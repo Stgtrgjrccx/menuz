@@ -34,8 +34,8 @@ async function run() {
     }
   });
 
-  console.log('--- TEST 1: Visiting Master Admin (Localhost) ---');
-  await page.goto('http://localhost:5173/#/admin', { waitUntil: 'networkidle0' });
+  console.log('--- TEST 1: Visiting Master Admin (Live GitHub Pages) ---');
+  await page.goto('https://stgtrgjrccx.github.io/menuz/#/admin', { waitUntil: 'networkidle0' });
   console.log('Loaded Master Admin URL:', page.url());
 
   const title = await page.title();
@@ -90,7 +90,7 @@ async function run() {
   }
 
   console.log('--- TEST 5: Checking Reviews Tab & Seed Data ---');
-  await page.goto('http://localhost:5173/#/admin', { waitUntil: 'networkidle0' });
+  await page.goto('https://stgtrgjrccx.github.io/menuz/#/admin', { waitUntil: 'networkidle0' });
   // Click Reviews tab by evaluating buttons
   const buttons = await page.$$('button');
   for (const b of buttons) {
