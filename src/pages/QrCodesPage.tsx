@@ -5,13 +5,13 @@ import { Download, ExternalLink, QrCode, Smartphone, Globe, Copy, Check, Edit3 }
 export const QrCodesPage: React.FC = () => {
   const tables = useRestaurantStore((state) => state.tables);
   const [selectedTableId, setSelectedTableId] = useState(tables[0]?.id || 'tbl-01');
-  const [renderBaseUrl, setRenderBaseUrl] = useState('https://menuz-app.onrender.com');
+  const [renderBaseUrl, setRenderBaseUrl] = useState('https://stgtrgjrccx.github.io/menuz');
   const [copied, setCopied] = useState(false);
 
-  // Auto-detect if currently running on onrender.com or custom domain
+  // Auto-detect if currently running on a custom domain or deployed URL
   useEffect(() => {
-    if (window.location.hostname.includes('onrender.com') || (!window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1'))) {
-      setRenderBaseUrl(window.location.origin);
+    if (!window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
+      setRenderBaseUrl(window.location.origin + window.location.pathname.replace(/\/+$/, ''));
     }
   }, []);
 
@@ -19,7 +19,7 @@ export const QrCodesPage: React.FC = () => {
 
   // Clean trailing slashes
   const cleanBase = renderBaseUrl.replace(/\/+$/, '');
-  const deployedMenuUrl = `${cleanBase}/r/saffron-house/menu?t=${selectedTable.public_token}`;
+  const deployedMenuUrl = `${cleanBase}/#/r/saffron-house/menu?t=${selectedTable.public_token}`;
   const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=450x450&data=${encodeURIComponent(deployedMenuUrl)}&color=1C1917&bgcolor=FFFFFF`;
 
   const copyToClipboard = () => {
