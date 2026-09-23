@@ -25,8 +25,14 @@ export const Navbar: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const restaurant = useRestaurantStore((state) => state.restaurant);
+  const tables = useRestaurantStore((state) => state.tables);
+  const defaultToken = tables[0]?.public_token || 'table-token-01-saffron';
+  const dinerUrl = `/r/${restaurant?.slug || 'saffron-house'}/menu?t=${defaultToken}`;
+
   const navLinks = [
     { to: '/admin', label: 'Master Admin', icon: ShieldCheck, highlight: true },
+    { to: dinerUrl, label: 'Customer Menu', icon: UtensilsCrossed },
     { to: '/dashboard', label: 'Manager Hub', icon: LayoutDashboard },
     { to: '/kitchen', label: 'Kitchen KDS', icon: ChefHat },
     { to: '/qr', label: 'QR Codes', icon: QrCode },
