@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { DinerMenu } from './pages/DinerMenu';
 import { KitchenKDS } from './pages/KitchenKDS';
@@ -8,7 +8,7 @@ import { QrCodesPage } from './pages/QrCodesPage';
 
 export const App: React.FC = () => {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <div className="min-h-screen flex flex-col bg-ivory-50 text-charcoal-900 font-sans">
         <Navbar />
         <div className="flex-1">
@@ -40,7 +40,7 @@ export const App: React.FC = () => {
           </Routes>
         </div>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 
