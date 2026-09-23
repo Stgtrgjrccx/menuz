@@ -68,25 +68,15 @@ export const DinerMenu: React.FC = () => {
 
   // Table Token Verification
   useEffect(() => {
-    if (!tableToken) {
-      if (tables.length > 0) {
-        setActiveTable(tables[0]);
-      }
-      return;
-    }
-
-    const matchedTable = tables.find(
-      (t) => t.public_token === tableToken && t.is_active
-    );
-
-    if (!matchedTable) {
-      if (tables.length > 0) {
-        setActiveTable(tables[0]);
-      } else {
-        setErrorMsg('Invalid or inactive table token. Please request assistance from your server.');
-      }
-      return;
-    }
+    const matchedTable =
+      (tableToken ? tables.find((t) => t.public_token === tableToken && t.is_active) : null) ||
+      tables[0] || {
+        id: 'tbl-01',
+        restaurant_id: restaurant?.id || 'rest-saffron-house-01',
+        label: 'Table 1',
+        public_token: 'table-token-01-saffron',
+        is_active: true
+      };
 
     setActiveTable(matchedTable);
     setErrorMsg(null);
@@ -95,7 +85,7 @@ export const DinerMenu: React.FC = () => {
     if (!sessionStorage.getItem('menuz_session_id')) {
       sessionStorage.setItem('menuz_session_id', 'sess_' + crypto.randomUUID());
     }
-  }, [tableToken, tables, setActiveTable]);
+  }, [tableToken, tables, setActiveTable, restaurant]);
 
   // Track scroll for back-to-top button
   useEffect(() => {

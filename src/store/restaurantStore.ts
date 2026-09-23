@@ -577,18 +577,18 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
 
       resetToDefaults: () => {
         set({
-          restaurants: [],
-          restaurant: {} as Restaurant,
-          currentRestaurantId: '',
-          tables: [],
-          categories: [],
-          menuItems: [],
+          restaurants: SEED_RESTAURANTS,
+          restaurant: SEED_RESTAURANTS[0] || ({} as Restaurant),
+          currentRestaurantId: SEED_RESTAURANTS[0]?.id || '',
+          tables: SEED_TABLES,
+          categories: SEED_CATEGORIES,
+          menuItems: SEED_MENU_ITEMS,
           orders: [],
-          reviews: [],
-          challenges: [],
-          redemptions: [],
-          posConfigs: {},
-          questionnaires: {},
+          reviews: SEED_REVIEWS,
+          challenges: SEED_CHALLENGES,
+          redemptions: SEED_REDEMPTIONS,
+          posConfigs: SEED_POS_CONFIGS,
+          questionnaires: SEED_QUESTIONNAIRES,
           campaigns: [],
           notifications: [],
           cart: [],
@@ -597,7 +597,7 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       }
     }),
     {
-      name: 'menuz_restaurant_storage_v2',
+      name: 'menuz_restaurant_storage_v4',
       partialize: (state) => ({
         restaurants: state.restaurants,
         menuItems: state.menuItems,

@@ -7,11 +7,11 @@ export interface Restaurant {
   slug: string;
   name: string;
   cuisine: string;
-  location: string;
-  owner_name: string;
-  contact_email: string;
-  contact_phone: string;
-  status: 'active' | 'inactive';
+  location?: string;
+  owner_name?: string;
+  contact_email?: string;
+  contact_phone?: string;
+  status?: 'active' | 'inactive';
   logo_url: string;
   brand_colors: {
     primary: string;
@@ -21,10 +21,10 @@ export interface Restaurant {
   };
   currency: string;
   tax_rate_percent: number;
-  ordering_enabled: boolean;
-  google_place_url: string;
-  authentic_photography_statement: string;
-  pos_provider: 'toast' | 'square' | 'clover' | 'micros' | 'universal_api';
+  ordering_enabled?: boolean;
+  google_place_url?: string;
+  authentic_photography_statement?: string;
+  pos_provider?: 'toast' | 'square' | 'clover' | 'micros' | 'universal_api';
 }
 
 export interface RestaurantTable {
@@ -40,7 +40,7 @@ export interface MenuCategory {
   id: string;
   restaurant_id: string;
   name: string;
-  category_type: 'food' | 'drink' | 'all';
+  category_type?: 'food' | 'drink' | 'all';
   sort_order: number;
   is_active: boolean;
 }
@@ -72,10 +72,10 @@ export interface MenuItem {
   restaurant_id: string;
   category_id: string;
   name: string;
-  item_type: 'food' | 'drink';
+  item_type?: 'food' | 'drink';
   price: number;
   short_description: string;
-  full_description: string;
+  full_description?: string;
   ingredients: string[];
   allergens: string[];
   dietary_flags: string[];
