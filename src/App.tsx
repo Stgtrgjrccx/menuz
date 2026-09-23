@@ -14,9 +14,10 @@ export const App: React.FC = () => {
         <Navbar />
         <div className="flex-1">
           <Routes>
+            {/* Default route → Master Admin Dashboard */}
             <Route
               path="/"
-              element={<Navigate to="/r/saffron-house/menu?t=table-token-01-saffron" replace />}
+              element={<Navigate to="/admin" replace />}
             />
             <Route
               path="/r/:restaurantSlug/menu"
@@ -40,7 +41,7 @@ export const App: React.FC = () => {
             />
             <Route
               path="*"
-              element={<Navigate to="/r/saffron-house/menu?t=table-token-01-saffron" replace />}
+              element={<Navigate to="/admin" replace />}
             />
           </Routes>
         </div>

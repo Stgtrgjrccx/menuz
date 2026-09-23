@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { X, Send, Sparkles, Plus, AlertTriangle, Flame, ShieldAlert, Check } from 'lucide-react';
 import { MenuItem } from '../types';
 import { useRestaurantStore } from '../store/restaurantStore';
@@ -22,13 +22,56 @@ interface Message {
 
 const ALLERGY_DISCLAIMER = "Allergen information is supplied by the restaurant. Cross-contamination may occur in commercial kitchens. Please tell staff about severe allergies.";
 
-const QUICK_ACTIONS = [
-  "Is this spicy?",
-  "What are vegetarian alternatives?",
-  "What drink pairs with this?",
-  "Recommend something light",
-  "What is popular?"
-];
+/**
+ * Context-aware quick actions:
+ * When a specific dish is focused, the suggestions change to match.
+ */
+function getQuickActionsForDish(dish: MenuItem | null): string[] {
+  if (!dish) {
+    return [
+      "What's popular today?",
+      "Recommend something light",
+      "Any vegetarian specials?",
+      "What drinks pair well?",
+      "Show chef's recommendations"
+    ];
+  }
+
+  const actions: string[] = [];
+
+  // Spice-related
+  if (dish.spice_level > 0) {
+    actions.push(`How spicy is ${dish.name}?`);
+    actions.push(`A milder alternative to ${dish.name}?`);
+  } else {
+    actions.push(`Is ${dish.name} mild?`);
+  }
+
+  // Diet-related
+  if (dish.dietary_flags.includes('Vegetarian')) {
+    actions.push(`Non-veg alternative to ${dish.name}?`);
+  } else {
+    actions.push(`Vegetarian alternative to ${dish.name}?`);
+  }
+
+  // Allergens
+  if (dish.allergens.length > 0) {
+    actions.push(`Allergens in ${dish.name}?`);
+  }
+
+  // Pairing
+  if (dish.item_type === 'food') {
+    actions.push(`Best drink with ${dish.name}?`);
+    actions.push(`What bread goes with ${dish.name}?`);
+  } else {
+    actions.push(`Best food with ${dish.name}?`);
+  }
+
+  // Portion
+  actions.push(`Portion size of ${dish.name}?`);
+
+  return actions.slice(0, 5);
+}
 
 export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
   isOpen,
@@ -36,23 +79,27 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
   focusDish,
   onConfirmAdd,
 }) => {
+  const restaurant = useRestaurantStore((state) => state.restaurant);
   const menuItems = useRestaurantStore((state) => state.menuItems);
+  const categories = useRestaurantStore((state) => state.categories);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Available dishes only
   const availableItems = menuItems.filter((i) => i.is_available);
+
+  // Context-aware quick actions
+  const quickActions = useMemo(() => getQuickActionsForDish(focusDish), [focusDish]);
 
   useEffect(() => {
     if (isOpen) {
       if (focusDish) {
-        handleSendQuery(`Can you explain the flavor, ingredients, and allergens of ${focusDish.name}?`, focusDish);
+        handleSendQuery(`Tell me about ${focusDish.name} — flavor profile, ingredients, and allergens.`, focusDish);
       } else if (messages.length === 0) {
         setMessages([
           {
             role: 'assistant',
-            content: `Namaste! I am MenuMate, your culinary guide at Saffron House. Ask me about our slow-simmered curries, tandoor specials, spice intensities, or beverage pairings.`
+            content: `Namaste! I'm your AI dining concierge${restaurant?.name ? ` at ${restaurant.name}` : ''}. Ask me about any dish — ingredients, allergens, spice levels, pairings, or dietary alternatives. I'll help you find the perfect meal.`
           }
         ]);
       }
@@ -71,11 +118,10 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
 
     try {
       if (isSupabaseConfigured) {
-        // Invoke Edge Function
         const resp = await supabase.functions.invoke('ai-menu-assistant', {
           body: {
-            restaurantSlug: 'saffron-house',
-            tableToken: 'table-token-01-saffron',
+            restaurantSlug: restaurant?.slug || 'restaurant',
+            tableToken: 'table-token-01',
             message: queryText,
             dishContextId: targetDish?.id || null,
             conversationHistory: newMsgs.slice(-4)
@@ -93,56 +139,163 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
         return;
       }
 
-      // High-precision local verified digital waiter engine (Guaranteed Zero-Hallucination)
+      // ── Context-aware local AI engine ──────────────────────
       await new Promise((r) => setTimeout(r, 600));
 
       const lower = queryText.toLowerCase();
       let reply = "";
       let recs: Array<{ item: MenuItem; reason: string }> = [];
 
-      if (lower.includes('spicy') || lower.includes('spice')) {
-        if (targetDish) {
-          reply = `${targetDish.name} has a verified spice intensity of ${targetDish.spice_level}/5. ${
+      // ── Dish-specific queries ─────────────────────────────
+      if (targetDish) {
+        const dishName = targetDish.name;
+
+        if (lower.includes('spicy') || lower.includes('spice') || lower.includes('how spicy')) {
+          reply = `${dishName} has a verified spice intensity of ${targetDish.spice_level}/5. ${
             targetDish.spice_level >= 3
-              ? "It features robust aromatic Kashmiri and Kolhapuri chili notes."
-              : "It is moderately spiced, highlighting cream, green cardamom, and subtle warmth rather than intense heat."
+              ? "It features robust aromatic chili notes. If you prefer less heat, I can suggest milder alternatives."
+              : targetDish.spice_level === 0
+                ? "This dish has no spice at all — it's completely mild and family-friendly."
+                : "It has subtle warmth from aromatic spices, but nothing overwhelming."
           }`;
+
+          // Suggest milder alternatives
+          if (targetDish.spice_level >= 2) {
+            const milder = availableItems
+              .filter(i => i.spice_level < targetDish.spice_level && i.category_id === targetDish.category_id && i.id !== targetDish.id)
+              .slice(0, 2);
+            if (milder.length > 0) {
+              recs = milder.map(item => ({
+                item,
+                reason: `Milder option (Spice ${item.spice_level}/5) — ${item.short_description.slice(0, 60)}...`
+              }));
+            }
+          }
+        } else if (lower.includes('allergen') || lower.includes('allergy')) {
+          reply = targetDish.allergens.length > 0
+            ? `⚠️ ${dishName} contains: ${targetDish.allergens.join(', ')}.\n\n${ALLERGY_DISCLAIMER}`
+            : `${dishName} has no declared allergens. However, ${ALLERGY_DISCLAIMER}`;
+        } else if (lower.includes('vegetarian alternative') || lower.includes('veg alternative') || lower.includes('non-veg alternative')) {
+          const isVeg = targetDish.dietary_flags.includes('Vegetarian');
+          const alternatives = availableItems.filter(i =>
+            i.id !== targetDish.id &&
+            i.category_id === targetDish.category_id &&
+            (isVeg
+              ? !i.dietary_flags.includes('Vegetarian')
+              : i.dietary_flags.includes('Vegetarian'))
+          ).slice(0, 2);
+
+          reply = isVeg
+            ? `Looking for a non-vegetarian alternative to ${dishName}? Here are my recommendations:`
+            : `Here are vegetarian alternatives to ${dishName}:`;
+
+          recs = alternatives.map(item => ({
+            item,
+            reason: `${item.dietary_flags.join(', ')} — ${item.short_description.slice(0, 50)}`
+          }));
+
+          if (alternatives.length === 0) {
+            reply += ` Unfortunately, I couldn't find a direct ${isVeg ? 'non-veg' : 'vegetarian'} match in the same category. Try browsing other sections!`;
+          }
+        } else if (lower.includes('drink') || lower.includes('pair') || lower.includes('beverage') || lower.includes('bread')) {
+          const drinks = availableItems.filter(i => i.item_type === 'drink').slice(0, 2);
+          const breads = availableItems.filter(i => i.name.toLowerCase().includes('naan') || i.name.toLowerCase().includes('roti') || i.name.toLowerCase().includes('bread'));
+
+          if (lower.includes('bread') || lower.includes('naan')) {
+            reply = `With ${dishName}, I'd recommend our freshly baked breads to soak up the rich gravy:`;
+            recs = breads.slice(0, 2).map(item => ({
+              item,
+              reason: `Clay oven baked to perfection — ideal with ${dishName}.`
+            }));
+          } else {
+            reply = `For ${dishName} (Spice ${targetDish.spice_level}/5), I recommend:`;
+            recs = drinks.map(item => ({
+              item,
+              reason: targetDish.spice_level >= 3
+                ? `Cooling ${item.name} balances the spice beautifully.`
+                : `A refreshing complement to the rich flavors of ${dishName}.`
+            }));
+          }
+        } else if (lower.includes('portion') || lower.includes('serving') || lower.includes('size')) {
+          reply = `${dishName} comes in a ${targetDish.serving_size} serving. ${
+            targetDish.price > 500
+              ? "It's a generous portion meant for sharing or as a full individual entrée."
+              : "It's well-portioned for one person as part of a multi-dish meal."
+          }`;
+        } else if (lower.includes('mild') || lower.includes('milder')) {
+          if (targetDish.spice_level <= 1) {
+            reply = `Good news! ${dishName} is already very mild (Spice ${targetDish.spice_level}/5). It's gentle and approachable for all palates.`;
+          } else {
+            const milder = availableItems
+              .filter(i => i.spice_level < targetDish.spice_level && i.id !== targetDish.id)
+              .sort((a, b) => a.spice_level - b.spice_level)
+              .slice(0, 2);
+            reply = `${dishName} is at Spice ${targetDish.spice_level}/5. Here are milder options:`;
+            recs = milder.map(item => ({
+              item,
+              reason: `Much milder at Spice ${item.spice_level}/5 — ${item.short_description.slice(0, 50)}`
+            }));
+          }
         } else {
-          reply = "Our spice levels are carefully calibrated from 0 to 5. We recommend the Old Delhi Style Butter Chicken (Spice 2/5) or Truffle Potli Samosa (Spice 1/5) for mild palates.";
+          // General dish info
+          reply = `**${dishName}**\n${targetDish.full_description}\n\n• Ingredients: ${targetDish.ingredients.join(', ')}\n• Spice Level: ${targetDish.spice_level}/5\n• Serving: ${targetDish.serving_size}\n• Diet: ${targetDish.dietary_flags.join(', ') || 'No specific flags'}`;
+          if (targetDish.allergens.length > 0) {
+            reply += `\n• ⚠️ Allergens: ${targetDish.allergens.join(', ')}`;
+          }
+          if (targetDish.chef_notes) {
+            reply += `\n• Chef's Note: ${targetDish.chef_notes}`;
+          }
         }
-      } else if (lower.includes('vegetarian alternative') || lower.includes('veg alternative')) {
-        const vegDishes = availableItems.filter(i => i.dietary_flags.includes('Vegetarian'));
-        reply = "Here are our finest verified vegetarian alternatives crafted with organic produce and fresh cottage cheese:";
-        recs = vegDishes.slice(0, 2).map(item => ({
-          item,
-          reason: `100% Vegetarian certified with fresh ${item.ingredients.slice(0, 2).join(' and ')}.`
-        }));
-      } else if (lower.includes('pair') || lower.includes('drink')) {
-        const drink = availableItems.find(i => i.category_id === 'cat-bev');
-        const naan = availableItems.find(i => i.id === 'item-bread-3');
-        reply = targetDish
-          ? `For ${targetDish.name}, our master chef recommends pairing with freshly baked Artisanal Tandoori Naan and chilled Alphonso Mango Lassi to balance rich spiced gravies.`
-          : `We recommend pairing rich curries with chilled Alphonso Mango Lassi or our Smoked Kashmiri Kahwa.`;
-        if (drink) recs.push({ item: drink, reason: "Refreshing yogurt & Alphonso mango cuts through rich spices." });
-        if (naan) recs.push({ item: naan, reason: "Clay oven blistered flatbread to savor heritage gravies." });
-      } else if (lower.includes('light')) {
-        const light = availableItems.find(i => i.name.includes('Avocado') || i.name.includes('Kahwa') || i.name.includes('Truffle'));
-        reply = "Looking for something refreshing? The Avocado & Pomelo Bhel is our lightest grain salad, tossed with ruby pomelo, wild red rice, and mint emulsion.";
-        if (light) recs.push({ item: light, reason: "Airy puffed grain salad, completely vegan and Jain suitable." });
-      } else if (lower.includes('popular')) {
-        const butterChicken = availableItems.find(i => i.name.includes('Butter Chicken'));
-        const dalMakhani = availableItems.find(i => i.name.includes('Dal Makhani'));
-        reply = "Our guests' top favorites are the slow 36-Hour Dal Makhani and the 1950s Old Delhi Style Butter Chicken, roasted over silver oak embers.";
-        if (butterChicken) recs.push({ item: butterChicken, reason: "1950s heritage recipe simmered in San Marzano tomatoes." });
-        if (dalMakhani) recs.push({ item: dalMakhani, reason: "Slow charcoal simmered for 36 hours with churned white butter." });
-      } else if (targetDish) {
-        // Detailed dish explanation
-        reply = `${targetDish.name}: ${targetDish.full_description}\n\n• Verified Ingredients: ${targetDish.ingredients.join(', ')}\n• Spice Level: ${targetDish.spice_level}/5\n• Serving: ${targetDish.serving_size}`;
-        if (targetDish.allergens.length > 0) {
-          reply += `\n• Declared Allergens: ${targetDish.allergens.join(', ')}. ${ALLERGY_DISCLAIMER}`;
+      }
+      // ── General queries (no dish focused) ─────────────────
+      else {
+        if (lower.includes('popular') || lower.includes('best seller') || lower.includes('recommend')) {
+          const bestsellers = availableItems.filter(i => i.is_bestseller).slice(0, 2);
+          const chefPicks = availableItems.filter(i => i.is_chef_recommended).slice(0, 2);
+          const picks = bestsellers.length > 0 ? bestsellers : chefPicks.length > 0 ? chefPicks : availableItems.slice(0, 2);
+          reply = "Here are our most popular dishes, loved by our guests:";
+          recs = picks.map(item => ({
+            item,
+            reason: item.is_bestseller ? `⭐ Bestseller — ${item.short_description.slice(0, 50)}` : `Chef recommended — ${item.short_description.slice(0, 50)}`
+          }));
+        } else if (lower.includes('vegetarian') || lower.includes('veg')) {
+          const vegDishes = availableItems.filter(i => i.dietary_flags.includes('Vegetarian')).slice(0, 3);
+          reply = "Here are our finest vegetarian offerings:";
+          recs = vegDishes.map(item => ({
+            item,
+            reason: `100% Vegetarian — ${item.short_description.slice(0, 50)}`
+          }));
+        } else if (lower.includes('light') || lower.includes('healthy') || lower.includes('salad')) {
+          const light = availableItems.filter(i => i.dietary_flags.includes('Vegan') || i.dietary_flags.includes('Jain') || i.spice_level === 0).slice(0, 2);
+          reply = "Looking for lighter fare? Here are our gentler options:";
+          recs = light.map(item => ({
+            item,
+            reason: `Light & fresh — ${item.dietary_flags.join(', ')}`
+          }));
+        } else if (lower.includes('chef') || lower.includes('special')) {
+          const chefPicks = availableItems.filter(i => i.is_chef_recommended).slice(0, 2);
+          reply = "Our chef personally recommends these dishes:";
+          recs = chefPicks.map(item => ({
+            item,
+            reason: `🧑‍🍳 Chef's Special — ${item.chef_notes || item.short_description.slice(0, 50)}`
+          }));
+        } else if (lower.includes('spicy') || lower.includes('hot')) {
+          const spicy = availableItems.filter(i => i.spice_level >= 3).sort((a, b) => b.spice_level - a.spice_level).slice(0, 2);
+          reply = "For those who love the heat:";
+          recs = spicy.map(item => ({
+            item,
+            reason: `🔥 Spice ${item.spice_level}/5 — ${item.short_description.slice(0, 50)}`
+          }));
+        } else if (lower.includes('drink') || lower.includes('beverage')) {
+          const drinks = availableItems.filter(i => i.item_type === 'drink').slice(0, 3);
+          reply = "Here's our beverage selection:";
+          recs = drinks.map(item => ({
+            item,
+            reason: `${item.short_description.slice(0, 60)}`
+          }));
+        } else {
+          reply = "I don't have verified kitchen records for that specific query. You can ask me about:\n\n• Specific dish details & allergens\n• Spice levels & milder alternatives\n• Vegetarian / vegan options\n• Drink & bread pairings\n• Chef's recommendations\n• Portion sizes";
         }
-      } else {
-        reply = "I don't have verified kitchen records for that detail. Please check with a staff member.";
       }
 
       setMessages([...newMsgs, { role: 'assistant', content: reply, recommendations: recs }]);
@@ -172,8 +325,12 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="font-serif font-bold text-base text-charcoal-900">MenuMate AI Assistant</h3>
-              <p className="text-[10px] text-charcoal-700/60">Strictly verified Saffron House kitchen data</p>
+              <h3 className="font-serif font-bold text-base text-charcoal-900">AI Dining Concierge</h3>
+              <p className="text-[10px] text-charcoal-700/60">
+                {focusDish
+                  ? `Focused on: ${focusDish.name}`
+                  : `Powered by ${restaurant?.name || 'restaurant'} kitchen data`}
+              </p>
             </div>
           </div>
           <button
@@ -183,6 +340,21 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
             <X className="w-5 h-5" />
           </button>
         </div>
+
+        {/* Focused Dish Banner */}
+        {focusDish && (
+          <div className="flex items-center space-x-3 p-2.5 bg-saffron-50 border border-saffron-200 rounded-xl my-2">
+            <img
+              src={focusDish.image_url}
+              alt={focusDish.name}
+              className="w-10 h-10 rounded-lg object-cover flex-shrink-0"
+            />
+            <div className="flex-1 min-w-0">
+              <h4 className="font-bold text-xs text-charcoal-900 truncate">{focusDish.name}</h4>
+              <span className="text-[10px] text-saffron-700">₹{focusDish.price.toFixed(2)} • Spice {focusDish.spice_level}/5</span>
+            </div>
+          </div>
+        )}
 
         {/* Allergy Policy Guard Banner */}
         <div className="bg-amber-50/90 border border-amber-200 p-2.5 rounded-xl my-2 flex items-start space-x-2 text-[11px] text-amber-900 leading-tight">
@@ -245,7 +417,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                         className="bg-saffron-600 hover:bg-saffron-700 text-white text-[11px] font-bold px-3 py-2 rounded-xl flex items-center space-x-1 shadow-subtle transition-colors flex-shrink-0"
                       >
                         <Plus className="w-3.5 h-3.5" />
-                        <span>Confirm Add</span>
+                        <span>Add</span>
                       </button>
                     </div>
                   ))}
@@ -257,14 +429,14 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
           {loading && (
             <div className="flex items-center space-x-2 text-xs text-charcoal-700/60 py-2">
               <span className="w-2 h-2 rounded-full bg-saffron-600 animate-ping" />
-              <span>Verifying recipe archives & kitchen notes...</span>
+              <span>Analyzing menu & kitchen data...</span>
             </div>
           )}
         </div>
 
-        {/* Quick action chips */}
+        {/* Context-aware Quick action chips */}
         <div className="flex space-x-1.5 overflow-x-auto py-2 scrollbar-none border-t border-ivory-200">
-          {QUICK_ACTIONS.map((q, idx) => (
+          {quickActions.map((q, idx) => (
             <button
               key={idx}
               type="button"
@@ -283,7 +455,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSendQuery(input)}
-            placeholder="Ask about ingredients, preparation, wine/drink pairings..."
+            placeholder={focusDish ? `Ask about ${focusDish.name}...` : "Ask about ingredients, pairings, allergens..."}
             className="flex-1 bg-ivory-50 border border-ivory-200 rounded-xl px-3.5 py-2.5 text-xs text-charcoal-900 focus:outline-none focus:border-saffron-600 placeholder-charcoal-700/40"
           />
           <button

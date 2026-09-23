@@ -201,3 +201,17 @@ export interface PosIntegrationConfig {
   sync_latency_ms: number;
   sync_log: PosSyncEvent[];
 }
+
+export type NotificationType = 'waiter_call' | 'challenge_complete' | 'order_placed' | 'review_submitted';
+
+export interface SystemNotification {
+  id: string;
+  restaurant_id: string;
+  table_id?: string;
+  table_label?: string;
+  type: NotificationType;
+  message: string;
+  customer_name?: string;
+  timestamp: string;
+  read: boolean;
+}

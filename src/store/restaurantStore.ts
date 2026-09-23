@@ -13,7 +13,8 @@ import {
   ChallengeRedemption,
   PosIntegrationConfig,
   RestaurantAiQuestionnaire,
-  OrderSource
+  OrderSource,
+  SystemNotification
 } from '../types';
 import {
   SEED_RESTAURANTS,
@@ -63,6 +64,7 @@ interface RestaurantStoreState {
   posConfigs: Record<string, PosIntegrationConfig>;
   questionnaires: Record<string, RestaurantAiQuestionnaire>;
   campaigns: WhatsAppCampaign[];
+  notifications: SystemNotification[];
 
   // Diner state
   cart: CartItem[];
@@ -79,6 +81,7 @@ interface RestaurantStoreState {
 
   // Menu Management
   addMenuItem: (item: MenuItem) => void;
+  addCategory: (category: MenuCategory) => void;
   updateMenuItem: (id: string, updates: Partial<MenuItem>) => void;
   deleteMenuItem: (id: string) => void;
   toggleItemAvailability: (itemId: string) => void;
@@ -89,6 +92,7 @@ interface RestaurantStoreState {
   addChallenge: (challenge: ReviewChallenge) => void;
   toggleChallengeStatus: (id: string) => void;
   redeemVoucher: (voucherCode: string) => boolean;
+  completeChallenge: (challengeId: string, customerName?: string, customerPhone?: string) => ChallengeRedemption | null;
 
   // Marketing & WhatsApp
   sendWhatsAppCampaign: (campaign: Omit<WhatsAppCampaign, 'id' | 'sent_at'>) => void;
@@ -96,6 +100,12 @@ interface RestaurantStoreState {
   // POS Integration
   triggerPosSync: (restaurantId: string) => void;
   simulateIncomingPosOrder: (restaurantId: string) => Order;
+
+  // Notification System
+  addSystemNotification: (notification: Omit<SystemNotification, 'id' | 'timestamp' | 'read'>) => void;
+  markNotificationRead: (id: string) => void;
+  clearAllNotifications: () => void;
+  callWaiter: (restaurantId: string, tableId: string, tableLabel: string) => void;
 
   // Diner Ordering
   setCustomerNotes: (notes: string) => void;
@@ -116,8 +126,8 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
   persist(
     (set, get) => ({
       restaurants: SEED_RESTAURANTS,
-      restaurant: SEED_RESTAURANTS[0],
-      currentRestaurantId: SEED_RESTAURANTS[0].id,
+      restaurant: SEED_RESTAURANTS[0] || ({} as Restaurant),
+      currentRestaurantId: SEED_RESTAURANTS[0]?.id || '',
       tables: SEED_TABLES,
       categories: SEED_CATEGORIES,
       menuItems: SEED_MENU_ITEMS,
@@ -127,17 +137,8 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       redemptions: SEED_REDEMPTIONS,
       posConfigs: SEED_POS_CONFIGS,
       questionnaires: SEED_QUESTIONNAIRES,
-      campaigns: [
-        {
-          id: 'camp-01',
-          campaign_name: 'Weekend Saffron Feast Promotion',
-          message_template: 'Namaste {{name}}! Enjoy 15% off your next dining experience at Saffron House this weekend. Use code SAFFRONVIP.',
-          target_restaurant_id: 'rest-saffron-house-01',
-          recipients_count: 2,
-          sent_at: new Date(Date.now() - 3600000 * 24).toISOString(),
-          status: 'sent'
-        }
-      ],
+      campaigns: [],
+      notifications: [],
 
       cart: [],
       customerNotes: '',
@@ -180,6 +181,12 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       addMenuItem: (item) => {
         set((state) => ({
           menuItems: [...state.menuItems, item]
+        }));
+      },
+
+      addCategory: (category) => {
+        set((state) => ({
+          categories: [...state.categories, category]
         }));
       },
 
@@ -245,6 +252,42 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
           return { redemptions: updated };
         });
         return success;
+      },
+
+      completeChallenge: (challengeId, customerName, customerPhone) => {
+        let redemption: ChallengeRedemption | null = null;
+        set((state) => {
+          const challenge = state.challenges.find((c) => c.id === challengeId);
+          if (!challenge) return state;
+
+          const voucherCode = `WIN-${Math.floor(1000 + Math.random() * 9000)}`;
+          const rewardItem = challenge.reward_item_name || 'Free Dessert / ₹100 Off';
+          redemption = {
+            id: 'red-' + Date.now(),
+            restaurant_id: challenge.restaurant_id,
+            review_id: 'rev_' + Date.now(),
+            customer_name: customerName || 'Valued Diner',
+            voucher_code: voucherCode,
+            reward_item_name: rewardItem,
+            status: 'unclaimed',
+            created_at: new Date().toISOString()
+          };
+
+          const notification: SystemNotification = {
+            id: 'notif-' + crypto.randomUUID().slice(0, 8),
+            restaurant_id: challenge.restaurant_id,
+            type: 'challenge_complete',
+            message: `🎉 ${redemption.customer_name} completed challenge "${challenge.title}" and won "${rewardItem}"! (Voucher: ${voucherCode})`,
+            timestamp: new Date().toISOString(),
+            read: false
+          };
+
+          return {
+            redemptions: [redemption, ...state.redemptions],
+            notifications: [notification, ...state.notifications].slice(0, 100)
+          };
+        });
+        return redemption;
       },
 
       // WhatsApp Campaign
@@ -449,8 +492,20 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
           }))
         };
 
+        const notif: SystemNotification = {
+          id: 'notif-' + crypto.randomUUID().slice(0, 8),
+          restaurant_id: currentRest.id,
+          table_id: activeTable.id,
+          table_label: activeTable.label,
+          type: 'order_placed',
+          message: `🍽️ New Order #${orderNumber} (${activeTable.label}) - ₹${total.toFixed(2)}`,
+          timestamp: new Date().toISOString(),
+          read: false
+        };
+
         set((prev) => ({
           orders: [newOrder, ...prev.orders],
+          notifications: [notif, ...prev.notifications].slice(0, 100),
           cart: [],
           customerNotes: '',
           activeOrderId: orderId
@@ -479,20 +534,63 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
         }));
       },
 
+      // ── Notification System ─────────────────────────────────
+      addSystemNotification: (notification) => {
+        const newNotification: SystemNotification = {
+          ...notification,
+          id: 'notif-' + crypto.randomUUID().slice(0, 8),
+          timestamp: new Date().toISOString(),
+          read: false,
+        };
+        set((state) => ({
+          notifications: [newNotification, ...state.notifications].slice(0, 100)
+        }));
+      },
+
+      markNotificationRead: (id) => {
+        set((state) => ({
+          notifications: state.notifications.map((n) =>
+            n.id === id ? { ...n, read: true } : n
+          )
+        }));
+      },
+
+      clearAllNotifications: () => {
+        set({ notifications: [] });
+      },
+
+      callWaiter: (restaurantId, tableId, tableLabel) => {
+        const notification: SystemNotification = {
+          id: 'notif-' + crypto.randomUUID().slice(0, 8),
+          restaurant_id: restaurantId,
+          table_id: tableId,
+          table_label: tableLabel,
+          type: 'waiter_call',
+          message: `🔔 Waiter requested at ${tableLabel}`,
+          timestamp: new Date().toISOString(),
+          read: false,
+        };
+        set((state) => ({
+          notifications: [notification, ...state.notifications].slice(0, 100)
+        }));
+      },
+
       resetToDefaults: () => {
         set({
-          restaurants: SEED_RESTAURANTS,
-          restaurant: SEED_RESTAURANTS[0],
-          currentRestaurantId: SEED_RESTAURANTS[0].id,
-          tables: SEED_TABLES,
-          categories: SEED_CATEGORIES,
-          menuItems: SEED_MENU_ITEMS,
+          restaurants: [],
+          restaurant: {} as Restaurant,
+          currentRestaurantId: '',
+          tables: [],
+          categories: [],
+          menuItems: [],
           orders: [],
-          reviews: SEED_REVIEWS,
-          challenges: SEED_CHALLENGES,
-          redemptions: SEED_REDEMPTIONS,
-          posConfigs: SEED_POS_CONFIGS,
-          questionnaires: SEED_QUESTIONNAIRES,
+          reviews: [],
+          challenges: [],
+          redemptions: [],
+          posConfigs: {},
+          questionnaires: {},
+          campaigns: [],
+          notifications: [],
           cart: [],
           customerNotes: ''
         });
@@ -503,11 +601,13 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       partialize: (state) => ({
         restaurants: state.restaurants,
         menuItems: state.menuItems,
+        categories: state.categories,
         orders: state.orders,
         reviews: state.reviews,
         challenges: state.challenges,
         redemptions: state.redemptions,
-        campaigns: state.campaigns
+        campaigns: state.campaigns,
+        notifications: state.notifications
       })
     }
   )
