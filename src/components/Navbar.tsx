@@ -61,6 +61,18 @@ export const Navbar: React.FC = () => {
             <LayoutDashboard className="w-3.5 h-3.5" />
             <span>Manager Hub</span>
           </Link>
+
+          <Link
+            to="/admin"
+            className={`flex items-center space-x-1 px-2.5 py-1 rounded-lg transition-colors border ${
+              location.pathname === '/admin'
+                ? 'bg-amber-500 text-charcoal-900 font-bold border-amber-400'
+                : 'text-amber-400 hover:text-white border-amber-500/40 hover:bg-charcoal-800'
+            }`}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+            <span>Master Admin</span>
+          </Link>
         </div>
       </div>
     </div>

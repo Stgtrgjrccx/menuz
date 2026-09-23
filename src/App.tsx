@@ -5,6 +5,7 @@ import { DinerMenu } from './pages/DinerMenu';
 import { KitchenKDS } from './pages/KitchenKDS';
 import { ManagerDashboard } from './pages/ManagerDashboard';
 import { QrCodesPage } from './pages/QrCodesPage';
+import { MasterAdminDashboard } from './pages/MasterAdminDashboard';
 
 export const App: React.FC = () => {
   return (
@@ -28,6 +29,10 @@ export const App: React.FC = () => {
             <Route
               path="/dashboard"
               element={<ManagerDashboard />}
+            />
+            <Route
+              path="/admin"
+              element={<MasterAdminDashboard />}
             />
             <Route
               path="/qr"
