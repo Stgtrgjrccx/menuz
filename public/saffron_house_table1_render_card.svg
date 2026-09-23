@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="840" viewBox="0 0 600 840">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@500;600;700&amp;display=swap');
+      .serif { font-family: 'Playfair Display', Georgia, serif; }
+      .sans { font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; }
+    </style>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="16" stdDeviation="24" flood-color="#1C1917" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="600" height="840" fill="#F4EFE6"/>
+
+  <!-- Printable Table Stand Card with Shadow -->
+  <rect x="50" y="40" width="500" height="760" rx="36" fill="#FDFBF7" stroke="#EFE9DE" stroke-width="2" filter="url(#cardShadow)"/>
+  
+  <!-- Saffron Double Inset Border -->
+  <rect x="74" y="64" width="452" height="712" rx="28" fill="none" stroke="#E85D04" stroke-width="2" stroke-dasharray="8 6"/>
+
+  <!-- Restaurant Header -->
+  <text x="300" y="130" text-anchor="middle" fill="#E85D04" class="sans" font-size="12" font-weight="700" letter-spacing="4">CONTEMPORARY INDIAN DINING</text>
+  <text x="300" y="175" text-anchor="middle" fill="#1C1917" class="serif" font-size="36" font-weight="700">SAFFRON HOUSE</text>
+
+  <!-- Table Badge -->
+  <g transform="translate(200, 205)">
+    <rect width="200" height="42" rx="21" fill="#FFEDD5" stroke="#FED7AA" stroke-width="1"/>
+    <text x="100" y="27" text-anchor="middle" fill="#C84B00" class="sans" font-size="16" font-weight="700">Table 1</text>
+  </g>
+
+  <!-- QR Frame -->
+  <rect x="130" y="275" width="340" height="340" rx="28" fill="#FFFFFF" stroke="#F8F5EE" stroke-width="2" filter="url(#cardShadow)"/>
+  <image href="https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=https%3A//menuz.onrender.com/r/saffron-house/menu%3Ft%3Dtable-token-01-saffron&color=1C1917&bgcolor=FFFFFF" x="155" y="300" width="290" height="290"/>
+
+  <!-- Instructions & Features -->
+  <text x="300" y="655" text-anchor="middle" fill="#1C1917" class="serif" font-size="22" font-weight="700">Scan to Explore &amp; Order</text>
+  <text x="300" y="685" text-anchor="middle" fill="#78716C" class="sans" font-size="13" font-weight="500">Ask AI Waiter • Customize Dishes • Pay at Table</text>
+  <text x="300" y="708" text-anchor="middle" fill="#E85D04" class="sans" font-size="11" font-weight="600">Live on Render: menuz.onrender.com</text>
+
+  <!-- Footer Powered By -->
+  <text x="300" y="748" text-anchor="middle" fill="#A8A29E" class="sans" font-size="11" font-weight="500">No App Download Required • Powered by Menuz</text>
+</svg>
