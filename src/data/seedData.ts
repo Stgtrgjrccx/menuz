@@ -31,14 +31,24 @@ export const SEED_TABLES: RestaurantTable[] = [
   { id: 'tbl-02', restaurant_id: 'rest-saffron-house-01', label: 'Table 2', public_token: 'table-token-02-saffron', is_active: true },
   { id: 'tbl-03', restaurant_id: 'rest-saffron-house-01', label: 'Table 3', public_token: 'table-token-03-saffron', is_active: true },
   { id: 'tbl-04', restaurant_id: 'rest-saffron-house-01', label: 'Table 4', public_token: 'table-token-04-saffron', is_active: true },
+  { id: 'tbl-cb-01', restaurant_id: 'rest-casa-bella-02', label: 'Table 1', public_token: 'table-token-01-casabella', is_active: true },
+  { id: 'tbl-cb-02', restaurant_id: 'rest-casa-bella-02', label: 'Table 2', public_token: 'table-token-02-casabella', is_active: true },
+  { id: 'tbl-cb-03', restaurant_id: 'rest-casa-bella-02', label: 'Table 3', public_token: 'table-token-03-casabella', is_active: true },
+  { id: 'tbl-cb-04', restaurant_id: 'rest-casa-bella-02', label: 'Table 4', public_token: 'table-token-04-casabella', is_active: true },
 ];
 
 export const SEED_CATEGORIES: MenuCategory[] = [
+  // Saffron House
   { id: 'cat-app', restaurant_id: 'rest-saffron-house-01', name: 'Appetizers', sort_order: 1, is_active: true },
   { id: 'cat-clay', restaurant_id: 'rest-saffron-house-01', name: 'Clay Oven (Tandoor)', sort_order: 2, is_active: true },
   { id: 'cat-curry', restaurant_id: 'rest-saffron-house-01', name: 'Heritage Curries', sort_order: 3, is_active: true },
   { id: 'cat-bread', restaurant_id: 'rest-saffron-house-01', name: 'Breads & Rice', sort_order: 4, is_active: true },
   { id: 'cat-bev', restaurant_id: 'rest-saffron-house-01', name: 'Beverages & Desserts', sort_order: 5, is_active: true },
+  // Casa Bella Trattoria
+  { id: 'cat-cb-anti', restaurant_id: 'rest-casa-bella-02', name: 'Antipasti & Crudo', sort_order: 1, is_active: true },
+  { id: 'cat-cb-pizza', restaurant_id: 'rest-casa-bella-02', name: 'Woodfired Pizza', sort_order: 2, is_active: true },
+  { id: 'cat-cb-pasta', restaurant_id: 'rest-casa-bella-02', name: 'Handmade Pasta', sort_order: 3, is_active: true },
+  { id: 'cat-cb-dolci', restaurant_id: 'rest-casa-bella-02', name: 'Dolci & Caffe', sort_order: 4, is_active: true },
 ];
 
 export const SEED_MENU_ITEMS: MenuItem[] = [
@@ -446,6 +456,103 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     is_available: true,
     pairing_item_ids: [],
     sort_order: 3
+  },
+
+  // CASA BELLA TRATTORIA (Italian Dishes)
+  {
+    id: 'item-cb-1',
+    restaurant_id: 'rest-casa-bella-02',
+    category_id: 'cat-cb-anti',
+    name: 'Burrata Pugliese con Pomodorini',
+    price: 520.00,
+    short_description: 'Creamy artisanal burrata with heirloom blistered tomatoes, basil oil, and focaccia crisps.',
+    full_description: 'Handcrafted Pugliese burrata filled with stracciatella, surrounded by flame-roasted vine cherry tomatoes, cold-pressed Ligurian olive oil, and aged balsamico.',
+    ingredients: ['Burrata', 'Cherry Tomatoes', 'Fresh Basil', 'Extra Virgin Olive Oil', 'Balsamic Glaze'],
+    allergens: ['Dairy', 'Gluten'],
+    dietary_flags: ['Vegetarian'],
+    spice_level: 0,
+    serving_size: '1 Portion',
+    image_url: 'https://images.unsplash.com/photo-1592417817098-8f3d6910985b?w=600&auto=format&fit=crop',
+    is_available: true,
+    pairing_item_ids: ['item-cb-3'],
+    chef_notes: 'Our burrata is flown in fresh weekly from artisanal cheesemakers in Puglia.',
+    sort_order: 1
+  },
+  {
+    id: 'item-cb-2',
+    restaurant_id: 'rest-casa-bella-02',
+    category_id: 'cat-cb-pizza',
+    name: 'Pizza Margherita Verace D.O.P.',
+    price: 490.00,
+    short_description: 'Woodfired 48-hr fermented sourdough pizza with San Marzano tomatoes and fior di latte.',
+    full_description: 'Cooked in our 450°C Italian oven for 90 seconds. Topped with crushed San Marzano D.O.P. tomatoes, fresh fior di latte mozzarella, and sweet basil leaves.',
+    ingredients: ['Caputo 00 Flour', 'San Marzano Tomatoes', 'Fior di Latte Mozzarella', 'Fresh Basil', 'Olive Oil'],
+    allergens: ['Dairy', 'Gluten'],
+    dietary_flags: ['Vegetarian'],
+    spice_level: 0,
+    serving_size: '12-inch Pizza',
+    image_url: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&auto=format&fit=crop',
+    is_available: true,
+    pairing_item_ids: [],
+    chef_notes: 'Authentic leopard-spotted Neapolitan crust.',
+    sort_order: 1
+  },
+  {
+    id: 'item-cb-3',
+    restaurant_id: 'rest-casa-bella-02',
+    category_id: 'cat-cb-pizza',
+    name: 'Tartufo Nero & Wild Mushroom Pizza',
+    price: 640.00,
+    short_description: 'White woodfired pizza with Umbrian black truffle paste, porcini mushrooms, and fontina cheese.',
+    full_description: 'Bianca pizza layered with creamy fontina, roasted cremini and porcini mushrooms, finished with pure black truffle reduction and fresh thyme.',
+    ingredients: ['Caputo 00 Flour', 'Fontina Cheese', 'Porcini Mushrooms', 'Black Truffle Paste', 'Thyme'],
+    allergens: ['Dairy', 'Gluten'],
+    dietary_flags: ['Vegetarian'],
+    spice_level: 0,
+    serving_size: '12-inch Pizza',
+    image_url: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=600&auto=format&fit=crop',
+    is_available: true,
+    pairing_item_ids: [],
+    chef_notes: 'Chef Alessandro’s signature Umbrian specialty.',
+    sort_order: 2
+  },
+  {
+    id: 'item-cb-4',
+    restaurant_id: 'rest-casa-bella-02',
+    category_id: 'cat-cb-pasta',
+    name: 'Tagliolini al Tartufo Handmade',
+    price: 580.00,
+    short_description: 'Egg tagliolini ribbon pasta rolled fresh daily, tossed in cultured butter and shaved truffles.',
+    full_description: '30-yolk fresh tagliolini spun in French cultured butter, 24-month aged Parmigiano Reggiano, cracked Kampot pepper, and aromatic truffle emulsion.',
+    ingredients: ['Semolina Flour', 'Farm Egg Yolks', 'Parmigiano Reggiano', 'Cultured Butter', 'Truffle'],
+    allergens: ['Dairy', 'Gluten', 'Eggs'],
+    dietary_flags: ['Vegetarian'],
+    spice_level: 0,
+    serving_size: 'Bowl (220g)',
+    image_url: 'https://images.unsplash.com/photo-1621996346565-e3d5d62817d2?w=600&auto=format&fit=crop',
+    is_available: true,
+    pairing_item_ids: [],
+    chef_notes: 'Prepared fresh in the pasta lab every morning at 10 AM.',
+    sort_order: 1
+  },
+  {
+    id: 'item-cb-5',
+    restaurant_id: 'rest-casa-bella-02',
+    category_id: 'cat-cb-dolci',
+    name: 'Tiramisu Tradizionale',
+    price: 340.00,
+    short_description: 'Savoiardi ladyfingers soaked in dark Illy espresso, layered with whipped mascarpone cream.',
+    full_description: 'The definitive Venetian dessert: airy savoiardi biscuits dipped in rich espresso, crowned with velvety egg-yolk mascarpone and dusted with Dutch cocoa powder.',
+    ingredients: ['Savoiardi Biscuits', 'Mascarpone', 'Illy Espresso', 'Cocoa Powder', 'Eggs'],
+    allergens: ['Dairy', 'Gluten', 'Eggs'],
+    dietary_flags: ['Vegetarian'],
+    spice_level: 0,
+    serving_size: '1 Portion',
+    image_url: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=600&auto=format&fit=crop',
+    is_available: true,
+    pairing_item_ids: [],
+    chef_notes: 'Made from our nonna’s 1958 Treviso family recipe.',
+    sort_order: 1
   }
 ];
 
@@ -482,6 +589,18 @@ export const SEED_CHALLENGES: ReviewChallenge[] = [
     is_active: true,
     terms: 'Valid on today’s dining bill for Table orders. One redemption per table.',
     redemption_code_prefix: 'SAFFRON-WIN-'
+  },
+  {
+    id: 'chal-cb-01',
+    restaurant_id: 'rest-casa-bella-02',
+    title: '🍕 Taste of Italy Review Challenge',
+    description: 'Post your dining review & photos on Google to unlock a complimentary Italian Dolce!',
+    reward_type: 'free_dessert',
+    reward_item_name: 'Complimentary Tiramisu Tradizionale',
+    win_probability_percent: 100,
+    is_active: true,
+    terms: 'Valid on today’s dining bill for Table orders. One redemption per table.',
+    redemption_code_prefix: 'BELLAVITA-'
   }
 ];
 export const SEED_REDEMPTIONS: ChallengeRedemption[] = [];

@@ -32,6 +32,14 @@ export const App: React.FC = () => {
               element={<ManagerDashboard />}
             />
             <Route
+              path="/manage/:restaurantSlug"
+              element={<ManagerDashboard />}
+            />
+            <Route
+              path="/dashboard/:restaurantSlug"
+              element={<ManagerDashboard />}
+            />
+            <Route
               path="/admin"
               element={<MasterAdminDashboard />}
             />

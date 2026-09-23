@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import {
   DollarSign,
   ShoppingBag,
@@ -16,7 +17,9 @@ import {
   Flame,
   Trash2,
   AlertCircle,
-  Check
+  Check,
+  UtensilsCrossed,
+  ExternalLink
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { MenuItem, MenuCategory } from '../types';
@@ -32,7 +35,10 @@ const SAMPLE_FOOD_IMAGES = [
 ];
 
 export const ManagerDashboard: React.FC = () => {
+  const { restaurantSlug } = useParams<{ restaurantSlug?: string }>();
+  const restaurants = useRestaurantStore((state) => state.restaurants);
   const restaurant = useRestaurantStore((state) => state.restaurant);
+  const setCurrentRestaurant = useRestaurantStore((state) => state.setCurrentRestaurant);
   const tables = useRestaurantStore((state) => state.tables);
   const menuItems = useRestaurantStore((state) => state.menuItems);
   const categories = useRestaurantStore((state) => state.categories);
@@ -45,11 +51,37 @@ export const ManagerDashboard: React.FC = () => {
   const markNotificationRead = useRestaurantStore((state) => state.markNotificationRead);
   const resetToDefaults = useRestaurantStore((state) => state.resetToDefaults);
 
+  // Sync route slug to current active restaurant
+  useEffect(() => {
+    if (restaurantSlug) {
+      const match = restaurants.find((r) => r.slug === restaurantSlug);
+      if (match && match.id !== restaurant.id) {
+        setCurrentRestaurant(match.id);
+      }
+    }
+  }, [restaurantSlug, restaurants, restaurant.id, setCurrentRestaurant]);
+
+  // Scoped entities for active restaurant
+  const currentRestTables = tables.filter((t) => t.restaurant_id === restaurant.id);
+  const activeTablesList = currentRestTables.length > 0 ? currentRestTables : tables;
+
+  const currentRestCategories = categories.filter((c) => c.restaurant_id === restaurant.id);
+  const activeCategoriesList = currentRestCategories.length > 0 ? currentRestCategories : categories;
+
+  const currentRestMenuItems = menuItems.filter((m) => m.restaurant_id === restaurant.id);
+  const activeMenuItemsList = currentRestMenuItems.length > 0 ? currentRestMenuItems : menuItems;
+
+  const currentRestOrders = orders.filter((o) => o.restaurant_id === restaurant.id);
+  const activeOrdersList = currentRestOrders.length > 0 ? currentRestOrders : orders;
+
+  const currentRestNotifications = notifications.filter((n) => !n.restaurant_id || n.restaurant_id === restaurant.id);
+  const activeNotificationsList = currentRestNotifications;
+
   // Modal state for adding a custom dish
   const [isAddDishOpen, setIsAddDishOpen] = useState(false);
   const [dishForm, setDishForm] = useState({
     name: '',
-    categoryId: categories[0]?.id || '',
+    categoryId: activeCategoriesList[0]?.id || '',
     newCategoryName: '',
     price: '',
     isVeg: true,
@@ -65,14 +97,15 @@ export const ManagerDashboard: React.FC = () => {
   });
   const [addSuccessMsg, setAddSuccessMsg] = useState<string | null>(null);
 
-  const totalVolume = orders.reduce((sum, o) => sum + o.total_amount, 0);
-  const totalOrdersCount = orders.length;
-  const unreadWaiterCalls = notifications.filter((n) => n.type === 'waiter_call' && !n.read);
+  const totalVolume = activeOrdersList.reduce((sum, o) => sum + o.total_amount, 0);
+  const totalOrdersCount = activeOrdersList.length;
+  const unreadWaiterCalls = activeNotificationsList.filter((n) => n.type === 'waiter_call' && !n.read);
 
   const downloadTableQrSvg = (tableLabel: string, publicToken: string) => {
     const origin = window.location.origin;
-    const targetUrl = `${origin}/#/r/saffron-house/menu?t=${publicToken}`;
+    const targetUrl = `${origin}/#/r/${restaurant.slug}/menu?t=${publicToken}`;
     const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(targetUrl)}&color=1C1917&bgcolor=FFFFFF`;
+    const primaryColor = restaurant.brand_colors?.primary || '#E85D04';
 
     const svgTemplate = `
 <svg xmlns="http://www.w3.org/2000/svg" width="420" height="560" viewBox="0 0 420 560">
@@ -87,11 +120,11 @@ export const ManagerDashboard: React.FC = () => {
   <rect width="420" height="560" rx="32" fill="#FDFBF7" stroke="#EFE9DE" stroke-width="2"/>
   
   <!-- Outer Gold Border -->
-  <rect x="24" y="24" width="372" height="512" rx="24" fill="none" stroke="#E85D04" stroke-width="2" stroke-dasharray="6 4"/>
+  <rect x="24" y="24" width="372" height="512" rx="24" fill="none" stroke="${primaryColor}" stroke-width="2" stroke-dasharray="6 4"/>
   
   <!-- Header Branding -->
-  <text x="210" y="75" text-anchor="middle" fill="#E85D04" class="sans" font-size="11" font-weight="700" letter-spacing="3">CONTEMPORARY INDIAN DINING</text>
-  <text x="210" y="110" text-anchor="middle" fill="#1C1917" class="serif" font-size="28" font-weight="700">SAFFRON HOUSE</text>
+  <text x="210" y="75" text-anchor="middle" fill="${primaryColor}" class="sans" font-size="11" font-weight="700" letter-spacing="3">${(restaurant.cuisine || 'CONTEMPORARY DINING').toUpperCase()}</text>
+  <text x="210" y="110" text-anchor="middle" fill="#1C1917" class="serif" font-size="26" font-weight="700">${restaurant.name.toUpperCase()}</text>
   
   <!-- Table Badge -->
   <rect x="135" y="130" width="150" height="34" rx="17" fill="#FFEDD5"/>
@@ -110,7 +143,7 @@ export const ManagerDashboard: React.FC = () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `SaffronHouse_${tableLabel.replace(/\s+/g, '_')}_QR.svg`;
+    link.download = `${restaurant.name.replace(/\s+/g, '_')}_${tableLabel.replace(/\s+/g, '_')}_QR.svg`;
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -205,6 +238,14 @@ export const ManagerDashboard: React.FC = () => {
         </div>
 
         <div className="flex items-center space-x-2">
+          <Link
+            to={`/r/${restaurant.slug}/menu?t=${activeTablesList[0]?.public_token || 'table-token-01-saffron'}`}
+            className="flex items-center space-x-1.5 text-xs text-charcoal-700 bg-white border border-ivory-200 px-3.5 py-2.5 rounded-xl shadow-subtle hover:bg-ivory-100 transition-colors font-bold"
+          >
+            <UtensilsCrossed className="w-3.5 h-3.5 text-saffron-600" />
+            <span>Launch Diner Menu</span>
+          </Link>
+
           <button
             type="button"
             onClick={() => setIsAddDishOpen(true)}
@@ -301,7 +342,7 @@ export const ManagerDashboard: React.FC = () => {
           </div>
           <div>
             <span className="text-xs text-charcoal-700/60 font-medium">Active QR Tables</span>
-            <p className="font-serif text-2xl font-bold text-charcoal-900">{tables.length} tables</p>
+            <p className="font-serif text-2xl font-bold text-charcoal-900">{activeTablesList.length} tables</p>
           </div>
         </div>
       </div>
@@ -318,7 +359,7 @@ export const ManagerDashboard: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          {tables.map((table) => (
+          {activeTablesList.map((table) => (
             <div
               key={table.id}
               className="bg-ivory-50/70 border border-ivory-200 rounded-2xl p-4 text-center space-y-3"
@@ -348,7 +389,7 @@ export const ManagerDashboard: React.FC = () => {
         <div className="flex flex-wrap justify-between items-center mb-4 gap-2">
           <div>
             <h2 className="font-serif text-xl font-bold text-charcoal-900">
-              Live Kitchen Stock Manager & Catalog ({menuItems.length} dishes)
+              Live Kitchen Stock Manager & Catalog ({activeMenuItemsList.length} dishes)
             </h2>
             <p className="text-xs text-charcoal-700/60 mt-0.5">
               Toggle dish availability instantly (86-ing) or custom add special dishes to your live menu.
@@ -366,7 +407,7 @@ export const ManagerDashboard: React.FC = () => {
         </div>
 
         <div className="divide-y divide-ivory-100">
-          {menuItems.map((item) => (
+          {activeMenuItemsList.map((item) => (
             <div key={item.id} className="py-3.5 flex items-center justify-between gap-3">
               <div className="flex items-center space-x-3 min-w-0">
                 <img
@@ -386,7 +427,7 @@ export const ManagerDashboard: React.FC = () => {
                   <div className="flex items-center space-x-2 mt-0.5">
                     <span className="text-xs text-saffron-700 font-semibold">₹{item.price.toFixed(2)}</span>
                     <span className="text-[10px] text-charcoal-400">
-                      {categories.find((c) => c.id === item.category_id)?.name || 'General'}
+                      {activeCategoriesList.find((c) => c.id === item.category_id)?.name || 'General'}
                     </span>
                   </div>
                 </div>
@@ -474,7 +515,7 @@ export const ManagerDashboard: React.FC = () => {
                     onChange={(e) => setDishForm({ ...dishForm, categoryId: e.target.value })}
                     className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-xs text-charcoal-900 font-medium focus:outline-none focus:border-saffron-600"
                   >
-                    {categories.map((c) => (
+                    {activeCategoriesList.map((c) => (
                       <option key={c.id} value={c.id}>
                         {c.name}
                       </option>

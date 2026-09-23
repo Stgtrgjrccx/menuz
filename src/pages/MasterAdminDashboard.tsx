@@ -39,6 +39,7 @@ import { Link } from 'react-router-dom';
 
 export const MasterAdminDashboard: React.FC = () => {
   const restaurants = useRestaurantStore((state) => state.restaurants);
+  const setCurrentRestaurant = useRestaurantStore((state) => state.setCurrentRestaurant);
   const addRestaurant = useRestaurantStore((state) => state.addRestaurant);
   const toggleRestaurantStatus = useRestaurantStore((state) => state.toggleRestaurantStatus);
   const tables = useRestaurantStore((state) => state.tables);
@@ -572,7 +573,7 @@ export const MasterAdminDashboard: React.FC = () => {
                       {restTables.length > 0 && (
                         <Link
                           to={`/r/${rest.slug}/menu?t=${firstTableToken}`}
-                          target="_blank"
+                          onClick={() => setCurrentRestaurant(rest.id)}
                           className="w-full bg-saffron-50 hover:bg-saffron-100 text-saffron-800 font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors border border-saffron-200"
                         >
                           <ExternalLink className="w-3.5 h-3.5" />
@@ -583,6 +584,7 @@ export const MasterAdminDashboard: React.FC = () => {
                       <div className="flex space-x-2">
                         <Link
                           to={`/manage/${rest.slug}`}
+                          onClick={() => setCurrentRestaurant(rest.id)}
                           className="flex-1 bg-charcoal-900 hover:bg-charcoal-800 text-white font-bold py-2 px-3 rounded-xl text-xs flex items-center justify-center space-x-1 transition-colors text-center"
                         >
                           <span>Manage Hub</span>

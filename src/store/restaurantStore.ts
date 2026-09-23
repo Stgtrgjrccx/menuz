@@ -147,8 +147,46 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
 
       // Restaurant Registry Actions
       addRestaurant: (newRest) => {
+        const cleanSlug = newRest.slug;
+        const newTables: RestaurantTable[] = [
+          { id: `tbl-${cleanSlug}-01`, restaurant_id: newRest.id, label: 'Table 1', public_token: `token-${cleanSlug}-01`, is_active: true },
+          { id: `tbl-${cleanSlug}-02`, restaurant_id: newRest.id, label: 'Table 2', public_token: `token-${cleanSlug}-02`, is_active: true },
+          { id: `tbl-${cleanSlug}-03`, restaurant_id: newRest.id, label: 'Table 3', public_token: `token-${cleanSlug}-03`, is_active: true },
+          { id: `tbl-${cleanSlug}-04`, restaurant_id: newRest.id, label: 'Table 4', public_token: `token-${cleanSlug}-04`, is_active: true },
+        ];
+        const newCategories: MenuCategory[] = [
+          { id: `cat-${cleanSlug}-starters`, restaurant_id: newRest.id, name: 'Starters & Small Plates', sort_order: 1, is_active: true },
+          { id: `cat-${cleanSlug}-mains`, restaurant_id: newRest.id, name: 'Chef Signature Mains', sort_order: 2, is_active: true },
+          { id: `cat-${cleanSlug}-desserts`, restaurant_id: newRest.id, name: 'Desserts & Refreshments', sort_order: 3, is_active: true },
+        ];
+        const newChallenge: ReviewChallenge = {
+          id: `chal-${cleanSlug}-01`,
+          restaurant_id: newRest.id,
+          title: `⭐ ${newRest.name} Review & Win Challenge`,
+          description: 'Share your dining feedback on Google to win a complimentary house dessert or beverage!',
+          reward_type: 'free_dessert',
+          reward_item_name: 'Complimentary House Specialty',
+          win_probability_percent: 100,
+          is_active: true,
+          terms: 'Valid on today’s dining bill for table orders.',
+          redemption_code_prefix: `${cleanSlug.toUpperCase().slice(0, 4)}-WIN-`
+        };
+
+        const notif: SystemNotification = {
+          id: 'notif_onboard_' + Date.now(),
+          type: 'order_placed',
+          restaurant_id: newRest.id,
+          message: `🎉 ${newRest.name} Successfully Onboarded with 4 active tables, digital QR codes, and review challenge.`,
+          timestamp: new Date().toISOString(),
+          read: false
+        };
+
         set((state) => ({
-          restaurants: [newRest, ...state.restaurants]
+          restaurants: [newRest, ...state.restaurants],
+          tables: [...state.tables, ...newTables],
+          categories: [...state.categories, ...newCategories],
+          challenges: [newChallenge, ...state.challenges],
+          notifications: [notif, ...state.notifications]
         }));
       },
 
@@ -386,8 +424,20 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
           ]
         };
 
+        const notification: SystemNotification = {
+          id: 'notif_pos_' + Date.now(),
+          type: 'order_placed',
+          restaurant_id: targetRest.id,
+          table_id: randomTable.id,
+          table_label: randomTable.label,
+          message: `POS Order #${orderNumber}: ${randomTable.label} ordered ${randomItem.name} (₹${total.toFixed(0)})`,
+          timestamp: new Date().toISOString(),
+          read: false
+        };
+
         set((prev) => ({
-          orders: [newOrder, ...prev.orders]
+          orders: [newOrder, ...prev.orders],
+          notifications: [notification, ...prev.notifications]
         }));
 
         return newOrder;
@@ -597,9 +647,10 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       }
     }),
     {
-      name: 'menuz_restaurant_storage_v4',
+      name: 'menuz_restaurant_storage_v5',
       partialize: (state) => ({
         restaurants: state.restaurants,
+        tables: state.tables,
         menuItems: state.menuItems,
         categories: state.categories,
         orders: state.orders,

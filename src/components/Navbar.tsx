@@ -26,19 +26,26 @@ export const Navbar: React.FC = () => {
   }, []);
 
   const restaurant = useRestaurantStore((state) => state.restaurant);
+  const restaurants = useRestaurantStore((state) => state.restaurants);
+  const setCurrentRestaurant = useRestaurantStore((state) => state.setCurrentRestaurant);
   const tables = useRestaurantStore((state) => state.tables);
-  const defaultToken = tables[0]?.public_token || 'table-token-01-saffron';
+  const currentRestTables = tables.filter((t) => t.restaurant_id === restaurant?.id);
+  const defaultToken = currentRestTables[0]?.public_token || tables[0]?.public_token || 'table-token-01-saffron';
   const dinerUrl = `/r/${restaurant?.slug || 'saffron-house'}/menu?t=${defaultToken}`;
 
   const navLinks = [
     { to: '/admin', label: 'Master Admin', icon: ShieldCheck, highlight: true },
     { to: dinerUrl, label: 'Customer Menu', icon: UtensilsCrossed },
-    { to: '/dashboard', label: 'Manager Hub', icon: LayoutDashboard },
+    { to: `/manage/${restaurant?.slug || 'saffron-house'}`, label: 'Manager Hub', icon: LayoutDashboard },
     { to: '/kitchen', label: 'Kitchen KDS', icon: ChefHat },
     { to: '/qr', label: 'QR Codes', icon: QrCode },
   ];
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => {
+    if (path.startsWith('/manage') && location.pathname.startsWith('/manage')) return true;
+    if (path.startsWith('/r/') && location.pathname.startsWith('/r/')) return true;
+    return location.pathname === path;
+  };
 
   const formatTime = (iso: string) => {
     const diffSec = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
@@ -52,18 +59,36 @@ export const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-12">
           {/* Logo → links to Dashboard (/admin) */}
-          <Link
-            to="/admin"
-            className="flex items-center space-x-2 group"
-            title="Go to Master Admin Dashboard"
-          >
-            <span className="font-serif font-bold text-base tracking-wide text-saffron-500 group-hover:text-saffron-400 transition-colors">
-              Menuz
-            </span>
-            <span className="text-[9px] text-charcoal-400 bg-charcoal-800 px-1.5 py-0.5 rounded font-mono hidden sm:inline">
-              Pune
-            </span>
-          </Link>
+          <div className="flex items-center space-x-3">
+            <Link
+              to="/admin"
+              className="flex items-center space-x-2 group"
+              title="Go to Master Admin Dashboard"
+            >
+              <span className="font-serif font-bold text-base tracking-wide text-saffron-500 group-hover:text-saffron-400 transition-colors">
+                Menuz
+              </span>
+              <span className="text-[9px] text-charcoal-400 bg-charcoal-800 px-1.5 py-0.5 rounded font-mono hidden sm:inline">
+                Pune
+              </span>
+            </Link>
+
+            {/* Quick Restaurant Hub Selector */}
+            <div className="hidden sm:block">
+              <select
+                value={restaurant?.id || ''}
+                onChange={(e) => setCurrentRestaurant(e.target.value)}
+                className="bg-charcoal-800 text-saffron-400 hover:text-saffron-300 border border-charcoal-700 hover:border-saffron-500/50 rounded-lg px-2.5 py-1 text-xs font-semibold focus:outline-none cursor-pointer max-w-[160px] truncate transition-colors"
+                title="Switch Active Restaurant Hub"
+              >
+                {restaurants.map((r) => (
+                  <option key={r.id} value={r.id} className="bg-charcoal-900 text-white">
+                    {r.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">

@@ -29,7 +29,9 @@ export const DinerMenu: React.FC = () => {
   const [searchParams] = useSearchParams();
   const tableToken = searchParams.get('t') || '';
 
+  const restaurants = useRestaurantStore((state) => state.restaurants);
   const restaurant = useRestaurantStore((state) => state.restaurant);
+  const setCurrentRestaurant = useRestaurantStore((state) => state.setCurrentRestaurant);
   const tables = useRestaurantStore((state) => state.tables);
   const categories = useRestaurantStore((state) => state.categories);
   const menuItems = useRestaurantStore((state) => state.menuItems);
@@ -42,6 +44,32 @@ export const DinerMenu: React.FC = () => {
   const addItemToCart = useRestaurantStore((state) => state.addItemToCart);
   const callWaiter = useRestaurantStore((state) => state.callWaiter);
   const completeChallenge = useRestaurantStore((state) => state.completeChallenge);
+
+  // Sync route restaurantSlug with active restaurant in store
+  useEffect(() => {
+    if (restaurantSlug) {
+      const match = restaurants.find((r) => r.slug === restaurantSlug);
+      if (match && match.id !== restaurant.id) {
+        setCurrentRestaurant(match.id);
+      }
+    }
+  }, [restaurantSlug, restaurants, restaurant.id, setCurrentRestaurant]);
+
+  // Scoped dishes, categories, and tables for this restaurant
+  const currentRestMenuItems = useMemo(() => {
+    const list = menuItems.filter((m) => m.restaurant_id === restaurant.id);
+    return list.length > 0 ? list : menuItems;
+  }, [menuItems, restaurant.id]);
+
+  const currentRestCategories = useMemo(() => {
+    const list = categories.filter((c) => c.restaurant_id === restaurant.id);
+    return list.length > 0 ? list : categories;
+  }, [categories, restaurant.id]);
+
+  const restaurantChallenges = useMemo(() => {
+    const list = challenges.filter((c) => c.restaurant_id === restaurant.id && c.is_active);
+    return list.length > 0 ? list : challenges.filter((c) => c.is_active);
+  }, [challenges, restaurant.id]);
 
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -68,8 +96,10 @@ export const DinerMenu: React.FC = () => {
 
   // Table Token Verification
   useEffect(() => {
+    const restTables = tables.filter((t) => t.restaurant_id === restaurant.id);
     const matchedTable =
-      (tableToken ? tables.find((t) => t.public_token === tableToken && t.is_active) : null) ||
+      (tableToken ? (restTables.find((t) => t.public_token === tableToken && t.is_active) || tables.find((t) => t.public_token === tableToken && t.is_active)) : null) ||
+      restTables[0] ||
       tables[0] || {
         id: 'tbl-01',
         restaurant_id: restaurant?.id || 'rest-saffron-house-01',
@@ -99,7 +129,7 @@ export const DinerMenu: React.FC = () => {
   const totalCartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   const filteredDishes = useMemo(() => {
-    return menuItems.filter((dish) => {
+    return currentRestMenuItems.filter((dish) => {
       const matchesCat = selectedCategory === 'all' || dish.category_id === selectedCategory;
       const q = searchQuery.toLowerCase().trim();
       const matchesSearch =
@@ -109,20 +139,20 @@ export const DinerMenu: React.FC = () => {
         dish.ingredients.some((ing) => ing.toLowerCase().includes(q));
       return matchesCat && matchesSearch;
     });
-  }, [menuItems, selectedCategory, searchQuery]);
+  }, [currentRestMenuItems, selectedCategory, searchQuery]);
 
   // Group dishes by category for scrollytelling sections
   const dishesByCategory = useMemo(() => {
     if (selectedCategory !== 'all') {
-      return [{ category: categories.find((c) => c.id === selectedCategory), items: filteredDishes }];
+      return [{ category: currentRestCategories.find((c) => c.id === selectedCategory), items: filteredDishes }];
     }
-    return categories
+    return currentRestCategories
       .filter((cat) => filteredDishes.some((d) => d.category_id === cat.id))
       .map((cat) => ({
         category: cat,
         items: filteredDishes.filter((d) => d.category_id === cat.id)
       }));
-  }, [categories, filteredDishes, selectedCategory]);
+  }, [currentRestCategories, filteredDishes, selectedCategory]);
 
   const handleCallWaiter = () => {
     const restId = restaurant?.id || 'rest_saffron_house';
