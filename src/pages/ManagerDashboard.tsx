@@ -19,7 +19,9 @@ import {
   AlertCircle,
   Check,
   UtensilsCrossed,
-  ExternalLink
+  ExternalLink,
+  ArrowLeft,
+  ChefHat
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { MenuItem, MenuCategory } from '../types';
@@ -227,7 +229,35 @@ export const ManagerDashboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-ivory-50 p-4 md:p-8 max-w-5xl mx-auto space-y-8 pb-20">
+    <div className="min-h-screen bg-ivory-50 p-4 md:p-8 max-w-5xl mx-auto space-y-6 pb-20">
+      {/* Top Quick Navigation Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-ivory-200/80">
+        <Link
+          to="/admin"
+          className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-700 hover:text-saffron-700 transition-colors bg-white px-3.5 py-2 rounded-xl border border-ivory-200 shadow-xs hover:border-saffron-300"
+        >
+          <ArrowLeft className="w-3.5 h-3.5 text-saffron-600" />
+          <span>Back to Master Admin Portal</span>
+        </Link>
+
+        <div className="flex items-center space-x-2">
+          <Link
+            to="/kitchen"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-700 hover:text-saffron-700 transition-colors bg-white px-3.5 py-2 rounded-xl border border-ivory-200 shadow-xs hover:border-saffron-300"
+          >
+            <ChefHat className="w-3.5 h-3.5 text-saffron-600" />
+            <span>Kitchen KDS</span>
+          </Link>
+          <Link
+            to="/qr"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-700 hover:text-saffron-700 transition-colors bg-white px-3.5 py-2 rounded-xl border border-ivory-200 shadow-xs hover:border-saffron-300"
+          >
+            <QrCode className="w-3.5 h-3.5 text-saffron-600" />
+            <span>Table QR Badges</span>
+          </Link>
+        </div>
+      </div>
+
       {/* Top Bar */}
       <header className="flex flex-wrap justify-between items-center pb-5 border-b border-ivory-200 gap-4">
         <div>

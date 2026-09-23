@@ -25,7 +25,9 @@ import {
   SEED_REVIEWS,
   SEED_CHALLENGES,
   SEED_REDEMPTIONS,
-  SEED_POS_CONFIGS
+  SEED_POS_CONFIGS,
+  SEED_ORDERS,
+  SEED_CAMPAIGNS
 } from '../data/seedData';
 
 export interface CartItem {
@@ -131,13 +133,13 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       tables: SEED_TABLES,
       categories: SEED_CATEGORIES,
       menuItems: SEED_MENU_ITEMS,
-      orders: [],
+      orders: SEED_ORDERS,
       reviews: SEED_REVIEWS,
       challenges: SEED_CHALLENGES,
       redemptions: SEED_REDEMPTIONS,
       posConfigs: SEED_POS_CONFIGS,
       questionnaires: SEED_QUESTIONNAIRES,
-      campaigns: [],
+      campaigns: SEED_CAMPAIGNS,
       notifications: [],
 
       cart: [],
@@ -633,13 +635,13 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
           tables: SEED_TABLES,
           categories: SEED_CATEGORIES,
           menuItems: SEED_MENU_ITEMS,
-          orders: [],
+          orders: SEED_ORDERS,
           reviews: SEED_REVIEWS,
           challenges: SEED_CHALLENGES,
           redemptions: SEED_REDEMPTIONS,
           posConfigs: SEED_POS_CONFIGS,
           questionnaires: SEED_QUESTIONNAIRES,
-          campaigns: [],
+          campaigns: SEED_CAMPAIGNS,
           notifications: [],
           cart: [],
           customerNotes: ''
@@ -647,7 +649,7 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       }
     }),
     {
-      name: 'menuz_restaurant_storage_v5',
+      name: 'menuz_restaurant_storage_v6',
       partialize: (state) => ({
         restaurants: state.restaurants,
         tables: state.tables,

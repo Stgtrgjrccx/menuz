@@ -7,7 +7,8 @@ import {
   CustomerReview,
   ReviewChallenge,
   ChallengeRedemption,
-  PosIntegrationConfig
+  PosIntegrationConfig,
+  Order
 } from '../types';
 
 export const SEED_RESTAURANT: Restaurant = {
@@ -141,7 +142,7 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     dietary_flags: ['Vegetarian', 'Gluten-Free'],
     spice_level: 2,
     serving_size: '5 skewers',
-    image_url: 'https://images.unsplash.com/photo-1567184109411-b28f5e0695b9?w=600&auto=format&fit=crop',
+    image_url: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=600&auto=format&fit=crop',
     is_available: true,
     pairing_item_ids: ['item-bev-1'],
     sort_order: 1
@@ -396,7 +397,7 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     dietary_flags: ['Vegetarian'],
     spice_level: 0,
     serving_size: '1 piece',
-    image_url: 'https://images.unsplash.com/photo-1505253758473-96b3d5ebcd96?w=600&auto=format&fit=crop',
+    image_url: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&auto=format&fit=crop',
     is_available: true,
     pairing_item_ids: ['item-curry-1'],
     sort_order: 4
@@ -472,7 +473,7 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     dietary_flags: ['Vegetarian'],
     spice_level: 0,
     serving_size: '1 Portion',
-    image_url: 'https://images.unsplash.com/photo-1592417817098-8f3d6910985b?w=600&auto=format&fit=crop',
+    image_url: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop',
     is_available: true,
     pairing_item_ids: ['item-cb-3'],
     chef_notes: 'Our burrata is flown in fresh weekly from artisanal cheesemakers in Puglia.',
@@ -529,7 +530,7 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     dietary_flags: ['Vegetarian'],
     spice_level: 0,
     serving_size: 'Bowl (220g)',
-    image_url: 'https://images.unsplash.com/photo-1621996346565-e3d5d62817d2?w=600&auto=format&fit=crop',
+    image_url: 'https://images.unsplash.com/photo-1556760544-74068565f05c?w=600&auto=format&fit=crop',
     is_available: true,
     pairing_item_ids: [],
     chef_notes: 'Prepared fresh in the pasta lab every morning at 10 AM.',
@@ -576,7 +577,62 @@ export const SEED_RESTAURANTS: Restaurant[] = [
 ];
 
 export const SEED_QUESTIONNAIRES: Record<string, RestaurantAiQuestionnaire> = {};
-export const SEED_REVIEWS: CustomerReview[] = [];
+
+export const SEED_REVIEWS: CustomerReview[] = [
+  {
+    id: 'rev-sh-01',
+    restaurant_id: 'rest-saffron-house-01',
+    customer_name: 'Ananya Deshmukh',
+    customer_phone: '+91 98220 11234',
+    customer_email: 'ananya.d@example.com',
+    rating: 5,
+    selected_keywords: ['Authentic Flavor', 'Quick Service', 'Royal Ambience', 'Dal Makhani'],
+    review_text: 'The 24-hour slow-cooked Dal Makhani paired with Laccha Paratha was pure perfection! The AI menu ordering was seamless right from our table.',
+    whatsapp_opt_in: true,
+    google_review_clicked: true,
+    created_at: new Date(Date.now() - 3600000 * 2).toISOString()
+  },
+  {
+    id: 'rev-sh-02',
+    restaurant_id: 'rest-saffron-house-01',
+    customer_name: 'Rohit Kulkarni',
+    customer_phone: '+91 98221 44556',
+    customer_email: 'rohit.k@example.com',
+    rating: 5,
+    selected_keywords: ['Butter Chicken', 'Tandoori Truffle Kulcha', 'Alphonso Lassi'],
+    review_text: 'Outstanding culinary experience in Pune. The pairings suggested by the digital sommelier were spot-on.',
+    whatsapp_opt_in: true,
+    google_review_clicked: true,
+    created_at: new Date(Date.now() - 3600000 * 8).toISOString()
+  },
+  {
+    id: 'rev-cb-01',
+    restaurant_id: 'rest-casa-bella-02',
+    customer_name: 'Vikram Joshi',
+    customer_phone: '+91 98222 77889',
+    customer_email: 'vikram.j@example.com',
+    rating: 5,
+    selected_keywords: ['Wood-Fired Pizza', 'Crispy Crust', 'Tiramisu'],
+    review_text: 'Best Neapolitan pizza in Koregaon Park! The San Marzano pomodoro and creamy burrata transported us straight to Naples.',
+    whatsapp_opt_in: true,
+    google_review_clicked: true,
+    created_at: new Date(Date.now() - 3600000 * 12).toISOString()
+  },
+  {
+    id: 'rev-cb-02',
+    restaurant_id: 'rest-casa-bella-02',
+    customer_name: 'Pooja Mehta',
+    customer_phone: '+91 98223 99001',
+    customer_email: 'pooja.m@example.com',
+    rating: 4,
+    selected_keywords: ['Fresh Pasta', 'Cozy Vibe', 'Espresso'],
+    review_text: 'Handcrafted pasta was al dente and packed with rich flavors. Great digital ordering workflow.',
+    whatsapp_opt_in: true,
+    google_review_clicked: false,
+    created_at: new Date(Date.now() - 3600000 * 24).toISOString()
+  }
+];
+
 export const SEED_CHALLENGES: ReviewChallenge[] = [
   {
     id: 'chal-sh-01',
@@ -603,5 +659,193 @@ export const SEED_CHALLENGES: ReviewChallenge[] = [
     redemption_code_prefix: 'BELLAVITA-'
   }
 ];
-export const SEED_REDEMPTIONS: ChallengeRedemption[] = [];
-export const SEED_POS_CONFIGS: Record<string, PosIntegrationConfig> = {};
+
+export const SEED_REDEMPTIONS: ChallengeRedemption[] = [
+  {
+    id: 'red-01',
+    restaurant_id: 'rest-saffron-house-01',
+    review_id: 'rev-sh-01',
+    customer_name: 'Ananya Deshmukh',
+    voucher_code: 'SAFFRON-WIN-9821',
+    reward_item_name: 'Complimentary Alphonso Mango Lassi',
+    status: 'unclaimed',
+    created_at: new Date(Date.now() - 3600000 * 2).toISOString()
+  },
+  {
+    id: 'red-02',
+    restaurant_id: 'rest-casa-bella-02',
+    review_id: 'rev-cb-01',
+    customer_name: 'Vikram Joshi',
+    voucher_code: 'BELLAVITA-4412',
+    reward_item_name: 'Complimentary Tiramisu Tradizionale',
+    status: 'redeemed',
+    created_at: new Date(Date.now() - 3600000 * 12).toISOString(),
+    redeemed_at: new Date(Date.now() - 3600000 * 11).toISOString()
+  }
+];
+
+export const SEED_POS_CONFIGS: Record<string, PosIntegrationConfig> = {
+  'rest-saffron-house-01': {
+    restaurant_id: 'rest-saffron-house-01',
+    provider: 'universal_api',
+    connection_status: 'connected',
+    last_sync_time: new Date().toISOString(),
+    auto_sync_orders: true,
+    sync_latency_ms: 180,
+    sync_log: [
+      {
+        id: 'sync-sh-1',
+        timestamp: new Date().toLocaleTimeString(),
+        event: 'Catalog Sync',
+        details: '14 menu items verified with Kitchen KDS printer',
+        status: 'success'
+      },
+      {
+        id: 'sync-sh-2',
+        timestamp: new Date(Date.now() - 300000).toLocaleTimeString(),
+        event: 'Order Webhook',
+        details: 'Order #ORD-1001 dispatched to Tandoor section',
+        status: 'success'
+      }
+    ]
+  },
+  'rest-casa-bella-02': {
+    restaurant_id: 'rest-casa-bella-02',
+    provider: 'toast',
+    connection_status: 'connected',
+    last_sync_time: new Date().toISOString(),
+    auto_sync_orders: true,
+    sync_latency_ms: 210,
+    sync_log: [
+      {
+        id: 'sync-cb-1',
+        timestamp: new Date().toLocaleTimeString(),
+        event: 'Toast POS Handshake',
+        details: 'Token validated, wood-fired oven queue operational',
+        status: 'success'
+      }
+    ]
+  }
+};
+
+export const SEED_ORDERS: Order[] = [
+  {
+    id: 'ord-sh-101',
+    restaurant_id: 'rest-saffron-house-01',
+    table_id: 'tbl-01',
+    table_label: 'Table 1',
+    anonymous_session_id: 'sess-sh-01',
+    order_number: 'ORD-1001',
+    source: 'menuz',
+    status: 'preparing',
+    currency: 'INR',
+    subtotal_amount: 1450.00,
+    tax_amount: 72.50,
+    total_amount: 1522.50,
+    customer_notes: 'Extra crispy laccha paratha please',
+    created_at: new Date(Date.now() - 15 * 60000).toISOString(),
+    updated_at: new Date(Date.now() - 5 * 60000).toISOString(),
+    items: [
+      {
+        id: 'item-ord-1',
+        order_id: 'ord-sh-101',
+        menu_item_id: 'item-curry-1',
+        item_name_snapshot: 'Old Delhi Smoked Butter Chicken',
+        unit_price_snapshot: 620.00,
+        quantity: 1,
+        selected_options_snapshot: [],
+        line_total_amount: 620.00
+      },
+      {
+        id: 'item-ord-2',
+        order_id: 'ord-sh-101',
+        menu_item_id: 'item-curry-2',
+        item_name_snapshot: 'Royal Dal Makhani Bukhara',
+        unit_price_snapshot: 480.00,
+        quantity: 1,
+        selected_options_snapshot: [],
+        line_total_amount: 480.00
+      },
+      {
+        id: 'item-ord-3',
+        order_id: 'ord-sh-101',
+        menu_item_id: 'item-bread-1',
+        item_name_snapshot: 'Tandoori Truffle Garlic Naan',
+        unit_price_snapshot: 140.00,
+        quantity: 2,
+        selected_options_snapshot: [],
+        line_total_amount: 280.00
+      },
+      {
+        id: 'item-ord-4',
+        order_id: 'ord-sh-101',
+        menu_item_id: 'item-bread-4',
+        item_name_snapshot: 'Layered Laccha Paratha',
+        unit_price_snapshot: 110.00,
+        quantity: 1,
+        selected_options_snapshot: [],
+        line_total_amount: 110.00
+      }
+    ]
+  },
+  {
+    id: 'ord-cb-201',
+    restaurant_id: 'rest-casa-bella-02',
+    table_id: 'tbl-cb-01',
+    table_label: 'Table 1',
+    anonymous_session_id: 'sess-cb-01',
+    order_number: 'ORD-2001',
+    source: 'menuz',
+    status: 'served',
+    currency: 'INR',
+    subtotal_amount: 920.00,
+    tax_amount: 46.00,
+    total_amount: 966.00,
+    customer_notes: 'Chili oil on the side',
+    created_at: new Date(Date.now() - 45 * 60000).toISOString(),
+    updated_at: new Date(Date.now() - 10 * 60000).toISOString(),
+    items: [
+      {
+        id: 'item-ord-cb-1',
+        order_id: 'ord-cb-201',
+        menu_item_id: 'item-cb-piz-1',
+        item_name_snapshot: 'Margherita Verace D.O.P.',
+        unit_price_snapshot: 580.00,
+        quantity: 1,
+        selected_options_snapshot: [],
+        line_total_amount: 580.00
+      },
+      {
+        id: 'item-ord-cb-2',
+        order_id: 'ord-cb-201',
+        menu_item_id: 'item-cb-dol-1',
+        item_name_snapshot: 'Tiramisu Tradizionale',
+        unit_price_snapshot: 340.00,
+        quantity: 1,
+        selected_options_snapshot: [],
+        line_total_amount: 340.00
+      }
+    ]
+  }
+];
+
+export const SEED_CAMPAIGNS = [
+  {
+    id: 'camp-sh-01',
+    campaign_name: 'Pune Foodies Weekend Treat',
+    message_template: 'Namaste {{name}}! Craving our royal 24-hr Dal Bukhara? Dine at Saffron House this weekend and enjoy a complimentary Alphonso Mango Lassi on us. Show this message at your table!',
+    target_restaurant_id: 'rest-saffron-house-01',
+    recipients_count: 85,
+    sent_at: new Date(Date.now() - 86400000).toISOString(),
+    status: 'sent' as const
+  },
+  {
+    id: 'camp-cb-01',
+    campaign_name: 'Casa Bella Truffle Pizza Fest',
+    message_template: 'Ciao {{name}}! Our imported Italian Black Summer Truffles have arrived. Book your table at Casa Bella Trattoria this week for an authentic wood-fired indulgence.',
+    target_restaurant_id: 'rest-casa-bella-02',
+    recipients_count: 62,
+    sent_at: new Date(Date.now() - 172800000).toISOString(),
+    status: 'sent' as const
+  }
+];

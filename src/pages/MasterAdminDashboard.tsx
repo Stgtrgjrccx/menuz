@@ -33,11 +33,14 @@ import {
   ArrowLeft,
   Utensils,
   Zap,
-  Globe
+  Globe,
+  ChefHat,
+  QrCode
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const MasterAdminDashboard: React.FC = () => {
+  const navigate = useNavigate();
   const restaurants = useRestaurantStore((state) => state.restaurants);
   const setCurrentRestaurant = useRestaurantStore((state) => state.setCurrentRestaurant);
   const addRestaurant = useRestaurantStore((state) => state.addRestaurant);
@@ -474,6 +477,69 @@ export const MasterAdminDashboard: React.FC = () => {
               </div>
             )}
 
+            {/* Quick Direct-Access Launchpad */}
+            {restaurants.length > 0 && (
+              <div className="bg-gradient-to-r from-charcoal-950 via-charcoal-900 to-charcoal-950 border border-charcoal-800 rounded-3xl p-5 text-white shadow-subtle">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-charcoal-800/80">
+                  <div>
+                    <div className="flex items-center space-x-2">
+                      <span className="w-2 h-2 rounded-full bg-saffron-500 animate-pulse" />
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-saffron-400">Quick Access Launchpad</h3>
+                    </div>
+                    <p className="text-xs text-charcoal-300 mt-0.5">Instant one-click direct jump to any restaurant’s operations or diner experience</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+                  {restaurants.map((r) => {
+                    const rTables = tables.filter((t) => t.restaurant_id === r.id);
+                    const rToken = rTables[0]?.public_token || 'table-token-01';
+                    return (
+                      <div
+                        key={`quick-${r.id}`}
+                        className="bg-charcoal-800/90 border border-charcoal-700 rounded-2xl p-3 flex items-center justify-between gap-3 hover:border-saffron-500/50 transition-all"
+                      >
+                        <div
+                          onClick={() => {
+                            setCurrentRestaurant(r.id);
+                            navigate(`/manage/${r.slug}`);
+                          }}
+                          className="flex items-center space-x-3 cursor-pointer min-w-0 flex-1 group"
+                        >
+                          <img src={r.logo_url} alt={r.name} className="w-10 h-10 rounded-xl object-cover border border-charcoal-700 flex-shrink-0" />
+                          <div className="truncate">
+                            <h4 className="text-xs font-bold text-white group-hover:text-saffron-400 transition-colors truncate">{r.name}</h4>
+                            <span className="text-[10px] text-charcoal-400 block truncate">{r.cuisine}</span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center space-x-1.5 flex-shrink-0">
+                          <Link
+                            to={`/manage/${r.slug}`}
+                            onClick={() => setCurrentRestaurant(r.id)}
+                            className="px-2.5 py-1.5 bg-saffron-600 hover:bg-saffron-500 text-white text-[11px] font-bold rounded-lg transition-colors flex items-center space-x-1"
+                            title={`Open ${r.name} Management Hub`}
+                          >
+                            <span>Hub</span>
+                            <ChevronRight className="w-3 h-3" />
+                          </Link>
+                          <Link
+                            to={`/r/${r.slug}/menu?t=${rToken}`}
+                            onClick={() => setCurrentRestaurant(r.id)}
+                            className="px-2.5 py-1.5 bg-charcoal-700 hover:bg-charcoal-600 text-charcoal-200 hover:text-white text-[11px] font-bold rounded-lg transition-colors flex items-center space-x-1 border border-charcoal-600"
+                            title={`Open ${r.name} Diner Menu (Table 1)`}
+                          >
+                            <UtensilsCrossed className="w-3 h-3 text-saffron-400" />
+                            <span>Diner</span>
+                          </Link>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* Restaurant Cards Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {restaurants.map((rest) => {
@@ -487,19 +553,27 @@ export const MasterAdminDashboard: React.FC = () => {
                 return (
                   <div
                     key={rest.id}
-                    className="bg-white rounded-3xl border border-ivory-300 p-6 shadow-subtle hover:shadow-float transition-all flex flex-col justify-between"
+                    className="bg-white rounded-3xl border border-ivory-300 p-6 shadow-subtle hover:shadow-float hover:border-saffron-300 transition-all flex flex-col justify-between group"
                   >
                     <div>
-                      {/* Card Header */}
+                      {/* Card Header - Clickable to open Manage Hub */}
                       <div className="flex items-start justify-between">
-                        <div className="flex items-center space-x-3">
+                        <div
+                          onClick={() => {
+                            setCurrentRestaurant(rest.id);
+                            navigate(`/manage/${rest.slug}`);
+                          }}
+                          className="flex items-center space-x-3 cursor-pointer flex-1 mr-2"
+                        >
                           <img
                             src={rest.logo_url}
                             alt={rest.name}
-                            className="w-12 h-12 rounded-2xl object-cover border border-ivory-300 shadow-sm"
+                            className="w-12 h-12 rounded-2xl object-cover border border-ivory-300 shadow-sm group-hover:scale-105 transition-transform"
                           />
                           <div>
-                            <h3 className="font-bold text-base text-charcoal-900 font-serif leading-tight">{rest.name}</h3>
+                            <h3 className="font-bold text-base text-charcoal-900 font-serif leading-tight group-hover:text-saffron-700 transition-colors">
+                              {rest.name}
+                            </h3>
                             <span className="text-xs text-saffron-700 font-medium block">{rest.cuisine}</span>
                           </div>
                         </div>
@@ -568,35 +642,68 @@ export const MasterAdminDashboard: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Action Links */}
-                    <div className="mt-5 pt-4 border-t border-ivory-200 flex flex-col space-y-2">
-                      {restTables.length > 0 && (
-                        <Link
-                          to={`/r/${rest.slug}/menu?t=${firstTableToken}`}
-                          onClick={() => setCurrentRestaurant(rest.id)}
-                          className="w-full bg-saffron-50 hover:bg-saffron-100 text-saffron-800 font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors border border-saffron-200"
-                        >
-                          <ExternalLink className="w-3.5 h-3.5" />
-                          <span>Launch Diner Menu ({restTables[0]?.label || 'Table 1'})</span>
-                        </Link>
-                      )}
+                    {/* Action Links & Multi-Button Control */}
+                    <div className="mt-5 pt-4 border-t border-ivory-200 flex flex-col space-y-2.5">
+                      <Link
+                        to={`/r/${rest.slug}/menu?t=${firstTableToken}`}
+                        onClick={() => setCurrentRestaurant(rest.id)}
+                        className="w-full bg-saffron-50 hover:bg-saffron-100 text-saffron-800 font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors border border-saffron-200 shadow-xs"
+                      >
+                        <UtensilsCrossed className="w-3.5 h-3.5 text-saffron-600" />
+                        <span>Launch Diner Menu ({restTables[0]?.label || 'Table 1'})</span>
+                        <ExternalLink className="w-3 h-3 text-saffron-500 ml-0.5" />
+                      </Link>
 
-                      <div className="flex space-x-2">
+                      <div className="grid grid-cols-3 gap-2">
                         <Link
                           to={`/manage/${rest.slug}`}
                           onClick={() => setCurrentRestaurant(rest.id)}
-                          className="flex-1 bg-charcoal-900 hover:bg-charcoal-800 text-white font-bold py-2 px-3 rounded-xl text-xs flex items-center justify-center space-x-1 transition-colors text-center"
+                          className="bg-charcoal-900 hover:bg-charcoal-800 text-white font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 transition-colors text-center"
+                          title="Manager Hub & Menu Editor"
                         >
-                          <span>Manage Hub</span>
-                          <ChevronRight className="w-3.5 h-3.5" />
+                          <span>Manage</span>
+                          <ChevronRight className="w-3 h-3" />
                         </Link>
 
+                        <Link
+                          to="/kitchen"
+                          onClick={() => setCurrentRestaurant(rest.id)}
+                          className="bg-ivory-100 hover:bg-ivory-200 text-charcoal-800 font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 border border-ivory-300 transition-colors text-center"
+                          title="Kitchen Display System (KDS)"
+                        >
+                          <ChefHat className="w-3.5 h-3.5 text-saffron-600" />
+                          <span>KDS</span>
+                        </Link>
+
+                        <Link
+                          to="/qr"
+                          onClick={() => setCurrentRestaurant(rest.id)}
+                          className="bg-ivory-100 hover:bg-ivory-200 text-charcoal-800 font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 border border-ivory-300 transition-colors text-center"
+                          title="View & Download Table QR Badges"
+                        >
+                          <QrCode className="w-3.5 h-3.5 text-charcoal-600" />
+                          <span>QRs</span>
+                        </Link>
+                      </div>
+
+                      <div className="flex items-center justify-between pt-1 text-[11px] text-charcoal-500">
+                        <span className="truncate max-w-[170px] font-mono text-[10px]">/#/r/{rest.slug}/menu</span>
                         <button
                           onClick={() => copyUrl(window.location.origin + dinerUrl, rest.id)}
-                          className="px-3 bg-ivory-100 hover:bg-ivory-200 text-charcoal-700 py-2 rounded-xl text-xs font-semibold border border-ivory-300 flex items-center space-x-1"
+                          className="px-2.5 py-1 bg-ivory-100 hover:bg-ivory-200 text-charcoal-700 rounded-lg font-medium border border-ivory-200 flex items-center space-x-1 flex-shrink-0 transition-colors"
                           title="Copy Table 1 Menu Link"
                         >
-                          {copiedLink === rest.id ? <Check className="w-3.5 h-3.5 text-green-600" /> : <Copy className="w-3.5 h-3.5" />}
+                          {copiedLink === rest.id ? (
+                            <>
+                              <Check className="w-3 h-3 text-green-600" />
+                              <span className="text-green-700 font-bold">Copied</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-3 h-3" />
+                              <span>Copy Link</span>
+                            </>
+                          )}
                         </button>
                       </div>
                     </div>
