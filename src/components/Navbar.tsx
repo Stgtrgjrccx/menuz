@@ -15,6 +15,18 @@ export const Navbar: React.FC = () => {
 
         <div className="flex items-center space-x-1 sm:space-x-3 overflow-x-auto">
           <Link
+            to="/qr"
+            className={`flex items-center space-x-1 px-2.5 py-1 rounded-lg transition-colors ${
+              location.pathname === '/qr'
+                ? 'bg-saffron-600 text-white font-semibold'
+                : 'text-gray-300 hover:text-white hover:bg-charcoal-800'
+            }`}
+          >
+            <QrCode className="w-3.5 h-3.5" />
+            <span>Table QR Codes</span>
+          </Link>
+
+          <Link
             to="/r/saffron-house/menu?t=table-token-01-saffron"
             className={`flex items-center space-x-1 px-2.5 py-1 rounded-lg transition-colors ${
               location.pathname.startsWith('/r/')

@@ -4,6 +4,7 @@ import { Navbar } from './components/Navbar';
 import { DinerMenu } from './pages/DinerMenu';
 import { KitchenKDS } from './pages/KitchenKDS';
 import { ManagerDashboard } from './pages/ManagerDashboard';
+import { QrCodesPage } from './pages/QrCodesPage';
 
 export const App: React.FC = () => {
   return (
@@ -27,6 +28,10 @@ export const App: React.FC = () => {
             <Route
               path="/dashboard"
               element={<ManagerDashboard />}
+            />
+            <Route
+              path="/qr"
+              element={<QrCodesPage />}
             />
             <Route
               path="*"
