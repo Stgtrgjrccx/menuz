@@ -24,7 +24,8 @@ export const SEED_RESTAURANT: Restaurant = {
     accent: '#C84B00'
   },
   currency: 'INR',
-  tax_rate_percent: 5.00
+  tax_rate_percent: 5.00,
+  google_place_url: 'https://search.google.com/local/writereview?placeid=ChIJSaffronHouseKoregaonParkPune'
 };
 
 export const SEED_TABLES: RestaurantTable[] = [
@@ -572,7 +573,8 @@ export const SEED_RESTAURANTS: Restaurant[] = [
       accent: '#0F766E'
     },
     currency: 'INR',
-    tax_rate_percent: 5.00
+    tax_rate_percent: 5.00,
+    google_place_url: 'https://search.google.com/local/writereview?placeid=ChIJCasaBellaTrattoriaPune'
   }
 ];
 

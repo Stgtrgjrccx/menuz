@@ -38,6 +38,7 @@ export const DinerMenu: React.FC = () => {
   const menuItems = useRestaurantStore((state) => state.menuItems);
   const cart = useRestaurantStore((state) => state.cart);
   const challenges = useRestaurantStore((state) => state.challenges);
+  const reviews = useRestaurantStore((state) => state.reviews);
   const activeTable = useRestaurantStore((state) => state.activeTable);
   const setActiveTable = useRestaurantStore((state) => state.setActiveTable);
   const activeOrderId = useRestaurantStore((state) => state.activeOrderId);
@@ -72,6 +73,11 @@ export const DinerMenu: React.FC = () => {
     return list.length > 0 ? list : challenges.filter((c) => c.is_active);
   }, [challenges, restaurant.id]);
 
+  const restaurantReviews = useMemo(() => {
+    const list = reviews.filter((r) => r.restaurant_id === restaurant.id);
+    return list.length > 0 ? list : reviews;
+  }, [reviews, restaurant.id]);
+
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeDish, setActiveDish] = useState<MenuItem | null>(null);
@@ -83,8 +89,9 @@ export const DinerMenu: React.FC = () => {
   const [waiterToast, setWaiterToast] = useState<string | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
-  // Challenge modal state
+  // Challenge & Wheel modal state
   const [isChallengeModalOpen, setIsChallengeModalOpen] = useState(false);
+  const [challengeModalMode, setChallengeModalMode] = useState<'review' | 'wheel'>('review');
   const [selectedChallenge, setSelectedChallenge] = useState<ReviewChallenge | null>(null);
 
   // Scrollytelling section refs
@@ -165,7 +172,7 @@ export const DinerMenu: React.FC = () => {
     }, 4500);
   };
 
-  const handleOpenChallenge = (chal?: ReviewChallenge) => {
+  const handleOpenChallenge = (chal?: ReviewChallenge, mode: 'review' | 'wheel' = 'review') => {
     if (chal) {
       setSelectedChallenge(chal);
     } else if (restaurantChallenges.length > 0) {
@@ -173,6 +180,7 @@ export const DinerMenu: React.FC = () => {
     } else if (challenges.length > 0) {
       setSelectedChallenge(challenges[0]);
     }
+    setChallengeModalMode(mode);
     setIsChallengeModalOpen(true);
   };
 
@@ -268,50 +276,66 @@ export const DinerMenu: React.FC = () => {
             </button>
 
             <button
-              onClick={() => handleOpenChallenge()}
-              className="px-4 py-2 bg-gradient-to-r from-amber-500 to-saffron-600 hover:brightness-105 text-white text-xs font-bold rounded-full shadow-subtle transition-all flex items-center space-x-1.5 animate-pulse"
+              onClick={() => handleOpenChallenge(undefined, 'review')}
+              className="px-4 py-2 bg-gradient-to-r from-amber-500 via-saffron-600 to-amber-600 hover:brightness-105 text-white text-xs font-bold rounded-full shadow-subtle transition-all flex items-center space-x-1.5 animate-pulse"
             >
-              <span className="text-sm">🎡</span>
-              <span>Spin &amp; Win Rewards</span>
+              <span className="text-sm">⭐</span>
+              <span>Google Review &amp; Win Rewards</span>
             </button>
           </div>
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* LUCKY DINING WHEEL BANNER                                   */}
+      {/* GOOGLE REVIEW & LUCKY DINING WHEEL BANNER                  */}
       {/* ═══════════════════════════════════════════════════════════ */}
       <div className="max-w-xl mx-auto px-4 -mt-4 relative z-20">
-        <button
-          onClick={() => handleOpenChallenge()}
-          className="w-full bg-gradient-to-r from-amber-600 via-saffron-600 to-amber-700 text-white p-4 rounded-3xl shadow-float flex items-center justify-between text-left hover:scale-[1.01] active:scale-[0.99] transition-all group border border-amber-300/30 overflow-hidden relative"
-        >
-          <div className="absolute right-0 top-0 bottom-0 w-36 bg-gradient-to-l from-white/10 to-transparent pointer-events-none" />
-          <div className="flex items-center space-x-3.5 relative z-10">
-            <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white flex-shrink-0 border border-white/30 group-hover:rotate-180 transition-transform duration-700">
-              <span className="text-2xl">🎡</span>
-            </div>
-            <div>
-              <div className="flex items-center space-x-2">
-                <span className="text-[10px] uppercase font-bold tracking-wider text-amber-200">
-                  Interactive Table Game
-                </span>
-                <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-400/30 text-amber-100 border border-amber-300/40">
-                  100% Win Rate
-                </span>
+        <div className="w-full bg-gradient-to-r from-charcoal-950 via-charcoal-900 to-charcoal-950 border border-amber-400/40 p-4 sm:p-5 rounded-3xl shadow-float text-white relative overflow-hidden space-y-3">
+          <div className="absolute right-0 top-0 bottom-0 w-44 bg-gradient-to-l from-amber-500/10 to-transparent pointer-events-none" />
+
+          <div className="flex items-start justify-between relative z-10">
+            <div className="flex items-start space-x-3">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-saffron-600 flex items-center justify-center text-white flex-shrink-0 shadow-md">
+                <span className="text-2xl">⭐</span>
               </div>
-              <p className="font-serif font-bold text-sm sm:text-base leading-snug text-white mt-0.5">
-                Spin the Wheel &amp; Win Free Treats or Discounts!
-              </p>
+              <div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-amber-400">
+                    Google Review &amp; Win Challenge
+                  </span>
+                  <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-green-500/20 text-green-300 border border-green-400/30">
+                    100% Win Rate
+                  </span>
+                </div>
+                <h3 className="font-serif font-bold text-sm sm:text-base leading-snug text-white mt-0.5">
+                  1-Tap AI Google Review &amp; Spin the Lucky Wheel!
+                </h3>
+                <p className="text-[11px] text-charcoal-300 mt-1 max-w-sm leading-relaxed">
+                  Draft an authentic 5-star review in seconds with our smart AI writer. Post on Google to unlock the Lucky Dining Wheel for free drinks, treats, or discounts!
+                </p>
+              </div>
             </div>
           </div>
-          <div className="relative z-10 flex-shrink-0 ml-2">
-            <span className="px-3.5 py-2 bg-white text-saffron-700 text-xs font-bold rounded-2xl shadow-subtle flex items-center space-x-1 group-hover:bg-amber-50 transition-colors">
-              <span>Spin Now</span>
-              <span className="group-hover:translate-x-0.5 transition-transform">→</span>
-            </span>
+
+          <div className="grid grid-cols-2 gap-2 relative z-10 pt-1 border-t border-charcoal-800">
+            <button
+              type="button"
+              onClick={() => handleOpenChallenge(undefined, 'review')}
+              className="py-2.5 px-3 bg-gradient-to-r from-amber-500 to-saffron-600 hover:brightness-105 active:scale-95 text-white text-xs font-bold rounded-2xl shadow-subtle flex items-center justify-center space-x-1.5 transition-all"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-white" />
+              <span>Draft AI Review &amp; Spin</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleOpenChallenge(undefined, 'wheel')}
+              className="py-2.5 px-3 bg-charcoal-800 hover:bg-charcoal-700 active:scale-95 text-charcoal-200 text-xs font-semibold rounded-2xl border border-charcoal-700 flex items-center justify-center space-x-1.5 transition-all"
+            >
+              <span>🎡 Direct Spin Game</span>
+            </button>
           </div>
-        </button>
+        </div>
       </div>
 
       {/* ═══════════════════════════════════════════════════════════ */}
@@ -488,6 +512,76 @@ export const DinerMenu: React.FC = () => {
             </section>
           ))
         )}
+
+        {/* ═══════════════════════════════════════════════════════════ */}
+        {/* VERIFIED GOOGLE REVIEWS & DINER FEEDBACK SECTION           */}
+        {/* ═══════════════════════════════════════════════════════════ */}
+        <section className="bg-gradient-to-br from-white via-ivory-50 to-amber-50/40 rounded-3xl p-5 border border-ivory-200 shadow-subtle space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <span className="text-xl">⭐</span>
+              <div>
+                <h3 className="font-serif font-bold text-sm text-charcoal-900 leading-tight">
+                  Guest Reviews &amp; Google Rating
+                </h3>
+                <span className="text-[10px] text-charcoal-500 font-medium">
+                  Verified diners at {restaurant.name}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-1.5 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-xl">
+              <span className="font-serif font-bold text-xs text-amber-900">4.9 ★</span>
+              <span className="text-[9px] text-amber-700 font-semibold">Google Verified</span>
+            </div>
+          </div>
+
+          {/* Quick Review Cards */}
+          <div className="space-y-2.5">
+            {restaurantReviews.slice(0, 2).map((rev) => (
+              <div key={rev.id} className="bg-white rounded-2xl p-3.5 border border-ivory-200 shadow-xs space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-6 h-6 rounded-full bg-saffron-100 text-saffron-700 flex items-center justify-center text-[10px] font-bold">
+                      {rev.customer_name[0]}
+                    </div>
+                    <span className="font-serif font-bold text-xs text-charcoal-900">{rev.customer_name}</span>
+                    <span className="text-[9px] bg-green-50 text-green-700 px-1.5 py-0.5 rounded font-semibold border border-green-200">
+                      ✓ Google Review
+                    </span>
+                  </div>
+                  <div className="flex text-amber-400 text-xs">
+                    {'★'.repeat(rev.rating)}
+                  </div>
+                </div>
+
+                <p className="text-xs text-charcoal-700/80 leading-relaxed italic">
+                  "{rev.review_text}"
+                </p>
+
+                {rev.selected_keywords && rev.selected_keywords.length > 0 && (
+                  <div className="flex flex-wrap gap-1 pt-1">
+                    {rev.selected_keywords.map((kw, i) => (
+                      <span key={i} className="text-[9px] bg-ivory-100 text-charcoal-600 px-1.5 py-0.5 rounded border border-ivory-200">
+                        {kw}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Call to Action Button */}
+          <button
+            type="button"
+            onClick={() => handleOpenChallenge(undefined, 'review')}
+            className="w-full py-3 bg-gradient-to-r from-charcoal-900 via-charcoal-800 to-charcoal-900 hover:brightness-110 active:scale-95 text-white rounded-2xl text-xs font-bold shadow-subtle flex items-center justify-center space-x-2 transition-all border border-charcoal-700"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <span>Write a Google Review with AI &amp; Spin the Wheel!</span>
+          </button>
+        </section>
       </main>
 
       {/* ═══════════════════════════════════════════════════════════ */}
@@ -507,14 +601,14 @@ export const DinerMenu: React.FC = () => {
         </div>
       )}
 
-      {/* Floating Lucky Wheel Game Button */}
+      {/* Floating Lucky Wheel / Review Game Button */}
       <button
-        onClick={() => handleOpenChallenge()}
+        onClick={() => handleOpenChallenge(undefined, 'review')}
         className="fixed bottom-36 right-4 z-40 p-3 rounded-full shadow-float bg-gradient-to-r from-amber-500 via-saffron-600 to-amber-600 text-white border-2 border-white hover:scale-105 active:scale-95 transition-all flex items-center space-x-1.5 group"
-        title="Spin the Lucky Dining Wheel"
+        title="Review & Spin to Win"
       >
-        <span className="text-xl group-hover:rotate-180 transition-transform duration-700">🎡</span>
-        <span className="text-xs font-bold pr-1 hidden sm:inline">Spin &amp; Win</span>
+        <span className="text-xl group-hover:rotate-180 transition-transform duration-700">⭐</span>
+        <span className="text-xs font-bold pr-1 hidden sm:inline">Review &amp; Win</span>
       </button>
 
       {/* Call Waiter FAB */}
@@ -573,6 +667,7 @@ export const DinerMenu: React.FC = () => {
         onClose={() => setIsChallengeModalOpen(false)}
         activeTable={activeTable}
         challenge={selectedChallenge}
+        initialMode={challengeModalMode}
       />
 
       {/* Dish Detail Modal */}
