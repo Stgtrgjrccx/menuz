@@ -202,7 +202,7 @@ export interface PosIntegrationConfig {
   sync_log: PosSyncEvent[];
 }
 
-export type NotificationType = 'waiter_call' | 'challenge_complete' | 'order_placed' | 'review_submitted';
+export type NotificationType = 'waiter_call' | 'challenge_complete' | 'order_placed' | 'review_submitted' | 'service_alert';
 
 export interface SystemNotification {
   id: string;

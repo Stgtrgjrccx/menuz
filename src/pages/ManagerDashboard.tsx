@@ -101,6 +101,15 @@ export const ManagerDashboard: React.FC = () => {
 
   const totalVolume = activeOrdersList.reduce((sum, o) => sum + o.total_amount, 0);
   const totalOrdersCount = activeOrdersList.length;
+  const unreadServiceAlerts = activeNotificationsList.filter(
+    (n) =>
+      (n.type === 'service_alert' ||
+        (n.message &&
+          (n.message.includes('URGENT') ||
+            n.message.includes('below 4') ||
+            n.message.includes('Service Concern')))) &&
+      !n.read
+  );
   const unreadWaiterCalls = activeNotificationsList.filter((n) => n.type === 'waiter_call' && !n.read);
 
   const downloadTableQrSvg = (tableLabel: string, publicToken: string) => {
@@ -301,6 +310,61 @@ export const ManagerDashboard: React.FC = () => {
         <div className="bg-emerald-50 border border-emerald-200 text-emerald-900 px-4 py-3 rounded-2xl flex items-center space-x-2 shadow-xs text-xs font-semibold animate-fadeIn">
           <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
           <span>{addSuccessMsg}</span>
+        </div>
+      )}
+
+      {/* 🚨 LIVE URGENT SERVICE ALERTS (RATING BELOW 4 STARS) */}
+      {unreadServiceAlerts.length > 0 && (
+        <div className="bg-red-500/15 border-2 border-red-500/60 rounded-3xl p-5 shadow-float animate-pulse">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center space-x-2.5">
+              <span className="relative flex h-3.5 w-3.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-90"></span>
+                <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-red-600"></span>
+              </span>
+              <div>
+                <h3 className="font-serif font-bold text-base text-red-950 flex items-center space-x-2">
+                  <span>🚨 Urgent Guest Assistance Required</span>
+                  <span className="text-xs bg-red-600 text-white px-2 py-0.5 rounded-full font-sans">
+                    {unreadServiceAlerts.length} Table{unreadServiceAlerts.length > 1 ? 's' : ''} (Rating &lt; 4★)
+                  </span>
+                </h3>
+                <p className="text-xs text-red-800">
+                  Guest rated below 4 stars. Manager or team member must attend the table immediately to resolve!
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            {unreadServiceAlerts.map((notif) => (
+              <div
+                key={notif.id}
+                className="bg-white p-4 rounded-2xl border-2 border-red-300 shadow-md flex flex-col justify-between space-y-2.5"
+              >
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] uppercase font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded-full border border-red-200">
+                      Immediate Action
+                    </span>
+                    <span className="text-[10px] text-charcoal-400 font-mono">Floor Alert</span>
+                  </div>
+                  <p className="font-serif font-bold text-base text-charcoal-900 mt-1">
+                    {notif.table_label || 'Customer Table'}
+                  </p>
+                  <p className="text-xs text-charcoal-700 mt-1 leading-snug font-medium">
+                    {notif.message}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => markNotificationRead(notif.id)}
+                  className="w-full py-2 bg-red-600 hover:bg-red-700 active:scale-95 text-white text-xs font-bold rounded-xl transition-all shadow-subtle flex items-center justify-center space-x-1.5"
+                >
+                  <span>✓ Attending Table Now</span>
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
