@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import {
   X,
   Sparkles,
@@ -338,7 +339,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
       table_label: activeTable?.label || 'Table 1',
       type: 'challenge_complete',
       customer_name: customerName,
-      message: `🎉 ${customerName} at ${activeTable?.label || 'Table 1'} filled the reward form and won: "${randomPrize.label}"! Voucher: ${code}`
+      message: `🎉 ${customerName} at ${activeTable?.label || 'Table 1'} unlocked surprise reward and won: "${randomPrize.label}"! Voucher: ${code}`
     });
 
     playWinFanfare();
@@ -366,9 +367,32 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
 
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-charcoal-950/80 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white rounded-3xl max-w-md w-full max-h-[92vh] overflow-y-auto p-5 sm:p-6 shadow-2xl border border-ivory-200 relative flex flex-col items-center">
+  return createPortal(
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 9999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(28, 25, 23, 0.85)',
+        backdropFilter: 'blur(8px)',
+        padding: '16px'
+      }}
+      className="animate-fadeIn"
+    >
+      <div
+        style={{
+          backgroundColor: '#FFFFFF',
+          maxHeight: '92vh',
+          overflowY: 'auto'
+        }}
+        className="rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-ivory-200 relative flex flex-col items-center"
+      >
         {/* Confetti canvas */}
         <canvas
           ref={confettiCanvasRef}
@@ -385,7 +409,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               <h3 className="font-serif font-bold text-base text-charcoal-900 leading-tight">
                 {step === 'urgent_service' || step === 'urgent_resolved'
                   ? 'Immediate Floor Assistance'
-                  : 'Fill Form to Win Table Reward'}
+                  : "🎁 Today's Surprise Table Reward"}
               </h3>
               <span className="text-[10px] uppercase font-bold tracking-wider text-saffron-700">
                 {activeTable?.label || 'Table 1'} • 100% Guaranteed Reward
@@ -403,7 +427,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
         </div>
 
         {/* ═══════════════════════════════════════════════════════════ */}
-        {/* STEP 1: THE INTRIGUING, SEAMLESS REWARD FORM                */}
+        {/* STEP 1: THE INTRIGUING, SEAMLESS SURPRISE REWARD UNLOCK     */}
         {/* ═══════════════════════════════════════════════════════════ */}
         {step === 'form' && (
           <div className="w-full flex flex-col items-center pt-3 space-y-4 text-center">
@@ -411,17 +435,17 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
             <div className="w-full bg-gradient-to-br from-amber-500/10 via-saffron-500/10 to-amber-600/10 border border-amber-300/50 rounded-2xl p-4 text-center space-y-1 relative overflow-hidden">
               <div className="text-3xl animate-bounce">🎁</div>
               <h4 className="font-serif font-bold text-sm text-charcoal-900">
-                Unlock Your Table's Mystery Dining Reward!
+                Unlock Your Table's Mystery Dining Treat!
               </h4>
               <p className="text-[11px] text-charcoal-600 max-w-xs mx-auto leading-relaxed">
-                Take 30 seconds to tell us about your visit today. Win an instant complimentary chef treat, craft beverage, or up to 20% off your bill!
+                Rate your dining experience below to instantly reveal your guaranteed complimentary chef treat, signature drink, or exclusive table discount!
               </p>
             </div>
 
             {/* Question 1: Star Rating */}
             <div className="w-full space-y-1.5">
               <label className="block text-xs font-bold text-charcoal-800">
-                1. How is your dining experience today?
+                1. Rate your dining experience to reveal your gift:
               </label>
 
               <div className="flex items-center justify-center space-x-2 my-1">
@@ -490,7 +514,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-[10px] font-bold text-charcoal-700 mb-0.5">Mobile Number</label>
+                <label className="block text-[10px] font-bold text-charcoal-700 mb-0.5">Mobile Number (Voucher)</label>
                 <input
                   type="tel"
                   placeholder="e.g. 98220 12345"
@@ -519,7 +543,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-saffron-600 via-amber-500 to-saffron-700 hover:brightness-105 active:scale-95 text-white font-serif text-sm font-bold shadow-float flex items-center justify-center space-x-2 transition-all mt-2"
             >
               <Sparkles className="w-4 h-4 text-amber-200" />
-              <span>🎁 Submit &amp; Reveal My Reward →</span>
+              <span>🎁 Reveal My Surprise Reward →</span>
             </button>
           </div>
         )}
@@ -749,6 +773,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

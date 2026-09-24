@@ -1,61 +1,67 @@
 {
-  "hash": "e4615daf",
+  "hash": "3f226763",
   "configHash": "83c53a48",
-  "lockfileHash": "ca3ebd27",
-  "browserHash": "cf42b29c",
+  "lockfileHash": "c70eb27a",
+  "browserHash": "cf7a31dc",
   "optimized": {
     "react/jsx-dev-runtime": {
       "src": "../../node_modules/react/jsx-dev-runtime.js",
       "file": "react_jsx-dev-runtime.js",
-      "fileHash": "90d4c01f",
+      "fileHash": "eb734443",
       "needsInterop": true
     },
     "react": {
       "src": "../../node_modules/react/index.js",
       "file": "react.js",
-      "fileHash": "d0e502de",
+      "fileHash": "b20868c2",
       "needsInterop": true
     },
     "react-dom/client": {
       "src": "../../node_modules/react-dom/client.js",
       "file": "react-dom_client.js",
-      "fileHash": "3643565b",
+      "fileHash": "aca82108",
       "needsInterop": true
     },
     "react-router-dom": {
       "src": "../../node_modules/react-router-dom/dist/index.js",
       "file": "react-router-dom.js",
-      "fileHash": "22753562",
+      "fileHash": "42673b3e",
       "needsInterop": false
     },
     "lucide-react": {
       "src": "../../node_modules/lucide-react/dist/esm/lucide-react.js",
       "file": "lucide-react.js",
-      "fileHash": "f1abfa36",
+      "fileHash": "8902d14d",
       "needsInterop": false
     },
     "zustand": {
       "src": "../../node_modules/zustand/esm/index.mjs",
       "file": "zustand.js",
-      "fileHash": "d87a12cd",
+      "fileHash": "78ad2df1",
       "needsInterop": false
     },
     "zustand/middleware": {
       "src": "../../node_modules/zustand/esm/middleware.mjs",
       "file": "zustand_middleware.js",
-      "fileHash": "69026453",
+      "fileHash": "c4a15699",
       "needsInterop": false
     },
     "@supabase/supabase-js": {
       "src": "../../node_modules/@supabase/supabase-js/dist/index.mjs",
       "file": "@supabase_supabase-js.js",
-      "fileHash": "ce2489b5",
+      "fileHash": "65bcbd27",
       "needsInterop": false
+    },
+    "react-dom": {
+      "src": "../../node_modules/react-dom/index.js",
+      "file": "react-dom.js",
+      "fileHash": "00444170",
+      "needsInterop": true
     }
   },
   "chunks": {
-    "chunk-V2X5ZORR": {
-      "file": "chunk-V2X5ZORR.js"
+    "chunk-XHU36PYF": {
+      "file": "chunk-XHU36PYF.js"
     },
     "chunk-32E4H3EV": {
       "file": "chunk-32E4H3EV.js"

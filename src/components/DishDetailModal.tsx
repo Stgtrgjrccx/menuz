@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Flame, Sparkles, ShoppingBag, Plus, Minus, AlertTriangle } from 'lucide-react';
 import { MenuItem, SelectedOptionSnapshot } from '../types';
 import { useRestaurantStore } from '../store/restaurantStore';
@@ -56,7 +57,7 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
     onOpenCart();
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-50 bg-charcoal-900/60 backdrop-blur-sm flex items-end justify-center">
       <div 
         className="bg-white rounded-t-3xl max-w-xl w-full max-h-[92vh] flex flex-col shadow-float overflow-hidden animate-in slide-in-from-bottom duration-200"
@@ -259,6 +260,7 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

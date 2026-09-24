@@ -54,6 +54,11 @@ export const Navbar: React.FC = () => {
     return `${Math.floor(diffSec / 3600)}h ago`;
   };
 
+  // Hide admin navigation bar completely when customer is viewing diner menu
+  if (location.pathname.startsWith('/r/')) {
+    return null;
+  }
+
   return (
     <nav className="bg-charcoal-900 text-white border-b border-charcoal-800 relative z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

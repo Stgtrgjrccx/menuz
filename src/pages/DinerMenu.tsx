@@ -254,14 +254,14 @@ export const DinerMenu: React.FC = () => {
               'Explore our carefully curated menu, crafted with passion and authentic Indian spices.'}
           </p>
 
-          {/* Quick Action Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-2.5 pt-2">
+          {/* Clean Quick Action Buttons */}
+          <div className="flex items-center justify-center gap-3 pt-2">
             <button
-              onClick={scrollToMenu}
-              className="px-4 py-2 bg-charcoal-900 hover:bg-charcoal-800 text-white text-xs font-bold rounded-full shadow-subtle transition-all flex items-center space-x-1.5"
+              onClick={() => handleOpenChallenge()}
+              className="px-5 py-2.5 bg-gradient-to-r from-amber-500 via-saffron-600 to-amber-600 hover:brightness-105 active:scale-95 text-white text-xs font-bold rounded-full shadow-float transition-all flex items-center space-x-1.5 animate-pulse"
             >
-              <span>Explore Menu</span>
-              <ChevronDown className="w-3.5 h-3.5" />
+              <span className="text-sm">🎁</span>
+              <span>Win Surprise Reward</span>
             </button>
 
             <button
@@ -269,62 +269,52 @@ export const DinerMenu: React.FC = () => {
                 setAiFocusDish(null);
                 setIsAiOpen(true);
               }}
-              className="px-4 py-2 bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold rounded-full shadow-subtle transition-all flex items-center space-x-1.5"
+              className="px-4 py-2.5 bg-charcoal-900 hover:bg-charcoal-800 text-white text-xs font-bold rounded-full shadow-subtle transition-all flex items-center space-x-1.5"
             >
-              <Sparkles className="w-3.5 h-3.5" />
+              <Sparkles className="w-3.5 h-3.5 text-saffron-400" />
               <span>Ask AI Concierge</span>
-            </button>
-
-            <button
-              onClick={() => handleOpenChallenge()}
-              className="px-4 py-2 bg-gradient-to-r from-amber-500 via-saffron-600 to-amber-600 hover:brightness-105 text-white text-xs font-bold rounded-full shadow-subtle transition-all flex items-center space-x-1.5 animate-pulse"
-            >
-              <span className="text-sm">🎁</span>
-              <span>Fill Form to Win Rewards</span>
             </button>
           </div>
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* INTRIGUING REWARD BANNER (FILL FORM TO WIN REWARD)          */}
+      {/* SLEEK SURPRISE TABLE REWARD TEASER CARD                    */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <div className="max-w-xl mx-auto px-4 -mt-4 relative z-20">
-        <div className="w-full bg-gradient-to-br from-charcoal-950 via-charcoal-900 to-charcoal-950 border border-amber-400/40 p-4 sm:p-5 rounded-3xl shadow-float text-white relative overflow-hidden space-y-3">
-          <div className="absolute right-0 top-0 bottom-0 w-44 bg-gradient-to-l from-amber-500/10 to-transparent pointer-events-none" />
-
-          <div className="flex items-start justify-between relative z-10">
-            <div className="flex items-start space-x-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 via-saffron-500 to-amber-600 flex items-center justify-center text-white flex-shrink-0 shadow-lg text-2xl animate-bounce">
+      <div className="max-w-xl mx-auto px-4 -mt-3 relative z-20">
+        <div
+          onClick={() => handleOpenChallenge()}
+          className="w-full bg-gradient-to-r from-amber-500 via-saffron-600 to-amber-600 p-0.5 rounded-2xl shadow-float cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-all group"
+        >
+          <div className="bg-charcoal-950/95 backdrop-blur-md px-4 py-3 rounded-[14px] flex items-center justify-between space-x-3 text-white">
+            <div className="flex items-center space-x-3 min-w-0">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-saffron-600 flex items-center justify-center text-lg flex-shrink-0 shadow-sm animate-bounce">
                 🎁
               </div>
-              <div>
+              <div className="min-w-0">
                 <div className="flex items-center space-x-2">
                   <span className="text-[10px] uppercase font-bold tracking-wider text-amber-400">
-                    Secret Table Reward Unlocked
+                    {activeTable?.label || 'Table 1'} Surprise Treat
                   </span>
-                  <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-green-500/20 text-green-300 border border-green-400/30">
-                    100% Guaranteed Win
+                  <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-green-500/20 text-green-300">
+                    Guaranteed Win
                   </span>
                 </div>
-                <h3 className="font-serif font-bold text-base sm:text-lg leading-snug text-white mt-0.5">
-                  Fill Form to Win Your Reward!
+                <h3 className="font-serif font-bold text-sm sm:text-base text-white truncate">
+                  Win Today's Surprise Table Reward!
                 </h3>
-                <p className="text-[11px] text-charcoal-300 mt-1 max-w-sm leading-relaxed">
-                  Take 30 seconds to rate your dining experience today and immediately reveal your complimentary chef treat, craft beverage, or up to 20% off bill!
+                <p className="text-[11px] text-charcoal-300 truncate">
+                  Complimentary chef treats, drinks, or up to 20% off your bill
                 </p>
               </div>
             </div>
-          </div>
 
-          <div className="relative z-10 pt-1">
             <button
               type="button"
-              onClick={() => handleOpenChallenge()}
-              className="w-full py-3.5 px-4 bg-gradient-to-r from-amber-500 via-saffron-600 to-amber-600 hover:brightness-110 active:scale-98 text-white font-serif text-sm font-bold rounded-2xl shadow-float flex items-center justify-center space-x-2 transition-all border border-amber-300/30"
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-saffron-500 hover:brightness-110 text-charcoal-950 font-bold text-xs flex items-center space-x-1 flex-shrink-0 shadow-sm transition-all"
             >
-              <span>🎁 Fill Form to Win the Reward</span>
-              <span className="text-amber-200">→</span>
+              <span>Win</span>
+              <span>→</span>
             </button>
           </div>
         </div>
@@ -504,76 +494,6 @@ export const DinerMenu: React.FC = () => {
             </section>
           ))
         )}
-
-        {/* ═══════════════════════════════════════════════════════════ */}
-        {/* VERIFIED GOOGLE REVIEWS & DINER FEEDBACK SECTION           */}
-        {/* ═══════════════════════════════════════════════════════════ */}
-        <section className="bg-gradient-to-br from-white via-ivory-50 to-amber-50/40 rounded-3xl p-5 border border-ivory-200 shadow-subtle space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <span className="text-xl">⭐</span>
-              <div>
-                <h3 className="font-serif font-bold text-sm text-charcoal-900 leading-tight">
-                  Guest Reviews &amp; Google Rating
-                </h3>
-                <span className="text-[10px] text-charcoal-500 font-medium">
-                  Verified diners at {restaurant.name}
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-1.5 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-xl">
-              <span className="font-serif font-bold text-xs text-amber-900">4.9 ★</span>
-              <span className="text-[9px] text-amber-700 font-semibold">Google Verified</span>
-            </div>
-          </div>
-
-          {/* Quick Review Cards */}
-          <div className="space-y-2.5">
-            {restaurantReviews.slice(0, 2).map((rev) => (
-              <div key={rev.id} className="bg-white rounded-2xl p-3.5 border border-ivory-200 shadow-xs space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-6 h-6 rounded-full bg-saffron-100 text-saffron-700 flex items-center justify-center text-[10px] font-bold">
-                      {rev.customer_name[0]}
-                    </div>
-                    <span className="font-serif font-bold text-xs text-charcoal-900">{rev.customer_name}</span>
-                    <span className="text-[9px] bg-green-50 text-green-700 px-1.5 py-0.5 rounded font-semibold border border-green-200">
-                      ✓ Google Review
-                    </span>
-                  </div>
-                  <div className="flex text-amber-400 text-xs">
-                    {'★'.repeat(rev.rating)}
-                  </div>
-                </div>
-
-                <p className="text-xs text-charcoal-700/80 leading-relaxed italic">
-                  "{rev.review_text}"
-                </p>
-
-                {rev.selected_keywords && rev.selected_keywords.length > 0 && (
-                  <div className="flex flex-wrap gap-1 pt-1">
-                    {rev.selected_keywords.map((kw, i) => (
-                      <span key={i} className="text-[9px] bg-ivory-100 text-charcoal-600 px-1.5 py-0.5 rounded border border-ivory-200">
-                        {kw}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Call to Action Button */}
-          <button
-            type="button"
-            onClick={() => handleOpenChallenge()}
-            className="w-full py-3 bg-gradient-to-r from-charcoal-900 via-charcoal-800 to-charcoal-900 hover:brightness-110 active:scale-95 text-white rounded-2xl text-xs font-bold shadow-subtle flex items-center justify-center space-x-2 transition-all border border-charcoal-700"
-          >
-            <Gift className="w-3.5 h-3.5 text-amber-400" />
-            <span>Fill 30-Sec Form to Win Table Rewards!</span>
-          </button>
-        </section>
       </main>
 
       {/* ═══════════════════════════════════════════════════════════ */}
@@ -597,10 +517,10 @@ export const DinerMenu: React.FC = () => {
       <button
         onClick={() => handleOpenChallenge()}
         className="fixed bottom-36 right-4 z-40 p-3 rounded-full shadow-float bg-gradient-to-r from-amber-500 via-saffron-600 to-amber-600 text-white border-2 border-white hover:scale-105 active:scale-95 transition-all flex items-center space-x-1.5 group"
-        title="Fill Form to Win Reward"
+        title="Win Today's Surprise Reward"
       >
         <span className="text-xl group-hover:scale-125 transition-transform duration-300">🎁</span>
-        <span className="text-xs font-bold pr-1 hidden sm:inline">Win Rewards</span>
+        <span className="text-xs font-bold pr-1 hidden sm:inline">Win Reward</span>
       </button>
 
       {/* Call Waiter FAB */}
