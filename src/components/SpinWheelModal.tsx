@@ -523,9 +523,38 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
     const startTime = performance.now();
     let lastTickAngle = startAngle;
 
-    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+    const finishSpin = () => {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      currentAngleRef.current = targetAngle;
+      drawWheel(targetAngle);
+      setIsSpinning(false);
+      setWonPrize(prize);
 
+      // Complete challenge
+      const chalId = challenge?.id || (isItalian ? 'chal-cb-01' : 'chal-sh-01');
+      completeChallenge(chalId, dinerName.trim() || 'Verified Diner', dinerPhone.trim() || '+91 98000 00000');
+
+      // Alert team: DIRECT REWARD CLAIM (NO VOUCHER CODE NEEDED!)
+      addSystemNotification({
+        restaurant_id: restaurant?.id || '',
+        table_id: activeTable?.id,
+        table_label: activeTable?.label || 'Table 1',
+        type: 'challenge_complete',
+        customer_name: dinerName.trim() || `Guest at ${activeTable?.label || 'Table 1'}`,
+        message: `🎁 ${activeTable?.label || 'Table 1'} posted Google Review and won: "${prize.label}"! Ready to redeem at table.`
+      });
+
+      playWinFanfare();
+      setStep('reward_won');
+      setTimeout(() => {
+        triggerConfetti();
+      }, 100);
+    };
+
+    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+    let finished = false;
     const animateWheel = (currentTime: number) => {
+      if (finished) return;
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
       const eased = easeOutCubic(progress);
@@ -543,32 +572,20 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
       if (progress < 1) {
         animFrameRef.current = requestAnimationFrame(animateWheel);
       } else {
-        setIsSpinning(false);
-        setWonPrize(prize);
-
-        // Complete challenge
-        const chalId = challenge?.id || (isItalian ? 'chal-cb-01' : 'chal-sh-01');
-        completeChallenge(chalId, dinerName.trim() || 'Verified Diner', dinerPhone.trim() || '+91 98000 00000');
-
-        // Alert team: DIRECT REWARD CLAIM (NO VOUCHER CODE NEEDED!)
-        addSystemNotification({
-          restaurant_id: restaurant?.id || '',
-          table_id: activeTable?.id,
-          table_label: activeTable?.label || 'Table 1',
-          type: 'challenge_complete',
-          customer_name: dinerName.trim() || `Guest at ${activeTable?.label || 'Table 1'}`,
-          message: `🎁 ${activeTable?.label || 'Table 1'} posted Google Review and won: "${prize.label}"! Ready to redeem at table.`
-        });
-
-        playWinFanfare();
-        setStep('reward_won');
-        setTimeout(() => {
-          triggerConfetti();
-        }, 100);
+        finished = true;
+        finishSpin();
       }
     };
 
     animFrameRef.current = requestAnimationFrame(animateWheel);
+
+    // Guaranteed fallback timer for headless / background execution
+    setTimeout(() => {
+      if (!finished) {
+        finished = true;
+        finishSpin();
+      }
+    }, duration + 300);
   };
 
   if (!isOpen) return null;
