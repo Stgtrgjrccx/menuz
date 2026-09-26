@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useRestaurantStore, WhatsAppCampaign } from '../store/restaurantStore';
 import { Restaurant, PosSyncEvent } from '../types';
 import { searchPuneRestaurants, PuneRestaurantEntry } from '../data/puneRestaurantDirectory';
@@ -133,6 +133,49 @@ export const MasterAdminDashboard: React.FC = () => {
     ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1)
     : '-';
   const whatsappOptInCount = reviews.filter((r) => r.whatsapp_opt_in).length;
+
+  // ── Restaurant filtering and search state ───────────────────
+  const [restaurantSearch, setRestaurantSearch] = useState('');
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
+  const [visibleCount, setVisibleCount] = useState(24);
+
+  const neighborhoods = useMemo(() => {
+    return [
+      'all',
+      'Koregaon Park',
+      'Shivajinagar',
+      'Camp',
+      'Baner',
+      'Kothrud',
+      'Viman Nagar',
+      'Hinjewadi',
+      'Wakad',
+      'Aundh',
+      'Hadapsar'
+    ];
+  }, []);
+
+  const filteredRestaurants = useMemo(() => {
+    return restaurants.filter((r) => {
+      const q = restaurantSearch.toLowerCase().trim();
+      const matchesSearch =
+        !q ||
+        r.name.toLowerCase().includes(q) ||
+        r.cuisine.toLowerCase().includes(q) ||
+        (r.location && r.location.toLowerCase().includes(q));
+
+      const matchesArea =
+        selectedNeighborhood === 'all' ||
+        (r.location && r.location.toLowerCase().includes(selectedNeighborhood.toLowerCase()));
+
+      const matchesStatus =
+        statusFilter === 'all' ||
+        (statusFilter === 'active' ? r.status === 'active' : r.status !== 'active');
+
+      return matchesSearch && matchesArea && matchesStatus;
+    });
+  }, [restaurants, restaurantSearch, selectedNeighborhood, statusFilter]);
 
   // ── Select from autocomplete ───────────────────────────────
   const handleSelectAutocomplete = (entry: PuneRestaurantEntry) => {
@@ -477,21 +520,24 @@ export const MasterAdminDashboard: React.FC = () => {
               </div>
             )}
 
-            {/* Quick Direct-Access Launchpad */}
+            {/* Quick Direct-Access Launchpad - Flagship Quick Launch */}
             {restaurants.length > 0 && (
               <div className="bg-gradient-to-r from-charcoal-950 via-charcoal-900 to-charcoal-950 border border-charcoal-800 rounded-3xl p-5 text-white shadow-subtle">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-charcoal-800/80">
                   <div>
                     <div className="flex items-center space-x-2">
                       <span className="w-2 h-2 rounded-full bg-saffron-500 animate-pulse" />
-                      <h3 className="text-xs font-bold uppercase tracking-wider text-saffron-400">Quick Access Launchpad</h3>
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-saffron-400">Flagship Quick Launch</h3>
+                      <span className="text-[10px] bg-charcoal-800 text-charcoal-300 px-2 py-0.5 rounded-full border border-charcoal-700">
+                        {restaurants.length} Total Registered
+                      </span>
                     </div>
-                    <p className="text-xs text-charcoal-300 mt-0.5">Instant one-click direct jump to any restaurant’s operations or diner experience</p>
+                    <p className="text-xs text-charcoal-300 mt-0.5">Instant one-click direct jump to flagship operations or diner experience</p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
-                  {restaurants.map((r) => {
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-3">
+                  {restaurants.slice(0, 6).map((r) => {
                     const rTables = tables.filter((t) => t.restaurant_id === r.id);
                     const rToken = rTables[0]?.public_token || 'table-token-01';
                     return (
@@ -540,9 +586,151 @@ export const MasterAdminDashboard: React.FC = () => {
               </div>
             )}
 
+            {/* Search, Status, and Neighborhood Filter Control Center */}
+            <div className="bg-white rounded-3xl border border-ivory-300 p-5 shadow-subtle space-y-4">
+              <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+                {/* Search Bar */}
+                <div className="relative flex-1">
+                  <Search className="w-4 h-4 text-charcoal-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={restaurantSearch}
+                    onChange={(e) => {
+                      setRestaurantSearch(e.target.value);
+                      setVisibleCount(24);
+                    }}
+                    placeholder={`Search all ${restaurants.length} Pune partner restaurants by name, cuisine, area, or street...`}
+                    className="w-full pl-10 pr-8 py-2.5 bg-ivory-50 border border-ivory-300 rounded-2xl text-xs text-charcoal-900 placeholder-charcoal-400 focus:outline-none focus:border-saffron-500 focus:bg-white transition-all font-medium"
+                  />
+                  {restaurantSearch && (
+                    <button
+                      onClick={() => setRestaurantSearch('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-charcoal-400 hover:text-charcoal-700 font-bold"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+
+                {/* Status Filter Toggle */}
+                <div className="flex items-center space-x-1.5 bg-ivory-100 p-1 rounded-2xl border border-ivory-300 flex-shrink-0">
+                  <button
+                    onClick={() => {
+                      setStatusFilter('all');
+                      setVisibleCount(24);
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                      statusFilter === 'all'
+                        ? 'bg-charcoal-900 text-white shadow-sm'
+                        : 'text-charcoal-600 hover:text-charcoal-900'
+                    }`}
+                  >
+                    All ({restaurants.length})
+                  </button>
+                  <button
+                    onClick={() => {
+                      setStatusFilter('active');
+                      setVisibleCount(24);
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                      statusFilter === 'active'
+                        ? 'bg-emerald-600 text-white shadow-sm'
+                        : 'text-charcoal-600 hover:text-charcoal-900'
+                    }`}
+                  >
+                    Active ({activeRestaurants})
+                  </button>
+                  <button
+                    onClick={() => {
+                      setStatusFilter('inactive');
+                      setVisibleCount(24);
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                      statusFilter === 'inactive'
+                        ? 'bg-rose-600 text-white shadow-sm'
+                        : 'text-charcoal-600 hover:text-charcoal-900'
+                    }`}
+                  >
+                    Inactive ({totalRestaurants - activeRestaurants})
+                  </button>
+                </div>
+              </div>
+
+              {/* Neighborhood Chips */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-xs">
+                <span className="text-[11px] font-bold text-charcoal-500 uppercase tracking-wider whitespace-nowrap mr-1">
+                  Hubs:
+                </span>
+                {neighborhoods.map((area) => (
+                  <button
+                    key={area}
+                    onClick={() => {
+                      setSelectedNeighborhood(area);
+                      setVisibleCount(24);
+                    }}
+                    className={`px-3 py-1 rounded-full whitespace-nowrap font-medium transition-all ${
+                      selectedNeighborhood === area
+                        ? 'bg-saffron-600 text-white shadow-xs'
+                        : 'bg-ivory-100 text-charcoal-600 hover:bg-ivory-200 border border-ivory-200'
+                    }`}
+                  >
+                    {area === 'all' ? 'All Locations' : area}
+                  </button>
+                ))}
+              </div>
+
+              {/* Count Banner */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-ivory-200 text-xs text-charcoal-600">
+                <span>
+                  Showing <strong>{Math.min(visibleCount, filteredRestaurants.length)}</strong> of{' '}
+                  <strong>{filteredRestaurants.length}</strong> matching restaurants (
+                  <strong>{restaurants.length}</strong> loaded in Pune database)
+                </span>
+                <div className="flex items-center space-x-3">
+                  {visibleCount < filteredRestaurants.length && (
+                    <button
+                      onClick={() => setVisibleCount((prev) => prev + 24)}
+                      className="text-saffron-700 hover:underline font-bold"
+                    >
+                      Load More (+24)
+                    </button>
+                  )}
+                  {visibleCount < filteredRestaurants.length && (
+                    <button
+                      onClick={() => setVisibleCount(filteredRestaurants.length)}
+                      className="text-charcoal-800 hover:text-saffron-700 font-bold underline"
+                    >
+                      Show All {filteredRestaurants.length}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Empty search state */}
+            {filteredRestaurants.length === 0 && (
+              <div className="bg-white rounded-3xl border border-ivory-300 p-10 text-center text-charcoal-500 shadow-subtle">
+                <Building2 className="w-10 h-10 mx-auto text-charcoal-300 mb-2" />
+                <h4 className="font-serif font-bold text-charcoal-900 text-base">No restaurants match your filters</h4>
+                <p className="text-xs text-charcoal-500 mt-1 mb-4">
+                  No partners found matching "{restaurantSearch || selectedNeighborhood}".
+                </p>
+                <button
+                  onClick={() => {
+                    setRestaurantSearch('');
+                    setSelectedNeighborhood('all');
+                    setStatusFilter('all');
+                  }}
+                  className="px-4 py-2 bg-charcoal-900 text-white font-bold text-xs rounded-xl shadow-subtle"
+                >
+                  Reset Filters
+                </button>
+              </div>
+            )}
+
             {/* Restaurant Cards Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {restaurants.map((rest) => {
+              {filteredRestaurants.slice(0, visibleCount).map((rest) => {
                 const restTables = tables.filter((t) => t.restaurant_id === rest.id);
                 const restItems = menuItems.filter((i) => i.restaurant_id === rest.id);
                 const restOrders = orders.filter((o) => o.restaurant_id === rest.id);
@@ -711,6 +899,25 @@ export const MasterAdminDashboard: React.FC = () => {
                 );
               })}
             </div>
+
+            {/* Bottom Pagination Controls */}
+            {visibleCount < filteredRestaurants.length && (
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-6 pb-2">
+                <button
+                  onClick={() => setVisibleCount((prev) => prev + 24)}
+                  className="px-6 py-3 bg-saffron-600 hover:bg-saffron-700 text-white font-serif text-xs font-bold rounded-2xl shadow-subtle flex items-center space-x-2 transition-all"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Load 24 More Restaurants ({filteredRestaurants.length - visibleCount} remaining)</span>
+                </button>
+                <button
+                  onClick={() => setVisibleCount(filteredRestaurants.length)}
+                  className="px-5 py-3 bg-ivory-100 hover:bg-ivory-200 border border-ivory-300 text-charcoal-800 text-xs font-semibold rounded-2xl transition-colors"
+                >
+                  Show All {filteredRestaurants.length} Restaurants
+                </button>
+              </div>
+            )}
           </div>
         )}
 

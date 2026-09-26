@@ -649,7 +649,7 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       }
     }),
     {
-      name: 'menuz_restaurant_storage_v6',
+      name: 'menuz_restaurant_storage_v7_all_pune',
       partialize: (state) => ({
         restaurants: state.restaurants,
         tables: state.tables,
@@ -661,7 +661,20 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
         redemptions: state.redemptions,
         campaigns: state.campaigns,
         notifications: state.notifications
-      })
+      }),
+      onRehydrateStorage: () => (state) => {
+        if (!state) return;
+        const existingIds = new Set((state.restaurants || []).map((r) => r.id));
+        const missing = SEED_RESTAURANTS.filter((r) => !existingIds.has(r.id));
+        if (missing.length > 0) {
+          state.restaurants = [...(state.restaurants || []), ...missing];
+        }
+        const existingTableIds = new Set((state.tables || []).map((t) => t.id));
+        const missingTables = SEED_TABLES.filter((t) => !existingTableIds.has(t.id));
+        if (missingTables.length > 0) {
+          state.tables = [...(state.tables || []), ...missingTables];
+        }
+      }
     }
   )
 );
