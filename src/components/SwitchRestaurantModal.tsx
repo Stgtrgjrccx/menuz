@@ -12,7 +12,8 @@ import {
   Sparkles,
   ArrowRight,
   Check,
-  Building2
+  Building2,
+  Plus
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { PUNE_RESTAURANT_DIRECTORY, PuneRestaurantEntry } from '../data/puneRestaurantDirectory';
@@ -134,6 +135,43 @@ export const SwitchRestaurantModal: React.FC<SwitchRestaurantModalProps> = ({
     navigate(`/r/${item.slug}/menu?t=${token}`);
   };
 
+  const handleInstantAddRestaurant = (customName: string) => {
+    const trimmed = customName.trim();
+    if (!trimmed) return;
+    const cleanSlug =
+      trimmed
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '') || `restaurant-${Date.now().toString().slice(-4)}`;
+
+    const existing = restaurants.find((r) => r.slug === cleanSlug);
+    if (!existing) {
+      addRestaurant({
+        id: `rest-${cleanSlug}-${Date.now().toString().slice(-4)}`,
+        slug: cleanSlug,
+        name: trimmed,
+        cuisine: 'Contemporary Multi-Cuisine & Dining',
+        location: 'Pune, Maharashtra',
+        logo_url: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&auto=format&fit=crop',
+        brand_colors: {
+          primary: '#E85D04',
+          background: '#FDFBF7',
+          text: '#1C1917',
+          accent: '#C84B00'
+        },
+        currency: 'INR',
+        tax_rate_percent: 5.0,
+        google_place_url: `https://search.google.com/local/writereview?placeid=${cleanSlug}`
+      });
+    }
+
+    const restTables = tables.filter((t) => t.restaurant_id === existing?.id || t.id.includes(cleanSlug));
+    const token = restTables[0]?.public_token || `token-${cleanSlug}-01`;
+
+    onClose();
+    navigate(`/r/${cleanSlug}/menu?t=${token}`);
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -242,10 +280,33 @@ export const SwitchRestaurantModal: React.FC<SwitchRestaurantModalProps> = ({
             {/* Restaurant List */}
             <div className="p-4 overflow-y-auto flex-1 space-y-2.5">
               {filteredRestaurants.length === 0 ? (
-                <div className="py-12 text-center text-charcoal-400">
-                  <UtensilsCrossed className="w-8 h-8 mx-auto mb-2 text-charcoal-300" />
-                  <p className="text-xs font-semibold">No restaurants found matching "{query}"</p>
-                  <p className="text-[11px] text-charcoal-500 mt-1">Try another keyword or neighborhood</p>
+                <div className="py-8 px-4 text-center text-charcoal-600 bg-ivory-50/80 rounded-2xl border border-ivory-200">
+                  <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto mb-3 border border-amber-200 shadow-sm">
+                    <Sparkles className="w-6 h-6" />
+                  </div>
+                  <h4 className="font-serif font-bold text-sm text-charcoal-900">
+                    {query ? `Launch "${query}" on Menuz` : 'No restaurants match this filter'}
+                  </h4>
+                  <p className="text-[11px] text-charcoal-500 mt-1 mb-4 leading-relaxed">
+                    {query ? (
+                      <>
+                        Not in the directory yet? Click below to instantly generate digital QR table menus and launch{' '}
+                        <strong>"{query}"</strong>.
+                      </>
+                    ) : (
+                      'Try choosing another neighborhood or reset search filter.'
+                    )}
+                  </p>
+                  {query && (
+                    <button
+                      type="button"
+                      onClick={() => handleInstantAddRestaurant(query)}
+                      className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-saffron-600 to-amber-600 hover:from-saffron-700 hover:to-amber-700 text-white text-xs font-bold flex items-center justify-center space-x-1.5 shadow-sm transition-all"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>Instantly Launch "{query}"</span>
+                    </button>
+                  )}
                 </div>
               ) : (
                 filteredRestaurants.map((item) => {

@@ -21,7 +21,8 @@ import {
   HeartHandshake,
   TrendingUp,
   SlidersHorizontal,
-  ExternalLink
+  ExternalLink,
+  Plus
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { PUNE_RESTAURANT_DIRECTORY, PuneRestaurantEntry } from '../data/puneRestaurantDirectory';
@@ -172,6 +173,43 @@ export const CustomerHomePage: React.FC = () => {
   const handleOpenScannerForRestaurant = (slug?: string) => {
     setSelectedScannerSlug(slug);
     setIsQrScannerOpen(true);
+  };
+
+  // Instant add & launch fallback for any restaurant searched
+  const handleInstantAddRestaurant = (customName: string) => {
+    const trimmed = customName.trim();
+    if (!trimmed) return;
+    const cleanSlug =
+      trimmed
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '') || `restaurant-${Date.now().toString().slice(-4)}`;
+
+    const existing = restaurants.find((r) => r.slug === cleanSlug);
+    if (!existing) {
+      addRestaurant({
+        id: `rest-${cleanSlug}-${Date.now().toString().slice(-4)}`,
+        slug: cleanSlug,
+        name: trimmed,
+        cuisine: 'Contemporary Multi-Cuisine & Dining',
+        location: 'Pune, Maharashtra',
+        logo_url: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&auto=format&fit=crop',
+        brand_colors: {
+          primary: '#E85D04',
+          background: '#FDFBF7',
+          text: '#1C1917',
+          accent: '#C84B00'
+        },
+        currency: 'INR',
+        tax_rate_percent: 5.0,
+        google_place_url: `https://search.google.com/local/writereview?placeid=${cleanSlug}`
+      });
+    }
+
+    const restTables = tables.filter((t) => t.restaurant_id === existing?.id || t.id.includes(cleanSlug));
+    const token = restTables[0]?.public_token || `token-${cleanSlug}-01`;
+
+    navigate(`/r/${cleanSlug}/menu?t=${token}`);
   };
 
   return (
@@ -414,100 +452,154 @@ export const CustomerHomePage: React.FC = () => {
 
         {/* Restaurants Grid */}
         {filteredList.length === 0 ? (
-          <div className="bg-white rounded-3xl border border-ivory-200 p-12 text-center text-charcoal-400 max-w-md mx-auto my-8">
-            <UtensilsCrossed className="w-12 h-12 mx-auto mb-3 text-charcoal-300" />
-            <h3 className="font-serif font-bold text-base text-charcoal-800">No restaurants match your search</h3>
-            <p className="text-xs text-charcoal-500 mt-1 mb-4">
-              Try searching for "Saffron", "Italian", "Baner", or select "All Restaurants".
+          <div className="bg-white rounded-3xl border border-ivory-200 p-8 sm:p-12 text-center text-charcoal-400 max-w-lg mx-auto my-8 shadow-subtle">
+            <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto mb-4 border border-amber-200">
+              <Sparkles className="w-7 h-7" />
+            </div>
+            <h3 className="font-serif font-bold text-lg text-charcoal-900">
+              {searchQuery ? `Can't find "${searchQuery}"?` : 'No restaurants match the selected filter'}
+            </h3>
+            <p className="text-xs text-charcoal-600 mt-2 mb-6 leading-relaxed">
+              {searchQuery ? (
+                <>
+                  No problem! Menuz can instantly provision and launch a live digital QR menu and table experience for{' '}
+                  <strong>"{searchQuery}"</strong> right now.
+                </>
+              ) : (
+                'Try selecting another neighborhood or cuisine tag from above.'
+              )}
             </p>
-            <button
-              onClick={() => {
-                setSearchQuery('');
-                setActiveFilter('all');
-              }}
-              className="py-2 px-4 rounded-xl bg-charcoal-900 text-white text-xs font-bold"
-            >
-              Reset Filters
-            </button>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => handleInstantAddRestaurant(searchQuery)}
+                  className="w-full sm:w-auto py-3 px-6 rounded-2xl bg-gradient-to-r from-saffron-600 to-amber-600 hover:from-saffron-700 hover:to-amber-700 text-white font-serif text-xs font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center space-x-2"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Launch "{searchQuery}" on Menuz</span>
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery('');
+                  setActiveFilter('all');
+                }}
+                className="w-full sm:w-auto py-3 px-5 rounded-2xl border border-ivory-300 hover:bg-ivory-100 text-charcoal-700 text-xs font-semibold transition-colors"
+              >
+                Reset Search
+              </button>
+            </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredList.map((item) => (
-              <div
-                key={item.slug}
-                className="bg-white rounded-3xl border border-ivory-200/90 overflow-hidden shadow-subtle hover:shadow-float transition-all hover:-translate-y-1 flex flex-col group"
-              >
-                {/* Image Cover */}
-                <div className="relative aspect-[16/10] overflow-hidden bg-charcoal-900">
-                  <img
-                    src={item.imageUrl}
-                    alt={item.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredList.map((item) => (
+                <div
+                  key={item.slug}
+                  className="bg-white rounded-3xl border border-ivory-200/90 overflow-hidden shadow-subtle hover:shadow-float transition-all hover:-translate-y-1 flex flex-col group"
+                >
+                  {/* Image Cover */}
+                  <div className="relative aspect-[16/10] overflow-hidden bg-charcoal-900">
+                    <img
+                      src={item.imageUrl}
+                      alt={item.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
 
-                  {/* Rating Badge */}
-                  <div className="absolute top-3 left-3 bg-charcoal-950/80 backdrop-blur-md text-white px-2.5 py-1 rounded-full text-xs font-bold flex items-center space-x-1 border border-white/20">
-                    <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                    <span>{item.rating}</span>
-                  </div>
+                    {/* Rating Badge */}
+                    <div className="absolute top-3 left-3 bg-charcoal-950/80 backdrop-blur-md text-white px-2.5 py-1 rounded-full text-xs font-bold flex items-center space-x-1 border border-white/20">
+                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                      <span>{item.rating}</span>
+                    </div>
 
-                  {/* Guaranteed Table Reward Pill */}
-                  <div className="absolute top-3 right-3 bg-gradient-to-r from-amber-500 to-saffron-600 text-white px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide flex items-center space-x-1 shadow-md">
-                    <Gift className="w-3 h-3 text-amber-200" />
-                    <span>Table Reward Active</span>
-                  </div>
+                    {/* Guaranteed Table Reward Pill */}
+                    <div className="absolute top-3 right-3 bg-gradient-to-r from-amber-500 to-saffron-600 text-white px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide flex items-center space-x-1 shadow-md">
+                      <Gift className="w-3 h-3 text-amber-200" />
+                      <span>Table Reward Active</span>
+                    </div>
 
-                  {/* Bottom Image Overlay with Location */}
-                  <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-charcoal-950 via-charcoal-950/70 to-transparent p-3 pt-6 text-white flex items-center justify-between text-xs">
-                    <span className="flex items-center text-charcoal-200 font-medium">
-                      <MapPin className="w-3 h-3 text-saffron-400 mr-1" />
-                      {item.location.split(',')[0]}
-                    </span>
-                    <span className="text-amber-200 font-bold">{item.avgCostForTwo} for two</span>
-                  </div>
-                </div>
-
-                {/* Card Content */}
-                <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-                  <div>
-                    <h3 className="font-serif font-bold text-lg text-charcoal-900 group-hover:text-saffron-700 transition-colors">
-                      {item.name}
-                    </h3>
-                    <p className="text-xs text-charcoal-500 mt-1 line-clamp-1">{item.cuisine}</p>
-
-                    {/* Table Reward Highlight Banner */}
-                    <div className="mt-3 bg-amber-50/80 border border-amber-200 rounded-xl p-2.5 flex items-center space-x-2 text-[11px] text-amber-900">
-                      <Sparkles className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                      <span className="font-medium line-clamp-1">
-                        <strong>Reward:</strong> {item.rewardHighlight}
+                    {/* Bottom Image Overlay with Location */}
+                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-charcoal-950 via-charcoal-950/70 to-transparent p-3 pt-6 text-white flex items-center justify-between text-xs">
+                      <span className="flex items-center text-charcoal-200 font-medium">
+                        <MapPin className="w-3 h-3 text-saffron-400 mr-1" />
+                        {item.location.split(',')[0]}
                       </span>
+                      <span className="text-amber-200 font-bold">{item.avgCostForTwo} for two</span>
                     </div>
                   </div>
 
-                  {/* Action Buttons */}
-                  <div className="pt-2 border-t border-ivory-200 flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => handleOpenRestaurantMenu(item)}
-                      className="flex-1 py-2.5 px-3 rounded-xl bg-charcoal-900 hover:bg-charcoal-800 text-white font-serif text-xs font-bold flex items-center justify-center space-x-1.5 transition-colors"
-                    >
-                      <span>Explore Menu &amp; Rewards</span>
-                      <ArrowRight className="w-3.5 h-3.5 text-saffron-400" />
-                    </button>
+                  {/* Card Content */}
+                  <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                    <div>
+                      <h3 className="font-serif font-bold text-lg text-charcoal-900 group-hover:text-saffron-700 transition-colors">
+                        {item.name}
+                      </h3>
+                      <p className="text-xs text-charcoal-500 mt-1 line-clamp-1">{item.cuisine}</p>
 
-                    <button
-                      type="button"
-                      onClick={() => handleOpenScannerForRestaurant(item.slug)}
-                      title={`Scan Table QR for ${item.name}`}
-                      className="p-2.5 rounded-xl border border-ivory-300 hover:border-saffron-400 hover:bg-saffron-50 text-charcoal-700 hover:text-saffron-700 transition-colors flex items-center justify-center"
-                    >
-                      <QrCode className="w-4 h-4" />
-                    </button>
+                      {/* Table Reward Highlight Banner */}
+                      <div className="mt-3 bg-amber-50/80 border border-amber-200 rounded-xl p-2.5 flex items-center space-x-2 text-[11px] text-amber-900">
+                        <Sparkles className="w-4 h-4 text-amber-600 flex-shrink-0" />
+                        <span className="font-medium line-clamp-1">
+                          <strong>Reward:</strong> {item.rewardHighlight}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="pt-2 border-t border-ivory-200 flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleOpenRestaurantMenu(item)}
+                        className="flex-1 py-2.5 px-3 rounded-xl bg-charcoal-900 hover:bg-charcoal-800 text-white font-serif text-xs font-bold flex items-center justify-center space-x-1.5 transition-colors"
+                      >
+                        <span>Explore Menu &amp; Rewards</span>
+                        <ArrowRight className="w-3.5 h-3.5 text-saffron-400" />
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleOpenScannerForRestaurant(item.slug)}
+                        title={`Scan Table QR for ${item.name}`}
+                        className="p-2.5 rounded-xl border border-ivory-300 hover:border-saffron-400 hover:bg-saffron-50 text-charcoal-700 hover:text-saffron-700 transition-colors flex items-center justify-center"
+                      >
+                        <QrCode className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
                 </div>
+              ))}
+            </div>
+
+            {/* Bottom helper card if user searched and wants to launch a custom restaurant */}
+            {searchQuery && (
+              <div className="mt-8 bg-gradient-to-r from-amber-50 via-ivory-50 to-amber-50 border border-amber-200/80 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-subtle">
+                <div className="flex items-center space-x-3 text-left">
+                  <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0">
+                    <Sparkles className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-serif font-bold text-sm text-charcoal-900">
+                      Looking for another branch or outlet?
+                    </h4>
+                    <p className="text-xs text-charcoal-600">
+                      Instantly launch a digital QR table menu for <strong>"{searchQuery}"</strong> on Menuz.
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleInstantAddRestaurant(searchQuery)}
+                  className="whitespace-nowrap py-2.5 px-4 rounded-xl bg-charcoal-900 hover:bg-charcoal-800 text-white font-serif text-xs font-bold flex items-center space-x-1.5 transition-colors"
+                >
+                  <Plus className="w-3.5 h-3.5 text-saffron-400" />
+                  <span>Launch "{searchQuery}"</span>
+                </button>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
       </section>
 
