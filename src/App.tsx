@@ -6,6 +6,7 @@ import { KitchenKDS } from './pages/KitchenKDS';
 import { ManagerDashboard } from './pages/ManagerDashboard';
 import { QrCodesPage } from './pages/QrCodesPage';
 import { MasterAdminDashboard } from './pages/MasterAdminDashboard';
+import { CustomerHomePage } from './pages/CustomerHomePage';
 
 export const App: React.FC = () => {
   return (
@@ -14,10 +15,10 @@ export const App: React.FC = () => {
         <Navbar />
         <div className="flex-1">
           <Routes>
-            {/* Default route → Master Admin Dashboard */}
+            {/* Customer Home Page: Search database, scan table QR, explore restaurants */}
             <Route
               path="/"
-              element={<Navigate to="/admin" replace />}
+              element={<CustomerHomePage />}
             />
             <Route
               path="/r/:restaurantSlug/menu"

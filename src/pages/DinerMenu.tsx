@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams, Link } from 'react-router-dom';
 import {
   Search,
   ShoppingBag,
@@ -15,7 +15,10 @@ import {
   Gift,
   X,
   Copy,
-  Check
+  Check,
+  ArrowLeftRight,
+  QrCode,
+  Home
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { MenuItem, ReviewChallenge } from '../types';
@@ -24,6 +27,8 @@ import { CartDrawer } from '../components/CartDrawer';
 import { AiAssistantDrawer } from '../components/AiAssistantDrawer';
 import { OrderTrackerModal } from '../components/OrderTrackerModal';
 import { SpinWheelModal } from '../components/SpinWheelModal';
+import { SwitchRestaurantModal } from '../components/SwitchRestaurantModal';
+import { PUNE_RESTAURANT_DIRECTORY } from '../data/puneRestaurantDirectory';
 
 export const DinerMenu: React.FC = () => {
   const { restaurantSlug } = useParams<{ restaurantSlug: string }>();
@@ -33,6 +38,7 @@ export const DinerMenu: React.FC = () => {
   const restaurants = useRestaurantStore((state) => state.restaurants);
   const restaurant = useRestaurantStore((state) => state.restaurant);
   const setCurrentRestaurant = useRestaurantStore((state) => state.setCurrentRestaurant);
+  const addRestaurant = useRestaurantStore((state) => state.addRestaurant);
   const tables = useRestaurantStore((state) => state.tables);
   const categories = useRestaurantStore((state) => state.categories);
   const menuItems = useRestaurantStore((state) => state.menuItems);
@@ -47,15 +53,42 @@ export const DinerMenu: React.FC = () => {
   const callWaiter = useRestaurantStore((state) => state.callWaiter);
   const completeChallenge = useRestaurantStore((state) => state.completeChallenge);
 
-  // Sync route restaurantSlug with active restaurant in store
+  const [isSwitchModalOpen, setIsSwitchModalOpen] = useState(false);
+
+  // Sync route restaurantSlug with active restaurant in store (auto-creating if from Pune directory)
   useEffect(() => {
     if (restaurantSlug) {
       const match = restaurants.find((r) => r.slug === restaurantSlug);
-      if (match && match.id !== restaurant.id) {
-        setCurrentRestaurant(match.id);
+      if (match) {
+        if (match.id !== restaurant.id) {
+          setCurrentRestaurant(match.id);
+        }
+      } else {
+        const dir = PUNE_RESTAURANT_DIRECTORY.find(
+          (p) => p.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') === restaurantSlug
+        );
+        if (dir) {
+          addRestaurant({
+            id: `rest-${restaurantSlug}`,
+            slug: restaurantSlug,
+            name: dir.name,
+            cuisine: dir.cuisine,
+            location: dir.location,
+            logo_url: dir.imageUrl,
+            brand_colors: {
+              primary: '#E85D04',
+              background: '#FDFBF7',
+              text: '#1C1917',
+              accent: '#C84B00'
+            },
+            currency: 'INR',
+            tax_rate_percent: 5.0,
+            google_place_url: `https://search.google.com/local/writereview?placeid=${restaurantSlug}`
+          });
+        }
       }
     }
-  }, [restaurantSlug, restaurants, restaurant.id, setCurrentRestaurant]);
+  }, [restaurantSlug, restaurants, restaurant.id, setCurrentRestaurant, addRestaurant]);
 
   // Scoped dishes, categories, and tables for this restaurant
   const currentRestMenuItems = useMemo(() => {
@@ -218,6 +251,51 @@ export const DinerMenu: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/* 0. STREAMLINED DINER TOP BAR                                */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <div className="sticky top-0 z-30 bg-charcoal-900/95 backdrop-blur-md text-white border-b border-charcoal-800 px-4 py-2.5 flex items-center justify-between shadow-sm">
+        {/* Link back to Menuz Home */}
+        <Link
+          to="/"
+          className="flex items-center space-x-1.5 text-xs text-charcoal-300 hover:text-white transition-colors group"
+          title="Back to Menuz Home"
+        >
+          <span className="w-5 h-5 rounded-lg bg-gradient-to-tr from-saffron-600 to-amber-400 flex items-center justify-center font-bold text-[10px] text-white">
+            M
+          </span>
+          <span className="font-serif font-black text-white group-hover:text-saffron-400 transition-colors">
+            menuz
+          </span>
+          <span className="text-[10px] text-charcoal-400 hidden sm:inline">• Home</span>
+        </Link>
+
+        {/* Switch Restaurant / Scan QR interactive button */}
+        <div className="flex items-center space-x-2">
+          <button
+            type="button"
+            onClick={() => setIsSwitchModalOpen(true)}
+            className="py-1 px-3 rounded-full bg-charcoal-800 hover:bg-charcoal-700 text-saffron-400 hover:text-saffron-300 border border-saffron-500/40 text-[11px] font-bold flex items-center space-x-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
+            title="Switch Restaurant or Scan a New Table QR Code"
+          >
+            <ArrowLeftRight className="w-3 h-3 text-saffron-400" />
+            <span>Switch Restaurant / Scan QR</span>
+          </button>
+
+          {cart.length > 0 && (
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="relative p-1.5 rounded-lg text-charcoal-300 hover:text-white bg-charcoal-800 transition-colors"
+            >
+              <ShoppingBag className="w-4 h-4 text-amber-400" />
+              <span className="absolute -top-1 -right-1 bg-saffron-600 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                {cart.reduce((a, b) => a + b.quantity, 0)}
+              </span>
+            </button>
+          )}
+        </div>
+      </div>
 
       {/* ═══════════════════════════════════════════════════════════ */}
       {/* SCROLLYTELLING HERO SECTION                                */}
@@ -626,6 +704,13 @@ export const DinerMenu: React.FC = () => {
           onClose={() => setActiveOrderId(null)}
         />
       )}
+
+      {/* Switch Restaurant or Scan QR Modal */}
+      <SwitchRestaurantModal
+        isOpen={isSwitchModalOpen}
+        onClose={() => setIsSwitchModalOpen(false)}
+        currentSlug={restaurant?.slug || restaurantSlug || 'saffron-house'}
+      />
     </div>
   );
 };

@@ -34,8 +34,9 @@ export const Navbar: React.FC = () => {
   const dinerUrl = `/r/${restaurant?.slug || 'saffron-house'}/menu?t=${defaultToken}`;
 
   const navLinks = [
+    { to: '/', label: 'Customer Home', icon: UtensilsCrossed },
     { to: '/admin', label: 'Master Admin', icon: ShieldCheck, highlight: true },
-    { to: dinerUrl, label: 'Customer Menu', icon: UtensilsCrossed },
+    { to: dinerUrl, label: 'Table Menu', icon: ShoppingBag },
     { to: `/manage/${restaurant?.slug || 'saffron-house'}`, label: 'Manager Hub', icon: LayoutDashboard },
     { to: '/kitchen', label: 'Kitchen KDS', icon: ChefHat },
     { to: '/qr', label: 'QR Codes', icon: QrCode },
@@ -54,8 +55,8 @@ export const Navbar: React.FC = () => {
     return `${Math.floor(diffSec / 3600)}h ago`;
   };
 
-  // Hide admin navigation bar completely when customer is viewing diner menu
-  if (location.pathname.startsWith('/r/')) {
+  // Hide admin navigation bar on customer-facing routes (/ and /r/*)
+  if (location.pathname.startsWith('/r/') || location.pathname === '/') {
     return null;
   }
 
