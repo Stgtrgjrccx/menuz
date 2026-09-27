@@ -3147,15 +3147,22 @@ export function matchesPuneQuery(
  * Matches against name, aliases, cuisine, location, and phonetic normalization
  */
 export function searchPuneRestaurants(query: string): PuneRestaurantEntry[] {
-  if (!query || query.trim().length < 2) return [];
+  if (!query || query.trim().length < 1) return [];
   const q = query.toLowerCase().trim();
+  const cleanQ = q.replace(/['’]/g, '');
 
   return PUNE_RESTAURANT_DIRECTORY
     .filter((r) => matchesPuneQuery(r, query))
     .sort((a, b) => {
       // Prioritize name or alias matches
-      const aExact = a.name.toLowerCase().includes(q) || a.aliases?.some((al) => al.toLowerCase().includes(q));
-      const bExact = b.name.toLowerCase().includes(q) || b.aliases?.some((al) => al.toLowerCase().includes(q));
+      const aExact =
+        a.name.toLowerCase().includes(q) ||
+        a.name.toLowerCase().replace(/['’]/g, '').includes(cleanQ) ||
+        a.aliases?.some((al) => al.toLowerCase().includes(q) || al.toLowerCase().replace(/['’]/g, '').includes(cleanQ));
+      const bExact =
+        b.name.toLowerCase().includes(q) ||
+        b.name.toLowerCase().replace(/['’]/g, '').includes(cleanQ) ||
+        b.aliases?.some((al) => al.toLowerCase().includes(q) || al.toLowerCase().replace(/['’]/g, '').includes(cleanQ));
       if (aExact && !bExact) return -1;
       if (!aExact && bExact) return 1;
       // Then by rating

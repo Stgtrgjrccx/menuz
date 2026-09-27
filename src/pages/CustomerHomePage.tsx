@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   QrCode,
@@ -25,7 +25,7 @@ import {
   Plus
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
-import { PUNE_RESTAURANT_DIRECTORY, PuneRestaurantEntry } from '../data/puneRestaurantDirectory';
+import { PUNE_RESTAURANT_DIRECTORY, PuneRestaurantEntry, matchesPuneQuery } from '../data/puneRestaurantDirectory';
 import { QrScannerModal } from '../components/QrScannerModal';
 
 export const CustomerHomePage: React.FC = () => {
@@ -35,9 +35,42 @@ export const CustomerHomePage: React.FC = () => {
   const tables = useRestaurantStore((state) => state.tables);
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [showCustomerSuggestions, setShowCustomerSuggestions] = useState(false);
+  const customerSearchRef = useRef<HTMLDivElement>(null);
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
   const [selectedScannerSlug, setSelectedScannerSlug] = useState<string | undefined>(undefined);
+
+  // Click outside to close customer suggestions
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (customerSearchRef.current && !customerSearchRef.current.contains(e.target as Node)) {
+        setShowCustomerSuggestions(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const customerSuggestions = useMemo(() => {
+    const q = searchQuery.trim();
+    if (!q) return [];
+    return restaurants
+      .filter((r) => matchesPuneQuery(r, q))
+      .sort((a, b) => {
+        const cleanQ = q.toLowerCase().replace(/['’]/g, '');
+        const aExact =
+          a.name.toLowerCase().includes(cleanQ) ||
+          a.aliases?.some((al) => al.toLowerCase().includes(cleanQ));
+        const bExact =
+          b.name.toLowerCase().includes(cleanQ) ||
+          b.aliases?.some((al) => al.toLowerCase().includes(cleanQ));
+        if (aExact && !bExact) return -1;
+        if (!aExact && bExact) return 1;
+        return 0;
+      })
+      .slice(0, 8);
+  }, [restaurants, searchQuery]);
 
   // Combine store restaurants with the full Pune directory
   const directoryList = useMemo(() => {
@@ -113,12 +146,7 @@ export const CustomerHomePage: React.FC = () => {
   // Filtered restaurants
   const filteredList = useMemo(() => {
     return directoryList.filter((item) => {
-      const matchesSearch =
-        !searchQuery ||
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.cuisine.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.location.toLowerCase().includes(searchQuery.toLowerCase());
-
+      const matchesSearch = matchesPuneQuery(item, searchQuery);
       const matchesFilter =
         activeFilter === 'all' || item.tags.includes(activeFilter.toLowerCase());
 
@@ -302,23 +330,111 @@ export const CustomerHomePage: React.FC = () => {
           {/* Dual Action: Search Bar & Scan Button */}
           <div className="max-w-2xl mx-auto pt-2">
             <div className="bg-white p-2 rounded-2xl sm:rounded-3xl shadow-float border border-charcoal-200/80 flex flex-col sm:flex-row items-center gap-2">
-              {/* Search input */}
-              <div className="relative flex-1 w-full">
-                <Search className="w-5 h-5 text-charcoal-400 absolute left-3.5 top-3.5" />
+              {/* Search input with live autocomplete suggestions */}
+              <div className="relative flex-1 w-full" ref={customerSearchRef}>
+                <Search className="w-5 h-5 text-charcoal-400 absolute left-3.5 top-3.5 z-10" />
                 <input
                   type="text"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search restaurants (e.g. Saffron House, Casa Bella, Malaka Spice)..."
-                  className="w-full py-3 pl-11 pr-4 text-xs sm:text-sm text-charcoal-900 placeholder:text-charcoal-400 bg-transparent focus:outline-none"
+                  onFocus={() => setShowCustomerSuggestions(true)}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setShowCustomerSuggestions(true);
+                  }}
+                  placeholder="Search Pune restaurants (e.g. Murphies, Dehaati, Gather, Vaishali)..."
+                  className="w-full py-3 pl-11 pr-10 text-xs sm:text-sm text-charcoal-900 placeholder:text-charcoal-400 bg-transparent focus:outline-none"
                 />
                 {searchQuery && (
                   <button
-                    onClick={() => setSearchQuery('')}
-                    className="absolute right-3 top-3 text-xs text-charcoal-400 hover:text-charcoal-600"
+                    onClick={() => {
+                      setSearchQuery('');
+                      setShowCustomerSuggestions(false);
+                    }}
+                    className="absolute right-3 top-3 text-xs text-charcoal-400 hover:text-charcoal-600 font-bold z-10"
                   >
                     Clear
                   </button>
+                )}
+
+                {/* Autocomplete Suggestions Popup */}
+                {showCustomerSuggestions && searchQuery.trim().length > 0 && (
+                  <div className="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-float border border-charcoal-200 overflow-hidden z-50 text-left animate-in fade-in slide-in-from-top-1 duration-150">
+                    <div className="p-2.5 bg-ivory-100/80 border-b border-ivory-200 flex items-center justify-between text-[11px] text-charcoal-500 font-bold">
+                      <span className="flex items-center space-x-1">
+                        <Sparkles className="w-3.5 h-3.5 text-saffron-600 inline" />
+                        <span>SUGGESTIONS ({customerSuggestions.length} found)</span>
+                      </span>
+                      <span className="text-[10px] text-charcoal-400 font-normal">Click to launch menu</span>
+                    </div>
+
+                    {customerSuggestions.length > 0 ? (
+                      <div className="max-h-72 overflow-y-auto divide-y divide-ivory-100">
+                        {customerSuggestions.map((item) => {
+                          const rTables = tables.filter((t) => t.restaurant_id === item.id);
+                          const rToken = rTables[0]?.public_token || 'table-token-01';
+                          return (
+                            <div
+                              key={`cust-sugg-${item.id}`}
+                              onClick={() => {
+                                setSearchQuery(item.name);
+                                setShowCustomerSuggestions(false);
+                                navigate(`/r/${item.slug}/menu?t=${rToken}`);
+                              }}
+                              className="p-3 hover:bg-saffron-50/70 cursor-pointer flex items-center justify-between gap-3 transition-colors group"
+                            >
+                              <div className="flex items-center space-x-3 min-w-0">
+                                <img
+                                  src={item.logo_url}
+                                  alt={item.name}
+                                  className="w-10 h-10 rounded-xl object-cover border border-ivory-300 flex-shrink-0 group-hover:scale-105 transition-transform"
+                                />
+                                <div className="truncate">
+                                  <div className="flex items-center space-x-2">
+                                    <h4 className="text-xs font-bold text-charcoal-900 group-hover:text-saffron-700 transition-colors truncate">
+                                      {item.name}
+                                    </h4>
+                                    {item.is_menuz_partner !== false ? (
+                                      <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                                        ✨ Partner
+                                      </span>
+                                    ) : (
+                                      <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                                        📍 Pune Venue
+                                      </span>
+                                    )}
+                                  </div>
+                                  <p className="text-[11px] text-charcoal-500 truncate mt-0.5">
+                                    {item.cuisine} • <span className="text-charcoal-700">{item.location}</span>
+                                  </p>
+                                </div>
+                              </div>
+
+                              <Link
+                                to={`/r/${item.slug}/menu?t=${rToken}`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setShowCustomerSuggestions(false);
+                                }}
+                                className="px-3 py-1.5 bg-gradient-to-r from-saffron-600 to-amber-500 hover:from-saffron-700 hover:to-amber-600 text-white text-[10px] font-bold rounded-xl transition-all flex items-center space-x-1 flex-shrink-0 shadow-xs"
+                              >
+                                <span>Menu</span>
+                                <ChevronRight className="w-3 h-3" />
+                              </Link>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div className="p-4 text-center">
+                        <p className="text-xs text-charcoal-600">
+                          No matching restaurants found for <strong>"{searchQuery}"</strong>.
+                        </p>
+                        <p className="text-[11px] text-charcoal-400 mt-1">
+                          Try searching by cuisine, neighborhood, or popular dishes.
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
 

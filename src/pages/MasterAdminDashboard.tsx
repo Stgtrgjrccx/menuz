@@ -139,10 +139,43 @@ export const MasterAdminDashboard: React.FC = () => {
 
   // ── Restaurant filtering and search state ───────────────────
   const [restaurantSearch, setRestaurantSearch] = useState('');
+  const [showAdminSuggestions, setShowAdminSuggestions] = useState(false);
+  const adminSearchRef = useRef<HTMLDivElement>(null);
   const [selectedNeighborhood, setSelectedNeighborhood] = useState('all');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
   const [partnerFilter, setPartnerFilter] = useState<'all' | 'menuz_partners' | 'directory'>('all');
   const [visibleCount, setVisibleCount] = useState(24);
+
+  // Click outside to close admin suggestions
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (adminSearchRef.current && !adminSearchRef.current.contains(e.target as Node)) {
+        setShowAdminSuggestions(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const adminSuggestions = useMemo(() => {
+    const q = restaurantSearch.trim();
+    if (!q) return [];
+    return restaurants
+      .filter((r) => matchesPuneQuery(r, q))
+      .sort((a, b) => {
+        const cleanQ = q.toLowerCase().replace(/['’]/g, '');
+        const aExact =
+          a.name.toLowerCase().includes(cleanQ) ||
+          a.aliases?.some((al) => al.toLowerCase().includes(cleanQ));
+        const bExact =
+          b.name.toLowerCase().includes(cleanQ) ||
+          b.aliases?.some((al) => al.toLowerCase().includes(cleanQ));
+        if (aExact && !bExact) return -1;
+        if (!aExact && bExact) return 1;
+        return 0;
+      })
+      .slice(0, 8);
+  }, [restaurants, restaurantSearch]);
 
   const neighborhoods = useMemo(() => {
     return [
@@ -670,14 +703,16 @@ export const MasterAdminDashboard: React.FC = () => {
             {/* Search, Status, and Neighborhood Filter Control Center */}
             <div className="bg-white rounded-3xl border border-ivory-300 p-5 shadow-subtle space-y-4">
               <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
-                {/* Search Bar */}
-                <div className="relative flex-1">
-                  <Search className="w-4 h-4 text-charcoal-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                {/* Search Bar with Autocomplete Suggestions Dropdown */}
+                <div className="relative flex-1" ref={adminSearchRef}>
+                  <Search className="w-4 h-4 text-charcoal-400 absolute left-3.5 top-1/2 -translate-y-1/2 z-10" />
                   <input
                     type="text"
                     value={restaurantSearch}
+                    onFocus={() => setShowAdminSuggestions(true)}
                     onChange={(e) => {
                       setRestaurantSearch(e.target.value);
+                      setShowAdminSuggestions(true);
                       setVisibleCount(24);
                     }}
                     placeholder={`Search all ${restaurants.length} Pune partner restaurants by name, cuisine, area, or street...`}
@@ -685,11 +720,122 @@ export const MasterAdminDashboard: React.FC = () => {
                   />
                   {restaurantSearch && (
                     <button
-                      onClick={() => setRestaurantSearch('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-charcoal-400 hover:text-charcoal-700 font-bold"
+                      onClick={() => {
+                        setRestaurantSearch('');
+                        setShowAdminSuggestions(false);
+                      }}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-charcoal-400 hover:text-charcoal-700 font-bold z-10"
                     >
                       ✕
                     </button>
+                  )}
+
+                  {/* Autocomplete Suggestions Dropdown Popup */}
+                  {showAdminSuggestions && restaurantSearch.trim().length > 0 && (
+                    <div className="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-float border border-ivory-300 overflow-hidden z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                      <div className="p-2.5 bg-ivory-100/70 border-b border-ivory-200 flex items-center justify-between text-[11px] text-charcoal-500 font-bold">
+                        <span className="flex items-center space-x-1">
+                          <Sparkles className="w-3.5 h-3.5 text-saffron-600 inline" />
+                          <span>SUGGESTIONS ({adminSuggestions.length} found)</span>
+                        </span>
+                        <span className="text-[10px] text-charcoal-400 font-normal">Click to filter or jump</span>
+                      </div>
+
+                      {adminSuggestions.length > 0 ? (
+                        <div className="max-h-80 overflow-y-auto divide-y divide-ivory-100">
+                          {adminSuggestions.map((item) => {
+                            const rTables = tables.filter((t) => t.restaurant_id === item.id);
+                            const rToken = rTables[0]?.public_token || 'table-token-01';
+                            return (
+                              <div
+                                key={`sugg-${item.id}`}
+                                onClick={() => {
+                                  setRestaurantSearch(item.name);
+                                  setShowAdminSuggestions(false);
+                                }}
+                                className="p-3 hover:bg-saffron-50/60 cursor-pointer flex items-center justify-between gap-3 transition-colors group"
+                              >
+                                <div className="flex items-center space-x-3 min-w-0">
+                                  <img
+                                    src={item.logo_url}
+                                    alt={item.name}
+                                    className="w-10 h-10 rounded-xl object-cover border border-ivory-300 flex-shrink-0 group-hover:scale-105 transition-transform"
+                                  />
+                                  <div className="truncate">
+                                    <div className="flex items-center space-x-2">
+                                      <h4 className="text-xs font-bold text-charcoal-900 group-hover:text-saffron-700 transition-colors truncate">
+                                        {item.name}
+                                      </h4>
+                                      {item.is_menuz_partner !== false ? (
+                                        <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                                          ✨ Partner
+                                        </span>
+                                      ) : (
+                                        <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                                          📍 Lead
+                                        </span>
+                                      )}
+                                    </div>
+                                    <p className="text-[11px] text-charcoal-500 truncate mt-0.5">
+                                      {item.cuisine} • <span className="text-charcoal-700">{item.location}</span>
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center space-x-1.5 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
+                                  <Link
+                                    to={`/manage/${item.slug}`}
+                                    onClick={() => {
+                                      setCurrentRestaurant(item.id);
+                                      setShowAdminSuggestions(false);
+                                    }}
+                                    className="px-2.5 py-1 bg-charcoal-900 hover:bg-charcoal-800 text-white text-[10px] font-bold rounded-lg transition-colors"
+                                  >
+                                    Hub
+                                  </Link>
+                                  <Link
+                                    to={`/r/${item.slug}/menu?t=${rToken}`}
+                                    onClick={() => {
+                                      setCurrentRestaurant(item.id);
+                                      setShowAdminSuggestions(false);
+                                    }}
+                                    className="px-2.5 py-1 bg-saffron-50 hover:bg-saffron-100 text-saffron-800 text-[10px] font-bold rounded-lg transition-colors border border-saffron-200"
+                                  >
+                                    Menu
+                                  </Link>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <div className="p-4 text-center">
+                          <p className="text-xs text-charcoal-600 mb-2">
+                            No restaurant in Pune database matches <strong>"{restaurantSearch}"</strong>.
+                          </p>
+                          <button
+                            onClick={() => {
+                              handleQuickAddPuneRestaurant(restaurantSearch);
+                              setShowAdminSuggestions(false);
+                            }}
+                            className="px-4 py-2 bg-saffron-600 hover:bg-saffron-700 text-white font-bold text-xs rounded-xl shadow-xs inline-flex items-center space-x-1.5 transition-colors"
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                            <span>Instant 1-Click Register "{restaurantSearch.trim()}"</span>
+                          </button>
+                        </div>
+                      )}
+
+                      <div className="p-2 bg-ivory-50 border-t border-ivory-200 flex items-center justify-between text-[11px] text-charcoal-500">
+                        <span>Showing top matches from {restaurants.length} Pune restaurants</span>
+                        <button
+                          onClick={() => setShowAdminSuggestions(false)}
+                          className="text-saffron-700 hover:underline font-bold text-[10px]"
+                        >
+                          Close Suggestions ✕
+                        </button>
+                      </div>
+                    </div>
                   )}
                 </div>
 
