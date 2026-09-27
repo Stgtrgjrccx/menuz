@@ -24,9 +24,46 @@ export interface Restaurant {
   ordering_enabled?: boolean;
   google_place_url?: string;
   authentic_photography_statement?: string;
-  pos_provider?: 'toast' | 'square' | 'clover' | 'micros' | 'universal_api';
+  pos_provider?: 'petpooja' | 'rancelab' | 'toast' | 'square' | 'clover' | 'micros' | 'universal_api';
+  petpooja_config?: PetpoojaConfig;
   is_menuz_partner?: boolean;
   aliases?: string[];
+}
+
+export interface PetpoojaConfig {
+  enabled: boolean;
+  rest_id: string;
+  app_key: string;
+  app_secret: string;
+  access_token?: string;
+  environment: 'sandbox' | 'production';
+  auto_push_kot: boolean;
+  auto_sync_menu: boolean;
+  mapping_table_prefix?: string;
+  last_kot_number?: number;
+  last_synced_at?: string;
+}
+
+export interface PetpoojaKotReceipt {
+  kot_number: string;
+  petpooja_order_id: string;
+  table_label: string;
+  restaurant_name: string;
+  timestamp: string;
+  server_name: string;
+  items: Array<{
+    name: string;
+    quantity: number;
+    price: number;
+    options?: string[];
+    special_notes?: string;
+  }>;
+  subtotal: number;
+  discount_amount: number;
+  discount_name?: string;
+  taxes: number;
+  grand_total: number;
+  raw_payload?: any;
 }
 
 export const isWorkingWithMenuz = (r?: { id?: string; slug?: string } | null): boolean => {

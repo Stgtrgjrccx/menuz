@@ -21,10 +21,12 @@ import {
   UtensilsCrossed,
   ExternalLink,
   ArrowLeft,
-  ChefHat
+  ChefHat,
+  Printer
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
-import { MenuItem, MenuCategory } from '../types';
+import { MenuItem, MenuCategory, PetpoojaConfig } from '../types';
+import { PetpoojaIntegrationPanel } from '../components/PetpoojaIntegrationPanel';
 
 const SAMPLE_FOOD_IMAGES = [
   { label: 'Paneer / Curry', url: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80' },
@@ -52,6 +54,9 @@ export const ManagerDashboard: React.FC = () => {
   const addCategory = useRestaurantStore((state) => state.addCategory);
   const markNotificationRead = useRestaurantStore((state) => state.markNotificationRead);
   const resetToDefaults = useRestaurantStore((state) => state.resetToDefaults);
+  const updateRestaurant = useRestaurantStore((state) => state.updateRestaurant);
+
+  const [isPosModalOpen, setIsPosModalOpen] = useState(false);
 
   // Sync route slug to current active restaurant
   useEffect(() => {
@@ -264,6 +269,14 @@ export const ManagerDashboard: React.FC = () => {
             <QrCode className="w-3.5 h-3.5 text-saffron-600" />
             <span>Table QR Badges</span>
           </Link>
+          <button
+            type="button"
+            onClick={() => setIsPosModalOpen(true)}
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-orange-900 hover:text-orange-950 transition-colors bg-orange-100/90 hover:bg-orange-200 px-3.5 py-2 rounded-xl border border-orange-300 shadow-xs"
+          >
+            <Printer className="w-3.5 h-3.5 text-orange-700" />
+            <span>Petpooja POS & KOT</span>
+          </button>
         </div>
       </div>
 
@@ -784,6 +797,24 @@ export const ManagerDashboard: React.FC = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Petpooja Integration Modal */}
+      {isPosModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-6 relative">
+            <button
+              onClick={() => setIsPosModalOpen(false)}
+              className="absolute top-5 right-5 p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors z-10"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <PetpoojaIntegrationPanel
+              restaurant={restaurant}
+              onUpdateConfig={(cfg: PetpoojaConfig) => updateRestaurant(restaurant.id, { petpooja_config: cfg })}
+            />
           </div>
         </div>
       )}

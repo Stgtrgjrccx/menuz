@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useRestaurantStore, WhatsAppCampaign } from '../store/restaurantStore';
-import { Restaurant, PosSyncEvent, isWorkingWithMenuz } from '../types';
+import { Restaurant, PosSyncEvent, isWorkingWithMenuz, PetpoojaConfig } from '../types';
 import { PUNE_RESTAURANT_DIRECTORY, searchPuneRestaurants, PuneRestaurantEntry, normalizePuneSearch, matchesPuneQuery } from '../data/puneRestaurantDirectory';
+import { PetpoojaIntegrationPanel } from '../components/PetpoojaIntegrationPanel';
 import {
   Building2,
   Users,
@@ -1798,6 +1799,14 @@ export const MasterAdminDashboard: React.FC = () => {
         {/* ========================================================================= */}
         {activeTab === 'pos' && (
           <div className="space-y-6">
+            {/* Direct Petpooja POS Bridge & KOT Dispatch Simulator */}
+            {restaurants.length > 0 && (
+              <PetpoojaIntegrationPanel
+                restaurant={restaurants[0]}
+                onUpdateConfig={(cfg: PetpoojaConfig) => updateRestaurant(restaurants[0].id, { petpooja_config: cfg })}
+              />
+            )}
+
             <div className="bg-white p-5 rounded-3xl border border-ivory-300 shadow-subtle flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <span className="text-[10px] uppercase font-bold tracking-widest text-blue-700">Universal Adapter Layer</span>
