@@ -488,14 +488,14 @@ export const CustomerHomePage: React.FC = () => {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 4.5 MAIN HOOK: CHEF & OWNER TRAINED AI CONCIERGE           */}
+      {/* 4.5 CHEF & OWNER TRAINED AI CONCIERGE                      */}
       {/* ═══════════════════════════════════════════════════════════ */}
       <section className="py-12 bg-gradient-to-b from-charcoal-950 via-[#0d121c] to-charcoal-950 text-white border-b border-charcoal-800">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
             <div className="lg:w-7/12 space-y-4">
               <div className="inline-flex items-center space-x-2 bg-amber-500/20 border border-amber-500/30 px-3 py-1 rounded-full text-amber-300 text-xs font-bold tracking-wide">
-                <span>🧑‍🍳 THE APP'S MAIN HOOK</span>
+                <span>🧑‍🍳 IN-TABLE AI DINING CONCIERGE</span>
                 <span>•</span>
                 <span>CHEF &amp; OWNER TRAINED</span>
               </div>

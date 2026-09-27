@@ -443,16 +443,16 @@ export const PitchDeckPage: React.FC = () => {
               <div className="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full text-amber-400 text-xs font-bold tracking-wide">
                 <span>CHAPTER 02</span>
                 <span>•</span>
-                <span>THE MAIN HOOK: CHEF &amp; OWNER TRAINED AI CHATBOT</span>
+                <span>CHEF &amp; OWNER TRAINED AI CHATBOT</span>
               </div>
 
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-                The App's Main Hook: <span className="text-amber-400">Trained by Head Chef &amp; Owner.</span>
+                Trained Directly by Your <span className="text-amber-400">Head Chef &amp; Owner.</span>
                 <span className="block text-2xl sm:text-3xl font-bold text-slate-300 mt-1">A Personalised Dining Concierge at Every Table.</span>
               </h2>
 
               <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-                Generic AI chatbots hallucinate ingredients. Menuz delivers the core hook of modern dining: <strong>a personalized concierge trained directly by your Head Chef and Restaurant Owner</strong>. It knows your kitchen's secret recipe notes, calibrated spice levels (1-5), allergen cautions, and your owner's high-margin pairing rules.
+                Generic AI chatbots hallucinate ingredients. Menuz elevates the table experience: <strong>a personalized concierge trained directly by your Head Chef and Restaurant Owner</strong>. It knows your kitchen's secret recipe notes, calibrated spice levels (1-5), allergen cautions, and your owner's high-margin pairing rules.
               </p>
 
               {/* 3 Pillars of Chef & Owner Training */}

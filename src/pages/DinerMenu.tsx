@@ -449,7 +449,7 @@ export const DinerMenu: React.FC = () => {
       )}
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 🧑‍🍳 CHEF & OWNER AI DINING CONCIERGE (MAIN HOOK)           */}
+      {/* 🧑‍🍳 CHEF & OWNER AI DINING CONCIERGE                      */}
       {/* ═══════════════════════════════════════════════════════════ */}
       <div className="max-w-xl mx-auto px-4 mt-3 mb-1">
         <div className="bg-gradient-to-br from-[#121824] via-[#0d121c] to-[#121824] text-white p-4 rounded-3xl border border-amber-500/30 shadow-float relative overflow-hidden">
@@ -472,7 +472,7 @@ export const DinerMenu: React.FC = () => {
                     Ask Chef's AI Concierge
                   </h3>
                   <span className="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-md bg-amber-400/20 text-amber-300 border border-amber-400/30 flex-shrink-0">
-                    Main Hook
+                    Chef Trained
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-300 mt-0.5 line-clamp-1">
@@ -792,7 +792,7 @@ export const DinerMenu: React.FC = () => {
         onOpenCart={() => setIsCartOpen(true)}
       />
 
-      {/* Floating Chef & Owner AI Concierge Trigger (Main Hook) */}
+      {/* Floating Chef & Owner AI Concierge Trigger */}
       <div className={`fixed z-40 transition-all duration-300 ${totalCartCount > 0 ? 'bottom-20 right-4' : 'bottom-6 right-4'}`}>
         <button
           type="button"
@@ -811,7 +811,7 @@ export const DinerMenu: React.FC = () => {
           <div className="text-left">
             <div className="flex items-center space-x-1">
               <span className="text-xs font-bold font-serif tracking-tight text-amber-200">Ask Chef's AI</span>
-              <span className="text-[9px] bg-amber-500/20 text-amber-300 px-1 rounded uppercase font-mono font-bold">Main Hook</span>
+              <span className="text-[9px] bg-amber-500/20 text-amber-300 px-1 rounded uppercase font-mono font-bold">Live Concierge</span>
             </div>
             <p className="text-[10px] text-ivory-300/80 leading-none">Trained by Chef &amp; Owner</p>
           </div>
