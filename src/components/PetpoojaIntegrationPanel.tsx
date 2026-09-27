@@ -43,9 +43,8 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
   const [savedNotification, setSavedNotification] = useState(false);
   const [activeTab, setActiveTab] = useState<'simulator' | 'credentials' | 'guide'>('simulator');
   const [simTable, setSimTable] = useState('Table 4 (Patio)');
-  const [simDinerName, setSimDinerName] = useState('Aarav Mehta');
-  const [includeReviewDiscount, setIncludeReviewDiscount] = useState(true);
-  const [discountType, setDiscountType] = useState<'wheel15' | 'freeDessert'>('wheel15');
+  const [simDinerName, setSimDinerName] = useState('Rahul Verma');
+  const [includeFoodReward, setIncludeFoodReward] = useState(false);
   const [isFiringKot, setIsFiringKot] = useState(false);
   const [lastReceipt, setLastReceipt] = useState<PetpoojaKotReceipt | null>(null);
   const [showJsonPayload, setShowJsonPayload] = useState(false);
@@ -111,14 +110,27 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
 
   const handleTestKot = async () => {
     setIsFiringKot(true);
-    const discountInfo = includeReviewDiscount
-      ? discountType === 'wheel15'
-        ? { code: 'REVIEW15', name: 'Google Review Lucky Wheel (15% OFF)', amount: 156, ratePercent: 15 }
-        : { code: 'FREEDESSERT', name: 'Google Review Free Dessert Voucher', amount: 180 }
-      : undefined;
+    const orderToDispatch: Order = includeFoodReward
+      ? {
+          ...sampleOrder,
+          items: [
+            ...sampleOrder.items,
+            {
+              id: 'ord-it-comp',
+              order_id: 'ord-sim',
+              menu_item_id: 'mi-comp-dessert',
+              item_name_snapshot: 'Complimentary Chef Dessert (Food Reward)',
+              unit_price_snapshot: 0,
+              quantity: 1,
+              selected_options_snapshot: [],
+              line_total_amount: 0
+            }
+          ]
+        }
+      : sampleOrder;
 
     try {
-      const res = await sendOrderToPetpooja(sampleOrder, restaurant, config, discountInfo);
+      const res = await sendOrderToPetpooja(orderToDispatch, restaurant, config);
       setLastReceipt(res.receipt);
     } finally {
       setIsFiringKot(false);
@@ -143,7 +155,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
               Petpooja POS Direct Kitchen Dispatch
             </h2>
             <p className="text-sm text-orange-100 max-w-xl mt-1">
-              Diners scan the Menuz QR, spin the wheel for a Google Review, and their order prints directly on the kitchen thermal printer with the discount pre-calculated.
+              Diners scan the table QR code and place their orders. Tickets print directly in your kitchen in 1 second with zero staff handwriting errors.
             </p>
           </div>
 
@@ -207,7 +219,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
                   <Zap className="w-4 h-4 text-amber-600" /> Test Kitchen KOT Dispatch
                 </h3>
                 <p className="text-xs text-amber-900/80 mt-1 leading-relaxed">
-                  Fire a test order from Menuz to verify the thermal kitchen receipt layout and ensure that Google Review reward discounts deduct properly before sending to real printers.
+                  Fire a test order from Menuz to verify the thermal kitchen receipt layout and ensure that kitchen ticket items and optional food rewards dispatch accurately to printers.
                 </p>
               </div>
 
@@ -238,49 +250,32 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
                   </div>
                 </div>
 
-                {/* Google Review Discount Injection */}
-                <div className="p-3.5 bg-gray-50 border border-gray-200 rounded-xl space-y-2.5">
+                {/* Optional Food-as-Reward Injection */}
+                <div className="p-3.5 bg-gray-50 border border-gray-200 rounded-xl space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-gray-800 flex items-center gap-1.5">
-                      <Tag className="w-3.5 h-3.5 text-orange-600" /> Apply Google Review Reward
-                    </span>
-                    <label className="relative inline-flex items-center cursor-pointer">
+                    <div>
+                      <span className="text-xs font-bold text-gray-800 flex items-center gap-1.5">
+                        <Tag className="w-3.5 h-3.5 text-orange-600" /> Optional: Complimentary Food Reward
+                      </span>
+                      <p className="text-[11px] text-gray-500 mt-0.5">
+                        Discounts are completely optional. Many owners prefer rewarding diners with a complimentary food/dessert item rather than discounting the bill.
+                      </p>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer shrink-0 ml-2">
                       <input
                         type="checkbox"
-                        checked={includeReviewDiscount}
-                        onChange={(e) => setIncludeReviewDiscount(e.target.checked)}
+                        checked={includeFoodReward}
+                        onChange={(e) => setIncludeFoodReward(e.target.checked)}
                         className="sr-only peer"
                       />
                       <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-orange-600"></div>
                     </label>
                   </div>
 
-                  {includeReviewDiscount && (
-                    <div className="grid grid-cols-2 gap-2 pt-2 border-t border-gray-200 text-xs">
-                      <button
-                        type="button"
-                        onClick={() => setDiscountType('wheel15')}
-                        className={`p-2 rounded-lg font-medium text-left border ${
-                          discountType === 'wheel15'
-                            ? 'border-orange-500 bg-orange-50 text-orange-900 font-bold'
-                            : 'border-gray-200 bg-white text-gray-700'
-                        }`}
-                      >
-                        15% Off Food Bill
-                        <span className="block text-[10px] text-gray-500 font-normal">Won on Lucky Wheel</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setDiscountType('freeDessert')}
-                        className={`p-2 rounded-lg font-medium text-left border ${
-                          discountType === 'freeDessert'
-                            ? 'border-orange-500 bg-orange-50 text-orange-900 font-bold'
-                            : 'border-gray-200 bg-white text-gray-700'
-                        }`}
-                      >
-                        Free Dessert (₹180)
-                        <span className="block text-[10px] text-gray-500 font-normal">Complimentary reward</span>
-                      </button>
+                  {includeFoodReward && (
+                    <div className="text-[11px] text-emerald-800 bg-emerald-50 border border-emerald-200 p-2.5 rounded-lg flex items-center gap-2">
+                      <span>🎁</span>
+                      <span>1x Complimentary Chef Dessert (₹0) added to kitchen ticket. Zero bill discount deducted.</span>
                     </div>
                   )}
                 </div>

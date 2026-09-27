@@ -3,10 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import {
   DollarSign,
   ShoppingBag,
-  Download,
   ToggleLeft,
   ToggleRight,
-  QrCode,
   RefreshCw,
   Sparkles,
   CheckCircle2,
@@ -127,52 +125,6 @@ export const ManagerDashboard: React.FC = () => {
   );
   const unreadWaiterCalls = activeNotificationsList.filter((n) => n.type === 'waiter_call' && !n.read);
 
-  const downloadTableQrSvg = (tableLabel: string, publicToken: string) => {
-    const origin = window.location.origin;
-    const targetUrl = `${origin}/#/r/${restaurant.slug}/menu?t=${publicToken}`;
-    const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(targetUrl)}&color=1C1917&bgcolor=FFFFFF`;
-    const primaryColor = restaurant.brand_colors?.primary || '#E85D04';
-
-    const svgTemplate = `
-<svg xmlns="http://www.w3.org/2000/svg" width="420" height="560" viewBox="0 0 420 560">
-  <defs>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;family=Plus+Jakarta+Sans:wght@500;700&amp;display=swap');
-      .serif { font-family: 'Playfair Display', Georgia, serif; }
-      .sans { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
-    </style>
-  </defs>
-  <!-- Background Card -->
-  <rect width="420" height="560" rx="32" fill="#FDFBF7" stroke="#EFE9DE" stroke-width="2"/>
-  
-  <!-- Outer Gold Border -->
-  <rect x="24" y="24" width="372" height="512" rx="24" fill="none" stroke="${primaryColor}" stroke-width="2" stroke-dasharray="6 4"/>
-  
-  <!-- Header Branding -->
-  <text x="210" y="75" text-anchor="middle" fill="${primaryColor}" class="sans" font-size="11" font-weight="700" letter-spacing="3">${(restaurant.cuisine || 'CONTEMPORARY DINING').toUpperCase()}</text>
-  <text x="210" y="110" text-anchor="middle" fill="#1C1917" class="serif" font-size="26" font-weight="700">${restaurant.name.toUpperCase()}</text>
-  
-  <!-- Table Badge -->
-  <rect x="135" y="130" width="150" height="34" rx="17" fill="#FFEDD5"/>
-  <text x="210" y="152" text-anchor="middle" fill="#C84B00" class="sans" font-size="14" font-weight="700">${tableLabel}</text>
-  
-  <!-- QR Code Framing -->
-  <rect x="70" y="185" width="280" height="280" rx="20" fill="#FFFFFF" filter="drop-shadow(0 4px 12px rgba(28,25,23,0.06))"/>
-  <image href="${qrApiUrl}" x="85" y="200" width="250" height="250"/>
-  
-  <!-- Instructions -->
-  <text x="210" y="495" text-anchor="middle" fill="#1C1917" class="serif" font-size="15" font-weight="700">Scan to View Menu &amp; Order</text>
-  <text x="210" y="515" text-anchor="middle" fill="#78716C" class="sans" font-size="11">No app download • Powered by Menuz AI</text>
-</svg>`.trim();
-
-    const blob = new Blob([svgTemplate], { type: 'image/svg+xml;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${restaurant.name.replace(/\s+/g, '_')}_${tableLabel.replace(/\s+/g, '_')}_QR.svg`;
-    link.click();
-    URL.revokeObjectURL(url);
-  };
 
   const handleCreateDish = (e: React.FormEvent) => {
     e.preventDefault();
@@ -271,13 +223,6 @@ export const ManagerDashboard: React.FC = () => {
           >
             <ChefHat className="w-3.5 h-3.5 text-saffron-600" />
             <span>Kitchen KDS</span>
-          </Link>
-          <Link
-            to="/qr"
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-700 hover:text-saffron-700 transition-colors bg-white px-3.5 py-2 rounded-xl border border-ivory-200 shadow-xs hover:border-saffron-300"
-          >
-            <QrCode className="w-3.5 h-3.5 text-saffron-600" />
-            <span>Table QR Badges</span>
           </Link>
           <button
             type="button"
@@ -632,42 +577,6 @@ export const ManagerDashboard: React.FC = () => {
         </div>
       </section>
 
-      {/* Table QR Card Generator */}
-      <section className="bg-white p-6 rounded-3xl border border-ivory-200 shadow-subtle">
-        <div className="flex justify-between items-center mb-4">
-          <div>
-            <h2 className="font-serif text-xl font-bold text-charcoal-900">Table QR Badges</h2>
-            <p className="text-xs text-charcoal-700/60 mt-0.5">
-              Download high-resolution, print-ready SVG cards with embedded table routing tokens.
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          {activeTablesList.map((table) => (
-            <div
-              key={table.id}
-              className="bg-ivory-50/70 border border-ivory-200 rounded-2xl p-4 text-center space-y-3"
-            >
-              <div className="w-10 h-10 bg-saffron-100 text-saffron-700 rounded-xl mx-auto flex items-center justify-center">
-                <QrCode className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="font-serif font-bold text-base text-charcoal-900">{table.label}</p>
-                <p className="text-[10px] text-charcoal-700/50 font-mono truncate">{table.public_token}</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => downloadTableQrSvg(table.label, table.public_token)}
-                className="w-full bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold py-2 px-3 rounded-xl flex items-center justify-center space-x-1.5 shadow-subtle transition-colors"
-              >
-                <Download className="w-3.5 h-3.5" />
-                <span>Download SVG Card</span>
-              </button>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* Live Menu Availability & Catalog Manager */}
       <section className="bg-white p-6 rounded-3xl border border-ivory-200 shadow-subtle">

@@ -56,7 +56,7 @@ export const RoyalPosIntegrationPanel: React.FC<RoyalPosIntegrationPanelProps> =
   const [savedNotification, setSavedNotification] = useState(false);
   const [activeTab, setActiveTab] = useState<'simulator' | 'credentials' | 'guide'>('simulator');
   const [simTable, setSimTable] = useState('Table 4 (Patio)');
-  const [includeDiscount, setIncludeDiscount] = useState(true);
+  const [includeFoodReward, setIncludeFoodReward] = useState(false);
   const [isFiringKot, setIsFiringKot] = useState(false);
   const [lastReceipt, setLastReceipt] = useState<GenericKotReceipt | null>(null);
   const [showJsonPayload, setShowJsonPayload] = useState(false);
@@ -81,11 +81,27 @@ export const RoyalPosIntegrationPanel: React.FC<RoyalPosIntegrationPanelProps> =
 
   const handleTestKot = async () => {
     setIsFiringKot(true);
-    const discountInfo = includeDiscount
-      ? { label: 'Menuz Google Review Reward (15% OFF)', amount: 156, ratePercent: 15 }
-      : undefined;
+    const orderToDispatch: Order = includeFoodReward
+      ? {
+          ...sampleOrder,
+          items: [
+            ...sampleOrder.items,
+            {
+              id: 'ord-it-comp',
+              order_id: 'ord-sim',
+              menu_item_id: 'mi-comp-dessert',
+              item_name_snapshot: 'Complimentary Chef Dessert (Food Reward)',
+              unit_price_snapshot: 0,
+              quantity: 1,
+              selected_options_snapshot: [],
+              line_total_amount: 0
+            }
+          ]
+        }
+      : sampleOrder;
+
     try {
-      const res = await sendOrderToRoyalPos(sampleOrder, restaurant, config, discountInfo);
+      const res = await sendOrderToRoyalPos(orderToDispatch, restaurant, config);
       setLastReceipt(res.receipt);
     } finally {
       setIsFiringKot(false);
@@ -152,7 +168,7 @@ export const RoyalPosIntegrationPanel: React.FC<RoyalPosIntegrationPanelProps> =
                   <Zap className="w-4 h-4 text-blue-600" /> Test RoyalPOS LAN KOT Dispatch
                 </h3>
                 <p className="text-xs text-blue-900/80 mt-1 leading-relaxed">
-                  Simulates a POST to <code className="font-mono bg-blue-100 px-1 rounded">http://{config.device_ip}:{config.device_port}/api/v1/kot/save</code> on the restaurant's local network. Verify the thermal receipt layout and discount injection before going live.
+                  Simulates a POST to <code className="font-mono bg-blue-100 px-1 rounded">http://{config.device_ip}:{config.device_port}/api/v1/kot/save</code> on the restaurant's local network. Verify the thermal receipt layout before going live.
                 </p>
               </div>
 
@@ -168,12 +184,25 @@ export const RoyalPosIntegrationPanel: React.FC<RoyalPosIntegrationPanelProps> =
                 </select>
               </div>
 
-              <div className="p-3.5 bg-gray-50 border border-gray-200 rounded-xl flex items-center justify-between">
-                <span className="text-xs font-bold text-gray-800">Apply 15% Google Review Reward Discount</span>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" checked={includeDiscount} onChange={(e) => setIncludeDiscount(e.target.checked)} className="sr-only peer" />
-                  <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-                </label>
+              <div className="p-3.5 bg-gray-50 border border-gray-200 rounded-xl space-y-2">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-xs font-bold text-gray-800">Optional: Complimentary Food Reward</span>
+                    <p className="text-[11px] text-gray-500 mt-0.5">
+                      Discounts are completely optional. Reward diners with a complimentary food/dessert item with zero bill deduction.
+                    </p>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer shrink-0 ml-2">
+                    <input type="checkbox" checked={includeFoodReward} onChange={(e) => setIncludeFoodReward(e.target.checked)} className="sr-only peer" />
+                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
+                </div>
+                {includeFoodReward && (
+                  <div className="text-[11px] text-emerald-800 bg-emerald-50 border border-emerald-200 p-2.5 rounded-lg flex items-center gap-2">
+                    <span>🎁</span>
+                    <span>1x Complimentary Chef Dessert (₹0) added to KOT. Zero bill discount deducted.</span>
+                  </div>
+                )}
               </div>
 
               {/* Items preview */}
@@ -351,7 +380,7 @@ export const RoyalPosIntegrationPanel: React.FC<RoyalPosIntegrationPanelProps> =
               { step: 1, title: 'Restaurant Owner Contacts RoyalPOS Account Manager', desc: 'Every RoyalPOS restaurant has a local account manager or a support WhatsApp group. Owner sends: "Please enable API access for our Menuz QR integration and share the Bearer Token."' },
               { step: 2, title: 'RoyalPOS Enables API on the POS Terminal', desc: 'The RoyalPOS admin dashboard (Settings → Integrations) exposes an API Token and starts the local HTTP server on port 8080. The POS must be on the same Wi-Fi as the Menuz relay.' },
               { step: 3, title: 'You Enter Device IP + Token in Menuz', desc: 'Paste the device IP (visible in the POS under About → Network) and the API Token in the Credentials tab above. Switch to Production.' },
-              { step: 4, title: 'Live KOT Printing', desc: 'Every Menuz QR order now fires directly to the RoyalPOS kitchen station. Discount vouchers from the Google Review wheel are pre-calculated in the payload.' }
+              { step: 4, title: 'Live KOT Printing', desc: 'Every Menuz order fires directly to the RoyalPOS kitchen station. Kitchen items and optional food rewards are structured in real-time.' }
             ].map(({ step, title, desc }) => (
               <div key={step} className="flex gap-4 items-start p-4 bg-white border border-gray-200 rounded-xl">
                 <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-black flex items-center justify-center shrink-0 text-sm">{step}</div>

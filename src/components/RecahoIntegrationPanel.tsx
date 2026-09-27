@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   Printer, CheckCircle2, Terminal, Send, RefreshCw,
-  Sliders, ShieldCheck, Zap, Receipt, HelpCircle, Cloud
+  Sliders, ShieldCheck, Zap, Receipt, HelpCircle, Cloud, Tag
 } from 'lucide-react';
 import { Restaurant, RecahoConfig, Order, GenericKotReceipt } from '../types';
 import { sendOrderToRecaho } from '../services/recahoService';
@@ -55,7 +55,7 @@ export const RecahoIntegrationPanel: React.FC<RecahoIntegrationPanelProps> = ({
   const [savedNotification, setSavedNotification] = useState(false);
   const [activeTab, setActiveTab] = useState<'simulator' | 'credentials' | 'guide'>('simulator');
   const [simTable, setSimTable] = useState('Table 4 (Patio)');
-  const [includeDiscount, setIncludeDiscount] = useState(true);
+  const [includeFoodReward, setIncludeFoodReward] = useState(false);
   const [isFiringKot, setIsFiringKot] = useState(false);
   const [lastReceipt, setLastReceipt] = useState<GenericKotReceipt | null>(null);
   const [showJsonPayload, setShowJsonPayload] = useState(false);
@@ -80,11 +80,27 @@ export const RecahoIntegrationPanel: React.FC<RecahoIntegrationPanelProps> = ({
 
   const handleTestKot = async () => {
     setIsFiringKot(true);
-    const discountInfo = includeDiscount
-      ? { reason: 'Menuz Google Review Lucky Wheel (15% OFF)', amount: 156, ratePercent: 15 }
-      : undefined;
+    const orderToDispatch: Order = includeFoodReward
+      ? {
+          ...sampleOrder,
+          items: [
+            ...sampleOrder.items,
+            {
+              id: 'ord-it-comp',
+              order_id: 'ord-sim',
+              menu_item_id: 'mi-comp-dessert',
+              item_name_snapshot: 'Complimentary Chef Dessert (Food Reward)',
+              unit_price_snapshot: 0,
+              quantity: 1,
+              selected_options_snapshot: [],
+              line_total_amount: 0
+            }
+          ]
+        }
+      : sampleOrder;
+
     try {
-      const res = await sendOrderToRecaho(sampleOrder, restaurant, config, discountInfo);
+      const res = await sendOrderToRecaho(orderToDispatch, restaurant, config);
       setLastReceipt(res.receipt);
     } finally {
       setIsFiringKot(false);
@@ -155,12 +171,34 @@ export const RecahoIntegrationPanel: React.FC<RecahoIntegrationPanelProps> = ({
                 </select>
               </div>
 
-              <div className="p-3.5 bg-gray-50 border border-gray-200 rounded-xl flex items-center justify-between">
-                <span className="text-xs font-bold text-gray-800">Apply 15% Google Review Reward Discount</span>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" checked={includeDiscount} onChange={(e) => setIncludeDiscount(e.target.checked)} className="sr-only peer" />
-                  <div className="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-teal-600"></div>
-                </label>
+              {/* Optional Food-as-Reward */}
+              <div className="p-3.5 bg-gray-50 border border-gray-200 rounded-xl space-y-2">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-xs font-bold text-gray-800 flex items-center gap-1.5">
+                      <Tag className="w-3.5 h-3.5 text-teal-600" /> Optional: Complimentary Food Reward
+                    </span>
+                    <p className="text-[11px] text-gray-500 mt-0.5">
+                      Discounts are completely optional. Many owners prefer rewarding diners with a complimentary food/dessert item rather than discounting the bill.
+                    </p>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer shrink-0 ml-2">
+                    <input
+                      type="checkbox"
+                      checked={includeFoodReward}
+                      onChange={(e) => setIncludeFoodReward(e.target.checked)}
+                      className="sr-only peer"
+                    />
+                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-teal-600"></div>
+                  </label>
+                </div>
+
+                {includeFoodReward && (
+                  <div className="text-[11px] text-teal-900 bg-teal-50 border border-teal-200 p-2.5 rounded-lg flex items-center gap-2">
+                    <span>🎁</span>
+                    <span>1x Complimentary Chef Dessert (₹0) added to kitchen ticket. Zero bill discount deducted.</span>
+                  </div>
+                )}
               </div>
 
               <div className="border border-gray-200 rounded-xl p-3 bg-white space-y-2">

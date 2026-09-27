@@ -4,7 +4,6 @@ import { Navbar } from './components/Navbar';
 import { DinerMenu } from './pages/DinerMenu';
 import { KitchenKDS } from './pages/KitchenKDS';
 import { ManagerDashboard } from './pages/ManagerDashboard';
-import { QrCodesPage } from './pages/QrCodesPage';
 import { MasterAdminDashboard } from './pages/MasterAdminDashboard';
 import { CustomerHomePage } from './pages/CustomerHomePage';
 import { PitchDeckPage } from './pages/PitchDeckPage';
@@ -59,7 +58,7 @@ export const App: React.FC = () => {
             />
             <Route
               path="/qr"
-              element={<QrCodesPage />}
+              element={<Navigate to="/admin" replace />}
             />
             <Route
               path="*"
