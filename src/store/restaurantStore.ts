@@ -38,6 +38,7 @@ export interface CartItem {
   quantity: number;
   image_url: string;
   selected_options: SelectedOptionSnapshot[];
+  added_by_guest?: string;
 }
 
 export interface WhatsAppCampaign {

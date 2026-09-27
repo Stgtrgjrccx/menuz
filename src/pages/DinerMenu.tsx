@@ -18,7 +18,9 @@ import {
   Check,
   ArrowLeftRight,
   QrCode,
-  Home
+  Home,
+  Instagram,
+  Users
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { MenuItem, ReviewChallenge } from '../types';
@@ -28,6 +30,7 @@ import { AiAssistantDrawer } from '../components/AiAssistantDrawer';
 import { OrderTrackerModal } from '../components/OrderTrackerModal';
 import { SpinWheelModal } from '../components/SpinWheelModal';
 import { SwitchRestaurantModal } from '../components/SwitchRestaurantModal';
+import { InstagramStoryModal } from '../components/InstagramStoryModal';
 import { PUNE_RESTAURANT_DIRECTORY } from '../data/puneRestaurantDirectory';
 
 export const DinerMenu: React.FC = () => {
@@ -136,6 +139,44 @@ export const DinerMenu: React.FC = () => {
 
   // Reward teaser banner dismiss state
   const [rewardBannerDismissed, setRewardBannerDismissed] = useState(false);
+
+  // Instagram Story Foodie Card state
+  const [isInstagramStoryOpen, setIsInstagramStoryOpen] = useState(false);
+  const [tableSyncAlert, setTableSyncAlert] = useState<string | null>(null);
+  const [activeTableGuests, setActiveTableGuests] = useState<number>(2);
+  const [forceHappyHourDemo, setForceHappyHourDemo] = useState<boolean>(true);
+
+  // Smart Happy Hour & Dynamic Pricing Active Status
+  const isHappyHourActive = useMemo(() => {
+    if (forceHappyHourDemo) return true;
+    const hh = restaurant.happy_hour_config;
+    if (!hh || !hh.enabled) return false;
+    const now = new Date();
+    const currentMin = now.getHours() * 60 + now.getMinutes();
+    const [sH, sM] = (hh.start_time || '16:00').split(':').map(Number);
+    const [eH, eM] = (hh.end_time || '19:30').split(':').map(Number);
+    return currentMin >= (sH * 60 + sM) && currentMin <= (eH * 60 + eM);
+  }, [restaurant.happy_hour_config, forceHappyHourDemo]);
+
+  // Real-time Table Cart Multiplayer Broadcast Listener
+  useEffect(() => {
+    if (!activeTable?.public_token) return;
+    const channelName = `menuz_table_sync_${activeTable.public_token}`;
+    let channel: BroadcastChannel | null = null;
+    try {
+      channel = new BroadcastChannel(channelName);
+      channel.onmessage = (event) => {
+        if (event.data?.type === 'SYNC_CART_ACTION') {
+          setTableSyncAlert(event.data.message || 'Companion diner updated the shared table tray');
+          setTimeout(() => setTableSyncAlert(null), 4000);
+        }
+      };
+    } catch (e) {}
+
+    return () => {
+      channel?.close();
+    };
+  }, [activeTable?.public_token]);
 
   // Scrollytelling section refs
   const heroRef = useRef<HTMLDivElement>(null);
@@ -308,6 +349,41 @@ export const DinerMenu: React.FC = () => {
       </div>
 
       {/* ═══════════════════════════════════════════════════════════ */}
+      {/* LIVE TABLE SYNC TOAST                                      */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {tableSyncAlert && (
+        <div className="fixed top-14 left-4 right-4 max-w-sm mx-auto z-40 bg-emerald-950 text-white p-3 rounded-2xl shadow-float border border-emerald-500/50 flex items-center space-x-2.5 animate-slideDown">
+          <div className="w-7 h-7 rounded-lg bg-emerald-600 flex items-center justify-center flex-shrink-0">
+            <Users className="w-3.5 h-3.5 text-white" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-serif font-bold text-xs text-white leading-tight">Live Table Sync</p>
+            <p className="text-[10px] text-emerald-300 truncate">{tableSyncAlert}</p>
+          </div>
+        </div>
+      )}
+
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/* SMART HAPPY HOUR ACTIVE BANNER                             */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {isHappyHourActive && (
+        <div className="bg-gradient-to-r from-amber-600 via-orange-600 to-amber-600 text-white px-4 py-2 flex items-center justify-between text-xs font-bold shadow-md">
+          <div className="flex items-center space-x-2">
+            <span className="w-2 h-2 rounded-full bg-white animate-ping" />
+            <span className="tracking-wide">
+              {restaurant.happy_hour_config?.banner_label || '⚡ Twilight Happy Hour: 20% Off All Beverages & Chef Starters!'}
+            </span>
+          </div>
+          <button
+            onClick={() => setForceHappyHourDemo(!forceHappyHourDemo)}
+            className="text-[10px] underline opacity-90 hover:opacity-100 cursor-pointer ml-2"
+          >
+            {forceHappyHourDemo ? 'Hide Demo' : 'Preview Live'}
+          </button>
+        </div>
+      )}
+
+      {/* ═══════════════════════════════════════════════════════════ */}
       {/* SCROLLYTELLING HERO SECTION                                */}
       {/* ═══════════════════════════════════════════════════════════ */}
       <section
@@ -327,10 +403,16 @@ export const DinerMenu: React.FC = () => {
         />
 
         <div className="relative z-10 max-w-lg mx-auto space-y-3.5">
-          {/* Restaurant badge */}
-          <span className="inline-block px-3 py-1 rounded-full text-[10px] tracking-widest uppercase font-bold border bg-white/80 backdrop-blur-sm shadow-xs text-saffron-700 border-saffron-200">
-            {activeTable?.label || 'Table 1'} • {restaurant?.cuisine || 'Contemporary Dining'}
-          </span>
+          {/* Restaurant badge with multiplayer session indicator */}
+          <div className="flex flex-wrap items-center justify-center gap-1.5">
+            <span className="inline-block px-3 py-1 rounded-full text-[10px] tracking-widest uppercase font-bold border bg-white/80 backdrop-blur-sm shadow-xs text-saffron-700 border-saffron-200">
+              {activeTable?.label || 'Table 1'} • {restaurant?.cuisine || 'Contemporary Dining'}
+            </span>
+            <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full text-[10px] font-bold border bg-emerald-50 text-emerald-800 border-emerald-200">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Multiplayer Sync ({activeTableGuests} Guests)</span>
+            </span>
+          </div>
 
           {/* Restaurant name */}
           <h1 className="font-serif text-3xl sm:text-5xl font-bold text-charcoal-900 leading-tight tracking-tight">
@@ -343,13 +425,13 @@ export const DinerMenu: React.FC = () => {
           </p>
 
           {/* Clean Quick Action Buttons */}
-          <div className="flex items-center justify-center gap-3 pt-2">
+          <div className="flex flex-wrap items-center justify-center gap-2.5 pt-2">
             <button
               onClick={() => handleOpenChallenge()}
-              className="px-5 py-2.5 bg-gradient-to-r from-amber-500 via-saffron-600 to-amber-600 hover:brightness-105 active:scale-95 text-white text-xs font-bold rounded-full shadow-float transition-all flex items-center space-x-1.5 animate-pulse"
+              className="px-4 py-2.5 bg-gradient-to-r from-amber-500 via-saffron-600 to-amber-600 hover:brightness-105 active:scale-95 text-white text-xs font-bold rounded-full shadow-float transition-all flex items-center space-x-1.5 animate-pulse cursor-pointer"
             >
               <span className="text-sm">🎁</span>
-              <span>Win Surprise Reward</span>
+              <span>Win Reward</span>
             </button>
 
             <button
@@ -357,13 +439,22 @@ export const DinerMenu: React.FC = () => {
                 setAiFocusDish(null);
                 setIsAiOpen(true);
               }}
-              className="px-4 py-2.5 bg-gradient-to-r from-charcoal-900 to-charcoal-800 hover:from-charcoal-950 hover:to-charcoal-900 text-white text-xs font-bold rounded-full shadow-subtle transition-all flex items-center space-x-1.5 border border-amber-500/30 group"
+              className="px-4 py-2.5 bg-gradient-to-r from-charcoal-900 to-charcoal-800 hover:from-charcoal-950 hover:to-charcoal-900 text-white text-xs font-bold rounded-full shadow-subtle transition-all flex items-center space-x-1.5 border border-amber-500/30 group cursor-pointer"
             >
               <span className="text-sm">🧑‍🍳</span>
-              <span>Ask Chef's AI Assistant</span>
+              <span>Ask Chef's AI</span>
               <span className="hidden sm:inline-block text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300">
-                Trained by Chef
+                Trained
               </span>
+            </button>
+
+            <button
+              onClick={() => setIsInstagramStoryOpen(true)}
+              className="px-4 py-2.5 bg-gradient-to-r from-amber-500 via-pink-600 to-purple-600 hover:opacity-95 text-white text-xs font-bold rounded-full shadow-subtle transition-all flex items-center space-x-1.5 cursor-pointer"
+            >
+              <Instagram className="w-3.5 h-3.5" />
+              <span>Instagram Story</span>
+              <span className="text-[9px] bg-white/20 px-1.5 py-0.2 rounded-full">Perk</span>
             </button>
           </div>
         </div>
@@ -860,6 +951,15 @@ export const DinerMenu: React.FC = () => {
         isOpen={isSwitchModalOpen}
         onClose={() => setIsSwitchModalOpen(false)}
         currentSlug={restaurant?.slug || restaurantSlug || 'saffron-house'}
+      />
+
+      {/* Foodie Instagram Story Generator Modal */}
+      <InstagramStoryModal
+        isOpen={isInstagramStoryOpen}
+        onClose={() => setIsInstagramStoryOpen(false)}
+        restaurant={restaurant}
+        items={cart.length > 0 ? cart : currentRestMenuItems.slice(0, 3)}
+        tableLabel={activeTable?.label || 'Table 1'}
       />
     </div>
   );

@@ -98,8 +98,19 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
           </div>
         ) : (
           <>
+            {/* Real-time shared table indicator */}
+            <div className="bg-emerald-50 border border-emerald-200/80 rounded-xl px-3 py-2 my-2 flex items-center justify-between text-xs text-emerald-900">
+              <div className="flex items-center space-x-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="font-bold">Live Table Cart Sync Active</span>
+              </div>
+              <span className="text-[10px] text-emerald-700 font-mono">
+                {cart.length} {cart.length === 1 ? 'item' : 'items'} on {tableLabel}
+              </span>
+            </div>
+
             {/* Items list */}
-            <div className="flex-1 overflow-y-auto py-3 divide-y divide-ivory-100">
+            <div className="flex-1 overflow-y-auto py-2 divide-y divide-ivory-100">
               {cart.map((item) => {
                 const optsTotal = item.selected_options.reduce((s, o) => s + o.price_modifier, 0);
                 const lineTotal = (item.price + optsTotal) * item.quantity;
@@ -112,9 +123,19 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     />
 
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-serif font-bold text-sm text-charcoal-900 leading-snug truncate">
-                        {item.name}
-                      </h4>
+                      <div className="flex items-center space-x-1.5">
+                        <h4 className="font-serif font-bold text-sm text-charcoal-900 leading-snug truncate">
+                          {item.name}
+                        </h4>
+                      </div>
+
+                      {item.added_by_guest && (
+                        <span className="inline-flex items-center space-x-1 text-[10px] text-saffron-800 bg-saffron-50 border border-saffron-200 px-1.5 py-0.2 rounded-md mt-0.5 font-medium">
+                          <span>👤</span>
+                          <span>{item.added_by_guest}</span>
+                        </span>
+                      )}
+
                       <span className="text-xs text-saffron-700 font-semibold block mt-0.5">
                         ₹{item.price.toFixed(2)}
                       </span>
@@ -163,6 +184,70 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   </div>
                 );
               })}
+
+              {/* Chef's Smart Upsells & Recommended Pairings */}
+              {(() => {
+                const cartIds = new Set(cart.map((c) => c.menu_item_id));
+                const allRestItems = useRestaurantStore.getState().menuItems.filter((m) => m.restaurant_id === restaurant.id && m.is_available);
+                const upsellCandidates = allRestItems
+                  .filter((m) => !cartIds.has(m.id))
+                  .slice(0, 3);
+
+                if (upsellCandidates.length === 0) return null;
+
+                return (
+                  <div className="pt-3 pb-2">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-bold text-charcoal-900 flex items-center space-x-1">
+                        <span>🧑‍🍳</span>
+                        <span>Chef's Recommended Pairings</span>
+                      </span>
+                      <span className="text-[10px] text-saffron-700 font-bold uppercase tracking-wider">
+                        Quick Add
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2">
+                      {upsellCandidates.map((dish) => (
+                        <div
+                          key={dish.id}
+                          className="bg-ivory-50 border border-ivory-200 rounded-xl p-2 flex flex-col justify-between hover:border-saffron-300 transition-all text-left"
+                        >
+                          <img
+                            src={dish.image_url}
+                            alt={dish.name}
+                            className="w-full aspect-[4/3] rounded-lg object-cover mb-1.5"
+                          />
+                          <p className="font-bold text-[11px] text-charcoal-900 truncate leading-tight">
+                            {dish.name}
+                          </p>
+                          <div className="flex items-center justify-between mt-1">
+                            <span className="text-[10px] font-bold text-saffron-700">₹{dish.price}</span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                useRestaurantStore.getState().addItemToCart({
+                                  menu_item_id: dish.id,
+                                  name: dish.name,
+                                  price: dish.price,
+                                  quantity: 1,
+                                  image_url: dish.image_url,
+                                  selected_options: [],
+                                  added_by_guest: 'Quick Pairing'
+                                });
+                              }}
+                              className="px-2 py-0.5 bg-saffron-600 hover:bg-saffron-700 text-white text-[10px] font-bold rounded-md shadow-xs transition-colors flex items-center space-x-0.5 cursor-pointer"
+                            >
+                              <Plus className="w-2.5 h-2.5" />
+                              <span>Add</span>
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
 
               {/* Kitchen notes */}
               <div className="pt-3">

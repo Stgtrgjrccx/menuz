@@ -59,6 +59,23 @@ export interface Restaurant {
   aliases?: string[];
   ai_persona?: ChefOwnerAiPersona;
   white_label?: WhiteLabelConfig;
+  direct_kitchen_kot_enabled?: boolean;
+  instagram_handle?: string;
+  performance_guarantee_pilot?: {
+    enabled: boolean;
+    target_reviews: number;
+    target_revenue: number;
+    start_date: string;
+    trial_days: number;
+  };
+  happy_hour_config?: {
+    enabled: boolean;
+    start_time: string; // e.g. "16:00"
+    end_time: string;   // e.g. "19:30"
+    discount_percent: number; // e.g. 20
+    banner_label: string; // e.g. "⚡ Twilight Happy Hour: 20% Off Beverages & Small Bites!"
+    active_days?: string[]; // e.g. ["Mon", "Tue", "Wed", "Thu", "Fri"]
+  };
 }
 
 export interface WhiteLabelConfig {

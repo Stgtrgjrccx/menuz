@@ -331,8 +331,60 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
             item,
             reason: `Core Feast Dish — ${item.serving_size} • ${item.short_description.slice(0, 50)}`
           }));
-        } else if (lower.includes('gluten') || lower.includes('nut') || lower.includes('celiac')) {
-          reply = "🌾 Allergen Kitchen Protocol (Chef Sanjeev):\n\n• Nut-Free Options: Many curries use cashew paste for richness, but our Rogan Josh and yellow lentils are prepared 100% nut-free.\n• Gluten-Free Options: All tandoori starters, curries, and Basmati biryanis are naturally wheat-free. Pair with rice rather than tandoori rotis/naans.\n\n⚠️ We flag all allergy tickets in bold red on the kitchen KOT!";
+        } else if (lower.includes('jain')) {
+          const jainSafe = availableItems.filter(i =>
+            i.dietary_flags.some(f => f.toLowerCase() === 'jain') ||
+            (i.dietary_flags.some(f => f.toLowerCase() === 'veg' || f.toLowerCase() === 'vegetarian') &&
+             !i.ingredients.some(ing => /onion|garlic|ginger|potato|root/i.test(ing)))
+          ).slice(0, 3);
+
+          reply = `🌱 **100% Jain Dining Safe Protocol**:\n\nOur kitchen maintains dedicated cookware and preparation stations without onion, garlic, or root vegetables.\n\nHere are verified Jain-friendly preparations:`;
+          recs = jainSafe.map(item => ({
+            item,
+            reason: `100% Jain Safe • Prepared with isolated utensils & zero root vegetables`
+          }));
+        } else if (lower.includes('gluten') || lower.includes('celiac')) {
+          const glutenFree = availableItems.filter(i =>
+            !i.allergens.some(a => /gluten|wheat|flour|maida/i.test(a)) &&
+            !i.ingredients.some(ing => /wheat|maida|semolina|soy sauce/i.test(ing))
+          ).slice(0, 3);
+
+          reply = `🌾 **Gluten-Free & Celiac Safe Guide**:\n\nAll tandoori grills, basmati rice preparations, and select gravies are naturally wheat-free. Avoid tandoori rotis/naans and fried battered starters.\n\nRecommended Gluten-Free dishes:`;
+          recs = glutenFree.map(item => ({
+            item,
+            reason: `Verified Wheat-Free • Cooked with pure rice, corn, or gram flour`
+          }));
+        } else if (lower.includes('nut') || lower.includes('peanut')) {
+          const nutFree = availableItems.filter(i =>
+            !i.allergens.some(a => /nut|peanut|cashew|almond|walnut/i.test(a)) &&
+            !i.ingredients.some(ing => /cashew|almond|pista|nut|peanut/i.test(ing))
+          ).slice(0, 3);
+
+          reply = `🥜 **Nut Allergy Safe Protocol**:\n\nWe tag nut-allergy tickets in bold red on the kitchen KOT. These dishes are prepared without cashew paste, peanuts, or nut oils:`;
+          recs = nutFree.map(item => ({
+            item,
+            reason: `100% Nut-Free Recipe • Zero peanuts, cashews, or almond paste`
+          }));
+        } else if (lower.includes('vegan')) {
+          const veganSafe = availableItems.filter(i =>
+            i.dietary_flags.some(f => f.toLowerCase() === 'vegan') ||
+            (!i.allergens.some(a => /dairy|milk|cheese|butter|ghee/i.test(a)) &&
+             !i.ingredients.some(ing => /paneer|butter|cream|ghee|curd|yogurt|honey/i.test(ing)) &&
+             !i.dietary_flags.some(f => f.toLowerCase() === 'non-veg'))
+          ).slice(0, 3);
+
+          reply = `🥬 **100% Plant-Based Vegan Selections**:\n\nPrepared using cold-pressed oils, zero dairy makkhan, zero paneer, and zero ghee:`;
+          recs = veganSafe.map(item => ({
+            item,
+            reason: `Pure Plant-Based Vegan • Zero dairy, makkhan, cream, or ghee`
+          }));
+        } else if (lower.includes('kid') || lower.includes('child') || lower.includes('mildest')) {
+          const kidSafe = availableItems.filter(i => i.spice_level === 0 || (i.spice_level === 1 && i.item_type !== 'drink')).slice(0, 3);
+          reply = `👶 **Kid-Friendly & Gentle Flavors**:\n\nThese dishes have zero harsh chilies or pungent spices, focusing on creamy, naturally sweet, or buttery notes that kids love:`;
+          recs = kidSafe.map(item => ({
+            item,
+            reason: `Spice Level ${item.spice_level}/5 • Gentle aroma, zero chili bite`
+          }));
         } else if (lower.includes('popular') || lower.includes('best seller') || lower.includes('recommend')) {
           const bestsellers = availableItems.filter(i => i.is_bestseller).slice(0, 2);
           const chefPicks = availableItems.filter(i => i.is_chef_recommended).slice(0, 2);
@@ -458,11 +510,47 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
         )}
 
         {/* Allergy Policy Guard Banner */}
-        <div className="bg-amber-50/90 border border-amber-200 p-2.5 rounded-xl my-2 flex items-start space-x-2 text-[11px] text-amber-900 leading-tight">
+        <div className="bg-amber-50/90 border border-amber-200 p-2.5 rounded-xl my-1.5 flex items-start space-x-2 text-[11px] text-amber-900 leading-tight">
           <ShieldAlert className="w-4 h-4 text-amber-700 flex-shrink-0 mt-0.5" />
           <p>
             {ALLERGY_DISCLAIMER}
           </p>
+        </div>
+
+        {/* Dedicated 1-Tap Dietary & Allergen Safety Concierge Bar */}
+        <div className="py-1">
+          <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 scrollbar-none">
+            <button
+              onClick={() => handleSendQuery("Which dishes are 100% Jain safe with isolated prep?")}
+              className="px-2.5 py-1 rounded-lg bg-green-50 hover:bg-green-100 text-green-800 text-[11px] font-bold border border-green-200 flex-shrink-0 transition-colors cursor-pointer"
+            >
+              🌱 100% Jain Safe
+            </button>
+            <button
+              onClick={() => handleSendQuery("Which dishes are strictly Gluten-Free and celiac safe?")}
+              className="px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 text-[11px] font-bold border border-amber-200 flex-shrink-0 transition-colors cursor-pointer"
+            >
+              🌾 Gluten-Free / Celiac
+            </button>
+            <button
+              onClick={() => handleSendQuery("Which dishes are completely free of peanuts, tree nuts, and nut oils?")}
+              className="px-2.5 py-1 rounded-lg bg-orange-50 hover:bg-orange-100 text-orange-900 text-[11px] font-bold border border-orange-200 flex-shrink-0 transition-colors cursor-pointer"
+            >
+              🥜 Nut-Allergy Safe
+            </button>
+            <button
+              onClick={() => handleSendQuery("Which dishes are 100% Plant-Based Vegan with zero dairy or ghee?")}
+              className="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-900 text-[11px] font-bold border border-emerald-200 flex-shrink-0 transition-colors cursor-pointer"
+            >
+              🥬 Pure Vegan
+            </button>
+            <button
+              onClick={() => handleSendQuery("What are your zero-spice, mild dishes suitable for kids?")}
+              className="px-2.5 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-900 text-[11px] font-bold border border-blue-200 flex-shrink-0 transition-colors cursor-pointer"
+            >
+              👶 Kid-Friendly Mild
+            </button>
+          </div>
         </div>
 
         {/* Messages */}

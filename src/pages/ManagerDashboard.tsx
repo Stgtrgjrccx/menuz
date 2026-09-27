@@ -499,6 +499,175 @@ export const ManagerDashboard: React.FC = () => {
         </div>
       )}
 
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/* ⚡ SMART OPERATIONS, DIRECT KOT & STRATEGIC PILOT ENGINE   */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <div className="bg-white rounded-3xl border border-ivory-300 p-6 shadow-subtle space-y-5">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-ivory-200">
+          <div>
+            <div className="flex items-center space-x-2">
+              <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-saffron-100 text-saffron-800 border border-saffron-200 font-mono">
+                Strategic Controls
+              </span>
+              <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200 font-mono">
+                Automation
+              </span>
+            </div>
+            <h3 className="font-serif font-bold text-lg text-charcoal-900 mt-1">
+              Smart Operations, Direct KOT &amp; Growth Engine
+            </h3>
+            <p className="text-xs text-charcoal-600">
+              Configure optional direct kitchen routing, 7-day risk-free performance pilot, and time-based surge pricing.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* 1. Direct-to-Kitchen KOT Auto-Dispatch */}
+          <div className="bg-ivory-50 border border-ivory-300 rounded-2xl p-4 flex flex-col justify-between space-y-3">
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-xs font-bold text-charcoal-900 flex items-center space-x-1.5">
+                  <span>🔥</span>
+                  <span>Direct Kitchen KOT</span>
+                </span>
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                  restaurant.direct_kitchen_kot_enabled
+                    ? 'bg-green-100 text-green-800 border border-green-200'
+                    : 'bg-charcoal-200 text-charcoal-700'
+                }`}>
+                  {restaurant.direct_kitchen_kot_enabled ? 'Auto-Dispatch ON' : 'Manual Approval'}
+                </span>
+              </div>
+              <p className="text-[11px] text-charcoal-600 leading-snug">
+                Send guest table orders straight to the Kitchen KDS without waiting for manual manager acceptance.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                const nextVal = !restaurant.direct_kitchen_kot_enabled;
+                updateRestaurant(restaurant.id, { direct_kitchen_kot_enabled: nextVal });
+              }}
+              className={`w-full py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 shadow-xs cursor-pointer ${
+                restaurant.direct_kitchen_kot_enabled
+                  ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                  : 'bg-charcoal-800 hover:bg-charcoal-900 text-white'
+              }`}
+            >
+              <span>{restaurant.direct_kitchen_kot_enabled ? '✓ Direct Auto-KOT Active' : 'Enable Direct Auto-KOT'}</span>
+            </button>
+          </div>
+
+          {/* 2. 7-Day Performance Guarantee Pilot */}
+          <div className="bg-ivory-50 border border-ivory-300 rounded-2xl p-4 flex flex-col justify-between space-y-3">
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-xs font-bold text-charcoal-900 flex items-center space-x-1.5">
+                  <span>🛡️</span>
+                  <span>7-Day Zero-Risk Pilot</span>
+                </span>
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                  restaurant.performance_guarantee_pilot?.enabled
+                    ? 'bg-amber-100 text-amber-900 border border-amber-300'
+                    : 'bg-charcoal-200 text-charcoal-700'
+                }`}>
+                  {restaurant.performance_guarantee_pilot?.enabled ? 'Pilot Active' : 'Offered Optional'}
+                </span>
+              </div>
+              <p className="text-[11px] text-charcoal-600 leading-snug">
+                Zero software fee unless Menuz generates 40+ 5-star reviews and ₹25k+ volume in the first 7 days.
+              </p>
+
+              {restaurant.performance_guarantee_pilot?.enabled && (
+                <div className="mt-2 bg-white p-2 rounded-xl border border-ivory-200 space-y-1 text-[10px]">
+                  <div className="flex justify-between font-bold text-charcoal-800">
+                    <span>Google Reviews</span>
+                    <span className="text-green-700">42 / 40 (105%) ✓</span>
+                  </div>
+                  <div className="w-full bg-ivory-200 h-1.5 rounded-full overflow-hidden">
+                    <div className="bg-green-500 h-full w-full" />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                const isCurrentlyEnabled = !!restaurant.performance_guarantee_pilot?.enabled;
+                updateRestaurant(restaurant.id, {
+                  performance_guarantee_pilot: {
+                    enabled: !isCurrentlyEnabled,
+                    target_reviews: 40,
+                    target_revenue: 25000,
+                    start_date: new Date().toISOString(),
+                    trial_days: 7
+                  }
+                });
+              }}
+              className={`w-full py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 shadow-xs cursor-pointer ${
+                restaurant.performance_guarantee_pilot?.enabled
+                  ? 'bg-amber-600 hover:bg-amber-700 text-white'
+                  : 'bg-charcoal-800 hover:bg-charcoal-900 text-white'
+              }`}
+            >
+              <span>
+                {restaurant.performance_guarantee_pilot?.enabled
+                  ? '✓ Guarantee Pilot Enabled'
+                  : 'Activate 7-Day Pilot'}
+              </span>
+            </button>
+          </div>
+
+          {/* 3. Smart Happy Hour & Dynamic Pricing */}
+          <div className="bg-ivory-50 border border-ivory-300 rounded-2xl p-4 flex flex-col justify-between space-y-3">
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-xs font-bold text-charcoal-900 flex items-center space-x-1.5">
+                  <span>⚡</span>
+                  <span>Happy Hour &amp; Surge Pricing</span>
+                </span>
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                  restaurant.happy_hour_config?.enabled
+                    ? 'bg-orange-100 text-orange-900 border border-orange-300'
+                    : 'bg-charcoal-200 text-charcoal-700'
+                }`}>
+                  {restaurant.happy_hour_config?.enabled ? 'Active (4PM-7:30PM)' : 'Disabled'}
+                </span>
+              </div>
+              <p className="text-[11px] text-charcoal-600 leading-snug">
+                Automatically display special discounts during off-peak hours to boost afternoon &amp; weekday table occupancy.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                const isCurrentlyEnabled = !!restaurant.happy_hour_config?.enabled;
+                updateRestaurant(restaurant.id, {
+                  happy_hour_config: {
+                    enabled: !isCurrentlyEnabled,
+                    start_time: '16:00',
+                    end_time: '19:30',
+                    discount_percent: 20,
+                    banner_label: '⚡ Twilight Happy Hour: 20% Off Beverages & Small Bites!'
+                  }
+                });
+              }}
+              className={`w-full py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 shadow-xs cursor-pointer ${
+                restaurant.happy_hour_config?.enabled
+                  ? 'bg-orange-600 hover:bg-orange-700 text-white'
+                  : 'bg-charcoal-800 hover:bg-charcoal-900 text-white'
+              }`}
+            >
+              <span>{restaurant.happy_hour_config?.enabled ? '✓ Happy Hour Running' : 'Turn On Happy Hour'}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white p-5 rounded-3xl border border-ivory-200 shadow-subtle flex items-center space-x-4">
