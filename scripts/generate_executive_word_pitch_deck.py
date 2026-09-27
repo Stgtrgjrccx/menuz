@@ -490,13 +490,18 @@ def build_pdf(output_path):
             Paragraph("Eliminates fragmented orders, speeds up group dining decisions, and lifts table spend by 22%.", table_body_style)
         ],
         [
-            Paragraph("<b>Multilingual Dining Engine</b>", table_bold_style),
-            Paragraph("<b>English strictly primary default on open.</b> Physical 1-click toggles for <b>Hindi (हिन्दी)</b> and <b>Marathi (मराठी)</b> across categories, search, cooking notes, and kitchen dispatch.", table_body_style),
-            Paragraph("Honors regional Maharashtrian & Pan-Indian diners without confusing international guests or relying on faulty auto-translate.", table_body_style)
+            Paragraph("<b>1-Tap Waiter Calls &amp; Service SOS</b>", table_bold_style),
+            Paragraph("Diners summon waitstaff with 1 tap: 'Call Waiter', 'Water Needed', 'Clean Table', or 'Bill Requested' with real-time floor alerts.", table_body_style),
+            Paragraph("Eliminates frantic waving and cuts diner wait times from 10 minutes to under 60 seconds.", table_body_style)
+        ],
+        [
+            Paragraph("<b>Owner-Controlled Reward Gateway</b>", table_bold_style),
+            Paragraph("Owner chooses whether diners unlock table rewards via <b>5-Star Google Reviews</b>, <b>9:16 Instagram Stories</b>, or <b>Dual Mode</b>.", table_body_style),
+            Paragraph("Operators direct customer actions toward either local Google Maps SEO or viral peer-to-peer social media reach.", table_body_style)
         ],
         [
             Paragraph("<b>Direct Kitchen KOT (Owner-Controlled)</b>", table_bold_style),
-            Paragraph("Orders can bypass floor approval to print directly at kitchen line (ESC/POS, Petpooja, Recaho). <b>Completely optional</b> — owner toggles between auto-dispatch or captain review.", table_body_style),
+            Paragraph("Orders can bypass floor approval to print directly at kitchen line (ESC/POS, Petpooja, Recaho). <b>Completely optional</b> — owner toggles between Mode A (auto-dispatch) or Mode B (captain review).", table_body_style),
             Paragraph("Cuts peak-hour order lag from 12 minutes to 0 seconds, or keeps traditional captain curation for fine dining.", table_body_style)
         ],
         [
@@ -510,7 +515,7 @@ def build_pdf(output_path):
             Paragraph("Frictionless conversation where guests never need to scroll down manually to read recommendations.", table_body_style)
         ],
         [
-            Paragraph("<b>Viral Instagram Story Cards</b>", table_bold_style),
+            Paragraph("<b>Viral 9:16 Instagram Story Cards</b>", table_bold_style),
             Paragraph("Generates 9:16 vertical aesthetic social story cards with authentic food photography, restaurant branding, and review stickers.", table_body_style),
             Paragraph("Free organic word-of-mouth marketing as satisfied diners share dish stories directly to Instagram & WhatsApp.", table_body_style)
         ],
@@ -521,8 +526,13 @@ def build_pdf(output_path):
         ],
         [
             Paragraph("<b>Direct Restaurant Access Onboarding</b>", table_bold_style),
-            Paragraph("Removed arbitrary 7-day trial limits. Platform owner directly grants instant, full-featured access to partner restaurants.", table_body_style),
+            Paragraph("Removed arbitrary 7-day trial limits. Platform owner directly grants instant, full-featured access with flat ₹1,999/mo and 0% food cut.", table_body_style),
             Paragraph("Zero friction onboarding and full administrative autonomy for restaurant partners.", table_body_style)
+        ],
+        [
+            Paragraph("<b>Multilingual Regional Support</b>", table_bold_style),
+            Paragraph("<b>English strictly primary default on open.</b> Physical 1-click toggles for <b>Hindi (हिन्दी)</b> and <b>Marathi (मराठी)</b> across categories, search, and notes.", table_body_style),
+            Paragraph("Honors regional Maharashtrian & Pan-Indian diners without confusing international guests or relying on faulty auto-translate.", table_body_style)
         ]
     ]
     t_strat = Table(strategic_features_data, colWidths=[1.8*inch, 2.7*inch, 2.5*inch])

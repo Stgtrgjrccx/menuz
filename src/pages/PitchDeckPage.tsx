@@ -130,7 +130,8 @@ export const PitchDeckPage: React.FC = () => {
   const [kotPrinting, setKotPrinting] = useState(false);
   const [kotPrinted, setKotPrinted] = useState(true);
 
-  // Simulator states for Chapter 5: Viral Instagram & Platform Architecture
+  // Simulator states for Chapter 5: Viral Growth Gateway (Instagram vs Google) & Platform Architecture
+  const [rewardGatewayChoice, setRewardGatewayChoice] = useState<'google' | 'instagram' | 'both'>('both');
   const [selectedStoryDish, setSelectedStoryDish] = useState<'biryani' | 'curry' | 'cocktail'>('biryani');
   const [storyGenerated, setStoryGenerated] = useState(false);
 
@@ -248,11 +249,11 @@ export const PitchDeckPage: React.FC = () => {
 
   const chapters = [
     { num: '01', short: 'The Dilemma', title: 'The Silent Diner Dilemma' },
-    { num: '02', short: 'Table Sync & Languages', title: 'Real-Time Table Sync & Multilingual (EN/HI/MR)' },
+    { num: '02', short: 'Table Sync & Service', title: 'Real-Time Table Sync & Joint Ordering' },
     { num: '03', short: "Chef's AI & Pairings", title: 'Chef AI Sommelier & Smart Pairings' },
     { num: '04', short: 'Direct Kitchen KOT', title: 'Direct Kitchen KOT & Universal POS Bridge' },
-    { num: '05', short: 'Viral Social & Brand', title: 'Viral Instagram Stories & Master Platform' },
-    { num: '06', short: 'Review Shield & Direct Access', title: 'AI Review Shield & Direct Access Onboarding' }
+    { num: '05', short: 'Instagram vs. Google', title: "Owner's Growth Gateway: Instagram Story vs. Google Review" },
+    { num: '06', short: 'Shield & Multilingual', title: 'Reputation Shield, Direct Access & Multilingual' }
   ];
 
   return (
@@ -531,18 +532,18 @@ export const PitchDeckPage: React.FC = () => {
               <div className="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full text-amber-400 text-xs font-bold tracking-wide">
                 <span>CHAPTER 02</span>
                 <span>•</span>
-                <span>TABLE CART SYNC &amp; MULTILINGUAL</span>
+                <span>MULTIPLAYER TABLE CART SYNC</span>
               </div>
 
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-                Real-Time Table Sync. <span className="text-amber-400">English, Hindi &amp; Marathi.</span>
+                Real-Time Table Sync. <span className="text-amber-400">Multiplayer Co-Ordering.</span>
                 <span className="block text-xl sm:text-2xl font-bold text-slate-300 mt-1">
-                  Multiplayer Co-Ordering with Universal Regional Accessibility.
+                  1-Tap Waiter Calls &amp; Unified Joint Table Ordering.
                 </span>
               </h2>
 
               <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-                When a family or group sits at Table 4, multiple phones can scan the QR code and co-order simultaneously. Items appear instantly across all diners' screens with guest tags. Plus, while <strong>English remains strictly primary and default</strong>, guests can switch to <strong>Hindi (हिन्दी)</strong> or <strong>Marathi (मराठी)</strong> with a single physical click.
+                When a family or group sits at Table 4, multiple phones can scan the QR code and co-order simultaneously. Items appear instantly across all diners' screens with guest tags. Diners can also summon waitstaff with 1-tap quick actions ("Call Waiter", "Request Water", "Clean Table", "Request Bill") with zero hand-waving friction.
               </p>
 
               {/* 3 Core Points */}
@@ -559,11 +560,11 @@ export const PitchDeckPage: React.FC = () => {
 
                 <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
                   <div className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <Globe className="w-4 h-4 text-emerald-400" />
+                    <Bell className="w-4 h-4 text-emerald-400" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white">English Primary + Physical Marathi &amp; Hindi Toggles</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Opens in English by default. Native Marathi and Hindi speaking diners can toggle in 1 tap to view localized dish titles, descriptions, and kitchen notes.</p>
+                    <h3 className="text-sm font-bold text-white">1-Tap Service Calls &amp; Floor SOS</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">Diners summon floor staff with 1 tap: 'Call Waiter', 'Water Needed', or 'Bill Requested' — buzzing the captain's tablet in real time.</p>
                   </div>
                 </div>
 
@@ -572,8 +573,8 @@ export const PitchDeckPage: React.FC = () => {
                     <Sparkles className="w-4 h-4 text-blue-400" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white">Seamless Guest Attribution &amp; Cart Locks</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Each dish is labeled with its respective guest ("👤 Guest 1 - Host", "👤 Guest 2 - Rohan"), giving waitstaff and kitchen perfect order clarity.</p>
+                    <h3 className="text-sm font-bold text-white">Seamless Guest Attribution &amp; Joint Dispatch</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">Each dish is labeled with its respective guest ("👤 Host", "👤 Guest 2 - Rohan"), giving waitstaff and kitchen perfect order clarity.</p>
                   </div>
                 </div>
               </div>
@@ -1241,7 +1242,8 @@ export const PitchDeckPage: React.FC = () => {
         </section>
 
         {/* ──────────────────────────────────────────────────────────────── */}
-        {/* CHAPTER 05: VIRAL INSTAGRAM STORIES & MASTER PLATFORM             */}
+        {/* ──────────────────────────────────────────────────────────────── */}
+        {/* CHAPTER 05: OWNER'S REWARD GATEWAY (INSTAGRAM VS GOOGLE REVIEW)   */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section
           ref={sectionRefs[4]}
@@ -1250,22 +1252,86 @@ export const PitchDeckPage: React.FC = () => {
           <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left Narrative Column */}
             <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full text-amber-400 text-xs font-bold tracking-wide">
+              <div className="inline-flex items-center space-x-2 bg-pink-500/10 border border-pink-500/20 px-3 py-1 rounded-full text-pink-400 text-xs font-bold tracking-wide">
                 <span>CHAPTER 05</span>
                 <span>•</span>
-                <span>VIRAL SOCIAL &amp; MASTER PLATFORM</span>
+                <span>OWNER REWARD GATEWAY</span>
               </div>
 
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-                9:16 Instagram Stories. <span className="text-amber-400">Diners Become Brand Ambassadors.</span>
+                Instagram Story vs. Google Review. <span className="text-amber-400">Owner Decides.</span>
                 <span className="block text-xl sm:text-2xl font-bold text-slate-300 mt-1">
-                  Partitioned Multi-Restaurant Architecture &amp; Independent Custom URLs.
+                  Choose How Diners Unlock Free Dishes, Drinks &amp; Table Discounts.
                 </span>
               </h2>
 
               <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-                Diners love taking food photos. Menuz packages their dining experience into <strong>gorgeous 9:16 vertical Instagram Stories</strong> with your restaurant's handle, location badge, and their 5-star review. With 1 tap, guests share to their stories, generating thousands of hyper-local walk-in impressions every weekend.
+                Every restaurant brand has different marketing priorities. Menuz empowers the owner to configure which social channel unlocks the table reward (e.g. 15% discount or free signature dessert): <strong>5-Star Google Reviews</strong> to dominate Google Maps rankings, <strong>9:16 Instagram Stories</strong> to reach diners' local followers, or <strong>Dual Mode</strong> where the guest chooses.
               </p>
+
+              {/* Owner Gateway Configuration Selector */}
+              <div className="space-y-2 bg-slate-900/80 border border-slate-800 p-3.5 rounded-2xl">
+                <div className="flex items-center justify-between text-xs font-bold">
+                  <span className="text-white flex items-center gap-1.5">
+                    <Sliders className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Owner Reward Gateway Setting:</span>
+                  </span>
+                  <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">
+                    {rewardGatewayChoice === 'both' ? 'Dual Mode Active' : `${rewardGatewayChoice.toUpperCase()} ONLY`}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRewardGatewayChoice('google');
+                      playTone(523.25, 'sine', 0.15);
+                    }}
+                    className={`py-2 px-2.5 rounded-xl text-xs font-bold transition-all text-center cursor-pointer ${
+                      rewardGatewayChoice === 'google'
+                        ? 'bg-amber-500 text-slate-950 shadow-md'
+                        : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+                    }`}
+                  >
+                    ⭐ Google Review
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRewardGatewayChoice('instagram');
+                      playTone(587.33, 'sine', 0.15);
+                    }}
+                    className={`py-2 px-2.5 rounded-xl text-xs font-bold transition-all text-center cursor-pointer ${
+                      rewardGatewayChoice === 'instagram'
+                        ? 'bg-pink-600 text-white shadow-md'
+                        : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+                    }`}
+                  >
+                    📸 Instagram Story
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRewardGatewayChoice('both');
+                      playTone(659.25, 'sine', 0.15);
+                    }}
+                    className={`py-2 px-2.5 rounded-xl text-xs font-bold transition-all text-center cursor-pointer ${
+                      rewardGatewayChoice === 'both'
+                        ? 'bg-gradient-to-r from-amber-500 to-pink-500 text-slate-950 font-black shadow-md'
+                        : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+                    }`}
+                  >
+                    ⚡ Diner's Choice
+                  </button>
+                </div>
+
+                <div className="text-[11px] text-slate-300 pt-1">
+                  {rewardGatewayChoice === 'google' && "Diners post an AI-crafted 5-star Google review to unlock their 15% discount. Best for fast Google Maps SEO growth."}
+                  {rewardGatewayChoice === 'instagram' && "Diners share a branded 9:16 Instagram Story tagging @restaurant to unlock their free dessert. Best for weekend social buzz."}
+                  {rewardGatewayChoice === 'both' && "Diners choose either Google Review or Instagram Story on their phone to unlock the reward. Maximum participation rate!"}
+                </div>
+              </div>
 
               {/* 3 Core Points */}
               <div className="space-y-3 pt-1">
@@ -1274,8 +1340,8 @@ export const PitchDeckPage: React.FC = () => {
                     <Share2 className="w-4 h-4 text-pink-400" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white">1-Click 9:16 Vertical Instagram Story Studio</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Auto-generates high-aesthetic Instagram stories featuring your signature dishes, verified Google stars, and your Instagram tag (@saffronhouse.pune).</p>
+                    <h3 className="text-sm font-bold text-white">Branded 9:16 Vertical Story Asset</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">Auto-generates high-aesthetic Instagram stories with high-res dish photography, verified 5★ stickers, and your Instagram tag (@saffronhouse.pune).</p>
                   </div>
                 </div>
 
@@ -1285,17 +1351,7 @@ export const PitchDeckPage: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-sm font-bold text-white">Multi-Restaurant Partitioned Image Library</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Each restaurant operates with a completely isolated cloud image repository. Dish photography and logos are saved in segregated namespaces with permanent persistence.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <Smartphone className="w-4 h-4 text-emerald-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">Independent Standalone URL Routes</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Restaurants own their dedicated clean URLs (<code className="text-amber-300">/r/:restaurantSlug</code>) for direct bio links, Google Maps website buttons, and printed table acrylics.</p>
+                    <p className="text-xs text-slate-300 mt-0.5">Each restaurant operates with a completely isolated cloud image repository. Dish photography and logos are saved in segregated namespaces permanently.</p>
                   </div>
                 </div>
               </div>
@@ -1688,6 +1744,64 @@ export const PitchDeckPage: React.FC = () => {
                   <span className="font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-lg border border-emerald-500/20 text-[11px]">
                     Direct Owner Access
                   </span>
+                </div>
+
+                {/* Regional Inclusivity (English Primary, Hindi & Marathi) */}
+                <div className="bg-slate-900/60 border border-slate-800 p-3 rounded-xl space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-white font-bold flex items-center gap-1.5">
+                      <Globe className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Regional Languages (English Default Primary):</span>
+                    </span>
+                    <span className="text-[10px] text-amber-400 font-mono font-bold">{demoLang.toUpperCase()} Active</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDemoLang('en');
+                        playTone(523.25, 'sine', 0.15);
+                      }}
+                      className={`py-1 px-2 rounded-lg text-[10px] font-bold transition-all text-center cursor-pointer ${
+                        demoLang === 'en'
+                          ? 'bg-amber-500 text-slate-950 font-bold'
+                          : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+                      }`}
+                    >
+                      🇬🇧 English (Default)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDemoLang('hi');
+                        playTone(587.33, 'sine', 0.15);
+                      }}
+                      className={`py-1 px-2 rounded-lg text-[10px] font-bold transition-all text-center cursor-pointer ${
+                        demoLang === 'hi'
+                          ? 'bg-amber-500 text-slate-950 font-bold'
+                          : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+                      }`}
+                    >
+                      🇮🇳 हिन्दी
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDemoLang('mr');
+                        playTone(659.25, 'sine', 0.15);
+                      }}
+                      className={`py-1 px-2 rounded-lg text-[10px] font-bold transition-all text-center cursor-pointer ${
+                        demoLang === 'mr'
+                          ? 'bg-amber-500 text-slate-950 font-bold'
+                          : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+                      }`}
+                    >
+                      🚩 मराठी
+                    </button>
+                  </div>
+                  <p className="text-[10px] text-slate-400 italic">
+                    Always opens in English by default. Guests can toggle physically to Hindi or Marathi without losing their cart state.
+                  </p>
                 </div>
               </div>
             </div>
