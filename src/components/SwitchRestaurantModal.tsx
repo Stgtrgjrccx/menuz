@@ -13,6 +13,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
+import { isWorkingWithMenuz } from '../types';
 import { QrScannerModal } from './QrScannerModal';
 
 interface SwitchRestaurantModalProps {
@@ -34,21 +35,21 @@ export const SwitchRestaurantModal: React.FC<SwitchRestaurantModalProps> = ({
   const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
 
   // Strictly show restaurants working with Menuz (the active demos)
-  const menuzPartners = useMemo(() => {
-    return restaurants.filter((r) => r.is_menuz_partner !== false);
+  const workingRestaurants = useMemo(() => {
+    return restaurants.filter((r) => isWorkingWithMenuz(r));
   }, [restaurants]);
 
   const filteredRestaurants = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return menuzPartners;
-    return menuzPartners.filter((r) => {
+    if (!q) return workingRestaurants;
+    return workingRestaurants.filter((r) => {
       const matchName = r.name.toLowerCase().includes(q);
       const matchCuisine = r.cuisine.toLowerCase().includes(q);
       const matchLoc = (r.location || '').toLowerCase().includes(q);
       const matchAlias = r.aliases?.some((a) => a.toLowerCase().includes(q));
       return matchName || matchCuisine || matchLoc || matchAlias;
     });
-  }, [menuzPartners, query]);
+  }, [workingRestaurants, query]);
 
   const handleSelectRestaurant = (slug: string) => {
     const target = restaurants.find((r) => r.slug === slug);

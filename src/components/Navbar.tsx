@@ -1,10 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ChefHat, LayoutDashboard, QrCode, ShieldCheck, Bell, Menu, X, Check, Trash2, Award, ShoppingBag, UtensilsCrossed } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
+import { isWorkingWithMenuz } from '../types';
 
 export const Navbar: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const notifications = useRestaurantStore((state) => state.notifications);
   const markNotificationRead = useRestaurantStore((state) => state.markNotificationRead);
   const clearAllNotifications = useRestaurantStore((state) => state.clearAllNotifications);
@@ -29,6 +31,25 @@ export const Navbar: React.FC = () => {
   const restaurants = useRestaurantStore((state) => state.restaurants);
   const setCurrentRestaurant = useRestaurantStore((state) => state.setCurrentRestaurant);
   const tables = useRestaurantStore((state) => state.tables);
+
+  // Strictly filter restaurants working with Menuz
+  const activeWorkingRestaurants = useMemo(() => {
+    return restaurants.filter((r) => isWorkingWithMenuz(r));
+  }, [restaurants]);
+
+  const handleSelectRestaurant = (restaurantId: string) => {
+    setCurrentRestaurant(restaurantId);
+    const target = restaurants.find((r) => r.id === restaurantId);
+    if (!target) return;
+
+    if (location.pathname.startsWith('/r/')) {
+      const restTables = tables.filter((t) => t.restaurant_id === target.id);
+      const token = restTables[0]?.public_token || `table-token-01-${target.slug}`;
+      navigate(`/r/${target.slug}/menu?t=${token}`);
+    } else if (location.pathname.startsWith('/manage') || location.pathname.startsWith('/dashboard')) {
+      navigate(`/manage/${target.slug}`);
+    }
+  };
   const currentRestTables = tables.filter((t) => t.restaurant_id === restaurant?.id);
   const defaultToken = currentRestTables[0]?.public_token || tables[0]?.public_token || 'table-token-01-saffron';
   const dinerUrl = `/r/${restaurant?.slug || 'saffron-house'}/menu?t=${defaultToken}`;
@@ -83,17 +104,15 @@ export const Navbar: React.FC = () => {
             <div className="hidden sm:block">
               <select
                 value={restaurant?.id || ''}
-                onChange={(e) => setCurrentRestaurant(e.target.value)}
-                className="bg-charcoal-800 text-saffron-400 hover:text-saffron-300 border border-charcoal-700 hover:border-saffron-500/50 rounded-lg px-2.5 py-1 text-xs font-semibold focus:outline-none cursor-pointer max-w-[180px] truncate transition-colors"
+                onChange={(e) => handleSelectRestaurant(e.target.value)}
+                className="bg-charcoal-800 text-saffron-400 hover:text-saffron-300 border border-charcoal-700 hover:border-saffron-500/50 rounded-lg px-2.5 py-1 text-xs font-semibold focus:outline-none cursor-pointer max-w-[200px] truncate transition-colors"
                 title="Switch Active Restaurant Hub"
               >
-                {restaurants
-                  .filter((r) => r.is_menuz_partner !== false)
-                  .map((r) => (
-                    <option key={r.id} value={r.id} className="bg-charcoal-900 text-white">
-                      {r.name}
-                    </option>
-                  ))}
+                {activeWorkingRestaurants.map((r) => (
+                  <option key={r.id} value={r.id} className="bg-charcoal-900 text-white">
+                    {r.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -255,7 +274,28 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile dropdown */}
       {mobileOpen && (
-        <div className="md:hidden bg-charcoal-900 border-t border-charcoal-800 px-4 pb-3 pt-1 space-y-1">
+        <div className="md:hidden bg-charcoal-900 border-t border-charcoal-800 px-4 pb-3 pt-2 space-y-2">
+          {/* Mobile Restaurant Selector */}
+          <div className="pb-2 border-b border-charcoal-800">
+            <label className="text-[10px] uppercase font-bold text-saffron-400 block mb-1">
+              Select Restaurant
+            </label>
+            <select
+              value={restaurant?.id || ''}
+              onChange={(e) => {
+                handleSelectRestaurant(e.target.value);
+                setMobileOpen(false);
+              }}
+              className="w-full bg-charcoal-800 text-saffron-300 border border-charcoal-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold focus:outline-none"
+            >
+              {activeWorkingRestaurants.map((r) => (
+                <option key={r.id} value={r.id} className="bg-charcoal-900 text-white">
+                  {r.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {navLinks.map((link) => {
             const Icon = link.icon;
             const active = isActive(link.to);

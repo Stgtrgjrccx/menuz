@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useRestaurantStore, WhatsAppCampaign } from '../store/restaurantStore';
-import { Restaurant, PosSyncEvent } from '../types';
+import { Restaurant, PosSyncEvent, isWorkingWithMenuz } from '../types';
 import { PUNE_RESTAURANT_DIRECTORY, searchPuneRestaurants, PuneRestaurantEntry, normalizePuneSearch, matchesPuneQuery } from '../data/puneRestaurantDirectory';
 import {
   Building2,
@@ -134,8 +134,8 @@ export const MasterAdminDashboard: React.FC = () => {
     ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1)
     : '-';
   const whatsappOptInCount = reviews.filter((r) => r.whatsapp_opt_in).length;
-  const menuzPartnerCount = restaurants.filter((r) => r.is_menuz_partner !== false).length;
-  const directoryOnlyCount = restaurants.filter((r) => r.is_menuz_partner === false).length;
+  const menuzPartnerCount = restaurants.filter((r) => isWorkingWithMenuz(r)).length;
+  const directoryOnlyCount = restaurants.filter((r) => !isWorkingWithMenuz(r)).length;
 
   // ── Restaurant filtering and search state ───────────────────
   const [restaurantSearch, setRestaurantSearch] = useState('');
@@ -250,7 +250,7 @@ export const MasterAdminDashboard: React.FC = () => {
           (statusFilter === 'active' ? r.status === 'active' : r.status !== 'active');
 
         const matchesPartner =
-          partnerFilter === 'menuz_partners' ? r.is_menuz_partner !== false : r.is_menuz_partner === false;
+          partnerFilter === 'menuz_partners' ? isWorkingWithMenuz(r) : !isWorkingWithMenuz(r);
 
         return matchesSearch && matchesArea && matchesStatus && matchesPartner;
       })
@@ -796,7 +796,7 @@ export const MasterAdminDashboard: React.FC = () => {
                                 r.name.toLowerCase() === item.name.toLowerCase() ||
                                 (r.aliases && r.aliases.some((a) => a.toLowerCase() === item.name.toLowerCase()))
                             );
-                            const isDemoOrPartner = !!existingRest && existingRest.is_menuz_partner !== false;
+                            const isDemoOrPartner = !!existingRest && isWorkingWithMenuz(existingRest);
                             const rTables = existingRest ? tables.filter((t) => t.restaurant_id === existingRest.id) : [];
                             const rToken = rTables[0]?.public_token || 'table-token-01-saffron';
 
@@ -1106,7 +1106,7 @@ export const MasterAdminDashboard: React.FC = () => {
                         r.name.toLowerCase() === entry.name.toLowerCase() ||
                         (r.aliases && r.aliases.some((a) => a.toLowerCase() === entry.name.toLowerCase()))
                     );
-                    const isOnboarded = !!existing && existing.is_menuz_partner !== false;
+                    const isOnboarded = !!existing && isWorkingWithMenuz(existing);
                     const restTables = existing ? tables.filter((t) => t.restaurant_id === existing.id) : [];
                     const firstToken = restTables[0]?.public_token || 'table-token-01-saffron';
 

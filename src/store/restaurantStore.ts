@@ -30,6 +30,22 @@ import {
   SEED_CAMPAIGNS
 } from '../data/seedData';
 
+// Purge any legacy localStorage keys from prior versions to prevent pollution
+if (typeof window !== 'undefined' && window.localStorage) {
+  try {
+    const keysToRemove: string[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith('menuz_') && k !== 'menuz_restaurant_storage_v15_strictly_two_demos') {
+        keysToRemove.push(k);
+      }
+    }
+    keysToRemove.forEach((k) => localStorage.removeItem(k));
+  } catch (e) {
+    // Ignore storage errors in restrictive environments
+  }
+}
+
 export interface CartItem {
   menu_item_id: string;
   name: string;
@@ -649,7 +665,7 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       }
     }),
     {
-      name: 'menuz_restaurant_storage_v12_only_two_demos',
+      name: 'menuz_restaurant_storage_v15_strictly_two_demos',
       partialize: (state) => ({
         restaurants: state.restaurants,
         tables: state.tables,

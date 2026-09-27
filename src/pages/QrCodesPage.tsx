@@ -1,12 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useRestaurantStore } from '../store/restaurantStore';
-import { Download, ExternalLink, QrCode, Smartphone, Globe, Copy, Check, Edit3 } from 'lucide-react';
+import { isWorkingWithMenuz } from '../types';
+import { Download, ExternalLink, QrCode, Smartphone, Globe, Copy, Check, Edit3, UtensilsCrossed } from 'lucide-react';
 
 export const QrCodesPage: React.FC = () => {
+  const restaurant = useRestaurantStore((state) => state.restaurant);
+  const restaurants = useRestaurantStore((state) => state.restaurants);
+  const setCurrentRestaurant = useRestaurantStore((state) => state.setCurrentRestaurant);
   const tables = useRestaurantStore((state) => state.tables);
-  const [selectedTableId, setSelectedTableId] = useState(tables[0]?.id || 'tbl-01');
+
+  const activeWorkingRestaurants = restaurants.filter((r) => isWorkingWithMenuz(r));
+  const currentTables = tables.filter((t) => t.restaurant_id === restaurant?.id);
+  const effectiveTables = currentTables.length > 0 ? currentTables : tables;
+
+  const [selectedTableId, setSelectedTableId] = useState(effectiveTables[0]?.id || 'tbl-01');
   const [renderBaseUrl, setRenderBaseUrl] = useState('https://stgtrgjrccx.github.io/menuz');
   const [copied, setCopied] = useState(false);
+
+  // Sync selected table if restaurant changes
+  useEffect(() => {
+    if (effectiveTables.length > 0 && !effectiveTables.some((t) => t.id === selectedTableId)) {
+      setSelectedTableId(effectiveTables[0].id);
+    }
+  }, [effectiveTables, selectedTableId]);
 
   // Auto-detect if currently running on a custom domain or deployed URL
   useEffect(() => {
@@ -15,11 +31,11 @@ export const QrCodesPage: React.FC = () => {
     }
   }, []);
 
-  const selectedTable = tables.find((t) => t.id === selectedTableId) || tables[0];
+  const selectedTable = effectiveTables.find((t) => t.id === selectedTableId) || effectiveTables[0];
 
   // Clean trailing slashes
   const cleanBase = renderBaseUrl.replace(/\/+$/, '');
-  const deployedMenuUrl = `${cleanBase}/#/r/saffron-house/menu?t=${selectedTable.public_token}`;
+  const deployedMenuUrl = `${cleanBase}/#/r/${restaurant?.slug || 'saffron-house'}/menu?t=${selectedTable?.public_token || 'table-token-01'}`;
   const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=450x450&data=${encodeURIComponent(deployedMenuUrl)}&color=1C1917&bgcolor=FFFFFF`;
 
   const copyToClipboard = () => {
@@ -69,9 +85,32 @@ export const QrCodesPage: React.FC = () => {
         </p>
       </div>
 
+      {/* Restaurant Selector */}
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <span className="text-xs font-bold text-charcoal-700 flex items-center space-x-1.5">
+          <UtensilsCrossed className="w-3.5 h-3.5 text-saffron-600" />
+          <span>Select Restaurant:</span>
+        </span>
+        <div className="flex space-x-2">
+          {activeWorkingRestaurants.map((r) => (
+            <button
+              key={r.id}
+              onClick={() => setCurrentRestaurant(r.id)}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                restaurant?.id === r.id
+                  ? 'bg-charcoal-900 text-white shadow-subtle'
+                  : 'bg-white text-charcoal-800 border border-ivory-200 hover:bg-ivory-100'
+              }`}
+            >
+              {r.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Table Selector */}
-      <div className="flex justify-center space-x-2">
-        {tables.map((table) => (
+      <div className="flex justify-center space-x-2 flex-wrap gap-y-2">
+        {effectiveTables.map((table) => (
           <button
             key={table.id}
             onClick={() => setSelectedTableId(table.id)}
@@ -89,9 +128,13 @@ export const QrCodesPage: React.FC = () => {
       {/* Live Connected QR Display Card */}
       <div className="max-w-md mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-float border border-ivory-200 text-center">
         <div className="mb-4">
-          <span className="text-[10px] uppercase font-bold tracking-widest text-saffron-700">Saffron House</span>
-          <h2 className="font-serif text-2xl font-bold text-charcoal-900">{selectedTable.label}</h2>
-          <span className="text-xs text-charcoal-700/60 block mt-0.5">Contemporary Indian Dining</span>
+          <span className="text-[10px] uppercase font-bold tracking-widest text-saffron-700">
+            {restaurant?.name || 'Saffron House'}
+          </span>
+          <h2 className="font-serif text-2xl font-bold text-charcoal-900">{selectedTable?.label}</h2>
+          <span className="text-xs text-charcoal-700/60 block mt-0.5">
+            {restaurant?.cuisine || 'Contemporary Indian Dining'}
+          </span>
         </div>
 
         {/* The Live QR Image */}

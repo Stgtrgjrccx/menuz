@@ -29,6 +29,18 @@ export interface Restaurant {
   aliases?: string[];
 }
 
+export const isWorkingWithMenuz = (r?: { id?: string; slug?: string } | null): boolean => {
+  if (!r || !r.id) return false;
+  return (
+    r.id === 'rest-saffron-house-01' ||
+    r.id === 'rest-casa-bella-02' ||
+    r.slug === 'saffron-house' ||
+    r.slug === 'casa-bella' ||
+    r.id.startsWith('rest-onboarded-') ||
+    r.id.startsWith('rest-custom-')
+  );
+};
+
 export interface RestaurantTable {
   id: string;
   restaurant_id: string;

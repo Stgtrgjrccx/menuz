@@ -25,6 +25,7 @@ import {
   Plus
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
+import { isWorkingWithMenuz } from '../types';
 import { PUNE_RESTAURANT_DIRECTORY, PuneRestaurantEntry, matchesPuneQuery } from '../data/puneRestaurantDirectory';
 import { QrScannerModal } from '../components/QrScannerModal';
 
@@ -90,10 +91,10 @@ export const CustomerHomePage: React.FC = () => {
       return tags;
     };
 
-    // Only show partner restaurants working with Menuz on the customer site
-    const menuzPartners = restaurants.filter((r) => r.is_menuz_partner !== false);
+    // Only show restaurants working with Menuz on the customer site (the 2 demos)
+    const workingRestaurants = restaurants.filter((r) => isWorkingWithMenuz(r));
 
-    menuzPartners.forEach((r) => {
+    workingRestaurants.forEach((r) => {
       const isItalian = r.slug === 'casa-bella';
       map.set(r.slug, {
         id: r.id,
@@ -184,10 +185,35 @@ export const CustomerHomePage: React.FC = () => {
               </div>
             </Link>
 
-            <div className="hidden sm:flex items-center space-x-1 bg-charcoal-800 border border-charcoal-700 rounded-full px-2.5 py-1 text-xs text-charcoal-300">
+            <div className="hidden md:flex items-center space-x-1 bg-charcoal-800 border border-charcoal-700 rounded-full px-2.5 py-1 text-xs text-charcoal-300">
               <MapPin className="w-3 h-3 text-saffron-400" />
               <span className="font-semibold text-white">Pune</span>
               <span className="text-[10px] text-charcoal-400">• Live Demos</span>
+            </div>
+
+            {/* Quick Demo Restaurant Selector (Strictly restaurants working with Menuz) */}
+            <div className="flex items-center space-x-1.5 bg-charcoal-800 border border-charcoal-700 hover:border-saffron-500/50 rounded-xl px-2.5 py-1 transition-colors">
+              <UtensilsCrossed className="w-3.5 h-3.5 text-saffron-400 flex-shrink-0" />
+              <select
+                onChange={(e) => {
+                  const targetSlug = e.target.value;
+                  if (!targetSlug) return;
+                  const item = directoryList.find((d) => d.slug === targetSlug);
+                  if (item) handleOpenRestaurantMenu(item);
+                }}
+                defaultValue=""
+                className="bg-transparent text-saffron-300 hover:text-white text-xs font-semibold focus:outline-none cursor-pointer max-w-[150px] sm:max-w-[210px] truncate"
+                title="Select Demo Restaurant"
+              >
+                <option value="" disabled className="bg-charcoal-900 text-charcoal-400">
+                  Select Demo Restaurant...
+                </option>
+                {directoryList.map((item) => (
+                  <option key={item.slug} value={item.slug} className="bg-charcoal-900 text-white">
+                    {item.name}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
