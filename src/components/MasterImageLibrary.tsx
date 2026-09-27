@@ -379,20 +379,24 @@ export const MasterImageLibrary: React.FC = () => {
                     />
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-saffron-500 text-charcoal-950 font-mono">
-                          RESTAURANT LISTING
+                        <span className="text-xs uppercase font-black tracking-wider px-3 py-1 rounded-full bg-saffron-500 text-charcoal-950 font-mono shadow-sm flex items-center space-x-1">
+                          <span>🏪 RESTAURANT:</span>
+                          <span className="underline">{rest.name}</span>
                         </span>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/20 text-saffron-300">
+                        <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-white/20 text-saffron-200">
                           {rest.cuisine}
                         </span>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-500/20 text-green-300 border border-green-500/30">
-                          Active Partner
+                        <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-green-500/20 text-green-300 border border-green-500/30">
+                          Active Menuz Partner
                         </span>
                       </div>
 
                       {/* HUGE BOLD RESTAURANT NAME */}
-                      <h3 className="font-serif text-2xl sm:text-3xl font-black text-white mt-1">
-                        {rest.name}
+                      <h3 className="font-serif text-2xl sm:text-3xl font-black text-white mt-2 flex flex-wrap items-center gap-2">
+                        <span>{rest.name}</span>
+                        <span className="text-xs font-sans font-medium text-saffron-300 bg-charcoal-800/80 px-2.5 py-0.5 rounded-full border border-saffron-500/30">
+                          {restItems.length} Photos in Gallery
+                        </span>
                       </h3>
 
                       <p className="text-xs text-charcoal-300 mt-1 flex flex-wrap items-center gap-3">
@@ -404,8 +408,8 @@ export const MasterImageLibrary: React.FC = () => {
                           <Phone className="w-3.5 h-3.5 text-saffron-400" />
                           <span>{rest.contact_phone || '+91 20 2600 0000'}</span>
                         </span>
-                        <span className="text-charcoal-400">
-                          • {restTables.length || 4} Tables • {restItems.length} Dishes
+                        <span className="text-saffron-400 font-semibold">
+                          • {restTables.length || 4} Tables Configured • {restItems.length} Dishes
                         </span>
                       </p>
                     </div>
@@ -447,9 +451,11 @@ export const MasterImageLibrary: React.FC = () => {
                 {/* Restaurant's Dishes & Photographs Grid */}
                 <div className="p-6 bg-ivory-50/50">
                   <div className="flex items-center justify-between mb-4 pb-2 border-b border-ivory-200">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-charcoal-800 flex items-center space-x-1.5">
-                      <ImageIcon className="w-4 h-4 text-saffron-600" />
-                      <span>Culinary Photographs for {rest.name} ({restItems.length} items)</span>
+                    <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-charcoal-900 flex items-center space-x-2">
+                      <ImageIcon className="w-4 h-4 sm:w-5 sm:h-5 text-saffron-600" />
+                      <span>
+                        📸 Photo Gallery for <strong className="text-saffron-700 underline">{rest.name}</strong> ({restItems.length} items)
+                      </span>
                     </h4>
                     <span className="text-[11px] text-charcoal-500 font-medium">
                       Changes instantly sync to {rest.name}'s QR menu

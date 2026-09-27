@@ -406,7 +406,8 @@ export const MasterAdminDashboard: React.FC = () => {
       ordering_enabled: true,
       google_place_url: 'https://maps.google.com',
       authentic_photography_statement: 'Every dish photograph represents the true culinary creations of our kitchen.',
-      pos_provider: newRestPos
+      pos_provider: newRestPos,
+      is_menuz_partner: true
     };
 
     addRestaurant(newRest);
