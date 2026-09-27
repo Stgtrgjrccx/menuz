@@ -27,51 +27,87 @@ const ALLERGY_DISCLAIMER = "Allergen information is supplied by the restaurant. 
  * Context-aware quick actions:
  * When a specific dish is focused, the suggestions change to match.
  */
-function getQuickActionsForDish(dish: MenuItem | null): string[] {
+function getQuickActionsForDish(dish: MenuItem | null): Array<{ label: string; query: string; icon?: string }> {
   if (!dish) {
     return [
-      "🧑‍🍳 What does the Chef recommend?",
-      "🔥 How spicy are your curries?",
-      "🍷 Best drink pairing by the Owner",
-      "🌱 Show vegetarian & vegan specials",
-      "👨‍👩‍👧‍👦 Recommend feast for a table of 4"
+      { label: "🧑‍🍳 Chef's Favourites", query: "What are the Chef's personal favourite dishes tonight?", icon: "🧑‍🍳" },
+      { label: "🔥 House Specials", query: "What are your signature house specials?", icon: "🔥" },
+      { label: "🌅 What's Fresh Today?", query: "What is fresh in the kitchen today?", icon: "🌅" },
+      { label: "🍷 Drink Pairings", query: "What drinks or coolers does the owner recommend pairing with curries?", icon: "🍷" },
+      { label: "👨‍👩‍👧‍👦 Table of 4 Feast", query: "Recommend a complete feast for a table of 4 people", icon: "👨‍👩‍👧‍👦" },
+      { label: "🌶️ Mild & Kid-Friendly", query: "What are your mildest, non-spicy dishes suitable for kids?", icon: "🌶️" },
+      { label: "🛡️ Jain & Vegan Options", query: "Show 100% Jain and Vegan safe dishes prepared with isolated cookware", icon: "🛡️" },
+      { label: "⚡ Fast 15-Min Starters", query: "We are hungry, which dishes come out of the kitchen fastest?", icon: "⚡" },
+      { label: "🍮 Best Desserts", query: "What are your signature desserts to end the meal?", icon: "🍮" }
     ];
   }
 
-  const actions: string[] = [];
+  const actions: Array<{ label: string; query: string; icon?: string }> = [];
 
-  // Spice-related
-  if (dish.spice_level > 0) {
-    actions.push(`How spicy is ${dish.name}?`);
-    actions.push(`A milder alternative to ${dish.name}?`);
-  } else {
-    actions.push(`Is ${dish.name} mild?`);
-  }
-
-  // Diet-related
-  if (dish.dietary_flags.includes('Vegetarian')) {
-    actions.push(`Non-veg alternative to ${dish.name}?`);
-  } else {
-    actions.push(`Vegetarian alternative to ${dish.name}?`);
-  }
-
-  // Allergens
-  if (dish.allergens.length > 0) {
-    actions.push(`Allergens in ${dish.name}?`);
-  }
+  // Secret & Story
+  actions.push({
+    label: "🧑‍🍳 Secret Recipe & Lore",
+    query: `What is the secret cooking technique and chef lore behind ${dish.name}?`,
+    icon: "🧑‍🍳"
+  });
 
   // Pairing
   if (dish.item_type === 'food') {
-    actions.push(`Best drink with ${dish.name}?`);
-    actions.push(`What bread goes with ${dish.name}?`);
+    actions.push({
+      label: "🍷 Best Drink Pairing",
+      query: `What drink or cooler pairs best with ${dish.name}?`,
+      icon: "🍷"
+    });
+    actions.push({
+      label: "🍞 Best Bread / Rice Side",
+      query: `What bread or rice pairs best with ${dish.name}?`,
+      icon: "🍞"
+    });
   } else {
-    actions.push(`Best food with ${dish.name}?`);
+    actions.push({
+      label: "🍽️ Best Food Pairing",
+      query: `What starter or main course goes best with ${dish.name}?`,
+      icon: "🍽️"
+    });
+  }
+
+  // Spice & Heat
+  if (dish.spice_level > 0) {
+    actions.push({
+      label: `🌶️ Spice Level (${dish.spice_level}/5)`,
+      query: `How spicy is ${dish.name} and can heat be reduced?`,
+      icon: "🌶️"
+    });
+    actions.push({
+      label: "🌿 Milder Alternative",
+      query: `What is a milder alternative to ${dish.name}?`,
+      icon: "🌿"
+    });
+  } else {
+    actions.push({
+      label: "🌿 Is this mild?",
+      query: `Is ${dish.name} completely mild and non-spicy?`,
+      icon: "🌿"
+    });
+  }
+
+  // Dietary & Allergens
+  if (dish.allergens && dish.allergens.length > 0) {
+    actions.push({
+      label: `⚠️ Allergens Check`,
+      query: `What allergens are in ${dish.name} and how is cross-contamination prevented?`,
+      icon: "⚠️"
+    });
   }
 
   // Portion
-  actions.push(`Portion size of ${dish.name}?`);
+  actions.push({
+    label: `📏 Portion Size`,
+    query: `What is the portion size of ${dish.name} and is it enough to share?`,
+    icon: "📏"
+  });
 
-  return actions.slice(0, 5);
+  return actions;
 }
 
 export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
@@ -500,15 +536,16 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
         </div>
 
         {/* Context-aware Quick action chips */}
-        <div className="flex space-x-1.5 overflow-x-auto py-2 scrollbar-none border-t border-ivory-200">
+        <div className="flex space-x-1.5 overflow-x-auto py-2.5 no-scrollbar border-t border-ivory-200">
           {quickActions.map((q, idx) => (
             <button
               key={idx}
               type="button"
-              onClick={() => handleSendQuery(q)}
-              className="whitespace-nowrap bg-ivory-100 hover:bg-ivory-200 border border-ivory-200 text-[11px] px-2.5 py-1 rounded-full text-charcoal-800 transition-colors"
+              onClick={() => handleSendQuery(q.query)}
+              className="whitespace-nowrap bg-ivory-100 hover:bg-amber-100 hover:text-amber-950 border border-ivory-300 hover:border-amber-400 text-[11px] font-bold px-3 py-1.5 rounded-full text-charcoal-800 transition-all flex items-center space-x-1 shadow-2xs cursor-pointer"
             >
-              {q}
+              {q.icon && <span className="mr-0.5">{q.icon}</span>}
+              <span>{q.label}</span>
             </button>
           ))}
         </div>
