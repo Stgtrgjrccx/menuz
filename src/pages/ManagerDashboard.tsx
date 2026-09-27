@@ -30,7 +30,7 @@ import { PetpoojaIntegrationPanel } from '../components/PetpoojaIntegrationPanel
 import { RoyalPosIntegrationPanel } from '../components/RoyalPosIntegrationPanel';
 import { RecahoIntegrationPanel } from '../components/RecahoIntegrationPanel';
 import { RancelabIntegrationPanel } from '../components/RancelabIntegrationPanel';
-import { SelfServeKotSetupWizard } from '../components/SelfServeKotSetupWizard';
+import { TableManagementModal } from '../components/TableManagementModal';
 import { AiAssistantDrawer } from '../components/AiAssistantDrawer';
 import { ChefOwnerQuestionnaireModal } from '../components/ChefOwnerQuestionnaireModal';
 import { RestaurantLaunchKitModal } from '../components/RestaurantLaunchKitModal';
@@ -66,9 +66,9 @@ export const ManagerDashboard: React.FC = () => {
   const updateRestaurant = useRestaurantStore((state) => state.updateRestaurant);
 
   const [isPosModalOpen, setIsPosModalOpen] = useState(false);
-  const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [isAiDrawerOpen, setIsAiDrawerOpen] = useState(false);
   const [isLaunchKitOpen, setIsLaunchKitOpen] = useState(false);
+  const [isTableModalOpen, setIsTableModalOpen] = useState(false);
   const [selectedPosTab, setSelectedPosTab] = useState<'petpooja' | 'royalpos' | 'recaho' | 'rancelab'>(
     (restaurant.pos_provider as any) || 'petpooja'
   );
@@ -304,13 +304,13 @@ export const ManagerDashboard: React.FC = () => {
           </button>
           <button
             type="button"
-            onClick={() => setIsWizardOpen(true)}
+            onClick={() => setIsTableModalOpen(true)}
             className="inline-flex items-center space-x-1.5 text-xs font-bold text-emerald-950 hover:text-emerald-900 transition-colors bg-emerald-100/90 hover:bg-emerald-200 px-3.5 py-2 rounded-xl border border-emerald-300 shadow-xs cursor-pointer"
           >
-            <span className="text-xs">⚡</span>
-            <span>2-Min KOT Wizard</span>
+            <span className="text-xs">🪑</span>
+            <span>Floor Plan & QRs</span>
             <span className="text-[9px] uppercase font-mono px-1.5 py-0.2 rounded-md bg-emerald-200/90 text-emerald-900 font-bold">
-              Self-Serve
+              {activeTablesList.length} Tables
             </span>
           </button>
         </div>
@@ -343,10 +343,20 @@ export const ManagerDashboard: React.FC = () => {
             type="button"
             onClick={() => setIsLaunchKitOpen(true)}
             className="flex items-center space-x-1.5 text-xs text-white bg-charcoal-900 hover:bg-saffron-700 border border-charcoal-700 px-3.5 py-2.5 rounded-xl shadow-subtle transition-all font-bold cursor-pointer"
-            title="View & Share Venue Launch Kit, Table QR Codes, WhatsApp Brief & Custom Domain"
+            title="View & Share Guest Links, Table QR Codes, WhatsApp Handover & Custom Domain"
           >
             <Share2 className="w-3.5 h-3.5 text-saffron-400" />
-            <span>🚀 Share Launch Kit</span>
+            <span>📲 Links & Table QRs</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsTableModalOpen(true)}
+            className="flex items-center space-x-1.5 text-xs text-charcoal-800 bg-ivory-100 hover:bg-ivory-200 border border-ivory-300 px-3.5 py-2.5 rounded-xl shadow-subtle transition-all font-bold cursor-pointer"
+            title="Manage Tables, Floor Plan, Capacity, and Edit Restaurant Profile"
+          >
+            <span className="text-sm">🪑</span>
+            <span>Floor Plan & Tables</span>
           </button>
 
           <button
@@ -650,18 +660,11 @@ export const ManagerDashboard: React.FC = () => {
           <div className="flex items-center space-x-2">
             <button
               type="button"
-              onClick={() => setIsWizardOpen(true)}
-              className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-charcoal-950 text-xs font-bold rounded-xl transition-all shadow-subtle flex items-center space-x-1.5 cursor-pointer whitespace-nowrap"
-            >
-              <span>⚡ Launch 2-Min KOT Wizard</span>
-              <span>→</span>
-            </button>
-            <button
-              type="button"
               onClick={() => setIsPosModalOpen(true)}
-              className="px-3 py-2 bg-charcoal-800 hover:bg-charcoal-700 text-white text-xs font-medium rounded-xl border border-charcoal-700 transition-all cursor-pointer whitespace-nowrap"
+              className="px-4 py-2 bg-saffron-600 hover:bg-saffron-500 text-white text-xs font-bold rounded-xl transition-all shadow-subtle flex items-center space-x-1.5 cursor-pointer whitespace-nowrap"
             >
-              POS Settings
+              <span>POS & Thermal Printer Settings</span>
+              <span>→</span>
             </button>
           </div>
         </div>
@@ -1108,18 +1111,6 @@ export const ManagerDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* 2-Minute Self-Service KOT Setup Wizard Modal */}
-      {isWizardOpen && (
-        <SelfServeKotSetupWizard
-          restaurant={restaurant}
-          onComplete={(updates) => {
-            updateRestaurant(restaurant.id, updates);
-            setIsWizardOpen(false);
-          }}
-          onCancel={() => setIsWizardOpen(false)}
-        />
-      )}
-
       {/* Chef & Owner AI Intake Questionnaire Studio */}
       <ChefOwnerQuestionnaireModal
         restaurant={restaurant}
@@ -1140,11 +1131,19 @@ export const ManagerDashboard: React.FC = () => {
         }}
       />
 
-      {/* Instant Client Launch Kit & Handover Modal */}
+      {/* Instant Table QRs & Share Links Handover Modal */}
       <RestaurantLaunchKitModal
         restaurant={restaurant}
         isOpen={isLaunchKitOpen}
         onClose={() => setIsLaunchKitOpen(false)}
+        onOpenTableManagement={() => setIsTableModalOpen(true)}
+      />
+
+      {/* Table & Floor Plan / Profile Customizer Modal */}
+      <TableManagementModal
+        restaurant={restaurant}
+        isOpen={isTableModalOpen}
+        onClose={() => setIsTableModalOpen(false)}
       />
     </div>
   );

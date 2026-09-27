@@ -6,7 +6,7 @@ import { PetpoojaIntegrationPanel } from '../components/PetpoojaIntegrationPanel
 import { RoyalPosIntegrationPanel } from '../components/RoyalPosIntegrationPanel';
 import { RecahoIntegrationPanel } from '../components/RecahoIntegrationPanel';
 import { RancelabIntegrationPanel } from '../components/RancelabIntegrationPanel';
-import { SelfServeKotSetupWizard } from '../components/SelfServeKotSetupWizard';
+import { TableManagementModal } from '../components/TableManagementModal';
 import { RestaurantLaunchKitModal } from '../components/RestaurantLaunchKitModal';
 import {
   Building2,
@@ -79,16 +79,19 @@ export const MasterAdminDashboard: React.FC = () => {
 
   // ── Modals state ───────────────────────────────────────────
   const [isAddRestaurantOpen, setIsAddRestaurantOpen] = useState(false);
-  const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
   const [isImageAssignModalOpen, setIsImageAssignModalOpen] = useState(false);
   const [selectedImageForAssign, setSelectedImageForAssign] = useState<string>('');
   const [targetMenuItemId, setTargetMenuItemId] = useState<string>('');
   const [copiedLink, setCopiedLink] = useState<string | null>(null);
 
-  // ── Instant Launch Kit & Handover Modal State ───────────────
+  // ── Instant Table QRs & Share Links Modal State ───────────────
   const [launchKitRestaurant, setLaunchKitRestaurant] = useState<Restaurant | null>(null);
   const [isLaunchKitOpen, setIsLaunchKitOpen] = useState(false);
+
+  // ── Table Management & Floor Plan Modal State ───────────────
+  const [tableModalRestaurant, setTableModalRestaurant] = useState<Restaurant | null>(null);
+  const [isTableModalOpen, setIsTableModalOpen] = useState(false);
 
   // ── Onboarding form state ──────────────────────────────────
   const [newRestName, setNewRestName] = useState('');
@@ -1396,18 +1399,33 @@ export const MasterAdminDashboard: React.FC = () => {
                             </Link>
                           </div>
 
-                          <button
-                            onClick={() => {
-                              setCurrentRestaurant(rest.id);
-                              setLaunchKitRestaurant(rest);
-                              setIsLaunchKitOpen(true);
-                            }}
-                            className="w-full bg-charcoal-900 hover:bg-saffron-700 text-white font-bold py-2 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-all shadow-xs border border-charcoal-700 cursor-pointer"
-                            title="Open Client Handover Kit, WhatsApp Brief, QR Generator, and Domain settings"
-                          >
-                            <Share2 className="w-3.5 h-3.5 text-saffron-400" />
-                            <span>🚀 Launch Kit & Client Handover</span>
-                          </button>
+                          <div className="grid grid-cols-2 gap-2">
+                            <button
+                              onClick={() => {
+                                setCurrentRestaurant(rest.id);
+                                setLaunchKitRestaurant(rest);
+                                setIsLaunchKitOpen(true);
+                              }}
+                              className="bg-charcoal-900 hover:bg-saffron-700 text-white font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-all shadow-xs border border-charcoal-700 cursor-pointer"
+                              title="View & Share Guest Links, WhatsApp Handover Brief, Table QRs, and Domain"
+                            >
+                              <Share2 className="w-3.5 h-3.5 text-saffron-400" />
+                              <span>📲 Links & QRs</span>
+                            </button>
+
+                            <button
+                              onClick={() => {
+                                setCurrentRestaurant(rest.id);
+                                setTableModalRestaurant(rest);
+                                setIsTableModalOpen(true);
+                              }}
+                              className="bg-ivory-100 hover:bg-ivory-200 text-charcoal-800 font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1.5 border border-ivory-300 transition-colors cursor-pointer"
+                              title="Manage Tables, Floor Plan, Capacity, and Edit Restaurant Details"
+                            >
+                              <QrCode className="w-3.5 h-3.5 text-saffron-600" />
+                              <span>🪑 Floor Plan</span>
+                            </button>
+                          </div>
 
                           <div className="flex items-center justify-between pt-1 text-[11px] text-charcoal-500">
                             <span className="truncate max-w-[170px] font-mono text-[10px]">/#/r/{rest.slug}/menu</span>
@@ -1846,16 +1864,9 @@ export const MasterAdminDashboard: React.FC = () => {
                   </p>
                 </div>
                 <div className="flex items-center space-x-2 text-xs">
-                  <button
-                    type="button"
-                    onClick={() => setIsWizardOpen(true)}
-                    className="px-3 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold rounded-xl shadow-xs flex items-center space-x-1.5 cursor-pointer"
-                  >
-                    <span>⚡ 2-Min Self-Serve KOT Wizard</span>
-                  </button>
                   <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 font-bold rounded-lg border border-emerald-200 flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    All 5 KOT Routes Active
+                    All Multi-Channel KOT Routes Active
                   </span>
                 </div>
               </div>
@@ -2605,24 +2616,25 @@ export const MasterAdminDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* 2-Minute Self-Service KOT Setup Wizard Modal */}
-      {isWizardOpen && (
-        <SelfServeKotSetupWizard
-          restaurant={restaurants[0]}
-          onComplete={(updates) => {
-            updateRestaurant(restaurants[0].id, updates);
-            setIsWizardOpen(false);
-          }}
-          onCancel={() => setIsWizardOpen(false)}
-        />
-      )}
-
-      {/* Instant Client Launch Kit & Handover Modal */}
+      {/* Instant Table QRs & Share Links Handover Modal */}
       {launchKitRestaurant && (
         <RestaurantLaunchKitModal
           restaurant={launchKitRestaurant}
           isOpen={isLaunchKitOpen}
           onClose={() => setIsLaunchKitOpen(false)}
+          onOpenTableManagement={() => {
+            setTableModalRestaurant(launchKitRestaurant);
+            setIsTableModalOpen(true);
+          }}
+        />
+      )}
+
+      {/* Table & Floor Plan / Profile Customizer Modal */}
+      {tableModalRestaurant && (
+        <TableManagementModal
+          restaurant={tableModalRestaurant}
+          isOpen={isTableModalOpen}
+          onClose={() => setIsTableModalOpen(false)}
         />
       )}
     </div>

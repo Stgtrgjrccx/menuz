@@ -97,6 +97,12 @@ interface RestaurantStoreState {
   deleteRestaurant: (id: string) => void;
   setCurrentRestaurant: (restaurantId: string) => void;
 
+  // Table & Floor Plan Management
+  addTable: (table: RestaurantTable) => void;
+  updateTable: (id: string, updates: Partial<RestaurantTable>) => void;
+  deleteTable: (id: string) => void;
+  batchCreateTables: (restaurantId: string, count: number, startNumber?: number, section?: string, capacity?: number) => void;
+
   // Menu Management
   addMenuItem: (item: MenuItem) => void;
   addCategory: (category: MenuCategory) => void;
@@ -231,6 +237,47 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       setCurrentRestaurant: (restaurantId) => {
         const target = get().restaurants.find((r) => r.id === restaurantId) || get().restaurants[0];
         set({ currentRestaurantId: restaurantId, restaurant: target });
+      },
+
+      // Table & Floor Plan Management Actions
+      addTable: (table) => {
+        set((state) => ({
+          tables: [...state.tables, table]
+        }));
+      },
+
+      updateTable: (id, updates) => {
+        set((state) => ({
+          tables: state.tables.map((t) => (t.id === id ? { ...t, ...updates } : t))
+        }));
+      },
+
+      deleteTable: (id) => {
+        set((state) => ({
+          tables: state.tables.filter((t) => t.id !== id)
+        }));
+      },
+
+      batchCreateTables: (restaurantId, count, startNumber = 1, section = 'Indoor Main', capacity = 4) => {
+        const targetRest = get().restaurants.find((r) => r.id === restaurantId);
+        const slug = targetRest?.slug || 'table';
+        const newTables: RestaurantTable[] = [];
+        for (let i = 0; i < count; i++) {
+          const num = startNumber + i;
+          newTables.push({
+            id: `tbl-${slug}-${Date.now()}-${num}`,
+            restaurant_id: restaurantId,
+            label: `${section.includes('VIP') ? 'VIP ' : section.includes('Rooftop') ? 'Roof ' : 'Table '}${num}`,
+            public_token: `token-${slug}-${num.toString().padStart(2, '0')}-${Math.random().toString(36).substring(2, 6)}`,
+            is_active: true,
+            capacity: capacity,
+            section: section,
+            status: 'vacant'
+          });
+        }
+        set((state) => ({
+          tables: [...state.tables, ...newTables]
+        }));
       },
 
       // Menu Management Actions
@@ -665,7 +712,7 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       }
     }),
     {
-      name: 'menuz_restaurant_storage_v15_strictly_two_demos',
+      name: 'menuz_platform_cloud_storage_v16_enterprise_all_venues',
       partialize: (state) => ({
         restaurants: state.restaurants,
         tables: state.tables,
@@ -680,12 +727,16 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       }),
       onRehydrateStorage: () => (state) => {
         if (!state) return;
-        // Strictly keep the two verified demos (Saffron House & Casa Bella) plus any explicitly onboarded restaurant
-        const allowedDemos = new Set(['rest-saffron-house-01', 'rest-casa-bella-02']);
-        const cleaned = (state.restaurants || []).filter(
-          (r) => allowedDemos.has(r.id) || r.id.startsWith('rest-onboarded-') || r.id.startsWith('rest-custom-')
-        );
-        state.restaurants = cleaned.length >= 2 ? cleaned : SEED_RESTAURANTS;
+        // Retain ALL persisted restaurants, ensuring seed demo restaurants are present as base
+        if (!state.restaurants || state.restaurants.length === 0) {
+          state.restaurants = SEED_RESTAURANTS;
+        } else {
+          const existingIds = new Set(state.restaurants.map((r) => r.id));
+          const missingSeeds = SEED_RESTAURANTS.filter((r) => !existingIds.has(r.id));
+          if (missingSeeds.length > 0) {
+            state.restaurants = [...state.restaurants, ...missingSeeds];
+          }
+        }
         if (!state.restaurant || !state.restaurants.some((r) => r.id === state.restaurant.id)) {
           state.restaurant = state.restaurants[0] || SEED_RESTAURANTS[0];
           state.currentRestaurantId = state.restaurant?.id || '';

@@ -207,25 +207,25 @@ export interface RancelabConfig {
   last_synced_at?: string;
 }
 
-export const isWorkingWithMenuz = (r?: { id?: string; slug?: string } | null): boolean => {
+export const isWorkingWithMenuz = (r?: { id?: string; slug?: string; is_menuz_partner?: boolean } | null): boolean => {
   if (!r || !r.id) return false;
-  return (
-    r.id === 'rest-saffron-house-01' ||
-    r.id === 'rest-casa-bella-02' ||
-    r.slug === 'saffron-house' ||
-    r.slug === 'casa-bella' ||
-    r.id.startsWith('rest-onboarded-') ||
-    r.id.startsWith('rest-custom-')
-  );
+  // If explicitly flagged as false (e.g. unpartnered directory placeholder), return false
+  if (r.is_menuz_partner === false) return false;
+  // All active restaurants in the database/store are valid Menuz working venues
+  return true;
 };
 
 export interface RestaurantTable {
   id: string;
   restaurant_id: string;
-  label: string;
+  label: string; // e.g. "Table 1", "VIP Booth 3", "Rooftop Terrace 2"
   public_token: string;
   nfc_tag_id?: string;
   is_active: boolean;
+  capacity?: number; // Number of seats (2, 4, 6, 8, 12)
+  section?: string; // "Indoor Main", "Outdoor Patio", "Rooftop Terrace", "Bar Lounge", "VIP Dining"
+  status?: 'vacant' | 'occupied' | 'reserved' | 'cleaning';
+  assigned_server?: string; // Server / Waiter assigned to this station
 }
 
 export interface MenuCategory {

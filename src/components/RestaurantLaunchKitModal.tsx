@@ -20,7 +20,11 @@ import {
   Sliders,
   CheckCircle2,
   Lock,
-  ArrowRight
+  ArrowRight,
+  HelpCircle,
+  Server,
+  Zap,
+  Layers
 } from 'lucide-react';
 
 interface RestaurantLaunchKitModalProps {
@@ -28,13 +32,15 @@ interface RestaurantLaunchKitModalProps {
   isOpen: boolean;
   onClose: () => void;
   isInitialOnboarding?: boolean;
+  onOpenTableManagement?: () => void;
 }
 
 export const RestaurantLaunchKitModal: React.FC<RestaurantLaunchKitModalProps> = ({
   restaurant,
   isOpen,
   onClose,
-  isInitialOnboarding = false
+  isInitialOnboarding = false,
+  onOpenTableManagement
 }) => {
   const tables = useRestaurantStore((state) => state.tables);
   const updateRestaurant = useRestaurantStore((state) => state.updateRestaurant);
@@ -102,7 +108,7 @@ ${aiStudioUrl}
 • Multi-Channel KOT: ${posProviderInfo.name} (${posProviderInfo.region})
 • Ready Table QR Codes for Tables 1 to ${Math.max(restaurantTables.length, 4)}
 
-For support or custom domain setup, reach out to your Menuz Account Team.`;
+For table adjustments or custom domain setup, open your manager console anytime.`;
 
   const handleShareWhatsApp = () => {
     const encoded = encodeURIComponent(whatsappHandoverMessage);
@@ -127,7 +133,7 @@ For support or custom domain setup, reach out to your Menuz Account Team.`;
       setIsSavingWhiteLabel(false);
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
-    }, 600);
+    }, 500);
   };
 
   return (
@@ -150,7 +156,7 @@ For support or custom domain setup, reach out to your Menuz Account Team.`;
             <div>
               <div className="flex items-center space-x-2">
                 <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-white/20 text-white border border-white/30">
-                  {isInitialOnboarding ? '🎉 Onboarding Successful' : '🚀 Venue Launch Kit'}
+                  {isInitialOnboarding ? '🎉 Onboarding Successful' : '📱 Venue Links & Access'}
                 </span>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 flex items-center space-x-1">
                   <Check className="w-3 h-3" />
@@ -177,7 +183,7 @@ For support or custom domain setup, reach out to your Menuz Account Team.`;
               }`}
             >
               <Globe className="w-3.5 h-3.5" />
-              <span>All Venue Links</span>
+              <span>All Direct Links</span>
             </button>
             <button
               onClick={() => setActiveTab('share_kit')}
@@ -188,7 +194,7 @@ For support or custom domain setup, reach out to your Menuz Account Team.`;
               }`}
             >
               <Share2 className="w-3.5 h-3.5" />
-              <span>Shareable Handover Kit</span>
+              <span>WhatsApp Handover</span>
             </button>
             <button
               onClick={() => setActiveTab('qr_codes')}
@@ -199,7 +205,7 @@ For support or custom domain setup, reach out to your Menuz Account Team.`;
               }`}
             >
               <QrCode className="w-3.5 h-3.5" />
-              <span>Table QR Codes</span>
+              <span>Table QR Cards ({restaurantTables.length})</span>
             </button>
             <button
               onClick={() => setActiveTab('white_label')}
@@ -210,7 +216,7 @@ For support or custom domain setup, reach out to your Menuz Account Team.`;
               }`}
             >
               <Sliders className="w-3.5 h-3.5" />
-              <span>Custom Domain & Brand</span>
+              <span>Custom Domain</span>
             </button>
           </div>
         </div>
@@ -222,7 +228,7 @@ For support or custom domain setup, reach out to your Menuz Account Team.`;
           {activeTab === 'links' && (
             <div className="space-y-3">
               <p className="text-charcoal-300 leading-relaxed">
-                Here are the permanent, isolated URLs for <strong>{restaurant.name}</strong>. These links are accessible at all times without needing a new deployment.
+                Permanent, isolated URLs for <strong>{restaurant.name}</strong>. Share these with the dining floor, manager, and kitchen staff:
               </p>
 
               {/* Link Card 1: Customer Diner Menu */}
@@ -233,7 +239,7 @@ For support or custom domain setup, reach out to your Menuz Account Team.`;
                       <ShoppingBag className="w-4 h-4" />
                     </span>
                     <div>
-                      <h4 className="font-bold text-white text-sm">Customer Dining Menu (Table 1)</h4>
+                      <h4 className="font-bold text-white text-sm">Customer Dining Menu ({restaurantTables[0]?.label || 'Table 1'})</h4>
                       <span className="text-[10px] text-charcoal-400">Guest-facing menu with Personalized Chef AI & 5-star review wheel</span>
                     </div>
                   </div>
@@ -373,14 +379,14 @@ For support or custom domain setup, reach out to your Menuz Account Team.`;
             </div>
           )}
 
-          {/* TAB 2: SHAREABLE HANDOVER KIT */}
+          {/* TAB 2: WHATSAPP CLIENT HANDOVER */}
           {activeTab === 'share_kit' && (
             <div className="space-y-3.5">
               <div className="p-3 bg-saffron-500/10 border border-saffron-500/20 rounded-2xl flex items-center justify-between">
                 <div>
                   <h4 className="font-bold text-white text-xs">Ready-to-Send Client Handover Brief</h4>
                   <p className="text-[10px] text-charcoal-300 mt-0.5">
-                    Send this formatted brief directly to the restaurant owner via WhatsApp or Email.
+                    Send this formatted brief directly to the restaurant owner via WhatsApp or Email in 1 click.
                   </p>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -418,17 +424,31 @@ For support or custom domain setup, reach out to your Menuz Account Team.`;
                     Each table has an encrypted token. Guests scan to place orders directly into the kitchen.
                   </p>
                 </div>
-                <button
-                  onClick={() => window.print()}
-                  className="px-3 py-1.5 rounded-xl bg-saffron-600 hover:bg-saffron-500 text-white font-bold text-xs flex items-center space-x-1.5"
-                >
-                  <Printer className="w-3.5 h-3.5" />
-                  <span>Print All Stands</span>
-                </button>
+                <div className="flex items-center space-x-2">
+                  {onOpenTableManagement && (
+                    <button
+                      onClick={() => {
+                        onClose();
+                        onOpenTableManagement();
+                      }}
+                      className="px-3 py-1.5 rounded-xl bg-charcoal-800 hover:bg-charcoal-700 text-saffron-300 font-bold text-xs flex items-center space-x-1.5 border border-charcoal-700 transition-colors"
+                    >
+                      <Layers className="w-3.5 h-3.5" />
+                      <span>Manage Tables</span>
+                    </button>
+                  )}
+                  <button
+                    onClick={() => window.print()}
+                    className="px-3 py-1.5 rounded-xl bg-saffron-600 hover:bg-saffron-500 text-white font-bold text-xs flex items-center space-x-1.5"
+                  >
+                    <Printer className="w-3.5 h-3.5" />
+                    <span>Print All Stands</span>
+                  </button>
+                </div>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {restaurantTables.slice(0, 8).map((tbl, idx) => {
+                {restaurantTables.slice(0, 12).map((tbl, idx) => {
                   const tableDinerUrl = `${origin}#/r/${restaurant.slug}/menu?t=${tbl.public_token}`;
                   return (
                     <div key={tbl.id} className="p-3 bg-charcoal-800 border border-charcoal-700 rounded-2xl text-center space-y-2">
@@ -438,7 +458,7 @@ For support or custom domain setup, reach out to your Menuz Account Team.`;
                           {tbl.label}
                         </span>
                       </div>
-                      <div className="text-[11px] font-bold text-white">{tbl.label}</div>
+                      <div className="text-[11px] font-bold text-white truncate">{tbl.label}</div>
                       <button
                         onClick={() => copyToClipboard(tableDinerUrl, `tbl_${idx}`)}
                         className="w-full py-1 rounded-lg bg-charcoal-900 hover:bg-charcoal-950 text-[10px] text-saffron-400 font-bold border border-charcoal-700 transition-colors"
@@ -455,13 +475,15 @@ For support or custom domain setup, reach out to your Menuz Account Team.`;
           {/* TAB 4: WHITE-LABEL & CUSTOM DOMAIN */}
           {activeTab === 'white_label' && (
             <div className="space-y-4">
-              <div className="p-3.5 bg-charcoal-800/80 border border-charcoal-700 rounded-2xl space-y-2">
+              
+              {/* How it works 3-Step Guide */}
+              <div className="p-4 bg-gradient-to-r from-charcoal-800 to-charcoal-850 border border-charcoal-700 rounded-2xl space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <Globe className="w-4 h-4 text-saffron-400" />
-                    <h4 className="font-bold text-white text-sm">Custom Domain Routing (White-Label)</h4>
+                    <h4 className="font-bold text-white text-sm">How to Connect a Custom Domain</h4>
                   </div>
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold border ${
+                  <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold border ${
                     domainVerified
                       ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
                       : 'bg-amber-500/20 text-amber-300 border-amber-500/30'
@@ -469,36 +491,56 @@ For support or custom domain setup, reach out to your Menuz Account Team.`;
                     {domainVerified ? 'SSL Active & Verified' : 'DNS Propagation Pending'}
                   </span>
                 </div>
-                <p className="text-[11px] text-charcoal-300 leading-relaxed">
-                  Connect your client's custom domain (e.g. <code>menu.{restaurant.slug.replace(/[^a-z0-9]/g, '')}.com</code>). Diners will see their private brand domain without mentioning Menuz.
-                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-[11px] text-charcoal-300 pt-1">
+                  <div className="p-2.5 bg-charcoal-900/90 rounded-xl border border-charcoal-800 space-y-1">
+                    <span className="font-bold text-saffron-400 text-xs block">Step 1: In GoDaddy / Cloudflare</span>
+                    <p className="text-[10px] text-charcoal-400">Add a <strong>CNAME</strong> record in your DNS settings for your restaurant domain.</p>
+                  </div>
+                  <div className="p-2.5 bg-charcoal-900/90 rounded-xl border border-charcoal-800 space-y-1">
+                    <span className="font-bold text-saffron-400 text-xs block">Step 2: Point to Menuz Server</span>
+                    <p className="text-[10px] text-charcoal-400">Host: <code>menu</code> &rarr; Target: <code>cname.menuz.co</code></p>
+                  </div>
+                  <div className="p-2.5 bg-charcoal-900/90 rounded-xl border border-charcoal-800 space-y-1">
+                    <span className="font-bold text-saffron-400 text-xs block">Step 3: Free Automated SSL</span>
+                    <p className="text-[10px] text-charcoal-400">Enter domain below and click "Verify". Free HTTPS/SSL activates automatically!</p>
+                  </div>
+                </div>
               </div>
 
               <div className="space-y-3 bg-charcoal-800/50 p-4 rounded-2xl border border-charcoal-700">
                 <div>
-                  <label className="font-bold text-white block mb-1">Custom Domain Name</label>
+                  <label className="font-bold text-white block mb-1">Your Custom Domain URL</label>
                   <div className="flex space-x-2">
                     <input
                       type="text"
                       value={customDomain}
                       onChange={(e) => setCustomDomain(e.target.value)}
-                      placeholder={`menu.${restaurant.slug}.com`}
+                      placeholder={`menu.${restaurant.slug.replace(/[^a-z0-9]/g, '')}.com`}
                       className="flex-1 bg-charcoal-900 border border-charcoal-700 rounded-xl px-3 py-2 text-white font-mono text-xs focus:outline-none focus:border-saffron-500"
                     />
                     <button
                       type="button"
                       onClick={() => setDomainVerified(!domainVerified)}
-                      className={`px-3 py-2 rounded-xl text-xs font-bold transition-colors ${
+                      className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-colors ${
                         domainVerified
                           ? 'bg-emerald-600 text-white'
-                          : 'bg-charcoal-700 text-charcoal-300 hover:text-white'
+                          : 'bg-saffron-600 hover:bg-saffron-500 text-white'
                       }`}
                     >
                       {domainVerified ? 'Verified ✓' : 'Verify DNS'}
                     </button>
                   </div>
-                  <div className="mt-2 p-2.5 bg-charcoal-950 rounded-xl border border-charcoal-800 text-[10px] text-charcoal-400 font-mono">
-                    DNS CNAME Record: <strong className="text-saffron-300">CNAME &rarr; cname.menuz.co</strong> (Auto SSL Provisioned)
+                  <div className="mt-2 p-2.5 bg-charcoal-950 rounded-xl border border-charcoal-800 text-[10px] text-charcoal-400 font-mono flex items-center justify-between">
+                    <span>DNS CNAME Target: <strong className="text-saffron-300">cname.menuz.co</strong></span>
+                    <button
+                      type="button"
+                      onClick={() => copyToClipboard('cname.menuz.co', 'cname')}
+                      className="text-saffron-400 hover:text-saffron-300 flex items-center space-x-1"
+                    >
+                      {copiedKey === 'cname' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                      <span>{copiedKey === 'cname' ? 'Copied' : 'Copy'}</span>
+                    </button>
                   </div>
                 </div>
 
@@ -528,7 +570,7 @@ For support or custom domain setup, reach out to your Menuz Account Team.`;
                 <div className="pt-2 border-t border-charcoal-700 flex items-center justify-between">
                   <div>
                     <span className="font-bold text-white text-xs block">White-Label Enterprise Mode</span>
-                    <span className="text-[10px] text-charcoal-400">Remove all "Powered by Menuz" logos and footers from diner UI</span>
+                    <span className="text-[10px] text-charcoal-400">Hide all "Powered by Menuz" logos and branding from diner UI</span>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input
@@ -555,7 +597,7 @@ For support or custom domain setup, reach out to your Menuz Account Team.`;
                         <span>Domain & White-Label Settings Saved!</span>
                       </span>
                     ) : (
-                      <span>Save White-Label & Domain Settings</span>
+                      <span>Save Custom Domain & Brand Settings</span>
                     )}
                   </button>
                 </div>
