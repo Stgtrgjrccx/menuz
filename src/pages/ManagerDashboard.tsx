@@ -30,6 +30,9 @@ import { RecahoIntegrationPanel } from '../components/RecahoIntegrationPanel';
 import { RancelabIntegrationPanel } from '../components/RancelabIntegrationPanel';
 import { SelfServeKotSetupWizard } from '../components/SelfServeKotSetupWizard';
 import { AiAssistantDrawer } from '../components/AiAssistantDrawer';
+import { ChefOwnerQuestionnaireModal } from '../components/ChefOwnerQuestionnaireModal';
+import { printDirectWebUsb } from '../services/webUsbPrinterService';
+import { Order } from '../types';
 
 const SAMPLE_FOOD_IMAGES = [
   { label: 'Paneer / Curry', url: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80' },
@@ -94,6 +97,45 @@ export const ManagerDashboard: React.FC = () => {
 
   // Modal state for adding a custom dish
   const [isAddDishOpen, setIsAddDishOpen] = useState(false);
+  const [isAiStudioOpen, setIsAiStudioOpen] = useState(false);
+  const [usbPrintLoading, setUsbPrintLoading] = useState(false);
+  const [usbPrintStatus, setUsbPrintStatus] = useState<string | null>(null);
+
+  const handleTestUsbPrint = async () => {
+    setUsbPrintLoading(true);
+    setUsbPrintStatus(null);
+    const sampleTestOrder: Order = {
+      id: `ord-usb-${Date.now()}`,
+      restaurant_id: restaurant.id,
+      table_id: 'tbl-4',
+      table_label: 'Table 4 (Patio)',
+      anonymous_session_id: 'sess-usb-test',
+      order_number: 'ORD-USB-101',
+      total_amount: 880,
+      subtotal_amount: 840,
+      tax_amount: 40,
+      status: 'received',
+      source: 'menuz',
+      currency: 'INR',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      items: activeMenuItemsList.slice(0, 2).map((item) => ({
+        id: `it-${item.id}`,
+        order_id: 'ord-usb',
+        menu_item_id: item.id,
+        item_name_snapshot: item.name,
+        unit_price_snapshot: item.price,
+        quantity: 1,
+        selected_options_snapshot: [],
+        line_total_amount: item.price
+      }))
+    };
+
+    const res = await printDirectWebUsb(sampleTestOrder, restaurant, 'Complimentary Chef Dessert (Food Reward)');
+    setUsbPrintLoading(false);
+    setUsbPrintStatus(res.message);
+    setTimeout(() => setUsbPrintStatus(null), 6000);
+  };
   const [dishForm, setDishForm] = useState({
     name: '',
     categoryId: activeCategoriesList[0]?.id || '',
@@ -216,7 +258,28 @@ export const ManagerDashboard: React.FC = () => {
           <span>Back to Master Admin Portal</span>
         </Link>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setIsAiStudioOpen(true)}
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-amber-950 hover:text-amber-900 transition-colors bg-amber-100/90 hover:bg-amber-200 px-3.5 py-2 rounded-xl border border-amber-300 shadow-xs cursor-pointer"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-700" />
+            <span>Chef & Owner AI Studio</span>
+            <span className="text-[9px] uppercase font-mono px-1.5 py-0.2 rounded-md bg-amber-200 text-amber-900 font-bold">
+              Personalized
+            </span>
+          </button>
+          <button
+            type="button"
+            disabled={usbPrintLoading}
+            onClick={handleTestUsbPrint}
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-blue-950 hover:text-blue-900 transition-colors bg-blue-100/90 hover:bg-blue-200 px-3.5 py-2 rounded-xl border border-blue-300 shadow-xs cursor-pointer"
+            title="Connect USB Thermal Printer & Test Print ESC/POS Ticket"
+          >
+            <Printer className="w-3.5 h-3.5 text-blue-700" />
+            <span>{usbPrintLoading ? 'Sending ESC/POS...' : 'Test USB Thermal Print'}</span>
+          </button>
           <Link
             to="/kitchen"
             className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-700 hover:text-saffron-700 transition-colors bg-white px-3.5 py-2 rounded-xl border border-ivory-200 shadow-xs hover:border-saffron-300"
@@ -248,6 +311,19 @@ export const ManagerDashboard: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* USB Print Notification Banner */}
+      {usbPrintStatus && (
+        <div className="bg-blue-50 border border-blue-200 text-blue-900 p-4 rounded-2xl text-xs font-bold flex items-center justify-between shadow-xs animate-in fade-in">
+          <div className="flex items-center gap-2">
+            <Printer className="w-4 h-4 text-blue-600" />
+            <span>{usbPrintStatus}</span>
+          </div>
+          <button onClick={() => setUsbPrintStatus(null)} className="text-blue-500 hover:text-blue-800">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
 
       {/* Top Bar */}
       <header className="flex flex-wrap justify-between items-center pb-5 border-b border-ivory-200 gap-4">
@@ -1029,6 +1105,16 @@ export const ManagerDashboard: React.FC = () => {
           onCancel={() => setIsWizardOpen(false)}
         />
       )}
+
+      {/* Chef & Owner AI Intake Questionnaire Studio */}
+      <ChefOwnerQuestionnaireModal
+        restaurant={restaurant}
+        isOpen={isAiStudioOpen}
+        onClose={() => setIsAiStudioOpen(false)}
+        onSavePersona={(persona) => {
+          updateRestaurant(restaurant.id, { ai_persona: persona });
+        }}
+      />
 
       {/* AI Dining Assistant Simulation Drawer */}
       <AiAssistantDrawer

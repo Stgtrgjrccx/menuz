@@ -34,7 +34,27 @@ export const SEED_RESTAURANT: Restaurant = {
   google_place_url: 'https://search.google.com/local/writereview?placeid=ChIJSaffronHouseKoregaonParkPune',
   ordering_enabled: true,
   pos_provider: 'universal_api',
-  is_menuz_partner: true
+  is_menuz_partner: true,
+  ai_persona: {
+    chef_name: 'Chef Sanjay Rawat',
+    chef_title: 'Executive Head Chef & Culinary Director',
+    chef_bio: 'Master of Dum Pukht slow-cooking and Kashmiri copper deg techniques with 22 years of royal kitchen expertise.',
+    chef_philosophy: 'Pure organic spices slow-roasted over charcoal. We never use artificial gravies, food colors, or shortcuts.',
+    owner_name: 'Vikramaditya Singhania',
+    owner_hospitality_note: 'At Saffron House, our guests are treated as royal patrons. We strive to bring the forgotten heritage flavors of Awadh and Kashmir to your table.',
+    greeting_tone: 'warm_traditional',
+    signature_pairings: [
+      { dish_name: 'Old Delhi Butter Chicken', pairing_drink: 'Smoked Saffron & Cardamom Lassi', why: 'The cooling organic saffron yogurt cuts through the velvety richness of the single-origin dairy butter.' },
+      { dish_name: 'Slow-Cooked Dal Makhani', pairing_drink: 'Amritsari Garlic Kulcha & Mint Chaas', why: 'The 36-hour slow simmered black lentils pair harmoniously with woodfired crisp bread.' },
+      { dish_name: 'Mughlai Galouti Kebab', pairing_drink: 'Spiced Pomegranate Mint Cooler', why: 'Melts on your tongue with 32 secret Lucknowi potli spices balanced by tart fresh pomegranate.' }
+    ],
+    secret_stories: [
+      { dish_name: 'Old Delhi Butter Chicken', story: 'Our tomato gravy is slow-simmered for 8 hours with Kashmiri whole chilies and cold-churned white makkhan, based on Chef Sanjay grandfather 1952 recipe.' },
+      { dish_name: 'Slow-Cooked Dal Makhani', story: 'Simmered continuously over glowing tandoor charcoal embers for 36 hours with churned dairy butter and crushed fenugreek leaves.' }
+    ],
+    spice_guidance: 'Our spice level 1 is gentle and aromatic; level 3 is authentic North Indian warmth; level 5 is fiery for true spice lovers.',
+    dietary_rules: 'We maintain 100% separate dedicated cookware, grills, and oil fryers for vegetarian and non-vegetarian dishes.'
+  }
 };
 
 export const SEED_CASA_BELLA: Restaurant = {
@@ -59,7 +79,27 @@ export const SEED_CASA_BELLA: Restaurant = {
   google_place_url: 'https://search.google.com/local/writereview?placeid=ChIJCasaBellaTrattoriaPune',
   ordering_enabled: true,
   pos_provider: 'toast',
-  is_menuz_partner: true
+  is_menuz_partner: true,
+  ai_persona: {
+    chef_name: 'Chef Marco Rossi',
+    chef_title: 'Head Pizzaiolo & Culinary Master',
+    chef_bio: 'Born in Naples, trained in Bologna. Crafts 72-hour cold-fermented sourdough pizza and hand-extruded bronze-die tagliatelle daily.',
+    chef_philosophy: 'Respect the flour, San Marzano tomatoes, and aged Parmigiano Reggiano. Simplicity is perfection.',
+    owner_name: 'Isabella Conti & Marco Rossi',
+    owner_hospitality_note: 'Benvenuti a Casa Bella! We treat you like family sitting around our grandmother Sunday table in Tuscany.',
+    greeting_tone: 'bistro_cozy',
+    signature_pairings: [
+      { dish_name: 'Wood-Fired Margherita Pizza', pairing_drink: 'San Pellegrino Aranciata or Chianti Classico', why: 'The crisp blistered crust and sweet San Marzano acidity require bright, effervescent notes.' },
+      { dish_name: 'Truffle & Porcini Tagliatelle', pairing_drink: 'Aged Pinot Grigio or Sparkling Botanical Tonic', why: 'Earthy Piedmont black truffle shavings are heightened by crisp mineral undertones.' },
+      { dish_name: 'Classic Venetian Tiramisu', pairing_drink: 'Double Shot Espresso Romano', why: 'Artisanal Savoiardi biscuits soaked in Illy dark roast perfectly contrast creamy mascarpone.' }
+    ],
+    secret_stories: [
+      { dish_name: 'Wood-Fired Margherita Pizza', story: 'Our dough undergoes 72 hours of cold fermentation using imported Italian Caputo Tipo 00 flour and baked in a 480°C volcanic stone oven.' },
+      { dish_name: 'Truffle & Porcini Tagliatelle', story: 'Fresh bronze-die egg pasta made fresh every morning at 7:00 AM with imported Emilia-Romagna organic eggs.' }
+    ],
+    spice_guidance: 'Italian cuisine relies on fresh herbs, cracked black pepper, and chili-infused olive oil rather than harsh chilies. All dishes are kid and family friendly.',
+    dietary_rules: 'We offer gluten-free crust options and dedicated vegetarian pasta stations.'
+  }
 };
 
 export const SEED_RESTAURANTS: Restaurant[] = [

@@ -100,15 +100,24 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
       } else if (focusDish) {
         handleSendQuery(`Tell me about ${focusDish.name} — flavor profile, ingredients, and allergens.`, focusDish);
       } else if (messages.length === 0) {
+        const p = restaurant?.ai_persona;
+        const greetingPrefix = p?.greeting_tone === 'bistro_cozy'
+          ? 'Benvenuti!'
+          : p?.greeting_tone === 'fine_dining_artisan'
+            ? 'A very warm welcome.'
+            : 'Namaste!';
+        const chefTag = p?.chef_name ? `${p.chef_name} (${p.chef_title})` : 'our Executive Head Chef';
+        const ownerTag = p?.owner_name ? `Owner ${p.owner_name}` : 'our founder';
+
         setMessages([
           {
             role: 'assistant',
-            content: `Namaste! I am your AI dining concierge at ${restaurant?.name || 'our restaurant'}, trained directly by our Head Chef & Owner. I know our kitchen's secret recipes, true spice levels (1-5), allergen safety, and signature pairings. How can I guide your meal today?`
+            content: `${greetingPrefix} I am your dining concierge at ${restaurant?.name || 'our restaurant'}, trained directly by ${chefTag} & ${ownerTag}.\n\nI know our kitchen's secret recipes, true spice calibrations (1-5), allergen guidelines, and signature pairings. How may I guide your table today?`
           }
         ]);
       }
     }
-  }, [isOpen, focusDish, initialQuery]);
+  }, [isOpen, focusDish, initialQuery, restaurant]);
 
   if (!isOpen) return null;
 
@@ -253,22 +262,34 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
       }
       // ── General queries (no dish focused) ─────────────────
       else {
+        const persona = restaurant?.ai_persona;
+        const chefLabel = persona?.chef_name || 'Our Executive Chef';
+        const ownerLabel = persona?.owner_name || restaurant?.owner_name || 'Our Founder';
+
         if (lower.includes('secret') || lower.includes('recipe') || lower.includes('behind the scene')) {
-          reply = "🧑‍🍳 From Chef Sanjeev's Kitchen Diary:\n\nOur Dal Makhani simmers for 18 continuous hours on low charcoal embers with slow-churned white butter. Our Old Delhi Butter Chicken uses tender tandoor-roasted chicken simmered in vine-ripened tomatoes, raw cashew cream, and sun-dried Nagauri kasuri methi.\n\nEvery base is prepared from scratch daily without artificial color or commercial preservatives!";
+          const storiesText = persona?.secret_stories && persona.secret_stories.length > 0
+            ? persona.secret_stories.map(s => `• **${s.dish_name}**: ${s.story}`).join('\n\n')
+            : `Our dishes are prepared from scratch daily with ${persona?.chef_philosophy || 'time-honored recipes'}.`;
+
+          reply = `🧑‍🍳 **From ${chefLabel}'s Kitchen Diary**:\n\n${storiesText}\n\n*${persona?.chef_philosophy || 'Every base is prepared from scratch without artificial additives!'}*`;
           const secrets = availableItems.filter(i => i.is_chef_recommended || i.is_bestseller).slice(0, 2);
           recs = secrets.map(item => ({
             item,
             reason: `Chef's Signature — ${item.chef_notes || item.short_description.slice(0, 60)}`
           }));
         } else if (lower.includes('wine') || lower.includes('owner') || lower.includes('pairing') || (lower.includes('pair') && !targetDish)) {
-          reply = "🍷 Curated by Owner Rohit:\n\n• For Rich Creamy Curries: A chilled Saffron Cardamom Lassi or a crisp Sula Sauvignon Blanc.\n• For Smoky Tandoori Kebabs: Our Signature Kokum Mojito or a full-bodied Cabernet Sauvignon cuts through the tandoori char.\n• For Royal Biryanis: Paired best with tempered mint burani raita and chilled lemonade.";
+          const pairingsText = persona?.signature_pairings && persona.signature_pairings.length > 0
+            ? persona.signature_pairings.map(p => `• **${p.dish_name}** ➔ Pair with *${p.pairing_drink}*: ${p.why}`).join('\n\n')
+            : "• For rich mains: A chilled artisanal beverage or crisp mineral wine cuts through the richness.\n• For spicy specialties: Cooling yogurt coolers or botanical tonics balance the heat.";
+
+          reply = `🍷 **Curated by ${ownerLabel} & ${chefLabel}**:\n\n${pairingsText}`;
           const drinks = availableItems.filter(i => i.item_type === 'drink').slice(0, 2);
           recs = drinks.map(item => ({
             item,
-            reason: `Owner's Handpicked Beverage — ${item.short_description.slice(0, 60)}`
+            reason: `Handpicked Beverage Pairing — ${item.short_description.slice(0, 60)}`
           }));
         } else if (lower.includes('table of 4') || lower.includes('feast') || lower.includes('family') || lower.includes('group')) {
-          reply = "👨‍👩‍👧‍👦 Chef Sanjeev's Feast for 4:\n\nWe recommend 2 appetizers (1 veg + 1 kebab), 1 rich curry, 1 slow-cooked Dal Makhani, a basket of 4 assorted tandoori naans, and 1 royal dum biryani. Perfect balance without food waste!";
+          reply = `👨‍👩‍👧‍👦 **${chefLabel}'s Feast Recommendation**:\n\nWe recommend 2 appetizers (1 vegetarian + 1 specialty), 2 signature main courses, an assorted bread/side basket, and 1 royal rice or pasta course. Perfect balance without food waste!`;
           const feast = availableItems.filter(i => i.is_bestseller || i.is_chef_recommended).slice(0, 3);
           recs = feast.map(item => ({
             item,

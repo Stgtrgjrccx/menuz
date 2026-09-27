@@ -22,7 +22,9 @@ import {
   MapPin,
   Check,
   Layers,
-  ChevronDown
+  ChevronDown,
+  FileText,
+  Download
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { SelfServeKotSetupWizard } from '../components/SelfServeKotSetupWizard';
@@ -233,8 +235,20 @@ export const PitchDeckPage: React.FC = () => {
             ))}
           </nav>
 
-          {/* Live System Demo Links */}
+          {/* Live System Demo Links & PDF Download */}
           <div className="flex items-center space-x-2">
+            <a
+              href="./menuz_complete_pitch_and_product_deck.pdf"
+              download="Menuz_Complete_Pitch_and_Product_Deck.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-amber-400 hover:text-amber-300 font-bold text-xs rounded-lg transition-colors flex items-center gap-1.5 border border-amber-500/30 shadow-xs"
+              title="Download Full Multi-Page Pitch & Product Architecture PDF"
+            >
+              <FileText className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden sm:inline">Download Deck (PDF)</span>
+              <span className="sm:hidden">PDF</span>
+            </a>
             <Link
               to="/admin"
               className="text-xs text-slate-400 hover:text-white px-2.5 py-1.5 rounded-lg border border-slate-800 hover:border-slate-700 transition-colors hidden lg:inline-flex items-center gap-1"

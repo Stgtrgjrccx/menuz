@@ -37,6 +37,22 @@ export interface Restaurant {
   };
   is_menuz_partner?: boolean;
   aliases?: string[];
+  ai_persona?: ChefOwnerAiPersona;
+}
+
+export interface ChefOwnerAiPersona {
+  chef_name: string;
+  chef_title: string;
+  chef_bio: string;
+  chef_philosophy: string;
+  owner_name: string;
+  owner_hospitality_note: string;
+  greeting_tone: 'warm_traditional' | 'modern_chic' | 'fine_dining_artisan' | 'bistro_cozy';
+  signature_pairings: Array<{ dish_name: string; pairing_drink: string; why: string }>;
+  secret_stories: Array<{ dish_name: string; story: string }>;
+  spice_guidance: string;
+  dietary_rules: string;
+  custom_faqs?: Array<{ question: string; answer: string }>;
 }
 
 export interface PetpoojaConfig {
