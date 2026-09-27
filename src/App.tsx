@@ -7,6 +7,7 @@ import { ManagerDashboard } from './pages/ManagerDashboard';
 import { QrCodesPage } from './pages/QrCodesPage';
 import { MasterAdminDashboard } from './pages/MasterAdminDashboard';
 import { CustomerHomePage } from './pages/CustomerHomePage';
+import { PitchDeckPage } from './pages/PitchDeckPage';
 
 export const App: React.FC = () => {
   return (
@@ -51,6 +52,10 @@ export const App: React.FC = () => {
             <Route
               path="/admin"
               element={<MasterAdminDashboard />}
+            />
+            <Route
+              path="/pitch"
+              element={<PitchDeckPage />}
             />
             <Route
               path="/qr"

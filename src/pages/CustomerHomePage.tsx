@@ -639,11 +639,19 @@ export const CustomerHomePage: React.FC = () => {
 
           <div className="pt-2 flex flex-wrap justify-center gap-3">
             <Link
-              to="/admin"
-              className="py-3 px-6 rounded-2xl bg-gradient-to-r from-saffron-600 to-amber-500 hover:brightness-110 text-white font-serif text-xs font-bold shadow-float flex items-center space-x-2 transition-all cursor-pointer"
+              to="/pitch"
+              className="py-3 px-6 rounded-2xl bg-gradient-to-r from-amber-600 via-saffron-600 to-amber-700 hover:brightness-110 text-white font-serif text-xs font-bold shadow-float flex items-center space-x-2 transition-all cursor-pointer"
             >
-              <ShieldCheck className="w-4 h-4" />
-              <span>Launch Restaurant Master Admin ↗</span>
+              <TrendingUp className="w-4 h-4 text-amber-200" />
+              <span>Restaurant Pitch & ROI Calculator ↗</span>
+            </Link>
+
+            <Link
+              to="/admin"
+              className="py-3 px-6 rounded-2xl bg-charcoal-800 hover:bg-charcoal-700 text-white font-serif text-xs font-bold border border-charcoal-700 flex items-center space-x-2 transition-all cursor-pointer"
+            >
+              <ShieldCheck className="w-4 h-4 text-saffron-400" />
+              <span>Launch Master Admin ↗</span>
             </Link>
 
             <button
@@ -671,6 +679,9 @@ export const CustomerHomePage: React.FC = () => {
           <div className="flex items-center space-x-4 text-[11px]">
             <Link to="/" className="hover:text-white transition-colors">
               Demos
+            </Link>
+            <Link to="/pitch" className="text-amber-400 font-bold hover:underline">
+              Owner Pitch &amp; ROI
             </Link>
             <button
               onClick={() => handleOpenScannerForRestaurant()}

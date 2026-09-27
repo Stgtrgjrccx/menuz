@@ -10,7 +10,14 @@ import {
   RotateCw,
   ArrowRight,
   ShieldCheck,
-  AlertTriangle
+  AlertTriangle,
+  Clock,
+  Timer,
+  Lock,
+  Key,
+  Copy,
+  CheckCircle2,
+  Radio
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { RestaurantTable, ReviewChallenge, CustomerReview } from '../types';
@@ -162,6 +169,38 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
   // Wheel state
   const [isSpinning, setIsSpinning] = useState(false);
   const [wonPrize, setWonPrize] = useState<PrizeOption | null>(null);
+
+  // Anti-Cheat & Live Security Voucher State
+  const [voucherSecondsLeft, setVoucherSecondsLeft] = useState<number>(900); // 15 mins (900s)
+  const [liveClock, setLiveClock] = useState<string>('');
+  const [isVoucherRedeemed, setIsVoucherRedeemed] = useState<boolean>(false);
+  const [redeemedTimestamp, setRedeemedTimestamp] = useState<string>('');
+  const [showStaffPinModal, setShowStaffPinModal] = useState<boolean>(false);
+  const [staffPinInput, setStaffPinInput] = useState<string>('');
+  const [pinErrorMessage, setPinErrorMessage] = useState<string>('');
+  const [voucherCode, setVoucherCode] = useState<string>('');
+  const [copiedVoucher, setCopiedVoucher] = useState<boolean>(false);
+
+  // Live ticking security clock for anti-screenshot verification
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      setLiveClock(now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+    };
+    updateTime();
+    const clockInterval = setInterval(updateTime, 1000);
+    return () => clearInterval(clockInterval);
+  }, []);
+
+  // 15-Minute Countdown Timer for Live Table Voucher
+  useEffect(() => {
+    if (step === 'reward_won' && !isVoucherRedeemed && voucherSecondsLeft > 0) {
+      const timer = setInterval(() => {
+        setVoucherSecondsLeft((prev) => Math.max(0, prev - 1));
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [step, isVoucherRedeemed, voucherSecondsLeft]);
 
   // Urgent service state (< 4 stars)
   const [urgentIssues, setUrgentIssues] = useState<string[]>([]);
@@ -529,6 +568,11 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
       drawWheel(targetAngle);
       setIsSpinning(false);
       setWonPrize(prize);
+      const uniqueCode = `${isItalian ? 'CASA' : 'SAFFRON'}-WIN-${Math.floor(1000 + Math.random() * 9000)}`;
+      setVoucherCode(uniqueCode);
+      setVoucherSecondsLeft(900); // 15 mins
+      setIsVoucherRedeemed(false);
+      setRedeemedTimestamp('');
 
       // Complete challenge
       const chalId = challenge?.id || (isItalian ? 'chal-cb-01' : 'chal-sh-01');
@@ -856,46 +900,204 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
         )}
 
         {/* ═══════════════════════════════════════════════════════════ */}
-        {/* STEP 4: REWARD WON SCREEN (NO VOUCHER CODES - DIRECT CLAIM) */}
+        {/* STEP 4: REWARD WON SCREEN (ANTI-CHEAT LIVE SECURITY CARD)   */}
         {/* ═══════════════════════════════════════════════════════════ */}
         {step === 'reward_won' && wonPrize && (
-          <div className="w-full flex flex-col items-center pt-3 space-y-4 text-center">
-            <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-amber-400 via-saffron-500 to-amber-600 flex items-center justify-center text-3xl shadow-float text-white animate-bounce">
+          <div className="w-full flex flex-col items-center pt-2 space-y-3.5 text-center animate-in fade-in zoom-in-95 duration-200">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 via-saffron-500 to-amber-600 flex items-center justify-center text-3xl shadow-float text-white animate-bounce">
               {wonPrize.emoji}
             </div>
 
             <div>
-              <span className="text-[10px] uppercase font-bold tracking-widest text-saffron-700 block">
-                🎉 Congratulations Table 1!
+              <span className="text-[10px] uppercase font-black tracking-widest text-saffron-700 block">
+                🎉 Verified Google Review Winner!
               </span>
               <h3 className="font-serif font-bold text-xl text-charcoal-900 mt-0.5">
-                You Won: {wonPrize.label}!
+                {wonPrize.label}
               </h3>
             </div>
 
-            {/* Direct Table Claim Card (NO CODES!) */}
-            <div className="w-full bg-gradient-to-br from-charcoal-950 via-charcoal-900 to-charcoal-950 text-white rounded-2xl p-4 border border-amber-400/40 shadow-float space-y-2 text-left">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] uppercase font-bold text-amber-400 tracking-wider">
-                  Verified Reward
-                </span>
-                <span className="text-[9px] bg-green-500/20 text-green-300 px-2 py-0.5 rounded-full font-bold border border-green-400/30">
-                  ✓ Claimable at Table
+            {/* ANTI-CHEAT DYNAMIC LIVE VOUCHER CARD */}
+            <div className="w-full relative overflow-hidden rounded-2xl border-2 border-amber-400 shadow-float text-left bg-gradient-to-br from-charcoal-950 via-gray-900 to-charcoal-950 text-white p-4 space-y-3">
+              {/* Animated Live Security Watermark Banner */}
+              <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
+                <div className="flex items-center space-x-2">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                  </span>
+                  <span className="text-[10px] font-mono font-bold tracking-wider text-emerald-400 uppercase">
+                    Live Session: {liveClock || 'Active'}
+                  </span>
+                </div>
+                <span className="text-[9px] bg-white/10 text-amber-300 font-bold px-2 py-0.5 rounded-full border border-amber-400/30 flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3 text-amber-400" />
+                  Anti-Screenshot Guard
                 </span>
               </div>
 
-              <p className="font-serif font-bold text-base text-white">
-                {wonPrize.emoji} {wonPrize.label}
-              </p>
-
-              <div className="pt-1 border-t border-charcoal-800 text-[11px] text-charcoal-300 leading-relaxed flex items-center space-x-1.5">
-                <ShieldCheck className="w-4 h-4 text-green-400 flex-shrink-0" />
-                <span>Present this screen to your server or at checkout to redeem immediately.</span>
+              {/* Status Header */}
+              <div className="flex items-start justify-between">
+                <div>
+                  <span className="text-[10px] uppercase tracking-wider text-charcoal-400 block font-semibold">
+                    Authorized Diner Table
+                  </span>
+                  <span className="text-sm font-bold text-white font-serif">
+                    {activeTable?.label || 'Table 1'} • {restaurant?.name}
+                  </span>
+                </div>
+                <div className="text-right">
+                  <span className="text-[9px] uppercase tracking-wider text-charcoal-400 block">Security Code</span>
+                  <div className="flex items-center space-x-1">
+                    <span className="font-mono text-xs font-black text-amber-400 tracking-wider">
+                      {voucherCode || 'WIN-4821'}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText(voucherCode || 'WIN-4821');
+                        setCopiedVoucher(true);
+                        setTimeout(() => setCopiedVoucher(false), 2000);
+                      }}
+                      className="p-1 rounded-md hover:bg-white/10 text-charcoal-400 hover:text-white"
+                      title="Copy Voucher Code"
+                    >
+                      {copiedVoucher ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                    </button>
+                  </div>
+                </div>
               </div>
+
+              {/* Reward Display */}
+              <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-between">
+                <div className="flex items-center space-x-2.5">
+                  <span className="text-2xl">{wonPrize.emoji}</span>
+                  <div>
+                    <span className="text-xs font-bold text-white block">{wonPrize.label}</span>
+                    <span className="text-[10px] text-emerald-400 font-medium">Valid on today's dining bill</span>
+                  </div>
+                </div>
+                <span className="text-xs font-bold bg-amber-500/20 text-amber-300 px-2 py-1 rounded-lg border border-amber-400/30">
+                  {wonPrize.shortLabel}
+                </span>
+              </div>
+
+              {/* 15-MINUTE LIVE COUNTDOWN TIMER OR REDEEMED SEAL */}
+              {!isVoucherRedeemed ? (
+                voucherSecondsLeft > 0 ? (
+                  <div className="bg-amber-950/40 border border-amber-500/30 rounded-xl p-2.5 space-y-1.5">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-bold text-amber-300 flex items-center gap-1.5">
+                        <Timer className="w-3.5 h-3.5 text-amber-400 animate-spin" /> Live Claim Window
+                      </span>
+                      <span className="font-mono font-black text-amber-400 text-sm tracking-wider">
+                        {Math.floor(voucherSecondsLeft / 60).toString().padStart(2, '0')}:
+                        {(voucherSecondsLeft % 60).toString().padStart(2, '0')}
+                      </span>
+                    </div>
+
+                    {/* Progress Bar */}
+                    <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+                      <div
+                        className="bg-gradient-to-r from-amber-500 to-emerald-400 h-full transition-all duration-1000"
+                        style={{ width: `${(voucherSecondsLeft / 900) * 100}%` }}
+                      />
+                    </div>
+                    <span className="text-[10px] text-amber-200/70 block leading-tight">
+                      Screenshots and expired timers will not be accepted by staff.
+                    </span>
+                  </div>
+                ) : (
+                  <div className="bg-red-950/40 border border-red-500/40 rounded-xl p-2.5 flex items-center space-x-2 text-red-300 text-xs">
+                    <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0" />
+                    <span>Voucher expired. Please request a new bill from your server.</span>
+                  </div>
+                )
+              ) : (
+                <div className="bg-emerald-950/60 border border-emerald-500/50 rounded-xl p-3 flex items-center space-x-2.5 text-emerald-300">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                  <div>
+                    <span className="text-xs font-bold block uppercase tracking-wide">
+                      ✓ VOIDED & APPLIED TO BILL
+                    </span>
+                    <span className="text-[10px] text-emerald-400/80">
+                      Redeemed by Server at {redeemedTimestamp} • Cannot be re-used.
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* WAITER ONE-TAP PIN REDEMPTION */}
+              {!isVoucherRedeemed && voucherSecondsLeft > 0 && (
+                <div className="pt-1">
+                  {!showStaffPinModal ? (
+                    <button
+                      type="button"
+                      onClick={() => setShowStaffPinModal(true)}
+                      className="w-full py-2 bg-white/10 hover:bg-white/20 active:scale-95 border border-white/20 rounded-xl text-xs font-bold text-white transition-all flex items-center justify-center space-x-1.5"
+                    >
+                      <Key className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Server: Tap to Void & Apply to POS Bill</span>
+                    </button>
+                  ) : (
+                    <div className="bg-white/10 p-3 rounded-xl border border-white/20 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-white flex items-center gap-1">
+                          <Lock className="w-3.5 h-3.5 text-amber-400" /> Enter Staff 4-Digit PIN:
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShowStaffPinModal(false);
+                            setPinErrorMessage('');
+                          }}
+                          className="text-[10px] text-charcoal-400 hover:text-white"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="password"
+                          maxLength={4}
+                          value={staffPinInput}
+                          onChange={(e) => setStaffPinInput(e.target.value)}
+                          placeholder="e.g. 1234"
+                          autoFocus
+                          className="w-24 text-center font-mono text-sm font-bold bg-black/50 border border-white/30 rounded-lg py-1.5 text-white focus:outline-none focus:border-amber-400"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (staffPinInput === '1234' || staffPinInput.length === 4) {
+                              setIsVoucherRedeemed(true);
+                              setRedeemedTimestamp(new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }));
+                              setShowStaffPinModal(false);
+                              setPinErrorMessage('');
+                              playWinFanfare();
+                            } else {
+                              setPinErrorMessage('PIN must be 4 digits (default: 1234)');
+                            }
+                          }}
+                          className="flex-1 py-1.5 bg-amber-500 hover:bg-amber-600 text-charcoal-950 font-bold text-xs rounded-lg transition-colors"
+                        >
+                          Confirm Void
+                        </button>
+                      </div>
+                      {pinErrorMessage && (
+                        <p className="text-[10px] text-red-400 font-semibold">{pinErrorMessage}</p>
+                      )}
+                      <p className="text-[9px] text-charcoal-400">
+                        Default Demo Staff PIN is <code className="font-mono text-amber-300">1234</code>
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             <p className="text-[11px] text-charcoal-500">
-              Staff and kitchen have been notified of your reward for {activeTable?.label || 'Table 1'}.
+              Kitchen staff & POS have been alerted for {activeTable?.label || 'Table 1'}.
             </p>
 
             <button
