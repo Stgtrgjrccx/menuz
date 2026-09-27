@@ -33,8 +33,49 @@ export const SEED_RESTAURANT: Restaurant = {
   tax_rate_percent: 5.00,
   google_place_url: 'https://search.google.com/local/writereview?placeid=ChIJSaffronHouseKoregaonParkPune',
   ordering_enabled: true,
-  pos_provider: 'universal_api'
+  pos_provider: 'universal_api',
+  is_menuz_partner: true
 };
+
+const directoryMappedRestaurants: Restaurant[] = [];
+const seenSlugs = new Set<string>(['saffron-house', 'casa-bella']);
+
+for (const entry of PUNE_RESTAURANT_DIRECTORY) {
+  if (!entry || !entry.name) continue;
+  const cleanSlug =
+    entry.name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '') || 'pune-restaurant';
+  if (seenSlugs.has(cleanSlug)) continue;
+  seenSlugs.add(cleanSlug);
+
+  directoryMappedRestaurants.push({
+    id: `rest-${cleanSlug}`,
+    slug: cleanSlug,
+    name: entry.name,
+    cuisine: entry.cuisine,
+    location: entry.location,
+    owner_name: `${entry.name} Hospitality Team`,
+    contact_email: `contact@${cleanSlug.slice(0, 16).replace(/-$/, '')}.in`,
+    contact_phone: entry.phone,
+    status: 'active',
+    logo_url: entry.imageUrl,
+    brand_colors: {
+      primary: '#E85D04',
+      background: '#FDFBF7',
+      text: '#1C1917',
+      accent: '#C84B00'
+    },
+    currency: 'INR',
+    tax_rate_percent: 5.0,
+    ordering_enabled: true,
+    google_place_url: `https://search.google.com/local/writereview?placeid=${cleanSlug}`,
+    authentic_photography_statement: 'High-definition verified culinary photography for table-side digital menus',
+    pos_provider: entry.posProvider || 'universal_api',
+    is_menuz_partner: false
+  });
+}
 
 export const SEED_RESTAURANTS: Restaurant[] = [
   SEED_RESTAURANT,
@@ -59,39 +100,10 @@ export const SEED_RESTAURANTS: Restaurant[] = [
     tax_rate_percent: 5.00,
     google_place_url: 'https://search.google.com/local/writereview?placeid=ChIJCasaBellaTrattoriaPune',
     ordering_enabled: true,
-    pos_provider: 'toast'
+    pos_provider: 'toast',
+    is_menuz_partner: true
   },
-  ...PUNE_RESTAURANT_DIRECTORY.map((entry): Restaurant => {
-    const cleanSlug =
-      entry.name
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '') || 'pune-restaurant';
-    return {
-      id: `rest-${cleanSlug}`,
-      slug: cleanSlug,
-      name: entry.name,
-      cuisine: entry.cuisine,
-      location: entry.location,
-      owner_name: `${entry.name} Hospitality Team`,
-      contact_email: `contact@${cleanSlug.slice(0, 16).replace(/-$/, '')}.in`,
-      contact_phone: entry.phone,
-      status: 'active',
-      logo_url: entry.imageUrl,
-      brand_colors: {
-        primary: '#E85D04',
-        background: '#FDFBF7',
-        text: '#1C1917',
-        accent: '#C84B00'
-      },
-      currency: 'INR',
-      tax_rate_percent: 5.0,
-      ordering_enabled: true,
-      google_place_url: `https://search.google.com/local/writereview?placeid=${cleanSlug}`,
-      authentic_photography_statement: 'High-definition verified culinary photography for table-side digital menus',
-      pos_provider: entry.posProvider || 'universal_api'
-    };
-  }).filter((r, idx, arr) => r.slug !== 'saffron-house' && r.slug !== 'casa-bella' && arr.findIndex((x) => x.slug === r.slug) === idx)
+  ...directoryMappedRestaurants
 ];
 
 export const SEED_TABLES: RestaurantTable[] = [

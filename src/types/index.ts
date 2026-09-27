@@ -25,6 +25,7 @@ export interface Restaurant {
   google_place_url?: string;
   authentic_photography_statement?: string;
   pos_provider?: 'toast' | 'square' | 'clover' | 'micros' | 'universal_api';
+  is_menuz_partner?: boolean;
 }
 
 export interface RestaurantTable {

@@ -44,6 +44,7 @@ export const MasterAdminDashboard: React.FC = () => {
   const restaurants = useRestaurantStore((state) => state.restaurants);
   const setCurrentRestaurant = useRestaurantStore((state) => state.setCurrentRestaurant);
   const addRestaurant = useRestaurantStore((state) => state.addRestaurant);
+  const updateRestaurant = useRestaurantStore((state) => state.updateRestaurant);
   const toggleRestaurantStatus = useRestaurantStore((state) => state.toggleRestaurantStatus);
   const tables = useRestaurantStore((state) => state.tables);
   const menuItems = useRestaurantStore((state) => state.menuItems);
@@ -133,16 +134,20 @@ export const MasterAdminDashboard: React.FC = () => {
     ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1)
     : '-';
   const whatsappOptInCount = reviews.filter((r) => r.whatsapp_opt_in).length;
+  const menuzPartnerCount = restaurants.filter((r) => r.is_menuz_partner !== false).length;
+  const directoryOnlyCount = restaurants.filter((r) => r.is_menuz_partner === false).length;
 
   // ── Restaurant filtering and search state ───────────────────
   const [restaurantSearch, setRestaurantSearch] = useState('');
   const [selectedNeighborhood, setSelectedNeighborhood] = useState('all');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
+  const [partnerFilter, setPartnerFilter] = useState<'all' | 'menuz_partners' | 'directory'>('all');
   const [visibleCount, setVisibleCount] = useState(24);
 
   const neighborhoods = useMemo(() => {
     return [
       'all',
+      'PCMC',
       'Koregaon Park',
       'Shivajinagar',
       'Camp',
@@ -151,8 +156,12 @@ export const MasterAdminDashboard: React.FC = () => {
       'Viman Nagar',
       'Hinjewadi',
       'Wakad',
-      'Aundh',
-      'Hadapsar'
+      'Pimple Saudagar',
+      'Kharadi',
+      'Hadapsar',
+      'Katraj',
+      'Kalyani Nagar',
+      'Aundh'
     ];
   }, []);
 
@@ -173,9 +182,13 @@ export const MasterAdminDashboard: React.FC = () => {
         statusFilter === 'all' ||
         (statusFilter === 'active' ? r.status === 'active' : r.status !== 'active');
 
-      return matchesSearch && matchesArea && matchesStatus;
+      const matchesPartner =
+        partnerFilter === 'all' ||
+        (partnerFilter === 'menuz_partners' ? r.is_menuz_partner !== false : r.is_menuz_partner === false);
+
+      return matchesSearch && matchesArea && matchesStatus && matchesPartner;
     });
-  }, [restaurants, restaurantSearch, selectedNeighborhood, statusFilter]);
+  }, [restaurants, restaurantSearch, selectedNeighborhood, statusFilter, partnerFilter]);
 
   // ── Select from autocomplete ───────────────────────────────
   const handleSelectAutocomplete = (entry: PuneRestaurantEntry) => {
@@ -612,6 +625,49 @@ export const MasterAdminDashboard: React.FC = () => {
                   )}
                 </div>
 
+                {/* Menuz Partner vs Directory Leads Filter */}
+                <div className="flex flex-wrap items-center gap-1.5 bg-ivory-100 p-1 rounded-2xl border border-ivory-300 flex-shrink-0">
+                  <button
+                    onClick={() => {
+                      setPartnerFilter('all');
+                      setVisibleCount(24);
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                      partnerFilter === 'all'
+                        ? 'bg-charcoal-900 text-white shadow-sm'
+                        : 'text-charcoal-600 hover:text-charcoal-900'
+                    }`}
+                  >
+                    All Database ({restaurants.length})
+                  </button>
+                  <button
+                    onClick={() => {
+                      setPartnerFilter('menuz_partners');
+                      setVisibleCount(24);
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1 ${
+                      partnerFilter === 'menuz_partners'
+                        ? 'bg-saffron-600 text-white shadow-sm'
+                        : 'text-charcoal-600 hover:text-charcoal-900'
+                    }`}
+                  >
+                    <span>✨ Working with Menuz ({menuzPartnerCount})</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setPartnerFilter('directory');
+                      setVisibleCount(24);
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1 ${
+                      partnerFilter === 'directory'
+                        ? 'bg-amber-600 text-white shadow-sm'
+                        : 'text-charcoal-600 hover:text-charcoal-900'
+                    }`}
+                  >
+                    <span>📍 City Directory Leads ({directoryOnlyCount})</span>
+                  </button>
+                </div>
+
                 {/* Status Filter Toggle */}
                 <div className="flex items-center space-x-1.5 bg-ivory-100 p-1 rounded-2xl border border-ivory-300 flex-shrink-0">
                   <button
@@ -766,18 +822,29 @@ export const MasterAdminDashboard: React.FC = () => {
                           </div>
                         </div>
 
-                        <button
-                          onClick={() => toggleRestaurantStatus(rest.id)}
-                          title="Click to toggle restaurant active/inactive"
-                          className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center space-x-1 transition-colors ${
-                            rest.status === 'active'
-                              ? 'bg-green-100 text-green-800 border border-green-300'
-                              : 'bg-red-100 text-red-800 border border-red-300'
-                          }`}
-                        >
-                          <span className={`w-1.5 h-1.5 rounded-full ${rest.status === 'active' ? 'bg-green-600' : 'bg-red-600'}`} />
-                          <span>{rest.status}</span>
-                        </button>
+                        <div className="flex flex-col items-end space-y-1">
+                          <button
+                            onClick={() => toggleRestaurantStatus(rest.id)}
+                            title="Click to toggle restaurant active/inactive"
+                            className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center space-x-1 transition-colors ${
+                              rest.status === 'active'
+                                ? 'bg-green-100 text-green-800 border border-green-300'
+                                : 'bg-red-100 text-red-800 border border-red-300'
+                            }`}
+                          >
+                            <span className={`w-1.5 h-1.5 rounded-full ${rest.status === 'active' ? 'bg-green-600' : 'bg-red-600'}`} />
+                            <span>{rest.status}</span>
+                          </button>
+                          {rest.is_menuz_partner !== false ? (
+                            <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 whitespace-nowrap">
+                              ✨ Menuz Partner
+                            </span>
+                          ) : (
+                            <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-50 text-amber-800 border border-amber-300 whitespace-nowrap">
+                              📍 Directory Lead
+                            </span>
+                          )}
+                        </div>
                       </div>
 
                       {/* Location & Contact */}
@@ -832,15 +899,28 @@ export const MasterAdminDashboard: React.FC = () => {
 
                     {/* Action Links & Multi-Button Control */}
                     <div className="mt-5 pt-4 border-t border-ivory-200 flex flex-col space-y-2.5">
-                      <Link
-                        to={`/r/${rest.slug}/menu?t=${firstTableToken}`}
-                        onClick={() => setCurrentRestaurant(rest.id)}
-                        className="w-full bg-saffron-50 hover:bg-saffron-100 text-saffron-800 font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors border border-saffron-200 shadow-xs"
-                      >
-                        <UtensilsCrossed className="w-3.5 h-3.5 text-saffron-600" />
-                        <span>Launch Diner Menu ({restTables[0]?.label || 'Table 1'})</span>
-                        <ExternalLink className="w-3 h-3 text-saffron-500 ml-0.5" />
-                      </Link>
+                      {rest.is_menuz_partner === false ? (
+                        <button
+                          onClick={() => {
+                            updateRestaurant(rest.id, { is_menuz_partner: true, status: 'active' });
+                          }}
+                          className="w-full bg-gradient-to-r from-saffron-600 to-amber-500 hover:from-saffron-700 hover:to-amber-600 text-white font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-all shadow-subtle hover:scale-[1.01]"
+                          title="Activate Menuz Partnership: Enables customer website display, table QR badges & menus"
+                        >
+                          <Sparkles className="w-3.5 h-3.5" />
+                          <span>Onboard as Menuz Partner</span>
+                        </button>
+                      ) : (
+                        <Link
+                          to={`/r/${rest.slug}/menu?t=${firstTableToken}`}
+                          onClick={() => setCurrentRestaurant(rest.id)}
+                          className="w-full bg-saffron-50 hover:bg-saffron-100 text-saffron-800 font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors border border-saffron-200 shadow-xs"
+                        >
+                          <UtensilsCrossed className="w-3.5 h-3.5 text-saffron-600" />
+                          <span>Launch Diner Menu ({restTables[0]?.label || 'Table 1'})</span>
+                          <ExternalLink className="w-3 h-3 text-saffron-500 ml-0.5" />
+                        </Link>
+                      )}
 
                       <div className="grid grid-cols-3 gap-2">
                         <Link

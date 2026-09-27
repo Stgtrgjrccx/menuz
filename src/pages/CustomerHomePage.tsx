@@ -55,72 +55,58 @@ export const CustomerHomePage: React.FC = () => {
       tags: string[];
     }>();
 
-    // 1. Existing registered restaurants
-    restaurants.forEach((r) => {
+    const buildTags = (cuisine: string, location: string) => {
+      const lowerCuisine = (cuisine || '').toLowerCase();
+      const lowerLoc = (location || '').toLowerCase();
+      const tags: string[] = ['rewards'];
+
+      if (lowerLoc.includes('pcmc') || lowerLoc.includes('pimpri') || lowerLoc.includes('chinchwad') || lowerLoc.includes('bhosari') || lowerLoc.includes('akurdi') || lowerLoc.includes('nigdi')) tags.push('pcmc');
+      if (lowerLoc.includes('koregaon')) tags.push('koregaon park');
+      if (lowerLoc.includes('baner') || lowerLoc.includes('balewadi') || lowerLoc.includes('aundh')) tags.push('baner');
+      if (lowerLoc.includes('hinjewadi') || lowerLoc.includes('wakad') || lowerLoc.includes('tathawade')) tags.push('hinjewadi');
+      if (lowerLoc.includes('kothrud') || lowerLoc.includes('karve')) tags.push('kothrud');
+      if (lowerLoc.includes('viman') || lowerLoc.includes('kharadi') || lowerLoc.includes('kalyani')) tags.push('viman nagar');
+      if (lowerLoc.includes('camp')) tags.push('camp');
+      if (lowerLoc.includes('hadapsar') || lowerLoc.includes('magarpatta')) tags.push('hadapsar');
+
+      if (lowerCuisine.includes('indian') || lowerCuisine.includes('mughlai') || lowerCuisine.includes('thali') || lowerCuisine.includes('biryani') || lowerCuisine.includes('punjabi') || lowerCuisine.includes('maharashtrian')) tags.push('indian');
+      if (lowerCuisine.includes('italian') || lowerCuisine.includes('pizza') || lowerCuisine.includes('pasta')) tags.push('italian');
+      if (lowerCuisine.includes('asian') || lowerCuisine.includes('thai') || lowerCuisine.includes('vietnamese') || lowerCuisine.includes('momo') || lowerCuisine.includes('japanese') || lowerCuisine.includes('chinese')) tags.push('asian');
+      if (lowerCuisine.includes('veg') || lowerCuisine.includes('vegetarian')) tags.push('veg');
+
+      return tags;
+    };
+
+    // Only show partner restaurants working with Menuz on the customer site
+    const menuzPartners = restaurants.filter((r) => r.is_menuz_partner !== false);
+
+    menuzPartners.forEach((r) => {
       const isItalian = r.slug === 'casa-bella';
       map.set(r.slug, {
         id: r.id,
         name: r.name,
         slug: r.slug,
         cuisine: r.cuisine,
-        location: r.location || (isItalian ? 'Koregaon Park, Pune' : 'Koregaon Park, Pune'),
+        location: r.location || 'Koregaon Park, Pune',
         rating: 4.8,
         avgCostForTwo: isItalian ? '₹1,400' : '₹1,500',
         imageUrl: r.logo_url,
         isStoreActive: true,
         rewardHighlight: isItalian ? 'Free Tiramisu or 15% Off' : 'Free Potli Samosa, Kokum Cooler or 20% Off',
-        tags: isItalian
-          ? ['rewards', 'koregaon park', 'italian', 'pizza', 'pasta']
-          : ['rewards', 'koregaon park', 'indian', 'curries', 'tandoori']
+        tags: buildTags(r.cuisine, r.location || '')
       });
-    });
-
-    // 2. Curated Pune directory entries
-    PUNE_RESTAURANT_DIRECTORY.forEach((p) => {
-      const slug = p.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-      if (!map.has(slug)) {
-        const lowerCuisine = p.cuisine.toLowerCase();
-        const lowerLoc = p.location.toLowerCase();
-        const tags: string[] = ['rewards'];
-
-        if (lowerLoc.includes('koregaon')) tags.push('koregaon park');
-        if (lowerLoc.includes('baner')) tags.push('baner');
-        if (lowerLoc.includes('shivaji') || lowerLoc.includes('sb road')) tags.push('shivajinagar');
-        if (lowerLoc.includes('kalyani')) tags.push('kalyani nagar');
-
-        if (lowerCuisine.includes('indian') || lowerCuisine.includes('mughlai') || lowerCuisine.includes('thali')) tags.push('indian');
-        if (lowerCuisine.includes('italian') || lowerCuisine.includes('pizza') || lowerCuisine.includes('pasta')) tags.push('italian');
-        if (lowerCuisine.includes('asian') || lowerCuisine.includes('thai') || lowerCuisine.includes('vietnamese') || lowerCuisine.includes('momo')) tags.push('asian');
-        if (lowerCuisine.includes('veg')) tags.push('veg');
-
-        map.set(slug, {
-          id: `rest-${slug}`,
-          name: p.name,
-          slug: slug,
-          cuisine: p.cuisine,
-          location: p.location,
-          rating: p.rating,
-          avgCostForTwo: p.avgCostForTwo,
-          imageUrl: p.imageUrl,
-          isStoreActive: false,
-          rewardHighlight: 'Guaranteed Chef Treat & Wheel Spin',
-          tags
-        });
-      }
     });
 
     return Array.from(map.values());
   }, [restaurants]);
 
-  // Filter chips options
+  // Filter chips options for active Menuz partner dining
   const filterOptions = [
-    { id: 'all', label: 'All Restaurants (50+)' },
+    { id: 'all', label: 'All Menuz Partners' },
     { id: 'rewards', label: '🎁 Guaranteed Table Rewards' },
     { id: 'koregaon park', label: 'Koregaon Park' },
-    { id: 'baner', label: 'Baner & Aundh' },
-    { id: 'indian', label: 'Contemporary Indian' },
-    { id: 'italian', label: 'Italian & Woodfired' },
-    { id: 'asian', label: 'Pan-Asian & Thai' },
+    { id: 'indian', label: 'Contemporary Indian & Tandoor' },
+    { id: 'italian', label: 'Artisanal Italian & Pizza' },
     { id: 'veg', label: 'Pure Veg Special' },
   ];
 

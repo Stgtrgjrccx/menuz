@@ -649,7 +649,7 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       }
     }),
     {
-      name: 'menuz_restaurant_storage_v7_all_pune',
+      name: 'menuz_restaurant_storage_v9_full_pune_pcmc',
       partialize: (state) => ({
         restaurants: state.restaurants,
         tables: state.tables,
