@@ -10,13 +10,9 @@ import {
   MapPin,
   Star,
   Sparkles,
-  ArrowRight,
-  Check,
-  Building2,
-  Plus
+  ArrowRight
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
-import { PUNE_RESTAURANT_DIRECTORY, PuneRestaurantEntry } from '../data/puneRestaurantDirectory';
 import { QrScannerModal } from './QrScannerModal';
 
 interface SwitchRestaurantModalProps {
@@ -32,144 +28,34 @@ export const SwitchRestaurantModal: React.FC<SwitchRestaurantModalProps> = ({
 }) => {
   const navigate = useNavigate();
   const restaurants = useRestaurantStore((state) => state.restaurants);
-  const addRestaurant = useRestaurantStore((state) => state.addRestaurant);
   const tables = useRestaurantStore((state) => state.tables);
 
   const [query, setQuery] = useState('');
-  const [selectedNeighborhood, setSelectedNeighborhood] = useState<string>('all');
   const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
 
-  // Combine store restaurants with full Pune directory
-  const allAvailableRestaurants = useMemo(() => {
-    // Map of unique slugs
-    const map = new Map<string, {
-      name: string;
-      slug: string;
-      cuisine: string;
-      location: string;
-      rating: number;
-      avgCostForTwo: string;
-      imageUrl: string;
-      isStoreActive: boolean;
-    }>();
-
-    // 1. Registered restaurants in store
-    restaurants.forEach((r) => {
-      map.set(r.slug, {
-        name: r.name,
-        slug: r.slug,
-        cuisine: r.cuisine,
-        location: r.location || 'Pune',
-        rating: 4.8,
-        avgCostForTwo: '₹1,500',
-        imageUrl: r.logo_url,
-        isStoreActive: true
-      });
-    });
-
-    // 2. Curated Pune directory
-    PUNE_RESTAURANT_DIRECTORY.forEach((p) => {
-      const slug = p.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-      if (!map.has(slug)) {
-        map.set(slug, {
-          name: p.name,
-          slug: slug,
-          cuisine: p.cuisine,
-          location: p.location,
-          rating: p.rating,
-          avgCostForTwo: p.avgCostForTwo,
-          imageUrl: p.imageUrl,
-          isStoreActive: false
-        });
-      }
-    });
-
-    return Array.from(map.values());
+  // Strictly show restaurants working with Menuz (the active demos)
+  const menuzPartners = useMemo(() => {
+    return restaurants.filter((r) => r.is_menuz_partner !== false);
   }, [restaurants]);
 
-  const neighborhoods = ['all', 'Koregaon Park', 'Baner', 'Shivajinagar', 'Kalyani Nagar', 'Viman Nagar'];
-
   const filteredRestaurants = useMemo(() => {
-    return allAvailableRestaurants.filter((item) => {
-      const matchesQuery =
-        !query ||
-        item.name.toLowerCase().includes(query.toLowerCase()) ||
-        item.cuisine.toLowerCase().includes(query.toLowerCase()) ||
-        item.location.toLowerCase().includes(query.toLowerCase());
-
-      const matchesNeighborhood =
-        selectedNeighborhood === 'all' ||
-        item.location.toLowerCase().includes(selectedNeighborhood.toLowerCase());
-
-      return matchesQuery && matchesNeighborhood;
+    const q = query.trim().toLowerCase();
+    if (!q) return menuzPartners;
+    return menuzPartners.filter((r) => {
+      const matchName = r.name.toLowerCase().includes(q);
+      const matchCuisine = r.cuisine.toLowerCase().includes(q);
+      const matchLoc = (r.location || '').toLowerCase().includes(q);
+      const matchAlias = r.aliases?.some((a) => a.toLowerCase().includes(q));
+      return matchName || matchCuisine || matchLoc || matchAlias;
     });
-  }, [allAvailableRestaurants, query, selectedNeighborhood]);
+  }, [menuzPartners, query]);
 
-  const handleSelectRestaurant = (item: typeof allAvailableRestaurants[0]) => {
-    // If not in store, add it
-    const existing = restaurants.find((r) => r.slug === item.slug);
-    if (!existing) {
-      addRestaurant({
-        id: `rest-${item.slug}`,
-        slug: item.slug,
-        name: item.name,
-        cuisine: item.cuisine,
-        location: item.location,
-        logo_url: item.imageUrl,
-        brand_colors: {
-          primary: '#E85D04',
-          background: '#FDFBF7',
-          text: '#1C1917',
-          accent: '#C84B00'
-        },
-        currency: 'INR',
-        tax_rate_percent: 5.0,
-        google_place_url: `https://search.google.com/local/writereview?placeid=${item.slug}`
-      });
-    }
-
-    const restTables = tables.filter((t) => t.restaurant_id === existing?.id || t.id.includes(item.slug));
-    const token = restTables[0]?.public_token || `token-${item.slug}-01`;
-
+  const handleSelectRestaurant = (slug: string) => {
+    const target = restaurants.find((r) => r.slug === slug);
+    const restTables = tables.filter((t) => t.restaurant_id === target?.id);
+    const token = restTables[0]?.public_token || 'table-token-01-saffron';
     onClose();
-    navigate(`/r/${item.slug}/menu?t=${token}`);
-  };
-
-  const handleInstantAddRestaurant = (customName: string) => {
-    const trimmed = customName.trim();
-    if (!trimmed) return;
-    const cleanSlug =
-      trimmed
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '') || `restaurant-${Date.now().toString().slice(-4)}`;
-
-    const existing = restaurants.find((r) => r.slug === cleanSlug);
-    if (!existing) {
-      addRestaurant({
-        id: `rest-${cleanSlug}-${Date.now().toString().slice(-4)}`,
-        slug: cleanSlug,
-        name: trimmed,
-        cuisine: 'Contemporary Multi-Cuisine & Dining',
-        location: 'Pune, Maharashtra',
-        logo_url: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&auto=format&fit=crop',
-        brand_colors: {
-          primary: '#E85D04',
-          background: '#FDFBF7',
-          text: '#1C1917',
-          accent: '#C84B00'
-        },
-        currency: 'INR',
-        tax_rate_percent: 5.0,
-        google_place_url: `https://search.google.com/local/writereview?placeid=${cleanSlug}`
-      });
-    }
-
-    const restTables = tables.filter((t) => t.restaurant_id === existing?.id || t.id.includes(cleanSlug));
-    const token = restTables[0]?.public_token || `token-${cleanSlug}-01`;
-
-    onClose();
-    navigate(`/r/${cleanSlug}/menu?t=${token}`);
+    navigate(`/r/${slug}/menu?t=${token}`);
   };
 
   if (!isOpen) return null;
@@ -197,10 +83,10 @@ export const SwitchRestaurantModal: React.FC<SwitchRestaurantModalProps> = ({
                 </div>
                 <div>
                   <h3 className="font-serif font-bold text-base text-white">
-                    Switch Restaurant or Table
+                    Switch Demo Restaurant or Table
                   </h3>
                   <p className="text-[11px] text-charcoal-300">
-                    Explore digital menus across Pune's top dining spots
+                    Select between the active Menuz demo restaurants
                   </p>
                 </div>
               </div>
@@ -208,6 +94,7 @@ export const SwitchRestaurantModal: React.FC<SwitchRestaurantModalProps> = ({
               <button
                 onClick={onClose}
                 className="w-8 h-8 rounded-full bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-300 hover:text-white flex items-center justify-center transition-colors"
+                aria-label="Close modal"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -218,10 +105,10 @@ export const SwitchRestaurantModal: React.FC<SwitchRestaurantModalProps> = ({
               <button
                 type="button"
                 onClick={() => setIsQrScannerOpen(true)}
-                className="flex-1 py-2.5 px-3 bg-gradient-to-r from-saffron-600 to-amber-500 hover:brightness-105 active:scale-95 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 shadow-sm transition-all"
+                className="flex-1 py-2.5 px-3 bg-gradient-to-r from-saffron-600 to-amber-500 hover:brightness-105 active:scale-95 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 shadow-sm transition-all cursor-pointer"
               >
                 <QrCode className="w-4 h-4" />
-                <span>Scan New Table QR</span>
+                <span>Scan Table QR</span>
               </button>
 
               <button
@@ -230,54 +117,43 @@ export const SwitchRestaurantModal: React.FC<SwitchRestaurantModalProps> = ({
                   onClose();
                   navigate('/');
                 }}
-                className="py-2.5 px-3 bg-white hover:bg-ivory-100 border border-ivory-300 text-charcoal-800 rounded-xl text-xs font-semibold flex items-center justify-center space-x-1.5 transition-colors"
+                className="py-2.5 px-3 bg-white hover:bg-ivory-100 border border-ivory-300 text-charcoal-800 rounded-xl text-xs font-semibold flex items-center justify-center space-x-1.5 transition-colors cursor-pointer"
               >
                 <Home className="w-4 h-4 text-charcoal-500" />
                 <span>Menuz Home</span>
               </button>
             </div>
 
-            {/* Search Input & Filter Pills */}
-            <div className="p-4 border-b border-ivory-200 space-y-2.5">
+            {/* Live Search Input with Instant Filtering */}
+            <div className="p-4 border-b border-ivory-200">
               <div className="relative">
                 <input
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search restaurants, cuisines (Italian, Indian, Asian)..."
-                  className="w-full py-2.5 pl-9 pr-3.5 rounded-xl border border-ivory-300 text-xs focus:outline-none focus:border-saffron-500 bg-ivory-50 text-charcoal-900"
+                  placeholder="Search demo restaurants (Saffron House, Casa Bella)..."
+                  className="w-full py-2.5 pl-9 pr-8 rounded-xl border border-ivory-300 text-xs focus:outline-none focus:border-saffron-500 bg-ivory-50 text-charcoal-900"
+                  autoFocus
                 />
                 <Search className="w-4 h-4 text-charcoal-400 absolute left-3 top-3" />
                 {query && (
                   <button
                     onClick={() => setQuery('')}
-                    className="absolute right-3 top-2.5 text-xs text-charcoal-400 hover:text-charcoal-600"
+                    className="absolute right-3 top-2.5 text-xs text-charcoal-400 hover:text-charcoal-600 font-bold"
                   >
-                    Clear
+                    ✕
                   </button>
                 )}
               </div>
-
-              {/* Neighborhood Chips */}
-              <div className="flex items-center space-x-1.5 overflow-x-auto scrollbar-none pb-1 text-[11px]">
-                {neighborhoods.map((n) => (
-                  <button
-                    key={n}
-                    type="button"
-                    onClick={() => setSelectedNeighborhood(n)}
-                    className={`px-2.5 py-1 rounded-full whitespace-nowrap transition-all ${
-                      selectedNeighborhood === n
-                        ? 'bg-charcoal-900 text-white font-bold'
-                        : 'bg-ivory-100 hover:bg-ivory-200 text-charcoal-700 border border-ivory-200'
-                    }`}
-                  >
-                    {n === 'all' ? 'All Areas' : n}
-                  </button>
-                ))}
-              </div>
+              {query && (
+                <div className="mt-2 text-[11px] text-charcoal-500 flex items-center justify-between">
+                  <span>Suggestions matching "{query}":</span>
+                  <span className="font-bold text-saffron-700">{filteredRestaurants.length} found</span>
+                </div>
+              )}
             </div>
 
-            {/* Restaurant List */}
+            {/* Restaurant List - Strictly Active Demos */}
             <div className="p-4 overflow-y-auto flex-1 space-y-2.5">
               {filteredRestaurants.length === 0 ? (
                 <div className="py-8 px-4 text-center text-charcoal-600 bg-ivory-50/80 rounded-2xl border border-ivory-200">
@@ -285,28 +161,27 @@ export const SwitchRestaurantModal: React.FC<SwitchRestaurantModalProps> = ({
                     <Sparkles className="w-6 h-6" />
                   </div>
                   <h4 className="font-serif font-bold text-sm text-charcoal-900">
-                    {query ? `Launch "${query}" on Menuz` : 'No restaurants match this filter'}
+                    No demo matches "{query}"
                   </h4>
-                  <p className="text-[11px] text-charcoal-500 mt-1 mb-4 leading-relaxed">
-                    {query ? (
-                      <>
-                        Not in the directory yet? Click below to instantly generate digital QR table menus and launch{' '}
-                        <strong>"{query}"</strong>.
-                      </>
-                    ) : (
-                      'Try choosing another neighborhood or reset search filter.'
-                    )}
+                  <p className="text-[11px] text-charcoal-500 mt-1 mb-3 leading-relaxed">
+                    Menuz is currently showcasing our two live demo experiences (Saffron House &amp; Casa Bella Trattoria). Point your camera at your table QR code or choose a demo below.
                   </p>
-                  {query && (
+                  <div className="flex gap-2 justify-center">
                     <button
                       type="button"
-                      onClick={() => handleInstantAddRestaurant(query)}
-                      className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-saffron-600 to-amber-600 hover:from-saffron-700 hover:to-amber-700 text-white text-xs font-bold flex items-center justify-center space-x-1.5 shadow-sm transition-all"
+                      onClick={() => setQuery('')}
+                      className="py-1.5 px-3 bg-white border border-ivory-300 rounded-lg text-xs font-semibold text-charcoal-700 hover:bg-ivory-100"
                     >
-                      <Plus className="w-4 h-4" />
-                      <span>Instantly Launch "{query}"</span>
+                      View All Demos
                     </button>
-                  )}
+                    <button
+                      type="button"
+                      onClick={() => setIsQrScannerOpen(true)}
+                      className="py-1.5 px-3 bg-saffron-600 text-white rounded-lg text-xs font-semibold hover:bg-saffron-700"
+                    >
+                      Scan Table QR
+                    </button>
+                  </div>
                 </div>
               ) : (
                 filteredRestaurants.map((item) => {
@@ -314,47 +189,50 @@ export const SwitchRestaurantModal: React.FC<SwitchRestaurantModalProps> = ({
                   return (
                     <div
                       key={item.slug}
-                      onClick={() => handleSelectRestaurant(item)}
-                      className={`p-3 rounded-2xl border transition-all cursor-pointer flex items-center space-x-3 group ${
+                      onClick={() => handleSelectRestaurant(item.slug)}
+                      className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center space-x-3.5 group ${
                         isCurrent
                           ? 'border-saffron-500 bg-saffron-50/60 shadow-sm'
                           : 'border-ivory-200 hover:border-saffron-300 hover:bg-ivory-50/80'
                       }`}
                     >
                       <img
-                        src={item.imageUrl}
+                        src={item.logo_url}
                         alt={item.name}
-                        className="w-16 h-16 min-w-[64px] max-w-[64px] rounded-xl object-cover border border-ivory-300 flex-shrink-0"
+                        className="w-16 h-16 min-w-[64px] max-w-[64px] rounded-xl object-cover border border-ivory-300 flex-shrink-0 shadow-xs"
                       />
 
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center space-x-1.5">
-                          <h4 className="font-serif font-bold text-xs text-charcoal-900 group-hover:text-saffron-700 truncate">
+                          <h4 className="font-serif font-bold text-sm text-charcoal-900 group-hover:text-saffron-700 truncate">
                             {item.name}
                           </h4>
                           {isCurrent && (
-                            <span className="text-[9px] bg-saffron-600 text-white px-1.5 py-0.2 rounded-full font-bold">
+                            <span className="text-[9px] bg-saffron-600 text-white px-2 py-0.5 rounded-full font-bold">
                               Current
                             </span>
                           )}
+                          <span className="text-[9px] bg-amber-100 text-amber-900 border border-amber-200 px-2 py-0.5 rounded-full font-bold">
+                            Interactive Demo
+                          </span>
                         </div>
 
-                        <p className="text-[11px] text-charcoal-500 truncate mt-0.5">{item.cuisine}</p>
+                        <p className="text-[11px] text-charcoal-600 truncate mt-0.5">{item.cuisine}</p>
 
                         <div className="flex items-center space-x-2 text-[10px] text-charcoal-600 mt-1">
                           <span className="flex items-center text-amber-600 font-bold">
                             <Star className="w-3 h-3 fill-amber-400 text-amber-500 mr-0.5" />
-                            {item.rating}
+                            4.8
                           </span>
                           <span>•</span>
                           <span className="flex items-center text-charcoal-500 truncate">
                             <MapPin className="w-2.5 h-2.5 mr-0.5" />
-                            {item.location.split(',')[0]}
+                            {item.location ? item.location.split(',')[0] : 'Koregaon Park, Pune'}
                           </span>
                           <span>•</span>
                           <span className="text-emerald-700 font-semibold flex items-center">
                             <Sparkles className="w-2.5 h-2.5 mr-0.5 text-amber-500" />
-                            Table Rewards
+                            Digital Menu &amp; Rewards
                           </span>
                         </div>
                       </div>
@@ -368,7 +246,7 @@ export const SwitchRestaurantModal: React.FC<SwitchRestaurantModalProps> = ({
 
             {/* Footer */}
             <div className="bg-ivory-50 border-t border-ivory-200 p-3 px-5 flex items-center justify-between text-[11px] text-charcoal-600">
-              <span>Showing {filteredRestaurants.length} restaurants</span>
+              <span>Showing {filteredRestaurants.length} demo restaurant{filteredRestaurants.length === 1 ? '' : 's'}</span>
               <button
                 onClick={() => {
                   onClose();
@@ -384,7 +262,7 @@ export const SwitchRestaurantModal: React.FC<SwitchRestaurantModalProps> = ({
         document.body
       )}
 
-      {/* Embedded QR Scanner Modal if user clicks "Scan New Table QR" */}
+      {/* Embedded QR Scanner Modal if user clicks "Scan Table QR" */}
       <QrScannerModal
         isOpen={isQrScannerOpen}
         onClose={() => setIsQrScannerOpen(false)}

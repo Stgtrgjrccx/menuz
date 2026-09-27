@@ -52,27 +52,7 @@ export const CustomerHomePage: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const customerSuggestions = useMemo(() => {
-    const q = searchQuery.trim();
-    if (!q) return [];
-    return restaurants
-      .filter((r) => matchesPuneQuery(r, q))
-      .sort((a, b) => {
-        const cleanQ = q.toLowerCase().replace(/['’]/g, '');
-        const aExact =
-          a.name.toLowerCase().includes(cleanQ) ||
-          a.aliases?.some((al) => al.toLowerCase().includes(cleanQ));
-        const bExact =
-          b.name.toLowerCase().includes(cleanQ) ||
-          b.aliases?.some((al) => al.toLowerCase().includes(cleanQ));
-        if (aExact && !bExact) return -1;
-        if (!aExact && bExact) return 1;
-        return 0;
-      })
-      .slice(0, 8);
-  }, [restaurants, searchQuery]);
-
-  // Combine store restaurants with the full Pune directory
+  // Combine store restaurants with the full Pune directory (strictly Menuz partners)
   const directoryList = useMemo(() => {
     const map = new Map<string, {
       id: string;
@@ -133,14 +113,28 @@ export const CustomerHomePage: React.FC = () => {
     return Array.from(map.values());
   }, [restaurants]);
 
-  // Filter chips options for active Menuz partner dining
+  const customerSuggestions = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return [];
+    return directoryList
+      .filter((r) => {
+        return (
+          r.name.toLowerCase().includes(q) ||
+          r.cuisine.toLowerCase().includes(q) ||
+          r.location.toLowerCase().includes(q) ||
+          r.tags.some((t) => t.toLowerCase().includes(q))
+        );
+      })
+      .slice(0, 8);
+  }, [directoryList, searchQuery]);
+
+  // Filter chips options for active Menuz demo dining
   const filterOptions = [
-    { id: 'all', label: 'All Menuz Partners' },
-    { id: 'rewards', label: '🎁 Guaranteed Table Rewards' },
+    { id: 'all', label: 'All Demos' },
+    { id: 'rewards', label: '🎁 Table Rewards' },
     { id: 'koregaon park', label: 'Koregaon Park' },
-    { id: 'indian', label: 'Contemporary Indian & Tandoor' },
-    { id: 'italian', label: 'Artisanal Italian & Pizza' },
-    { id: 'veg', label: 'Pure Veg Special' },
+    { id: 'indian', label: 'Indian (Saffron House)' },
+    { id: 'italian', label: 'Italian (Casa Bella)' },
   ];
 
   // Filtered restaurants
@@ -156,74 +150,15 @@ export const CustomerHomePage: React.FC = () => {
 
   // Open digital menu for restaurant
   const handleOpenRestaurantMenu = (item: typeof directoryList[0]) => {
-    // If not in store, add it
     const existing = restaurants.find((r) => r.slug === item.slug);
-    if (!existing) {
-      addRestaurant({
-        id: `rest-${item.slug}`,
-        slug: item.slug,
-        name: item.name,
-        cuisine: item.cuisine,
-        location: item.location,
-        logo_url: item.imageUrl,
-        brand_colors: {
-          primary: '#E85D04',
-          background: '#FDFBF7',
-          text: '#1C1917',
-          accent: '#C84B00'
-        },
-        currency: 'INR',
-        tax_rate_percent: 5.0,
-        google_place_url: `https://search.google.com/local/writereview?placeid=${item.slug}`
-      });
-    }
-
     const restTables = tables.filter((t) => t.restaurant_id === existing?.id || t.id.includes(item.slug));
     const token = restTables[0]?.public_token || `token-${item.slug}-01`;
-
     navigate(`/r/${item.slug}/menu?t=${token}`);
   };
 
   const handleOpenScannerForRestaurant = (slug?: string) => {
     setSelectedScannerSlug(slug);
     setIsQrScannerOpen(true);
-  };
-
-  // Instant add & launch fallback for any restaurant searched
-  const handleInstantAddRestaurant = (customName: string) => {
-    const trimmed = customName.trim();
-    if (!trimmed) return;
-    const cleanSlug =
-      trimmed
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '') || `restaurant-${Date.now().toString().slice(-4)}`;
-
-    const existing = restaurants.find((r) => r.slug === cleanSlug);
-    if (!existing) {
-      addRestaurant({
-        id: `rest-${cleanSlug}-${Date.now().toString().slice(-4)}`,
-        slug: cleanSlug,
-        name: trimmed,
-        cuisine: 'Contemporary Multi-Cuisine & Dining',
-        location: 'Pune, Maharashtra',
-        logo_url: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&auto=format&fit=crop',
-        brand_colors: {
-          primary: '#E85D04',
-          background: '#FDFBF7',
-          text: '#1C1917',
-          accent: '#C84B00'
-        },
-        currency: 'INR',
-        tax_rate_percent: 5.0,
-        google_place_url: `https://search.google.com/local/writereview?placeid=${cleanSlug}`
-      });
-    }
-
-    const restTables = tables.filter((t) => t.restaurant_id === existing?.id || t.id.includes(cleanSlug));
-    const token = restTables[0]?.public_token || `token-${cleanSlug}-01`;
-
-    navigate(`/r/${cleanSlug}/menu?t=${token}`);
   };
 
   return (
@@ -252,7 +187,7 @@ export const CustomerHomePage: React.FC = () => {
             <div className="hidden sm:flex items-center space-x-1 bg-charcoal-800 border border-charcoal-700 rounded-full px-2.5 py-1 text-xs text-charcoal-300">
               <MapPin className="w-3 h-3 text-saffron-400" />
               <span className="font-semibold text-white">Pune</span>
-              <span className="text-[10px] text-charcoal-400">• 50+ Tables Live</span>
+              <span className="text-[10px] text-charcoal-400">• Live Demos</span>
             </div>
           </div>
 
@@ -262,19 +197,19 @@ export const CustomerHomePage: React.FC = () => {
             <button
               type="button"
               onClick={() => handleOpenScannerForRestaurant()}
-              className="py-2 px-3.5 sm:px-4 rounded-xl bg-gradient-to-r from-saffron-600 via-amber-500 to-saffron-700 hover:brightness-110 active:scale-95 text-white font-serif text-xs font-bold shadow-float flex items-center space-x-1.5 transition-all"
+              className="py-2 px-3.5 sm:px-4 rounded-xl bg-gradient-to-r from-saffron-600 via-amber-500 to-saffron-700 hover:brightness-110 active:scale-95 text-white font-serif text-xs font-bold shadow-float flex items-center space-x-1.5 transition-all cursor-pointer"
             >
               <QrCode className="w-4 h-4 text-amber-200" />
               <span>Scan Table QR</span>
             </button>
 
-            {/* Restaurant Partner / Staff portal link */}
+            {/* Restaurant Admin / Staff portal link */}
             <Link
               to="/admin"
               className="hidden md:flex items-center space-x-1.5 py-2 px-3 rounded-xl bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-300 hover:text-white text-xs font-semibold border border-charcoal-700 transition-colors"
             >
               <ShieldCheck className="w-3.5 h-3.5 text-saffron-400" />
-              <span>Partner Portal</span>
+              <span>Admin Portal</span>
             </Link>
           </div>
         </div>
@@ -294,12 +229,12 @@ export const CustomerHomePage: React.FC = () => {
             <span className="opacity-50">•</span>
             <span>Table 3 @ Casa Bella unlocked Complimentary Tiramisu!</span>
             <span className="opacity-50">•</span>
-            <span>Table 4 @ Malaka Spice rated 5★ on Google Maps!</span>
+            <span>Table 2 @ Saffron House rated 5★ on Google Maps!</span>
           </div>
 
           <button
             onClick={() => handleOpenScannerForRestaurant('saffron-house')}
-            className="hidden lg:flex items-center space-x-1 text-white hover:underline text-[11px] ml-4 flex-shrink-0"
+            className="hidden lg:flex items-center space-x-1 text-white hover:underline text-[11px] ml-4 flex-shrink-0 cursor-pointer"
           >
             <span>Test a Table Now</span>
             <ArrowRight className="w-3 h-3" />
@@ -320,7 +255,7 @@ export const CustomerHomePage: React.FC = () => {
 
           {/* Heading */}
           <h1 className="font-serif font-black text-3xl sm:text-5xl lg:text-6xl text-charcoal-900 tracking-tight leading-tight max-w-3xl mx-auto">
-            Scan Your Table QR or Discover Pune’s Finest Dining
+            Scan Your Table QR or Explore Live Menuz Demos
           </h1>
 
           <p className="text-sm sm:text-base text-charcoal-600 max-w-2xl mx-auto leading-relaxed">
@@ -341,7 +276,7 @@ export const CustomerHomePage: React.FC = () => {
                     setSearchQuery(e.target.value);
                     setShowCustomerSuggestions(true);
                   }}
-                  placeholder="Search Pune restaurants (e.g. Murphies, Dehaati, Gather, Vaishali)..."
+                  placeholder="Search demo restaurants (Saffron House, Casa Bella Trattoria)..."
                   className="w-full py-3 pl-11 pr-10 text-xs sm:text-sm text-charcoal-900 placeholder:text-charcoal-400 bg-transparent focus:outline-none"
                 />
                 {searchQuery && (
@@ -350,7 +285,7 @@ export const CustomerHomePage: React.FC = () => {
                       setSearchQuery('');
                       setShowCustomerSuggestions(false);
                     }}
-                    className="absolute right-3 top-3 text-xs text-charcoal-400 hover:text-charcoal-600 font-bold z-10"
+                    className="absolute right-3 top-3 text-xs text-charcoal-400 hover:text-charcoal-600 font-bold z-10 cursor-pointer"
                   >
                     Clear
                   </button>
@@ -384,7 +319,7 @@ export const CustomerHomePage: React.FC = () => {
                             >
                               <div className="flex items-center space-x-3 min-w-0">
                                 <img
-                                  src={item.logo_url}
+                                  src={item.imageUrl}
                                   alt={item.name}
                                   className="w-10 h-10 rounded-xl object-cover border border-ivory-300 flex-shrink-0 group-hover:scale-105 transition-transform"
                                 />
@@ -393,15 +328,9 @@ export const CustomerHomePage: React.FC = () => {
                                     <h4 className="text-xs font-bold text-charcoal-900 group-hover:text-saffron-700 transition-colors truncate">
                                       {item.name}
                                     </h4>
-                                    {item.is_menuz_partner !== false ? (
-                                      <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                                        ✨ Partner
-                                      </span>
-                                    ) : (
-                                      <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
-                                        📍 Pune Venue
-                                      </span>
-                                    )}
+                                    <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-50 text-amber-900 border border-amber-200">
+                                      Interactive Demo
+                                    </span>
                                   </div>
                                   <p className="text-[11px] text-charcoal-500 truncate mt-0.5">
                                     {item.cuisine} • <span className="text-charcoal-700">{item.location}</span>
@@ -427,10 +356,10 @@ export const CustomerHomePage: React.FC = () => {
                     ) : (
                       <div className="p-4 text-center">
                         <p className="text-xs text-charcoal-600">
-                          No matching restaurants found for <strong>"{searchQuery}"</strong>.
+                          No demo restaurant matches <strong>"{searchQuery}"</strong>.
                         </p>
                         <p className="text-[11px] text-charcoal-400 mt-1">
-                          Try searching by cuisine, neighborhood, or popular dishes.
+                          Try searching for Saffron House or Casa Bella Trattoria.
                         </p>
                       </div>
                     )}
@@ -442,7 +371,7 @@ export const CustomerHomePage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => handleOpenScannerForRestaurant()}
-                className="w-full sm:w-auto py-3 px-6 rounded-xl sm:rounded-2xl bg-gradient-to-r from-saffron-600 via-amber-500 to-saffron-700 hover:brightness-105 active:scale-95 text-white font-serif text-xs sm:text-sm font-bold shadow-float flex items-center justify-center space-x-2 transition-all flex-shrink-0"
+                className="w-full sm:w-auto py-3 px-6 rounded-xl sm:rounded-2xl bg-gradient-to-r from-saffron-600 via-amber-500 to-saffron-700 hover:brightness-105 active:scale-95 text-white font-serif text-xs sm:text-sm font-bold shadow-float flex items-center justify-center space-x-2 transition-all flex-shrink-0 cursor-pointer"
               >
                 <Camera className="w-4 h-4 text-amber-200" />
                 <span>Scan Table QR</span>
@@ -534,20 +463,20 @@ export const CustomerHomePage: React.FC = () => {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 gap-3 border-b border-ivory-200 mb-8">
           <div>
             <h2 className="font-serif font-bold text-2xl text-charcoal-900">
-              Pune Restaurant Directory
+              Interactive Demo Restaurants
             </h2>
             <p className="text-xs text-charcoal-500 mt-0.5">
-              Showing {filteredList.length} dining destinations with live Menuz table systems
+              Experience live digital table menus, ordering, and instant Google Review rewards with our two flagship demo venues.
             </p>
           </div>
 
           <div className="flex items-center space-x-2">
             <button
               onClick={() => handleOpenScannerForRestaurant()}
-              className="py-2 px-3.5 rounded-xl bg-ivory-100 hover:bg-saffron-50 border border-ivory-300 text-charcoal-800 text-xs font-semibold flex items-center space-x-1.5 transition-colors"
+              className="py-2 px-3.5 rounded-xl bg-ivory-100 hover:bg-saffron-50 border border-ivory-300 text-charcoal-800 text-xs font-semibold flex items-center space-x-1.5 transition-colors cursor-pointer"
             >
               <QrCode className="w-3.5 h-3.5 text-saffron-600" />
-              <span>Scan QR Code</span>
+              <span>Scan Table QR</span>
             </button>
           </div>
         </div>
@@ -559,159 +488,121 @@ export const CustomerHomePage: React.FC = () => {
               <Sparkles className="w-7 h-7" />
             </div>
             <h3 className="font-serif font-bold text-lg text-charcoal-900">
-              {searchQuery ? `Can't find "${searchQuery}"?` : 'No restaurants match the selected filter'}
+              No demo matches "{searchQuery}"
             </h3>
             <p className="text-xs text-charcoal-600 mt-2 mb-6 leading-relaxed">
-              {searchQuery ? (
-                <>
-                  No problem! Menuz can instantly provision and launch a live digital QR menu and table experience for{' '}
-                  <strong>"{searchQuery}"</strong> right now.
-                </>
-              ) : (
-                'Try selecting another neighborhood or cuisine tag from above.'
-              )}
+              Menuz is currently showcasing our two live demo experiences (Saffron House &amp; Casa Bella Trattoria). Point your camera at your table's QR code or choose a demo below.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => handleInstantAddRestaurant(searchQuery)}
-                  className="w-full sm:w-auto py-3 px-6 rounded-2xl bg-gradient-to-r from-saffron-600 to-amber-600 hover:from-saffron-700 hover:to-amber-700 text-white font-serif text-xs font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center space-x-2"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>Launch "{searchQuery}" on Menuz</span>
-                </button>
-              )}
               <button
                 type="button"
                 onClick={() => {
                   setSearchQuery('');
                   setActiveFilter('all');
                 }}
-                className="w-full sm:w-auto py-3 px-5 rounded-2xl border border-ivory-300 hover:bg-ivory-100 text-charcoal-700 text-xs font-semibold transition-colors"
+                className="w-full sm:w-auto py-2.5 px-5 rounded-2xl bg-charcoal-900 text-white text-xs font-semibold hover:bg-charcoal-800 transition-colors cursor-pointer"
               >
-                Reset Search
+                View All Demos
+              </button>
+              <button
+                type="button"
+                onClick={() => handleOpenScannerForRestaurant()}
+                className="w-full sm:w-auto py-2.5 px-5 rounded-2xl bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-semibold transition-colors flex items-center justify-center space-x-1.5 cursor-pointer"
+              >
+                <QrCode className="w-3.5 h-3.5" />
+                <span>Scan Table QR</span>
               </button>
             </div>
           </div>
         ) : (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredList.map((item) => (
-                <div
-                  key={item.slug}
-                  className="bg-white rounded-3xl border border-ivory-200/90 overflow-hidden shadow-subtle hover:shadow-float transition-all hover:-translate-y-1 flex flex-col group"
-                >
-                  {/* Image Cover */}
-                  <div className="relative aspect-[16/10] overflow-hidden bg-charcoal-900">
-                    <img
-                      src={item.imageUrl}
-                      alt={item.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredList.map((item) => (
+              <div
+                key={item.slug}
+                className="bg-white rounded-3xl border border-ivory-200/90 overflow-hidden shadow-subtle hover:shadow-float transition-all hover:-translate-y-1 flex flex-col group"
+              >
+                {/* Image Cover */}
+                <div className="relative aspect-[16/10] overflow-hidden bg-charcoal-900">
+                  <img
+                    src={item.imageUrl}
+                    alt={item.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
 
-                    {/* Rating Badge */}
-                    <div className="absolute top-3 left-3 bg-charcoal-950/80 backdrop-blur-md text-white px-2.5 py-1 rounded-full text-xs font-bold flex items-center space-x-1 border border-white/20">
-                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                      <span>{item.rating}</span>
-                    </div>
-
-                    {/* Guaranteed Table Reward Pill */}
-                    <div className="absolute top-3 right-3 bg-gradient-to-r from-amber-500 to-saffron-600 text-white px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide flex items-center space-x-1 shadow-md">
-                      <Gift className="w-3 h-3 text-amber-200" />
-                      <span>Table Reward Active</span>
-                    </div>
-
-                    {/* Bottom Image Overlay with Location */}
-                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-charcoal-950 via-charcoal-950/70 to-transparent p-3 pt-6 text-white flex items-center justify-between text-xs">
-                      <span className="flex items-center text-charcoal-200 font-medium">
-                        <MapPin className="w-3 h-3 text-saffron-400 mr-1" />
-                        {item.location.split(',')[0]}
-                      </span>
-                      <span className="text-amber-200 font-bold">{item.avgCostForTwo} for two</span>
-                    </div>
+                  {/* Rating Badge */}
+                  <div className="absolute top-3 left-3 bg-charcoal-950/80 backdrop-blur-md text-white px-2.5 py-1 rounded-full text-xs font-bold flex items-center space-x-1 border border-white/20">
+                    <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                    <span>{item.rating}</span>
                   </div>
 
-                  {/* Card Content */}
-                  <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-                    <div>
-                      <h3 className="font-serif font-bold text-lg text-charcoal-900 group-hover:text-saffron-700 transition-colors">
-                        {item.name}
-                      </h3>
-                      <p className="text-xs text-charcoal-500 mt-1 line-clamp-1">{item.cuisine}</p>
+                  {/* Guaranteed Table Reward Pill */}
+                  <div className="absolute top-3 right-3 bg-gradient-to-r from-amber-500 to-saffron-600 text-white px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide flex items-center space-x-1 shadow-md">
+                    <Sparkles className="w-3 h-3 text-amber-200" />
+                    <span>Interactive Demo</span>
+                  </div>
 
-                      {/* Table Reward Highlight Banner */}
-                      <div className="mt-3 bg-amber-50/80 border border-amber-200 rounded-xl p-2.5 flex items-center space-x-2 text-[11px] text-amber-900">
-                        <Sparkles className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                        <span className="font-medium line-clamp-1">
-                          <strong>Reward:</strong> {item.rewardHighlight}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="pt-2 border-t border-ivory-200 flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => handleOpenRestaurantMenu(item)}
-                        className="flex-1 py-2.5 px-3 rounded-xl bg-charcoal-900 hover:bg-charcoal-800 text-white font-serif text-xs font-bold flex items-center justify-center space-x-1.5 transition-colors"
-                      >
-                        <span>Explore Menu &amp; Rewards</span>
-                        <ArrowRight className="w-3.5 h-3.5 text-saffron-400" />
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => handleOpenScannerForRestaurant(item.slug)}
-                        title={`Scan Table QR for ${item.name}`}
-                        className="p-2.5 rounded-xl border border-ivory-300 hover:border-saffron-400 hover:bg-saffron-50 text-charcoal-700 hover:text-saffron-700 transition-colors flex items-center justify-center"
-                      >
-                        <QrCode className="w-4 h-4" />
-                      </button>
-                    </div>
+                  {/* Bottom Image Overlay with Location */}
+                  <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-charcoal-950 via-charcoal-950/70 to-transparent p-3 pt-6 text-white flex items-center justify-between text-xs">
+                    <span className="flex items-center text-charcoal-200 font-medium">
+                      <MapPin className="w-3 h-3 text-saffron-400 mr-1" />
+                      {item.location.split(',')[0]}
+                    </span>
+                    <span className="text-amber-200 font-bold">{item.avgCostForTwo} for two</span>
                   </div>
                 </div>
-              ))}
-            </div>
 
-            {/* Bottom helper card if user searched and wants to launch a custom restaurant */}
-            {searchQuery && (
-              <div className="mt-8 bg-gradient-to-r from-amber-50 via-ivory-50 to-amber-50 border border-amber-200/80 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-subtle">
-                <div className="flex items-center space-x-3 text-left">
-                  <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0">
-                    <Sparkles className="w-5 h-5" />
-                  </div>
+                {/* Card Content */}
+                <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
                   <div>
-                    <h4 className="font-serif font-bold text-sm text-charcoal-900">
-                      Looking for another branch or outlet?
-                    </h4>
-                    <p className="text-xs text-charcoal-600">
-                      Instantly launch a digital QR table menu for <strong>"{searchQuery}"</strong> on Menuz.
-                    </p>
+                    <h3 className="font-serif font-bold text-lg text-charcoal-900 group-hover:text-saffron-700 transition-colors">
+                      {item.name}
+                    </h3>
+                    <p className="text-xs text-charcoal-500 mt-1 line-clamp-1">{item.cuisine}</p>
+
+                    {/* Table Reward Highlight Banner */}
+                    <div className="mt-3 bg-amber-50/80 border border-amber-200 rounded-xl p-2.5 flex items-center space-x-2 text-[11px] text-amber-900">
+                      <Sparkles className="w-4 h-4 text-amber-600 flex-shrink-0" />
+                      <span className="font-medium line-clamp-1">
+                        <strong>Reward:</strong> {item.rewardHighlight}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="pt-2 border-t border-ivory-200 flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleOpenRestaurantMenu(item)}
+                      className="flex-1 py-2.5 px-3 rounded-xl bg-charcoal-900 hover:bg-charcoal-800 text-white font-serif text-xs font-bold flex items-center justify-center space-x-1.5 transition-colors cursor-pointer"
+                    >
+                      <span>Explore Menu &amp; Rewards</span>
+                      <ArrowRight className="w-3.5 h-3.5 text-saffron-400" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleOpenScannerForRestaurant(item.slug)}
+                      title={`Scan Table QR for ${item.name}`}
+                      className="p-2.5 rounded-xl border border-ivory-300 hover:border-saffron-400 hover:bg-saffron-50 text-charcoal-700 hover:text-saffron-700 transition-colors flex items-center justify-center cursor-pointer"
+                    >
+                      <QrCode className="w-4 h-4" />
+                    </button>
                   </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => handleInstantAddRestaurant(searchQuery)}
-                  className="whitespace-nowrap py-2.5 px-4 rounded-xl bg-charcoal-900 hover:bg-charcoal-800 text-white font-serif text-xs font-bold flex items-center space-x-1.5 transition-colors"
-                >
-                  <Plus className="w-3.5 h-3.5 text-saffron-400" />
-                  <span>Launch "{searchQuery}"</span>
-                </button>
               </div>
-            )}
-          </>
+            ))}
+          </div>
         )}
       </section>
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 6. PARTNER WITH MENUZ BANNER                               */}
+      {/* 6. ADMIN JUMP BANNER                                        */}
       {/* ═══════════════════════════════════════════════════════════ */}
       <section className="bg-charcoal-900 text-white py-12 px-4 sm:px-6 lg:px-8 border-t border-charcoal-800">
         <div className="max-w-4xl mx-auto text-center space-y-4">
           <span className="text-xs uppercase tracking-widest text-saffron-400 font-bold">
-            For Restaurateurs &amp; Hospitality Owners
+            Hospitality &amp; Restaurant System
           </span>
           <h2 className="font-serif font-bold text-2xl sm:text-3xl text-white">
             Transform Your Dining Room into a 5-Star Review Machine
@@ -723,7 +614,7 @@ export const CustomerHomePage: React.FC = () => {
           <div className="pt-2 flex flex-wrap justify-center gap-3">
             <Link
               to="/admin"
-              className="py-3 px-6 rounded-2xl bg-gradient-to-r from-saffron-600 to-amber-500 hover:brightness-110 text-white font-serif text-xs font-bold shadow-float flex items-center space-x-2 transition-all"
+              className="py-3 px-6 rounded-2xl bg-gradient-to-r from-saffron-600 to-amber-500 hover:brightness-110 text-white font-serif text-xs font-bold shadow-float flex items-center space-x-2 transition-all cursor-pointer"
             >
               <ShieldCheck className="w-4 h-4" />
               <span>Launch Restaurant Master Admin ↗</span>
@@ -732,7 +623,7 @@ export const CustomerHomePage: React.FC = () => {
             <button
               type="button"
               onClick={() => handleOpenScannerForRestaurant()}
-              className="py-3 px-5 rounded-2xl bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-200 border border-charcoal-700 text-xs font-semibold flex items-center space-x-1.5 transition-colors"
+              className="py-3 px-5 rounded-2xl bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-200 border border-charcoal-700 text-xs font-semibold flex items-center space-x-1.5 transition-colors cursor-pointer"
             >
               <QrCode className="w-4 h-4 text-saffron-400" />
               <span>Try QR Table Experience</span>
@@ -748,21 +639,21 @@ export const CustomerHomePage: React.FC = () => {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center space-x-2">
             <span className="font-serif font-black text-white text-sm">menuz</span>
-            <span>• Pune Table Dining &amp; Review Network</span>
+            <span>• Pune Table Dining &amp; Review Network (Demo)</span>
           </div>
 
           <div className="flex items-center space-x-4 text-[11px]">
             <Link to="/" className="hover:text-white transition-colors">
-              Directory
+              Demos
             </Link>
             <button
               onClick={() => handleOpenScannerForRestaurant()}
-              className="hover:text-white transition-colors"
+              className="hover:text-white transition-colors cursor-pointer"
             >
               Table Scanner
             </button>
             <Link to="/admin" className="text-saffron-400 hover:underline">
-              Partner Hub
+              Admin Hub
             </Link>
           </div>
         </div>

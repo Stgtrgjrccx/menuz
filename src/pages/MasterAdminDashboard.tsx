@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useRestaurantStore, WhatsAppCampaign } from '../store/restaurantStore';
 import { Restaurant, PosSyncEvent } from '../types';
-import { searchPuneRestaurants, PuneRestaurantEntry, normalizePuneSearch, matchesPuneQuery } from '../data/puneRestaurantDirectory';
+import { PUNE_RESTAURANT_DIRECTORY, searchPuneRestaurants, PuneRestaurantEntry, normalizePuneSearch, matchesPuneQuery } from '../data/puneRestaurantDirectory';
 import {
   Building2,
   Users,
@@ -143,7 +143,7 @@ export const MasterAdminDashboard: React.FC = () => {
   const adminSearchRef = useRef<HTMLDivElement>(null);
   const [selectedNeighborhood, setSelectedNeighborhood] = useState('all');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
-  const [partnerFilter, setPartnerFilter] = useState<'all' | 'menuz_partners' | 'directory'>('all');
+  const [partnerFilter, setPartnerFilter] = useState<'menuz_partners' | 'directory'>('menuz_partners');
   const [visibleCount, setVisibleCount] = useState(24);
 
   // Click outside to close admin suggestions
@@ -160,22 +160,57 @@ export const MasterAdminDashboard: React.FC = () => {
   const adminSuggestions = useMemo(() => {
     const q = restaurantSearch.trim();
     if (!q) return [];
-    return restaurants
-      .filter((r) => matchesPuneQuery(r, q))
-      .sort((a, b) => {
-        const cleanQ = q.toLowerCase().replace(/['’]/g, '');
-        const aExact =
-          a.name.toLowerCase().includes(cleanQ) ||
-          a.aliases?.some((al) => al.toLowerCase().includes(cleanQ));
-        const bExact =
-          b.name.toLowerCase().includes(cleanQ) ||
-          b.aliases?.some((al) => al.toLowerCase().includes(cleanQ));
-        if (aExact && !bExact) return -1;
-        if (!aExact && bExact) return 1;
-        return 0;
-      })
-      .slice(0, 8);
-  }, [restaurants, restaurantSearch]);
+    return searchPuneRestaurants(q).slice(0, 10);
+  }, [restaurantSearch]);
+
+  const handleOnboardDirectoryEntry = (entry: PuneRestaurantEntry) => {
+    const cleanSlug =
+      entry.name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '') || `pune-rest-${Date.now().toString().slice(-4)}`;
+
+    const existing = restaurants.find(
+      (r) =>
+        r.slug === cleanSlug ||
+        r.name.toLowerCase() === entry.name.toLowerCase() ||
+        (r.aliases && r.aliases.some((a) => a.toLowerCase() === entry.name.toLowerCase()))
+    );
+
+    if (existing) {
+      updateRestaurant(existing.id, { is_menuz_partner: true, status: 'active' });
+      setCurrentRestaurant(existing.id);
+      return;
+    }
+
+    const newRest: Restaurant = {
+      id: `rest-${cleanSlug}`,
+      slug: cleanSlug,
+      name: entry.name,
+      cuisine: entry.cuisine,
+      location: entry.location,
+      owner_name: `${entry.name} Hospitality Team`,
+      contact_email: `contact@${cleanSlug.slice(0, 16).replace(/-$/, '')}.in`,
+      contact_phone: entry.phone || '+91 20 2600 0000',
+      status: 'active',
+      logo_url: entry.imageUrl,
+      brand_colors: {
+        primary: '#E85D04',
+        background: '#FDFBF7',
+        text: '#1C1917',
+        accent: '#C84B00'
+      },
+      currency: 'INR',
+      tax_rate_percent: 5.0,
+      ordering_enabled: true,
+      google_place_url: `https://search.google.com/local/writereview?placeid=${cleanSlug}`,
+      is_menuz_partner: true,
+      aliases: entry.aliases || []
+    };
+
+    addRestaurant(newRest);
+    setCurrentRestaurant(newRest.id);
+  };
 
   const neighborhoods = useMemo(() => {
     return [
@@ -215,8 +250,7 @@ export const MasterAdminDashboard: React.FC = () => {
           (statusFilter === 'active' ? r.status === 'active' : r.status !== 'active');
 
         const matchesPartner =
-          partnerFilter === 'all' ||
-          (partnerFilter === 'menuz_partners' ? r.is_menuz_partner !== false : r.is_menuz_partner === false);
+          partnerFilter === 'menuz_partners' ? r.is_menuz_partner !== false : r.is_menuz_partner === false;
 
         return matchesSearch && matchesArea && matchesStatus && matchesPartner;
       })
@@ -235,6 +269,17 @@ export const MasterAdminDashboard: React.FC = () => {
         return 0;
       });
   }, [restaurants, restaurantSearch, selectedNeighborhood, statusFilter, partnerFilter]);
+
+  // Pune directory database items filtered by query and neighborhood
+  const filteredDirectory = useMemo(() => {
+    return PUNE_RESTAURANT_DIRECTORY.filter((entry) => {
+      const matchSearch = !restaurantSearch.trim() || matchesPuneQuery(entry, restaurantSearch);
+      const matchArea =
+        selectedNeighborhood === 'all' ||
+        entry.location.toLowerCase().includes(selectedNeighborhood.toLowerCase());
+      return matchSearch && matchArea;
+    });
+  }, [restaurantSearch, selectedNeighborhood]);
 
   // ── Quick instant 1-click add for any Pune restaurant ───────
   const handleQuickAddPuneRestaurant = (nameInput: string) => {
@@ -428,7 +473,7 @@ export const MasterAdminDashboard: React.FC = () => {
                 Menuz Master Admin
               </h1>
               <p className="text-xs sm:text-sm text-charcoal-300 mt-1 max-w-2xl">
-                Central command centre for Pune partner restaurants. Onboard restaurants, manage reviews, POS sync, challenges, and marketing CRM.
+                Command centre for Menuz demo operations and Pune restaurant database. Manage live demo venues or onboard any of Pune’s {PUNE_RESTAURANT_DIRECTORY.length}+ restaurants on demand.
               </p>
             </div>
 
@@ -436,14 +481,14 @@ export const MasterAdminDashboard: React.FC = () => {
             <div className="flex flex-wrap items-center gap-2">
               <button
                 onClick={() => setIsAddRestaurantOpen(true)}
-                className="px-4 py-2.5 bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-all"
+                className="px-4 py-2.5 bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-all cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 <span>Onboard Restaurant</span>
               </button>
               <button
                 onClick={() => setIsCampaignModalOpen(true)}
-                className="px-4 py-2.5 bg-green-700 hover:bg-green-800 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-all"
+                className="px-4 py-2.5 bg-green-700 hover:bg-green-800 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-all cursor-pointer"
               >
                 <Send className="w-4 h-4" />
                 <span>WhatsApp Campaign</span>
@@ -454,18 +499,18 @@ export const MasterAdminDashboard: React.FC = () => {
           {/* Metric Overview Tiles */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mt-8">
             <div className="bg-charcoal-800/80 p-3.5 rounded-2xl border border-charcoal-700">
-              <span className="text-[11px] text-charcoal-400 block font-medium">Partner Restaurants</span>
+              <span className="text-[11px] text-charcoal-400 block font-medium">Active Venues</span>
               <div className="flex items-baseline space-x-2 mt-1">
                 <span className="text-2xl font-bold text-white font-mono">{totalRestaurants}</span>
-                <span className="text-[11px] text-green-400 font-medium">({activeRestaurants} active)</span>
+                <span className="text-[11px] text-amber-400 font-medium">({activeRestaurants} demos)</span>
               </div>
             </div>
 
             <div className="bg-charcoal-800/80 p-3.5 rounded-2xl border border-charcoal-700">
-              <span className="text-[11px] text-charcoal-400 block font-medium">Catalog Items</span>
+              <span className="text-[11px] text-charcoal-400 block font-medium">City Database</span>
               <div className="flex items-baseline space-x-2 mt-1">
-                <span className="text-2xl font-bold text-white font-mono">{menuItems.length}</span>
-                <span className="text-[11px] text-charcoal-400">across {tables.length} tables</span>
+                <span className="text-2xl font-bold text-white font-mono">{PUNE_RESTAURANT_DIRECTORY.length}</span>
+                <span className="text-[11px] text-charcoal-400">leads ready</span>
               </div>
             </div>
 
@@ -522,7 +567,7 @@ export const MasterAdminDashboard: React.FC = () => {
               }`}
             >
               <Building2 className="w-4 h-4" />
-              <span>Partner Restaurants ({restaurants.length})</span>
+              <span>Restaurants & Venues ({restaurants.length})</span>
             </button>
 
             <button
@@ -597,16 +642,16 @@ export const MasterAdminDashboard: React.FC = () => {
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-3xl border border-ivory-300 shadow-subtle">
               <div>
-                <h2 className="text-lg font-bold font-serif text-charcoal-900">Partner Restaurant Registry</h2>
+                <h2 className="text-lg font-bold font-serif text-charcoal-900">Restaurant Operations &amp; Pune Database</h2>
                 <p className="text-xs text-charcoal-600">
                   {restaurants.length > 0
-                    ? 'Manage restaurant accounts, toggle availability, and launch management hubs.'
-                    : 'No restaurants onboarded yet. Click "Onboard Restaurant" to get started — just type a name from Pune!'}
+                    ? 'Manage active Menuz demo restaurants or browse the 269+ Pune restaurant database to onboard any restaurant on demand.'
+                    : 'Browse Pune restaurant database to onboard your first venue.'}
                 </p>
               </div>
               <button
                 onClick={() => setIsAddRestaurantOpen(true)}
-                className="px-4 py-2.5 bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-colors self-start sm:self-auto"
+                className="px-4 py-2.5 bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-colors self-start sm:self-auto cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 <span>Onboard Restaurant</span>
@@ -621,12 +666,12 @@ export const MasterAdminDashboard: React.FC = () => {
                 </div>
                 <h3 className="font-serif text-xl font-bold text-charcoal-900 mt-2">Welcome to Menuz — Pune Edition</h3>
                 <p className="text-sm text-charcoal-600 mt-2 max-w-md mx-auto">
-                  Your restaurant management ecosystem is ready. Start by onboarding your first partner restaurant.
-                  Our Pune directory has 50+ restaurants pre-loaded for instant auto-fill.
+                  Your restaurant management ecosystem is ready. Start by onboarding your first restaurant.
+                  Our Pune database has 269+ restaurants pre-loaded for instant onboarding.
                 </p>
                 <button
                   onClick={() => setIsAddRestaurantOpen(true)}
-                  className="mt-6 px-6 py-3 bg-saffron-600 hover:bg-saffron-700 text-white font-bold rounded-xl shadow-subtle flex items-center space-x-2 mx-auto transition-colors"
+                  className="mt-6 px-6 py-3 bg-saffron-600 hover:bg-saffron-700 text-white font-bold rounded-xl shadow-subtle flex items-center space-x-2 mx-auto transition-colors cursor-pointer"
                 >
                   <Plus className="w-5 h-5" />
                   <span>Onboard Your First Restaurant</span>
@@ -641,12 +686,12 @@ export const MasterAdminDashboard: React.FC = () => {
                   <div>
                     <div className="flex items-center space-x-2">
                       <span className="w-2 h-2 rounded-full bg-saffron-500 animate-pulse" />
-                      <h3 className="text-xs font-bold uppercase tracking-wider text-saffron-400">Flagship Quick Launch</h3>
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-saffron-400">Active Demos Quick Launch</h3>
                       <span className="text-[10px] bg-charcoal-800 text-charcoal-300 px-2 py-0.5 rounded-full border border-charcoal-700">
-                        {restaurants.length} Total Registered
+                        {restaurants.length} Active Venues
                       </span>
                     </div>
-                    <p className="text-xs text-charcoal-300 mt-0.5">Instant one-click direct jump to flagship operations or diner experience</p>
+                    <p className="text-xs text-charcoal-300 mt-0.5">Instant one-click direct jump to demo management hub or diner menu</p>
                   </div>
                 </div>
 
@@ -715,7 +760,7 @@ export const MasterAdminDashboard: React.FC = () => {
                       setShowAdminSuggestions(true);
                       setVisibleCount(24);
                     }}
-                    placeholder={`Search all ${restaurants.length} Pune partner restaurants by name, cuisine, area, or street...`}
+                    placeholder={`Search Pune city database (${PUNE_RESTAURANT_DIRECTORY.length} restaurants) or active demos...`}
                     className="w-full pl-10 pr-8 py-2.5 bg-ivory-50 border border-ivory-300 rounded-2xl text-xs text-charcoal-900 placeholder-charcoal-400 focus:outline-none focus:border-saffron-500 focus:bg-white transition-all font-medium"
                   />
                   {restaurantSearch && (
@@ -724,7 +769,7 @@ export const MasterAdminDashboard: React.FC = () => {
                         setRestaurantSearch('');
                         setShowAdminSuggestions(false);
                       }}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-charcoal-400 hover:text-charcoal-700 font-bold z-10"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-charcoal-400 hover:text-charcoal-700 font-bold z-10 cursor-pointer"
                     >
                       ✕
                     </button>
@@ -738,17 +783,26 @@ export const MasterAdminDashboard: React.FC = () => {
                           <Sparkles className="w-3.5 h-3.5 text-saffron-600 inline" />
                           <span>SUGGESTIONS ({adminSuggestions.length} found)</span>
                         </span>
-                        <span className="text-[10px] text-charcoal-400 font-normal">Click to filter or jump</span>
+                        <span className="text-[10px] text-charcoal-400 font-normal">Click to jump or onboard</span>
                       </div>
 
                       {adminSuggestions.length > 0 ? (
                         <div className="max-h-80 overflow-y-auto divide-y divide-ivory-100">
                           {adminSuggestions.map((item) => {
-                            const rTables = tables.filter((t) => t.restaurant_id === item.id);
-                            const rToken = rTables[0]?.public_token || 'table-token-01';
+                            const cleanSlug = item.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+                            const existingRest = restaurants.find(
+                              (r) =>
+                                r.slug === cleanSlug ||
+                                r.name.toLowerCase() === item.name.toLowerCase() ||
+                                (r.aliases && r.aliases.some((a) => a.toLowerCase() === item.name.toLowerCase()))
+                            );
+                            const isDemoOrPartner = !!existingRest && existingRest.is_menuz_partner !== false;
+                            const rTables = existingRest ? tables.filter((t) => t.restaurant_id === existingRest.id) : [];
+                            const rToken = rTables[0]?.public_token || 'table-token-01-saffron';
+
                             return (
                               <div
-                                key={`sugg-${item.id}`}
+                                key={`sugg-${item.name}`}
                                 onClick={() => {
                                   setRestaurantSearch(item.name);
                                   setShowAdminSuggestions(false);
@@ -757,7 +811,7 @@ export const MasterAdminDashboard: React.FC = () => {
                               >
                                 <div className="flex items-center space-x-3 min-w-0">
                                   <img
-                                    src={item.logo_url}
+                                    src={item.imageUrl}
                                     alt={item.name}
                                     className="w-10 h-10 rounded-xl object-cover border border-ivory-300 flex-shrink-0 group-hover:scale-105 transition-transform"
                                   />
@@ -766,13 +820,13 @@ export const MasterAdminDashboard: React.FC = () => {
                                       <h4 className="text-xs font-bold text-charcoal-900 group-hover:text-saffron-700 transition-colors truncate">
                                         {item.name}
                                       </h4>
-                                      {item.is_menuz_partner !== false ? (
-                                        <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                                          ✨ Partner
+                                      {isDemoOrPartner ? (
+                                        <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-100 text-amber-900 border border-amber-200">
+                                          Interactive Demo
                                         </span>
                                       ) : (
-                                        <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
-                                          📍 Lead
+                                        <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-ivory-200 text-charcoal-700 border border-ivory-300">
+                                          📍 Database Lead
                                         </span>
                                       )}
                                     </div>
@@ -783,26 +837,41 @@ export const MasterAdminDashboard: React.FC = () => {
                                 </div>
 
                                 <div className="flex items-center space-x-1.5 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
-                                  <Link
-                                    to={`/manage/${item.slug}`}
-                                    onClick={() => {
-                                      setCurrentRestaurant(item.id);
-                                      setShowAdminSuggestions(false);
-                                    }}
-                                    className="px-2.5 py-1 bg-charcoal-900 hover:bg-charcoal-800 text-white text-[10px] font-bold rounded-lg transition-colors"
-                                  >
-                                    Hub
-                                  </Link>
-                                  <Link
-                                    to={`/r/${item.slug}/menu?t=${rToken}`}
-                                    onClick={() => {
-                                      setCurrentRestaurant(item.id);
-                                      setShowAdminSuggestions(false);
-                                    }}
-                                    className="px-2.5 py-1 bg-saffron-50 hover:bg-saffron-100 text-saffron-800 text-[10px] font-bold rounded-lg transition-colors border border-saffron-200"
-                                  >
-                                    Menu
-                                  </Link>
+                                  {isDemoOrPartner && existingRest ? (
+                                    <>
+                                      <Link
+                                        to={`/manage/${existingRest.slug}`}
+                                        onClick={() => {
+                                          setCurrentRestaurant(existingRest.id);
+                                          setShowAdminSuggestions(false);
+                                        }}
+                                        className="px-2.5 py-1 bg-charcoal-900 hover:bg-charcoal-800 text-white text-[10px] font-bold rounded-lg transition-colors cursor-pointer"
+                                      >
+                                        Hub
+                                      </Link>
+                                      <Link
+                                        to={`/r/${existingRest.slug}/menu?t=${rToken}`}
+                                        onClick={() => {
+                                          setCurrentRestaurant(existingRest.id);
+                                          setShowAdminSuggestions(false);
+                                        }}
+                                        className="px-2.5 py-1 bg-saffron-50 hover:bg-saffron-100 text-saffron-800 text-[10px] font-bold rounded-lg transition-colors border border-saffron-200 cursor-pointer"
+                                      >
+                                        Menu
+                                      </Link>
+                                    </>
+                                  ) : (
+                                    <button
+                                      onClick={() => {
+                                        handleOnboardDirectoryEntry(item);
+                                        setShowAdminSuggestions(false);
+                                      }}
+                                      className="px-3 py-1 bg-saffron-600 hover:bg-saffron-700 text-white text-[10px] font-bold rounded-lg transition-colors shadow-xs flex items-center space-x-1 cursor-pointer"
+                                    >
+                                      <Plus className="w-3 h-3" />
+                                      <span>+ Onboard</span>
+                                    </button>
+                                  )}
                                 </div>
                               </div>
                             );
@@ -818,7 +887,7 @@ export const MasterAdminDashboard: React.FC = () => {
                               handleQuickAddPuneRestaurant(restaurantSearch);
                               setShowAdminSuggestions(false);
                             }}
-                            className="px-4 py-2 bg-saffron-600 hover:bg-saffron-700 text-white font-bold text-xs rounded-xl shadow-xs inline-flex items-center space-x-1.5 transition-colors"
+                            className="px-4 py-2 bg-saffron-600 hover:bg-saffron-700 text-white font-bold text-xs rounded-xl shadow-xs inline-flex items-center space-x-1.5 transition-colors cursor-pointer"
                           >
                             <Plus className="w-3.5 h-3.5" />
                             <span>Instant 1-Click Register "{restaurantSearch.trim()}"</span>
@@ -827,10 +896,10 @@ export const MasterAdminDashboard: React.FC = () => {
                       )}
 
                       <div className="p-2 bg-ivory-50 border-t border-ivory-200 flex items-center justify-between text-[11px] text-charcoal-500">
-                        <span>Showing top matches from {restaurants.length} Pune restaurants</span>
+                        <span>Showing top matches from {PUNE_RESTAURANT_DIRECTORY.length} Pune restaurants</span>
                         <button
                           onClick={() => setShowAdminSuggestions(false)}
-                          className="text-saffron-700 hover:underline font-bold text-[10px]"
+                          className="text-saffron-700 hover:underline font-bold text-[10px] cursor-pointer"
                         >
                           Close Suggestions ✕
                         </button>
@@ -839,46 +908,33 @@ export const MasterAdminDashboard: React.FC = () => {
                   )}
                 </div>
 
-                {/* Menuz Partner vs Directory Leads Filter */}
+                {/* Active Demos vs Pune City Database Filter */}
                 <div className="flex flex-wrap items-center gap-1.5 bg-ivory-100 p-1 rounded-2xl border border-ivory-300 flex-shrink-0">
-                  <button
-                    onClick={() => {
-                      setPartnerFilter('all');
-                      setVisibleCount(24);
-                    }}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                      partnerFilter === 'all'
-                        ? 'bg-charcoal-900 text-white shadow-sm'
-                        : 'text-charcoal-600 hover:text-charcoal-900'
-                    }`}
-                  >
-                    All Database ({restaurants.length})
-                  </button>
                   <button
                     onClick={() => {
                       setPartnerFilter('menuz_partners');
                       setVisibleCount(24);
                     }}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1 ${
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${
                       partnerFilter === 'menuz_partners'
                         ? 'bg-saffron-600 text-white shadow-sm'
                         : 'text-charcoal-600 hover:text-charcoal-900'
                     }`}
                   >
-                    <span>✨ Working with Menuz ({menuzPartnerCount})</span>
+                    <span>✨ Active Demo Venues ({restaurants.length})</span>
                   </button>
                   <button
                     onClick={() => {
                       setPartnerFilter('directory');
                       setVisibleCount(24);
                     }}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1 ${
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${
                       partnerFilter === 'directory'
-                        ? 'bg-amber-600 text-white shadow-sm'
+                        ? 'bg-charcoal-900 text-white shadow-sm'
                         : 'text-charcoal-600 hover:text-charcoal-900'
                     }`}
                   >
-                    <span>📍 City Directory Leads ({directoryOnlyCount})</span>
+                    <span>📍 Pune City Database ({PUNE_RESTAURANT_DIRECTORY.length} Leads)</span>
                   </button>
                 </div>
 
@@ -971,261 +1027,378 @@ export const MasterAdminDashboard: React.FC = () => {
               {/* Count Banner */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-ivory-200 text-xs text-charcoal-600">
                 <span>
-                  Showing <strong>{Math.min(visibleCount, filteredRestaurants.length)}</strong> of{' '}
-                  <strong>{filteredRestaurants.length}</strong> matching restaurants (
-                  <strong>{restaurants.length}</strong> loaded in Pune database)
+                  {partnerFilter === 'directory' ? (
+                    <>
+                      Showing <strong>{Math.min(visibleCount, filteredDirectory.length)}</strong> of{' '}
+                      <strong>{filteredDirectory.length}</strong> matching Pune database leads (
+                      <strong>{PUNE_RESTAURANT_DIRECTORY.length}</strong> total venues in city database)
+                    </>
+                  ) : (
+                    <>
+                      Showing <strong>{Math.min(visibleCount, filteredRestaurants.length)}</strong> of{' '}
+                      <strong>{filteredRestaurants.length}</strong> active demo venues in Menuz
+                    </>
+                  )}
                 </span>
                 <div className="flex items-center space-x-3">
-                  {visibleCount < filteredRestaurants.length && (
+                  {visibleCount < (partnerFilter === 'directory' ? filteredDirectory.length : filteredRestaurants.length) && (
                     <button
                       onClick={() => setVisibleCount((prev) => prev + 24)}
-                      className="text-saffron-700 hover:underline font-bold"
+                      className="text-saffron-700 hover:underline font-bold cursor-pointer"
                     >
                       Load More (+24)
                     </button>
                   )}
-                  {visibleCount < filteredRestaurants.length && (
+                  {visibleCount < (partnerFilter === 'directory' ? filteredDirectory.length : filteredRestaurants.length) && (
                     <button
-                      onClick={() => setVisibleCount(filteredRestaurants.length)}
-                      className="text-charcoal-800 hover:text-saffron-700 font-bold underline"
+                      onClick={() => setVisibleCount(partnerFilter === 'directory' ? filteredDirectory.length : filteredRestaurants.length)}
+                      className="text-charcoal-800 hover:text-saffron-700 font-bold underline cursor-pointer"
                     >
-                      Show All {filteredRestaurants.length}
+                      Show All ({partnerFilter === 'directory' ? filteredDirectory.length : filteredRestaurants.length})
                     </button>
                   )}
                 </div>
               </div>
             </div>
 
-            {/* Empty search state */}
-            {filteredRestaurants.length === 0 && (
-              <div className="bg-white rounded-3xl border border-ivory-300 p-10 text-center text-charcoal-500 shadow-subtle">
-                <Building2 className="w-10 h-10 mx-auto text-charcoal-300 mb-2" />
-                <h4 className="font-serif font-bold text-charcoal-900 text-base">No restaurants match your filters</h4>
-                <p className="text-xs text-charcoal-500 mt-1 mb-4">
-                  No partners found matching "{restaurantSearch || selectedNeighborhood}".
-                </p>
-                {restaurantSearch.trim() ? (
-                  <div className="max-w-md mx-auto p-4 bg-saffron-50 border border-saffron-200 rounded-2xl mb-4 text-center">
-                    <p className="text-xs text-saffron-900 font-medium mb-3">
-                      Add <strong>"{restaurantSearch.trim()}"</strong> directly to Pune Menuz Master Database with 1 click:
-                    </p>
-                    <button
-                      onClick={() => handleQuickAddPuneRestaurant(restaurantSearch)}
-                      className="px-5 py-2.5 bg-saffron-600 hover:bg-saffron-700 text-white font-bold text-xs rounded-xl shadow-subtle flex items-center space-x-2 mx-auto transition-colors"
-                    >
-                      <Plus className="w-4 h-4" />
-                      <span>Add "{restaurantSearch.trim()}" to Pune Database</span>
-                    </button>
-                  </div>
-                ) : null}
-                <button
-                  onClick={() => {
-                    setRestaurantSearch('');
-                    setSelectedNeighborhood('all');
-                    setStatusFilter('all');
-                  }}
-                  className="px-4 py-2 bg-charcoal-900 text-white font-bold text-xs rounded-xl shadow-subtle"
-                >
-                  Reset Filters
-                </button>
-              </div>
-            )}
-
-            {/* Restaurant Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredRestaurants.slice(0, visibleCount).map((rest) => {
-                const restTables = tables.filter((t) => t.restaurant_id === rest.id);
-                const restItems = menuItems.filter((i) => i.restaurant_id === rest.id);
-                const restOrders = orders.filter((o) => o.restaurant_id === rest.id);
-                const restReviews = reviews.filter((r) => r.restaurant_id === rest.id);
-                const firstTableToken = restTables[0]?.public_token || 'table-token-01';
-                const dinerUrl = `/#/r/${rest.slug}/menu?t=${firstTableToken}`;
-
-                return (
-                  <div
-                    key={rest.id}
-                    className="bg-white rounded-3xl border border-ivory-300 p-6 shadow-subtle hover:shadow-float hover:border-saffron-300 transition-all flex flex-col justify-between group"
+            {/* TAB CONTENT: EITHER PUNE CITY DATABASE OR ACTIVE DEMO VENUES */}
+            {partnerFilter === 'directory' ? (
+              /* ── 1. Pune City Database Leads Grid ──────────────────────── */
+              filteredDirectory.length === 0 ? (
+                <div className="bg-white rounded-3xl border border-ivory-300 p-10 text-center text-charcoal-500 shadow-subtle">
+                  <Building2 className="w-10 h-10 mx-auto text-charcoal-300 mb-2" />
+                  <h4 className="font-serif font-bold text-charcoal-900 text-base">No restaurants match your filters</h4>
+                  <p className="text-xs text-charcoal-500 mt-1 mb-4">
+                    No leads found matching "{restaurantSearch || selectedNeighborhood}".
+                  </p>
+                  {restaurantSearch.trim() ? (
+                    <div className="max-w-md mx-auto p-4 bg-saffron-50 border border-saffron-200 rounded-2xl mb-4 text-center">
+                      <p className="text-xs text-saffron-900 font-medium mb-3">
+                        Onboard <strong>"{restaurantSearch.trim()}"</strong> directly into Menuz with 1 click:
+                      </p>
+                      <button
+                        onClick={() => handleQuickAddPuneRestaurant(restaurantSearch)}
+                        className="px-5 py-2.5 bg-saffron-600 hover:bg-saffron-700 text-white font-bold text-xs rounded-xl shadow-subtle flex items-center space-x-2 mx-auto transition-colors cursor-pointer"
+                      >
+                        <Plus className="w-4 h-4" />
+                        <span>Onboard "{restaurantSearch.trim()}"</span>
+                      </button>
+                    </div>
+                  ) : null}
+                  <button
+                    onClick={() => {
+                      setRestaurantSearch('');
+                      setSelectedNeighborhood('all');
+                      setStatusFilter('all');
+                    }}
+                    className="px-4 py-2 bg-charcoal-900 text-white font-bold text-xs rounded-xl shadow-subtle cursor-pointer"
                   >
-                    <div>
-                      {/* Card Header - Clickable to open Manage Hub */}
-                      <div className="flex items-start justify-between">
-                        <div
-                          onClick={() => {
-                            setCurrentRestaurant(rest.id);
-                            navigate(`/manage/${rest.slug}`);
-                          }}
-                          className="flex items-center space-x-3 cursor-pointer flex-1 mr-2"
-                        >
-                          <img
-                            src={rest.logo_url}
-                            alt={rest.name}
-                            className="w-12 h-12 rounded-2xl object-cover border border-ivory-300 shadow-sm group-hover:scale-105 transition-transform"
-                          />
-                          <div>
-                            <h3 className="font-bold text-base text-charcoal-900 font-serif leading-tight group-hover:text-saffron-700 transition-colors">
-                              {rest.name}
-                            </h3>
-                            <span className="text-xs text-saffron-700 font-medium block">{rest.cuisine}</span>
+                    Reset Filters
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredDirectory.slice(0, visibleCount).map((entry) => {
+                    const cleanSlug = entry.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+                    const existing = restaurants.find(
+                      (r) =>
+                        r.slug === cleanSlug ||
+                        r.name.toLowerCase() === entry.name.toLowerCase() ||
+                        (r.aliases && r.aliases.some((a) => a.toLowerCase() === entry.name.toLowerCase()))
+                    );
+                    const isOnboarded = !!existing && existing.is_menuz_partner !== false;
+                    const restTables = existing ? tables.filter((t) => t.restaurant_id === existing.id) : [];
+                    const firstToken = restTables[0]?.public_token || 'table-token-01-saffron';
+
+                    return (
+                      <div
+                        key={`dir-card-${entry.name}`}
+                        className="bg-white rounded-3xl border border-ivory-300 p-6 shadow-subtle hover:shadow-float hover:border-saffron-300 transition-all flex flex-col justify-between group"
+                      >
+                        <div>
+                          {/* Header */}
+                          <div className="flex items-start justify-between">
+                            <div className="flex items-center space-x-3 flex-1 mr-2 min-w-0">
+                              <img
+                                src={entry.imageUrl}
+                                alt={entry.name}
+                                className="w-12 h-12 rounded-2xl object-cover border border-ivory-300 shadow-sm flex-shrink-0 group-hover:scale-105 transition-transform"
+                              />
+                              <div className="truncate">
+                                <h3 className="font-bold text-base text-charcoal-900 font-serif leading-tight group-hover:text-saffron-700 transition-colors truncate">
+                                  {entry.name}
+                                </h3>
+                                <span className="text-xs text-saffron-700 font-medium block truncate">
+                                  {entry.cuisine}
+                                </span>
+                              </div>
+                            </div>
+
+                            <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-50 text-amber-900 border border-amber-300 whitespace-nowrap">
+                              📍 Database Lead
+                            </span>
+                          </div>
+
+                          {/* Location & Details */}
+                          <div className="mt-4 p-3 bg-ivory-50 rounded-2xl border border-ivory-200 text-xs space-y-1.5">
+                            <div className="flex justify-between text-charcoal-700">
+                              <span className="text-charcoal-500">Location:</span>
+                              <span className="font-medium text-right truncate max-w-[200px]">{entry.location}</span>
+                            </div>
+                            <div className="flex justify-between text-charcoal-700">
+                              <span className="text-charcoal-500">Avg Cost:</span>
+                              <span className="font-medium text-right">{entry.avgCostForTwo} for two</span>
+                            </div>
+                            {entry.phone && (
+                              <div className="flex justify-between text-charcoal-700">
+                                <span className="text-charcoal-500">Phone:</span>
+                                <span className="font-mono text-[11px]">{entry.phone}</span>
+                              </div>
+                            )}
+                            <div className="flex justify-between text-charcoal-700">
+                              <span className="text-charcoal-500">Rating:</span>
+                              <span className="font-bold text-amber-600 flex items-center">
+                                <Star className="w-3 h-3 fill-amber-500 mr-0.5" />
+                                {entry.rating}
+                              </span>
+                            </div>
                           </div>
                         </div>
 
-                        <div className="flex flex-col items-end space-y-1">
-                          <button
-                            onClick={() => toggleRestaurantStatus(rest.id)}
-                            title="Click to toggle restaurant active/inactive"
-                            className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center space-x-1 transition-colors ${
-                              rest.status === 'active'
-                                ? 'bg-green-100 text-green-800 border border-green-300'
-                                : 'bg-red-100 text-red-800 border border-red-300'
-                            }`}
+                        {/* Onboard Action */}
+                        <div className="mt-5 pt-4 border-t border-ivory-200">
+                          {isOnboarded && existing ? (
+                            <div className="flex gap-2">
+                              <Link
+                                to={`/manage/${existing.slug}`}
+                                onClick={() => setCurrentRestaurant(existing.id)}
+                                className="flex-1 bg-charcoal-900 hover:bg-charcoal-800 text-white font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors cursor-pointer"
+                              >
+                                <span>Open Hub</span>
+                                <ChevronRight className="w-3.5 h-3.5" />
+                              </Link>
+                              <Link
+                                to={`/r/${existing.slug}/menu?t=${firstToken}`}
+                                onClick={() => setCurrentRestaurant(existing.id)}
+                                className="flex-1 bg-saffron-50 hover:bg-saffron-100 text-saffron-800 font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors border border-saffron-200 cursor-pointer"
+                              >
+                                <span>Diner Menu</span>
+                              </Link>
+                            </div>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => handleOnboardDirectoryEntry(entry)}
+                              className="w-full bg-gradient-to-r from-saffron-600 to-amber-500 hover:from-saffron-700 hover:to-amber-600 text-white font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-all shadow-subtle hover:scale-[1.01] cursor-pointer"
+                            >
+                              <Plus className="w-4 h-4" />
+                              <span>+ Onboard Restaurant to Menuz</span>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )
+            ) : (
+              /* ── 2. Active Demo Venues Grid ─────────────────────────────── */
+              filteredRestaurants.length === 0 ? (
+                <div className="bg-white rounded-3xl border border-ivory-300 p-10 text-center text-charcoal-500 shadow-subtle">
+                  <Building2 className="w-10 h-10 mx-auto text-charcoal-300 mb-2" />
+                  <h4 className="font-serif font-bold text-charcoal-900 text-base">No active venues match your filters</h4>
+                  <p className="text-xs text-charcoal-500 mt-1 mb-4">
+                    Try switching to the "Pune City Database" tab to onboard from 269+ venues.
+                  </p>
+                  <button
+                    onClick={() => {
+                      setRestaurantSearch('');
+                      setSelectedNeighborhood('all');
+                      setStatusFilter('all');
+                    }}
+                    className="px-4 py-2 bg-charcoal-900 text-white font-bold text-xs rounded-xl shadow-subtle cursor-pointer"
+                  >
+                    Reset Filters
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredRestaurants.slice(0, visibleCount).map((rest) => {
+                    const restTables = tables.filter((t) => t.restaurant_id === rest.id);
+                    const restItems = menuItems.filter((i) => i.restaurant_id === rest.id);
+                    const restOrders = orders.filter((o) => o.restaurant_id === rest.id);
+                    const restReviews = reviews.filter((r) => r.restaurant_id === rest.id);
+                    const firstTableToken = restTables[0]?.public_token || 'table-token-01';
+                    const dinerUrl = `/#/r/${rest.slug}/menu?t=${firstTableToken}`;
+
+                    return (
+                      <div
+                        key={rest.id}
+                        className="bg-white rounded-3xl border border-ivory-300 p-6 shadow-subtle hover:shadow-float hover:border-saffron-300 transition-all flex flex-col justify-between group"
+                      >
+                        <div>
+                          {/* Card Header - Clickable to open Manage Hub */}
+                          <div className="flex items-start justify-between">
+                            <div
+                              onClick={() => {
+                                setCurrentRestaurant(rest.id);
+                                navigate(`/manage/${rest.slug}`);
+                              }}
+                              className="flex items-center space-x-3 cursor-pointer flex-1 mr-2"
+                            >
+                              <img
+                                src={rest.logo_url}
+                                alt={rest.name}
+                                className="w-12 h-12 rounded-2xl object-cover border border-ivory-300 shadow-sm group-hover:scale-105 transition-transform"
+                              />
+                              <div>
+                                <h3 className="font-bold text-base text-charcoal-900 font-serif leading-tight group-hover:text-saffron-700 transition-colors">
+                                  {rest.name}
+                                </h3>
+                                <span className="text-xs text-saffron-700 font-medium block">{rest.cuisine}</span>
+                              </div>
+                            </div>
+
+                            <div className="flex flex-col items-end space-y-1">
+                              <button
+                                onClick={() => toggleRestaurantStatus(rest.id)}
+                                title="Click to toggle restaurant active/inactive"
+                                className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center space-x-1 transition-colors ${
+                                  rest.status === 'active'
+                                    ? 'bg-green-100 text-green-800 border border-green-300'
+                                    : 'bg-red-100 text-red-800 border border-red-300'
+                                }`}
+                              >
+                                <span className={`w-1.5 h-1.5 rounded-full ${rest.status === 'active' ? 'bg-green-600' : 'bg-red-600'}`} />
+                                <span>{rest.status}</span>
+                              </button>
+                              <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-100 text-amber-900 border border-amber-300 whitespace-nowrap">
+                                Interactive Demo
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Location & Contact */}
+                          <div className="mt-4 p-3 bg-ivory-50 rounded-2xl border border-ivory-200 text-xs space-y-1">
+                            <div className="flex justify-between text-charcoal-700">
+                              <span className="text-charcoal-500">Location:</span>
+                              <span className="font-medium text-right">{rest.location}</span>
+                            </div>
+                            {rest.owner_name && (
+                              <div className="flex justify-between text-charcoal-700">
+                                <span className="text-charcoal-500">Owner:</span>
+                                <span className="font-medium">{rest.owner_name}</span>
+                              </div>
+                            )}
+                            {rest.contact_phone && (
+                              <div className="flex justify-between text-charcoal-700">
+                                <span className="text-charcoal-500">Contact:</span>
+                                <span className="font-mono text-[11px]">{rest.contact_phone}</span>
+                              </div>
+                            )}
+                            <div className="flex justify-between text-charcoal-700">
+                              <span className="text-charcoal-500">POS Integration:</span>
+                              <span className="font-bold uppercase tracking-wider text-[10px] text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">
+                                {rest.pos_provider}
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Metrics row */}
+                          <div className="grid grid-cols-4 gap-2 mt-4 text-center">
+                            <div className="p-2 bg-ivory-100/60 rounded-xl">
+                              <span className="text-[10px] text-charcoal-500 block uppercase font-bold">Tables</span>
+                              <span className="text-sm font-bold font-mono text-charcoal-900">{restTables.length}</span>
+                            </div>
+                            <div className="p-2 bg-ivory-100/60 rounded-xl">
+                              <span className="text-[10px] text-charcoal-500 block uppercase font-bold">Dishes</span>
+                              <span className="text-sm font-bold font-mono text-charcoal-900">{restItems.length}</span>
+                            </div>
+                            <div className="p-2 bg-ivory-100/60 rounded-xl">
+                              <span className="text-[10px] text-charcoal-500 block uppercase font-bold">Orders</span>
+                              <span className="text-sm font-bold font-mono text-charcoal-900">{restOrders.length}</span>
+                            </div>
+                            <div className="p-2 bg-ivory-100/60 rounded-xl">
+                              <span className="text-[10px] text-charcoal-500 block uppercase font-bold">Rating</span>
+                              <span className="text-sm font-bold font-mono text-amber-600 flex items-center justify-center">
+                                <Star className="w-3 h-3 fill-amber-500 inline mr-0.5" />
+                                {restReviews.length > 0 ? (restReviews.reduce((s, r) => s + r.rating, 0) / restReviews.length).toFixed(1) : '-'}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Action Links & Multi-Button Control */}
+                        <div className="mt-5 pt-4 border-t border-ivory-200 flex flex-col space-y-2.5">
+                          <Link
+                            to={`/r/${rest.slug}/menu?t=${firstTableToken}`}
+                            onClick={() => setCurrentRestaurant(rest.id)}
+                            className="w-full bg-saffron-50 hover:bg-saffron-100 text-saffron-800 font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors border border-saffron-200 shadow-xs cursor-pointer"
                           >
-                            <span className={`w-1.5 h-1.5 rounded-full ${rest.status === 'active' ? 'bg-green-600' : 'bg-red-600'}`} />
-                            <span>{rest.status}</span>
-                          </button>
-                          {rest.is_menuz_partner !== false ? (
-                            <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 whitespace-nowrap">
-                              ✨ Menuz Partner
-                            </span>
-                          ) : (
-                            <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-50 text-amber-800 border border-amber-300 whitespace-nowrap">
-                              📍 Directory Lead
-                            </span>
-                          )}
-                        </div>
-                      </div>
+                            <UtensilsCrossed className="w-3.5 h-3.5 text-saffron-600" />
+                            <span>Launch Diner Menu ({restTables[0]?.label || 'Table 1'})</span>
+                            <ExternalLink className="w-3 h-3 text-saffron-500 ml-0.5" />
+                          </Link>
 
-                      {/* Location & Contact */}
-                      <div className="mt-4 p-3 bg-ivory-50 rounded-2xl border border-ivory-200 text-xs space-y-1">
-                        <div className="flex justify-between text-charcoal-700">
-                          <span className="text-charcoal-500">Location:</span>
-                          <span className="font-medium text-right">{rest.location}</span>
-                        </div>
-                        {rest.owner_name && (
-                          <div className="flex justify-between text-charcoal-700">
-                            <span className="text-charcoal-500">Owner:</span>
-                            <span className="font-medium">{rest.owner_name}</span>
+                          <div className="grid grid-cols-3 gap-2">
+                            <Link
+                              to={`/manage/${rest.slug}`}
+                              onClick={() => setCurrentRestaurant(rest.id)}
+                              className="bg-charcoal-900 hover:bg-charcoal-800 text-white font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 transition-colors text-center cursor-pointer"
+                              title="Manager Hub & Menu Editor"
+                            >
+                              <span>Manage</span>
+                              <ChevronRight className="w-3 h-3" />
+                            </Link>
+
+                            <Link
+                              to="/kitchen"
+                              onClick={() => setCurrentRestaurant(rest.id)}
+                              className="bg-ivory-100 hover:bg-ivory-200 text-charcoal-800 font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 border border-ivory-300 transition-colors text-center cursor-pointer"
+                              title="Kitchen Display System (KDS)"
+                            >
+                              <ChefHat className="w-3.5 h-3.5 text-saffron-600" />
+                              <span>KDS</span>
+                            </Link>
+
+                            <Link
+                              to="/qr"
+                              onClick={() => setCurrentRestaurant(rest.id)}
+                              className="bg-ivory-100 hover:bg-ivory-200 text-charcoal-800 font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 border border-ivory-300 transition-colors text-center cursor-pointer"
+                              title="View & Download Table QR Badges"
+                            >
+                              <QrCode className="w-3.5 h-3.5 text-charcoal-600" />
+                              <span>QRs</span>
+                            </Link>
                           </div>
-                        )}
-                        {rest.contact_phone && (
-                          <div className="flex justify-between text-charcoal-700">
-                            <span className="text-charcoal-500">Contact:</span>
-                            <span className="font-mono text-[11px]">{rest.contact_phone}</span>
+
+                          <div className="flex items-center justify-between pt-1 text-[11px] text-charcoal-500">
+                            <span className="truncate max-w-[170px] font-mono text-[10px]">/#/r/{rest.slug}/menu</span>
+                            <button
+                              onClick={() => copyUrl(window.location.origin + dinerUrl, rest.id)}
+                              className="px-2.5 py-1 bg-ivory-100 hover:bg-ivory-200 text-charcoal-700 rounded-lg font-medium border border-ivory-200 flex items-center space-x-1 flex-shrink-0 transition-colors cursor-pointer"
+                              title="Copy Table 1 Menu Link"
+                            >
+                              {copiedLink === rest.id ? (
+                                <>
+                                  <Check className="w-3 h-3 text-green-600" />
+                                  <span className="text-green-700 font-bold">Copied</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Copy className="w-3 h-3" />
+                                  <span>Copy Link</span>
+                                </>
+                              )}
+                            </button>
                           </div>
-                        )}
-                        <div className="flex justify-between text-charcoal-700">
-                          <span className="text-charcoal-500">POS Integration:</span>
-                          <span className="font-bold uppercase tracking-wider text-[10px] text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">
-                            {rest.pos_provider}
-                          </span>
                         </div>
                       </div>
-
-                      {/* Metrics row */}
-                      <div className="grid grid-cols-4 gap-2 mt-4 text-center">
-                        <div className="p-2 bg-ivory-100/60 rounded-xl">
-                          <span className="text-[10px] text-charcoal-500 block uppercase font-bold">Tables</span>
-                          <span className="text-sm font-bold font-mono text-charcoal-900">{restTables.length}</span>
-                        </div>
-                        <div className="p-2 bg-ivory-100/60 rounded-xl">
-                          <span className="text-[10px] text-charcoal-500 block uppercase font-bold">Dishes</span>
-                          <span className="text-sm font-bold font-mono text-charcoal-900">{restItems.length}</span>
-                        </div>
-                        <div className="p-2 bg-ivory-100/60 rounded-xl">
-                          <span className="text-[10px] text-charcoal-500 block uppercase font-bold">Orders</span>
-                          <span className="text-sm font-bold font-mono text-charcoal-900">{restOrders.length}</span>
-                        </div>
-                        <div className="p-2 bg-ivory-100/60 rounded-xl">
-                          <span className="text-[10px] text-charcoal-500 block uppercase font-bold">Rating</span>
-                          <span className="text-sm font-bold font-mono text-amber-600 flex items-center justify-center">
-                            <Star className="w-3 h-3 fill-amber-500 inline mr-0.5" />
-                            {restReviews.length > 0 ? (restReviews.reduce((s, r) => s + r.rating, 0) / restReviews.length).toFixed(1) : '-'}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Action Links & Multi-Button Control */}
-                    <div className="mt-5 pt-4 border-t border-ivory-200 flex flex-col space-y-2.5">
-                      {rest.is_menuz_partner === false ? (
-                        <button
-                          onClick={() => {
-                            updateRestaurant(rest.id, { is_menuz_partner: true, status: 'active' });
-                          }}
-                          className="w-full bg-gradient-to-r from-saffron-600 to-amber-500 hover:from-saffron-700 hover:to-amber-600 text-white font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-all shadow-subtle hover:scale-[1.01]"
-                          title="Activate Menuz Partnership: Enables customer website display, table QR badges & menus"
-                        >
-                          <Sparkles className="w-3.5 h-3.5" />
-                          <span>Onboard as Menuz Partner</span>
-                        </button>
-                      ) : (
-                        <Link
-                          to={`/r/${rest.slug}/menu?t=${firstTableToken}`}
-                          onClick={() => setCurrentRestaurant(rest.id)}
-                          className="w-full bg-saffron-50 hover:bg-saffron-100 text-saffron-800 font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors border border-saffron-200 shadow-xs"
-                        >
-                          <UtensilsCrossed className="w-3.5 h-3.5 text-saffron-600" />
-                          <span>Launch Diner Menu ({restTables[0]?.label || 'Table 1'})</span>
-                          <ExternalLink className="w-3 h-3 text-saffron-500 ml-0.5" />
-                        </Link>
-                      )}
-
-                      <div className="grid grid-cols-3 gap-2">
-                        <Link
-                          to={`/manage/${rest.slug}`}
-                          onClick={() => setCurrentRestaurant(rest.id)}
-                          className="bg-charcoal-900 hover:bg-charcoal-800 text-white font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 transition-colors text-center"
-                          title="Manager Hub & Menu Editor"
-                        >
-                          <span>Manage</span>
-                          <ChevronRight className="w-3 h-3" />
-                        </Link>
-
-                        <Link
-                          to="/kitchen"
-                          onClick={() => setCurrentRestaurant(rest.id)}
-                          className="bg-ivory-100 hover:bg-ivory-200 text-charcoal-800 font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 border border-ivory-300 transition-colors text-center"
-                          title="Kitchen Display System (KDS)"
-                        >
-                          <ChefHat className="w-3.5 h-3.5 text-saffron-600" />
-                          <span>KDS</span>
-                        </Link>
-
-                        <Link
-                          to="/qr"
-                          onClick={() => setCurrentRestaurant(rest.id)}
-                          className="bg-ivory-100 hover:bg-ivory-200 text-charcoal-800 font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 border border-ivory-300 transition-colors text-center"
-                          title="View & Download Table QR Badges"
-                        >
-                          <QrCode className="w-3.5 h-3.5 text-charcoal-600" />
-                          <span>QRs</span>
-                        </Link>
-                      </div>
-
-                      <div className="flex items-center justify-between pt-1 text-[11px] text-charcoal-500">
-                        <span className="truncate max-w-[170px] font-mono text-[10px]">/#/r/{rest.slug}/menu</span>
-                        <button
-                          onClick={() => copyUrl(window.location.origin + dinerUrl, rest.id)}
-                          className="px-2.5 py-1 bg-ivory-100 hover:bg-ivory-200 text-charcoal-700 rounded-lg font-medium border border-ivory-200 flex items-center space-x-1 flex-shrink-0 transition-colors"
-                          title="Copy Table 1 Menu Link"
-                        >
-                          {copiedLink === rest.id ? (
-                            <>
-                              <Check className="w-3 h-3 text-green-600" />
-                              <span className="text-green-700 font-bold">Copied</span>
-                            </>
-                          ) : (
-                            <>
-                              <Copy className="w-3 h-3" />
-                              <span>Copy Link</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                    );
+                  })}
+                </div>
+              )
+            )}
 
             {/* Bottom Pagination Controls */}
             {visibleCount < filteredRestaurants.length && (
@@ -1742,7 +1915,7 @@ export const MasterAdminDashboard: React.FC = () => {
                 <h3 className="text-lg font-bold font-serif text-charcoal-900 mt-0.5">Master Culinary Photography Library</h3>
                 <p className="text-xs text-charcoal-600 mt-0.5">
                   {menuItems.length > 0
-                    ? 'Audit, replace, or assign photographs to any partner restaurant\'s catalog.'
+                    ? 'Audit, replace, or assign photographs to any restaurant\'s catalog.'
                     : 'No menu items yet. Add menu items through restaurant management hubs.'}
                 </p>
               </div>
@@ -1887,10 +2060,10 @@ export const MasterAdminDashboard: React.FC = () => {
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-float border border-ivory-300 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-ivory-200">
               <div>
-                <h3 className="font-serif text-lg font-bold text-charcoal-900">Onboard Partner Restaurant</h3>
+                <h3 className="font-serif text-lg font-bold text-charcoal-900">Onboard Restaurant to Menuz</h3>
                 <span className="text-[11px] text-saffron-700 font-semibold flex items-center space-x-1 mt-0.5">
                   <Globe className="w-3.5 h-3.5" />
-                  <span>Pune Directory — 50+ restaurants pre-loaded</span>
+                  <span>Pune Directory — 269+ restaurants ready in city database</span>
                 </span>
               </div>
               <button onClick={() => { setIsAddRestaurantOpen(false); setAutocompleteQuery(''); setSelectedFromDirectory(false); }} className="text-charcoal-400 hover:text-charcoal-600">

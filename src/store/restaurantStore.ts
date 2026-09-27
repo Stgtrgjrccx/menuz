@@ -649,7 +649,7 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       }
     }),
     {
-      name: 'menuz_restaurant_storage_v9_full_pune_pcmc',
+      name: 'menuz_restaurant_storage_v12_only_two_demos',
       partialize: (state) => ({
         restaurants: state.restaurants,
         tables: state.tables,
@@ -664,10 +664,15 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       }),
       onRehydrateStorage: () => (state) => {
         if (!state) return;
-        const existingIds = new Set((state.restaurants || []).map((r) => r.id));
-        const missing = SEED_RESTAURANTS.filter((r) => !existingIds.has(r.id));
-        if (missing.length > 0) {
-          state.restaurants = [...(state.restaurants || []), ...missing];
+        // Strictly keep the two verified demos (Saffron House & Casa Bella) plus any explicitly onboarded restaurant
+        const allowedDemos = new Set(['rest-saffron-house-01', 'rest-casa-bella-02']);
+        const cleaned = (state.restaurants || []).filter(
+          (r) => allowedDemos.has(r.id) || r.id.startsWith('rest-onboarded-') || r.id.startsWith('rest-custom-')
+        );
+        state.restaurants = cleaned.length >= 2 ? cleaned : SEED_RESTAURANTS;
+        if (!state.restaurant || !state.restaurants.some((r) => r.id === state.restaurant.id)) {
+          state.restaurant = state.restaurants[0] || SEED_RESTAURANTS[0];
+          state.currentRestaurantId = state.restaurant?.id || '';
         }
         const existingTableIds = new Set((state.tables || []).map((t) => t.id));
         const missingTables = SEED_TABLES.filter((t) => !existingTableIds.has(t.id));

@@ -79,19 +79,21 @@ export const Navbar: React.FC = () => {
               </span>
             </Link>
 
-            {/* Quick Restaurant Hub Selector */}
+            {/* Quick Restaurant Hub Selector (Only active Menuz restaurants) */}
             <div className="hidden sm:block">
               <select
                 value={restaurant?.id || ''}
                 onChange={(e) => setCurrentRestaurant(e.target.value)}
-                className="bg-charcoal-800 text-saffron-400 hover:text-saffron-300 border border-charcoal-700 hover:border-saffron-500/50 rounded-lg px-2.5 py-1 text-xs font-semibold focus:outline-none cursor-pointer max-w-[160px] truncate transition-colors"
+                className="bg-charcoal-800 text-saffron-400 hover:text-saffron-300 border border-charcoal-700 hover:border-saffron-500/50 rounded-lg px-2.5 py-1 text-xs font-semibold focus:outline-none cursor-pointer max-w-[180px] truncate transition-colors"
                 title="Switch Active Restaurant Hub"
               >
-                {restaurants.map((r) => (
-                  <option key={r.id} value={r.id} className="bg-charcoal-900 text-white">
-                    {r.name}
-                  </option>
-                ))}
+                {restaurants
+                  .filter((r) => r.is_menuz_partner !== false)
+                  .map((r) => (
+                    <option key={r.id} value={r.id} className="bg-charcoal-900 text-white">
+                      {r.name}
+                    </option>
+                  ))}
               </select>
             </div>
           </div>

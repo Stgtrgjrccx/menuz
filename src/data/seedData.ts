@@ -37,74 +37,34 @@ export const SEED_RESTAURANT: Restaurant = {
   is_menuz_partner: true
 };
 
-const directoryMappedRestaurants: Restaurant[] = [];
-const seenSlugs = new Set<string>(['saffron-house', 'casa-bella']);
-
-for (const entry of PUNE_RESTAURANT_DIRECTORY) {
-  if (!entry || !entry.name) continue;
-  const cleanSlug =
-    entry.name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '') || 'pune-restaurant';
-  if (seenSlugs.has(cleanSlug)) continue;
-  seenSlugs.add(cleanSlug);
-
-  directoryMappedRestaurants.push({
-    id: `rest-${cleanSlug}`,
-    slug: cleanSlug,
-    name: entry.name,
-    cuisine: entry.cuisine,
-    location: entry.location,
-    owner_name: `${entry.name} Hospitality Team`,
-    contact_email: `contact@${cleanSlug.slice(0, 16).replace(/-$/, '')}.in`,
-    contact_phone: entry.phone,
-    status: 'active',
-    logo_url: entry.imageUrl,
-    brand_colors: {
-      primary: '#E85D04',
-      background: '#FDFBF7',
-      text: '#1C1917',
-      accent: '#C84B00'
-    },
-    currency: 'INR',
-    tax_rate_percent: 5.0,
-    ordering_enabled: true,
-    google_place_url: `https://search.google.com/local/writereview?placeid=${cleanSlug}`,
-    authentic_photography_statement: 'High-definition verified culinary photography for table-side digital menus',
-    pos_provider: entry.posProvider || 'universal_api',
-    is_menuz_partner: false,
-    aliases: entry.aliases || []
-  });
-}
+export const SEED_CASA_BELLA: Restaurant = {
+  id: 'rest-casa-bella-02',
+  slug: 'casa-bella',
+  name: 'Casa Bella Trattoria',
+  cuisine: 'Artisanal Italian Trattoria',
+  location: 'Koregaon Park, Pune',
+  owner_name: 'Chef Marco Rossi & Team',
+  contact_email: 'management@casabella.in',
+  contact_phone: '+91 20 2615 4422',
+  status: 'active',
+  logo_url: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&auto=format&fit=crop',
+  brand_colors: {
+    primary: '#0D9488',
+    background: '#FDFBF7',
+    text: '#1C1917',
+    accent: '#0F766E'
+  },
+  currency: 'INR',
+  tax_rate_percent: 5.00,
+  google_place_url: 'https://search.google.com/local/writereview?placeid=ChIJCasaBellaTrattoriaPune',
+  ordering_enabled: true,
+  pos_provider: 'toast',
+  is_menuz_partner: true
+};
 
 export const SEED_RESTAURANTS: Restaurant[] = [
   SEED_RESTAURANT,
-  {
-    id: 'rest-casa-bella-02',
-    slug: 'casa-bella',
-    name: 'Casa Bella Trattoria',
-    cuisine: 'Artisanal Italian Trattoria',
-    location: 'Koregaon Park, Pune',
-    owner_name: 'Chef Marco Rossi & Team',
-    contact_email: 'management@casabella.in',
-    contact_phone: '+91 20 2615 4422',
-    status: 'active',
-    logo_url: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&auto=format&fit=crop',
-    brand_colors: {
-      primary: '#0D9488',
-      background: '#FDFBF7',
-      text: '#1C1917',
-      accent: '#0F766E'
-    },
-    currency: 'INR',
-    tax_rate_percent: 5.00,
-    google_place_url: 'https://search.google.com/local/writereview?placeid=ChIJCasaBellaTrattoriaPune',
-    ordering_enabled: true,
-    pos_provider: 'toast',
-    is_menuz_partner: true
-  },
-  ...directoryMappedRestaurants
+  SEED_CASA_BELLA
 ];
 
 export const SEED_TABLES: RestaurantTable[] = [
@@ -115,13 +75,7 @@ export const SEED_TABLES: RestaurantTable[] = [
   { id: 'tbl-cb-01', restaurant_id: 'rest-casa-bella-02', label: 'Table 1', public_token: 'table-token-01-casabella', is_active: true },
   { id: 'tbl-cb-02', restaurant_id: 'rest-casa-bella-02', label: 'Table 2', public_token: 'table-token-02-casabella', is_active: true },
   { id: 'tbl-cb-03', restaurant_id: 'rest-casa-bella-02', label: 'Table 3', public_token: 'table-token-03-casabella', is_active: true },
-  { id: 'tbl-cb-04', restaurant_id: 'rest-casa-bella-02', label: 'Table 4', public_token: 'table-token-04-casabella', is_active: true },
-  ...SEED_RESTAURANTS.filter((r) => r.id !== 'rest-saffron-house-01' && r.id !== 'rest-casa-bella-02').flatMap((rest) => [
-    { id: `tbl-${rest.slug}-01`, restaurant_id: rest.id, label: 'Table 1', public_token: `table-token-01-${rest.slug}`, is_active: true },
-    { id: `tbl-${rest.slug}-02`, restaurant_id: rest.id, label: 'Table 2', public_token: `table-token-02-${rest.slug}`, is_active: true },
-    { id: `tbl-${rest.slug}-03`, restaurant_id: rest.id, label: 'Table 3', public_token: `table-token-03-${rest.slug}`, is_active: true },
-    { id: `tbl-${rest.slug}-04`, restaurant_id: rest.id, label: 'Table 4', public_token: `table-token-04-${rest.slug}`, is_active: true }
-  ])
+  { id: 'tbl-cb-04', restaurant_id: 'rest-casa-bella-02', label: 'Table 4', public_token: 'table-token-04-casabella', is_active: true }
 ];
 
 export const SEED_CATEGORIES: MenuCategory[] = [
@@ -643,7 +597,7 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
   }
 ];
 
-// SEED_RESTAURANTS and SEED_TABLES are comprehensively defined above with all Pune partner restaurants
+// SEED_RESTAURANTS and SEED_TABLES are defined with the 2 active interactive demo restaurants
 
 export const SEED_QUESTIONNAIRES: Record<string, RestaurantAiQuestionnaire> = {};
 
