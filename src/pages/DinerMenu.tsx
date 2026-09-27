@@ -350,10 +350,13 @@ export const DinerMenu: React.FC = () => {
                 setAiFocusDish(null);
                 setIsAiOpen(true);
               }}
-              className="px-4 py-2.5 bg-charcoal-900 hover:bg-charcoal-800 text-white text-xs font-bold rounded-full shadow-subtle transition-all flex items-center space-x-1.5"
+              className="px-4 py-2.5 bg-gradient-to-r from-charcoal-900 to-charcoal-800 hover:from-charcoal-950 hover:to-charcoal-900 text-white text-xs font-bold rounded-full shadow-subtle transition-all flex items-center space-x-1.5 border border-amber-500/30 group"
             >
-              <Sparkles className="w-3.5 h-3.5 text-saffron-400" />
-              <span>Ask AI Concierge</span>
+              <span className="text-sm">🧑‍🍳</span>
+              <span>Ask Chef's AI Assistant</span>
+              <span className="hidden sm:inline-block text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300">
+                Trained by Chef
+              </span>
             </button>
           </div>
         </div>

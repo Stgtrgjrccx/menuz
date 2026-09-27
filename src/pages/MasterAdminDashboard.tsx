@@ -6,6 +6,7 @@ import { PetpoojaIntegrationPanel } from '../components/PetpoojaIntegrationPanel
 import { RoyalPosIntegrationPanel } from '../components/RoyalPosIntegrationPanel';
 import { RecahoIntegrationPanel } from '../components/RecahoIntegrationPanel';
 import { RancelabIntegrationPanel } from '../components/RancelabIntegrationPanel';
+import { SelfServeKotSetupWizard } from '../components/SelfServeKotSetupWizard';
 import {
   Building2,
   Users,
@@ -77,6 +78,7 @@ export const MasterAdminDashboard: React.FC = () => {
 
   // ── Modals state ───────────────────────────────────────────
   const [isAddRestaurantOpen, setIsAddRestaurantOpen] = useState(false);
+  const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
   const [isImageAssignModalOpen, setIsImageAssignModalOpen] = useState(false);
   const [selectedImageForAssign, setSelectedImageForAssign] = useState<string>('');
@@ -1814,9 +1816,16 @@ export const MasterAdminDashboard: React.FC = () => {
                   </p>
                 </div>
                 <div className="flex items-center space-x-2 text-xs">
+                  <button
+                    type="button"
+                    onClick={() => setIsWizardOpen(true)}
+                    className="px-3 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold rounded-xl shadow-xs flex items-center space-x-1.5 cursor-pointer"
+                  >
+                    <span>⚡ 2-Min Self-Serve KOT Wizard</span>
+                  </button>
                   <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 font-bold rounded-lg border border-emerald-200 flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    4 POS Adapters Active
+                    All 5 KOT Routes Active
                   </span>
                 </div>
               </div>
@@ -2563,6 +2572,18 @@ export const MasterAdminDashboard: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* 2-Minute Self-Service KOT Setup Wizard Modal */}
+      {isWizardOpen && (
+        <SelfServeKotSetupWizard
+          restaurant={restaurants[0]}
+          onComplete={(updates) => {
+            updateRestaurant(restaurants[0].id, updates);
+            setIsWizardOpen(false);
+          }}
+          onCancel={() => setIsWizardOpen(false)}
+        />
       )}
     </div>
   );

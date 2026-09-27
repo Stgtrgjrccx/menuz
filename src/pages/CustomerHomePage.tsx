@@ -461,11 +461,13 @@ export const CustomerHomePage: React.FC = () => {
               <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl font-serif font-black mb-4">
                 2
               </div>
-              <h3 className="font-serif font-bold text-base text-charcoal-900 mb-1.5">
-                Browse &amp; Order Seamlessly
-              </h3>
+              <div className="flex items-center space-x-1.5 mb-1.5">
+                <h3 className="font-serif font-bold text-base text-charcoal-900">
+                  Chef &amp; Owner Trained AI Assistant
+                </h3>
+              </div>
               <p className="text-xs text-charcoal-600 leading-relaxed">
-                Enjoy authentic high-res food photos, dietary labels, chef highlights, and an AI dining concierge to help you choose the best pairing.
+                Trained directly by the Head Chef on secret recipes, true spice meters (1-5), and allergens — and by the Owner on signature beverage and bread pairings.
               </p>
             </div>
 
@@ -638,7 +640,7 @@ export const CustomerHomePage: React.FC = () => {
               Instant Kitchen KOT Sync With Your Existing Software
             </h2>
             <p className="text-xs sm:text-sm text-charcoal-300 leading-relaxed">
-              Menuz connects seamlessly to all major Indian restaurant billing systems. Whether you operate on Petpooja, RoyalPOS, Recaho, RanceLab FusionResto, or direct thermal hardware, orders placed on Menuz fire kitchen tickets in 1 second.
+              Connect to any restaurant's KOT in <strong>under 2 minutes</strong> without developer help or technical setup. Whether you operate on Petpooja, RoyalPOS, Recaho, RanceLab FusionResto, or direct ESC/POS thermal printer hardware, orders placed on Menuz fire kitchen tickets in 1 second.
             </p>
           </div>
 

@@ -29,11 +29,11 @@ const ALLERGY_DISCLAIMER = "Allergen information is supplied by the restaurant. 
 function getQuickActionsForDish(dish: MenuItem | null): string[] {
   if (!dish) {
     return [
-      "What's popular today?",
-      "Recommend something light",
-      "Any vegetarian specials?",
-      "What drinks pair well?",
-      "Show chef's recommendations"
+      "🧑‍🍳 What does the Chef recommend?",
+      "🔥 How spicy are your curries?",
+      "🍷 Best drink pairing by the Owner",
+      "🌱 Show vegetarian & vegan specials",
+      "👨‍👩‍👧‍👦 Recommend feast for a table of 4"
     ];
   }
 
@@ -99,7 +99,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
         setMessages([
           {
             role: 'assistant',
-            content: `Namaste! I'm your AI dining concierge${restaurant?.name ? ` at ${restaurant.name}` : ''}. Ask me about any dish — ingredients, allergens, spice levels, pairings, or dietary alternatives. I'll help you find the perfect meal.`
+            content: `Namaste! I am your AI dining concierge at ${restaurant?.name || 'our restaurant'}, trained directly by our Head Chef & Owner. I know our kitchen's secret recipes, true spice levels (1-5), allergen safety, and signature pairings. How can I guide your meal today?`
           }
         ]);
       }
@@ -320,22 +320,27 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
       >
         {/* Header */}
         <div className="flex justify-between items-center pb-3 border-b border-ivory-200">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-full bg-saffron-100 flex items-center justify-center text-saffron-700">
+          <div className="flex items-center space-x-2.5">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-500 to-saffron-600 flex items-center justify-center text-white shadow-xs">
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="font-serif font-bold text-base text-charcoal-900">AI Dining Concierge</h3>
+              <div className="flex items-center space-x-1.5">
+                <h3 className="font-serif font-bold text-base text-charcoal-900">AI Dining Concierge</h3>
+                <span className="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-200">
+                  🧑‍🍳 Chef &amp; Owner Trained
+                </span>
+              </div>
               <p className="text-[10px] text-charcoal-700/60">
                 {focusDish
                   ? `Focused on: ${focusDish.name}`
-                  : `Powered by ${restaurant?.name || 'restaurant'} kitchen data`}
+                  : `Trained on secret kitchen recipes & authentic spice index`}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-full text-charcoal-700 hover:bg-ivory-100 transition-colors"
+            className="p-1.5 rounded-full text-charcoal-700 hover:bg-ivory-100 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>

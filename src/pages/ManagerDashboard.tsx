@@ -30,6 +30,8 @@ import { PetpoojaIntegrationPanel } from '../components/PetpoojaIntegrationPanel
 import { RoyalPosIntegrationPanel } from '../components/RoyalPosIntegrationPanel';
 import { RecahoIntegrationPanel } from '../components/RecahoIntegrationPanel';
 import { RancelabIntegrationPanel } from '../components/RancelabIntegrationPanel';
+import { SelfServeKotSetupWizard } from '../components/SelfServeKotSetupWizard';
+import { AiAssistantDrawer } from '../components/AiAssistantDrawer';
 
 const SAMPLE_FOOD_IMAGES = [
   { label: 'Paneer / Curry', url: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80' },
@@ -60,6 +62,8 @@ export const ManagerDashboard: React.FC = () => {
   const updateRestaurant = useRestaurantStore((state) => state.updateRestaurant);
 
   const [isPosModalOpen, setIsPosModalOpen] = useState(false);
+  const [isWizardOpen, setIsWizardOpen] = useState(false);
+  const [isAiDrawerOpen, setIsAiDrawerOpen] = useState(false);
   const [selectedPosTab, setSelectedPosTab] = useState<'petpooja' | 'royalpos' | 'recaho' | 'rancelab'>(
     (restaurant.pos_provider as any) || 'petpooja'
   );
@@ -278,12 +282,23 @@ export const ManagerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsPosModalOpen(true)}
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-orange-900 hover:text-orange-950 transition-colors bg-orange-100/90 hover:bg-orange-200 px-3.5 py-2 rounded-xl border border-orange-300 shadow-xs"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-orange-900 hover:text-orange-950 transition-colors bg-orange-100/90 hover:bg-orange-200 px-3.5 py-2 rounded-xl border border-orange-300 shadow-xs cursor-pointer"
           >
             <Printer className="w-3.5 h-3.5 text-orange-700" />
-            <span>POS & KOT Integration</span>
+            <span>POS & KOT</span>
             <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded-md bg-orange-200/80 text-orange-800">
               {restaurant.pos_provider || 'Petpooja'}
+            </span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsWizardOpen(true)}
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-emerald-950 hover:text-emerald-900 transition-colors bg-emerald-100/90 hover:bg-emerald-200 px-3.5 py-2 rounded-xl border border-emerald-300 shadow-xs cursor-pointer"
+          >
+            <span className="text-xs">⚡</span>
+            <span>2-Min KOT Wizard</span>
+            <span className="text-[9px] uppercase font-mono px-1.5 py-0.2 rounded-md bg-emerald-200/90 text-emerald-900 font-bold">
+              Self-Serve
             </span>
           </button>
         </div>
@@ -299,6 +314,15 @@ export const ManagerDashboard: React.FC = () => {
         </div>
 
         <div className="flex items-center space-x-2">
+          <button
+            type="button"
+            onClick={() => setIsAiDrawerOpen(true)}
+            className="flex items-center space-x-1.5 text-xs text-purple-900 bg-purple-50 hover:bg-purple-100 border border-purple-200 px-3.5 py-2.5 rounded-xl shadow-subtle transition-colors font-bold cursor-pointer"
+          >
+            <span className="text-sm">🧑‍🍳</span>
+            <span>Test Chef's AI</span>
+          </button>
+
           <Link
             to={`/r/${restaurant.slug}/menu?t=${activeTablesList[0]?.public_token || 'table-token-01-saffron'}`}
             className="flex items-center space-x-1.5 text-xs text-charcoal-700 bg-white border border-ivory-200 px-3.5 py-2.5 rounded-xl shadow-subtle hover:bg-ivory-100 transition-colors font-bold"
@@ -462,6 +486,151 @@ export const ManagerDashboard: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* 🧑‍🍳 CHEF & OWNER AI KNOWLEDGE HUB & KOT ENGINE */}
+      <section className="bg-gradient-to-br from-charcoal-950 via-charcoal-900 to-charcoal-950 text-white p-6 rounded-3xl border border-charcoal-800 shadow-float space-y-5">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-charcoal-800 pb-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-saffron-600 flex items-center justify-center text-2xl shadow-md">
+              🧑‍🍳
+            </div>
+            <div>
+              <div className="flex items-center space-x-2">
+                <h2 className="font-serif text-xl font-bold text-white">Chef &amp; Owner AI Knowledge Hub</h2>
+                <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                  Live on Table QRs
+                </span>
+              </div>
+              <p className="text-xs text-charcoal-300 mt-0.5">
+                Your dining concierge is trained directly on your head chef's recipes &amp; owner's upselling strategy — not generic LLM web text.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <button
+              type="button"
+              onClick={() => setIsAiDrawerOpen(true)}
+              className="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-charcoal-950 text-xs font-bold rounded-xl shadow-subtle transition-all flex items-center space-x-1.5 cursor-pointer"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Simulate AI Chat as Diner</span>
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Head Chef Training Box */}
+          <div className="bg-charcoal-900/90 border border-charcoal-800 rounded-2xl p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <span className="text-base">🧑‍🍳</span>
+                <h3 className="font-serif font-bold text-sm text-white">Head Chef Culinary Profile</h3>
+              </div>
+              <span className="text-[10px] font-mono text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/20">
+                Chef Sanjeev
+              </span>
+            </div>
+            <div className="space-y-2 text-xs text-charcoal-300">
+              <div className="flex items-start space-x-2 bg-charcoal-950 p-2.5 rounded-xl border border-charcoal-800/60">
+                <span className="text-amber-400 font-bold">✓</span>
+                <div>
+                  <strong className="text-white block">Calibrated 1–5 Spice Index:</strong>
+                  <span>Every curry &amp; starter has verified heat notes so diners never get unpleasantly surprised.</span>
+                </div>
+              </div>
+              <div className="flex items-start space-x-2 bg-charcoal-950 p-2.5 rounded-xl border border-charcoal-800/60">
+                <span className="text-amber-400 font-bold">✓</span>
+                <div>
+                  <strong className="text-white block">Secret Recipe Preparation Notes:</strong>
+                  <span>White butter simmering, clay tandoor smoking, and signature marination secrets are explained seamlessly.</span>
+                </div>
+              </div>
+              <div className="flex items-start space-x-2 bg-charcoal-950 p-2.5 rounded-xl border border-charcoal-800/60">
+                <span className="text-amber-400 font-bold">✓</span>
+                <div>
+                  <strong className="text-white block">Kitchen Allergen Guard:</strong>
+                  <span>Strict warnings for nuts, dairy, and gluten with cross-contamination guidelines.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Restaurant Owner Upsell Box */}
+          <div className="bg-charcoal-900/90 border border-charcoal-800 rounded-2xl p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <span className="text-base">💼</span>
+                <h3 className="font-serif font-bold text-sm text-white">Owner Upsell &amp; Hospitality Rules</h3>
+              </div>
+              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded border border-emerald-400/20">
+                Owner Rohit
+              </span>
+            </div>
+            <div className="space-y-2 text-xs text-charcoal-300">
+              <div className="flex items-start space-x-2 bg-charcoal-950 p-2.5 rounded-xl border border-charcoal-800/60">
+                <span className="text-emerald-400 font-bold">✓</span>
+                <div>
+                  <strong className="text-white block">High-Margin Beverage Pairing:</strong>
+                  <span>Automatically recommends signature coolers (Kokum Mint Cooler, Mango Lassi) with rich curries (+18% bill size).</span>
+                </div>
+              </div>
+              <div className="flex items-start space-x-2 bg-charcoal-950 p-2.5 rounded-xl border border-charcoal-800/60">
+                <span className="text-emerald-400 font-bold">✓</span>
+                <div>
+                  <strong className="text-white block">Bread Basket Suggestions:</strong>
+                  <span>Prompts crispy Garlic Butter Naan and Amritsari Kulcha with every main course gravy.</span>
+                </div>
+              </div>
+              <div className="flex items-start space-x-2 bg-charcoal-950 p-2.5 rounded-xl border border-charcoal-800/60">
+                <span className="text-emerald-400 font-bold">✓</span>
+                <div>
+                  <strong className="text-white block">Post-Meal Google Review Incentive:</strong>
+                  <span>Coordinates with the surprise table reward challenge to convert happy diners into 5-star reviews.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 2-Minute KOT Self-Serve Connectivity Strip */}
+        <div className="bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-purple-500/20 border border-amber-500/30 p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-300">
+              <Printer className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center space-x-2">
+                <h4 className="font-bold text-sm text-white">Universal Kitchen KOT Bridge: Active</h4>
+                <span className="text-[10px] font-mono uppercase bg-black/40 text-amber-300 px-2 py-0.5 rounded border border-amber-500/30">
+                  {restaurant.pos_provider || 'Petpooja'} Configured
+                </span>
+              </div>
+              <p className="text-xs text-charcoal-300 mt-0.5">
+                Orders fire directly to your kitchen thermal printer in &lt;1 second. Connect to any new restaurant in 2 minutes without coding.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <button
+              type="button"
+              onClick={() => setIsWizardOpen(true)}
+              className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-charcoal-950 text-xs font-bold rounded-xl transition-all shadow-subtle flex items-center space-x-1.5 cursor-pointer whitespace-nowrap"
+            >
+              <span>⚡ Launch 2-Min KOT Wizard</span>
+              <span>→</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsPosModalOpen(true)}
+              className="px-3 py-2 bg-charcoal-800 hover:bg-charcoal-700 text-white text-xs font-medium rounded-xl border border-charcoal-700 transition-all cursor-pointer whitespace-nowrap"
+            >
+              POS Settings
+            </button>
+          </div>
+        </div>
+      </section>
 
       {/* Table QR Card Generator */}
       <section className="bg-white p-6 rounded-3xl border border-ivory-200 shadow-subtle">
@@ -939,6 +1108,28 @@ export const ManagerDashboard: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* 2-Minute Self-Service KOT Setup Wizard Modal */}
+      {isWizardOpen && (
+        <SelfServeKotSetupWizard
+          restaurant={restaurant}
+          onComplete={(updates) => {
+            updateRestaurant(restaurant.id, updates);
+            setIsWizardOpen(false);
+          }}
+          onCancel={() => setIsWizardOpen(false)}
+        />
+      )}
+
+      {/* AI Dining Assistant Simulation Drawer */}
+      <AiAssistantDrawer
+        isOpen={isAiDrawerOpen}
+        onClose={() => setIsAiDrawerOpen(false)}
+        focusDish={null}
+        onConfirmAdd={(_dish) => {
+          setIsAiDrawerOpen(false);
+        }}
+      />
     </div>
   );
 };

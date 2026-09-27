@@ -25,6 +25,7 @@ import {
   ChevronDown
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
+import { SelfServeKotSetupWizard } from '../components/SelfServeKotSetupWizard';
 
 // Web Audio API chimes for interactive pitch experience
 function playTone(freq: number, type: OscillatorType = 'sine', duration: number = 0.2) {
@@ -57,8 +58,10 @@ export const PitchDeckPage: React.FC = () => {
   // Simulator states for Chapter 1: The Google Rating Dilemma
   const [demoRating, setDemoRating] = useState<'average' | 'stellar'>('stellar');
 
-  // Simulator states for Chapter 2: Smart Table Menu
-  const [waiterCalled, setWaiterCalled] = useState(false);
+  // Simulator states for Chapter 2: Chef & Owner AI Chatbot
+  const [selectedAiQuery, setSelectedAiQuery] = useState<'chef' | 'spice' | 'allergen' | 'pairing'>('chef');
+  const [aiItemAdded, setAiItemAdded] = useState(false);
+  const [isWizardOpen, setIsWizardOpen] = useState(false);
 
   // Simulator states for Chapter 3: Universal Kitchen KOT (Petpooja, RoyalPOS, Recaho, RanceLab, Direct ESC/POS)
   const [selectedDeckPos, setSelectedDeckPos] = useState<'Petpooja' | 'RoyalPOS' | 'Recaho' | 'RanceLab' | 'Direct ESC/POS'>('Petpooja');
@@ -99,13 +102,6 @@ export const PitchDeckPage: React.FC = () => {
       setPinError(true);
       playTone(196, 'sawtooth', 0.3);
     }
-  };
-
-  const handleCallWaiter = () => {
-    setWaiterCalled(true);
-    playTone(523.25, 'sine', 0.15);
-    setTimeout(() => playTone(659.25, 'sine', 0.25), 150);
-    setTimeout(() => setWaiterCalled(false), 4000);
   };
 
   const handlePrintKot = () => {
@@ -187,8 +183,8 @@ export const PitchDeckPage: React.FC = () => {
 
   const chapters = [
     { num: '01', short: 'The Dilemma', title: 'The Silent Diner Dilemma' },
-    { num: '02', short: 'QR Menu', title: 'Smart Contactless Table Menu' },
-    { num: '03', short: 'All KOT & POS', title: 'Universal POS & Kitchen KOT Integration' },
+    { num: '02', short: "Chef's AI Chatbot", title: 'Chef & Owner Trained AI Dining Chatbot' },
+    { num: '03', short: 'Universal KOT', title: 'Universal POS & Kitchen KOT Integration' },
     { num: '04', short: 'Review Shield', title: 'AI Review & 4★ Floor Shield' },
     { num: '05', short: 'Zero Commission', title: 'Anti-Cheat Security & 0% Cut' }
   ];
@@ -435,7 +431,7 @@ export const PitchDeckPage: React.FC = () => {
         </section>
 
         {/* ──────────────────────────────────────────────────────────────── */}
-        {/* CHAPTER 02: SMART CONTACTLESS TABLE MENU                         */}
+        {/* CHAPTER 02: CHEF & OWNER TRAINED AI CHATBOT                      */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section
           ref={sectionRefs[1]}
@@ -447,36 +443,37 @@ export const PitchDeckPage: React.FC = () => {
               <div className="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full text-amber-400 text-xs font-bold tracking-wide">
                 <span>CHAPTER 02</span>
                 <span>•</span>
-                <span>THE TABLE EXPERIENCE</span>
+                <span>CHEF &amp; OWNER TRAINED AI CHATBOT</span>
               </div>
 
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-                Scan & Browse <span className="text-amber-400">in 0.3 Seconds.</span>
+                Trained by Your <span className="text-amber-400">Head Chef &amp; Owner.</span>
+                <span className="block text-2xl sm:text-3xl font-bold text-slate-300 mt-1">Your Star Waiter at Every Table.</span>
               </h2>
 
               <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-                No app download. Diners point any phone camera at the custom acrylic stand on Table 4. High-definition photos, spice meters, and dietary tags make decision-making effortless.
+                Generic AI chatbots hallucinate ingredients. Menuz is different: <strong>it is trained directly by your Head Chef and Restaurant Owner</strong>. It knows your kitchen's secret recipe notes, calibrated spice levels (1-5), allergen cautions, and your owner's high-margin pairing rules.
               </p>
 
-              {/* 3 Standout Features */}
+              {/* 3 Pillars of Chef & Owner Training */}
               <div className="space-y-3 pt-1">
                 <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
                   <div className="w-7 h-7 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <QrCode className="w-4 h-4 text-amber-400" />
+                    <span className="text-sm">🧑‍🍳</span>
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white">Zero App Download</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Opens instantly in Safari or Chrome without asking guests to install any application.</p>
+                    <h3 className="text-sm font-bold text-white">Trained by Head Chef: True Spice &amp; Recipes</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">Calibrated spice meters (1-5), secret marinades, preparation styles, and exact allergen cross-contamination warnings.</p>
                   </div>
                 </div>
 
                 <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
                   <div className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <UtensilsCrossed className="w-4 h-4 text-emerald-400" />
+                    <span className="text-sm">💼</span>
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white">Visual Dishes with Chef Notes</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Clear Veg/Non-Veg badges, 1–3 chili spice indicators, and beverage pairings drive 18% higher dessert and drink sales.</p>
+                    <h3 className="text-sm font-bold text-white">Trained by Restaurant Owner: High-Margin Upselling</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">Subtly suggests signature coolers, hot tandoor breads, and desserts that pair perfectly with the diner's selection, increasing check size by +18%.</p>
                   </div>
                 </div>
 
@@ -485,8 +482,8 @@ export const PitchDeckPage: React.FC = () => {
                     <Sparkles className="w-4 h-4 text-purple-400" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white">AI Dining Concierge — Trained by Your Chef</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Every dish question answered instantly: allergens, spice levels, alternatives, pairings. The AI is trained on your restaurant owner's actual menu data and your head chef's personal notes — not generic knowledge.</p>
+                    <h3 className="text-sm font-bold text-white">100% Guardrailed &amp; Instant 1-Tap KOT Addition</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">Never hallucinates items not in stock. Diners can tap <strong>"+ Add to Tray"</strong> directly inside the chat dialogue, firing straight to your kitchen.</p>
                   </div>
                 </div>
               </div>
@@ -498,97 +495,163 @@ export const PitchDeckPage: React.FC = () => {
                   onClick={() => scrollToSection(2)}
                   className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition-all flex items-center gap-2 shadow-sm"
                 >
-                  <span>See How It Connects to POS</span>
+                  <span>See How It Connects to POS &amp; KOT</span>
                   <ChevronDown className="w-4 h-4" />
                 </button>
               </div>
             </div>
 
-            {/* Right Interactive Visual: Table 4 Live Phone Menu Simulation */}
+            {/* Right Interactive Visual: Live Chef & Owner AI Chatbot Simulation */}
             <div className="lg:col-span-6">
               <div className="bg-[#111622] border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
                 <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                   <div className="flex items-center space-x-2">
-                    <Smartphone className="w-4 h-4 text-amber-400" />
-                    <span className="text-xs font-bold text-white">Saffron House • Table 4</span>
+                    <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-amber-500 to-saffron-600 flex items-center justify-center text-xs">
+                      🧑‍🍳
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold text-white block">Saffron House • Chef's AI Assistant</span>
+                      <span className="text-[10px] text-amber-400/90 font-mono">Trained directly by Chef Sanjeev &amp; Owner Rohit</span>
+                    </div>
                   </div>
-                  <span className="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
-                    Live Mobile Menu
+                  <span className="text-[10px] font-bold bg-purple-500/20 text-purple-300 px-2.5 py-0.5 rounded-full border border-purple-500/30">
+                    Live Chat Simulation
                   </span>
                 </div>
 
-                {/* Saffron House Live Dish Card 1 */}
-                <div className="bg-slate-900 border border-slate-800 p-3 rounded-xl flex items-center justify-between gap-3">
-                  <img
-                    src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=150&q=80"
-                    alt="Old Delhi Butter Chicken"
-                    className="w-14 h-14 rounded-lg object-cover border border-slate-700 shrink-0"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center space-x-1.5">
-                      <span className="w-2.5 h-2.5 rounded-sm bg-red-600 shrink-0" title="Non-Veg" />
-                      <span className="text-xs font-bold text-white truncate">Old Delhi Butter Chicken</span>
-                    </div>
-                    <span className="text-[11px] text-slate-400 block mt-0.5">Charcoal tandoor chicken, velvet makhani sauce</span>
-                    <div className="flex items-center space-x-2 mt-1">
-                      <span className="text-xs font-bold text-amber-400 font-mono">₹480</span>
-                      <span className="text-[10px] text-amber-500/80">🌶️ Mild Spice</span>
-                    </div>
-                  </div>
-                  <span className="text-[11px] bg-emerald-500/20 text-emerald-400 font-bold px-2 py-1 rounded-md shrink-0">
-                    In Tray ✓
+                {/* Interactive Query Chips */}
+                <div className="space-y-1.5">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                    Click a question to test Chef &amp; Owner training:
                   </span>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedAiQuery('chef');
+                        setAiItemAdded(false);
+                      }}
+                      className={`px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-left transition-all ${
+                        selectedAiQuery === 'chef'
+                          ? 'bg-amber-500 text-slate-950 font-bold shadow-xs'
+                          : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
+                      }`}
+                    >
+                      🧑‍🍳 Chef recommendations
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedAiQuery('spice');
+                        setAiItemAdded(false);
+                      }}
+                      className={`px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-left transition-all ${
+                        selectedAiQuery === 'spice'
+                          ? 'bg-amber-500 text-slate-950 font-bold shadow-xs'
+                          : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
+                      }`}
+                    >
+                      🔥 Spice level check
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedAiQuery('pairing');
+                        setAiItemAdded(false);
+                      }}
+                      className={`px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-left transition-all ${
+                        selectedAiQuery === 'pairing'
+                          ? 'bg-amber-500 text-slate-950 font-bold shadow-xs'
+                          : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
+                      }`}
+                    >
+                      🍷 Owner's pairing upsell
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedAiQuery('allergen');
+                        setAiItemAdded(false);
+                      }}
+                      className={`px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-left transition-all ${
+                        selectedAiQuery === 'allergen'
+                          ? 'bg-amber-500 text-slate-950 font-bold shadow-xs'
+                          : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
+                      }`}
+                    >
+                      🌾 Gluten &amp; nut-free check
+                    </button>
+                  </div>
                 </div>
 
-                {/* Saffron House Live Dish Card 2 */}
-                <div className="bg-slate-900 border border-slate-800 p-3 rounded-xl flex items-center justify-between gap-3">
-                  <img
-                    src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=150&q=80"
-                    alt="Slow Cooked Dal Makhani"
-                    className="w-14 h-14 rounded-lg object-cover border border-slate-700 shrink-0"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center space-x-1.5">
-                      <span className="w-2.5 h-2.5 rounded-sm bg-emerald-600 shrink-0" title="Veg" />
-                      <span className="text-xs font-bold text-white truncate">Slow-Cooked Dal Makhani</span>
-                    </div>
-                    <span className="text-[11px] text-slate-400 block mt-0.5">Simmered 16 hours with cream & white butter</span>
-                    <div className="flex items-center space-x-2 mt-1">
-                      <span className="text-xs font-bold text-amber-400 font-mono">₹360</span>
-                      <span className="text-[10px] text-emerald-400">Chef Special</span>
-                    </div>
-                  </div>
-                  <span className="text-[11px] bg-emerald-500/20 text-emerald-400 font-bold px-2 py-1 rounded-md shrink-0">
-                    In Tray ✓
-                  </span>
-                </div>
-
-                {/* AI Dining Concierge Chat Preview */}
-                <div className="bg-slate-900 border border-purple-500/20 rounded-xl p-3 space-y-2">
-                  <div className="flex items-center space-x-2 border-b border-slate-800 pb-2">
-                    <div className="w-5 h-5 rounded-full bg-purple-500/20 flex items-center justify-center">
-                      <Sparkles className="w-3 h-3 text-purple-400" />
-                    </div>
-                    <span className="text-[11px] font-bold text-purple-300">AI Dining Concierge</span>
-                    <span className="text-[9px] text-slate-500 ml-auto">Trained on Saffron House kitchen data</span>
-                  </div>
-                  {/* Guest question */}
+                {/* Dialogue Container */}
+                <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 space-y-3 min-h-[220px] flex flex-col justify-between">
+                  {/* Diner Bubble */}
                   <div className="flex justify-end">
-                    <div className="bg-amber-500/20 border border-amber-500/20 px-2.5 py-1.5 rounded-xl rounded-tr-sm text-[11px] text-amber-200 max-w-[75%]">
-                      Is the Butter Chicken very spicy? I'm sensitive.
+                    <div className="bg-amber-500/20 border border-amber-500/30 px-3 py-2 rounded-2xl rounded-tr-sm text-xs text-amber-200 max-w-[80%]">
+                      {selectedAiQuery === 'chef' && "What does the Chef recommend for first-time diners tonight?"}
+                      {selectedAiQuery === 'spice' && "Is the Butter Chicken spicy? We have elderly parents and kids."}
+                      {selectedAiQuery === 'pairing' && "What drink and bread does the owner recommend with curries?"}
+                      {selectedAiQuery === 'allergen' && "Do you have gluten-free or nut-free dishes prepared safely?"}
                     </div>
                   </div>
-                  {/* AI response */}
+
+                  {/* AI Response Bubble */}
                   <div className="flex justify-start">
-                    <div className="bg-slate-800 border border-slate-700 px-2.5 py-1.5 rounded-xl rounded-tl-sm text-[11px] text-slate-200 max-w-[85%] space-y-1">
-                      <p>Old Delhi Butter Chicken is Spice 1/5 — very mild. The makhani sauce is rich and creamy with no chili heat.</p>
-                      <p className="text-[10px] text-purple-300">🧑‍🍳 Chef's note: "Can be made extra mild on request."</p>
+                    <div className="bg-slate-950 border border-slate-800 px-3.5 py-2.5 rounded-2xl rounded-tl-sm text-xs text-slate-200 max-w-[90%] space-y-2">
+                      <p className="leading-relaxed">
+                        {selectedAiQuery === 'chef' && "Chef Sanjeev highlights our Old Delhi Butter Chicken and 16-hour Slow-Cooked Dal Makhani. Both are prepared with hand-churned white butter and aromatic Kashmiri spices."}
+                        {selectedAiQuery === 'spice' && "Old Delhi Butter Chicken is calibrated at Spice 1/5 (very mild). The gravy is tomato, cream, and cashew based with zero harsh green chilies. It's 100% kid and senior-friendly."}
+                        {selectedAiQuery === 'pairing' && "Owner Rohit recommends pairing rich curries with our clay-oven Garlic Butter Naan and a chilled Kokum Mint Cooler to refresh your palate between bites."}
+                        {selectedAiQuery === 'allergen' && "Our Slow-Cooked Dal Makhani and Tandoori Murgh are 100% gluten-free. For nut allergies, our kitchen uses dedicated allergen-safe pans and separate ladles."}
+                      </p>
+
+                      {/* Chef / Owner Note Box */}
+                      <div className="bg-amber-500/10 border-l-2 border-amber-500 px-2.5 py-1.5 rounded-r-md text-[11px] text-amber-300">
+                        {selectedAiQuery === 'chef' && "🧑‍🍳 Chef's Secret: Hand-smoked charcoal tandoori finish gives it the iconic Old Delhi flavor."}
+                        {selectedAiQuery === 'spice' && "🧑‍🍳 Chef's Note: Spice can be customized to zero heat upon your request."}
+                        {selectedAiQuery === 'pairing' && "💼 Owner's Tip: Pairing cooler + naan completes the meal and qualifies for our Google Review dessert reward!"}
+                        {selectedAiQuery === 'allergen' && "🧑‍🍳 Chef's Safety Guarantee: All cross-contamination protocols verified in our kitchen."}
+                      </div>
+
+                      {/* 1-Tap Add to Tray */}
+                      <div className="pt-1 flex items-center justify-between border-t border-slate-800">
+                        <span className="text-[11px] font-bold text-white">
+                          {selectedAiQuery === 'chef' && "Old Delhi Butter Chicken • ₹480"}
+                          {selectedAiQuery === 'spice' && "Kid-Friendly Butter Chicken • ₹480"}
+                          {selectedAiQuery === 'pairing' && "Garlic Naan & Kokum Cooler • ₹240"}
+                          {selectedAiQuery === 'allergen' && "Gluten-Free Dal Makhani • ₹360"}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setAiItemAdded(true);
+                            playTone(587.33, 'triangle', 0.2);
+                          }}
+                          className={`px-3 py-1 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 ${
+                            aiItemAdded
+                              ? 'bg-emerald-500 text-slate-950'
+                              : 'bg-amber-500 hover:bg-amber-400 text-slate-950'
+                          }`}
+                        >
+                          {aiItemAdded ? (
+                            <>
+                              <CheckCircle2 className="w-3 h-3" />
+                              <span>Added to Tray ✓</span>
+                            </>
+                          ) : (
+                            <>
+                              <span>+ Add to Table Tray</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="text-[11px] text-slate-400 text-center">
-                  Chef's personal notes & allergen data built in — no waiter needed for basic questions.
+                  💡 Zero hallucinations: The AI answers only using your exact menu recipes, spice data, and owner upsell rules.
                 </div>
               </div>
             </div>
@@ -618,6 +681,31 @@ export const PitchDeckPage: React.FC = () => {
               <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
                 Menuz doesn't replace your billing software — it seamlessly links with whatever you already run. Whether your restaurant uses <strong>Petpooja, RoyalPOS, Recaho, RanceLab FusionResto, or a standalone Wi-Fi thermal printer</strong>, orders placed on Menuz instantly fire physical 80mm KOT tickets in your kitchen in 1 second.
               </p>
+
+              {/* Self-Service Quick Setup Banner */}
+              <div className="bg-gradient-to-r from-amber-500/15 via-orange-500/15 to-purple-500/15 border border-amber-500/30 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-md">
+                <div>
+                  <div className="flex items-center space-x-1.5 mb-0.5">
+                    <span className="text-xs">⚡</span>
+                    <span className="text-xs font-bold text-white">2-Minute Self-Service KOT Setup</span>
+                    <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300 font-mono font-bold">
+                      Zero-Dev / No Help Needed
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-300">
+                    Connect Petpooja, RoyalPOS, Recaho, RanceLab, or direct ESC/POS hardware printer in 120 seconds.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsWizardOpen(true)}
+                  className="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs rounded-xl transition-all shadow-md shrink-0 flex items-center space-x-1.5 cursor-pointer"
+                >
+                  <Printer className="w-3.5 h-3.5" />
+                  <span>Launch 2-Min Wizard</span>
+                  <span>→</span>
+                </button>
+              </div>
 
               {/* 3-Step Real-time KOT Architecture Card */}
               <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 space-y-2.5">
@@ -1148,6 +1236,17 @@ export const PitchDeckPage: React.FC = () => {
           </Link>
         </div>
       </footer>
+
+      {/* 2-Minute Self-Service KOT Setup Wizard Modal */}
+      {isWizardOpen && (
+        <SelfServeKotSetupWizard
+          restaurant={restaurant}
+          onComplete={(_updates) => {
+            setIsWizardOpen(false);
+          }}
+          onCancel={() => setIsWizardOpen(false)}
+        />
+      )}
     </div>
   );
 };
