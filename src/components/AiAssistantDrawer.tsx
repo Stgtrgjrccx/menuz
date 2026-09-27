@@ -320,29 +320,41 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
             item,
             reason: `Light & fresh — ${item.dietary_flags.join(', ')}`
           }));
-        } else if (lower.includes('chef') || lower.includes('special')) {
-          const chefPicks = availableItems.filter(i => i.is_chef_recommended).slice(0, 2);
-          reply = "Our chef personally recommends these dishes:";
-          recs = chefPicks.map(item => ({
+        } else if (lower.includes('chef') || lower.includes('favourite') || lower.includes('favorite')) {
+          const chefPicks = availableItems.filter(i => i.is_chef_recommended);
+          const picks = chefPicks.length > 0 ? chefPicks.slice(0, 3) : availableItems.slice(0, 2);
+          reply = `🌟 **Head Chef ${chefLabel}'s Personal Favourites**:\n\n` +
+            `*"${persona?.chef_philosophy || 'Our dishes are prepared with authentic hand-pounded spices and zero compromises on slow-cooked technique.'}"*\n\n` +
+            picks.map(item => `• **${item.name}** (₹${item.price}): ${item.chef_notes || item.short_description}`).join('\n');
+          recs = picks.map(item => ({
             item,
-            reason: `🧑‍🍳 Chef's Special — ${item.chef_notes || item.short_description.slice(0, 50)}`
+            reason: `Chef's Choice • ${item.chef_story || item.chef_notes || item.short_description.slice(0, 50)}`
+          }));
+        } else if (lower.includes('special') || lower.includes('signature') || lower.includes('house special')) {
+          const specials = availableItems.filter(i => i.is_signature || i.is_bestseller);
+          const list = specials.length > 0 ? specials.slice(0, 3) : availableItems.slice(0, 2);
+          reply = `🔥 **Our House Specials & Signatures at ${restaurant?.name || 'our restaurant'}**:\n\n` +
+            list.map(item => `• **${item.name}** (₹${item.price}) [Spice ${item.spice_level}/5]: ${item.owner_pitch || item.short_description}`).join('\n');
+          recs = list.map(item => ({
+            item,
+            reason: `House Signature • ${item.chef_notes || item.short_description.slice(0, 50)}`
           }));
         } else if (lower.includes('spicy') || lower.includes('hot')) {
           const spicy = availableItems.filter(i => i.spice_level >= 3).sort((a, b) => b.spice_level - a.spice_level).slice(0, 2);
-          reply = "For those who love the heat:";
+          reply = `🌶️ **For those who love authentic heat:**\n${persona?.spice_guidance || 'Our spices are roasted in desi ghee for deep aroma rather than raw heat.'}`;
           recs = spicy.map(item => ({
             item,
             reason: `🔥 Spice ${item.spice_level}/5 — ${item.short_description.slice(0, 50)}`
           }));
         } else if (lower.includes('drink') || lower.includes('beverage')) {
           const drinks = availableItems.filter(i => i.item_type === 'drink').slice(0, 3);
-          reply = "Here's our beverage selection:";
+          reply = "Here's our beverage selection crafted to complement our cuisine:";
           recs = drinks.map(item => ({
             item,
             reason: `${item.short_description.slice(0, 60)}`
           }));
         } else {
-          reply = "I don't have verified kitchen records for that specific query. You can ask me about:\n\n• Specific dish details & allergens\n• Spice levels & milder alternatives\n• Vegetarian / vegan options\n• Drink & bread pairings\n• Chef's recommendations\n• Portion sizes";
+          reply = `Namaste! As Head Chef ${chefLabel} & Owner ${ownerLabel} ensure: "${persona?.owner_hospitality_note || 'We treat every guest as family.'}"\n\nAsk me about:\n• Chef's Favourites & House Specials\n• Cooking secrets & 18-hour preparation techniques\n• Spice levels (0-5) & milder options\n• Beverage and artisan bread pairings\n• Dietary safety (Jain, Vegan, Gluten-Free, Allergens)`;
         }
       }
 

@@ -226,6 +226,11 @@ export interface MenuItem {
   is_new?: boolean;
   pairing_item_ids: string[];
   chef_notes?: string;
+  chef_story?: string;
+  owner_pitch?: string;
+  pairing_drink_name?: string;
+  pairing_reason?: string;
+  temperature_style?: string;
   sort_order: number;
   option_groups?: MenuItemOptionGroup[];
 }
