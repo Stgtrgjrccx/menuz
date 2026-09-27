@@ -12,11 +12,15 @@ import {
   X,
   Building2,
   Trash2,
+  MapPin,
+  Phone,
+  ChefHat,
+  Filter
 } from 'lucide-react';
-import { MenuItem, isWorkingWithMenuz } from '../types';
+import { MenuItem, Restaurant, isWorkingWithMenuz } from '../types';
 import { useRestaurantStore } from '../store/restaurantStore';
 
-// Curated high-res royalty free food photography bank for instant 1-click styling
+// Curated high-res culinary photo bank
 export const CURATED_CULINARY_LIBRARY = [
   {
     category: 'Indian & Mughlai',
@@ -82,7 +86,7 @@ export const MasterImageLibrary: React.FC = () => {
   const addMenuItem = useRestaurantStore((state) => state.addMenuItem);
   const deleteMenuItem = useRestaurantStore((state) => state.deleteMenuItem);
 
-  // Filter only restaurants working with Menuz
+  // Partner restaurants working with Menuz
   const partnerRestaurants = useMemo(() => {
     return restaurants.filter((r) => isWorkingWithMenuz(r));
   }, [restaurants]);
@@ -102,7 +106,7 @@ export const MasterImageLibrary: React.FC = () => {
 
   // New Dish Form State
   const [newDishName, setNewDishName] = useState('');
-  const [newDishCategory, setNewDishCategory] = useState('Chef Signature Specials');
+  const [newDishCategory, setNewDishCategory] = useState('Chef Signature Mains');
   const [newDishPrice, setNewDishPrice] = useState('450');
   const [newDishDesc, setNewDishDesc] = useState('');
   const [newDishImageUrl, setNewDishImageUrl] = useState(
@@ -147,29 +151,28 @@ export const MasterImageLibrary: React.FC = () => {
 
     addMenuItem(newItem);
     setIsAddDishModalOpen(false);
-    // Reset
     setNewDishName('');
     setNewDishDesc('');
   };
 
   return (
     <div className="space-y-6">
-      {/* 1. TOP HEADER & ASSET VAULT CONTROLS */}
+      {/* 1. TOP HEADER & ASSET CONTROLS */}
       <div className="bg-white p-6 rounded-3xl border border-ivory-300 shadow-subtle flex flex-col lg:flex-row lg:items-center justify-between gap-5">
         <div>
           <div className="flex items-center space-x-2">
             <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-saffron-100 text-saffron-800 border border-saffron-200">
-              Centralized Photography & Menu Asset Hub
+              Master Culinary Photography Hub
             </span>
             <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-green-100 text-green-800 border border-green-200">
-              {partnerRestaurants.length} Partner Venues
+              {partnerRestaurants.length} Restaurants Active
             </span>
           </div>
           <h2 className="text-xl sm:text-2xl font-bold font-serif text-charcoal-900 mt-2">
-            Restaurant Master Image Library & Asset Sections
+            Restaurant Image Library &amp; Photography Sections
           </h2>
           <p className="text-xs text-charcoal-600 mt-1 max-w-2xl">
-            Browse, manage, and replace high-definition culinary photographs organized per restaurant. Every photo uploaded here synchronizes directly with the table menus, customer mobile apps, and AI bot recommendations.
+            Below is the list of <strong>restaurants working with Menuz</strong>. Under each restaurant name, you will find all the dish photographs, menu items, and ambiance photos belonging strictly to that restaurant.
           </p>
         </div>
 
@@ -186,68 +189,95 @@ export const MasterImageLibrary: React.FC = () => {
             className="px-4 py-2.5 bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-2 transition-all"
           >
             <Plus className="w-4 h-4" />
-            <span>Add New Dish & Photo</span>
+            <span>Add Dish &amp; Photo</span>
           </button>
         </div>
       </div>
 
-      {/* 2. RESTAURANT SELECTOR TABS & SEARCH BAR */}
-      <div className="bg-white p-4 rounded-2xl border border-ivory-300 shadow-subtle space-y-4">
-        {/* Horizontal scrollable Restaurant Chips */}
+      {/* 2. PROMINENT RESTAURANT DIRECTORY TABS */}
+      <div className="bg-white p-5 rounded-3xl border border-ivory-300 shadow-subtle space-y-4">
         <div>
-          <label className="text-[10px] uppercase font-bold tracking-wider text-charcoal-500 block mb-2">
-            Select Restaurant Section:
-          </label>
-          <div className="flex items-center space-x-2 overflow-x-auto pb-1.5 scrollbar-thin">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-xs uppercase font-bold tracking-wider text-charcoal-700 flex items-center space-x-1.5">
+              <Building2 className="w-4 h-4 text-saffron-600" />
+              <span>Select Restaurant to View Photos:</span>
+            </h3>
+            <span className="text-[11px] text-charcoal-500 font-medium">
+              Showing {partnerRestaurants.length} onboarded venues
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5 pt-1">
             <button
               onClick={() => setSelectedRestaurantId('all')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex items-center space-x-2 border ${
+              className={`p-3 rounded-2xl text-left border transition-all flex flex-col justify-between ${
                 selectedRestaurantId === 'all'
-                  ? 'bg-charcoal-900 text-white border-charcoal-900 shadow-xs'
-                  : 'bg-ivory-100 text-charcoal-700 hover:bg-ivory-200 border-ivory-300'
+                  ? 'bg-charcoal-900 text-white border-charcoal-900 shadow-md ring-2 ring-saffron-500/50'
+                  : 'bg-ivory-50 text-charcoal-800 hover:bg-ivory-100 border-ivory-300'
               }`}
             >
-              <Building2 className="w-3.5 h-3.5" />
-              <span>All Partner Restaurants ({partnerRestaurants.length})</span>
+              <div className="flex items-center justify-between mb-2">
+                <Building2 className={`w-5 h-5 ${selectedRestaurantId === 'all' ? 'text-saffron-400' : 'text-charcoal-500'}`} />
+                <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded-md ${
+                  selectedRestaurantId === 'all' ? 'bg-white/20 text-white' : 'bg-charcoal-200 text-charcoal-700'
+                }`}>
+                  All
+                </span>
+              </div>
+              <div>
+                <strong className="text-xs font-bold block leading-tight">All Restaurants</strong>
+                <span className={`text-[10px] block mt-0.5 ${selectedRestaurantId === 'all' ? 'text-charcoal-300' : 'text-charcoal-500'}`}>
+                  Full network catalog
+                </span>
+              </div>
             </button>
 
-            {partnerRestaurants.map((rest) => {
-              const count = menuItems.filter((m) => m.restaurant_id === rest.id).length;
-              const isSelected = selectedRestaurantId === rest.id;
+            {partnerRestaurants.map((r) => {
+              const count = menuItems.filter((m) => m.restaurant_id === r.id).length;
+              const isSelected = selectedRestaurantId === r.id;
               return (
                 <button
-                  key={rest.id}
-                  onClick={() => setSelectedRestaurantId(rest.id)}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex items-center space-x-2 border ${
+                  key={r.id}
+                  onClick={() => setSelectedRestaurantId(r.id)}
+                  className={`p-3 rounded-2xl text-left border transition-all flex flex-col justify-between ${
                     isSelected
-                      ? 'bg-saffron-600 text-white border-saffron-600 shadow-xs'
-                      : 'bg-ivory-100 text-charcoal-700 hover:bg-ivory-200 border-ivory-300'
+                      ? 'bg-saffron-600 text-white border-saffron-600 shadow-md ring-2 ring-saffron-400/50'
+                      : 'bg-ivory-50 text-charcoal-800 hover:bg-ivory-100 border-ivory-300'
                   }`}
                 >
-                  <img
-                    src={rest.logo_url}
-                    alt={rest.name}
-                    className="w-4 h-4 rounded-full object-cover border border-white/40"
-                  />
-                  <span>{rest.name}</span>
-                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-normal ${
-                    isSelected ? 'bg-white/20 text-white' : 'bg-charcoal-200 text-charcoal-700'
-                  }`}>
-                    {count}
-                  </span>
+                  <div className="flex items-center justify-between mb-2">
+                    <img
+                      src={r.logo_url}
+                      alt={r.name}
+                      className="w-6 h-6 rounded-lg object-cover border border-white/40"
+                    />
+                    <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded-md ${
+                      isSelected ? 'bg-white/25 text-white' : 'bg-saffron-100 text-saffron-800'
+                    }`}>
+                      {count} Photos
+                    </span>
+                  </div>
+                  <div className="truncate">
+                    <strong className="text-xs font-bold block truncate leading-tight" title={r.name}>
+                      {r.name}
+                    </strong>
+                    <span className={`text-[10px] block truncate mt-0.5 ${isSelected ? 'text-white/90' : 'text-charcoal-500'}`}>
+                      {r.cuisine}
+                    </span>
+                  </div>
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* Filter controls & Search */}
+        {/* Search & Dietary Filters */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-3 border-t border-ivory-200">
           <div className="relative flex-1 max-w-md">
             <Search className="w-4 h-4 text-charcoal-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search dish name, ingredients, or description..."
+              placeholder="Search dish by name, spice, or ingredient..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-ivory-50 border border-ivory-300 rounded-xl pl-9 pr-3 py-2 text-xs text-charcoal-900 focus:outline-none focus:border-saffron-600"
@@ -263,7 +293,7 @@ export const MasterImageLibrary: React.FC = () => {
                   : 'bg-ivory-100 text-charcoal-600 hover:bg-ivory-200'
               }`}
             >
-              All Photos
+              All Items
             </button>
             <button
               onClick={() => setFilterType('veg')}
@@ -274,7 +304,7 @@ export const MasterImageLibrary: React.FC = () => {
               }`}
             >
               <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
-              <span>Veg Only</span>
+              <span>Veg</span>
             </button>
             <button
               onClick={() => setFilterType('non-veg')}
@@ -302,20 +332,19 @@ export const MasterImageLibrary: React.FC = () => {
         </div>
       </div>
 
-      {/* 3. RESTAURANT-WISE SECTIONS LISTING */}
+      {/* 3. RESTAURANT-WISE LISTING SECTIONS */}
       <div className="space-y-8">
         {partnerRestaurants
           .filter((rest) => selectedRestaurantId === 'all' || rest.id === selectedRestaurantId)
           .map((rest) => {
             const restTables = tables.filter((t) => t.restaurant_id === rest.id);
-            const defaultToken = restTables[0]?.public_token || `table-token-01-${rest.slug}`;
+            const defaultToken = restTables[0]?.public_token || `token-${rest.slug}-01`;
             const dinerUrl = `#/r/${rest.slug}/menu?t=${defaultToken}`;
             const managerUrl = `#/manage/${rest.slug}`;
 
-            // Get items for this restaurant
             let restItems = menuItems.filter((m) => m.restaurant_id === rest.id);
 
-            // Apply search filter
+            // Apply search
             if (searchQuery.trim()) {
               const q = searchQuery.toLowerCase();
               restItems = restItems.filter(
@@ -338,40 +367,59 @@ export const MasterImageLibrary: React.FC = () => {
             return (
               <div
                 key={rest.id}
-                className="bg-white rounded-3xl border border-ivory-300 shadow-subtle overflow-hidden"
+                className="bg-white rounded-3xl border-2 border-ivory-300 shadow-float overflow-hidden"
               >
-                {/* Section Header Card */}
-                <div className="bg-gradient-to-r from-charcoal-900 via-charcoal-800 to-charcoal-900 text-white p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                {/* 🌟 PROMINENT RESTAURANT NAME BANNER 🌟 */}
+                <div className="bg-gradient-to-r from-charcoal-950 via-charcoal-900 to-charcoal-950 text-white p-6 border-b-2 border-saffron-500 flex flex-col md:flex-row md:items-center justify-between gap-5">
                   <div className="flex items-center space-x-4">
                     <img
                       src={rest.logo_url}
                       alt={rest.name}
-                      className="w-14 h-14 rounded-2xl object-cover border-2 border-white/20 shadow-sm"
+                      className="w-16 h-16 rounded-2xl object-cover border-2 border-saffron-500 shadow-md flex-shrink-0"
                     />
                     <div>
-                      <div className="flex items-center space-x-2">
-                        <h3 className="font-serif text-lg sm:text-xl font-bold text-white">
-                          {rest.name}
-                        </h3>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-saffron-500/20 text-saffron-300 border border-saffron-500/30">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-saffron-500 text-charcoal-950 font-mono">
+                          RESTAURANT LISTING
+                        </span>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/20 text-saffron-300">
                           {rest.cuisine}
                         </span>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-500/20 text-green-300 border border-green-500/30">
+                          Active Partner
+                        </span>
                       </div>
-                      <p className="text-xs text-charcoal-300 mt-0.5">
-                        📍 {rest.location || 'Pune, India'} • {rest.contact_phone || '+91 98765 43210'} • {rest.tax_rate_percent}% GST
+
+                      {/* HUGE BOLD RESTAURANT NAME */}
+                      <h3 className="font-serif text-2xl sm:text-3xl font-black text-white mt-1">
+                        {rest.name}
+                      </h3>
+
+                      <p className="text-xs text-charcoal-300 mt-1 flex flex-wrap items-center gap-3">
+                        <span className="flex items-center space-x-1">
+                          <MapPin className="w-3.5 h-3.5 text-saffron-400" />
+                          <span>{rest.location || 'Pune, India'}</span>
+                        </span>
+                        <span className="flex items-center space-x-1">
+                          <Phone className="w-3.5 h-3.5 text-saffron-400" />
+                          <span>{rest.contact_phone || '+91 20 2600 0000'}</span>
+                        </span>
+                        <span className="text-charcoal-400">
+                          • {restTables.length || 4} Tables • {restItems.length} Dishes
+                        </span>
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2 self-start md:self-auto">
                     <button
                       onClick={() => {
                         setTargetRestaurantForNewDish(rest.id);
                         setIsAddDishModalOpen(true);
                       }}
-                      className="px-3 py-2 bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold rounded-xl transition-colors flex items-center space-x-1.5 shadow-subtle"
+                      className="px-3.5 py-2 bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold rounded-xl transition-all flex items-center space-x-1.5 shadow-subtle cursor-pointer"
                     >
-                      <Plus className="w-3.5 h-3.5" />
+                      <Plus className="w-4 h-4" />
                       <span>Add Dish to {rest.name}</span>
                     </button>
 
@@ -379,40 +427,51 @@ export const MasterImageLibrary: React.FC = () => {
                       href={dinerUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="px-3 py-2 bg-charcoal-700 hover:bg-charcoal-600 text-charcoal-200 hover:text-white text-xs font-bold rounded-xl transition-colors flex items-center space-x-1.5 border border-charcoal-600"
+                      className="px-3.5 py-2 bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-200 hover:text-white text-xs font-bold rounded-xl transition-all flex items-center space-x-1.5 border border-charcoal-700"
                     >
                       <ExternalLink className="w-3.5 h-3.5 text-saffron-400" />
-                      <span>Open Live Diner Menu</span>
+                      <span>Live Diner Menu</span>
                     </a>
 
                     <a
                       href={managerUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="px-3 py-2 bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-300 hover:text-white text-xs font-semibold rounded-xl transition-colors border border-charcoal-700"
+                      className="px-3.5 py-2 bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-300 hover:text-white text-xs font-semibold rounded-xl transition-all border border-charcoal-700"
                     >
                       <span>Manager Hub</span>
                     </a>
                   </div>
                 </div>
 
-                {/* Section Content & Gallery Grid */}
-                <div className="p-6">
+                {/* Restaurant's Dishes & Photographs Grid */}
+                <div className="p-6 bg-ivory-50/50">
+                  <div className="flex items-center justify-between mb-4 pb-2 border-b border-ivory-200">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-charcoal-800 flex items-center space-x-1.5">
+                      <ImageIcon className="w-4 h-4 text-saffron-600" />
+                      <span>Culinary Photographs for {rest.name} ({restItems.length} items)</span>
+                    </h4>
+                    <span className="text-[11px] text-charcoal-500 font-medium">
+                      Changes instantly sync to {rest.name}'s QR menu
+                    </span>
+                  </div>
+
                   {restItems.length === 0 ? (
-                    <div className="p-8 text-center bg-ivory-50 rounded-2xl border border-dashed border-ivory-300">
-                      <ImageIcon className="w-10 h-10 text-charcoal-300 mx-auto mb-2" />
-                      <p className="text-xs font-bold text-charcoal-700">No photos matching criteria</p>
-                      <p className="text-[11px] text-charcoal-500 mt-0.5">
-                        Add a new dish and photo to start showcasing dishes for {rest.name}.
+                    <div className="p-8 text-center bg-white rounded-2xl border-2 border-dashed border-ivory-300">
+                      <ImageIcon className="w-12 h-12 text-charcoal-300 mx-auto mb-2" />
+                      <h5 className="font-serif font-bold text-sm text-charcoal-900">No dishes uploaded yet for {rest.name}</h5>
+                      <p className="text-xs text-charcoal-500 mt-1 max-w-md mx-auto">
+                        Click below to create menu dishes and assign photography for {rest.name}.
                       </p>
                       <button
                         onClick={() => {
                           setTargetRestaurantForNewDish(rest.id);
                           setIsAddDishModalOpen(true);
                         }}
-                        className="mt-3 px-3.5 py-1.5 bg-saffron-600 text-white text-xs font-bold rounded-xl"
+                        className="mt-3.5 px-4 py-2 bg-saffron-600 text-white text-xs font-bold rounded-xl shadow-subtle inline-flex items-center space-x-1.5"
                       >
-                        Add First Dish
+                        <Plus className="w-4 h-4" />
+                        <span>Add First Dish to {rest.name}</span>
                       </button>
                     </div>
                   ) : (
@@ -435,7 +494,7 @@ export const MasterImageLibrary: React.FC = () => {
                                 loading="lazy"
                               />
 
-                              {/* Dietary indicator */}
+                              {/* Dietary / Special Tags */}
                               <div className="absolute top-2 left-2 flex items-center space-x-1">
                                 {isVeg && (
                                   <span className="w-4 h-4 bg-white/95 backdrop-blur-sm border border-green-600 rounded flex items-center justify-center">
@@ -456,12 +515,12 @@ export const MasterImageLibrary: React.FC = () => {
                                 {item.is_signature && (
                                   <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-red-500 text-white shadow-xs flex items-center space-x-0.5">
                                     <Star className="w-2.5 h-2.5 fill-white" />
-                                    <span>Signature</span>
+                                    <span>Special</span>
                                   </span>
                                 )}
                               </div>
 
-                              {/* Quick Copy Link icon */}
+                              {/* Copy Link button */}
                               <button
                                 onClick={() => handleCopy(item.image_url)}
                                 className="absolute top-2 right-2 p-1.5 rounded-lg bg-charcoal-900/80 hover:bg-charcoal-900 text-white backdrop-blur-sm transition-colors"
@@ -476,7 +535,7 @@ export const MasterImageLibrary: React.FC = () => {
                             </div>
 
                             {/* Details & Actions */}
-                            <div className="p-3 flex-1 flex flex-col justify-between space-y-2">
+                            <div className="p-3.5 flex-1 flex flex-col justify-between space-y-2">
                               <div>
                                 <h5 className="font-bold text-xs text-charcoal-900 leading-tight line-clamp-1" title={item.name}>
                                   {item.name}
@@ -489,7 +548,7 @@ export const MasterImageLibrary: React.FC = () => {
                                     {item.item_type || 'food'}
                                   </span>
                                 </div>
-                                <p className="text-[10px] text-charcoal-500 line-clamp-2 mt-1">
+                                <p className="text-[10px] text-charcoal-500 line-clamp-2 mt-1 leading-snug">
                                   {item.short_description}
                                 </p>
                               </div>
@@ -500,7 +559,7 @@ export const MasterImageLibrary: React.FC = () => {
                                     setPhotoPickerItem(item);
                                     setCustomPhotoUrl(item.image_url);
                                   }}
-                                  className="w-full py-1.5 bg-saffron-50 hover:bg-saffron-100 text-saffron-900 text-[11px] font-bold rounded-lg border border-saffron-200 transition-colors flex items-center justify-center space-x-1"
+                                  className="w-full py-1.5 bg-saffron-50 hover:bg-saffron-100 text-saffron-900 text-[11px] font-bold rounded-lg border border-saffron-200 transition-colors flex items-center justify-center space-x-1 cursor-pointer"
                                 >
                                   <ImageIcon className="w-3 h-3 text-saffron-700" />
                                   <span>Change Photo</span>
@@ -509,7 +568,7 @@ export const MasterImageLibrary: React.FC = () => {
                                 <div className="flex items-center space-x-1">
                                   <button
                                     onClick={() => updateMenuItem(item.id, { is_chef_recommended: !item.is_chef_recommended })}
-                                    className={`flex-1 py-1 text-[10px] font-semibold rounded border transition-colors ${
+                                    className={`flex-1 py-1 text-[10px] font-semibold rounded border transition-colors cursor-pointer ${
                                       item.is_chef_recommended
                                         ? 'bg-amber-100 text-amber-900 border-amber-300 font-bold'
                                         : 'bg-ivory-100 text-charcoal-600 border-ivory-200 hover:bg-ivory-200'
@@ -521,7 +580,7 @@ export const MasterImageLibrary: React.FC = () => {
 
                                   <button
                                     onClick={() => updateMenuItem(item.id, { is_signature: !item.is_signature })}
-                                    className={`flex-1 py-1 text-[10px] font-semibold rounded border transition-colors ${
+                                    className={`flex-1 py-1 text-[10px] font-semibold rounded border transition-colors cursor-pointer ${
                                       item.is_signature
                                         ? 'bg-red-100 text-red-900 border-red-300 font-bold'
                                         : 'bg-ivory-100 text-charcoal-600 border-ivory-200 hover:bg-ivory-200'
@@ -537,7 +596,7 @@ export const MasterImageLibrary: React.FC = () => {
                                         deleteMenuItem(item.id);
                                       }
                                     }}
-                                    className="p-1 text-charcoal-400 hover:text-red-500 rounded hover:bg-red-50 border border-transparent hover:border-red-200 transition-colors"
+                                    className="p-1 text-charcoal-400 hover:text-red-500 rounded hover:bg-red-50 border border-transparent hover:border-red-200 transition-colors cursor-pointer"
                                     title="Delete dish"
                                   >
                                     <Trash2 className="w-3.5 h-3.5" />
@@ -560,12 +619,12 @@ export const MasterImageLibrary: React.FC = () => {
       {/* MODAL: PHOTO PICKER & CURATED CULINARY VAULT                               */}
       {/* ========================================================================= */}
       {photoPickerItem && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-float border border-ivory-300 max-h-[90vh] overflow-y-auto space-y-5">
             <div className="flex items-center justify-between pb-3 border-b border-ivory-200">
               <div>
                 <span className="text-[10px] uppercase font-bold text-saffron-700 tracking-wider">
-                  Photo Editor & Library
+                  Photo Editor &amp; Library
                 </span>
                 <h3 className="font-serif text-lg font-bold text-charcoal-900">
                   Update Photograph for "{photoPickerItem.name}"
@@ -600,7 +659,7 @@ export const MasterImageLibrary: React.FC = () => {
                       setPhotoPickerItem(null);
                     }
                   }}
-                  className="px-4 py-2 bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold rounded-xl shadow-subtle whitespace-nowrap"
+                  className="px-4 py-2 bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold rounded-xl shadow-subtle whitespace-nowrap cursor-pointer"
                 >
                   Save URL
                 </button>
@@ -674,7 +733,7 @@ export const MasterImageLibrary: React.FC = () => {
       {/* MODAL: ADD NEW DISH & PHOTO TO RESTAURANT                                  */}
       {/* ========================================================================= */}
       {isAddDishModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-float border border-ivory-300 max-h-[90vh] overflow-y-auto space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-ivory-200">
               <div>
@@ -682,7 +741,7 @@ export const MasterImageLibrary: React.FC = () => {
                   Menu Creation
                 </span>
                 <h3 className="font-serif text-lg font-bold text-charcoal-900">
-                  Add New Dish & Photograph
+                  Add New Dish &amp; Photograph
                 </h3>
               </div>
               <button
@@ -802,13 +861,13 @@ export const MasterImageLibrary: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsAddDishModalOpen(false)}
-                  className="px-4 py-2 bg-ivory-100 hover:bg-ivory-200 text-charcoal-700 rounded-xl font-semibold"
+                  className="px-4 py-2 bg-ivory-100 hover:bg-ivory-200 text-charcoal-700 rounded-xl font-semibold cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-saffron-600 hover:bg-saffron-700 text-white rounded-xl font-bold shadow-subtle"
+                  className="px-5 py-2 bg-saffron-600 hover:bg-saffron-700 text-white rounded-xl font-bold shadow-subtle cursor-pointer"
                 >
                   Save Dish to Menu
                 </button>

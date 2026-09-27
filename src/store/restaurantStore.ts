@@ -14,7 +14,8 @@ import {
   PosIntegrationConfig,
   RestaurantAiQuestionnaire,
   OrderSource,
-  SystemNotification
+  SystemNotification,
+  isWorkingWithMenuz
 } from '../types';
 import {
   SEED_RESTAURANTS,
@@ -29,22 +30,6 @@ import {
   SEED_ORDERS,
   SEED_CAMPAIGNS
 } from '../data/seedData';
-
-// Purge any legacy localStorage keys from prior versions to prevent pollution
-if (typeof window !== 'undefined' && window.localStorage) {
-  try {
-    const keysToRemove: string[] = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const k = localStorage.key(i);
-      if (k && k.startsWith('menuz_') && k !== 'menuz_restaurant_storage_v15_strictly_two_demos') {
-        keysToRemove.push(k);
-      }
-    }
-    keysToRemove.forEach((k) => localStorage.removeItem(k));
-  } catch (e) {
-    // Ignore storage errors in restrictive environments
-  }
-}
 
 export interface CartItem {
   menu_item_id: string;
@@ -146,12 +131,36 @@ interface RestaurantStoreState {
   resetToDefaults: () => void;
 }
 
+const STORAGE_KEY = 'menuz_master_cloud_storage_v20_permanent_venues';
+
+// Helper to safely recover any past onboarded restaurants from localStorage
+const getInitialPersistedRestaurants = (): Restaurant[] => {
+  if (typeof window === 'undefined' || !window.localStorage) return SEED_RESTAURANTS;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed?.state?.restaurants && Array.isArray(parsed.state.restaurants) && parsed.state.restaurants.length > 0) {
+        // Merge with SEED_RESTAURANTS to guarantee baseline
+        const existingIds = new Set(parsed.state.restaurants.map((r: Restaurant) => r.id));
+        const missingSeeds = SEED_RESTAURANTS.filter((r) => !existingIds.has(r.id));
+        return [...parsed.state.restaurants, ...missingSeeds];
+      }
+    }
+  } catch (e) {
+    console.error('Error recovering storage:', e);
+  }
+  return SEED_RESTAURANTS;
+};
+
+const initialRestaurants = getInitialPersistedRestaurants();
+
 export const useRestaurantStore = create<RestaurantStoreState>()(
   persist(
     (set, get) => ({
-      restaurants: SEED_RESTAURANTS,
-      restaurant: SEED_RESTAURANTS[0] || ({} as Restaurant),
-      currentRestaurantId: SEED_RESTAURANTS[0]?.id || '',
+      restaurants: initialRestaurants,
+      restaurant: initialRestaurants[0] || SEED_RESTAURANTS[0],
+      currentRestaurantId: initialRestaurants[0]?.id || SEED_RESTAURANTS[0].id,
       tables: SEED_TABLES,
       categories: SEED_CATEGORIES,
       menuItems: SEED_MENU_ITEMS,
@@ -170,19 +179,115 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       activeOrderId: null,
 
       // Restaurant Registry Actions
-      addRestaurant: (newRest) => {
+      addRestaurant: (newRestInput) => {
+        const newRest: Restaurant = {
+          ...newRestInput,
+          is_menuz_partner: true,
+          status: 'active'
+        };
         const cleanSlug = newRest.slug;
         const newTables: RestaurantTable[] = [
-          { id: `tbl-${cleanSlug}-01`, restaurant_id: newRest.id, label: 'Table 1', public_token: `token-${cleanSlug}-01`, is_active: true },
-          { id: `tbl-${cleanSlug}-02`, restaurant_id: newRest.id, label: 'Table 2', public_token: `token-${cleanSlug}-02`, is_active: true },
-          { id: `tbl-${cleanSlug}-03`, restaurant_id: newRest.id, label: 'Table 3', public_token: `token-${cleanSlug}-03`, is_active: true },
-          { id: `tbl-${cleanSlug}-04`, restaurant_id: newRest.id, label: 'Table 4', public_token: `token-${cleanSlug}-04`, is_active: true },
+          { id: `tbl-${cleanSlug}-01`, restaurant_id: newRest.id, label: 'Table 1', public_token: `token-${cleanSlug}-01`, is_active: true, capacity: 4, section: 'Indoor Dining', status: 'vacant' },
+          { id: `tbl-${cleanSlug}-02`, restaurant_id: newRest.id, label: 'Table 2', public_token: `token-${cleanSlug}-02`, is_active: true, capacity: 2, section: 'Indoor Dining', status: 'vacant' },
+          { id: `tbl-${cleanSlug}-03`, restaurant_id: newRest.id, label: 'Table 3', public_token: `token-${cleanSlug}-03`, is_active: true, capacity: 6, section: 'Outdoor Patio', status: 'vacant' },
+          { id: `tbl-${cleanSlug}-04`, restaurant_id: newRest.id, label: 'Table 4', public_token: `token-${cleanSlug}-04`, is_active: true, capacity: 4, section: 'Outdoor Patio', status: 'vacant' },
+          { id: `tbl-${cleanSlug}-05`, restaurant_id: newRest.id, label: 'VIP Booth 1', public_token: `token-${cleanSlug}-05`, is_active: true, capacity: 8, section: 'VIP Dining', status: 'vacant' },
+          { id: `tbl-${cleanSlug}-06`, restaurant_id: newRest.id, label: 'Bar Counter 1', public_token: `token-${cleanSlug}-06`, is_active: true, capacity: 2, section: 'Bar Lounge', status: 'vacant' }
         ];
+
         const newCategories: MenuCategory[] = [
-          { id: `cat-${cleanSlug}-starters`, restaurant_id: newRest.id, name: 'Starters & Small Plates', sort_order: 1, is_active: true },
+          { id: `cat-${cleanSlug}-starters`, restaurant_id: newRest.id, name: 'Starters & Small Bites', sort_order: 1, is_active: true },
           { id: `cat-${cleanSlug}-mains`, restaurant_id: newRest.id, name: 'Chef Signature Mains', sort_order: 2, is_active: true },
-          { id: `cat-${cleanSlug}-desserts`, restaurant_id: newRest.id, name: 'Desserts & Refreshments', sort_order: 3, is_active: true },
+          { id: `cat-${cleanSlug}-desserts`, restaurant_id: newRest.id, name: 'Desserts & Beverages', sort_order: 3, is_active: true },
         ];
+
+        const newDishes: MenuItem[] = [
+          {
+            id: `item-${cleanSlug}-01`,
+            restaurant_id: newRest.id,
+            category_id: `cat-${cleanSlug}-starters`,
+            name: `${newRest.name} Crispy Signature Starter`,
+            price: 340,
+            short_description: `Artisanal small plate crafted with freshly sourced seasonal ingredients and chef spices.`,
+            full_description: `Crisp handcrafted delight served with authentic house dips and fresh microgreens.`,
+            ingredients: ['Farm Fresh Produce', 'House Spice Blend', 'Cold Pressed Oil'],
+            allergens: [],
+            dietary_flags: ['veg'],
+            spice_level: 2,
+            serving_size: 'Serves 2',
+            image_url: newRest.logo_url || 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=800&auto=format&fit=crop',
+            is_available: true,
+            is_signature: true,
+            is_chef_recommended: true,
+            is_bestseller: true,
+            pairing_item_ids: [`item-${cleanSlug}-04`],
+            sort_order: 1
+          },
+          {
+            id: `item-${cleanSlug}-02`,
+            restaurant_id: newRest.id,
+            category_id: `cat-${cleanSlug}-mains`,
+            name: `${newRest.name} Head Chef Specialty Main`,
+            price: 520,
+            short_description: `Slow-cooked signature preparation infused with rich heritage spices and culinary precision.`,
+            full_description: `Prepared following our kitchen's secret recipe with premium ingredients and slow-simmered aromas.`,
+            ingredients: ['Artisanal Spices', 'Organic Butter/Oil', 'Premium Produce'],
+            allergens: ['Dairy'],
+            dietary_flags: ['veg'],
+            spice_level: 2,
+            serving_size: 'Serves 1-2',
+            image_url: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&auto=format&fit=crop',
+            is_available: true,
+            is_signature: true,
+            is_chef_recommended: true,
+            is_bestseller: true,
+            pairing_item_ids: [],
+            sort_order: 2
+          },
+          {
+            id: `item-${cleanSlug}-03`,
+            restaurant_id: newRest.id,
+            category_id: `cat-${cleanSlug}-desserts`,
+            name: `Artisanal House Dessert`,
+            price: 260,
+            short_description: `Decadent sweet creation prepared fresh daily in-house.`,
+            full_description: `A delicate sweet finale to celebrate your dining experience at ${newRest.name}.`,
+            ingredients: ['Organic Dairy', 'Raw Cane Sugar', 'Pistachio'],
+            allergens: ['Dairy', 'Nuts'],
+            dietary_flags: ['veg', 'dessert'],
+            spice_level: 0,
+            serving_size: '1 Portion',
+            image_url: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800&auto=format&fit=crop',
+            is_available: true,
+            is_signature: false,
+            is_chef_recommended: true,
+            is_bestseller: false,
+            pairing_item_ids: [],
+            sort_order: 3
+          },
+          {
+            id: `item-${cleanSlug}-04`,
+            restaurant_id: newRest.id,
+            category_id: `cat-${cleanSlug}-desserts`,
+            name: `Botanical Craft Refresher`,
+            price: 190,
+            short_description: `Handcrafted beverage with fresh citrus, garden mint, and sparkling tonic.`,
+            full_description: `Chilled botanical drink freshly muddled to pair with flavorful dishes.`,
+            ingredients: ['Cold Pressed Citrus', 'Fresh Garden Herbs', 'Sparkling Soda'],
+            allergens: [],
+            dietary_flags: ['beverage'],
+            spice_level: 0,
+            serving_size: '350ml',
+            image_url: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&auto=format&fit=crop',
+            is_available: true,
+            is_signature: false,
+            is_chef_recommended: false,
+            item_type: 'drink',
+            pairing_item_ids: [],
+            sort_order: 4
+          }
+        ];
+
         const newChallenge: ReviewChallenge = {
           id: `chal-${cleanSlug}-01`,
           restaurant_id: newRest.id,
@@ -200,23 +305,30 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
           id: 'notif_onboard_' + Date.now(),
           type: 'order_placed',
           restaurant_id: newRest.id,
-          message: `🎉 ${newRest.name} Successfully Onboarded with 4 active tables, digital QR codes, and review challenge.`,
+          message: `🎉 ${newRest.name} Successfully Onboarded with ${newTables.length} tables, ${newDishes.length} menu dishes, and Google Review Challenge.`,
           timestamp: new Date().toISOString(),
           read: false
         };
 
-        set((state) => ({
-          restaurants: [newRest, ...state.restaurants],
-          tables: [...state.tables, ...newTables],
-          categories: [...state.categories, ...newCategories],
-          challenges: [newChallenge, ...state.challenges],
-          notifications: [notif, ...state.notifications]
-        }));
+        set((state) => {
+          const updatedRestaurants = [newRest, ...state.restaurants.filter((r) => r.id !== newRest.id)];
+          return {
+            restaurants: updatedRestaurants,
+            restaurant: newRest,
+            currentRestaurantId: newRest.id,
+            tables: [...state.tables, ...newTables],
+            categories: [...state.categories, ...newCategories],
+            menuItems: [...state.menuItems, ...newDishes],
+            challenges: [newChallenge, ...state.challenges],
+            notifications: [notif, ...state.notifications]
+          };
+        });
       },
 
       updateRestaurant: (id, updates) => {
         set((state) => ({
-          restaurants: state.restaurants.map((r) => (r.id === id ? { ...r, ...updates } : r))
+          restaurants: state.restaurants.map((r) => (r.id === id ? { ...r, ...updates } : r)),
+          restaurant: state.restaurant?.id === id ? { ...state.restaurant, ...updates } : state.restaurant
         }));
       },
 
@@ -229,9 +341,14 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       },
 
       deleteRestaurant: (id) => {
-        set((state) => ({
-          restaurants: state.restaurants.filter((r) => r.id !== id)
-        }));
+        set((state) => {
+          const updated = state.restaurants.filter((r) => r.id !== id);
+          return {
+            restaurants: updated,
+            restaurant: state.restaurant?.id === id ? updated[0] || SEED_RESTAURANTS[0] : state.restaurant,
+            currentRestaurantId: state.restaurant?.id === id ? (updated[0]?.id || '') : state.currentRestaurantId
+          };
+        });
       },
 
       setCurrentRestaurant: (restaurantId) => {
@@ -258,32 +375,34 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
         }));
       },
 
-      batchCreateTables: (restaurantId, count, startNumber = 1, section = 'Indoor Main', capacity = 4) => {
+      batchCreateTables: (restaurantId, count, startNumber = 1, section = 'Indoor Dining', capacity = 4) => {
         const targetRest = get().restaurants.find((r) => r.id === restaurantId);
-        const slug = targetRest?.slug || 'table';
-        const newTables: RestaurantTable[] = [];
+        const slug = targetRest?.slug || 'venue';
+        const newBatch: RestaurantTable[] = [];
+
         for (let i = 0; i < count; i++) {
           const num = startNumber + i;
-          newTables.push({
-            id: `tbl-${slug}-${Date.now()}-${num}`,
+          newBatch.push({
+            id: `tbl-${slug}-batch-${num}-${Date.now()}`,
             restaurant_id: restaurantId,
-            label: `${section.includes('VIP') ? 'VIP ' : section.includes('Rooftop') ? 'Roof ' : 'Table '}${num}`,
-            public_token: `token-${slug}-${num.toString().padStart(2, '0')}-${Math.random().toString(36).substring(2, 6)}`,
+            label: `Table ${num}`,
+            public_token: `token-${slug}-tbl-${num}`,
             is_active: true,
             capacity: capacity,
             section: section,
             status: 'vacant'
           });
         }
+
         set((state) => ({
-          tables: [...state.tables, ...newTables]
+          tables: [...state.tables, ...newBatch]
         }));
       },
 
-      // Menu Management Actions
+      // Menu Actions
       addMenuItem: (item) => {
         set((state) => ({
-          menuItems: [...state.menuItems, item]
+          menuItems: [item, ...state.menuItems]
         }));
       },
 
@@ -343,97 +462,83 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       },
 
       redeemVoucher: (voucherCode) => {
-        let success = false;
-        set((state) => {
-          const updated = state.redemptions.map((r) => {
-            if (r.voucher_code.trim().toUpperCase() === voucherCode.trim().toUpperCase() && r.status === 'unclaimed') {
-              success = true;
-              return { ...r, status: 'redeemed' as const, redeemed_at: new Date().toISOString() };
-            }
-            return r;
-          });
-          return { redemptions: updated };
-        });
-        return success;
+        const redemptions = get().redemptions;
+        const exists = redemptions.some((r) => r.voucher_code === voucherCode && r.status === 'unclaimed');
+        if (exists) {
+          set((state) => ({
+            redemptions: state.redemptions.map((r) =>
+              r.voucher_code === voucherCode ? { ...r, status: 'redeemed', redeemed_at: new Date().toISOString() } : r
+            )
+          }));
+          return true;
+        }
+        return false;
       },
 
-      completeChallenge: (challengeId, customerName, customerPhone) => {
-        let redemption: ChallengeRedemption | null = null;
-        set((state) => {
-          const challenge = state.challenges.find((c) => c.id === challengeId);
-          if (!challenge) return state;
+      completeChallenge: (challengeId, customerName = 'Guest Diner', customerPhone = '+91 98765 43210') => {
+        const state = get();
+        const chal = state.challenges.find((c) => c.id === challengeId);
+        if (!chal) return null;
 
-          const voucherCode = `WIN-${Math.floor(1000 + Math.random() * 9000)}`;
-          const rewardItem = challenge.reward_item_name || 'Free Dessert / ₹100 Off';
-          redemption = {
-            id: 'red-' + Date.now(),
-            restaurant_id: challenge.restaurant_id,
-            review_id: 'rev_' + Date.now(),
-            customer_name: customerName || 'Valued Diner',
-            voucher_code: voucherCode,
-            reward_item_name: rewardItem,
-            status: 'unclaimed',
-            created_at: new Date().toISOString()
-          };
+        const targetRest = state.restaurants.find((r) => r.id === chal.restaurant_id) || state.restaurant;
+        const randomNum = Math.floor(1000 + Math.random() * 9000);
+        const code = `${chal.redemption_code_prefix || 'WIN-'}${randomNum}`;
 
-          const notification: SystemNotification = {
-            id: 'notif-' + crypto.randomUUID().slice(0, 8),
-            restaurant_id: challenge.restaurant_id,
-            type: 'challenge_complete',
-            message: `🎉 ${redemption.customer_name} completed challenge "${challenge.title}" and won "${rewardItem}"! (Voucher: ${voucherCode})`,
-            timestamp: new Date().toISOString(),
-            read: false
-          };
+        const restItems = state.menuItems.filter((i) => i.restaurant_id === targetRest.id && i.is_available);
+        const randomItem = restItems[Math.floor(Math.random() * restItems.length)] || state.menuItems[0];
 
-          return {
-            redemptions: [redemption, ...state.redemptions],
-            notifications: [notification, ...state.notifications].slice(0, 100)
-          };
-        });
-        return redemption;
+        const newRedemption: ChallengeRedemption = {
+          id: 'redempt_' + Date.now(),
+          restaurant_id: chal.restaurant_id,
+          review_id: 'rev_' + Date.now(),
+          customer_name: customerName,
+          voucher_code: code,
+          reward_item_name: chal.reward_item_name || 'Chef Specialty Dessert',
+          status: 'unclaimed',
+          created_at: new Date().toISOString()
+        };
+
+        const notification: SystemNotification = {
+          id: 'notif_chal_' + Date.now(),
+          restaurant_id: chal.restaurant_id,
+          type: 'challenge_complete',
+          message: `🎁 ${customerName} won "${newRedemption.reward_item_name}" (${code})`,
+          timestamp: new Date().toISOString(),
+          read: false
+        };
+
+        set((s) => ({
+          redemptions: [newRedemption, ...s.redemptions],
+          notifications: [notification, ...s.notifications]
+        }));
+
+        return newRedemption;
       },
 
-      // WhatsApp Campaign
-      sendWhatsAppCampaign: (campaignData) => {
+      sendWhatsAppCampaign: (campaign) => {
         const newCamp: WhatsAppCampaign = {
-          ...campaignData,
-          id: 'camp-' + Date.now(),
-          sent_at: new Date().toISOString()
+          ...campaign,
+          id: 'camp_' + Date.now(),
+          sent_at: new Date().toISOString(),
+          status: 'sent'
         };
         set((state) => ({
           campaigns: [newCamp, ...state.campaigns]
         }));
       },
 
-      // POS Integration
       triggerPosSync: (restaurantId) => {
         set((state) => {
-          const existing = state.posConfigs[restaurantId] || {
-            restaurant_id: restaurantId,
-            provider: 'universal_api',
-            connection_status: 'connected',
-            last_sync_time: new Date().toISOString(),
-            auto_sync_orders: true,
-            sync_latency_ms: 120,
-            sync_log: []
-          };
-
-          const newLog = {
-            id: 'log-' + Date.now(),
-            timestamp: new Date().toISOString(),
-            event: 'MANUAL_SYNC_TRIGGERED',
-            details: 'Master Admin triggered real-time POS catalog and order synchronization',
-            status: 'success' as const
-          };
+          const currentConfig = state.posConfigs[restaurantId];
+          if (!currentConfig) return state;
 
           return {
             posConfigs: {
               ...state.posConfigs,
               [restaurantId]: {
-                ...existing,
-                connection_status: 'connected',
+                ...currentConfig,
                 last_sync_time: new Date().toISOString(),
-                sync_log: [newLog, ...(existing.sync_log || []).slice(0, 19)]
+                connection_status: 'connected'
               }
             }
           };
@@ -442,241 +547,195 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
 
       simulateIncomingPosOrder: (restaurantId) => {
         const state = get();
-        const targetRest = state.restaurants.find((r) => r.id === restaurantId) || state.restaurants[0];
-        const restTables = state.tables.filter((t) => t.restaurant_id === targetRest.id);
-        const randomTable = restTables[Math.floor(Math.random() * restTables.length)] || {
-          id: 'tbl-pos',
-          label: 'Bar Counter'
-        };
+        const targetRest = state.restaurants.find((r) => r.id === restaurantId) || state.restaurant;
+        const availableItems = state.menuItems.filter((i) => i.restaurant_id === targetRest.id && i.is_available);
+        const randomItem = availableItems[0] || state.menuItems[0];
+        const orderId = 'pos_ord_' + Date.now().toString().slice(-4);
+        const price = randomItem ? randomItem.price : 450;
 
-        const restItems = state.menuItems.filter((i) => i.restaurant_id === targetRest.id && i.is_available);
-        const randomItem = restItems[Math.floor(Math.random() * restItems.length)] || state.menuItems[0];
-
-        const orderId = 'ord_pos_' + Date.now();
-        const orderNumber = 'POS-' + Math.floor(1000 + Math.random() * 9000);
-        const taxRate = targetRest.tax_rate_percent || 5;
-        const subtotal = randomItem.price;
-        const tax = Number((subtotal * (taxRate / 100)).toFixed(2));
-        const total = Number((subtotal + tax).toFixed(2));
-
-        const newOrder: Order = {
+        const simulatedOrder: Order = {
           id: orderId,
           restaurant_id: targetRest.id,
-          table_id: randomTable.id,
-          table_label: randomTable.label,
-          anonymous_session_id: 'sess_pos_terminal',
-          order_number: orderNumber,
+          table_id: 'tbl-01',
+          table_label: 'Table 1',
+          anonymous_session_id: 'session_pos_' + Date.now(),
+          order_number: 'POS-' + Date.now().toString().slice(-4),
           source: 'pos',
           status: 'received',
-          currency: targetRest.currency,
-          subtotal_amount: subtotal,
-          tax_amount: tax,
-          total_amount: total,
-          customer_notes: 'Placed via POS Floor Terminal (Table Side)',
+          currency: 'INR',
+          subtotal_amount: price,
+          tax_amount: (price * (targetRest.tax_rate_percent || 5)) / 100,
+          total_amount: price + (price * (targetRest.tax_rate_percent || 5)) / 100,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
           items: [
             {
-              id: 'ord_item_' + Date.now(),
+              id: 'pos_item_1',
               order_id: orderId,
-              menu_item_id: randomItem.id,
-              item_name_snapshot: randomItem.name,
-              unit_price_snapshot: randomItem.price,
+              menu_item_id: randomItem ? randomItem.id : 'item-app-1',
+              item_name_snapshot: randomItem ? randomItem.name : 'Chef Specialty',
+              unit_price_snapshot: price,
               quantity: 1,
               selected_options_snapshot: [],
-              line_total_amount: randomItem.price
+              line_total_amount: price
             }
           ]
         };
 
-        const notification: SystemNotification = {
-          id: 'notif_pos_' + Date.now(),
-          type: 'order_placed',
-          restaurant_id: targetRest.id,
-          table_id: randomTable.id,
-          table_label: randomTable.label,
-          message: `POS Order #${orderNumber}: ${randomTable.label} ordered ${randomItem.name} (₹${total.toFixed(0)})`,
-          timestamp: new Date().toISOString(),
-          read: false
-        };
-
-        set((prev) => ({
-          orders: [newOrder, ...prev.orders],
-          notifications: [notification, ...prev.notifications]
+        set((s) => ({
+          orders: [simulatedOrder, ...s.orders]
         }));
 
-        return newOrder;
+        return simulatedOrder;
       },
 
-      // Diner Actions
-      setCustomerNotes: (customerNotes) => set({ customerNotes }),
-      setActiveTable: (activeTable) => set({ activeTable }),
-      setActiveOrderId: (activeOrderId) => set({ activeOrderId }),
+      // Diner Ordering Actions
+      setCustomerNotes: (notes) => set({ customerNotes: notes }),
+      setActiveTable: (table) => set({ activeTable: table }),
+      setActiveOrderId: (orderId) => set({ activeOrderId: orderId }),
 
       addItemToCart: (newItem) => {
         set((state) => {
-          const dbItem = state.menuItems.find((i) => i.id === newItem.menu_item_id);
-          if (dbItem && !dbItem.is_available) return state;
-
-          const existingIdx = state.cart.findIndex(
-            (i) =>
-              i.menu_item_id === newItem.menu_item_id &&
-              JSON.stringify(i.selected_options) === JSON.stringify(newItem.selected_options)
+          const existingIndex = state.cart.findIndex(
+            (c) =>
+              c.menu_item_id === newItem.menu_item_id &&
+              JSON.stringify(c.selected_options) === JSON.stringify(newItem.selected_options)
           );
 
-          if (existingIdx > -1) {
+          if (existingIndex > -1) {
             const updated = [...state.cart];
-            updated[existingIdx].quantity += newItem.quantity;
+            updated[existingIndex].quantity += newItem.quantity;
             return { cart: updated };
           }
           return { cart: [...state.cart, newItem] };
         });
       },
 
-      updateCartQuantity: (id, quantity) => {
-        if (quantity <= 0) {
-          get().removeCartItem(id);
-          return;
-        }
-        set((state) => ({
-          cart: state.cart.map((i) => (i.menu_item_id === id ? { ...i, quantity } : i))
-        }));
+      updateCartQuantity: (menuItemId, quantity) => {
+        set((state) => {
+          if (quantity <= 0) {
+            return { cart: state.cart.filter((i) => i.menu_item_id !== menuItemId) };
+          }
+          return {
+            cart: state.cart.map((i) =>
+              i.menu_item_id === menuItemId ? { ...i, quantity } : i
+            )
+          };
+        });
       },
 
-      removeCartItem: (id) => {
+      removeCartItem: (menuItemId) => {
         set((state) => ({
-          cart: state.cart.filter((i) => i.menu_item_id !== id)
+          cart: state.cart.filter((i) => i.menu_item_id !== menuItemId)
         }));
       },
 
       clearCart: () => set({ cart: [], customerNotes: '' }),
 
-      placeOrder: (notes, source = 'menuz') => {
+      placeOrder: (notes = '', source = 'menuz') => {
         const state = get();
-        const activeTable = state.activeTable;
-        if (!activeTable) return null;
         if (state.cart.length === 0) return null;
 
-        for (const cartItem of state.cart) {
-          const freshItem = state.menuItems.find((i) => i.id === cartItem.menu_item_id);
-          if (!freshItem || !freshItem.is_available) {
-            throw new Error(`Item "${cartItem.name}" is currently sold out and cannot be ordered.`);
-          }
-        }
+        const currentRest = state.restaurant;
+        const currentTable = state.activeTable;
 
-        const currentRest = state.restaurants.find((r) => r.id === activeTable.restaurant_id) || state.restaurants[0];
-        const subtotal = state.cart.reduce((sum, item) => {
-          const optsSum = item.selected_options.reduce((s, o) => s + o.price_modifier, 0);
-          return sum + (item.price + optsSum) * item.quantity;
-        }, 0);
+        const subtotal = state.cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+        const tax = (subtotal * (currentRest.tax_rate_percent || 5)) / 100;
+        const grandTotal = subtotal + tax;
 
-        const taxRate = currentRest.tax_rate_percent || 5;
-        const tax = Number((subtotal * (taxRate / 100)).toFixed(2));
-        const total = Number((subtotal + tax).toFixed(2));
-
-        const orderId = 'ord_' + crypto.randomUUID();
-        const orderNumber = 'ORD-' + Math.floor(100 + Math.random() * 900);
-        const sessionId = sessionStorage.getItem('menuz_session_id') || 'sess_' + crypto.randomUUID();
+        const orderId = 'ord_' + Date.now().toString().slice(-6);
 
         const newOrder: Order = {
           id: orderId,
           restaurant_id: currentRest.id,
-          table_id: activeTable.id,
-          table_label: activeTable.label,
-          anonymous_session_id: sessionId,
-          order_number: orderNumber,
+          table_id: currentTable?.id || 'tbl-walkin',
+          table_label: currentTable?.label || 'Direct Table',
+          anonymous_session_id: 'session_' + Date.now(),
+          order_number: 'ORD-' + Date.now().toString().slice(-4),
           source: source,
           status: 'received',
-          currency: currentRest.currency,
+          currency: 'INR',
           subtotal_amount: subtotal,
           tax_amount: tax,
-          total_amount: total,
-          customer_notes: notes || state.customerNotes || '',
+          total_amount: grandTotal,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-          items: state.cart.map((c) => ({
-            id: 'ord_item_' + crypto.randomUUID(),
+          customer_notes: notes || state.customerNotes,
+          items: state.cart.map((cartItem, idx) => ({
+            id: `item_${orderId}_${idx}`,
             order_id: orderId,
-            menu_item_id: c.menu_item_id,
-            item_name_snapshot: c.name,
-            unit_price_snapshot: c.price,
-            quantity: c.quantity,
-            selected_options_snapshot: c.selected_options,
-            line_total_amount:
-              (c.price + c.selected_options.reduce((s, o) => s + o.price_modifier, 0)) * c.quantity
+            menu_item_id: cartItem.menu_item_id,
+            item_name_snapshot: cartItem.name,
+            unit_price_snapshot: cartItem.price,
+            quantity: cartItem.quantity,
+            selected_options_snapshot: cartItem.selected_options,
+            line_total_amount: cartItem.price * cartItem.quantity
           }))
         };
 
-        const notif: SystemNotification = {
-          id: 'notif-' + crypto.randomUUID().slice(0, 8),
+        const notification: SystemNotification = {
+          id: 'notif_order_' + Date.now(),
           restaurant_id: currentRest.id,
-          table_id: activeTable.id,
-          table_label: activeTable.label,
+          table_id: currentTable?.id,
+          table_label: currentTable?.label,
           type: 'order_placed',
-          message: `🍽️ New Order #${orderNumber} (${activeTable.label}) - ₹${total.toFixed(2)}`,
+          message: `🛒 New order received from ${currentTable?.label || 'Table'}: ₹${grandTotal.toFixed(2)}`,
           timestamp: new Date().toISOString(),
           read: false
         };
 
-        set((prev) => ({
-          orders: [newOrder, ...prev.orders],
-          notifications: [notif, ...prev.notifications].slice(0, 100),
+        set((s) => ({
+          orders: [newOrder, ...s.orders],
           cart: [],
           customerNotes: '',
-          activeOrderId: orderId
+          activeOrderId: orderId,
+          notifications: [notification, ...s.notifications]
         }));
 
         return newOrder;
       },
 
       advanceOrderStatus: (orderId) => {
-        const nextMap: Record<OrderStatus, OrderStatus> = {
-          received: 'preparing',
-          preparing: 'ready',
-          ready: 'served',
-          served: 'served',
-          cancelled: 'cancelled'
-        };
-
-        set((state) => ({
-          orders: state.orders.map((o) => {
-            if (o.id === orderId) {
-              const nextStatus = nextMap[o.status];
-              return { ...o, status: nextStatus, updated_at: new Date().toISOString() };
-            }
-            return o;
-          })
-        }));
+        set((state) => {
+          const statusOrder: OrderStatus[] = ['received', 'preparing', 'ready', 'served'];
+          return {
+            orders: state.orders.map((o) => {
+              if (o.id === orderId) {
+                const currentIndex = statusOrder.indexOf(o.status);
+                if (currentIndex < statusOrder.length - 1) {
+                  return { ...o, status: statusOrder[currentIndex + 1] };
+                }
+              }
+              return o;
+            })
+          };
+        });
       },
 
-      // ── Notification System ─────────────────────────────────
+      // Notifications
       addSystemNotification: (notification) => {
-        const newNotification: SystemNotification = {
+        const newNotif: SystemNotification = {
           ...notification,
-          id: 'notif-' + crypto.randomUUID().slice(0, 8),
+          id: 'notif_' + Date.now(),
           timestamp: new Date().toISOString(),
-          read: false,
+          read: false
         };
         set((state) => ({
-          notifications: [newNotification, ...state.notifications].slice(0, 100)
+          notifications: [newNotif, ...state.notifications].slice(0, 100)
         }));
       },
 
       markNotificationRead: (id) => {
         set((state) => ({
-          notifications: state.notifications.map((n) =>
-            n.id === id ? { ...n, read: true } : n
-          )
+          notifications: state.notifications.map((n) => (n.id === id ? { ...n, read: true } : n))
         }));
       },
 
-      clearAllNotifications: () => {
-        set({ notifications: [] });
-      },
+      clearAllNotifications: () => set({ notifications: [] }),
 
       callWaiter: (restaurantId, tableId, tableLabel) => {
         const notification: SystemNotification = {
-          id: 'notif-' + crypto.randomUUID().slice(0, 8),
+          id: 'notif_waiter_' + Date.now(),
           restaurant_id: restaurantId,
           table_id: tableId,
           table_label: tableLabel,
@@ -712,7 +771,7 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       }
     }),
     {
-      name: 'menuz_platform_cloud_storage_v16_enterprise_all_venues',
+      name: STORAGE_KEY,
       partialize: (state) => ({
         restaurants: state.restaurants,
         tables: state.tables,
@@ -727,24 +786,15 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       }),
       onRehydrateStorage: () => (state) => {
         if (!state) return;
-        // Retain ALL persisted restaurants, ensuring seed demo restaurants are present as base
-        if (!state.restaurants || state.restaurants.length === 0) {
-          state.restaurants = SEED_RESTAURANTS;
-        } else {
-          const existingIds = new Set(state.restaurants.map((r) => r.id));
-          const missingSeeds = SEED_RESTAURANTS.filter((r) => !existingIds.has(r.id));
-          if (missingSeeds.length > 0) {
-            state.restaurants = [...state.restaurants, ...missingSeeds];
-          }
+        // Merge missing seeds with rehydrated restaurants
+        const existingIds = new Set((state.restaurants || []).map((r: Restaurant) => r.id));
+        const missingSeeds = SEED_RESTAURANTS.filter((r) => !existingIds.has(r.id));
+        if (missingSeeds.length > 0) {
+          state.restaurants = [...(state.restaurants || []), ...missingSeeds];
         }
-        if (!state.restaurant || !state.restaurants.some((r) => r.id === state.restaurant.id)) {
+        if (!state.restaurant || !state.restaurants.some((r: Restaurant) => r.id === state.restaurant.id)) {
           state.restaurant = state.restaurants[0] || SEED_RESTAURANTS[0];
           state.currentRestaurantId = state.restaurant?.id || '';
-        }
-        const existingTableIds = new Set((state.tables || []).map((t) => t.id));
-        const missingTables = SEED_TABLES.filter((t) => !existingTableIds.has(t.id));
-        if (missingTables.length > 0) {
-          state.tables = [...(state.tables || []), ...missingTables];
         }
       }
     }
