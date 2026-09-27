@@ -492,26 +492,34 @@ export const PitchDeckPage: React.FC = () => {
                 </div>
 
                 <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <Sparkles className="w-4 h-4 text-purple-400" />
+                  <div className="w-7 h-7 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="text-sm">⚡</span>
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white">100% Guardrailed &amp; Instant 1-Tap KOT Addition</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Never hallucinates items not in stock. Diners can tap <strong>"+ Add to Tray"</strong> directly inside the chat dialogue, firing straight to your kitchen.</p>
+                    <h3 className="text-sm font-bold text-white">5-Min Fast Intake: Voice Dictation &amp; 1-Click AI Auto-Draft</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">Chefs don't type for hours — 1-click auto-completes secret spices, origin lore, pairings, and daily morning catch broadcasts with voice input and printable PDF sheets.</p>
                   </div>
                 </div>
               </div>
 
-              {/* Bottom Next Button */}
-              <div className="pt-2">
+              {/* Bottom Next & Try Studio Buttons */}
+              <div className="pt-2 flex flex-wrap items-center gap-3">
                 <button
                   type="button"
                   onClick={() => scrollToSection(2)}
-                  className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition-all flex items-center gap-2 shadow-sm"
+                  className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition-all flex items-center gap-2 shadow-sm cursor-pointer"
                 >
                   <span>See How It Connects to POS &amp; KOT</span>
                   <ChevronDown className="w-4 h-4" />
                 </button>
+                <Link
+                  to="/ai-studio"
+                  className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-amber-300 hover:text-amber-200 border border-amber-500/30 font-bold text-xs rounded-xl transition-all flex items-center gap-1.5 shadow-sm"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Try AI Onboarding Studio Live</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
               </div>
             </div>
 

@@ -311,23 +311,33 @@ def build_pdf(output_path):
             Paragraph("Guest Experience Impact", table_header_style)
         ],
         [
+            Paragraph("<b>Chef's Favourites &amp; Specials</b>", table_bold_style),
+            Paragraph("1-click tagging of Head Chef's personal favorites and house signature dishes.", table_body_style),
+            Paragraph("When guests ask what to order, hero dishes are recommended with authentic chef pride.", table_body_style)
+        ],
+        [
+            Paragraph("<b>Daily Freshness Broadcast</b>", table_bold_style),
+            Paragraph("Chef's 10-second morning update (e.g. <i>'Slow-simmered Rogan Josh batch started at 4:30 AM'</i>).", table_body_style),
+            Paragraph("AI highlights today's morning catch and fresh batches when greeting diners.", table_body_style)
+        ],
+        [
             Paragraph("<b>Dish-by-Dish Secrets</b>", table_bold_style),
             Paragraph("Curated recipe notes, secret spice origin, cooking time (e.g. 18-hr slow simmer), and authentic techniques.", table_body_style),
             Paragraph("Guests discover the craftsmanship behind high-margin dishes, driving 24% higher average order value.", table_body_style)
         ],
         [
-            Paragraph("<b>Chef Curated Pairings</b>", table_bold_style),
-            Paragraph("Specific food + beverage pairings (e.g., Dum Biryani paired with Smoked Saffron Chaas).", table_body_style),
+            Paragraph("<b>Curated Beverage Pairings</b>", table_bold_style),
+            Paragraph("Specific food + beverage pairings with culinary 'why' explanation (e.g., Dum Biryani + Saffron Chaas).", table_body_style),
             Paragraph("High-conversion upsells recommended naturally when guests inquire about menu choices.", table_body_style)
         ],
         [
-            Paragraph("<b>Spice & Allergy Guidance</b>", table_bold_style),
-            Paragraph("Calibrated 1-5 heat scale and dietary safety matrix (Jain, Vegan, Nut-Free, Gluten-Free).", table_body_style),
-            Paragraph("Prevents return dishes, eliminates diner anxiety, and protects guest health with precise allergen awareness.", table_body_style)
+            Paragraph("<b>Voice Styles &amp; FAQs</b>", table_bold_style),
+            Paragraph("Royal Awadhi, Michelin Fine Dining, or Bistro Cozy tones + Halal/Zero MSG/elder care FAQ trainer.", table_body_style),
+            Paragraph("Eliminates diner anxiety, protects guest health, and reflects authentic owner hospitality.", table_body_style)
         ],
         [
             Paragraph("<b>Fast Intake Studio</b>", table_bold_style),
-            Paragraph("<b>1-Click AI Auto-Drafting, Voice Dictation, Matrix spreadsheet mode</b> & printable/sharable PDF form.", table_body_style),
+            Paragraph("<b>1-Click AI Auto-Drafting, Voice Dictation, Matrix mode</b>, + Add Missing Dish, &amp; WhatsApp sharing.", table_body_style),
             Paragraph("Chefs and owners complete full 50-dish menu onboarding in under 5 minutes without friction.", table_body_style)
         ]
     ]
@@ -337,7 +347,7 @@ def build_pdf(output_path):
         ('GRID', (0,0), (-1,-1), 0.5, BORDER_LIGHT),
         ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, BG_LIGHT_GRAY]),
         ('VALIGN', (0,0), (-1,-1), 'TOP'),
-        ('PADDING', (0,0), (-1,-1), 5),
+        ('PADDING', (0,0), (-1,-1), 4.5),
     ]))
     story.append(t_ai)
     story.append(Spacer(1, 14))

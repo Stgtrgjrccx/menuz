@@ -6,7 +6,8 @@ import {
   Mic, MicOff, Plus, Trash2, ArrowLeft, RefreshCw, Flame,
   AlertCircle, Table as TableIcon, Layers, Sliders, CheckCircle2,
   ExternalLink, Mail, Star, Award, Zap, Tag, Eye, Info, X,
-  Utensils, HelpCircle, FileText, CheckCheck, Compass
+  Utensils, HelpCircle, FileText, CheckCheck, Compass, Radio,
+  Clock, ShieldCheck, Smile, Gift
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { ChefOwnerAiPersona, MenuItem, MenuCategory, isWorkingWithMenuz } from '../types';
@@ -37,6 +38,12 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
   const [copiedLink, setCopiedLink] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
 
+  // Today's Freshness Broadcast
+  const [dailyFreshHighlight, setDailyFreshHighlight] = useState(
+    'Slow-simmered Rogan Josh batch started at 4:30 AM with fresh Kashmiri morels & whole mace'
+  );
+  const [isEditingFreshness, setIsEditingFreshness] = useState(false);
+
   // Add Dish Modal State
   const [isAddDishModalOpen, setIsAddDishModalOpen] = useState(false);
   const [newDishName, setNewDishName] = useState('');
@@ -49,14 +56,27 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
   const [newDishIsChefFav, setNewDishIsChefFav] = useState(false);
   const [autoGenOnCreate, setAutoGenOnCreate] = useState(true);
 
-  // Test Chat state
-  const [testMessages, setTestMessages] = useState<Array<{ role: 'user' | 'assistant'; text: string; dishHighlights?: MenuItem[] }>>([
+  // Custom FAQs Trainer State
+  const [customFaqs, setCustomFaqs] = useState<Array<{ q: string; a: string }>>([
     {
-      role: 'assistant',
-      text: `Namaste! I am the AI Concierge for ${restaurant.name}, trained directly with Head Chef ${restaurant.ai_persona?.chef_name || 'Sanjay'} and Owner ${restaurant.ai_persona?.owner_name || 'Vikram'}.\n\nAsk me about our Chef's Favourites, House Specials, 18-hour slow-cooked secrets, spice heat calibrations (1-5), or wine/beverage pairings!`
+      q: 'Do you use MSG or artificial food coloring?',
+      a: 'Zero MSG and zero synthetic food coloring. We use cold-pressed mustard oil, vine-ripened tomatoes, and natural Kashmiri saffron.'
+    },
+    {
+      q: 'Is all meat 100% Halal certified?',
+      a: 'Yes, all our poultry and lamb are 100% Halal certified from audited regional suppliers.'
+    },
+    {
+      q: 'Can the kitchen accommodate low-oil or low-salt for elders?',
+      a: 'Absolutely! Our chefs prepare made-to-order portions with reduced salt or cold-pressed ghee upon request.'
+    },
+    {
+      q: 'Do you offer birthday or anniversary celebrations?',
+      a: 'Yes! We provide complimentary celebratory dessert sparklers and personalized table greetings.'
     }
   ]);
-  const [testInput, setTestInput] = useState('');
+  const [newFaqQ, setNewFaqQ] = useState('');
+  const [newFaqA, setNewFaqA] = useState('');
 
   // Persona state
   const defaultPersona: ChefOwnerAiPersona = restaurant.ai_persona || {
@@ -78,6 +98,15 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
   };
 
   const [persona, setPersona] = useState<ChefOwnerAiPersona>(defaultPersona);
+
+  // Test Chat state
+  const [testMessages, setTestMessages] = useState<Array<{ role: 'user' | 'assistant'; text: string; dishHighlights?: MenuItem[] }>>([
+    {
+      role: 'assistant',
+      text: `Namaste! I am the AI Concierge for ${restaurant.name}, trained directly with Head Chef ${persona.chef_name || 'Sanjay'} and Owner ${persona.owner_name || 'Vikram'}.\n\n✨ *Today's Kitchen Highlight:* ${dailyFreshHighlight}\n\nAsk me about our Chef's Favourites, House Specials, 18-hour slow-cooked secrets, spice heat calibrations (1-5), wine/cocktail pairings, or dietary guidelines!`
+    }
+  ]);
+  const [testInput, setTestInput] = useState('');
 
   // Metrics calculation
   const totalDishes = currentMenuItems.length;
@@ -362,9 +391,18 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
       const houseSpecials = currentMenuItems.filter((d) => d.is_signature);
       const bestsellers = currentMenuItems.filter((d) => d.is_bestseller);
 
-      if (lower.includes('chef') && (lower.includes('favourite') || lower.includes('favorite') || lower.includes('recommend') || lower.includes('special'))) {
+      // Check for FAQ match
+      const matchedFaq = customFaqs.find(f => lower.includes(f.q.toLowerCase().slice(0, 15)) || f.q.toLowerCase().split(' ').some(w => w.length > 4 && lower.includes(w)));
+
+      if (lower.includes('fresh') || lower.includes('today') || lower.includes('morning')) {
+        reply = `🌅 **Today's Kitchen Freshness Broadcast (from Chef ${persona.chef_name}):**\n\n"${dailyFreshHighlight}"\n\nOur kitchen prepares every base fresh daily at sunrise with zero day-old reheats.`;
+        matchedDishes = chefFavs.slice(0, 2);
+      } else if (matchedFaq) {
+        reply = `🛡️ **Kitchen Policy & Guest Assurance:**\n\n**Q: ${matchedFaq.q}**\n**A:** ${matchedFaq.a}`;
+      } else if (lower.includes('chef') && (lower.includes('favourite') || lower.includes('favorite') || lower.includes('recommend') || lower.includes('special'))) {
         if (chefFavs.length > 0) {
-          reply = `🌟 **Chef ${persona.chef_name}'s Personal Favourites:**\n\n` +
+          reply = `🌟 **Head Chef ${persona.chef_name}'s Personal Favourites:**\n\n` +
+            `*"${persona.chef_philosophy}"*\n\n` +
             chefFavs.map((d) => `• **${d.name}** (₹${d.price}): ${d.chef_notes || d.short_description}\n  *Chef's Note:* "${d.chef_story || persona.chef_philosophy}"\n  *Recommended Pairing:* ${d.pairing_drink_name || 'Chef Specialty Beverage'}`).join('\n\n');
           matchedDishes = chefFavs.slice(0, 3);
         } else {
@@ -376,6 +414,27 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
         reply = `🔥 **Our House Specials & Signatures at ${restaurant.name}:**\n\n` +
           list.map((d) => `• **${d.name}** (₹${d.price}) [Spice ${d.spice_level}/5]:\n  ${d.owner_pitch || d.short_description}\n  *Secret Preparation:* ${d.chef_notes || 'Handcrafted daily'}`).join('\n\n');
         matchedDishes = list.slice(0, 3);
+      } else if (lower.includes('date') || lower.includes('couple') || lower.includes('romantic')) {
+        const romanticStarters = currentMenuItems.filter(d => d.is_chef_recommended || d.price > 400).slice(0, 2);
+        const romanticDrinks = currentMenuItems.filter(d => d.item_type === 'drink').slice(0, 2);
+        reply = `🥂 **Romantic Dinner & Date Night Curation (by Owner ${persona.owner_name}):**\n\n` +
+          `We recommend starting with our delicate charred appetizers, followed by slow-simmered handi mains and signature handcrafted coolers:\n\n` +
+          romanticStarters.map(d => `• **${d.name}** (₹${d.price}): ${d.chef_story || d.short_description}`).join('\n') +
+          `\n\n✨ *Special Touch:* Let us know if you are celebrating an anniversary for complimentary table sparklers!`;
+        matchedDishes = [...romanticStarters, ...romanticDrinks].slice(0, 3);
+      } else if (lower.includes('family') || lower.includes('kids') || lower.includes('toddler') || lower.includes('grandparent')) {
+        const mildDishes = currentMenuItems.filter(d => d.spice_level <= 1).slice(0, 3);
+        reply = `👨‍👩‍👧‍👦 **Family & Multi-Generational Feast Selection:**\n\n` +
+          `For kids and elders, our kitchen prepares gentler, velvety dishes with zero harsh spices:\n\n` +
+          mildDishes.map(d => `• **${d.name}** (₹${d.price}) [Spice ${d.spice_level}/5 - Mild]: ${d.short_description}`).join('\n') +
+          `\n\nOur kitchen can easily reduce salt or churn mild lassis upon request.`;
+        matchedDishes = mildDishes;
+      } else if (lower.includes('quick') || lower.includes('fast') || lower.includes('corporate') || lower.includes('30 min')) {
+        const fastDishes = currentMenuItems.filter(d => d.category_id.includes('starter') || d.category_id.includes('tandoor') || d.price < 400).slice(0, 3);
+        reply = `⚡ **Fast 30-Minute Business Lunch Recommendations:**\n\n` +
+          `These high-speed kitchen items fire and serve in under 10-12 minutes:\n\n` +
+          fastDishes.map(d => `• **${d.name}** (₹${d.price}): Ready in ~10 mins`).join('\n');
+        matchedDishes = fastDishes;
       } else if (lower.includes('spice') || lower.includes('spicy') || lower.includes('mild')) {
         const mildDishes = currentMenuItems.filter((d) => d.spice_level <= 1);
         const fieryDishes = currentMenuItems.filter((d) => d.spice_level >= 4);
@@ -455,11 +514,11 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                 <h1 className="text-sm sm:text-base font-bold text-white flex items-center gap-1.5">
                   <span>Chef &amp; Owner AI Training Studio</span>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">
-                    v2.4
+                    v2.5
                   </span>
                 </h1>
                 <p className="text-[11px] text-charcoal-400">
-                  Granular Dish Secrets, Chef's Favourites, Pairings &amp; Voice Onboarding
+                  Granular Dish Secrets, Chef's Favourites, Daily Freshness &amp; Voice Onboarding
                 </p>
               </div>
             </div>
@@ -518,6 +577,51 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
           </div>
         </div>
       </header>
+
+      {/* ── Daily Kitchen Freshness Broadcast Flash Banner ────────────────── */}
+      <section className="bg-amber-500/15 border-b border-amber-300/80 px-4 sm:px-6 lg:px-8 py-2.5">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex items-center space-x-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping" />
+            <span className="text-xs font-black uppercase tracking-wider text-amber-950 flex items-center gap-1">
+              <Radio className="w-3.5 h-3.5 text-amber-700" />
+              Today's Kitchen Freshness Broadcast:
+            </span>
+          </div>
+
+          <div className="flex-1 max-w-2xl">
+            {isEditingFreshness ? (
+              <div className="flex items-center space-x-2">
+                <input
+                  type="text"
+                  value={dailyFreshHighlight}
+                  onChange={(e) => setDailyFreshHighlight(e.target.value)}
+                  className="w-full text-xs bg-white border border-amber-400 rounded-xl px-3 py-1 font-bold text-amber-950"
+                />
+                <button
+                  type="button"
+                  onClick={() => setIsEditingFreshness(false)}
+                  className="text-xs bg-amber-600 text-white px-3 py-1 rounded-xl font-bold"
+                >
+                  Save
+                </button>
+              </div>
+            ) : (
+              <p className="text-xs font-bold text-amber-950/90 italic cursor-pointer hover:underline" onClick={() => setIsEditingFreshness(true)}>
+                "{dailyFreshHighlight}"
+              </p>
+            )}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setIsEditingFreshness(!isEditingFreshness)}
+            className="text-[11px] font-bold text-amber-800 hover:text-amber-950 underline self-end sm:self-auto"
+          >
+            {isEditingFreshness ? 'Done' : 'Edit Today\'s Batch'}
+          </button>
+        </div>
+      </section>
 
       {/* ── Status & Share Strip ──────────────────────────────────────────── */}
       <section className="bg-white border-b border-ivory-200 shadow-xs">
@@ -654,7 +758,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
               }`}
             >
               <ChefHat className="w-3.5 h-3.5 text-saffron-500" />
-              <span>Chef &amp; Owner Lore</span>
+              <span>Chef &amp; Owner Lore &amp; Personality</span>
             </button>
 
             <button
@@ -1291,7 +1395,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
         )}
 
         {/* ═════════════════════════════════════════════════════════════════════ */}
-        {/* VIEW 4: CHEF & OWNER LORE & PHILOSOPHY EDITOR                         */}
+        {/* VIEW 4: CHEF & OWNER LORE, PERSONALITY TONE & FAQS                    */}
         {/* ═════════════════════════════════════════════════════════════════════ */}
         {viewMode === 'lore' && (
           <div className="bg-white rounded-3xl border border-ivory-200 shadow-subtle p-6 space-y-6 max-w-4xl mx-auto">
@@ -1301,8 +1405,54 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                 <span>Executive Chef &amp; Owner Hospitality Persona</span>
               </h3>
               <p className="text-xs text-charcoal-600 mt-1">
-                Configure the master voice and core culinary philosophy that the AI Concierge uses when greeting and advising diners.
+                Configure the master voice, conversational personality style, and custom kitchen FAQs for your AI concierge.
               </p>
+            </div>
+
+            {/* AI Personality & Tone Selector */}
+            <div className="space-y-2 bg-ivory-50 p-4 rounded-2xl border border-ivory-200">
+              <label className="text-xs font-bold text-charcoal-900 block flex items-center gap-1.5">
+                <Smile className="w-4 h-4 text-amber-600" />
+                <span>AI Conversational Tone &amp; Hospitality Style:</span>
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {[
+                  {
+                    id: 'warm_traditional',
+                    title: '👑 Royal Awadhi & Dastarkhwan Heritage',
+                    desc: 'Poetic, respectful, deeply warm (Aadab / Namaste). Explains hand-pounded spices and dum techniques.'
+                  },
+                  {
+                    id: 'fine_dining_artisan',
+                    title: '🍷 Michelin-Star Sommelier & Fine Dining',
+                    desc: 'Refined culinary prose, wine/cocktail pairing focus, and artisanal origin notes.'
+                  },
+                  {
+                    id: 'modern_chic',
+                    title: '⚡ High-Energy Modern Bistro & Tapas',
+                    desc: 'Crisp, witty, fast recommendations, cocktail pairings, and high check-size upselling.'
+                  },
+                  {
+                    id: 'bistro_cozy',
+                    title: '🏡 Hearty Family Trattoria / Ghar-Jaisa',
+                    desc: 'Generous, comforting, family feast-oriented, zero pretension, heartwarming hospitality.'
+                  }
+                ].map((tone) => (
+                  <button
+                    key={tone.id}
+                    type="button"
+                    onClick={() => setPersona({ ...persona, greeting_tone: tone.id as any })}
+                    className={`p-3 rounded-2xl text-left border transition-all cursor-pointer ${
+                      persona.greeting_tone === tone.id
+                        ? 'bg-amber-500/15 border-amber-500 shadow-xs ring-2 ring-amber-400/20'
+                        : 'bg-white border-ivory-200 hover:bg-ivory-100'
+                    }`}
+                  >
+                    <p className="text-xs font-bold text-charcoal-900">{tone.title}</p>
+                    <p className="text-[11px] text-charcoal-600 mt-0.5">{tone.desc}</p>
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -1359,24 +1509,62 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-3">
-              <div>
-                <label className="text-xs font-bold text-charcoal-800 block mb-1">Spice Guidance Rule</label>
-                <textarea
-                  rows={2}
-                  value={persona.spice_guidance}
-                  onChange={(e) => setPersona({ ...persona, spice_guidance: e.target.value })}
-                  className="w-full text-xs bg-ivory-50 border border-ivory-300 rounded-xl p-2.5"
-                />
+            {/* Custom Kitchen FAQs Trainer */}
+            <div className="space-y-3 bg-white p-4 rounded-2xl border border-ivory-300">
+              <h4 className="text-xs font-bold text-charcoal-900 flex items-center gap-1.5">
+                <HelpCircle className="w-4 h-4 text-saffron-600" />
+                <span>Custom Kitchen FAQs Trainer (Halal, Zero MSG, Celebrations, Elders)</span>
+              </h4>
+
+              <div className="space-y-2">
+                {customFaqs.map((faq, idx) => (
+                  <div key={idx} className="bg-ivory-50 p-3 rounded-xl border border-ivory-200 text-xs space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-charcoal-900">Q: {faq.q}</span>
+                      <button
+                        type="button"
+                        onClick={() => setCustomFaqs(customFaqs.filter((_, i) => i !== idx))}
+                        className="text-red-500 hover:text-red-700 text-[10px]"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                    <p className="text-charcoal-600 italic">A: {faq.a}</p>
+                  </div>
+                ))}
               </div>
-              <div>
-                <label className="text-xs font-bold text-charcoal-800 block mb-1">Dietary &amp; Hygiene Standards</label>
-                <textarea
-                  rows={2}
-                  value={persona.dietary_rules}
-                  onChange={(e) => setPersona({ ...persona, dietary_rules: e.target.value })}
-                  className="w-full text-xs bg-ivory-50 border border-ivory-300 rounded-xl p-2.5"
+
+              {/* Add FAQ form */}
+              <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <input
+                  type="text"
+                  placeholder="Question (e.g., Is your meat 100% Halal?)"
+                  value={newFaqQ}
+                  onChange={(e) => setNewFaqQ(e.target.value)}
+                  className="text-xs bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2"
                 />
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="text"
+                    placeholder="Answer for the AI to reply..."
+                    value={newFaqA}
+                    onChange={(e) => setNewFaqA(e.target.value)}
+                    className="flex-1 text-xs bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (newFaqQ.trim() && newFaqA.trim()) {
+                        setCustomFaqs([...customFaqs, { q: newFaqQ.trim(), a: newFaqA.trim() }]);
+                        setNewFaqQ('');
+                        setNewFaqA('');
+                      }
+                    }}
+                    className="text-xs font-bold bg-charcoal-900 text-white px-3 py-2 rounded-xl"
+                  >
+                    Add FAQ
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -1405,7 +1593,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                   <span>Interactive Dining Concierge Simulator</span>
                 </h3>
                 <p className="text-xs text-charcoal-500">
-                  Test questions as a diner. The AI uses Chef {persona.chef_name}'s secrets and your tagged specials.
+                  Test questions as a diner. The AI uses Chef {persona.chef_name}'s secrets, today's freshness, and your tagged specials.
                 </p>
               </div>
               <button
@@ -1414,7 +1602,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                   setTestMessages([
                     {
                       role: 'assistant',
-                      text: `Namaste! I am your dining concierge for ${restaurant.name}, trained directly by Chef ${persona.chef_name} & Owner ${persona.owner_name}. Ask me about our specials, cooking secrets, or pairings!`
+                      text: `Namaste! I am your dining concierge for ${restaurant.name}, trained directly by Chef ${persona.chef_name} & Owner ${persona.owner_name}.\n\n✨ *Today's Kitchen Highlight:* ${dailyFreshHighlight}\n\nAsk me about our specials, cooking secrets, or pairings!`
                     }
                   ]);
                 }}
@@ -1425,25 +1613,31 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
               </button>
             </div>
 
-            {/* Quick Prompt Starters */}
-            <div className="flex flex-wrap items-center gap-1.5">
-              <span className="text-[10px] font-bold text-charcoal-400 uppercase">Test Prompts:</span>
-              {[
-                "What is the Chef's favourite dish?",
-                "What are your house specials?",
-                "Tell me the secret of Dal Makhani",
-                "What drink pairs with our main?",
-                "What is mild and non-spicy?"
-              ].map((promptText) => (
-                <button
-                  key={promptText}
-                  type="button"
-                  onClick={() => handleSendTestQuery(promptText)}
-                  className="text-[11px] font-bold bg-ivory-100 hover:bg-amber-100 text-charcoal-800 hover:text-amber-900 border border-ivory-300 px-2.5 py-1 rounded-xl transition-all cursor-pointer"
-                >
-                  {promptText}
-                </button>
-              ))}
+            {/* Quick Scenario Starters */}
+            <div className="space-y-1.5">
+              <span className="text-[10px] font-bold text-charcoal-400 uppercase tracking-wider block">
+                Simulate Real Guest Scenarios:
+              </span>
+              <div className="flex flex-wrap items-center gap-1.5">
+                {[
+                  { label: '🌟 What is fresh today?', query: 'What is fresh in the kitchen today?' },
+                  { label: "🧑‍🍳 Chef's Favourite Pick", query: "What is Chef Sanjay's personal favourite dish?" },
+                  { label: '🔥 House Specials', query: 'What are your signature house specials?' },
+                  { label: '👨‍👩‍👧‍👦 Family with Kids/Elders', query: 'We are a family with grandparents and kids, what should we order?' },
+                  { label: '🥂 Romantic Date Night', query: 'Planning a romantic dinner for two with pairings' },
+                  { label: '⚡ 30-min Business Lunch', query: 'We are on a quick 30-min corporate lunch' },
+                  { label: '🛡️ MSG & Halal Policy', query: 'Do you use MSG and is the meat Halal?' }
+                ].map((sc) => (
+                  <button
+                    key={sc.label}
+                    type="button"
+                    onClick={() => handleSendTestQuery(sc.query)}
+                    className="text-[11px] font-bold bg-ivory-100 hover:bg-amber-100 text-charcoal-800 hover:text-amber-900 border border-ivory-300 px-2.5 py-1 rounded-xl transition-all cursor-pointer"
+                  >
+                    {sc.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Chat History Box */}
