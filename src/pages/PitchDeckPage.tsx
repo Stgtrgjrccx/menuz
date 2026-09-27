@@ -22,9 +22,12 @@ import {
   MapPin,
   Check,
   Layers,
-  ChevronDown,
-  FileText,
-  Download
+  ChevronDown, 
+  FileText, 
+  Download,
+  Globe,
+  Share2,
+  Sliders
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { SelfServeKotSetupWizard } from '../components/SelfServeKotSetupWizard';
@@ -50,32 +53,91 @@ function playTone(freq: number, type: OscillatorType = 'sine', duration: number 
   }
 }
 
+const DEMO_DISH_DATA = {
+  en: {
+    title: 'Awadhi Murgh Dum Biryani',
+    desc: 'Slow-simmered fragrant basmati rice layered with marinated chicken, saffron & whole Awadhi spices.',
+    price: '₹480',
+    addBtn: 'Add to Table Cart',
+    addedBtn: 'In Table Cart',
+    guest: '👤 Guest 1 (Host)',
+    category: 'Biryanis & Rice'
+  },
+  hi: {
+    title: 'अवधी मुर्ग दम बिरयानी',
+    desc: 'धीमी आंच पर पका सुगंधित बासमती चावल, केसर और साबुत अवधी मसालों से लबरेज रसीला चिकन।',
+    price: '₹480',
+    addBtn: 'टेबल कार्ट में जोड़ें',
+    addedBtn: 'कार्ट में शामिल',
+    guest: '👤 अतिथि 1 (मेज़बान)',
+    category: 'बिरयानी और चावल'
+  },
+  mr: {
+    title: 'अवधी मुर्ग दम बिर्याणी',
+    desc: 'मंद आचेवर शिजवलेला सुगंधी बासमती तांदूळ, केसर आणि अस्सल खडे मसाल्यांचा शाही स्वाद.',
+    price: '₹480',
+    addBtn: 'टेबल कार्टमध्ये जोडा',
+    addedBtn: 'कार्टमध्ये जोडले',
+    guest: '👤 पाहुणे 1 (यजमान)',
+    category: 'बिर्याणी आणि भात'
+  }
+};
+
+const DEMO_STORIES = {
+  biryani: {
+    title: 'Awadhi Murgh Dum Biryani',
+    tag: 'Signature Charcoal Dum',
+    image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=800&auto=format&fit=crop&q=80',
+    quote: '"Unmatched aroma and royal flavors. A must-try in Pune!"'
+  },
+  curry: {
+    title: 'Old Delhi Butter Chicken',
+    tag: '36-Hour Simmered Makkhan',
+    image: 'https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=800&auto=format&fit=crop&q=80',
+    quote: '"Velvety rich gravy with tandoor charcoal smoky chicken."'
+  },
+  cocktail: {
+    title: 'Royal Saffron Smoked Cooler',
+    tag: 'Artisan Beverage Pairing',
+    image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&auto=format&fit=crop&q=80',
+    quote: '"The perfect balance to elevate authentic North Indian spices."'
+  }
+};
+
 export const PitchDeckPage: React.FC = () => {
   const restaurant = useRestaurantStore((state) => state.restaurant);
 
-  // Active section (0 to 4)
+  // Active section (0 to 5)
   const [activeSection, setActiveSection] = useState<number>(0);
-  const totalSections = 5;
+  const totalSections = 6;
 
   // Simulator states for Chapter 1: The Google Rating Dilemma
   const [demoRating, setDemoRating] = useState<'average' | 'stellar'>('stellar');
 
-  // Simulator states for Chapter 2: Chef & Owner AI Chatbot
+  // Simulator states for Chapter 2: Multiplayer Table Sync & Multilingual Engine
+  const [demoLang, setDemoLang] = useState<'en' | 'hi' | 'mr'>('en');
+  const [demoGuestAdded, setDemoGuestAdded] = useState<boolean>(false);
+
+  // Simulator states for Chapter 3: Chef & Owner AI Chatbot & Pairings
   const [selectedAiQuery, setSelectedAiQuery] = useState<'chef' | 'spice' | 'allergen' | 'pairing'>('chef');
   const [aiItemAdded, setAiItemAdded] = useState(false);
+  const [pairingAdded, setPairingAdded] = useState(false);
   const [isWizardOpen, setIsWizardOpen] = useState(false);
 
-  // Simulator states for Chapter 3: Universal Kitchen KOT (Petpooja, RoyalPOS, Recaho, RanceLab, Direct ESC/POS)
+  // Simulator states for Chapter 4: Universal Kitchen KOT & Direct Line Mode
+  const [activeKotMode, setActiveKotMode] = useState<'direct' | 'captain'>('direct');
   const [selectedDeckPos, setSelectedDeckPos] = useState<'Petpooja' | 'RoyalPOS' | 'Recaho' | 'RanceLab' | 'Direct ESC/POS'>('Petpooja');
   const [kotPrinting, setKotPrinting] = useState(false);
   const [kotPrinted, setKotPrinted] = useState(true);
 
-  // Simulator states for Chapter 4: AI Review Booster & Floor Shield
+  // Simulator states for Chapter 5: Viral Instagram & Platform Architecture
+  const [selectedStoryDish, setSelectedStoryDish] = useState<'biryani' | 'curry' | 'cocktail'>('biryani');
+  const [storyGenerated, setStoryGenerated] = useState(false);
+
+  // Simulator states for Chapter 6: AI Review Booster & Floor Shield & Direct Access
   const [selectedStars, setSelectedStars] = useState<number>(5);
   const [isSpinning, setIsSpinning] = useState(false);
   const [wonPrize, setWonPrize] = useState<string | null>('15% Off Food Bill');
-
-  // Simulator states for Chapter 5: Anti-Cheat & ROI
   const [voucherSeconds, setVoucherSeconds] = useState(882); // 14m 42s
   const [enteredPin, setEnteredPin] = useState('');
   const [pinVerified, setPinVerified] = useState(false);
@@ -175,6 +237,7 @@ export const PitchDeckPage: React.FC = () => {
     useRef<HTMLDivElement>(null),
     useRef<HTMLDivElement>(null),
     useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
     useRef<HTMLDivElement>(null)
   ];
 
@@ -185,10 +248,11 @@ export const PitchDeckPage: React.FC = () => {
 
   const chapters = [
     { num: '01', short: 'The Dilemma', title: 'The Silent Diner Dilemma' },
-    { num: '02', short: "Chef's AI Chatbot", title: 'Chef & Owner Trained AI Dining Chatbot' },
-    { num: '03', short: 'Universal KOT', title: 'Universal POS & Kitchen KOT Integration' },
-    { num: '04', short: 'Review Shield', title: 'AI Review & 4★ Floor Shield' },
-    { num: '05', short: 'Zero Commission', title: 'Anti-Cheat Security & 0% Cut' }
+    { num: '02', short: 'Table Sync & Languages', title: 'Real-Time Table Sync & Multilingual (EN/HI/MR)' },
+    { num: '03', short: "Chef's AI & Pairings", title: 'Chef AI Sommelier & Smart Pairings' },
+    { num: '04', short: 'Direct Kitchen KOT', title: 'Direct Kitchen KOT & Universal POS Bridge' },
+    { num: '05', short: 'Viral Social & Brand', title: 'Viral Instagram Stories & Master Platform' },
+    { num: '06', short: 'Review Shield & Direct Access', title: 'AI Review Shield & Direct Access Onboarding' }
   ];
 
   return (
@@ -455,7 +519,7 @@ export const PitchDeckPage: React.FC = () => {
         </section>
 
         {/* ──────────────────────────────────────────────────────────────── */}
-        {/* CHAPTER 02: CHEF & OWNER TRAINED AI CHATBOT                      */}
+        {/* CHAPTER 02: REAL-TIME TABLE SYNC & MULTILINGUAL ENGINE            */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section
           ref={sectionRefs[1]}
@@ -467,19 +531,253 @@ export const PitchDeckPage: React.FC = () => {
               <div className="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full text-amber-400 text-xs font-bold tracking-wide">
                 <span>CHAPTER 02</span>
                 <span>•</span>
-                <span>CHEF &amp; OWNER TRAINED AI CHATBOT</span>
+                <span>TABLE CART SYNC &amp; MULTILINGUAL</span>
               </div>
 
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-                Trained Directly by Your <span className="text-amber-400">Head Chef &amp; Owner.</span>
-                <span className="block text-2xl sm:text-3xl font-bold text-slate-300 mt-1">A Personalised Dining Concierge at Every Table.</span>
+                Real-Time Table Sync. <span className="text-amber-400">English, Hindi &amp; Marathi.</span>
+                <span className="block text-xl sm:text-2xl font-bold text-slate-300 mt-1">
+                  Multiplayer Co-Ordering with Universal Regional Accessibility.
+                </span>
+              </h2>
+
+              <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
+                When a family or group sits at Table 4, multiple phones can scan the QR code and co-order simultaneously. Items appear instantly across all diners' screens with guest tags. Plus, while <strong>English remains strictly primary and default</strong>, guests can switch to <strong>Hindi (हिन्दी)</strong> or <strong>Marathi (मराठी)</strong> with a single physical click.
+              </p>
+
+              {/* 3 Core Points */}
+              <div className="space-y-3 pt-1">
+                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
+                  <div className="w-7 h-7 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                    <Users className="w-4 h-4 text-amber-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-white">Multiplayer Table Cart Synchronization</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">Live cart tray sync across all diners at Table 4. Guest 1 and Guest 2 add dishes seamlessly with zero duplicate orders and unified table billing.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
+                  <div className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                    <Globe className="w-4 h-4 text-emerald-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-white">English Primary + Physical Marathi &amp; Hindi Toggles</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">Opens in English by default. Native Marathi and Hindi speaking diners can toggle in 1 tap to view localized dish titles, descriptions, and kitchen notes.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
+                  <div className="w-7 h-7 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                    <Sparkles className="w-4 h-4 text-blue-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-white">Seamless Guest Attribution &amp; Cart Locks</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">Each dish is labeled with its respective guest ("👤 Guest 1 - Host", "👤 Guest 2 - Rohan"), giving waitstaff and kitchen perfect order clarity.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Next Button */}
+              <div className="pt-2 flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => scrollToSection(2)}
+                  className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition-all flex items-center gap-2 shadow-sm cursor-pointer"
+                >
+                  <span>Explore Chef AI &amp; Upsell Pairings</span>
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Right Interactive Visual: Live Table Sync & Language Simulator */}
+            <div className="lg:col-span-6">
+              <div className="bg-[#111622] border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
+                {/* Header */}
+                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-xs text-emerald-400 font-bold">
+                      T4
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold text-white block">Table 4 • Live Shared Session</span>
+                      <span className="text-[10px] text-emerald-400 font-mono">● 2 Diners Connected (Host + Guest)</span>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-bold bg-amber-500/15 text-amber-300 px-2.5 py-0.5 rounded-full border border-amber-500/30">
+                    Live Table Cart Sync
+                  </span>
+                </div>
+
+                {/* Language Switcher Bar */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between text-[10px] uppercase font-bold text-slate-400">
+                    <span>Select Language (English Default):</span>
+                    <span className="text-amber-400 font-mono">{demoLang.toUpperCase()} Active</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDemoLang('en');
+                        playTone(523.25, 'sine', 0.15);
+                      }}
+                      className={`py-1.5 px-2 rounded-lg text-xs font-bold transition-all ${
+                        demoLang === 'en'
+                          ? 'bg-amber-500 text-slate-950 shadow-xs'
+                          : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
+                      }`}
+                    >
+                      🇬🇧 English (Default)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDemoLang('hi');
+                        playTone(587.33, 'sine', 0.15);
+                      }}
+                      className={`py-1.5 px-2 rounded-lg text-xs font-bold transition-all ${
+                        demoLang === 'hi'
+                          ? 'bg-amber-500 text-slate-950 shadow-xs'
+                          : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
+                      }`}
+                    >
+                      🇮🇳 हिन्दी (Hindi)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDemoLang('mr');
+                        playTone(659.25, 'sine', 0.15);
+                      }}
+                      className={`py-1.5 px-2 rounded-lg text-xs font-bold transition-all ${
+                        demoLang === 'mr'
+                          ? 'bg-amber-500 text-slate-950 shadow-xs'
+                          : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
+                      }`}
+                    >
+                      🚩 मराठी (Marathi)
+                    </button>
+                  </div>
+                </div>
+
+                {/* Localized Dish Card Demo */}
+                <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 space-y-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider block">
+                        {DEMO_DISH_DATA[demoLang].category}
+                      </span>
+                      <h4 className="text-sm font-extrabold text-white">
+                        {DEMO_DISH_DATA[demoLang].title}
+                      </h4>
+                      <p className="text-xs text-slate-300 leading-relaxed">
+                        {DEMO_DISH_DATA[demoLang].desc}
+                      </p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <span className="text-sm font-black text-amber-400 font-mono">
+                        {DEMO_DISH_DATA[demoLang].price}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 flex items-center justify-between border-t border-slate-800">
+                    <span className="text-[10px] font-medium text-slate-400">
+                      Ordered by: <strong className="text-amber-300">{DEMO_DISH_DATA[demoLang].guest}</strong>
+                    </span>
+                    <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                      ✓ In Table Cart
+                    </span>
+                  </div>
+                </div>
+
+                {/* Multiplayer Co-Ordering Simulation Tray */}
+                <div className="bg-slate-950 border border-slate-800/80 rounded-xl p-3.5 space-y-2.5">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-bold text-white flex items-center gap-1.5">
+                      <Users className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Table 4 Unified Cart (2 Diners)</span>
+                    </span>
+                    <span className="font-mono font-bold text-amber-400">
+                      ₹{demoGuestAdded ? '960' : '480'}
+                    </span>
+                  </div>
+
+                  {/* Guest 1 Item */}
+                  <div className="flex items-center justify-between text-xs bg-slate-900/60 p-2 rounded-lg border border-slate-800">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-[10px] bg-amber-500/20 text-amber-300 font-bold px-1.5 py-0.2 rounded">Host</span>
+                      <span className="text-white font-medium text-[11px]">{DEMO_DISH_DATA[demoLang].title}</span>
+                    </div>
+                    <span className="text-slate-300 font-mono text-[11px]">₹480</span>
+                  </div>
+
+                  {/* Guest 2 Simulated Item */}
+                  {demoGuestAdded ? (
+                    <div className="flex items-center justify-between text-xs bg-emerald-950/30 p-2 rounded-lg border border-emerald-500/30 animate-fadeIn">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-1.5 py-0.2 rounded">Guest 2 (Rohan)</span>
+                        <span className="text-emerald-200 font-medium text-[11px]">Kashmiri Mutton Rogan Josh</span>
+                      </div>
+                      <span className="text-emerald-400 font-mono text-[11px]">₹480</span>
+                    </div>
+                  ) : (
+                    <div className="text-[11px] text-slate-500 italic p-1.5 text-center">
+                      Guest 2 is currently browsing appetizers on their phone...
+                    </div>
+                  )}
+
+                  {/* Action to simulate Guest 2 co-ordering */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDemoGuestAdded(!demoGuestAdded);
+                      playTone(demoGuestAdded ? 330 : 660, 'triangle', 0.2);
+                    }}
+                    className="w-full py-2 bg-slate-900 hover:bg-slate-850 text-amber-300 hover:text-amber-200 text-xs font-bold rounded-lg border border-amber-500/30 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <span>{demoGuestAdded ? '✕ Remove Guest 2 Dish' : '⚡ Simulate Guest 2 Adding Item to Cart'}</span>
+                  </button>
+                </div>
+
+                <div className="text-[11px] text-slate-400 text-center italic">
+                  💡 Zero app downloads required. Table cart syncs in &lt;100ms via WebSocket state channels.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ──────────────────────────────────────────────────────────────── */}
+        {/* CHAPTER 03: CHEF AI SOMMELIER & SMART PAIRING ENGINE             */}
+        {/* ──────────────────────────────────────────────────────────────── */}
+        <section
+          ref={sectionRefs[2]}
+          className="min-h-[calc(100vh-60px)] scroll-mt-16 py-12 lg:py-16 flex items-center justify-center p-4 sm:p-8 lg:p-12 border-b border-slate-800/60"
+        >
+          <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left Narrative Column */}
+            <div className="lg:col-span-6 space-y-6">
+              <div className="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full text-amber-400 text-xs font-bold tracking-wide">
+                <span>CHAPTER 03</span>
+                <span>•</span>
+                <span>CHEF AI &amp; UPSELL SOMMELIER</span>
+              </div>
+
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+                Trained by Your Chef. <span className="text-amber-400">Upsells Like an Owner.</span>
+                <span className="block text-xl sm:text-2xl font-bold text-slate-300 mt-1">
+                  Auto-Scroll Conversational UX &amp; Intelligent Dish Pairings.
+                </span>
               </h2>
 
               <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
                 Generic AI chatbots hallucinate ingredients. Menuz elevates the table experience: <strong>a personalized concierge trained directly by your Head Chef and Restaurant Owner</strong>. It knows your kitchen's secret recipe notes, calibrated spice levels (1-5), allergen cautions, and your owner's high-margin pairing rules.
               </p>
 
-              {/* 3 Pillars of Chef & Owner Training */}
+              {/* 3 Core Points */}
               <div className="space-y-3 pt-1">
                 <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
                   <div className="w-7 h-7 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0 mt-0.5">
@@ -493,33 +791,33 @@ export const PitchDeckPage: React.FC = () => {
 
                 <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
                   <div className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-sm">💼</span>
+                    <UtensilsCrossed className="w-4 h-4 text-emerald-400" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white">Trained by Restaurant Owner: High-Margin Upselling</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Subtly suggests signature coolers, hot tandoor breads, and desserts that pair perfectly with the diner's selection, increasing check size by +18%.</p>
+                    <h3 className="text-sm font-bold text-white">Smart Beverage &amp; Side Pairings (+22% Order Value)</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">Suggests signature coolers, artisan mocktails, and tandoor breads paired with the guest's selection, unlocking bundle savings.</p>
                   </div>
                 </div>
 
                 <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
                   <div className="w-7 h-7 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-sm">⚡</span>
+                    <Sparkles className="w-4 h-4 text-blue-400" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white">5-Min Fast Intake: Voice Dictation &amp; 1-Click AI Auto-Draft</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Chefs don't type for hours — 1-click auto-completes secret spices, origin lore, pairings, and daily morning catch broadcasts with voice input and printable PDF sheets.</p>
+                    <h3 className="text-sm font-bold text-white">Frictionless Auto-Scroll UX</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">When diners tap quick suggestions, the chat window smoothly auto-follows to reveal the newest reply without awkward manual scrolling.</p>
                   </div>
                 </div>
               </div>
 
-              {/* Bottom Next & Try Studio Buttons */}
+              {/* Bottom Next Button */}
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <button
                   type="button"
-                  onClick={() => scrollToSection(2)}
+                  onClick={() => scrollToSection(3)}
                   className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition-all flex items-center gap-2 shadow-sm cursor-pointer"
                 >
-                  <span>See How It Connects to POS &amp; KOT</span>
+                  <span>See Direct Kitchen KOT Architecture</span>
                   <ChevronDown className="w-4 h-4" />
                 </button>
                 <Link
@@ -533,7 +831,7 @@ export const PitchDeckPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Interactive Visual: Live Chef & Owner AI Chatbot Simulation */}
+            {/* Right Interactive Visual: Live AI Sommelier & Pairings Simulator */}
             <div className="lg:col-span-6">
               <div className="bg-[#111622] border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
                 <div className="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -566,7 +864,7 @@ export const PitchDeckPage: React.FC = () => {
                       className={`px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-left transition-all ${
                         selectedAiQuery === 'chef'
                           ? 'bg-amber-500 text-slate-950 font-bold shadow-xs'
-                          : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
+                          : 'bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800'
                       }`}
                     >
                       🧑‍🍳 Chef recommendations
@@ -580,7 +878,7 @@ export const PitchDeckPage: React.FC = () => {
                       className={`px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-left transition-all ${
                         selectedAiQuery === 'spice'
                           ? 'bg-amber-500 text-slate-950 font-bold shadow-xs'
-                          : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
+                          : 'bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800'
                       }`}
                     >
                       🔥 Spice level check
@@ -594,7 +892,7 @@ export const PitchDeckPage: React.FC = () => {
                       className={`px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-left transition-all ${
                         selectedAiQuery === 'pairing'
                           ? 'bg-amber-500 text-slate-950 font-bold shadow-xs'
-                          : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
+                          : 'bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800'
                       }`}
                     >
                       🍷 Owner's pairing upsell
@@ -608,7 +906,7 @@ export const PitchDeckPage: React.FC = () => {
                       className={`px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-left transition-all ${
                         selectedAiQuery === 'allergen'
                           ? 'bg-amber-500 text-slate-950 font-bold shadow-xs'
-                          : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
+                          : 'bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800'
                       }`}
                     >
                       🌾 Gluten &amp; nut-free check
@@ -632,9 +930,9 @@ export const PitchDeckPage: React.FC = () => {
                   <div className="flex justify-start">
                     <div className="bg-slate-950 border border-slate-800 px-3.5 py-2.5 rounded-2xl rounded-tl-sm text-xs text-slate-200 max-w-[90%] space-y-2">
                       <p className="leading-relaxed">
-                        {selectedAiQuery === 'chef' && "Chef Sanjeev highlights our Old Delhi Butter Chicken and 16-hour Slow-Cooked Dal Makhani. Both are prepared with hand-churned white butter and aromatic Kashmiri spices."}
+                        {selectedAiQuery === 'chef' && "Chef Sanjeev highlights our Awadhi Murgh Dum Biryani and Slow-Cooked Dal Makhani. Both are slow-cooked in sealed handis with authentic Awadhi spices."}
                         {selectedAiQuery === 'spice' && "Old Delhi Butter Chicken is calibrated at Spice 1/5 (very mild). The gravy is tomato, cream, and cashew based with zero harsh green chilies. It's 100% kid and senior-friendly."}
-                        {selectedAiQuery === 'pairing' && "Owner Rohit recommends pairing rich curries with our clay-oven Garlic Butter Naan and a chilled Kokum Mint Cooler to refresh your palate between bites."}
+                        {selectedAiQuery === 'pairing' && "Owner Rohit recommends pairing rich curries with our clay-oven Garlic Butter Naan and chilled Royal Kokum Cooler to refresh your palate between bites."}
                         {selectedAiQuery === 'allergen' && "Our Slow-Cooked Dal Makhani and Tandoori Murgh are 100% gluten-free. For nut allergies, our kitchen uses dedicated allergen-safe pans and separate ladles."}
                       </p>
 
@@ -642,14 +940,14 @@ export const PitchDeckPage: React.FC = () => {
                       <div className="bg-amber-500/10 border-l-2 border-amber-500 px-2.5 py-1.5 rounded-r-md text-[11px] text-amber-300">
                         {selectedAiQuery === 'chef' && "🧑‍🍳 Chef's Secret: Hand-smoked charcoal tandoori finish gives it the iconic Old Delhi flavor."}
                         {selectedAiQuery === 'spice' && "🧑‍🍳 Chef's Note: Spice can be customized to zero heat upon your request."}
-                        {selectedAiQuery === 'pairing' && "💼 Owner's Tip: Pairing cooler + naan completes the meal and qualifies for our Google Review dessert reward!"}
+                        {selectedAiQuery === 'pairing' && "💼 Owner's Tip: Pairing cooler + naan completes the meal and unlocks a bundle discount!"}
                         {selectedAiQuery === 'allergen' && "🧑‍🍳 Chef's Safety Guarantee: All cross-contamination protocols verified in our kitchen."}
                       </div>
 
                       {/* 1-Tap Add to Tray */}
                       <div className="pt-1 flex items-center justify-between border-t border-slate-800">
                         <span className="text-[11px] font-bold text-white">
-                          {selectedAiQuery === 'chef' && "Old Delhi Butter Chicken • ₹480"}
+                          {selectedAiQuery === 'chef' && "Awadhi Murgh Biryani • ₹480"}
                           {selectedAiQuery === 'spice' && "Kid-Friendly Butter Chicken • ₹480"}
                           {selectedAiQuery === 'pairing' && "Garlic Naan & Kokum Cooler • ₹240"}
                           {selectedAiQuery === 'allergen' && "Gluten-Free Dal Makhani • ₹360"}
@@ -682,7 +980,37 @@ export const PitchDeckPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="text-[11px] text-slate-400 text-center">
+                {/* Chef Recommended Pairing Upsell Card */}
+                <div className="bg-gradient-to-r from-amber-500/15 via-orange-500/15 to-purple-500/15 border border-amber-500/30 rounded-xl p-3.5 flex items-center justify-between gap-3 shadow-md">
+                  <div className="space-y-0.5">
+                    <div className="flex items-center space-x-1.5">
+                      <span className="text-xs">🍷</span>
+                      <span className="text-xs font-bold text-white">Chef's Recommended Pairing</span>
+                      <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-mono font-bold">
+                        Save 15%
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-300">
+                      Garlic Butter Naan + Royal Kokum Cooler bundle with Biryani (₹240 bundle price).
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPairingAdded(!pairingAdded);
+                      playTone(pairingAdded ? 330 : 660, 'sine', 0.2);
+                    }}
+                    className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
+                      pairingAdded
+                        ? 'bg-emerald-500 text-slate-950'
+                        : 'bg-amber-500 hover:bg-amber-400 text-slate-950'
+                    }`}
+                  >
+                    {pairingAdded ? 'Pairing Added ✓' : '+ Add Pairing Deal'}
+                  </button>
+                </div>
+
+                <div className="text-[11px] text-slate-400 text-center italic">
                   💡 Zero hallucinations: The AI answers only using your exact menu recipes, spice data, and owner upsell rules.
                 </div>
               </div>
@@ -691,80 +1019,66 @@ export const PitchDeckPage: React.FC = () => {
         </section>
 
         {/* ──────────────────────────────────────────────────────────────── */}
-        {/* CHAPTER 03: UNIVERSAL POS & DIRECT KITCHEN KOT                   */}
+        {/* CHAPTER 04: DIRECT KITCHEN KOT & UNIVERSAL POS BRIDGE            */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section
-          ref={sectionRefs[2]}
-          className="min-h-[calc(100vh-60px)] scroll-mt-16 py-12 lg:py-16 flex items-center justify-center p-4 sm:p-8 lg:p-12 border-b border-slate-800/60"
+          ref={sectionRefs[3]}
+          className="min-h-[calc(100vh-60px)] scroll-mt-16 py-12 lg:py-16 flex items-center justify-center p-4 sm:p-8 lg:p-12 border-b border-slate-800/60 bg-[#0b0f18]"
         >
           <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left Narrative Column */}
             <div className="lg:col-span-6 space-y-6">
               <div className="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full text-amber-400 text-xs font-bold tracking-wide">
-                <span>CHAPTER 03</span>
+                <span>CHAPTER 04</span>
                 <span>•</span>
-                <span>TRIPLE-REDUNDANCY KITCHEN KOT ENGINE</span>
+                <span>DIRECT KITCHEN KOT &amp; POS BRIDGE</span>
               </div>
 
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-                Take All 3 Connections Available: <span className="text-amber-400">Setup Can Be Done Any How.</span>
+                Direct Line to Kitchen. <span className="text-amber-400">Owner Decides Workflow.</span>
+                <span className="block text-xl sm:text-2xl font-bold text-slate-300 mt-1">
+                  Mode A Instant Auto-KOT or Mode B Captain Review First.
+                </span>
               </h2>
 
               <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-                Menuz doesn't restrict you to one single channel. <strong>Take all 3 connections simultaneously</strong> — Cloud POS API (Petpooja, Recaho, RanceLab) + Local Wi-Fi LAN Bridge (RoyalPOS / Android / Windows) + Direct Hardware ESC/POS Thermal Printer (Port 9100). Setup can be done any how in under 2 minutes without developer help, providing 100% zero-downtime kitchen order tickets even if WAN internet drops.
+                Every restaurant runs differently. Menuz leaves the choice 100% in the owner's hands: <strong>Send orders directly to the kitchen thermal printer in 1 second (Mode A)</strong>, or <strong>route them to the floor captain for quick verification first (Mode B)</strong>. Coupled with triple-redundant POS integration (Petpooja, RoyalPOS, Recaho, RanceLab, and direct ESC/POS network hardware).
               </p>
 
-              {/* Self-Service Quick Setup Banner */}
-              <div className="bg-gradient-to-r from-amber-500/15 via-orange-500/15 to-purple-500/15 border border-amber-500/30 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-md">
-                <div>
-                  <div className="flex items-center space-x-1.5 mb-0.5">
-                    <span className="text-xs">⚡</span>
-                    <span className="text-xs font-bold text-white">Triple-Sync 2-Minute KOT Setup</span>
-                    <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300 font-mono font-bold">
-                      Zero-Dev / All 3 Connections
-                    </span>
+              {/* Owner Options Comparison Cards */}
+              <div className="grid grid-cols-2 gap-3 pt-1">
+                <div
+                  onClick={() => setActiveKotMode('direct')}
+                  className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
+                    activeKotMode === 'direct'
+                      ? 'bg-amber-500/15 border-amber-500/50 shadow-md'
+                      : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
+                  }`}
+                >
+                  <div className="flex items-center space-x-2 mb-1">
+                    <span className="text-sm">⚡</span>
+                    <h3 className="text-xs font-bold text-white uppercase tracking-wider">Mode A: Direct Auto-KOT</h3>
                   </div>
                   <p className="text-[11px] text-slate-300">
-                    Connect Cloud POS, Local Wi-Fi Tablet &amp; Direct Thermal Printer together so no kitchen order is ever dropped.
+                    Order prints directly in kitchen in 1 second. Zero staff delay. Perfect for high-speed QSRs and casual dining.
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setIsWizardOpen(true)}
-                  className="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs rounded-xl transition-all shadow-md shrink-0 flex items-center space-x-1.5 cursor-pointer"
-                >
-                  <Printer className="w-3.5 h-3.5" />
-                  <span>Launch 2-Min Wizard</span>
-                  <span>→</span>
-                </button>
-              </div>
 
-              {/* 3-Step Real-time KOT Architecture Card */}
-              <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] uppercase tracking-wider font-bold text-amber-400">
-                    How The Menuz KOT System Works
-                  </span>
-                  <span className="text-[10px] text-emerald-400 font-mono font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                    ⚡ 1-Second Latency
-                  </span>
-                </div>
-                <div className="grid grid-cols-3 gap-2 text-center">
-                  <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800/80 space-y-1">
-                    <span className="text-[9px] font-black text-amber-400 bg-amber-500/20 px-1.5 py-0.5 rounded-md">STEP 1</span>
-                    <div className="text-xs font-bold text-white mt-1">Diner Scans &amp; Orders</div>
-                    <p className="text-[10px] text-slate-400">Table QR opens menu on their phone. Customized order sent in 1 tap.</p>
+                <div
+                  onClick={() => setActiveKotMode('captain')}
+                  className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
+                    activeKotMode === 'captain'
+                      ? 'bg-amber-500/15 border-amber-500/50 shadow-md'
+                      : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
+                  }`}
+                >
+                  <div className="flex items-center space-x-2 mb-1">
+                    <span className="text-sm">👨‍✈️</span>
+                    <h3 className="text-xs font-bold text-white uppercase tracking-wider">Mode B: Captain Review</h3>
                   </div>
-                  <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800/80 space-y-1">
-                    <span className="text-[9px] font-black text-purple-400 bg-purple-500/20 px-1.5 py-0.5 rounded-md">STEP 2</span>
-                    <div className="text-xs font-bold text-white mt-1">Universal POS Bridge</div>
-                    <p className="text-[10px] text-slate-400">Routes to Petpooja, RoyalPOS, Recaho, RanceLab, or LAN printer.</p>
-                  </div>
-                  <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800/80 space-y-1">
-                    <span className="text-[9px] font-black text-emerald-400 bg-emerald-500/20 px-1.5 py-0.5 rounded-md">STEP 3</span>
-                    <div className="text-xs font-bold text-white mt-1">Kitchen Beeps &amp; Prints</div>
-                    <p className="text-[10px] text-slate-400">80mm thermal paper KOT fires in 1 second. Zero staff handwriting mistakes.</p>
-                  </div>
+                  <p className="text-[11px] text-slate-300">
+                    Captain reviews and approves on floor tablet before KOT prints. Ideal for fine dining and course coordination.
+                  </p>
                 </div>
               </div>
 
@@ -775,8 +1089,8 @@ export const PitchDeckPage: React.FC = () => {
                     <Printer className="w-4 h-4 text-amber-400" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white">Instant 80mm ESC/POS Printing</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Thermal kitchen printer fires immediately with table number, items, and preparation notes.</p>
+                    <h3 className="text-sm font-bold text-white">Instant 80mm ESC/POS Thermal Printing</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">Kitchen printer beeps and prints immediately with table number, items, guest tags, and spice notes.</p>
                   </div>
                 </div>
 
@@ -785,31 +1099,29 @@ export const PitchDeckPage: React.FC = () => {
                     <ShieldCheck className="w-4 h-4 text-emerald-400" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white">Every Major POS in India &amp; Pune</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Built-in adapters for Petpooja (50k+ outlets), RoyalPOS (FC Road/Pune local), Recaho (PCMC/Chakan), and RanceLab (Chains), plus direct network thermal printer printing.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <Layers className="w-4 h-4 text-purple-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">2-Way Live Menu &amp; 86 Item Sync</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Mark a dish sold out in your POS, and it instantly hides from diner mobile menus.</p>
+                    <h3 className="text-sm font-bold text-white">Triple-Redundancy Zero Downtime</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">If cloud internet drops, orders fail over seamlessly to Local Wi-Fi LAN bridge and Port 9100 direct printing.</p>
                   </div>
                 </div>
               </div>
 
               {/* Bottom Next Button */}
-              <div className="pt-2">
+              <div className="pt-2 flex flex-wrap items-center gap-3">
                 <button
                   type="button"
-                  onClick={() => scrollToSection(3)}
-                  className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition-all flex items-center gap-2 shadow-sm"
+                  onClick={() => scrollToSection(4)}
+                  className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition-all flex items-center gap-2 shadow-sm cursor-pointer"
                 >
-                  <span>See The Google Review Shield</span>
+                  <span>Explore Viral Instagram Stories</span>
                   <ChevronDown className="w-4 h-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsWizardOpen(true)}
+                  className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/30 font-bold text-xs rounded-xl transition-all flex items-center gap-1.5 shadow-sm cursor-pointer"
+                >
+                  <Printer className="w-3.5 h-3.5" />
+                  <span>2-Min KOT Wizard</span>
                 </button>
               </div>
             </div>
@@ -825,15 +1137,20 @@ export const PitchDeckPage: React.FC = () => {
                       {selectedDeckPos} Kitchen Thermal Printer
                     </span>
                   </div>
-                  <button
-                    type="button"
-                    onClick={handlePrintKot}
-                    disabled={kotPrinting}
-                    className="text-[11px] font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 px-3 py-1 rounded-lg border border-amber-500/30 transition-colors flex items-center gap-1.5"
-                  >
-                    <RotateCw className={`w-3 h-3 ${kotPrinting ? 'animate-spin' : ''}`} />
-                    <span>{kotPrinting ? 'Printing...' : 'Re-Print KOT'}</span>
-                  </button>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded">
+                      {activeKotMode === 'direct' ? 'MODE A: AUTO-KOT' : 'MODE B: CAPTAIN APPROVED'}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handlePrintKot}
+                      disabled={kotPrinting}
+                      className="text-[11px] font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 px-2.5 py-1 rounded-lg border border-amber-500/30 transition-colors flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <RotateCw className={`w-3 h-3 ${kotPrinting ? 'animate-spin' : ''}`} />
+                      <span>{kotPrinting ? 'Printing...' : 'Re-Print KOT'}</span>
+                    </button>
+                  </div>
                 </div>
 
                 {/* POS Selector Pills */}
@@ -843,7 +1160,7 @@ export const PitchDeckPage: React.FC = () => {
                       key={pos}
                       type="button"
                       onClick={() => setSelectedDeckPos(pos)}
-                      className={`py-1.5 px-1.5 rounded-lg text-[10px] font-bold transition-all truncate ${
+                      className={`py-1.5 px-1.5 rounded-lg text-[10px] font-bold transition-all truncate cursor-pointer ${
                         selectedDeckPos === pos
                           ? 'bg-amber-500 text-slate-950 shadow-xs'
                           : 'text-slate-400 hover:text-white hover:bg-slate-850'
@@ -876,22 +1193,30 @@ export const PitchDeckPage: React.FC = () => {
 
                   <div className="space-y-1.5 py-1 text-xs">
                     <div className="flex justify-between font-bold">
-                      <span>1x OLD DELHI BUTTER CHICKEN</span>
-                      <span>[MEDIUM]</span>
+                      <span>1x AWADHI MURGH BIRYANI [GUEST 1]</span>
+                      <span>₹480</span>
                     </div>
-                    <div className="flex justify-between font-bold">
-                      <span>1x SLOW-COOKED DAL MAKHANI</span>
-                      <span>[EXTRA BUTTER]</span>
+                    <div className="text-[10px] text-slate-600 pl-2">
+                      Notes: Medium spice, layered dum, salan on side
                     </div>
+
                     <div className="flex justify-between font-bold">
-                      <span>2x GARLIC BUTTER NAAN</span>
-                      <span>[CRISPY]</span>
+                      <span>1x GARLIC NAAN &amp; KOKUM COOLER [PAIRING]</span>
+                      <span>₹240</span>
+                    </div>
+                    <div className="text-[10px] text-emerald-800 pl-2">
+                      Bundle Discount Applied (15% Off)
+                    </div>
+
+                    <div className="flex justify-between font-bold">
+                      <span>1x MUTTON ROGAN JOSH [GUEST 2]</span>
+                      <span>₹480</span>
                     </div>
                   </div>
 
                   <div className="pt-2 border-t border-dashed border-slate-400 text-[10px] text-slate-600 space-y-0.5">
                     <div className="flex justify-between">
-                      <span>SOURCE: Menuz QR In-Table</span>
+                      <span>DISPATCH: {activeKotMode === 'direct' ? 'DIRECT TO KITCHEN' : 'CAPTAIN VERIFIED'}</span>
                       <span className="text-emerald-700 font-bold">
                         {selectedDeckPos === 'Direct ESC/POS'
                           ? 'ESC/POS: OK (RAW PRINT)'
@@ -899,14 +1224,16 @@ export const PitchDeckPage: React.FC = () => {
                       </span>
                     </div>
                     <div className="text-center text-slate-500 pt-1">
-                      *** {selectedDeckPos.toUpperCase()} KITCHEN COPY • NO CASH VALUE ***
+                      *** KITCHEN THERMAL COPY • ZERO RE-TYPING ***
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between text-xs bg-slate-900 p-3 rounded-xl border border-slate-800">
-                  <span className="text-slate-400">Time saved per order:</span>
-                  <span className="font-bold text-amber-400 font-mono">3–5 Minutes (Zero Staff Re-typing)</span>
+                  <span className="text-slate-400">Order Routing Mode:</span>
+                  <span className="font-bold text-amber-400 font-mono">
+                    {activeKotMode === 'direct' ? 'Mode A: Instant Direct (0 min lag)' : 'Mode B: Captain Approved First'}
+                  </span>
                 </div>
               </div>
             </div>
@@ -914,33 +1241,227 @@ export const PitchDeckPage: React.FC = () => {
         </section>
 
         {/* ──────────────────────────────────────────────────────────────── */}
-        {/* CHAPTER 04: AI REVIEW GENERATOR & 4★ FLOOR SHIELD                */}
+        {/* CHAPTER 05: VIRAL INSTAGRAM STORIES & MASTER PLATFORM             */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section
-          ref={sectionRefs[3]}
-          className="min-h-[calc(100vh-60px)] scroll-mt-16 py-12 lg:py-16 flex items-center justify-center p-4 sm:p-8 lg:p-12 border-b border-slate-800/60 bg-[#0b0f18]"
+          ref={sectionRefs[4]}
+          className="min-h-[calc(100vh-60px)] scroll-mt-16 py-12 lg:py-16 flex items-center justify-center p-4 sm:p-8 lg:p-12 border-b border-slate-800/60"
         >
           <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left Narrative Column */}
             <div className="lg:col-span-6 space-y-6">
               <div className="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full text-amber-400 text-xs font-bold tracking-wide">
-                <span>CHAPTER 04</span>
+                <span>CHAPTER 05</span>
                 <span>•</span>
-                <span>THE REPUTATION ENGINE</span>
+                <span>VIRAL SOCIAL &amp; MASTER PLATFORM</span>
               </div>
 
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-                Public 5★ Reviews. <span className="text-amber-400">Complaints Stay Private.</span>
+                9:16 Instagram Stories. <span className="text-amber-400">Diners Become Brand Ambassadors.</span>
+                <span className="block text-xl sm:text-2xl font-bold text-slate-300 mt-1">
+                  Partitioned Multi-Restaurant Architecture &amp; Independent Custom URLs.
+                </span>
               </h2>
 
-              {/* Timing callout */}
-              <div className="inline-flex items-center space-x-2 bg-red-500/10 border border-red-500/20 px-3 py-2 rounded-xl text-red-300 text-xs">
-                <span className="text-red-400 font-black text-base">⚡</span>
-                <span><strong className="text-white">Triggered the moment they scan</strong> — before they even browse the menu. Not at bill time.</span>
+              <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
+                Diners love taking food photos. Menuz packages their dining experience into <strong>gorgeous 9:16 vertical Instagram Stories</strong> with your restaurant's handle, location badge, and their 5-star review. With 1 tap, guests share to their stories, generating thousands of hyper-local walk-in impressions every weekend.
+              </p>
+
+              {/* 3 Core Points */}
+              <div className="space-y-3 pt-1">
+                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
+                  <div className="w-7 h-7 rounded-lg bg-pink-500/15 border border-pink-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                    <Share2 className="w-4 h-4 text-pink-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-white">1-Click 9:16 Vertical Instagram Story Studio</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">Auto-generates high-aesthetic Instagram stories featuring your signature dishes, verified Google stars, and your Instagram tag (@saffronhouse.pune).</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
+                  <div className="w-7 h-7 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                    <Layers className="w-4 h-4 text-amber-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-white">Multi-Restaurant Partitioned Image Library</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">Each restaurant operates with a completely isolated cloud image repository. Dish photography and logos are saved in segregated namespaces with permanent persistence.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
+                  <div className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                    <Smartphone className="w-4 h-4 text-emerald-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-white">Independent Standalone URL Routes</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">Restaurants own their dedicated clean URLs (<code className="text-amber-300">/r/:restaurantSlug</code>) for direct bio links, Google Maps website buttons, and printed table acrylics.</p>
+                  </div>
+                </div>
               </div>
 
+              {/* Bottom Next Button */}
+              <div className="pt-2 flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => scrollToSection(5)}
+                  className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition-all flex items-center gap-2 shadow-sm cursor-pointer"
+                >
+                  <span>See Review Shield &amp; Direct Access</span>
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Right Interactive Visual: 9:16 Instagram Story Preview Simulator */}
+            <div className="lg:col-span-6 flex justify-center">
+              <div className="w-full max-w-sm bg-[#111622] border border-slate-800 rounded-3xl p-5 shadow-2xl space-y-4">
+                {/* Header */}
+                <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-base">📸</span>
+                    <span className="text-xs font-bold text-white">Instagram Story Generator</span>
+                  </div>
+                  <span className="text-[10px] font-bold text-pink-400 bg-pink-500/10 px-2 py-0.5 rounded-full border border-pink-500/20">
+                    9:16 Format
+                  </span>
+                </div>
+
+                {/* Dish Selector Pills */}
+                <div className="grid grid-cols-3 gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-center">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedStoryDish('biryani');
+                      playTone(523.25, 'sine', 0.15);
+                    }}
+                    className={`py-1 rounded-lg text-[10px] font-bold transition-all ${
+                      selectedStoryDish === 'biryani'
+                        ? 'bg-amber-500 text-slate-950 shadow-xs'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    Biryani
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedStoryDish('curry');
+                      playTone(587.33, 'sine', 0.15);
+                    }}
+                    className={`py-1 rounded-lg text-[10px] font-bold transition-all ${
+                      selectedStoryDish === 'curry'
+                        ? 'bg-amber-500 text-slate-950 shadow-xs'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    Butter Chicken
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedStoryDish('cocktail');
+                      playTone(659.25, 'sine', 0.15);
+                    }}
+                    className={`py-1 rounded-lg text-[10px] font-bold transition-all ${
+                      selectedStoryDish === 'cocktail'
+                        ? 'bg-amber-500 text-slate-950 shadow-xs'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    Cocktail
+                  </button>
+                </div>
+
+                {/* Realistic 9:16 Vertical Story Mockup */}
+                <div className="relative aspect-[9/14] rounded-2xl overflow-hidden shadow-2xl border border-slate-700/60 group">
+                  {/* Background Image */}
+                  <img
+                    src={DEMO_STORIES[selectedStoryDish].image}
+                    alt={DEMO_STORIES[selectedStoryDish].title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  {/* Dark Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/60" />
+
+                  {/* Top Instagram Story Bar */}
+                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between text-white z-10">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-7 h-7 rounded-full bg-amber-500 p-0.5 flex items-center justify-center">
+                        <span className="text-[10px] font-bold text-slate-950">M</span>
+                      </div>
+                      <div>
+                        <span className="text-xs font-bold block text-white drop-shadow">@saffronhouse.pune</span>
+                        <span className="text-[9px] text-slate-300 block drop-shadow">Koregaon Park • 12m ago</span>
+                      </div>
+                    </div>
+                    <span className="text-[10px] bg-black/40 backdrop-blur-md px-2 py-0.5 rounded-full text-slate-200">
+                      ★ 5.0 Google Review
+                    </span>
+                  </div>
+
+                  {/* Center Dish Tag & Quote */}
+                  <div className="absolute bottom-16 left-3 right-3 space-y-2 z-10">
+                    <div className="inline-block bg-amber-500 text-slate-950 font-black text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-md shadow-md">
+                      {DEMO_STORIES[selectedStoryDish].tag}
+                    </div>
+                    <h4 className="text-base font-black text-white leading-tight drop-shadow-md">
+                      {DEMO_STORIES[selectedStoryDish].title}
+                    </h4>
+                    <p className="text-xs text-slate-200 italic leading-snug drop-shadow">
+                      {DEMO_STORIES[selectedStoryDish].quote}
+                    </p>
+                  </div>
+
+                  {/* Bottom Share Trigger Button */}
+                  <div className="absolute bottom-3 left-3 right-3 z-10">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setStoryGenerated(true);
+                        playTone(784, 'triangle', 0.25);
+                      }}
+                      className="w-full py-2 bg-gradient-to-r from-pink-600 via-rose-500 to-amber-500 hover:brightness-110 text-white font-bold text-xs rounded-xl shadow-lg flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <Share2 className="w-3.5 h-3.5" />
+                      <span>{storyGenerated ? 'Story Shared to @Instagram ✓' : 'Share to Instagram Story'}</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="text-[11px] text-slate-400 text-center italic">
+                  💡 Zero design effort for diner: Menuz auto-generates branded 9:16 stickers ready to post.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ──────────────────────────────────────────────────────────────── */}
+        {/* CHAPTER 06: AI REVIEW SHIELD & DIRECT ACCESS ONBOARDING          */}
+        {/* ──────────────────────────────────────────────────────────────── */}
+        <section
+          ref={sectionRefs[5]}
+          className="min-h-[calc(100vh-60px)] scroll-mt-16 py-12 lg:py-16 flex items-center justify-center p-4 sm:p-8 lg:p-12 bg-[#0b0f18]"
+        >
+          <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left Narrative Column */}
+            <div className="lg:col-span-6 space-y-6">
+              <div className="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full text-amber-400 text-xs font-bold tracking-wide">
+                <span>CHAPTER 06</span>
+                <span>•</span>
+                <span>REPUTATION SHIELD &amp; DIRECT ACCESS</span>
+              </div>
+
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+                Public 5★ Reviews. <span className="text-amber-400">Direct Access Onboarding.</span>
+                <span className="block text-xl sm:text-2xl font-bold text-slate-300 mt-1">
+                  Floor Shield, Anti-Cheat Voucher Timers &amp; 0% Commission.
+                </span>
+              </h2>
+
               <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-                The review challenge appears instantly when a diner scans the QR code. They rate, get an AI-written Google review, and spin the Lucky Wheel — all before they've even placed an order. A 1-3 star rating never reaches Google Maps; it silently alerts your manager to fix it at the table.
+                Menuz turns happy diners into verified 5-star Google reviews using an AI-crafted review generator and Lucky Wheel hook on the way in. Unhappy ratings (1-3★) silently alert your floor manager to resolve issues at the table. Plus, we've <strong>removed arbitrary 7-day trials — the platform owner directly grants complete access</strong> with flat ₹1,999/month pricing and 0% food commission.
               </p>
 
               {/* 3 Core Points */}
@@ -950,18 +1471,8 @@ export const PitchDeckPage: React.FC = () => {
                     <Sparkles className="w-4 h-4 text-emerald-400" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white">AI Writes Dish-Specific Reviews</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Mentions actual dishes ("crispy garlic naan", "tender butter chicken") so Google indexes your best menu items.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <RotateCw className="w-4 h-4 text-amber-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">Lucky Wheel Hooks Them on the Way In</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Guests spin immediately on scan — winning 15% off their bill or a free dessert before they've even ordered. That reward guarantees they stay, eat, and enjoy.</p>
+                    <h3 className="text-sm font-bold text-white">AI Dish-Specific Review Builder</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">Mentions actual dishes ("Awadhi Murgh Dum Biryani", "crispy garlic naan") so Google Maps indexes your high-margin specialties.</p>
                   </div>
                 </div>
 
@@ -970,34 +1481,53 @@ export const PitchDeckPage: React.FC = () => {
                     <ShieldCheck className="w-4 h-4 text-red-400" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white">The Negative Review Floor Shield</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">1-3 star ratings NEVER reach Google Maps. A silent alert sends your manager to Table 4 to resolve it before the guest leaves.</p>
+                    <h3 className="text-sm font-bold text-white">Negative Review Floor Shield</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">1-3 star ratings NEVER reach Google Maps. A silent floor buzzer alerts your manager to Table 4 to resolve complaints before the guest walks out.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
+                  <div className="w-7 h-7 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                    <CheckCircle2 className="w-4 h-4 text-blue-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-white">Direct Owner-Granted Access (0% Commission)</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">No arbitrary 7-day trials. Complete operational platform unlocked on demand. Flat ₹1,999/month subscription — zero commission on your food sales.</p>
                   </div>
                 </div>
               </div>
 
-              {/* Bottom Next Button */}
-              <div className="pt-2">
-                <button
-                  type="button"
-                  onClick={() => scrollToSection(4)}
-                  className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition-all flex items-center gap-2 shadow-sm"
+              {/* Bottom Actions */}
+              <div className="pt-2 flex flex-wrap items-center gap-3">
+                <Link
+                  to="/admin"
+                  className="px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm rounded-xl transition-all flex items-center gap-2 shadow-lg"
                 >
-                  <span>See Anti-Fraud Security & 0% Pricing</span>
-                  <ChevronDown className="w-4 h-4" />
-                </button>
+                  <span>Launch Operations Hub</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  to={`/r/${restaurant.slug}/menu?t=table-token-01-saffron`}
+                  className="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl transition-colors border border-slate-700"
+                >
+                  Test Diner Menu Live
+                </Link>
               </div>
             </div>
 
-            {/* Right Interactive Visual: Dual Review Gate Simulator */}
-            <div className="lg:col-span-6">
+            {/* Right Interactive Visual: Dual Review Gate & Live Anti-Cheat Voucher */}
+            <div className="lg:col-span-6 space-y-4">
               <div className="bg-[#111622] border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
                 <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                   <div className="flex items-center space-x-2">
                     <Star className="w-4 h-4 text-amber-400" />
-                    <span className="text-xs font-bold text-white">Test The Reputation Gate</span>
+                    <span className="text-xs font-bold text-white uppercase tracking-wider">
+                      Reputation Shield Simulator
+                    </span>
                   </div>
-                  <span className="text-[10px] font-bold bg-red-500/15 text-red-400 px-2 py-0.5 rounded-full border border-red-500/20">⚡ Fires on QR Scan</span>
+                  <span className="text-[10px] font-bold bg-red-500/15 text-red-400 px-2 py-0.5 rounded-full border border-red-500/20">
+                    ⚡ Fires on QR Scan
+                  </span>
                 </div>
 
                 {/* Star Selector Buttons */}
@@ -1014,7 +1544,7 @@ export const PitchDeckPage: React.FC = () => {
                           playTone(523.25, 'sine', 0.2);
                         }
                       }}
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold transition-all ${
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold transition-all cursor-pointer ${
                         selectedStars >= st
                           ? st < 4
                             ? 'bg-red-500/20 text-red-400 border border-red-500/40'
@@ -1033,7 +1563,7 @@ export const PitchDeckPage: React.FC = () => {
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-emerald-400 flex items-center gap-1">
                         <CheckCircle2 className="w-3.5 h-3.5" />
-                        <span>Eligible for Google Review & Wheel</span>
+                        <span>Eligible for Google Review &amp; Wheel</span>
                       </span>
                       <span className="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded">
                         Goes to Google Maps
@@ -1045,7 +1575,7 @@ export const PitchDeckPage: React.FC = () => {
                         AI-Generated Review Preview:
                       </span>
                       <p className="text-slate-200 italic text-[11px]">
-                        "Had an unforgettable dinner at Saffron House! The Old Delhi Butter Chicken was rich and tender, and the crispy garlic naan was perfection. 5 stars all the way!"
+                        "Had an unforgettable dinner at Saffron House! The Awadhi Murgh Dum Biryani was rich, aromatic, and tender, and the garlic butter naan was perfection. 5 stars all the way!"
                       </p>
                     </div>
 
@@ -1084,7 +1614,7 @@ export const PitchDeckPage: React.FC = () => {
                         <span>🚨 URGENT FLOOR ALERT (TABLE 4)</span>
                       </span>
                       <p className="text-[11px] text-slate-300">
-                        "Guest reported slow bread service & lukewarm curry. Floor manager alerted via SOS buzzer to resolve at table."
+                        "Guest reported slow bread service &amp; lukewarm curry. Floor manager alerted via SOS buzzer to resolve at table."
                       </p>
                     </div>
 
@@ -1094,145 +1624,69 @@ export const PitchDeckPage: React.FC = () => {
                   </div>
                 )}
 
-                <div className="text-[11px] text-slate-400 text-center">
-                  Filters out public negativity while funneling happy diners straight to your Google Maps listing.
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ──────────────────────────────────────────────────────────────── */}
-        {/* CHAPTER 05: ANTI-CHEAT SECURITY & ZERO COMMISSION                */}
-        {/* ──────────────────────────────────────────────────────────────── */}
-        <section
-          ref={sectionRefs[4]}
-          className="min-h-[calc(100vh-60px)] scroll-mt-16 py-12 lg:py-16 flex items-center justify-center p-4 sm:p-8 lg:p-12"
-        >
-          <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* Left Narrative Column */}
-            <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full text-amber-400 text-xs font-bold tracking-wide">
-                <span>CHAPTER 05</span>
-                <span>•</span>
-                <span>FRAUD PROTECTION & ROI</span>
-              </div>
-
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-                Anti-Cheat Security. <span className="text-amber-400">0% Commission.</span>
-              </h2>
-
-              <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-                Never worry about diners using screenshot coupons or fake claims. Menuz enforces a live 15-minute countdown clock and a Waiter PIN to permanently void vouchers at billing. Plus, you own 100% of guest phone numbers.
-              </p>
-
-              {/* 3 Core Points */}
-              <div className="space-y-3 pt-1">
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <Lock className="w-4 h-4 text-amber-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">Live 15-Min Timer & Waiter PIN</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Dynamic countdown clock with live seconds prevents reused screenshots. Server enters PIN 1234 on diner's screen to redeem.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <Users className="w-4 h-4 text-emerald-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">100% Customer Data Ownership</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Unlike third-party aggregators who hide diner data, Menuz builds your own verified WhatsApp guest list for festival remarketing.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <CheckCircle2 className="w-4 h-4 text-blue-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">Flat ₹1,999/Month. 0% Food Cut.</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Keep 100% of your bill values. Direct onboarding with full feature access and high-durability acrylic table stands included.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Final Call to Action */}
-              <div className="pt-2 flex flex-wrap items-center gap-3">
-                <Link
-                  to="/admin"
-                  className="px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm rounded-xl transition-all flex items-center gap-2 shadow-lg"
-                >
-                  <span>Launch Operations Hub</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link
-                  to={`/r/${restaurant.slug}/menu?t=table-token-01-saffron`}
-                  className="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl transition-colors border border-slate-700"
-                >
-                  Test Diner Menu Live
-                </Link>
-              </div>
-            </div>
-
-            {/* Right Interactive Visual: Live Anti-Cheat Voucher Simulator */}
-            <div className="lg:col-span-6">
-              <div className="bg-[#111622] border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                  <div className="flex items-center space-x-2">
-                    <Lock className="w-4 h-4 text-amber-400" />
-                    <span className="text-xs font-bold text-white uppercase tracking-wider">
-                      Live Voucher Security Engine
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
-                    ANTI-CHEAT ACTIVE
-                  </span>
-                </div>
-
-                {/* Live Voucher Card with Ticking Clock */}
-                <div className="bg-gradient-to-b from-slate-900 to-slate-950 border border-amber-500/40 p-5 rounded-2xl space-y-3 relative overflow-hidden">
+                {/* Anti-Cheat Voucher Simulator Card */}
+                <div className="bg-gradient-to-b from-slate-900 to-slate-950 border border-amber-500/40 p-4 rounded-xl space-y-2.5 relative">
                   <div className="flex justify-between items-start">
                     <div>
                       <span className="text-[10px] text-amber-400 font-bold uppercase tracking-wider block">
-                        Table 4 Reward Claim
+                        Table 4 Verified Reward
                       </span>
-                      <h3 className="text-lg font-black text-white">15% Off Total Food Bill</h3>
+                      <h4 className="text-sm font-black text-white">15% Off Total Food Bill</h4>
                     </div>
                     {/* Live Ticking Seconds Pill */}
-                    <div className="bg-amber-500/20 border border-amber-500/40 px-3 py-1 rounded-xl text-center">
-                      <span className="text-[9px] text-amber-300 font-bold block uppercase">Expires in</span>
-                      <span className="text-base font-extrabold text-amber-400 font-mono">
+                    <div className="bg-amber-500/20 border border-amber-500/40 px-2.5 py-0.5 rounded-lg text-center">
+                      <span className="text-[8px] text-amber-300 font-bold block uppercase">Expires in</span>
+                      <span className="text-xs font-extrabold text-amber-400 font-mono">
                         {formatTimer(voucherSeconds)}
                       </span>
                     </div>
                   </div>
 
-                  <div className="text-xs text-slate-300">
-                    Valid for Table 4 dine-in only. Must be redeemed before leaving table.
-                  </div>
-
-                  {/* Anti-cheat protection note */}
-                  <div className="pt-2 border-t border-slate-800">
-                    <div className="p-2.5 bg-slate-950 rounded-xl text-[11px] text-slate-400 flex items-start gap-2">
-                      <Lock className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
-                      <span>Countdown is dynamically generated server-side — no static code or screenshot can ever replicate it. Voucher auto-expires and cannot be reused across tables or sessions.</span>
+                  {/* Waiter PIN verification box */}
+                  <div className="pt-2 border-t border-slate-800 flex items-center justify-between gap-2">
+                    <div className="flex items-center space-x-1.5">
+                      <Lock className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                      <span className="text-[10px] text-slate-400">Waiter PIN (Enter 1234):</span>
                     </div>
+                    {pinVerified ? (
+                      <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">
+                        ✓ Voided &amp; Redeemed
+                      </span>
+                    ) : (
+                      <div className="flex items-center space-x-1.5">
+                        <input
+                          type="password"
+                          maxLength={4}
+                          value={enteredPin}
+                          onChange={(e) => setEnteredPin(e.target.value)}
+                          placeholder="PIN"
+                          className="w-14 bg-slate-900 border border-slate-700 px-2 py-1 rounded text-center text-xs font-mono text-white tracking-widest focus:border-amber-500 focus:outline-none"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleVerifyPin}
+                          className="px-2 py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[10px] rounded cursor-pointer"
+                        >
+                          Verify
+                        </button>
+                      </div>
+                    )}
                   </div>
+                  {pinError && (
+                    <div className="text-[10px] text-red-400 text-right">Invalid PIN! Try 1234</div>
+                  )}
                 </div>
 
-                {/* Transparent Pricing Callout */}
-                <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl flex items-center justify-between">
+                {/* Transparent Direct Access Callout */}
+                <div className="bg-slate-900/80 border border-slate-800 p-3 rounded-xl flex items-center justify-between text-xs">
                   <div>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
-                      Transparent Pricing
+                      Direct Access Onboarding
                     </span>
-                    <span className="text-xs font-bold text-white">Flat ₹1,999 / Month • Zero Commission</span>
+                    <span className="font-bold text-white">Flat ₹1,999 / Month • 0% Commission</span>
                   </div>
-                  <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">
-                    Direct Access Onboarding
+                  <span className="font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-lg border border-emerald-500/20 text-[11px]">
+                    Direct Owner Access
                   </span>
                 </div>
               </div>
