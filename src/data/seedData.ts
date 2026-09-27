@@ -73,7 +73,8 @@ for (const entry of PUNE_RESTAURANT_DIRECTORY) {
     google_place_url: `https://search.google.com/local/writereview?placeid=${cleanSlug}`,
     authentic_photography_statement: 'High-definition verified culinary photography for table-side digital menus',
     pos_provider: entry.posProvider || 'universal_api',
-    is_menuz_partner: false
+    is_menuz_partner: false,
+    aliases: entry.aliases || []
   });
 }
 

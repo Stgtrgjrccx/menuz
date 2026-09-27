@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useRestaurantStore, WhatsAppCampaign } from '../store/restaurantStore';
 import { Restaurant, PosSyncEvent } from '../types';
-import { searchPuneRestaurants, PuneRestaurantEntry } from '../data/puneRestaurantDirectory';
+import { searchPuneRestaurants, PuneRestaurantEntry, normalizePuneSearch, matchesPuneQuery } from '../data/puneRestaurantDirectory';
 import {
   Building2,
   Users,
@@ -166,29 +166,97 @@ export const MasterAdminDashboard: React.FC = () => {
   }, []);
 
   const filteredRestaurants = useMemo(() => {
-    return restaurants.filter((r) => {
-      const q = restaurantSearch.toLowerCase().trim();
-      const matchesSearch =
-        !q ||
-        r.name.toLowerCase().includes(q) ||
-        r.cuisine.toLowerCase().includes(q) ||
-        (r.location && r.location.toLowerCase().includes(q));
+    const q = restaurantSearch.toLowerCase().trim();
+    const cleanQ = q.replace(/['’]/g, '');
 
-      const matchesArea =
-        selectedNeighborhood === 'all' ||
-        (r.location && r.location.toLowerCase().includes(selectedNeighborhood.toLowerCase()));
+    return restaurants
+      .filter((r) => {
+        const matchesSearch = matchesPuneQuery(r, restaurantSearch);
 
-      const matchesStatus =
-        statusFilter === 'all' ||
-        (statusFilter === 'active' ? r.status === 'active' : r.status !== 'active');
+        const matchesArea =
+          selectedNeighborhood === 'all' ||
+          (r.location && r.location.toLowerCase().includes(selectedNeighborhood.toLowerCase()));
 
-      const matchesPartner =
-        partnerFilter === 'all' ||
-        (partnerFilter === 'menuz_partners' ? r.is_menuz_partner !== false : r.is_menuz_partner === false);
+        const matchesStatus =
+          statusFilter === 'all' ||
+          (statusFilter === 'active' ? r.status === 'active' : r.status !== 'active');
 
-      return matchesSearch && matchesArea && matchesStatus && matchesPartner;
-    });
+        const matchesPartner =
+          partnerFilter === 'all' ||
+          (partnerFilter === 'menuz_partners' ? r.is_menuz_partner !== false : r.is_menuz_partner === false);
+
+        return matchesSearch && matchesArea && matchesStatus && matchesPartner;
+      })
+      .sort((a, b) => {
+        if (!q) return 0;
+        const aExact =
+          a.name.toLowerCase().includes(q) ||
+          a.name.toLowerCase().replace(/['’]/g, '').includes(cleanQ) ||
+          a.aliases?.some((al: string) => al.toLowerCase().includes(q) || al.toLowerCase().replace(/['’]/g, '').includes(cleanQ));
+        const bExact =
+          b.name.toLowerCase().includes(q) ||
+          b.name.toLowerCase().replace(/['’]/g, '').includes(cleanQ) ||
+          b.aliases?.some((al: string) => al.toLowerCase().includes(q) || al.toLowerCase().replace(/['’]/g, '').includes(cleanQ));
+        if (aExact && !bExact) return -1;
+        if (!aExact && bExact) return 1;
+        return 0;
+      });
   }, [restaurants, restaurantSearch, selectedNeighborhood, statusFilter, partnerFilter]);
+
+  // ── Quick instant 1-click add for any Pune restaurant ───────
+  const handleQuickAddPuneRestaurant = (nameInput: string) => {
+    const trimmed = nameInput.trim();
+    if (!trimmed) return;
+
+    // Check if matching restaurant already exists in directory or store
+    const existing = restaurants.find(
+      (r) =>
+        r.name.toLowerCase() === trimmed.toLowerCase() ||
+        (r.aliases && r.aliases.some((a) => a.toLowerCase() === trimmed.toLowerCase()))
+    );
+
+    if (existing) {
+      updateRestaurant(existing.id, { is_menuz_partner: true, status: 'active' });
+      setRestaurantSearch(existing.name);
+      return;
+    }
+
+    const cleanSlug =
+      trimmed
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '') || `pune-restaurant-${Date.now().toString().slice(-4)}`;
+
+    const newRest: Restaurant = {
+      id: `rest-${cleanSlug}`,
+      slug: cleanSlug,
+      name: trimmed,
+      cuisine: 'Pune Authentic Dining & Multi-Cuisine',
+      location: 'Pune & PCMC, Maharashtra',
+      owner_name: `${trimmed} Management`,
+      contact_email: `contact@${cleanSlug.slice(0, 16).replace(/-$/, '')}.in`,
+      contact_phone: '+91 20 2565 0000',
+      status: 'active',
+      is_menuz_partner: true,
+      logo_url: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&auto=format&fit=crop',
+      brand_colors: {
+        primary: '#E85D04',
+        background: '#FDFBF7',
+        text: '#1C1917',
+        accent: '#C84B00'
+      },
+      currency: 'INR',
+      tax_rate_percent: 5.0,
+      ordering_enabled: true,
+      google_place_url: `https://search.google.com/local/writereview?placeid=${cleanSlug}`,
+      authentic_photography_statement: 'Every dish photograph represents the true culinary creations of our kitchen.',
+      pos_provider: 'universal_api',
+      aliases: [trimmed]
+    };
+
+    addRestaurant(newRest);
+    setRestaurantSearch(trimmed);
+  };
 
   // ── Select from autocomplete ───────────────────────────────
   const handleSelectAutocomplete = (entry: PuneRestaurantEntry) => {
@@ -712,6 +780,25 @@ export const MasterAdminDashboard: React.FC = () => {
                 </div>
               </div>
 
+              {/* Instant 1-Click Inline Add if searching */}
+              {restaurantSearch.trim().length > 1 && (
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-4 py-2.5 bg-gradient-to-r from-saffron-50 via-amber-50 to-orange-50 border border-saffron-200 rounded-2xl text-xs">
+                  <div className="flex items-center space-x-2 text-charcoal-700">
+                    <Sparkles className="w-4 h-4 text-saffron-600 flex-shrink-0" />
+                    <span>
+                      Missing a restaurant? Register <strong>"{restaurantSearch.trim()}"</strong> into Pune database now:
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => handleQuickAddPuneRestaurant(restaurantSearch)}
+                    className="px-3 py-1.5 bg-saffron-600 hover:bg-saffron-700 text-white font-bold rounded-xl shadow-xs flex items-center space-x-1.5 flex-shrink-0 transition-colors"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Instant 1-Click Register</span>
+                  </button>
+                </div>
+              )}
+
               {/* Neighborhood Chips */}
               <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-xs">
                 <span className="text-[11px] font-bold text-charcoal-500 uppercase tracking-wider whitespace-nowrap mr-1">
@@ -771,6 +858,20 @@ export const MasterAdminDashboard: React.FC = () => {
                 <p className="text-xs text-charcoal-500 mt-1 mb-4">
                   No partners found matching "{restaurantSearch || selectedNeighborhood}".
                 </p>
+                {restaurantSearch.trim() ? (
+                  <div className="max-w-md mx-auto p-4 bg-saffron-50 border border-saffron-200 rounded-2xl mb-4 text-center">
+                    <p className="text-xs text-saffron-900 font-medium mb-3">
+                      Add <strong>"{restaurantSearch.trim()}"</strong> directly to Pune Menuz Master Database with 1 click:
+                    </p>
+                    <button
+                      onClick={() => handleQuickAddPuneRestaurant(restaurantSearch)}
+                      className="px-5 py-2.5 bg-saffron-600 hover:bg-saffron-700 text-white font-bold text-xs rounded-xl shadow-subtle flex items-center space-x-2 mx-auto transition-colors"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>Add "{restaurantSearch.trim()}" to Pune Database</span>
+                    </button>
+                  </div>
+                ) : null}
                 <button
                   onClick={() => {
                     setRestaurantSearch('');

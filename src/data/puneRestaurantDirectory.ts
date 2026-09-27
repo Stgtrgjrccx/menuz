@@ -20,6 +20,7 @@ export interface PuneRestaurantEntry {
   rating: number;         // Approximate aggregate rating
   imageUrl: string;       // Unsplash placeholder
   posProvider: 'toast' | 'clover' | 'square' | 'universal_api';
+  aliases?: string[];
 }
 
 export const PUNE_RESTAURANT_DIRECTORY: PuneRestaurantEntry[] = [
@@ -665,7 +666,8 @@ export const PUNE_RESTAURANT_DIRECTORY: PuneRestaurantEntry[] = [
     avgCostForTwo: '₹350',
     rating: 4.5,
     imageUrl: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&auto=format&fit=crop',
-    posProvider: 'universal_api'
+    posProvider: 'universal_api',
+    aliases: ['Goodluck', 'Cafe Goodluck', 'Goodluck Cafe', 'Good Luck Cafe', 'Café Goodluck']
   },
   {
     name: 'Vaishali Restaurant',
@@ -731,7 +733,8 @@ export const PUNE_RESTAURANT_DIRECTORY: PuneRestaurantEntry[] = [
     avgCostForTwo: '₹600',
     rating: 4.4,
     imageUrl: 'https://images.unsplash.com/photo-1610057099431-d73a1c9d2f2f?w=200&auto=format&fit=crop',
-    posProvider: 'universal_api'
+    posProvider: 'universal_api',
+    aliases: ['Durvankur', 'Durvankur Dining Hall', 'Durvankur Thali', 'Durvankar']
   },
 
   // ── Camp & East Street Heritage Institutions ────────────────
@@ -929,7 +932,7 @@ export const PUNE_RESTAURANT_DIRECTORY: PuneRestaurantEntry[] = [
 
   // ── Puneri Seafood, Biryani & Misal Legends ─────────────────
   {
-    name: 'SP’s Biryani House',
+    name: "SP's Biryani House",
     cuisine: 'Dum Mutton Biryani, Rassa, Gavran Chicken',
     location: 'Sadashiv Peth / Tilak Road, Pune',
     address: '1472, Tilak Road, Lokmanya Nagar, Sadashiv Peth, Pune 411030',
@@ -937,7 +940,8 @@ export const PUNE_RESTAURANT_DIRECTORY: PuneRestaurantEntry[] = [
     avgCostForTwo: '₹800',
     rating: 4.4,
     imageUrl: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=200&auto=format&fit=crop',
-    posProvider: 'universal_api'
+    posProvider: 'universal_api',
+    aliases: ["SP's Biryani", "SP Biryani", "SP's Biryani House", "SPs Biryani", "SP Biryani House", "S.P.'s Biryani", "SP’s Biryani House"]
   },
   {
     name: 'Surve’s Pure Non-Veg',
@@ -2255,32 +2259,907 @@ export const PUNE_RESTAURANT_DIRECTORY: PuneRestaurantEntry[] = [
     imageUrl: "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?w=200&auto=format&fit=crop",
     posProvider: "toast"
   }
+,
+  {
+    name: "Murphies Bistro & Bar",
+    cuisine: "European, Jacket Potatoes, Continental, Cocktails",
+    location: "Prabhat Road, Pune",
+    address: "Lane 14, Opposite Syndicate Bank, Prabhat Road, Erandwane, Pune 411004",
+    phone: "+91 93700 05777",
+    avgCostForTwo: "₹1,400",
+    rating: 4.5,
+    imageUrl: "https://images.unsplash.com/photo-1544025162-d76694265947?w=200&auto=format&fit=crop",
+    posProvider: "toast",
+    aliases: ["Murphins", "Murphies", "Murphie", "Murphys", "Murphs", "Murphin", "Murph"]
+  },
+  {
+    name: "Hotel Dehaati",
+    cuisine: "Authentic Kolhapuri Thali, Pandhara Tambda Rassa, Mutton Sukka",
+    location: "Prabhat Road, Pune",
+    address: "Prabhat Road, Lane 10, Near Kamala Nehru Park, Erandwane, Pune 411004",
+    phone: "+91 98220 89123",
+    avgCostForTwo: "₹900",
+    rating: 4.7,
+    imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&auto=format&fit=crop",
+    posProvider: "clover",
+    aliases: ["Dehati", "Dehaati", "Hotel Dehati", "Dehati Thali", "Dehati Kolhapur"]
+  },
+  {
+    name: "Gather Bistro & All Day Dining",
+    cuisine: "Modern Indian, Mediterranean, Specialty Coffee, Brunch",
+    location: "Law College Road, Pune",
+    address: "Plot 12, Chiplunkar Road, Off Law College Road, Erandwane, Pune 411004",
+    phone: "+91 20 2565 8899",
+    avgCostForTwo: "₹1,300",
+    rating: 4.6,
+    imageUrl: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=200&auto=format&fit=crop",
+    posProvider: "toast",
+    aliases: ["Gather", "Gather Cafe", "The Gather", "Gather Pune", "Gather Bistro"]
+  },
+  {
+    name: "Shabree Restaurant",
+    cuisine: "Traditional Maharashtrian Thali, Puran Poli",
+    location: "FC Road, Pune",
+    address: "1199/1A, Parichay Hotel, FC Road, Shivajinagar, Pune 411004",
+    phone: "+91 20 2553 1511",
+    avgCostForTwo: "\u20b9800",
+    rating: 4.5,
+    imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&auto=format&fit=crop",
+    posProvider: "universal_api"
+  },
+  {
+    name: "Kata Kirr",
+    cuisine: "Puneri Misal Pav, Buttermilk",
+    location: "Karve Road, Pune",
+    address: "Dr Ketkar Road, Off Karve Road, Erandwane, Pune 411004",
+    phone: "+91 20 2543 8989",
+    avgCostForTwo: "\u20b9250",
+    rating: 4.5,
+    imageUrl: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=200&auto=format&fit=crop",
+    posProvider: "universal_api"
+  },
+  {
+    name: "Blue Nile",
+    cuisine: "Irani Mutton Biryani, Chelo Kebab, Mughlai",
+    location: "Camp, Pune",
+    address: "4, Bund Garden Road, Opposite Poona Club, Camp, Pune 411001",
+    phone: "+91 20 2612 5238",
+    avgCostForTwo: "\u20b91,100",
+    rating: 4.2,
+    imageUrl: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "Badshahi Boarding House",
+    cuisine: "Simple Home-Style Maharashtrian Brahmin Thali",
+    location: "Tilak Road, Pune",
+    address: "1187, Sadashiv Peth, Tilak Road, Pune 411030",
+    phone: "+91 20 2447 1856",
+    avgCostForTwo: "\u20b9350",
+    rating: 4.4,
+    imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&auto=format&fit=crop",
+    posProvider: "universal_api"
+  },
+  {
+    name: "Sukanta Pure Veg Thali",
+    cuisine: "Royal Rajasthani & Gujarati Unlimited Thali",
+    location: "Deccan Gymkhana, Pune",
+    address: "Pulachi Wadi, Near Z-Bridge, Deccan Gymkhana, Pune 411004",
+    phone: "+91 20 2553 0077",
+    avgCostForTwo: "\u20b9750",
+    rating: 4.6,
+    imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&auto=format&fit=crop",
+    posProvider: "universal_api"
+  },
+  {
+    name: "Nisarga Seafood Restaurant",
+    cuisine: "Coastal Malvani, Mangalorean Seafood, Neer Dosa, Crab Masala",
+    location: "Karve Road, Pune",
+    address: "Opposite Nal Stop, Karve Road, Erandwane, Pune 411004",
+    phone: "+91 20 2544 5444",
+    avgCostForTwo: "\u20b91,500",
+    rating: 4.4,
+    imageUrl: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "Mathura Pure Veg",
+    cuisine: "North Indian, South Indian, Punjabi Thali",
+    location: "JM Road, Pune",
+    address: "Near Balgandharva Rangmandir, JM Road, Shivajinagar, Pune 411005",
+    phone: "+91 20 2553 4567",
+    avgCostForTwo: "\u20b9600",
+    rating: 4.2,
+    imageUrl: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=200&auto=format&fit=crop",
+    posProvider: "universal_api"
+  },
+  {
+    name: "Chafa Cafe & Studio",
+    cuisine: "Healthy Bowls, Sourdough Toasts, Vegan, Specialty Coffee",
+    location: "Koregaon Park, Pune",
+    address: "Row House 5, Aadit Enclave, Lane 5, Koregaon Park, Pune 411001",
+    phone: "+91 97671 00022",
+    avgCostForTwo: "\u20b91,100",
+    rating: 4.5,
+    imageUrl: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=200&auto=format&fit=crop",
+    posProvider: "square"
+  },
+  {
+    name: "729 Grams Coffee Roasters",
+    cuisine: "Artisanal Specialty Coffee, Pour-overs, Sandwiches",
+    location: "Koregaon Park, Pune",
+    address: "Lane 6, Koregaon Park, Pune 411001",
+    phone: "+91 98220 99881",
+    avgCostForTwo: "\u20b9600",
+    rating: 4.7,
+    imageUrl: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=200&auto=format&fit=crop",
+    posProvider: "square"
+  },
+  {
+    name: "Blue Tokai Coffee Roasters - Koregaon Park",
+    cuisine: "Specialty Coffee, Flat Whites, Breakfast Croissants",
+    location: "Koregaon Park, Pune",
+    address: "Lane 5, North Main Road, Koregaon Park, Pune 411001",
+    phone: "+91 98221 44550",
+    avgCostForTwo: "\u20b9700",
+    rating: 4.6,
+    imageUrl: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=200&auto=format&fit=crop",
+    posProvider: "square"
+  },
+  {
+    name: "Blue Tokai Coffee Roasters - Baner",
+    cuisine: "Specialty Coffee, Light Bakes, Sourdough",
+    location: "Baner, Pune",
+    address: "Balewadi High Street Link Road, Baner, Pune 411045",
+    phone: "+91 98221 44551",
+    avgCostForTwo: "\u20b9700",
+    rating: 4.6,
+    imageUrl: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=200&auto=format&fit=crop",
+    posProvider: "square"
+  },
+  {
+    name: "Cafe Kathaa",
+    cuisine: "Coffee, Sandwiches, Book Cafe, Continental",
+    location: "FC Road, Pune",
+    address: "Opposite Starbucks, FC Road, Shivajinagar, Pune 411004",
+    phone: "+91 20 2567 4433",
+    avgCostForTwo: "\u20b9550",
+    rating: 4.4,
+    imageUrl: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=200&auto=format&fit=crop",
+    posProvider: "square"
+  },
+  {
+    name: "Cafe Peter - Aundh",
+    cuisine: "Korean Ramen, Donuts, Kimchi Fried Rice, Coffee",
+    location: "Aundh, Pune",
+    address: "Anand Park, ITI Road, Aundh, Pune 411007",
+    phone: "+91 20 2588 7766",
+    avgCostForTwo: "\u20b9700",
+    rating: 4.2,
+    imageUrl: "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=200&auto=format&fit=crop",
+    posProvider: "clover"
+  },
+  {
+    name: "Cafe Peter - Viman Nagar",
+    cuisine: "Korean Ramen, Pizza, Shakes, Waffles",
+    location: "Viman Nagar, Pune",
+    address: "Near Symbiosis College, Viman Nagar, Pune 411014",
+    phone: "+91 20 2663 8877",
+    avgCostForTwo: "\u20b9700",
+    rating: 4.2,
+    imageUrl: "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=200&auto=format&fit=crop",
+    posProvider: "clover"
+  },
+  {
+    name: "Grandmama's Cafe",
+    cuisine: "Continental, Mac & Cheese, Waffles, Italian",
+    location: "Koregaon Park, Pune",
+    address: "South Main Road, Koregaon Park, Pune 411001",
+    phone: "+91 20 2615 8899",
+    avgCostForTwo: "\u20b91,200",
+    rating: 4.3,
+    imageUrl: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "Barometer",
+    cuisine: "Modern European, Asian, Craft Cocktails, Pizza",
+    location: "Kothrud, Pune",
+    address: "Near Karishma Society, Off DP Road, Kothrud, Pune 411038",
+    phone: "+91 20 2544 1122",
+    avgCostForTwo: "\u20b91,500",
+    rating: 4.5,
+    imageUrl: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "Ginkgo - Asian Diner",
+    cuisine: "Japanese Ramen, Sushi, Korean Fried Chicken, Boba",
+    location: "Kothrud, Pune",
+    address: "Near Mayur Colony, Kothrud, Pune 411038",
+    phone: "+91 98220 33119",
+    avgCostForTwo: "\u20b91,100",
+    rating: 4.6,
+    imageUrl: "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=200&auto=format&fit=crop",
+    posProvider: "square"
+  },
+  {
+    name: "Independence Brewing Company",
+    cuisine: "Craft Beer, BBQ, Continental, Thin Crust Pizza",
+    location: "Baner, Pune",
+    address: "Balewadi High Street, Balewadi-Baner Link Road, Pune 411045",
+    phone: "+91 20 6644 8300",
+    avgCostForTwo: "\u20b92,200",
+    rating: 4.6,
+    imageUrl: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "Effingut Brewhouse - Koregaon Park",
+    cuisine: "Artisanal Craft Beer, Apple Cider, Pub Grubs",
+    location: "Koregaon Park, Pune",
+    address: "End of Lane 6, Koregaon Park, Pune 411001",
+    phone: "+91 76200 33441",
+    avgCostForTwo: "\u20b92,200",
+    rating: 4.6,
+    imageUrl: "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "Effingut Brewhouse - Baner",
+    cuisine: "Craft Beer, Woodfired Pizzas, Burgers",
+    location: "Baner, Pune",
+    address: "Deron Heights, Baner Road, Baner, Pune 411045",
+    phone: "+91 76200 33442",
+    avgCostForTwo: "\u20b92,200",
+    rating: 4.5,
+    imageUrl: "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "Doolally on Tap",
+    cuisine: "Craft Beers, Apple Cider, House Fries, Burgers",
+    location: "Koregaon Park, Pune",
+    address: "Opposite Jogger's Park, Lane 1, Koregaon Park, Pune 411001",
+    phone: "+91 20 2615 9900",
+    avgCostForTwo: "\u20b91,800",
+    rating: 4.5,
+    imageUrl: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "FC Road Social",
+    cuisine: "North Indian, Continental, Cocktails, Street Food",
+    location: "FC Road, Pune",
+    address: "Level 1, Cello Platina, FC Road, Shivajinagar, Pune 411005",
+    phone: "+91 20 6766 8800",
+    avgCostForTwo: "\u20b91,500",
+    rating: 4.4,
+    imageUrl: "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?w=200&auto=format&fit=crop",
+    posProvider: "toast",
+    aliases: ["Social", "FC Road Social", "Social FC Road", "FC Social", "Social Pune"]
+  },
+  {
+    name: "One8 Commune Pune",
+    cuisine: "Modern Global Dining, Asian, Cocktails",
+    location: "Koregaon Park, Pune",
+    address: "Unit 2, The Mills, Sangamvadi, Koregaon Park Annexe, Pune 411001",
+    phone: "+91 20 7196 7777",
+    avgCostForTwo: "\u20b92,500",
+    rating: 4.6,
+    imageUrl: "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "Arthur's Theme - Koregaon Park",
+    cuisine: "European, French, Steaks, Fondue, Wine",
+    location: "Koregaon Park, Pune",
+    address: "Shop 2, Vrindavan Apartment, Lane 6, Koregaon Park, Pune 411001",
+    phone: "+91 20 2615 2710",
+    avgCostForTwo: "\u20b91,800",
+    rating: 4.5,
+    imageUrl: "https://images.unsplash.com/photo-1544025162-d76694265947?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "Arthur's Theme - Balewadi",
+    cuisine: "European, French Steaks, Pastas, Desserts",
+    location: "Balewadi, Pune",
+    address: "Balewadi High Street, Balewadi, Pune 411045",
+    phone: "+91 20 6712 3456",
+    avgCostForTwo: "\u20b91,800",
+    rating: 4.4,
+    imageUrl: "https://images.unsplash.com/photo-1544025162-d76694265947?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "Prem's Restaurant",
+    cuisine: "North Indian, Continental, Outdoor Garden Dining",
+    location: "Koregaon Park, Pune",
+    address: "28/2, North Main Road, Koregaon Park, Pune 411001",
+    phone: "+91 20 2615 0040",
+    avgCostForTwo: "\u20b91,600",
+    rating: 4.3,
+    imageUrl: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "Tsuki",
+    cuisine: "Modern Pan-Asian, Dimsums, Robata Grills, Cocktails",
+    location: "Koregaon Park, Pune",
+    address: "Lane 5, Koregaon Park, Pune 411001",
+    phone: "+91 91520 66881",
+    avgCostForTwo: "\u20b92,800",
+    rating: 4.7,
+    imageUrl: "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "Gong - Balewadi High Street",
+    cuisine: "Modern Asian, Sushi, Dimsum, Cantonese",
+    location: "Balewadi, Pune",
+    address: "Balewadi High Street, Near Cummins India, Balewadi, Pune 411045",
+    phone: "+91 20 6712 5500",
+    avgCostForTwo: "\u20b92,400",
+    rating: 4.6,
+    imageUrl: "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "The Cult - Terra & Eco",
+    cuisine: "North Indian, Continental, Open Air Lounge",
+    location: "Hadapsar, Pune",
+    address: "Near Magarpatta City, Hadapsar, Pune 411028",
+    phone: "+91 20 6715 4400",
+    avgCostForTwo: "\u20b92,000",
+    rating: 4.2,
+    imageUrl: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "Paasha - JW Marriott",
+    cuisine: "Rooftop North Indian, Dal Paasha, Kakori Kebabs",
+    location: "Senapati Bapat Road, Pune",
+    address: "Level 24, JW Marriott Hotel, Senapati Bapat Road, Pune 411053",
+    phone: "+91 20 6683 3333",
+    avgCostForTwo: "\u20b94,000",
+    rating: 4.8,
+    imageUrl: "https://images.unsplash.com/photo-1544025162-d76694265947?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "Alto Vino - JW Marriott",
+    cuisine: "Authentic Italian Fine Dining, Handmade Pasta, Risotto",
+    location: "Senapati Bapat Road, Pune",
+    address: "JW Marriott Hotel, Senapati Bapat Road, Pune 411053",
+    phone: "+91 20 6683 2345",
+    avgCostForTwo: "\u20b93,500",
+    rating: 4.7,
+    imageUrl: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "Three Kitchens Restaurant and Bar",
+    cuisine: "Global Luxury Buffet, Asian, Indian, European",
+    location: "Yerawada, Pune",
+    address: "The Ritz-Carlton, Airport Road, Yerawada, Pune 411006",
+    phone: "+91 20 6767 5050",
+    avgCostForTwo: "\u20b94,500",
+    rating: 4.8,
+    imageUrl: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "Coriander Kitchen - Conrad Pune",
+    cuisine: "All Day Luxury Buffet, Mediterranean, Pan-Asian, Indian",
+    location: "Bund Garden Road, Pune",
+    address: "Conrad Pune, 7, Mangaldas Road, Sangamvadi, Pune 411001",
+    phone: "+91 20 6745 6745",
+    avgCostForTwo: "\u20b94,000",
+    rating: 4.8,
+    imageUrl: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "Surve's Pure Non-Veg - FC Road",
+    cuisine: "Authentic Maratha Non-Veg, Mutton & Chicken Thalis",
+    location: "FC Road, Pune",
+    address: "Near Fergusson College, FC Road, Shivajinagar, Pune 411004",
+    phone: "+91 98224 55660",
+    avgCostForTwo: "\u20b9800",
+    rating: 4.5,
+    imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&auto=format&fit=crop",
+    posProvider: "clover"
+  },
+  {
+    name: "Surve's Pure Non-Veg - Sadashiv Peth",
+    cuisine: "Maharashtrian Non-Veg, Tambda Rassa, Bhakri",
+    location: "Sadashiv Peth, Pune",
+    address: "Tilak Road, Near SP College, Sadashiv Peth, Pune 411030",
+    phone: "+91 98224 55661",
+    avgCostForTwo: "\u20b9800",
+    rating: 4.5,
+    imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&auto=format&fit=crop",
+    posProvider: "clover"
+  },
+  {
+    name: "Tiranga Bhuvan",
+    cuisine: "Traditional Maharashtrian Biryani, Chicken Thali",
+    location: "Kothrud, Pune",
+    address: "Paud Road, Near Vanaz Corner, Kothrud, Pune 411038",
+    phone: "+91 20 2544 3322",
+    avgCostForTwo: "\u20b9700",
+    rating: 4.2,
+    imageUrl: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=200&auto=format&fit=crop",
+    posProvider: "universal_api"
+  },
+  {
+    name: "Jagdamb Restaurant",
+    cuisine: "Highway Style Mutton Thali, Gavran Chicken, Indrayani Rice",
+    location: "Khed Shivapur, Pune",
+    address: "Pune-Bangalore Highway, Near Toll Plaza, Khed Shivapur, Pune 412205",
+    phone: "+91 98220 99990",
+    avgCostForTwo: "\u20b9900",
+    rating: 4.6,
+    imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&auto=format&fit=crop",
+    posProvider: "universal_api"
+  },
+  {
+    name: "Janseva Dining Hall",
+    cuisine: "Authentic Gujarati & Maharashtrian Thali",
+    location: "Deccan Gymkhana, Pune",
+    address: "Garware Bridge Corner, Deccan Gymkhana, Pune 411004",
+    phone: "+91 20 2567 8901",
+    avgCostForTwo: "\u20b9600",
+    rating: 4.3,
+    imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&auto=format&fit=crop",
+    posProvider: "universal_api"
+  },
+  {
+    name: "Panchali Pure Veg",
+    cuisine: "Pure Veg, North Indian, Punjabi Thali",
+    location: "JM Road, Pune",
+    address: "Near Sambhaji Park, JM Road, Shivajinagar, Pune 411004",
+    phone: "+91 20 2553 6677",
+    avgCostForTwo: "\u20b9650",
+    rating: 4.2,
+    imageUrl: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=200&auto=format&fit=crop",
+    posProvider: "universal_api"
+  },
+  {
+    name: "Sarjaa Family Restaurant",
+    cuisine: "North Indian, Mughlai, Seafood, Tandoor",
+    location: "Aundh, Pune",
+    address: "ITI Road, Near Parihar Chowk, Aundh, Pune 411007",
+    phone: "+91 20 2588 5544",
+    avgCostForTwo: "\u20b91,200",
+    rating: 4.3,
+    imageUrl: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "Bhairavee Pure Veg",
+    cuisine: "Pure Veg, Pav Bhaji, South Indian, North Indian",
+    location: "Aundh, Pune",
+    address: "Bhairavee Hotel, Baner Road, Aundh Phata, Pune 411007",
+    phone: "+91 20 2588 8899",
+    avgCostForTwo: "\u20b9750",
+    rating: 4.2,
+    imageUrl: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=200&auto=format&fit=crop",
+    posProvider: "universal_api"
+  },
+  {
+    name: "Urbo Kitchen & Bar",
+    cuisine: "North Indian, Continental, Finger Food, Cocktails",
+    location: "Aundh, Pune",
+    address: "Opposite Westend Mall, Aundh, Pune 411007",
+    phone: "+91 20 6712 9988",
+    avgCostForTwo: "\u20b91,600",
+    rating: 4.4,
+    imageUrl: "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "Tarsh Kitchen & Bar",
+    cuisine: "Rooftop North Indian, Buffet, Continental, Bar",
+    location: "Hinjewadi, PCMC",
+    address: "8th Floor, White Square, Wakad-Hinjewadi Road, Hinjewadi Phase 1, Pune 411057",
+    phone: "+91 20 6791 8888",
+    avgCostForTwo: "\u20b91,800",
+    rating: 4.5,
+    imageUrl: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&auto=format&fit=crop",
+    posProvider: "toast"
+  },
+  {
+    name: "Mezza9 Family Restaurant",
+    cuisine: "Multicuisine, North Indian, Chinese, Continental",
+    location: "Hinjewadi, PCMC",
+    address: "Opposite Geometric Software, Hinjewadi Phase 1, Pune 411057",
+    phone: "+91 20 6652 0909",
+    avgCostForTwo: "\u20b91,500",
+    rating: 4.2,
+    imageUrl: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&auto=format&fit=crop",
+    posProvider: "clover",
+    aliases: ["Mezza9", "Mezza 9", "Mezza9 Hinjewadi"]
+  },
+  {
+    name: "Kalyan Bhel",
+    cuisine: "Chaat, Street Food, Bhel Puri, Sev Puri, SPDP",
+    location: "Law College Road / Erandwane, Pune",
+    address: "Near Nal Stop, Law College Road, Erandwane, Pune 411004",
+    phone: "+91 20 2544 5566",
+    avgCostForTwo: "\u20b9250",
+    rating: 4.4,
+    imageUrl: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=200&auto=format&fit=crop",
+    posProvider: "universal_api",
+    aliases: ["Kalyan Bhel", "Kalyan", "Kalyan Bhel Pune", "Kalyan Chaat"]
+  },
+  {
+    name: "Fakira Misal",
+    cuisine: "Authentic Maharashtrian Misal Pav, Rassa, Taak",
+    location: "Bibwewadi, Pune",
+    address: "Swami Vivekanand Road, Upper Indira Nagar, Bibwewadi, Pune 411037",
+    phone: "+91 20 2428 1122",
+    avgCostForTwo: "\u20b9200",
+    rating: 4.5,
+    imageUrl: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=200&auto=format&fit=crop",
+    posProvider: "universal_api",
+    aliases: ["Fakira", "Fakira Misal", "Fakira Misal House", "Hotel Fakira"]
+  },
+  {
+    name: "Neelam Pure Veg",
+    cuisine: "North Indian, South Indian, Pav Bhaji, Pure Veg",
+    location: "Nigdi, PCMC",
+    address: "Sector 24, Near Pradhikaran, Nigdi, Pimpri-Chinchwad 411044",
+    phone: "+91 20 2765 4321",
+    avgCostForTwo: "\u20b9500",
+    rating: 4.3,
+    imageUrl: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=200&auto=format&fit=crop",
+    posProvider: "universal_api",
+    aliases: ["Neelam", "Neelam Pure Veg", "Hotel Neelam", "Neelam Nigdi", "Neelam PCMC"]
+  },
+  {
+    name: "Hotel Ram Krishna",
+    cuisine: "Pure Vegetarian Multi-Cuisine, South Indian, Thali",
+    location: "Camp, Pune",
+    address: "6 Bund Garden Road, Near Pune Railway Station & Camp, Pune 411001",
+    phone: "+91 20 2613 3939",
+    avgCostForTwo: "\u20b9600",
+    rating: 4.3,
+    imageUrl: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&auto=format&fit=crop",
+    posProvider: "universal_api",
+    aliases: ["Ram Krishna", "Hotel Ram Krishna", "Ramkrishna", "Hotel Ramkrishna", "Ram Krishna Pure Veg"]
+  },
+  {
+    name: "Garden Vada Pav Centre",
+    cuisine: "Iconic Pune Vada Pav, Masala Chaas, Mirchi Fry",
+    location: "Camp, Pune",
+    address: "948 Bootee Street, Camp, Pune 411001",
+    phone: "+91 98220 12345",
+    avgCostForTwo: "\u20b9100",
+    rating: 4.6,
+    imageUrl: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=200&auto=format&fit=crop",
+    posProvider: "universal_api",
+    aliases: ["Garden Vada Pav", "Garden Vadapav", "Garden Vada Pav Centre", "Camp Garden Vada Pav"]
+  },
+  {
+    name: "Cafe Paashh",
+    cuisine: "Organic European, Farm to Table, Vegan, Specialty Coffee",
+    location: "Kalyani Nagar, Pune",
+    address: "Plot No. E1, Survey No. 213, Kalyani Nagar, Pune 411006",
+    phone: "+91 20 6723 5555",
+    avgCostForTwo: "\u20b91,500",
+    rating: 4.5,
+    imageUrl: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=200&auto=format&fit=crop",
+    posProvider: "universal_api",
+    aliases: ["Paashh", "Cafe Paashh", "Paashh Cafe", "Paash Kalyani Nagar"]
+  },
+  {
+    name: "Smoor Chocolates & Cafe",
+    cuisine: "Artisanal Chocolates, Macarons, Pastries, European Cafe",
+    location: "Koregaon Park, Pune",
+    address: "Plot 390, Lane 5, Koregaon Park, Pune 411001",
+    phone: "+91 20 4860 7700",
+    avgCostForTwo: "\u20b9900",
+    rating: 4.5,
+    imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=200&auto=format&fit=crop",
+    posProvider: "universal_api",
+    aliases: ["Smoor", "Smoor Chocolates", "Smoor Cafe", "Smoor Koregaon Park"]
+  },
+  {
+    name: "Aromas Cafe & Bistro",
+    cuisine: "Australian All-Day Cafe, Continental, Gourmet Coffee",
+    location: "Koregaon Park, Pune",
+    address: "Lane 6, Koregaon Park, Pune 411001",
+    phone: "+91 20 6602 1100",
+    avgCostForTwo: "\u20b91,200",
+    rating: 4.3,
+    imageUrl: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=200&auto=format&fit=crop",
+    posProvider: "universal_api",
+    aliases: ["Aromas", "Aromas Cafe", "Aromas Bistro", "Aromas Cafe & Bistro"]
+  },
+  {
+    name: "We Idliwale Bar Room",
+    cuisine: "Contemporary South Indian, Podi Idlis, Craft Cocktails",
+    location: "Viman Nagar, Pune",
+    address: "Ground Floor, Sky Vista, New Airport Road, Viman Nagar, Pune 411014",
+    phone: "+91 80 4748 3344",
+    avgCostForTwo: "\u20b91,200",
+    rating: 4.5,
+    imageUrl: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=200&auto=format&fit=crop",
+    posProvider: "toast",
+    aliases: ["We Idliwale", "We Idliwale Bar Room", "Idliwale", "We Idliwale Pune"]
+  },
+  {
+    name: "Third Wave Coffee",
+    cuisine: "Specialty Coffee Roasters, Espresso, Bagels, Cafe",
+    location: "Kalyani Nagar, Pune",
+    address: "Central Avenue, Near Jogger's Park, Kalyani Nagar, Pune 411006",
+    phone: "+91 20 6700 8899",
+    avgCostForTwo: "\u20b9650",
+    rating: 4.4,
+    imageUrl: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=200&auto=format&fit=crop",
+    posProvider: "toast",
+    aliases: ["Third Wave Coffee", "Third Wave", "Third Wave Kalyani Nagar", "TWC Pune"]
+  },
+  {
+    name: "Baan Tao",
+    cuisine: "Pan-Asian Fine Dining, Thai Curry, Dim Sum, Chinese",
+    location: "Kalyani Nagar, Pune",
+    address: "Hyatt Pune, Adjacent to Aga Khan Palace, 88 Nagar Road, Kalyani Nagar, Pune 411006",
+    phone: "+91 20 4141 1234",
+    avgCostForTwo: "\u20b92,800",
+    rating: 4.6,
+    imageUrl: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=200&auto=format&fit=crop",
+    posProvider: "toast",
+    aliases: ["Baan Tao", "Baan Tao Hyatt", "Baan Tao Pune", "Baan Tao Pan Asian"]
+  },
+  {
+    name: "The K Factory",
+    cuisine: "Modern Continental, Wood Fired Pizza, Craft Cocktails",
+    location: "Baner, Pune",
+    address: "Near Westend Mall, Aundh-Baner Link Road, Baner, Pune 411045",
+    phone: "+91 20 6744 5500",
+    avgCostForTwo: "\u20b91,600",
+    rating: 4.4,
+    imageUrl: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&auto=format&fit=crop",
+    posProvider: "toast",
+    aliases: ["The K Factory", "K Factory", "K Factory Baner"]
+  },
+  {
+    name: "Incognito Restaurant Bar & Cafe",
+    cuisine: "European, Italian, Gourmet Burgers, Bar",
+    location: "Balewadi High Street, Pune",
+    address: "Balewadi High Street, Balewadi, Pune 411045",
+    phone: "+91 20 6709 8899",
+    avgCostForTwo: "\u20b91,800",
+    rating: 4.4,
+    imageUrl: "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?w=200&auto=format&fit=crop",
+    posProvider: "toast",
+    aliases: ["Incognito", "Incognito Restaurant", "Incognito Balewadi High Street", "Incognito Pune"]
+  },
+  {
+    name: "Greens & Olives",
+    cuisine: "Gourmet Pure Vegetarian, Italian, Continental, Mexican",
+    location: "Aundh, Pune",
+    address: "Nagras Road, Aundh, Pune 411007",
+    phone: "+91 20 2588 3333",
+    avgCostForTwo: "\u20b91,100",
+    rating: 4.4,
+    imageUrl: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=200&auto=format&fit=crop",
+    posProvider: "universal_api",
+    aliases: ["Greens & Olives", "Greens and Olives", "Greens & Olives Aundh", "Greens and Olives Pure Veg"]
+  },
+  {
+    name: "Portico Pure Veg",
+    cuisine: "Multi-Cuisine Pure Vegetarian, Punjabi, Chinese, South Indian",
+    location: "Hinjewadi, PCMC",
+    address: "Phase 1, Hinjewadi Rajiv Gandhi Infotech Park, Pune 411057",
+    phone: "+91 20 6652 4400",
+    avgCostForTwo: "\u20b9800",
+    rating: 4.2,
+    imageUrl: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&auto=format&fit=crop",
+    posProvider: "universal_api",
+    aliases: ["Portico", "Portico Pure Veg", "Hotel Portico Hinjewadi", "Portico Hinjewadi"]
+  },
+  {
+    name: "MoMo Cafe - Courtyard by Marriott",
+    cuisine: "Luxury Multi-Cuisine Buffet, North Indian, Continental, Asian",
+    location: "Hinjewadi, PCMC",
+    address: "Courtyard by Marriott, S. No. 19/3B, Rajiv Gandhi Infotech Park, Hinjewadi Phase 1, Pune 411057",
+    phone: "+91 20 4212 2222",
+    avgCostForTwo: "\u20b92,200",
+    rating: 4.5,
+    imageUrl: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=200&auto=format&fit=crop",
+    posProvider: "toast",
+    aliases: ["MoMo Cafe", "MoMo Cafe Hinjewadi", "MoMo Cafe Marriott", "Courtyard MoMo Cafe", "MoMo Cafe Courtyard by Marriott"]
+  },
+  {
+    name: "Aaswad Executive",
+    cuisine: "Authentic Maharashtrian, North Indian, Chinese Thali",
+    location: "Hinjewadi, PCMC",
+    address: "Near Wipro Circle, Phase 1, Hinjewadi, Pune 411057",
+    phone: "+91 20 2293 8877",
+    avgCostForTwo: "\u20b9600",
+    rating: 4.1,
+    imageUrl: "https://images.unsplash.com/photo-1610057099431-d73a1c9d2f2f?w=200&auto=format&fit=crop",
+    posProvider: "universal_api",
+    aliases: ["Aaswad", "Aaswad Executive", "Hotel Aaswad Hinjewadi", "Aaswad Hinjewadi"]
+  },
+  {
+    name: "The Rustle Nest",
+    cuisine: "Open Air Garden Cafe, Continental, Wood Fired Pizza, Shakes",
+    location: "Baner, Pune",
+    address: "Baner-Pashan Link Road, Baner, Pune 411045",
+    phone: "+91 91750 99887",
+    avgCostForTwo: "\u20b91,000",
+    rating: 4.3,
+    imageUrl: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=200&auto=format&fit=crop",
+    posProvider: "universal_api",
+    aliases: ["The Rustle Nest", "Rustle Nest", "Rustle Nest Baner"]
+  },
+  {
+    name: "Kaware Ice Cream",
+    cuisine: "Heritage Pune Handcrafted Ice Cream, Mango Mastani, Kulfi",
+    location: "Tulshibaug, Pune",
+    address: "Budhwar Peth, Near Tulshibaug, Pune 411002",
+    phone: "+91 20 2445 0099",
+    avgCostForTwo: "\u20b9200",
+    rating: 4.6,
+    imageUrl: "https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=200&auto=format&fit=crop",
+    posProvider: "universal_api",
+    aliases: ["Kaware", "Kaware Ice Cream", "Kaware Icecream", "Kaware Mastani"]
+  },
+  {
+    name: "Cream Stone Concepts",
+    cuisine: "Cold Stone Ice Cream Creations, Sundaes, Waffles",
+    location: "FC Road / Shivajinagar, Pune",
+    address: "FC Road, Shivajinagar, Pune 411004",
+    phone: "+91 20 2567 4488",
+    avgCostForTwo: "\u20b9450",
+    rating: 4.5,
+    imageUrl: "https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=200&auto=format&fit=crop",
+    posProvider: "toast",
+    aliases: ["Cream Stone", "Creamstone", "Cream Stone Concepts", "Cream Stone FC Road"]
+  },
+  {
+    name: "Yolkshire All Day Breakfast",
+    cuisine: "Gourmet Egg Specialties, English Breakfast, Pancakes, Cafe",
+    location: "Aundh, Pune",
+    address: "DP Road, Aundh, Pune 411007",
+    phone: "+91 20 6500 7744",
+    avgCostForTwo: "\u20b9600",
+    rating: 4.4,
+    imageUrl: "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=200&auto=format&fit=crop",
+    posProvider: "universal_api",
+    aliases: ["Yolkshire", "Yolkshire Aundh", "Yolkshire Breakfast", "Yolkshire All Day Breakfast"]
+  },
+  {
+    name: "The Flour Works",
+    cuisine: "European Bakery, Wood-Fired Pizza, Breakfast & Bistro",
+    location: "Kalyani Nagar, Pune",
+    address: "Commercial 4, North Avenue, Kalyani Nagar, Pune 411006",
+    phone: "+91 20 2668 0474",
+    avgCostForTwo: "\u20b91,400",
+    rating: 4.5,
+    imageUrl: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&auto=format&fit=crop",
+    posProvider: "toast",
+    aliases: ["The Flour Works", "Flour Works", "Flour Works Kalyani Nagar"]
+  },
+  {
+    name: "Siddique Kebab Corner",
+    cuisine: "Mughlai, Seekh Kebabs, Chicken Roll, Tandoor",
+    location: "Camp, Pune",
+    address: "Moledina Road, Camp, Pune 411001",
+    phone: "+91 20 2613 8822",
+    avgCostForTwo: "\u20b9400",
+    rating: 4.3,
+    imageUrl: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=200&auto=format&fit=crop",
+    posProvider: "universal_api",
+    aliases: ["Siddique", "Siddique Kabab", "Siddique Kebab", "Siddique Kebab Corner", "Siddique Camp"]
+  }
 ];
 
 /**
+ * Normalizes text for typo-tolerant, phonetic, and transliteration matching
+ * (e.g. 'murphins' -> 'murphies', 'dehati' -> 'dehaati', 'roopali' -> 'rupali')
+ */
+export function normalizePuneSearch(s: string): string {
+  if (!s) return '';
+  return s
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '')
+    .replace(/aa/g, 'a')
+    .replace(/ee/g, 'e')
+    .replace(/oo/g, 'o')
+    .replace(/ph/g, 'f')
+    .replace(/ns$/, '')
+    .replace(/s$/, '');
+}
+
+/**
+ * Checks if a Pune restaurant entry or Restaurant model matches a search query
+ * Supports:
+ * - Substring search across name, aliases, cuisine, location, address
+ * - Phonetic / typo-tolerant vowel collapse (e.g. murphins, dehati)
+ * - Word-order-independent multi-token matching (e.g. "social fc road", "goodluck cafe")
+ */
+export function matchesPuneQuery(
+  item: { name: string; cuisine?: string; location?: string; address?: string; aliases?: string[] },
+  query: string
+): boolean {
+  if (!query || !query.trim()) return true;
+
+  const rawQ = query.trim().toLowerCase();
+  const cleanQ = rawQ.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const nq = normalizePuneSearch(cleanQ);
+
+  const cleanName = item.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const cleanAliases = (item.aliases || []).map((a) =>
+    a.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+  );
+  const cleanCuisine = (item.cuisine || '').toLowerCase();
+  const cleanLoc = (item.location || '').toLowerCase();
+  const cleanAddr = (item.address || '').toLowerCase();
+
+  // 1. Direct continuous substring
+  if (
+    cleanName.includes(cleanQ) ||
+    cleanAliases.some((a) => a.includes(cleanQ)) ||
+    cleanCuisine.includes(cleanQ) ||
+    cleanLoc.includes(cleanQ) ||
+    cleanAddr.includes(cleanQ)
+  ) {
+    return true;
+  }
+
+  // 2. Phonetic normalized matching
+  if (nq.length >= 3) {
+    if (
+      normalizePuneSearch(cleanName).includes(nq) ||
+      cleanAliases.some((a) => normalizePuneSearch(a).includes(nq))
+    ) {
+      return true;
+    }
+  }
+
+  // 3. Multi-token / all-words-present matching
+  const tokens = cleanQ.split(/[\s,.'"-]+/).filter((t) => t.length > 0);
+  if (tokens.length > 1) {
+    const combinedSearchable = `${cleanName} ${cleanAliases.join(' ')} ${cleanCuisine} ${cleanLoc} ${cleanAddr}`.toLowerCase();
+    const allTokensFound = tokens.every((token) => {
+      const nToken = normalizePuneSearch(token);
+      return (
+        combinedSearchable.includes(token) ||
+        (nToken.length >= 3 && normalizePuneSearch(combinedSearchable).includes(nToken))
+      );
+    });
+    if (allTokensFound) return true;
+  }
+
+  return false;
+}
+
+/**
  * Fuzzy search function for autocomplete
- * Matches against name, cuisine, and location
+ * Matches against name, aliases, cuisine, location, and phonetic normalization
  */
 export function searchPuneRestaurants(query: string): PuneRestaurantEntry[] {
   if (!query || query.trim().length < 2) return [];
-  
   const q = query.toLowerCase().trim();
-  
+
   return PUNE_RESTAURANT_DIRECTORY
-    .filter((r) => {
-      const nameMatch = r.name.toLowerCase().includes(q);
-      const cuisineMatch = r.cuisine.toLowerCase().includes(q);
-      const locationMatch = r.location.toLowerCase().includes(q);
-      const addressMatch = r.address.toLowerCase().includes(q);
-      return nameMatch || cuisineMatch || locationMatch || addressMatch;
-    })
+    .filter((r) => matchesPuneQuery(r, query))
     .sort((a, b) => {
-      // Prioritize name matches
-      const aNameMatch = a.name.toLowerCase().startsWith(q) ? 0 : a.name.toLowerCase().includes(q) ? 1 : 2;
-      const bNameMatch = b.name.toLowerCase().startsWith(q) ? 0 : b.name.toLowerCase().includes(q) ? 1 : 2;
-      if (aNameMatch !== bNameMatch) return aNameMatch - bNameMatch;
+      // Prioritize name or alias matches
+      const aExact = a.name.toLowerCase().includes(q) || a.aliases?.some((al) => al.toLowerCase().includes(q));
+      const bExact = b.name.toLowerCase().includes(q) || b.aliases?.some((al) => al.toLowerCase().includes(q));
+      if (aExact && !bExact) return -1;
+      if (!aExact && bExact) return 1;
       // Then by rating
       return b.rating - a.rating;
     })
-    .slice(0, 10); // Max 10 suggestions
+    .slice(0, 15); // Suggestions
 }
