@@ -17,6 +17,7 @@ import {
   SystemNotification,
   isWorkingWithMenuz
 } from '../types';
+import { Language } from '../utils/i18n';
 import {
   SEED_RESTAURANTS,
   SEED_TABLES,
@@ -75,6 +76,8 @@ interface RestaurantStoreState {
   customerNotes: string;
   activeTable: RestaurantTable | null;
   activeOrderId: string | null;
+  selectedLanguage: Language;
+  setSelectedLanguage: (lang: Language) => void;
 
   // Master Admin Actions
   addRestaurant: (restaurant: Restaurant) => void;
@@ -750,6 +753,8 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       },
 
       // Diner Ordering Actions
+      selectedLanguage: 'en',
+      setSelectedLanguage: (lang) => set({ selectedLanguage: lang }),
       setCustomerNotes: (notes) => set({ customerNotes: notes }),
       setActiveTable: (table) => set({ activeTable: table }),
       setActiveOrderId: (orderId) => set({ activeOrderId: orderId }),

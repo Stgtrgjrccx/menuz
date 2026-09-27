@@ -31,6 +31,8 @@ import { OrderTrackerModal } from '../components/OrderTrackerModal';
 import { SpinWheelModal } from '../components/SpinWheelModal';
 import { SwitchRestaurantModal } from '../components/SwitchRestaurantModal';
 import { InstagramStoryModal } from '../components/InstagramStoryModal';
+import { LanguageSelector } from '../components/LanguageSelector';
+import { TRANSLATIONS, getCategoryTitle } from '../utils/i18n';
 import { PUNE_RESTAURANT_DIRECTORY } from '../data/puneRestaurantDirectory';
 
 export const DinerMenu: React.FC = () => {
@@ -55,6 +57,8 @@ export const DinerMenu: React.FC = () => {
   const addItemToCart = useRestaurantStore((state) => state.addItemToCart);
   const callWaiter = useRestaurantStore((state) => state.callWaiter);
   const completeChallenge = useRestaurantStore((state) => state.completeChallenge);
+  const selectedLanguage = useRestaurantStore((state) => state.selectedLanguage);
+  const t = TRANSLATIONS[selectedLanguage] || TRANSLATIONS.en;
 
   const [isSwitchModalOpen, setIsSwitchModalOpen] = useState(false);
 
@@ -322,8 +326,9 @@ export const DinerMenu: React.FC = () => {
           <span className="text-[10px] text-charcoal-400 hidden sm:inline">• Home</span>
         </Link>
 
-        {/* Switch Restaurant / Scan QR interactive button */}
+        {/* Language selector & Switch Restaurant */}
         <div className="flex items-center space-x-2">
+          <LanguageSelector />
           <button
             type="button"
             onClick={() => setIsSwitchModalOpen(true)}
@@ -331,7 +336,8 @@ export const DinerMenu: React.FC = () => {
             title="Switch Restaurant or Scan a New Table QR Code"
           >
             <ArrowLeftRight className="w-3 h-3 text-saffron-400" />
-            <span>Switch Restaurant / Scan QR</span>
+            <span className="hidden sm:inline">Switch Restaurant</span>
+            <span className="sm:hidden">Switch</span>
           </button>
 
           {cart.length > 0 && (
@@ -406,7 +412,7 @@ export const DinerMenu: React.FC = () => {
           {/* Restaurant badge with multiplayer session indicator */}
           <div className="flex flex-wrap items-center justify-center gap-1.5">
             <span className="inline-block px-3 py-1 rounded-full text-[10px] tracking-widest uppercase font-bold border bg-white/80 backdrop-blur-sm shadow-xs text-saffron-700 border-saffron-200">
-              {activeTable?.label || 'Table 1'} • {restaurant?.cuisine || 'Contemporary Dining'}
+              {activeTable?.label ? `${t.table} ${activeTable.label}` : `${t.table} 1`} • {restaurant?.cuisine || 'Contemporary Dining'}
             </span>
             <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full text-[10px] font-bold border bg-emerald-50 text-emerald-800 border-emerald-200">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -442,7 +448,7 @@ export const DinerMenu: React.FC = () => {
               className="px-4 py-2.5 bg-gradient-to-r from-charcoal-900 to-charcoal-800 hover:from-charcoal-950 hover:to-charcoal-900 text-white text-xs font-bold rounded-full shadow-subtle transition-all flex items-center space-x-1.5 border border-amber-500/30 group cursor-pointer"
             >
               <span className="text-sm">🧑‍🍳</span>
-              <span>Ask Chef's AI</span>
+              <span>{t.aiSommelier}</span>
               <span className="hidden sm:inline-block text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300">
                 Trained
               </span>
@@ -453,7 +459,7 @@ export const DinerMenu: React.FC = () => {
               className="px-4 py-2.5 bg-gradient-to-r from-amber-500 via-pink-600 to-purple-600 hover:opacity-95 text-white text-xs font-bold rounded-full shadow-subtle transition-all flex items-center space-x-1.5 cursor-pointer"
             >
               <Instagram className="w-3.5 h-3.5" />
-              <span>Instagram Story</span>
+              <span>{t.instagramStory}</span>
               <span className="text-[9px] bg-white/20 px-1.5 py-0.2 rounded-full">Perk</span>
             </button>
           </div>
@@ -622,7 +628,7 @@ export const DinerMenu: React.FC = () => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search dishes, ingredients, dietary..."
+              placeholder={t.searchPlaceholder}
               className="w-full pl-9 pr-4 py-2 bg-white rounded-xl text-xs border border-ivory-200 focus:outline-none focus:border-saffron-600 placeholder-charcoal-700/40 text-charcoal-900 shadow-xs"
             />
           </div>
@@ -638,7 +644,7 @@ export const DinerMenu: React.FC = () => {
                   : 'bg-white text-charcoal-800 border border-ivory-200 hover:bg-ivory-100'
               }`}
             >
-              All
+              {t.filterAll}
             </button>
             {currentRestCategories.map((cat) => (
               <button
@@ -651,7 +657,7 @@ export const DinerMenu: React.FC = () => {
                     : 'bg-white text-charcoal-800 border border-ivory-200 hover:bg-ivory-100'
                 }`}
               >
-                {cat.name}
+                {getCategoryTitle(cat.name, selectedLanguage)}
               </button>
             ))}
           </div>
@@ -678,7 +684,9 @@ export const DinerMenu: React.FC = () => {
                   </div>
                   <div className="relative flex justify-center">
                     <span className="bg-ivory-50 px-4 py-1 rounded-full border border-ivory-200 shadow-xs">
-                      <h3 className="font-serif text-sm font-bold text-charcoal-900 tracking-wide">{category.name}</h3>
+                      <h3 className="font-serif text-sm font-bold text-charcoal-900 tracking-wide">
+                        {getCategoryTitle(category.name, selectedLanguage)}
+                      </h3>
                     </span>
                   </div>
                 </div>
@@ -821,10 +829,10 @@ export const DinerMenu: React.FC = () => {
             ? 'bg-green-600 text-white'
             : 'bg-white text-charcoal-800 border border-ivory-300 hover:bg-ivory-100'
         }`}
-        title={waiterCalled ? 'Waiter has been notified' : 'Call Waiter'}
+        title={waiterCalled ? t.waiterCalled : t.callWaiter}
       >
         <Bell className={`w-5 h-5 ${waiterCalled ? 'animate-bounce' : ''}`} />
-        {waiterCalled && <span className="text-xs font-bold pr-1">Notified!</span>}
+        {waiterCalled && <span className="text-xs font-bold pr-1">{t.waiterCalled}</span>}
       </button>
 
       {/* Back to top */}
@@ -850,10 +858,10 @@ export const DinerMenu: React.FC = () => {
               <span className="bg-white text-saffron-700 text-xs w-6 h-6 rounded-full flex items-center justify-center font-bold">
                 {totalCartCount}
               </span>
-              <span className="text-sm font-serif">View Dining Tray</span>
+              <span className="text-sm font-serif">{t.yourTableCart}</span>
             </div>
             <div className="flex items-center space-x-1 text-sm font-sans">
-              <span>Pay at Table</span>
+              <span>{t.sendToKitchen}</span>
               <span>→</span>
             </div>
           </button>

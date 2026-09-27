@@ -24,7 +24,7 @@ interface SmartOperationsSettingsModalProps {
   onClose: () => void;
   restaurant: Restaurant;
   onSave: (updates: Partial<Restaurant>) => void;
-  initialTab?: 'kot' | 'pilot' | 'happy_hour' | 'instagram' | 'pairings';
+  initialTab?: 'kot' | 'happy_hour' | 'instagram' | 'pairings';
 }
 
 export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModalProps> = ({
@@ -34,7 +34,7 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
   onSave,
   initialTab = 'kot'
 }) => {
-  const [activeTab, setActiveTab] = useState<'kot' | 'pilot' | 'happy_hour' | 'instagram' | 'pairings'>(initialTab);
+  const [activeTab, setActiveTab] = useState<'kot' | 'happy_hour' | 'instagram' | 'pairings'>(initialTab);
   const [savedSuccess, setSavedSuccess] = useState(false);
 
   // KOT State
@@ -52,26 +52,6 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
   );
   const [kotPrinterIp, setKotPrinterIp] = useState(
     restaurant.direct_kitchen_kot_config?.printer_target_ip || '192.168.1.150:9100'
-  );
-
-  // Performance Pilot State
-  const [pilotEnabled, setPilotEnabled] = useState(
-    restaurant.performance_guarantee_pilot?.enabled ?? true
-  );
-  const [pilotDays, setPilotDays] = useState(
-    restaurant.performance_guarantee_pilot?.trial_days ?? 7
-  );
-  const [pilotTargetReviews, setPilotTargetReviews] = useState(
-    restaurant.performance_guarantee_pilot?.target_reviews ?? 40
-  );
-  const [pilotTargetRevenue, setPilotTargetRevenue] = useState(
-    restaurant.performance_guarantee_pilot?.target_revenue ?? 25000
-  );
-  const [pilotCurrentReviews, setPilotCurrentReviews] = useState(
-    restaurant.performance_guarantee_pilot?.current_reviews ?? 42
-  );
-  const [pilotCurrentRevenue, setPilotCurrentRevenue] = useState(
-    restaurant.performance_guarantee_pilot?.current_revenue ?? 31450
   );
 
   // Happy Hour & Surge State
@@ -133,15 +113,6 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
         auto_dispatch_delay_seconds: Number(kotDelaySeconds),
         audio_chime_enabled: kotAudioChime,
         printer_target_ip: kotPrinterIp
-      },
-      performance_guarantee_pilot: {
-        enabled: pilotEnabled,
-        trial_days: Number(pilotDays),
-        target_reviews: Number(pilotTargetReviews),
-        target_revenue: Number(pilotTargetRevenue),
-        current_reviews: Number(pilotCurrentReviews),
-        current_revenue: Number(pilotCurrentRevenue),
-        start_date: restaurant.performance_guarantee_pilot?.start_date || new Date().toISOString()
       },
       happy_hour_config: {
         enabled: happyHourEnabled,
@@ -210,19 +181,6 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
           >
             <Flame className="w-3.5 h-3.5 text-orange-500" />
             <span>Direct KOT</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('pilot')}
-            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 flex-shrink-0 cursor-pointer ${
-              activeTab === 'pilot'
-                ? 'bg-white text-charcoal-900 shadow-xs border border-ivory-200'
-                : 'text-charcoal-600 hover:text-charcoal-900'
-            }`}
-          >
-            <ShieldCheck className="w-3.5 h-3.5 text-amber-500" />
-            <span>Zero-Risk Pilot</span>
           </button>
 
           <button
@@ -359,106 +317,7 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
             </div>
           )}
 
-          {/* TAB 2: PILOT */}
-          {activeTab === 'pilot' && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-amber-50/60 border border-amber-200 rounded-2xl">
-                <div>
-                  <h4 className="font-bold text-xs text-charcoal-900">Zero-Risk Performance Guarantee Pilot</h4>
-                  <p className="text-[11px] text-charcoal-600">
-                    Offer restaurants a risk-free trial where Menuz is free unless verified review & revenue goals are achieved.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setPilotEnabled(!pilotEnabled)}
-                  className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${
-                    pilotEnabled ? 'bg-amber-600' : 'bg-charcoal-300'
-                  }`}
-                >
-                  <span
-                    className={`block w-4 h-4 rounded-full bg-white shadow-md transform transition-transform absolute top-1 ${
-                      pilotEnabled ? 'left-7' : 'left-1'
-                    }`}
-                  />
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-charcoal-800 mb-1.5 flex items-center space-x-1">
-                    <Calendar className="w-3.5 h-3.5 text-charcoal-500" />
-                    <span>Pilot Duration (Days)</span>
-                  </label>
-                  <select
-                    value={pilotDays}
-                    onChange={(e) => setPilotDays(Number(e.target.value))}
-                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-ivory-300 focus:outline-none focus:border-saffron-600 bg-white"
-                  >
-                    <option value={7}>7 Days (Standard)</option>
-                    <option value={14}>14 Days (Extended)</option>
-                    <option value={21}>21 Days</option>
-                    <option value={30}>30 Days (Full Month)</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-charcoal-800 mb-1.5 flex items-center space-x-1">
-                    <Star className="w-3.5 h-3.5 text-charcoal-500" />
-                    <span>Target 5★ Reviews</span>
-                  </label>
-                  <input
-                    type="number"
-                    value={pilotTargetReviews}
-                    onChange={(e) => setPilotTargetReviews(Number(e.target.value))}
-                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-ivory-300 focus:outline-none focus:border-saffron-600"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-charcoal-800 mb-1.5 flex items-center space-x-1">
-                    <DollarSign className="w-3.5 h-3.5 text-charcoal-500" />
-                    <span>Target GMV Volume (₹)</span>
-                  </label>
-                  <input
-                    type="number"
-                    value={pilotTargetRevenue}
-                    onChange={(e) => setPilotTargetRevenue(Number(e.target.value))}
-                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-ivory-300 focus:outline-none focus:border-saffron-600"
-                  />
-                </div>
-              </div>
-
-              {/* Current Progress Tracking */}
-              <div className="bg-ivory-50 p-4 rounded-2xl border border-ivory-200 space-y-3">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-charcoal-700 block">
-                  Live Pilot Performance Progress
-                </span>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-[11px] text-charcoal-600 mb-1">Current Reviews Logged</label>
-                    <input
-                      type="number"
-                      value={pilotCurrentReviews}
-                      onChange={(e) => setPilotCurrentReviews(Number(e.target.value))}
-                      className="w-full text-xs px-3 py-2 rounded-xl border border-ivory-300 bg-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[11px] text-charcoal-600 mb-1">Current Order Volume (₹)</label>
-                    <input
-                      type="number"
-                      value={pilotCurrentRevenue}
-                      onChange={(e) => setPilotCurrentRevenue(Number(e.target.value))}
-                      className="w-full text-xs px-3 py-2 rounded-xl border border-ivory-300 bg-white"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 3: HAPPY HOUR & SURGE */}
+          {/* TAB 2: HAPPY HOUR & SURGE */}
           {activeTab === 'happy_hour' && (
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 bg-yellow-50/60 border border-yellow-200 rounded-2xl">

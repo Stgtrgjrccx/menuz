@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, ShoppingBag, Trash2, ArrowRight, AlertCircle, Plus, Minus } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
+import { TRANSLATIONS } from '../utils/i18n';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -15,6 +16,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 }) => {
   const cart = useRestaurantStore((state) => state.cart);
   const restaurant = useRestaurantStore((state) => state.restaurant);
+  const selectedLanguage = useRestaurantStore((state) => state.selectedLanguage);
+  const t = TRANSLATIONS[selectedLanguage] || TRANSLATIONS.en;
   const customerNotes = useRestaurantStore((state) => state.customerNotes);
   const setCustomerNotes = useRestaurantStore((state) => state.setCustomerNotes);
   const updateCartQuantity = useRestaurantStore((state) => state.updateCartQuantity);
@@ -61,7 +64,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
         {/* Header */}
         <div className="flex justify-between items-center pb-3 border-b border-ivory-200">
           <div>
-            <h2 className="font-serif text-xl font-bold text-charcoal-900">Your Dining Tray</h2>
+            <h2 className="font-serif text-xl font-bold text-charcoal-900">{t.yourTableCart}</h2>
             <div className="flex items-center space-x-1.5 mt-0.5">
               <span className="text-xs bg-saffron-100 text-saffron-700 px-2 py-0.5 rounded-full font-semibold">
                 {tableLabel}
@@ -91,9 +94,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             <div className="w-14 h-14 bg-ivory-100 rounded-full flex items-center justify-center text-charcoal-700/30 mb-3">
               <ShoppingBag className="w-7 h-7" />
             </div>
-            <p className="font-serif text-charcoal-900 font-bold text-base">Your tray is currently empty</p>
+            <p className="font-serif text-charcoal-900 font-bold text-base">{t.cartEmpty}</p>
             <p className="text-xs text-charcoal-700/60 mt-1 max-w-xs">
-              Explore the contemporary Indian offerings of Saffron House to add dishes.
+              {t.addDishesPrompt}
             </p>
           </div>
         ) : (
@@ -102,7 +105,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             <div className="bg-emerald-50 border border-emerald-200/80 rounded-xl px-3 py-2 my-2 flex items-center justify-between text-xs text-emerald-900">
               <div className="flex items-center space-x-1.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="font-bold">Live Table Cart Sync Active</span>
+                <span className="font-bold">{t.tableCartSyncActive}</span>
               </div>
               <span className="text-[10px] text-emerald-700 font-mono">
                 {cart.length} {cart.length === 1 ? 'item' : 'items'} on {tableLabel}
@@ -206,7 +209,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         <span>{badgeTitle}</span>
                       </span>
                       <span className="text-[10px] text-saffron-700 font-bold uppercase tracking-wider">
-                        {pairingDiscount > 0 ? `${pairingDiscount}% Bundle Deal` : 'Quick Add'}
+                        {pairingDiscount > 0 ? `${pairingDiscount}% ${t.bundleDeal}` : t.add}
                       </span>
                     </div>
 
@@ -252,7 +255,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                                 className="px-2 py-0.5 bg-saffron-600 hover:bg-saffron-700 text-white text-[10px] font-bold rounded-md shadow-xs transition-colors flex items-center space-x-0.5 cursor-pointer"
                               >
                                 <Plus className="w-2.5 h-2.5" />
-                                <span>Add</span>
+                                <span>{t.add}</span>
                               </button>
                             </div>
                           </div>
@@ -265,12 +268,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
               {/* Kitchen notes */}
               <div className="pt-3">
-                <label className="text-xs font-semibold text-charcoal-900 mb-1 block">Special Kitchen Notes (Optional)</label>
+                <label className="text-xs font-semibold text-charcoal-900 mb-1 block">{t.specialInstructions}</label>
                 <input
                   type="text"
                   value={customerNotes}
                   onChange={(e) => setCustomerNotes(e.target.value)}
-                  placeholder="e.g. Please serve biryani piping hot, separate chutney..."
+                  placeholder={t.specialInstructionsPlaceholder}
                   className="w-full px-3 py-2 text-xs bg-ivory-50 border border-ivory-200 rounded-xl focus:outline-none focus:border-saffron-600 text-charcoal-900"
                 />
               </div>
@@ -279,15 +282,15 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             {/* Calculations & Checkout */}
             <div className="pt-3 border-t border-ivory-200 space-y-1.5 text-xs">
               <div className="flex justify-between text-charcoal-700">
-                <span>Items Subtotal</span>
+                <span>{t.itemTotal}</span>
                 <span>₹{subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-charcoal-700">
-                <span>Restaurant GST & Taxes ({taxRate}%)</span>
+                <span>{t.taxAndGst}</span>
                 <span>₹{taxAmount.toFixed(2)}</span>
               </div>
               <div className="flex justify-between font-bold text-sm text-charcoal-900 pt-2 border-t border-ivory-100">
-                <span>Total Payable</span>
+                <span>{t.grandTotal}</span>
                 <span className="text-saffron-700 text-base">₹{totalAmount.toFixed(2)}</span>
               </div>
 
@@ -299,7 +302,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   className="w-full bg-saffron-600 hover:bg-saffron-700 disabled:bg-gray-300 text-white font-bold py-3.5 px-4 rounded-xl shadow-subtle flex items-center justify-between text-xs transition-colors"
                 >
                   <div className="text-left">
-                    <span className="block leading-tight font-semibold">Place Order for {tableLabel}</span>
+                    <span className="block leading-tight font-semibold">{t.sendToKitchen} ({tableLabel})</span>
                     <span className="text-[10px] opacity-80 font-normal">Pay at counter/table</span>
                   </div>
                   <div className="flex items-center space-x-1.5">

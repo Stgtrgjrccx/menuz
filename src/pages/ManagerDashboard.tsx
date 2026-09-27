@@ -72,7 +72,7 @@ export const ManagerDashboard: React.FC = () => {
   const [isAiDrawerOpen, setIsAiDrawerOpen] = useState(false);
   const [isLaunchKitOpen, setIsLaunchKitOpen] = useState(false);
   const [isTableModalOpen, setIsTableModalOpen] = useState(false);
-  const [smartSettingsTab, setSmartSettingsTab] = useState<'kot' | 'pilot' | 'happy_hour' | 'instagram' | 'pairings' | null>(null);
+  const [smartSettingsTab, setSmartSettingsTab] = useState<'kot' | 'happy_hour' | 'instagram' | 'pairings' | null>(null);
   const [selectedPosTab, setSelectedPosTab] = useState<'petpooja' | 'royalpos' | 'recaho' | 'rancelab'>(
     (restaurant.pos_provider as any) || 'petpooja'
   );
@@ -504,7 +504,7 @@ export const ManagerDashboard: React.FC = () => {
       )}
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* ⚡ SMART OPERATIONS, DIRECT KOT & STRATEGIC PILOT ENGINE   */}
+      {/* ⚡ SMART OPERATIONS, DIRECT KOT & GROWTH ENGINE             */}
       {/* ═══════════════════════════════════════════════════════════ */}
       <div className="bg-white rounded-3xl border border-ivory-300 p-6 shadow-subtle space-y-5">
         <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-ivory-200">
@@ -521,7 +521,7 @@ export const ManagerDashboard: React.FC = () => {
               Smart Operations, Direct KOT &amp; Growth Engine
             </h3>
             <p className="text-xs text-charcoal-600">
-              Configure optional direct kitchen routing, 7-day risk-free performance pilot, dynamic surge pricing, and viral Instagram story cards.
+              Configure optional direct kitchen routing, direct restaurant access control, dynamic surge pricing, and viral Instagram story cards.
             </p>
           </div>
           <button
@@ -534,7 +534,7 @@ export const ManagerDashboard: React.FC = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3.5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5">
           {/* 1. Direct-to-Kitchen KOT Auto-Dispatch */}
           <div className="bg-ivory-50 border border-ivory-300 rounded-2xl p-3.5 flex flex-col justify-between space-y-3">
             <div>
@@ -598,84 +598,7 @@ export const ManagerDashboard: React.FC = () => {
             </div>
           </div>
 
-          {/* 2. 7-Day Performance Guarantee Pilot */}
-          <div className="bg-ivory-50 border border-ivory-300 rounded-2xl p-3.5 flex flex-col justify-between space-y-3">
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-bold text-charcoal-900 flex items-center space-x-1.5">
-                  <span>🛡️</span>
-                  <span>Zero-Risk Pilot</span>
-                </span>
-                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
-                  restaurant.performance_guarantee_pilot?.enabled
-                    ? 'bg-amber-100 text-amber-900 border border-amber-300'
-                    : 'bg-charcoal-200 text-charcoal-700'
-                }`}>
-                  {restaurant.performance_guarantee_pilot?.enabled ? `${restaurant.performance_guarantee_pilot.trial_days || 7}d Active` : 'Optional'}
-                </span>
-              </div>
-              <p className="text-[10px] text-charcoal-600 leading-snug line-clamp-2">
-                Free trial software guarantee unless review and volume targets are achieved.
-              </p>
-
-              <div className="mt-2.5 p-2 bg-white rounded-xl border border-ivory-200 text-[10px] space-y-1">
-                <div className="flex justify-between text-charcoal-700">
-                  <span className="font-semibold">Review Goal:</span>
-                  <span className="font-mono text-green-700 font-bold">
-                    {restaurant.performance_guarantee_pilot?.current_reviews || 42} / {restaurant.performance_guarantee_pilot?.target_reviews || 40} ✓
-                  </span>
-                </div>
-                <div className="flex justify-between text-charcoal-700">
-                  <span className="font-semibold">GMV Goal:</span>
-                  <span className="font-mono text-charcoal-900">
-                    ₹{(restaurant.performance_guarantee_pilot?.target_revenue || 25000).toLocaleString('en-IN')}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <button
-                type="button"
-                onClick={() => {
-                  const isCurrentlyEnabled = !!restaurant.performance_guarantee_pilot?.enabled;
-                  updateRestaurant(restaurant.id, {
-                    performance_guarantee_pilot: {
-                      enabled: !isCurrentlyEnabled,
-                      target_reviews: 40,
-                      target_revenue: 25000,
-                      start_date: new Date().toISOString(),
-                      trial_days: 7,
-                      current_reviews: 42,
-                      current_revenue: 31450
-                    }
-                  });
-                }}
-                className={`w-full py-1.5 px-2 rounded-xl text-[11px] font-bold transition-all flex items-center justify-center space-x-1 shadow-xs cursor-pointer ${
-                  restaurant.performance_guarantee_pilot?.enabled
-                    ? 'bg-amber-600 hover:bg-amber-700 text-white'
-                    : 'bg-charcoal-800 hover:bg-charcoal-900 text-white'
-                }`}
-              >
-                <span>
-                  {restaurant.performance_guarantee_pilot?.enabled
-                    ? '✓ Pilot Enabled'
-                    : 'Activate Pilot'}
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setSmartSettingsTab('pilot')}
-                className="w-full py-1.5 px-2 rounded-xl text-[10px] font-bold text-charcoal-700 bg-white hover:bg-ivory-100 border border-ivory-300 transition-all flex items-center justify-center space-x-1 cursor-pointer"
-              >
-                <Settings className="w-3 h-3 text-charcoal-500" />
-                <span>Edit Targets</span>
-              </button>
-            </div>
-          </div>
-
-          {/* 3. Smart Happy Hour & Dynamic Pricing */}
+          {/* 2. Smart Happy Hour & Dynamic Pricing */}
           <div className="bg-ivory-50 border border-ivory-300 rounded-2xl p-3.5 flex flex-col justify-between space-y-3">
             <div>
               <div className="flex items-center justify-between mb-1.5">
