@@ -8,6 +8,8 @@ import { RecahoIntegrationPanel } from '../components/RecahoIntegrationPanel';
 import { RancelabIntegrationPanel } from '../components/RancelabIntegrationPanel';
 import { TableManagementModal } from '../components/TableManagementModal';
 import { RestaurantLaunchKitModal } from '../components/RestaurantLaunchKitModal';
+import { MasterImageLibrary } from '../components/MasterImageLibrary';
+import { IndependentWebsitesDirectoryModal } from '../components/IndependentWebsitesDirectoryModal';
 import {
   Building2,
   Users,
@@ -92,6 +94,9 @@ export const MasterAdminDashboard: React.FC = () => {
   // ── Table Management & Floor Plan Modal State ───────────────
   const [tableModalRestaurant, setTableModalRestaurant] = useState<Restaurant | null>(null);
   const [isTableModalOpen, setIsTableModalOpen] = useState(false);
+
+  // ── Independent Websites Directory Modal State ──────────────
+  const [isIndependentSitesOpen, setIsIndependentSitesOpen] = useState(false);
 
   // ── Onboarding form state ──────────────────────────────────
   const [newRestName, setNewRestName] = useState('');
@@ -686,13 +691,22 @@ export const MasterAdminDashboard: React.FC = () => {
                     : 'Browse Pune restaurant database to onboard your first venue.'}
                 </p>
               </div>
-              <button
-                onClick={() => setIsAddRestaurantOpen(true)}
-                className="px-4 py-2.5 bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-colors self-start sm:self-auto cursor-pointer"
-              >
-                <Plus className="w-4 h-4" />
-                <span>Onboard Restaurant</span>
-              </button>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  onClick={() => setIsIndependentSitesOpen(true)}
+                  className="px-4 py-2.5 bg-charcoal-900 hover:bg-charcoal-800 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-colors self-start sm:self-auto cursor-pointer border border-charcoal-700"
+                >
+                  <Globe className="w-4 h-4 text-saffron-400" />
+                  <span>Independent Websites Directory</span>
+                </button>
+                <button
+                  onClick={() => setIsAddRestaurantOpen(true)}
+                  className="px-4 py-2.5 bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-colors self-start sm:self-auto cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Onboard Restaurant</span>
+                </button>
+              </div>
             </div>
 
             {/* Empty State */}
@@ -2087,79 +2101,10 @@ export const MasterAdminDashboard: React.FC = () => {
         )}
 
         {/* ========================================================================= */}
-        {/* TAB 5: MASTER IMAGE LIBRARY                                                */}
+        {/* TAB 5: MASTER IMAGE LIBRARY (RESTAURANT-WISE ASSETS)                      */}
         {/* ========================================================================= */}
         {activeTab === 'images' && (
-          <div className="space-y-6">
-            <div className="bg-white p-5 rounded-3xl border border-ivory-300 shadow-subtle flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div>
-                <span className="text-[10px] uppercase font-bold tracking-widest text-saffron-700">Central Asset Repository</span>
-                <h3 className="text-lg font-bold font-serif text-charcoal-900 mt-0.5">Master Culinary Photography Library</h3>
-                <p className="text-xs text-charcoal-600 mt-0.5">
-                  {menuItems.length > 0
-                    ? 'Audit, replace, or assign photographs to any restaurant\'s catalog.'
-                    : 'No menu items yet. Add menu items through restaurant management hubs.'}
-                </p>
-              </div>
-
-              {menuItems.length > 0 && (
-                <button
-                  onClick={() => {
-                    setSelectedImageForAssign('https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600&auto=format&fit=crop');
-                    setIsImageAssignModalOpen(true);
-                  }}
-                  className="px-4 py-2.5 bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-colors self-start md:self-auto"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>Assign Image to Dish</span>
-                </button>
-              )}
-            </div>
-
-            {menuItems.length === 0 ? (
-              <div className="bg-white rounded-3xl border border-ivory-300 p-12 text-center shadow-subtle">
-                <ImageIcon className="w-12 h-12 text-charcoal-300 mx-auto" />
-                <h3 className="font-serif text-lg font-bold text-charcoal-900 mt-4">No Images Yet</h3>
-                <p className="text-xs text-charcoal-500 mt-1">Menu item photos will appear here once dishes are added to restaurant catalogs.</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                {menuItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className="bg-white rounded-2xl border border-ivory-300 overflow-hidden shadow-subtle group hover:shadow-float transition-all flex flex-col justify-between"
-                  >
-                    <div className="relative aspect-square overflow-hidden bg-ivory-200">
-                      <img
-                        src={item.image_url}
-                        alt={item.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                      <span className="absolute top-2 right-2 px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-charcoal-900/80 text-white backdrop-blur-sm">
-                        {item.item_type}
-                      </span>
-                    </div>
-
-                    <div className="p-3">
-                      <h5 className="font-bold text-xs text-charcoal-900 truncate" title={item.name}>{item.name}</h5>
-                      <span className="text-[10px] text-saffron-700 font-semibold block mt-0.5">₹{item.price.toFixed(2)}</span>
-
-                      <button
-                        onClick={() => {
-                          setSelectedImageForAssign(item.image_url);
-                          setTargetMenuItemId(item.id);
-                          setIsImageAssignModalOpen(true);
-                        }}
-                        className="w-full mt-2.5 bg-ivory-100 hover:bg-ivory-200 text-charcoal-800 text-[10px] font-bold py-1.5 rounded-lg border border-ivory-200 transition-colors"
-                      >
-                        Change Photo
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <MasterImageLibrary />
         )}
 
         {/* ========================================================================= */}
@@ -2637,6 +2582,16 @@ export const MasterAdminDashboard: React.FC = () => {
           onClose={() => setIsTableModalOpen(false)}
         />
       )}
+
+      {/* Independent Websites & Standalone Portals Directory Modal */}
+      <IndependentWebsitesDirectoryModal
+        isOpen={isIndependentSitesOpen}
+        onClose={() => setIsIndependentSitesOpen(false)}
+        onOpenTableManagement={(r) => {
+          setTableModalRestaurant(r);
+          setIsTableModalOpen(true);
+        }}
+      />
     </div>
   );
 };
