@@ -77,8 +77,8 @@ export const Navbar: React.FC = () => {
     return `${Math.floor(diffSec / 3600)}h ago`;
   };
 
-  // Hide admin navigation bar on customer-facing routes (/ and /r/*)
-  if (location.pathname.startsWith('/r/') || location.pathname === '/') {
+  // Hide admin navigation bar on customer-facing routes (/ and /r/*) and presentation deck (/pitch)
+  if (location.pathname.startsWith('/r/') || location.pathname === '/' || location.pathname === '/pitch') {
     return null;
   }
 
