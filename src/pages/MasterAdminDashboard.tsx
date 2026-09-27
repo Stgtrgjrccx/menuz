@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useRestaurantStore, WhatsAppCampaign } from '../store/restaurantStore';
-import { Restaurant, PosSyncEvent, isWorkingWithMenuz, PetpoojaConfig, RoyalPosConfig, RecahoConfig, RancelabConfig } from '../types';
+import { Restaurant, PosSyncEvent, isWorkingWithMenuz, PetpoojaConfig, RoyalPosConfig, RecahoConfig, RancelabConfig, MODERN_POS_PROVIDERS } from '../types';
 import { PUNE_RESTAURANT_DIRECTORY, searchPuneRestaurants, PuneRestaurantEntry, normalizePuneSearch, matchesPuneQuery } from '../data/puneRestaurantDirectory';
 import { PetpoojaIntegrationPanel } from '../components/PetpoojaIntegrationPanel';
 import { RoyalPosIntegrationPanel } from '../components/RoyalPosIntegrationPanel';
 import { RecahoIntegrationPanel } from '../components/RecahoIntegrationPanel';
 import { RancelabIntegrationPanel } from '../components/RancelabIntegrationPanel';
 import { SelfServeKotSetupWizard } from '../components/SelfServeKotSetupWizard';
+import { RestaurantLaunchKitModal } from '../components/RestaurantLaunchKitModal';
 import {
   Building2,
   Users,
@@ -85,6 +86,10 @@ export const MasterAdminDashboard: React.FC = () => {
   const [targetMenuItemId, setTargetMenuItemId] = useState<string>('');
   const [copiedLink, setCopiedLink] = useState<string | null>(null);
 
+  // ── Instant Launch Kit & Handover Modal State ───────────────
+  const [launchKitRestaurant, setLaunchKitRestaurant] = useState<Restaurant | null>(null);
+  const [isLaunchKitOpen, setIsLaunchKitOpen] = useState(false);
+
   // ── Onboarding form state ──────────────────────────────────
   const [newRestName, setNewRestName] = useState('');
   const [newRestSlug, setNewRestSlug] = useState('');
@@ -94,7 +99,7 @@ export const MasterAdminDashboard: React.FC = () => {
   const [newRestOwner, setNewRestOwner] = useState('');
   const [newRestEmail, setNewRestEmail] = useState('');
   const [newRestPhone, setNewRestPhone] = useState('');
-  const [newRestPos, setNewRestPos] = useState<'toast' | 'clover' | 'square' | 'universal_api'>('universal_api');
+  const [newRestPos, setNewRestPos] = useState<Restaurant['pos_provider']>('petpooja');
   const [newRestColor, setNewRestColor] = useState('#E85D04');
 
   // ── Autocomplete state ─────────────────────────────────────
@@ -187,6 +192,8 @@ export const MasterAdminDashboard: React.FC = () => {
     if (existing) {
       updateRestaurant(existing.id, { is_menuz_partner: true, status: 'active' });
       setCurrentRestaurant(existing.id);
+      setLaunchKitRestaurant(existing);
+      setIsLaunchKitOpen(true);
       return;
     }
 
@@ -212,11 +219,14 @@ export const MasterAdminDashboard: React.FC = () => {
       ordering_enabled: true,
       google_place_url: `https://search.google.com/local/writereview?placeid=${cleanSlug}`,
       is_menuz_partner: true,
+      pos_provider: entry.posProvider || 'petpooja',
       aliases: entry.aliases || []
     };
 
     addRestaurant(newRest);
     setCurrentRestaurant(newRest.id);
+    setLaunchKitRestaurant(newRest);
+    setIsLaunchKitOpen(true);
   };
 
   const neighborhoods = useMemo(() => {
@@ -303,6 +313,8 @@ export const MasterAdminDashboard: React.FC = () => {
     if (existing) {
       updateRestaurant(existing.id, { is_menuz_partner: true, status: 'active' });
       setRestaurantSearch(existing.name);
+      setLaunchKitRestaurant(existing);
+      setIsLaunchKitOpen(true);
       return;
     }
 
@@ -335,12 +347,14 @@ export const MasterAdminDashboard: React.FC = () => {
       ordering_enabled: true,
       google_place_url: `https://search.google.com/local/writereview?placeid=${cleanSlug}`,
       authentic_photography_statement: 'Every dish photograph represents the true culinary creations of our kitchen.',
-      pos_provider: 'universal_api',
+      pos_provider: 'petpooja',
       aliases: [trimmed]
     };
 
     addRestaurant(newRest);
     setRestaurantSearch(trimmed);
+    setLaunchKitRestaurant(newRest);
+    setIsLaunchKitOpen(true);
   };
 
   // ── Select from autocomplete ───────────────────────────────
@@ -353,7 +367,7 @@ export const MasterAdminDashboard: React.FC = () => {
     setNewRestLocation(entry.location);
     setNewRestAddress(entry.address);
     setNewRestPhone(entry.phone);
-    setNewRestPos(entry.posProvider);
+    setNewRestPos(entry.posProvider || 'petpooja');
     setShowAutocomplete(false);
   };
 
@@ -389,6 +403,8 @@ export const MasterAdminDashboard: React.FC = () => {
 
     addRestaurant(newRest);
     setIsAddRestaurantOpen(false);
+    setLaunchKitRestaurant(newRest);
+    setIsLaunchKitOpen(true);
     // Reset form
     setNewRestName('');
     setNewRestSlug('');
@@ -1379,6 +1395,19 @@ export const MasterAdminDashboard: React.FC = () => {
                               <span>KDS</span>
                             </Link>
                           </div>
+
+                          <button
+                            onClick={() => {
+                              setCurrentRestaurant(rest.id);
+                              setLaunchKitRestaurant(rest);
+                              setIsLaunchKitOpen(true);
+                            }}
+                            className="w-full bg-charcoal-900 hover:bg-saffron-700 text-white font-bold py-2 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-all shadow-xs border border-charcoal-700 cursor-pointer"
+                            title="Open Client Handover Kit, WhatsApp Brief, QR Generator, and Domain settings"
+                          >
+                            <Share2 className="w-3.5 h-3.5 text-saffron-400" />
+                            <span>🚀 Launch Kit & Client Handover</span>
+                          </button>
 
                           <div className="flex items-center justify-between pt-1 text-[11px] text-charcoal-500">
                             <span className="truncate max-w-[170px] font-mono text-[10px]">/#/r/{rest.slug}/menu</span>
@@ -2378,16 +2407,17 @@ export const MasterAdminDashboard: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-charcoal-800 block mb-1">POS Integration</label>
+                  <label className="font-bold text-charcoal-800 block mb-1">POS Integration *</label>
                   <select
                     value={newRestPos}
                     onChange={(e) => setNewRestPos(e.target.value as any)}
-                    className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-charcoal-900 focus:outline-none focus:border-saffron-600"
+                    className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-charcoal-900 focus:outline-none focus:border-saffron-600 font-medium"
                   >
-                    <option value="universal_api">Universal API Adapter</option>
-                    <option value="toast">Toast POS</option>
-                    <option value="clover">Clover</option>
-                    <option value="square">Square</option>
+                    {MODERN_POS_PROVIDERS.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.name} ({p.tag})
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div>
@@ -2584,6 +2614,15 @@ export const MasterAdminDashboard: React.FC = () => {
             setIsWizardOpen(false);
           }}
           onCancel={() => setIsWizardOpen(false)}
+        />
+      )}
+
+      {/* Instant Client Launch Kit & Handover Modal */}
+      {launchKitRestaurant && (
+        <RestaurantLaunchKitModal
+          restaurant={launchKitRestaurant}
+          isOpen={isLaunchKitOpen}
+          onClose={() => setIsLaunchKitOpen(false)}
         />
       )}
     </div>

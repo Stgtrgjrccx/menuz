@@ -77,10 +77,101 @@ export const Navbar: React.FC = () => {
     return `${Math.floor(diffSec / 3600)}h ago`;
   };
 
-  // Hide admin navigation bar on customer-facing routes (/ and /r/*) and presentation deck (/pitch)
+  // 1. Hide completely on customer-facing routes and pitch presentation
   if (location.pathname.startsWith('/r/') || location.pathname === '/' || location.pathname === '/pitch') {
     return null;
   }
+
+  // 2. Venue Operations Portal: Scoped strictly to the active restaurant (No Master Admin leakage)
+  const isVenueOperations = location.pathname.startsWith('/manage') || location.pathname.startsWith('/kitchen') || location.pathname.startsWith('/ai-studio');
+
+  if (isVenueOperations) {
+    const venueName = restaurant?.name || 'Restaurant Hub';
+    const venueSlug = restaurant?.slug || 'saffron-house';
+    const venueDinerUrl = `/r/${venueSlug}/menu?t=${defaultToken}`;
+
+    return (
+      <nav className="bg-charcoal-900 text-white border-b border-charcoal-800 relative z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-12">
+            {/* Restaurant Brand Identity */}
+            <div className="flex items-center space-x-2.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
+              <div className="flex items-center space-x-1.5">
+                <span className="font-serif font-bold text-sm text-white truncate max-w-[180px] sm:max-w-none">
+                  {venueName}
+                </span>
+                <span className="text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                  Operations Hub
+                </span>
+              </div>
+            </div>
+
+            {/* Venue Scoped Navigation Links */}
+            <div className="flex items-center space-x-1 sm:space-x-2">
+              <Link
+                to={`/manage/${venueSlug}`}
+                className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  location.pathname.startsWith('/manage')
+                    ? 'bg-saffron-600 text-white shadow-xs'
+                    : 'text-charcoal-300 hover:text-white hover:bg-charcoal-800'
+                }`}
+              >
+                <LayoutDashboard className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Manager Hub</span>
+              </Link>
+
+              <Link
+                to="/kitchen"
+                className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  location.pathname.startsWith('/kitchen')
+                    ? 'bg-saffron-600 text-white shadow-xs'
+                    : 'text-charcoal-300 hover:text-white hover:bg-charcoal-800'
+                }`}
+              >
+                <ChefHat className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Kitchen KDS</span>
+              </Link>
+
+              <Link
+                to="/ai-studio"
+                className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  location.pathname.startsWith('/ai-studio')
+                    ? 'bg-amber-500 text-charcoal-950 shadow-xs'
+                    : 'text-amber-400/90 hover:text-amber-300 hover:bg-charcoal-800'
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Chef AI Studio</span>
+              </Link>
+
+              <a
+                href={`#${venueDinerUrl}`}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-200 hover:text-white border border-charcoal-700 transition-all ml-1"
+                title="Open live customer dining menu in a new tab"
+              >
+                <ShoppingBag className="w-3.5 h-3.5 text-saffron-400" />
+                <span className="hidden sm:inline">Live Diner Menu</span>
+                <span className="sm:hidden">Diner</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    );
+  }
+
+  // 3. Master Super Admin Portal (Full network oversight)
+  const masterNavLinks = [
+    { to: '/admin', label: 'Master Admin Hub', icon: ShieldCheck, highlight: true },
+    { to: '/pitch', label: 'Pitch Deck', icon: TrendingUp },
+    { to: `/manage/${restaurant?.slug || 'saffron-house'}`, label: 'Active Venue Hub', icon: LayoutDashboard },
+    { to: '/kitchen', label: 'Kitchen KDS', icon: ChefHat },
+    { to: '/ai-studio', label: 'Chef AI Studio', icon: Sparkles },
+    { to: dinerUrl, label: 'Table Menu', icon: ShoppingBag }
+  ];
 
   return (
     <nav className="bg-charcoal-900 text-white border-b border-charcoal-800 relative z-50">
@@ -94,20 +185,20 @@ export const Navbar: React.FC = () => {
               title="Go to Master Admin Dashboard"
             >
               <span className="font-serif font-bold text-base tracking-wide text-saffron-500 group-hover:text-saffron-400 transition-colors">
-                Menuz
+                Menuz HQ
               </span>
-              <span className="text-[9px] text-charcoal-400 bg-charcoal-800 px-1.5 py-0.5 rounded font-mono hidden sm:inline">
-                Pune
+              <span className="text-[9px] text-amber-300 bg-amber-500/20 border border-amber-500/30 px-1.5 py-0.5 rounded font-mono hidden sm:inline font-bold">
+                Master Control
               </span>
             </Link>
 
-            {/* Quick Restaurant Hub Selector (Only active Menuz restaurants) */}
+            {/* Quick Restaurant Hub Selector */}
             <div className="hidden sm:block">
               <select
                 value={restaurant?.id || ''}
                 onChange={(e) => handleSelectRestaurant(e.target.value)}
                 className="bg-charcoal-800 text-saffron-400 hover:text-saffron-300 border border-charcoal-700 hover:border-saffron-500/50 rounded-lg px-2.5 py-1 text-xs font-semibold focus:outline-none cursor-pointer max-w-[200px] truncate transition-colors"
-                title="Switch Active Restaurant Hub"
+                title="Super Admin: Switch Active Restaurant Hub"
               >
                 {activeWorkingRestaurants.map((r) => (
                   <option key={r.id} value={r.id} className="bg-charcoal-900 text-white">
@@ -120,7 +211,7 @@ export const Navbar: React.FC = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
-            {navLinks.map((link) => {
+            {masterNavLinks.map((link) => {
               const Icon = link.icon;
               const active = isActive(link.to);
               return (

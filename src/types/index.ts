@@ -24,7 +24,27 @@ export interface Restaurant {
   ordering_enabled?: boolean;
   google_place_url?: string;
   authentic_photography_statement?: string;
-  pos_provider?: 'petpooja' | 'royalpos' | 'recaho' | 'rancelab' | 'toast' | 'square' | 'clover' | 'micros' | 'universal_api' | 'tri_sync_multi';
+  pos_provider?:
+    | 'petpooja'
+    | 'posist'
+    | 'urbanpiper'
+    | 'dotpe'
+    | 'pinelabs'
+    | 'royalpos'
+    | 'recaho'
+    | 'rancelab'
+    | 'slickpos'
+    | 'toast'
+    | 'square'
+    | 'clover'
+    | 'lightspeed'
+    | 'touchbistro'
+    | 'micros'
+    | 'aloha'
+    | 'deliverect'
+    | 'esc_pos_direct'
+    | 'universal_api'
+    | 'tri_sync_multi';
   petpooja_config?: PetpoojaConfig;
   royalpos_config?: RoyalPosConfig;
   recaho_config?: RecahoConfig;
@@ -38,7 +58,44 @@ export interface Restaurant {
   is_menuz_partner?: boolean;
   aliases?: string[];
   ai_persona?: ChefOwnerAiPersona;
+  white_label?: WhiteLabelConfig;
 }
+
+export interface WhiteLabelConfig {
+  custom_domain?: string;
+  domain_verified?: boolean;
+  cname_target?: string;
+  ssl_status?: 'active' | 'provisioning' | 'pending';
+  hide_menuz_branding?: boolean;
+  custom_support_email?: string;
+  custom_support_phone?: string;
+  custom_favicon_url?: string;
+  custom_header_logo_url?: string;
+  custom_footer_text?: string;
+}
+
+export const MODERN_POS_PROVIDERS = [
+  { id: 'petpooja', name: 'Petpooja POS', region: 'India & UAE (55k+ Outlets)', tag: 'Popular', logoText: 'Petpooja' },
+  { id: 'posist', name: 'Posist / Restroworks', region: 'Global & Enterprise (20k+ Outlets)', tag: 'Enterprise', logoText: 'Posist' },
+  { id: 'urbanpiper', name: 'UrbanPiper (Prime POS & Hub)', region: 'India & Middle East', tag: 'Omnichannel', logoText: 'UrbanPiper' },
+  { id: 'dotpe', name: 'DotPe Digital & In-Store POS', region: 'India (Retail & Dining)', tag: 'Digital', logoText: 'DotPe' },
+  { id: 'pinelabs', name: 'Pine Labs / Plutus POS', region: 'India & Southeast Asia', tag: 'Fintech', logoText: 'Pine Labs' },
+  { id: 'royalpos', name: 'RoyalPOS (Wi-Fi Local KOT)', region: 'Local Android / Windows', tag: 'Offline LAN', logoText: 'RoyalPOS' },
+  { id: 'recaho', name: 'Recaho Cloud & Hybrid POS', region: 'Maharashtra & Pan-India', tag: 'Hybrid', logoText: 'Recaho' },
+  { id: 'rancelab', name: 'RanceLab FusionRest', region: 'Multi-Outlet Chains & F&B', tag: 'Chains', logoText: 'RanceLab' },
+  { id: 'slickpos', name: 'SlickPOS Cloud Terminal', region: 'Cafes & Quick Service', tag: 'QSR', logoText: 'SlickPOS' },
+  { id: 'toast', name: 'Toast POS', region: 'US, UK & Global Leader', tag: 'Top Global', logoText: 'Toast' },
+  { id: 'square', name: 'Square for Restaurants', region: 'US, UK, Australia, Japan', tag: 'Fast Setup', logoText: 'Square' },
+  { id: 'clover', name: 'Clover POS (Fiserv)', region: 'US & Global Hospitality', tag: 'Hardware', logoText: 'Clover' },
+  { id: 'lightspeed', name: 'Lightspeed Restaurant POS', region: 'Europe, US & APAC', tag: 'Cloud', logoText: 'Lightspeed' },
+  { id: 'touchbistro', name: 'TouchBistro iPad POS', region: 'North America & UK', tag: 'iPad Native', logoText: 'TouchBistro' },
+  { id: 'micros', name: 'Oracle MICROS Simphony', region: 'Luxury Hotels & Resorts', tag: 'Hotel/Resort', logoText: 'MICROS' },
+  { id: 'aloha', name: 'NCR Aloha POS', region: 'Enterprise Franchise Chains', tag: 'Franchise', logoText: 'NCR Aloha' },
+  { id: 'deliverect', name: 'Deliverect Aggregator Bridge', region: 'Global Delivery & In-House', tag: 'Bridge', logoText: 'Deliverect' },
+  { id: 'esc_pos_direct', name: 'Direct Hardware ESC/POS LAN Printer', region: 'Network Port 9100 / Raw Socket', tag: 'Zero Software', logoText: 'LAN ESC/POS' },
+  { id: 'universal_api', name: 'Universal Webhook & Cloud REST API', region: 'Custom POS & In-House IT', tag: 'Developer', logoText: 'Custom API' },
+  { id: 'tri_sync_multi', name: 'Triple Redundant Bridge (All 3 Channels)', region: 'Cloud + Wi-Fi LAN + Direct ESC/POS', tag: 'Zero Downtime', logoText: 'Triple Sync' }
+] as const;
 
 export interface ChefOwnerAiPersona {
   chef_name: string;

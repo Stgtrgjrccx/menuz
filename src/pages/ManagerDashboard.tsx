@@ -20,7 +20,9 @@ import {
   ExternalLink,
   ArrowLeft,
   ChefHat,
-  Printer
+  Printer,
+  Share2,
+  Globe
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { MenuItem, MenuCategory, PetpoojaConfig, RoyalPosConfig, RecahoConfig, RancelabConfig } from '../types';
@@ -31,6 +33,7 @@ import { RancelabIntegrationPanel } from '../components/RancelabIntegrationPanel
 import { SelfServeKotSetupWizard } from '../components/SelfServeKotSetupWizard';
 import { AiAssistantDrawer } from '../components/AiAssistantDrawer';
 import { ChefOwnerQuestionnaireModal } from '../components/ChefOwnerQuestionnaireModal';
+import { RestaurantLaunchKitModal } from '../components/RestaurantLaunchKitModal';
 import { printDirectWebUsb } from '../services/webUsbPrinterService';
 import { Order } from '../types';
 
@@ -65,6 +68,7 @@ export const ManagerDashboard: React.FC = () => {
   const [isPosModalOpen, setIsPosModalOpen] = useState(false);
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [isAiDrawerOpen, setIsAiDrawerOpen] = useState(false);
+  const [isLaunchKitOpen, setIsLaunchKitOpen] = useState(false);
   const [selectedPosTab, setSelectedPosTab] = useState<'petpooja' | 'royalpos' | 'recaho' | 'rancelab'>(
     (restaurant.pos_provider as any) || 'petpooja'
   );
@@ -335,6 +339,16 @@ export const ManagerDashboard: React.FC = () => {
         </div>
 
         <div className="flex items-center space-x-2">
+          <button
+            type="button"
+            onClick={() => setIsLaunchKitOpen(true)}
+            className="flex items-center space-x-1.5 text-xs text-white bg-charcoal-900 hover:bg-saffron-700 border border-charcoal-700 px-3.5 py-2.5 rounded-xl shadow-subtle transition-all font-bold cursor-pointer"
+            title="View & Share Venue Launch Kit, Table QR Codes, WhatsApp Brief & Custom Domain"
+          >
+            <Share2 className="w-3.5 h-3.5 text-saffron-400" />
+            <span>🚀 Share Launch Kit</span>
+          </button>
+
           <button
             type="button"
             onClick={() => setIsAiDrawerOpen(true)}
@@ -1124,6 +1138,13 @@ export const ManagerDashboard: React.FC = () => {
         onConfirmAdd={(_dish) => {
           setIsAiDrawerOpen(false);
         }}
+      />
+
+      {/* Instant Client Launch Kit & Handover Modal */}
+      <RestaurantLaunchKitModal
+        restaurant={restaurant}
+        isOpen={isLaunchKitOpen}
+        onClose={() => setIsLaunchKitOpen(false)}
       />
     </div>
   );
