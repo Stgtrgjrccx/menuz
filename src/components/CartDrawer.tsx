@@ -187,6 +187,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
               {/* Chef's Smart Upsells & Recommended Pairings */}
               {(() => {
+                if (restaurant.smart_pairings_config?.enabled === false) return null;
                 const cartIds = new Set(cart.map((c) => c.menu_item_id));
                 const allRestItems = useRestaurantStore.getState().menuItems.filter((m) => m.restaurant_id === restaurant.id && m.is_available);
                 const upsellCandidates = allRestItems
@@ -195,55 +196,68 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
                 if (upsellCandidates.length === 0) return null;
 
+                const badgeTitle = restaurant.smart_pairings_config?.badge_text || "🧑‍🍳 Chef's Recommended Pairings";
+                const pairingDiscount = restaurant.smart_pairings_config?.discount_percent || 0;
+
                 return (
                   <div className="pt-3 pb-2">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-xs font-bold text-charcoal-900 flex items-center space-x-1">
-                        <span>🧑‍🍳</span>
-                        <span>Chef's Recommended Pairings</span>
+                        <span>{badgeTitle}</span>
                       </span>
                       <span className="text-[10px] text-saffron-700 font-bold uppercase tracking-wider">
-                        Quick Add
+                        {pairingDiscount > 0 ? `${pairingDiscount}% Bundle Deal` : 'Quick Add'}
                       </span>
                     </div>
 
                     <div className="grid grid-cols-3 gap-2">
-                      {upsellCandidates.map((dish) => (
-                        <div
-                          key={dish.id}
-                          className="bg-ivory-50 border border-ivory-200 rounded-xl p-2 flex flex-col justify-between hover:border-saffron-300 transition-all text-left"
-                        >
-                          <img
-                            src={dish.image_url}
-                            alt={dish.name}
-                            className="w-full aspect-[4/3] rounded-lg object-cover mb-1.5"
-                          />
-                          <p className="font-bold text-[11px] text-charcoal-900 truncate leading-tight">
-                            {dish.name}
-                          </p>
-                          <div className="flex items-center justify-between mt-1">
-                            <span className="text-[10px] font-bold text-saffron-700">₹{dish.price}</span>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                useRestaurantStore.getState().addItemToCart({
-                                  menu_item_id: dish.id,
-                                  name: dish.name,
-                                  price: dish.price,
-                                  quantity: 1,
-                                  image_url: dish.image_url,
-                                  selected_options: [],
-                                  added_by_guest: 'Quick Pairing'
-                                });
-                              }}
-                              className="px-2 py-0.5 bg-saffron-600 hover:bg-saffron-700 text-white text-[10px] font-bold rounded-md shadow-xs transition-colors flex items-center space-x-0.5 cursor-pointer"
-                            >
-                              <Plus className="w-2.5 h-2.5" />
-                              <span>Add</span>
-                            </button>
+                      {upsellCandidates.map((dish) => {
+                        const finalPrice = pairingDiscount > 0
+                          ? Math.round(dish.price * (1 - pairingDiscount / 100))
+                          : dish.price;
+
+                        return (
+                          <div
+                            key={dish.id}
+                            className="bg-ivory-50 border border-ivory-200 rounded-xl p-2 flex flex-col justify-between hover:border-saffron-300 transition-all text-left"
+                          >
+                            <img
+                              src={dish.image_url}
+                              alt={dish.name}
+                              className="w-full aspect-[4/3] rounded-lg object-cover mb-1.5"
+                            />
+                            <p className="font-bold text-[11px] text-charcoal-900 truncate leading-tight">
+                              {dish.name}
+                            </p>
+                            <div className="flex items-center justify-between mt-1">
+                              <div>
+                                <span className="text-[10px] font-bold text-saffron-700">₹{finalPrice}</span>
+                                {pairingDiscount > 0 && (
+                                  <span className="text-[8px] line-through text-charcoal-400 ml-1">₹{dish.price}</span>
+                                )}
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  useRestaurantStore.getState().addItemToCart({
+                                    menu_item_id: dish.id,
+                                    name: dish.name,
+                                    price: finalPrice,
+                                    quantity: 1,
+                                    image_url: dish.image_url,
+                                    selected_options: [],
+                                    added_by_guest: 'Quick Pairing'
+                                  });
+                                }}
+                                className="px-2 py-0.5 bg-saffron-600 hover:bg-saffron-700 text-white text-[10px] font-bold rounded-md shadow-xs transition-colors flex items-center space-x-0.5 cursor-pointer"
+                              >
+                                <Plus className="w-2.5 h-2.5" />
+                                <span>Add</span>
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 );

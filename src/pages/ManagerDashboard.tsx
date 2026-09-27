@@ -22,7 +22,9 @@ import {
   ChefHat,
   Printer,
   Share2,
-  Globe
+  Globe,
+  Sliders,
+  Settings
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { MenuItem, MenuCategory, PetpoojaConfig, RoyalPosConfig, RecahoConfig, RancelabConfig } from '../types';
@@ -34,6 +36,7 @@ import { TableManagementModal } from '../components/TableManagementModal';
 import { AiAssistantDrawer } from '../components/AiAssistantDrawer';
 import { ChefOwnerQuestionnaireModal } from '../components/ChefOwnerQuestionnaireModal';
 import { RestaurantLaunchKitModal } from '../components/RestaurantLaunchKitModal';
+import { SmartOperationsSettingsModal } from '../components/SmartOperationsSettingsModal';
 import { printDirectWebUsb } from '../services/webUsbPrinterService';
 import { Order } from '../types';
 
@@ -69,6 +72,7 @@ export const ManagerDashboard: React.FC = () => {
   const [isAiDrawerOpen, setIsAiDrawerOpen] = useState(false);
   const [isLaunchKitOpen, setIsLaunchKitOpen] = useState(false);
   const [isTableModalOpen, setIsTableModalOpen] = useState(false);
+  const [smartSettingsTab, setSmartSettingsTab] = useState<'kot' | 'pilot' | 'happy_hour' | 'instagram' | 'pairings' | null>(null);
   const [selectedPosTab, setSelectedPosTab] = useState<'petpooja' | 'royalpos' | 'recaho' | 'rancelab'>(
     (restaurant.pos_provider as any) || 'petpooja'
   );
@@ -517,152 +521,316 @@ export const ManagerDashboard: React.FC = () => {
               Smart Operations, Direct KOT &amp; Growth Engine
             </h3>
             <p className="text-xs text-charcoal-600">
-              Configure optional direct kitchen routing, 7-day risk-free performance pilot, and time-based surge pricing.
+              Configure optional direct kitchen routing, 7-day risk-free performance pilot, dynamic surge pricing, and viral Instagram story cards.
             </p>
           </div>
+          <button
+            type="button"
+            onClick={() => setSmartSettingsTab('kot')}
+            className="px-4 py-2 bg-charcoal-900 hover:bg-black text-white rounded-xl text-xs font-bold flex items-center space-x-1.5 shadow-sm transition-all cursor-pointer"
+          >
+            <Sliders className="w-3.5 h-3.5 text-saffron-400" />
+            <span>⚙️ Configure All Smart Options</span>
+          </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3.5">
           {/* 1. Direct-to-Kitchen KOT Auto-Dispatch */}
-          <div className="bg-ivory-50 border border-ivory-300 rounded-2xl p-4 flex flex-col justify-between space-y-3">
+          <div className="bg-ivory-50 border border-ivory-300 rounded-2xl p-3.5 flex flex-col justify-between space-y-3">
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-xs font-bold text-charcoal-900 flex items-center space-x-1.5">
                   <span>🔥</span>
-                  <span>Direct Kitchen KOT</span>
+                  <span>Direct KOT</span>
                 </span>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
                   restaurant.direct_kitchen_kot_enabled
                     ? 'bg-green-100 text-green-800 border border-green-200'
                     : 'bg-charcoal-200 text-charcoal-700'
                 }`}>
-                  {restaurant.direct_kitchen_kot_enabled ? 'Auto-Dispatch ON' : 'Manual Approval'}
+                  {restaurant.direct_kitchen_kot_enabled ? 'Auto ON' : 'Manual'}
                 </span>
               </div>
-              <p className="text-[11px] text-charcoal-600 leading-snug">
-                Send guest table orders straight to the Kitchen KDS without waiting for manual manager acceptance.
+              <p className="text-[10px] text-charcoal-600 leading-snug line-clamp-2">
+                Fires orders directly to kitchen KDS without waiting for manual manager approval.
               </p>
+
+              <div className="mt-2.5 p-2 bg-white rounded-xl border border-ivory-200 text-[10px] space-y-1">
+                <div className="flex justify-between text-charcoal-700">
+                  <span className="font-semibold">Station:</span>
+                  <span className="truncate max-w-[90px] font-mono text-charcoal-900">
+                    {restaurant.direct_kitchen_kot_config?.station_name || 'Main Kitchen'}
+                  </span>
+                </div>
+                <div className="flex justify-between text-charcoal-700">
+                  <span className="font-semibold">Buffer:</span>
+                  <span className="font-mono text-charcoal-900">
+                    {restaurant.direct_kitchen_kot_config?.auto_dispatch_delay_seconds ? `${restaurant.direct_kitchen_kot_config.auto_dispatch_delay_seconds}s` : 'Instant 0s'}
+                  </span>
+                </div>
+              </div>
             </div>
 
-            <button
-              type="button"
-              onClick={() => {
-                const nextVal = !restaurant.direct_kitchen_kot_enabled;
-                updateRestaurant(restaurant.id, { direct_kitchen_kot_enabled: nextVal });
-              }}
-              className={`w-full py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 shadow-xs cursor-pointer ${
-                restaurant.direct_kitchen_kot_enabled
-                  ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
-                  : 'bg-charcoal-800 hover:bg-charcoal-900 text-white'
-              }`}
-            >
-              <span>{restaurant.direct_kitchen_kot_enabled ? '✓ Direct Auto-KOT Active' : 'Enable Direct Auto-KOT'}</span>
-            </button>
+            <div className="space-y-1.5">
+              <button
+                type="button"
+                onClick={() => {
+                  const nextVal = !restaurant.direct_kitchen_kot_enabled;
+                  updateRestaurant(restaurant.id, { direct_kitchen_kot_enabled: nextVal });
+                }}
+                className={`w-full py-1.5 px-2 rounded-xl text-[11px] font-bold transition-all flex items-center justify-center space-x-1 shadow-xs cursor-pointer ${
+                  restaurant.direct_kitchen_kot_enabled
+                    ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                    : 'bg-charcoal-800 hover:bg-charcoal-900 text-white'
+                }`}
+              >
+                <span>{restaurant.direct_kitchen_kot_enabled ? '✓ Auto-KOT ON' : 'Enable Auto-KOT'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setSmartSettingsTab('kot')}
+                className="w-full py-1.5 px-2 rounded-xl text-[10px] font-bold text-charcoal-700 bg-white hover:bg-ivory-100 border border-ivory-300 transition-all flex items-center justify-center space-x-1 cursor-pointer"
+              >
+                <Settings className="w-3 h-3 text-charcoal-500" />
+                <span>Edit Parameters</span>
+              </button>
+            </div>
           </div>
 
           {/* 2. 7-Day Performance Guarantee Pilot */}
-          <div className="bg-ivory-50 border border-ivory-300 rounded-2xl p-4 flex flex-col justify-between space-y-3">
+          <div className="bg-ivory-50 border border-ivory-300 rounded-2xl p-3.5 flex flex-col justify-between space-y-3">
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-xs font-bold text-charcoal-900 flex items-center space-x-1.5">
                   <span>🛡️</span>
-                  <span>7-Day Zero-Risk Pilot</span>
+                  <span>Zero-Risk Pilot</span>
                 </span>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
                   restaurant.performance_guarantee_pilot?.enabled
                     ? 'bg-amber-100 text-amber-900 border border-amber-300'
                     : 'bg-charcoal-200 text-charcoal-700'
                 }`}>
-                  {restaurant.performance_guarantee_pilot?.enabled ? 'Pilot Active' : 'Offered Optional'}
+                  {restaurant.performance_guarantee_pilot?.enabled ? `${restaurant.performance_guarantee_pilot.trial_days || 7}d Active` : 'Optional'}
                 </span>
               </div>
-              <p className="text-[11px] text-charcoal-600 leading-snug">
-                Zero software fee unless Menuz generates 40+ 5-star reviews and ₹25k+ volume in the first 7 days.
+              <p className="text-[10px] text-charcoal-600 leading-snug line-clamp-2">
+                Free trial software guarantee unless review and volume targets are achieved.
               </p>
 
-              {restaurant.performance_guarantee_pilot?.enabled && (
-                <div className="mt-2 bg-white p-2 rounded-xl border border-ivory-200 space-y-1 text-[10px]">
-                  <div className="flex justify-between font-bold text-charcoal-800">
-                    <span>Google Reviews</span>
-                    <span className="text-green-700">42 / 40 (105%) ✓</span>
-                  </div>
-                  <div className="w-full bg-ivory-200 h-1.5 rounded-full overflow-hidden">
-                    <div className="bg-green-500 h-full w-full" />
-                  </div>
+              <div className="mt-2.5 p-2 bg-white rounded-xl border border-ivory-200 text-[10px] space-y-1">
+                <div className="flex justify-between text-charcoal-700">
+                  <span className="font-semibold">Review Goal:</span>
+                  <span className="font-mono text-green-700 font-bold">
+                    {restaurant.performance_guarantee_pilot?.current_reviews || 42} / {restaurant.performance_guarantee_pilot?.target_reviews || 40} ✓
+                  </span>
                 </div>
-              )}
+                <div className="flex justify-between text-charcoal-700">
+                  <span className="font-semibold">GMV Goal:</span>
+                  <span className="font-mono text-charcoal-900">
+                    ₹{(restaurant.performance_guarantee_pilot?.target_revenue || 25000).toLocaleString('en-IN')}
+                  </span>
+                </div>
+              </div>
             </div>
 
-            <button
-              type="button"
-              onClick={() => {
-                const isCurrentlyEnabled = !!restaurant.performance_guarantee_pilot?.enabled;
-                updateRestaurant(restaurant.id, {
-                  performance_guarantee_pilot: {
-                    enabled: !isCurrentlyEnabled,
-                    target_reviews: 40,
-                    target_revenue: 25000,
-                    start_date: new Date().toISOString(),
-                    trial_days: 7
-                  }
-                });
-              }}
-              className={`w-full py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 shadow-xs cursor-pointer ${
-                restaurant.performance_guarantee_pilot?.enabled
-                  ? 'bg-amber-600 hover:bg-amber-700 text-white'
-                  : 'bg-charcoal-800 hover:bg-charcoal-900 text-white'
-              }`}
-            >
-              <span>
-                {restaurant.performance_guarantee_pilot?.enabled
-                  ? '✓ Guarantee Pilot Enabled'
-                  : 'Activate 7-Day Pilot'}
-              </span>
-            </button>
+            <div className="space-y-1.5">
+              <button
+                type="button"
+                onClick={() => {
+                  const isCurrentlyEnabled = !!restaurant.performance_guarantee_pilot?.enabled;
+                  updateRestaurant(restaurant.id, {
+                    performance_guarantee_pilot: {
+                      enabled: !isCurrentlyEnabled,
+                      target_reviews: 40,
+                      target_revenue: 25000,
+                      start_date: new Date().toISOString(),
+                      trial_days: 7,
+                      current_reviews: 42,
+                      current_revenue: 31450
+                    }
+                  });
+                }}
+                className={`w-full py-1.5 px-2 rounded-xl text-[11px] font-bold transition-all flex items-center justify-center space-x-1 shadow-xs cursor-pointer ${
+                  restaurant.performance_guarantee_pilot?.enabled
+                    ? 'bg-amber-600 hover:bg-amber-700 text-white'
+                    : 'bg-charcoal-800 hover:bg-charcoal-900 text-white'
+                }`}
+              >
+                <span>
+                  {restaurant.performance_guarantee_pilot?.enabled
+                    ? '✓ Pilot Enabled'
+                    : 'Activate Pilot'}
+                </span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setSmartSettingsTab('pilot')}
+                className="w-full py-1.5 px-2 rounded-xl text-[10px] font-bold text-charcoal-700 bg-white hover:bg-ivory-100 border border-ivory-300 transition-all flex items-center justify-center space-x-1 cursor-pointer"
+              >
+                <Settings className="w-3 h-3 text-charcoal-500" />
+                <span>Edit Targets</span>
+              </button>
+            </div>
           </div>
 
           {/* 3. Smart Happy Hour & Dynamic Pricing */}
-          <div className="bg-ivory-50 border border-ivory-300 rounded-2xl p-4 flex flex-col justify-between space-y-3">
+          <div className="bg-ivory-50 border border-ivory-300 rounded-2xl p-3.5 flex flex-col justify-between space-y-3">
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-xs font-bold text-charcoal-900 flex items-center space-x-1.5">
                   <span>⚡</span>
-                  <span>Happy Hour &amp; Surge Pricing</span>
+                  <span>Happy Hour &amp; Surge</span>
                 </span>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
                   restaurant.happy_hour_config?.enabled
                     ? 'bg-orange-100 text-orange-900 border border-orange-300'
                     : 'bg-charcoal-200 text-charcoal-700'
                 }`}>
-                  {restaurant.happy_hour_config?.enabled ? 'Active (4PM-7:30PM)' : 'Disabled'}
+                  {restaurant.happy_hour_config?.enabled ? `${restaurant.happy_hour_config.discount_percent}% Off` : 'Disabled'}
                 </span>
               </div>
-              <p className="text-[11px] text-charcoal-600 leading-snug">
-                Automatically display special discounts during off-peak hours to boost afternoon &amp; weekday table occupancy.
+              <p className="text-[10px] text-charcoal-600 leading-snug line-clamp-2">
+                Off-peak discounts and optional peak Saturday evening surge markups.
               </p>
+
+              <div className="mt-2.5 p-2 bg-white rounded-xl border border-ivory-200 text-[10px] space-y-1">
+                <div className="flex justify-between text-charcoal-700">
+                  <span className="font-semibold">Time:</span>
+                  <span className="font-mono text-charcoal-900">
+                    {restaurant.happy_hour_config?.start_time || '16:00'} - {restaurant.happy_hour_config?.end_time || '19:30'}
+                  </span>
+                </div>
+                <div className="flex justify-between text-charcoal-700">
+                  <span className="font-semibold">Surge Mode:</span>
+                  <span className="font-mono text-charcoal-900">
+                    {restaurant.happy_hour_config?.surge_pricing_enabled ? `+${restaurant.happy_hour_config.surge_markup_percent || 10}% Surge` : 'Off'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <button
+                type="button"
+                onClick={() => {
+                  const isCurrentlyEnabled = !!restaurant.happy_hour_config?.enabled;
+                  updateRestaurant(restaurant.id, {
+                    happy_hour_config: {
+                      enabled: !isCurrentlyEnabled,
+                      start_time: '16:00',
+                      end_time: '19:30',
+                      discount_percent: 20,
+                      banner_label: '⚡ Twilight Happy Hour: 20% Off Beverages & Small Bites!'
+                    }
+                  });
+                }}
+                className={`w-full py-1.5 px-2 rounded-xl text-[11px] font-bold transition-all flex items-center justify-center space-x-1 shadow-xs cursor-pointer ${
+                  restaurant.happy_hour_config?.enabled
+                    ? 'bg-orange-600 hover:bg-orange-700 text-white'
+                    : 'bg-charcoal-800 hover:bg-charcoal-900 text-white'
+                }`}
+              >
+                <span>{restaurant.happy_hour_config?.enabled ? '✓ Running' : 'Turn On'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setSmartSettingsTab('happy_hour')}
+                className="w-full py-1.5 px-2 rounded-xl text-[10px] font-bold text-charcoal-700 bg-white hover:bg-ivory-100 border border-ivory-300 transition-all flex items-center justify-center space-x-1 cursor-pointer"
+              >
+                <Settings className="w-3 h-3 text-charcoal-500" />
+                <span>Edit Schedule</span>
+              </button>
+            </div>
+          </div>
+
+          {/* 4. Instagram Story Brand Studio */}
+          <div className="bg-ivory-50 border border-ivory-300 rounded-2xl p-3.5 flex flex-col justify-between space-y-3">
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-xs font-bold text-charcoal-900 flex items-center space-x-1.5">
+                  <span>📸</span>
+                  <span>Instagram Story</span>
+                </span>
+                <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-pink-100 text-pink-800 border border-pink-200">
+                  Viral Card
+                </span>
+              </div>
+              <p className="text-[10px] text-charcoal-600 leading-snug line-clamp-2">
+                9:16 vertical story generator with dish photos, table stamp, and 1-tap caption copy.
+              </p>
+
+              <div className="mt-2.5 p-2 bg-white rounded-xl border border-ivory-200 text-[10px] space-y-1">
+                <div className="flex justify-between text-charcoal-700">
+                  <span className="font-semibold">Handle:</span>
+                  <span className="font-mono text-charcoal-900 truncate max-w-[85px]">
+                    {restaurant.instagram_config?.handle || restaurant.instagram_handle || `@${restaurant.slug.replace(/-/g, '_')}`}
+                  </span>
+                </div>
+                <div className="flex justify-between text-charcoal-700">
+                  <span className="font-semibold">Badge:</span>
+                  <span className="truncate max-w-[85px] text-charcoal-900">
+                    {restaurant.instagram_config?.reward_badge_text || '5-Star Night'}
+                  </span>
+                </div>
+              </div>
             </div>
 
             <button
               type="button"
-              onClick={() => {
-                const isCurrentlyEnabled = !!restaurant.happy_hour_config?.enabled;
-                updateRestaurant(restaurant.id, {
-                  happy_hour_config: {
-                    enabled: !isCurrentlyEnabled,
-                    start_time: '16:00',
-                    end_time: '19:30',
-                    discount_percent: 20,
-                    banner_label: '⚡ Twilight Happy Hour: 20% Off Beverages & Small Bites!'
-                  }
-                });
-              }}
-              className={`w-full py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 shadow-xs cursor-pointer ${
-                restaurant.happy_hour_config?.enabled
-                  ? 'bg-orange-600 hover:bg-orange-700 text-white'
-                  : 'bg-charcoal-800 hover:bg-charcoal-900 text-white'
-              }`}
+              onClick={() => setSmartSettingsTab('instagram')}
+              className="w-full py-2 px-2 rounded-xl text-[11px] font-bold text-charcoal-800 bg-white hover:bg-ivory-100 border border-ivory-300 transition-all flex items-center justify-center space-x-1 cursor-pointer"
             >
-              <span>{restaurant.happy_hour_config?.enabled ? '✓ Happy Hour Running' : 'Turn On Happy Hour'}</span>
+              <Settings className="w-3 h-3 text-pink-600" />
+              <span>Customize Story Card</span>
+            </button>
+          </div>
+
+          {/* 5. Smart Upsell Pairings */}
+          <div className="bg-ivory-50 border border-ivory-300 rounded-2xl p-3.5 flex flex-col justify-between space-y-3">
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-xs font-bold text-charcoal-900 flex items-center space-x-1.5">
+                  <span>🧑‍🍳</span>
+                  <span>Chef's Pairings</span>
+                </span>
+                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
+                  restaurant.smart_pairings_config?.enabled !== false
+                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                    : 'bg-charcoal-200 text-charcoal-700'
+                }`}>
+                  {restaurant.smart_pairings_config?.enabled !== false ? 'Active' : 'Disabled'}
+                </span>
+              </div>
+              <p className="text-[10px] text-charcoal-600 leading-snug line-clamp-2">
+                Recommends matching wine, desserts, and sides inside diner's cart before checkout.
+              </p>
+
+              <div className="mt-2.5 p-2 bg-white rounded-xl border border-ivory-200 text-[10px] space-y-1">
+                <div className="flex justify-between text-charcoal-700">
+                  <span className="font-semibold">Section:</span>
+                  <span className="truncate max-w-[90px] text-charcoal-900">
+                    {restaurant.smart_pairings_config?.badge_text || "Chef's Pairings"}
+                  </span>
+                </div>
+                <div className="flex justify-between text-charcoal-700">
+                  <span className="font-semibold">Bundle Deal:</span>
+                  <span className="font-mono text-charcoal-900">
+                    {restaurant.smart_pairings_config?.discount_percent ? `${restaurant.smart_pairings_config.discount_percent}% Off` : 'Regular'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setSmartSettingsTab('pairings')}
+              className="w-full py-2 px-2 rounded-xl text-[11px] font-bold text-charcoal-800 bg-white hover:bg-ivory-100 border border-ivory-300 transition-all flex items-center justify-center space-x-1 cursor-pointer"
+            >
+              <Settings className="w-3 h-3 text-emerald-600" />
+              <span>Customize Upsells</span>
             </button>
           </div>
         </div>
@@ -1313,6 +1481,17 @@ export const ManagerDashboard: React.FC = () => {
         restaurant={restaurant}
         isOpen={isTableModalOpen}
         onClose={() => setIsTableModalOpen(false)}
+      />
+
+      {/* Smart Operations & Growth Engine Settings Modal */}
+      <SmartOperationsSettingsModal
+        restaurant={restaurant}
+        isOpen={!!smartSettingsTab}
+        onClose={() => setSmartSettingsTab(null)}
+        initialTab={smartSettingsTab || 'kot'}
+        onSave={(updates) => {
+          updateRestaurant(restaurant.id, updates);
+        }}
       />
     </div>
   );

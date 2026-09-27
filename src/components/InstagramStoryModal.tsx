@@ -25,11 +25,14 @@ export const InstagramStoryModal: React.FC<InstagramStoryModalProps> = ({
   if (!isOpen) return null;
 
   const displayItems = items.slice(0, 3);
-  const handleTag = restaurant.instagram_handle || `@${restaurant.slug.replace(/-/g, '_')}`;
+  const handleTag = restaurant.instagram_config?.handle || restaurant.instagram_handle || `@${restaurant.slug.replace(/-/g, '_')}`;
+  const storyQuote = restaurant.instagram_config?.story_quote || "Incredible culinary experience";
+  const hashtagText = restaurant.instagram_config?.hashtag || `#PuneFoodie #${restaurant.slug.replace(/-/g, '')} #MenuzDining`;
+  const badgeText = restaurant.instagram_config?.reward_badge_text || "5-Star Culinary Night";
 
-  const captionText = `Incredible culinary experience at ${handleTag} tonight! ✨🍽️
+  const captionText = `${storyQuote} at ${handleTag} tonight! ✨🍽️
 Feast included: ${displayItems.map((i) => i.name).join(', ')}.
-Ordered seamlessly via Menuz Interactive Dining Engine 🚀 #PuneFoodie #${restaurant.slug.replace(/-/g, '')} #MenuzDining`;
+Ordered seamlessly via Menuz Interactive Dining Engine 🚀 ${hashtagText}`;
 
   const handleCopyCaption = () => {
     navigator.clipboard.writeText(captionText);
@@ -108,7 +111,7 @@ Ordered seamlessly via Menuz Interactive Dining Engine 🚀 #PuneFoodie #${resta
                     <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />
                   ))}
                 </div>
-                <span className="text-[10px] font-bold text-white ml-1">5-Star Culinary Night</span>
+                <span className="text-[10px] font-bold text-white ml-1">{badgeText}</span>
               </div>
             </div>
 

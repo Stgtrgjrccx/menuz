@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { X, Send, Sparkles, Plus, AlertTriangle, Flame, ShieldAlert, Check } from 'lucide-react';
 import { MenuItem } from '../types';
 import { useRestaurantStore } from '../store/restaurantStore';
@@ -125,6 +125,12 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
   const [loading, setLoading] = useState(false);
 
   const availableItems = menuItems.filter((i) => i.is_available);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll whenever messages or loading state change so user immediately sees replies
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, loading]);
 
   // Context-aware quick actions
   const quickActions = useMemo(() => getQuickActionsForDish(focusDish), [focusDish]);
@@ -621,6 +627,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
               <span>Analyzing menu & kitchen data...</span>
             </div>
           )}
+          <div ref={messagesEndRef} className="h-2 flex-shrink-0" />
         </div>
 
         {/* Context-aware Quick action chips */}

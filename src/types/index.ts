@@ -60,21 +60,43 @@ export interface Restaurant {
   ai_persona?: ChefOwnerAiPersona;
   white_label?: WhiteLabelConfig;
   direct_kitchen_kot_enabled?: boolean;
+  direct_kitchen_kot_config?: {
+    enabled: boolean;
+    station_name: string;
+    auto_dispatch_delay_seconds: number;
+    audio_chime_enabled: boolean;
+    printer_target_ip?: string;
+  };
   instagram_handle?: string;
+  instagram_config?: {
+    handle: string;
+    hashtag: string;
+    story_quote: string;
+    reward_badge_text: string;
+  };
   performance_guarantee_pilot?: {
     enabled: boolean;
     target_reviews: number;
     target_revenue: number;
     start_date: string;
     trial_days: number;
+    current_reviews?: number;
+    current_revenue?: number;
   };
   happy_hour_config?: {
     enabled: boolean;
     start_time: string; // e.g. "16:00"
     end_time: string;   // e.g. "19:30"
     discount_percent: number; // e.g. 20
+    surge_pricing_enabled?: boolean;
+    surge_markup_percent?: number;
     banner_label: string; // e.g. "⚡ Twilight Happy Hour: 20% Off Beverages & Small Bites!"
     active_days?: string[]; // e.g. ["Mon", "Tue", "Wed", "Thu", "Fri"]
+  };
+  smart_pairings_config?: {
+    enabled: boolean;
+    badge_text: string;
+    discount_percent?: number;
   };
 }
 
