@@ -22,7 +22,10 @@ import {
   TrendingUp,
   SlidersHorizontal,
   ExternalLink,
-  Plus
+  Plus,
+  Printer,
+  Wifi,
+  Zap
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { isWorkingWithMenuz } from '../types';
@@ -620,6 +623,94 @@ export const CustomerHomePage: React.FC = () => {
             ))}
           </div>
         )}
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/* 5.5 UNIVERSAL POS & KOT INTEGRATION ECOSYSTEM               */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <section className="bg-charcoal-950 text-white py-14 px-4 sm:px-6 lg:px-8 border-t border-charcoal-800 relative overflow-hidden">
+        <div className="max-w-6xl mx-auto space-y-8">
+          <div className="text-center max-w-3xl mx-auto space-y-2">
+            <span className="text-[10px] uppercase font-bold tracking-widest text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full inline-block">
+              Universal Restaurant POS &amp; KOT Ecosystem
+            </span>
+            <h2 className="font-serif font-bold text-2xl sm:text-3xl text-white">
+              Instant Kitchen KOT Sync With Your Existing Software
+            </h2>
+            <p className="text-xs sm:text-sm text-charcoal-300 leading-relaxed">
+              Menuz connects seamlessly to all major Indian restaurant billing systems. Whether you operate on Petpooja, RoyalPOS, Recaho, RanceLab FusionResto, or direct thermal hardware, orders placed on Menuz fire kitchen tickets in 1 second.
+            </p>
+          </div>
+
+          {/* 5 Supported POS Adapters */}
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            <div className="bg-charcoal-900 border border-charcoal-800 p-4 rounded-2xl space-y-2 hover:border-orange-500/50 transition-colors">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-bold text-white">Petpooja</span>
+                <span className="text-[8px] uppercase font-bold px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-300">50k+ Outlets</span>
+              </div>
+              <p className="text-[11px] text-charcoal-400">National &amp; Pune #1. Two-way REST API order push &amp; 86 item inventory sync.</p>
+              <div className="text-[9px] font-mono text-orange-400/80">⚡ Cloud REST API</div>
+            </div>
+
+            <div className="bg-charcoal-900 border border-charcoal-800 p-4 rounded-2xl space-y-2 hover:border-purple-500/50 transition-colors">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-bold text-white">RoyalPOS</span>
+                <span className="text-[8px] uppercase font-bold px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300">Pune Local</span>
+              </div>
+              <p className="text-[11px] text-charcoal-400">FC Road, Hinjewadi &amp; QSR favorite. High-speed local LAN Wi-Fi KOT bridge.</p>
+              <div className="text-[9px] font-mono text-purple-400/80">📶 LAN HTTP Bridge</div>
+            </div>
+
+            <div className="bg-charcoal-900 border border-charcoal-800 p-4 rounded-2xl space-y-2 hover:border-blue-500/50 transition-colors">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-bold text-white">Recaho</span>
+                <span className="text-[8px] uppercase font-bold px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300">PCMC Hub</span>
+              </div>
+              <p className="text-[11px] text-charcoal-400">Budget, family dining &amp; highway eateries across PCMC, Chakan &amp; Hadapsar.</p>
+              <div className="text-[9px] font-mono text-blue-400/80">☁️ Cloud GST API</div>
+            </div>
+
+            <div className="bg-charcoal-900 border border-charcoal-800 p-4 rounded-2xl space-y-2 hover:border-emerald-500/50 transition-colors">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-bold text-white">RanceLab</span>
+                <span className="text-[8px] uppercase font-bold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">FusionResto</span>
+              </div>
+              <p className="text-[11px] text-charcoal-400">Enterprise multi-outlet chains, bakeries &amp; fine dining format KOT management.</p>
+              <div className="text-[9px] font-mono text-emerald-400/80">🏢 Enterprise ERP</div>
+            </div>
+
+            <div className="bg-charcoal-900 border border-charcoal-800 p-4 rounded-2xl space-y-2 hover:border-amber-500/50 transition-colors col-span-2 md:col-span-1">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-bold text-white">Direct ESC/POS</span>
+                <span className="text-[8px] uppercase font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">Universal</span>
+              </div>
+              <p className="text-[11px] text-charcoal-400">Direct Wi-Fi / LAN thermal printing (Epson, TVS, Rugtek) — zero POS API needed.</p>
+              <div className="text-[9px] font-mono text-amber-400/80">🖨️ TCP Port 9100</div>
+            </div>
+          </div>
+
+          {/* 3-Step Flow Diagram */}
+          <div className="bg-charcoal-900/60 border border-charcoal-800/80 p-5 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                <Printer className="w-5 h-5 text-amber-400" />
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-white">How The KOT Printing Pipeline Works</h4>
+                <p className="text-[11px] text-charcoal-400">Diner submits order on phone → Menuz formats ESC/POS ticket in &lt;100ms → Kitchen printer beeps &amp; prints.</p>
+              </div>
+            </div>
+
+            <Link
+              to="/pitch"
+              className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-charcoal-950 font-bold text-xs rounded-xl transition-all shrink-0 flex items-center gap-1.5"
+            >
+              <span>See Thermal Simulator In Pitch Deck</span>
+              <span>→</span>
+            </Link>
+          </div>
+        </div>
       </section>
 
       {/* ═══════════════════════════════════════════════════════════ */}

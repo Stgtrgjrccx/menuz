@@ -60,8 +60,8 @@ export const PitchDeckPage: React.FC = () => {
   // Simulator states for Chapter 2: Smart Table Menu
   const [waiterCalled, setWaiterCalled] = useState(false);
 
-  // Simulator states for Chapter 3: Universal Kitchen KOT (Petpooja, RoyalPOS, Recaho, RanceLab)
-  const [selectedDeckPos, setSelectedDeckPos] = useState<'Petpooja' | 'RoyalPOS' | 'Recaho' | 'RanceLab'>('Petpooja');
+  // Simulator states for Chapter 3: Universal Kitchen KOT (Petpooja, RoyalPOS, Recaho, RanceLab, Direct ESC/POS)
+  const [selectedDeckPos, setSelectedDeckPos] = useState<'Petpooja' | 'RoyalPOS' | 'Recaho' | 'RanceLab' | 'Direct ESC/POS'>('Petpooja');
   const [kotPrinting, setKotPrinting] = useState(false);
   const [kotPrinted, setKotPrinted] = useState(true);
 
@@ -188,7 +188,7 @@ export const PitchDeckPage: React.FC = () => {
   const chapters = [
     { num: '01', short: 'The Dilemma', title: 'The Silent Diner Dilemma' },
     { num: '02', short: 'QR Menu', title: 'Smart Contactless Table Menu' },
-    { num: '03', short: 'POS Bridge', title: 'Petpooja, RoyalPOS & RanceLab KOT' },
+    { num: '03', short: 'All KOT & POS', title: 'Universal POS & Kitchen KOT Integration' },
     { num: '04', short: 'Review Shield', title: 'AI Review & 4★ Floor Shield' },
     { num: '05', short: 'Zero Commission', title: 'Anti-Cheat Security & 0% Cut' }
   ];
@@ -596,7 +596,7 @@ export const PitchDeckPage: React.FC = () => {
         </section>
 
         {/* ──────────────────────────────────────────────────────────────── */}
-        {/* CHAPTER 03: PETPOOJA POS & DIRECT KITCHEN KOT                    */}
+        {/* CHAPTER 03: UNIVERSAL POS & DIRECT KITCHEN KOT                   */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section
           ref={sectionRefs[2]}
@@ -608,16 +608,45 @@ export const PitchDeckPage: React.FC = () => {
               <div className="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full text-amber-400 text-xs font-bold tracking-wide">
                 <span>CHAPTER 03</span>
                 <span>•</span>
-                <span>KITCHEN AUTOMATION</span>
+                <span>UNIVERSAL KITCHEN KOT</span>
               </div>
 
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-                Direct to Your POS. <span className="text-amber-400">Zero Waiter Re-Typing.</span>
+                Direct to Any POS &amp; Kitchen Printer. <span className="text-amber-400">Zero Waiter Re-Typing.</span>
               </h2>
 
               <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-                Menuz doesn't replace your billing software — it supercharges it. Seamlessly integrated with <strong>Petpooja, RoyalPOS, Recaho, and RanceLab FusionResto</strong>. Orders placed on Menuz sync with your existing terminal and print to the kitchen thermal printer in 1 second.
+                Menuz doesn't replace your billing software — it seamlessly links with whatever you already run. Whether your restaurant uses <strong>Petpooja, RoyalPOS, Recaho, RanceLab FusionResto, or a standalone Wi-Fi thermal printer</strong>, orders placed on Menuz instantly fire physical 80mm KOT tickets in your kitchen in 1 second.
               </p>
+
+              {/* 3-Step Real-time KOT Architecture Card */}
+              <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] uppercase tracking-wider font-bold text-amber-400">
+                    How The Menuz KOT System Works
+                  </span>
+                  <span className="text-[10px] text-emerald-400 font-mono font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                    ⚡ 1-Second Latency
+                  </span>
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800/80 space-y-1">
+                    <span className="text-[9px] font-black text-amber-400 bg-amber-500/20 px-1.5 py-0.5 rounded-md">STEP 1</span>
+                    <div className="text-xs font-bold text-white mt-1">Diner Scans &amp; Orders</div>
+                    <p className="text-[10px] text-slate-400">Table QR opens menu on their phone. Customized order sent in 1 tap.</p>
+                  </div>
+                  <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800/80 space-y-1">
+                    <span className="text-[9px] font-black text-purple-400 bg-purple-500/20 px-1.5 py-0.5 rounded-md">STEP 2</span>
+                    <div className="text-xs font-bold text-white mt-1">Universal POS Bridge</div>
+                    <p className="text-[10px] text-slate-400">Routes to Petpooja, RoyalPOS, Recaho, RanceLab, or LAN printer.</p>
+                  </div>
+                  <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800/80 space-y-1">
+                    <span className="text-[9px] font-black text-emerald-400 bg-emerald-500/20 px-1.5 py-0.5 rounded-md">STEP 3</span>
+                    <div className="text-xs font-bold text-white mt-1">Kitchen Beeps &amp; Prints</div>
+                    <p className="text-[10px] text-slate-400">80mm thermal paper KOT fires in 1 second. Zero staff handwriting mistakes.</p>
+                  </div>
+                </div>
+              </div>
 
               {/* 3 Core Points */}
               <div className="space-y-3 pt-1">
@@ -636,8 +665,8 @@ export const PitchDeckPage: React.FC = () => {
                     <ShieldCheck className="w-4 h-4 text-emerald-400" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white">Pune's Most Widely Used Systems</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Pre-built drivers for Petpooja (50k+ outlets), RoyalPOS (FC Road/Pune local), Recaho (PCMC), and RanceLab (Chains).</p>
+                    <h3 className="text-sm font-bold text-white">Every Major POS in India &amp; Pune</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">Built-in adapters for Petpooja (50k+ outlets), RoyalPOS (FC Road/Pune local), Recaho (PCMC/Chakan), and RanceLab (Chains), plus direct network thermal printer printing.</p>
                   </div>
                 </div>
 
@@ -646,8 +675,8 @@ export const PitchDeckPage: React.FC = () => {
                     <Layers className="w-4 h-4 text-purple-400" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white">2-Way Menu Synchronization</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Mark a dish out of stock (86) in your POS, and it instantly disappears from all diner table menus.</p>
+                    <h3 className="text-sm font-bold text-white">2-Way Live Menu &amp; 86 Item Sync</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">Mark a dish sold out in your POS, and it instantly hides from diner mobile menus.</p>
                   </div>
                 </div>
               </div>
@@ -688,13 +717,13 @@ export const PitchDeckPage: React.FC = () => {
                 </div>
 
                 {/* POS Selector Pills */}
-                <div className="grid grid-cols-4 gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-center">
-                  {(['Petpooja', 'RoyalPOS', 'Recaho', 'RanceLab'] as const).map((pos) => (
+                <div className="grid grid-cols-3 sm:grid-cols-5 gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-center">
+                  {(['Petpooja', 'RoyalPOS', 'Recaho', 'RanceLab', 'Direct ESC/POS'] as const).map((pos) => (
                     <button
                       key={pos}
                       type="button"
                       onClick={() => setSelectedDeckPos(pos)}
-                      className={`py-1.5 px-2 rounded-lg text-[10px] font-bold transition-all ${
+                      className={`py-1.5 px-1.5 rounded-lg text-[10px] font-bold transition-all truncate ${
                         selectedDeckPos === pos
                           ? 'bg-amber-500 text-slate-950 shadow-xs'
                           : 'text-slate-400 hover:text-white hover:bg-slate-850'
@@ -703,6 +732,15 @@ export const PitchDeckPage: React.FC = () => {
                       {pos}
                     </button>
                   ))}
+                </div>
+
+                {/* Connection Protocol Pill */}
+                <div className="text-[10px] text-center font-mono text-slate-400 bg-slate-900/80 px-2.5 py-1.5 rounded-lg border border-slate-800">
+                  {selectedDeckPos === 'Petpooja' && '⚡ Cloud REST API (restID + app_key) • 50k+ Outlets in India'}
+                  {selectedDeckPos === 'RoyalPOS' && '📶 Local LAN Wi-Fi API (Port 8080) • FC Road & Pune QSRs'}
+                  {selectedDeckPos === 'Recaho' && '☁️ Cloud REST API (X-Api-Key) • PCMC & Suburban Pune Hub'}
+                  {selectedDeckPos === 'RanceLab' && '🏢 FusionResto Enterprise API • Multi-Outlet Chains & Fine Dining'}
+                  {selectedDeckPos === 'Direct ESC/POS' && '🖨️ Wi-Fi / Ethernet TCP Direct (Port 9100) • Works Without POS API'}
                 </div>
 
                 {/* 80mm ESC/POS Thermal Receipt Simulation */}
@@ -735,7 +773,9 @@ export const PitchDeckPage: React.FC = () => {
                     <div className="flex justify-between">
                       <span>SOURCE: Menuz QR In-Table</span>
                       <span className="text-emerald-700 font-bold">
-                        {selectedDeckPos.toUpperCase()} STATUS: OK (200)
+                        {selectedDeckPos === 'Direct ESC/POS'
+                          ? 'ESC/POS: OK (RAW PRINT)'
+                          : `${selectedDeckPos.toUpperCase()} STATUS: OK (200)`}
                       </span>
                     </div>
                     <div className="text-center text-slate-500 pt-1">
