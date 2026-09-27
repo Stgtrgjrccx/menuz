@@ -24,11 +24,17 @@ export interface Restaurant {
   ordering_enabled?: boolean;
   google_place_url?: string;
   authentic_photography_statement?: string;
-  pos_provider?: 'petpooja' | 'royalpos' | 'recaho' | 'rancelab' | 'toast' | 'square' | 'clover' | 'micros' | 'universal_api';
+  pos_provider?: 'petpooja' | 'royalpos' | 'recaho' | 'rancelab' | 'toast' | 'square' | 'clover' | 'micros' | 'universal_api' | 'tri_sync_multi';
   petpooja_config?: PetpoojaConfig;
   royalpos_config?: RoyalPosConfig;
   recaho_config?: RecahoConfig;
   rancelab_config?: RancelabConfig;
+  direct_printer_config?: {
+    enabled: boolean;
+    ip: string;
+    port: number;
+    model?: string;
+  };
   is_menuz_partner?: boolean;
   aliases?: string[];
 }

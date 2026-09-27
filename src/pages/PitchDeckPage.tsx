@@ -443,16 +443,16 @@ export const PitchDeckPage: React.FC = () => {
               <div className="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full text-amber-400 text-xs font-bold tracking-wide">
                 <span>CHAPTER 02</span>
                 <span>•</span>
-                <span>CHEF &amp; OWNER TRAINED AI CHATBOT</span>
+                <span>THE MAIN HOOK: CHEF &amp; OWNER TRAINED AI CHATBOT</span>
               </div>
 
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-                Trained by Your <span className="text-amber-400">Head Chef &amp; Owner.</span>
-                <span className="block text-2xl sm:text-3xl font-bold text-slate-300 mt-1">Your Star Waiter at Every Table.</span>
+                The App's Main Hook: <span className="text-amber-400">Trained by Head Chef &amp; Owner.</span>
+                <span className="block text-2xl sm:text-3xl font-bold text-slate-300 mt-1">A Personalised Dining Concierge at Every Table.</span>
               </h2>
 
               <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-                Generic AI chatbots hallucinate ingredients. Menuz is different: <strong>it is trained directly by your Head Chef and Restaurant Owner</strong>. It knows your kitchen's secret recipe notes, calibrated spice levels (1-5), allergen cautions, and your owner's high-margin pairing rules.
+                Generic AI chatbots hallucinate ingredients. Menuz delivers the core hook of modern dining: <strong>a personalized concierge trained directly by your Head Chef and Restaurant Owner</strong>. It knows your kitchen's secret recipe notes, calibrated spice levels (1-5), allergen cautions, and your owner's high-margin pairing rules.
               </p>
 
               {/* 3 Pillars of Chef & Owner Training */}
@@ -671,15 +671,15 @@ export const PitchDeckPage: React.FC = () => {
               <div className="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full text-amber-400 text-xs font-bold tracking-wide">
                 <span>CHAPTER 03</span>
                 <span>•</span>
-                <span>UNIVERSAL KITCHEN KOT</span>
+                <span>TRIPLE-REDUNDANCY KITCHEN KOT ENGINE</span>
               </div>
 
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-                Direct to Any POS &amp; Kitchen Printer. <span className="text-amber-400">Zero Waiter Re-Typing.</span>
+                Take All 3 Connections Available: <span className="text-amber-400">Setup Can Be Done Any How.</span>
               </h2>
 
               <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-                Menuz doesn't replace your billing software — it seamlessly links with whatever you already run. Whether your restaurant uses <strong>Petpooja, RoyalPOS, Recaho, RanceLab FusionResto, or a standalone Wi-Fi thermal printer</strong>, orders placed on Menuz instantly fire physical 80mm KOT tickets in your kitchen in 1 second.
+                Menuz doesn't restrict you to one single channel. <strong>Take all 3 connections simultaneously</strong> — Cloud POS API (Petpooja, Recaho, RanceLab) + Local Wi-Fi LAN Bridge (RoyalPOS / Android / Windows) + Direct Hardware ESC/POS Thermal Printer (Port 9100). Setup can be done any how in under 2 minutes without developer help, providing 100% zero-downtime kitchen order tickets even if WAN internet drops.
               </p>
 
               {/* Self-Service Quick Setup Banner */}
@@ -687,13 +687,13 @@ export const PitchDeckPage: React.FC = () => {
                 <div>
                   <div className="flex items-center space-x-1.5 mb-0.5">
                     <span className="text-xs">⚡</span>
-                    <span className="text-xs font-bold text-white">2-Minute Self-Service KOT Setup</span>
+                    <span className="text-xs font-bold text-white">Triple-Sync 2-Minute KOT Setup</span>
                     <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300 font-mono font-bold">
-                      Zero-Dev / No Help Needed
+                      Zero-Dev / All 3 Connections
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-300">
-                    Connect Petpooja, RoyalPOS, Recaho, RanceLab, or direct ESC/POS hardware printer in 120 seconds.
+                    Connect Cloud POS, Local Wi-Fi Tablet &amp; Direct Thermal Printer together so no kitchen order is ever dropped.
                   </p>
                 </div>
                 <button

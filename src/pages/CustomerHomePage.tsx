@@ -488,6 +488,97 @@ export const CustomerHomePage: React.FC = () => {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════ */}
+      {/* 4.5 MAIN HOOK: CHEF & OWNER TRAINED AI CONCIERGE           */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <section className="py-12 bg-gradient-to-b from-charcoal-950 via-[#0d121c] to-charcoal-950 text-white border-b border-charcoal-800">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
+            <div className="lg:w-7/12 space-y-4">
+              <div className="inline-flex items-center space-x-2 bg-amber-500/20 border border-amber-500/30 px-3 py-1 rounded-full text-amber-300 text-xs font-bold tracking-wide">
+                <span>🧑‍🍳 THE APP'S MAIN HOOK</span>
+                <span>•</span>
+                <span>CHEF &amp; OWNER TRAINED</span>
+              </div>
+              <h2 className="font-serif font-bold text-3xl sm:text-4xl text-white tracking-tight leading-tight">
+                Not Generic AI. Trained by the <span className="text-amber-400">Head Chef &amp; Owner</span>.
+              </h2>
+              <p className="text-xs sm:text-sm text-charcoal-300 leading-relaxed">
+                Most digital menus are static PDFs. Menuz equips every table with a personalized dining concierge trained on secret kitchen recipes, real-time calibrated spice levels (1-5), allergen safety, and the owner's signature beverage pairings. Zero hallucinations, 100% kitchen-accurate.
+              </p>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                <div className="bg-charcoal-900/80 border border-charcoal-800 p-3.5 rounded-2xl flex items-start space-x-3">
+                  <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 text-sm">
+                    🧑‍🍳
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-white">Chef Sanjeev's Knowledge</h4>
+                    <p className="text-[11px] text-charcoal-400 mt-0.5">True spice heat, 18-hr slow cook methods, and exact cross-contamination protocols.</p>
+                  </div>
+                </div>
+
+                <div className="bg-charcoal-900/80 border border-charcoal-800 p-3.5 rounded-2xl flex items-start space-x-3">
+                  <div className="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center shrink-0 text-sm">
+                    🍷
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-white">Owner Rohit's Pairings</h4>
+                    <p className="text-[11px] text-charcoal-400 mt-0.5">Handpicked wines, kokum coolers, garlic tandoor breads, and feast portions for groups.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Link
+                  to="/r/saffron-house/menu?t=table-token-01-saffron"
+                  className="inline-flex items-center space-x-2 px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-saffron-600 hover:brightness-110 text-charcoal-950 font-bold text-xs shadow-float transition-all"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span>Try Chef's AI Assistant at Table 1</span>
+                  <span>→</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Visual Chat Preview Card */}
+            <div className="lg:w-5/12 w-full">
+              <div className="bg-[#121824] border border-amber-500/30 rounded-3xl p-5 shadow-2xl space-y-3 relative overflow-hidden">
+                <div className="flex items-center justify-between border-b border-charcoal-800 pb-3">
+                  <div className="flex items-center space-x-2.5">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-saffron-600 flex items-center justify-center text-white text-xs">
+                      🧑‍🍳
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-white">Ask Chef's AI Concierge</h4>
+                      <span className="text-[10px] text-amber-400 font-mono">0% Hallucinations • Table 1</span>
+                    </div>
+                  </div>
+                  <span className="text-[9px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-bold">
+                    Live At Table
+                  </span>
+                </div>
+
+                <div className="space-y-2 text-xs">
+                  <div className="bg-amber-500/20 border border-amber-500/30 p-2.5 rounded-2xl rounded-tr-sm text-amber-200 text-[11px] ml-auto max-w-[85%]">
+                    "Is the Butter Chicken spicy? We have kids with us."
+                  </div>
+                  <div className="bg-charcoal-900 border border-charcoal-800 p-2.5 rounded-2xl rounded-tl-sm text-charcoal-200 text-[11px] space-y-1.5 max-w-[90%]">
+                    <p>
+                      <strong>Chef Sanjeev:</strong> "Old Delhi Butter Chicken is calibrated at Spice 1/5 (very mild). Made with cashew cream &amp; sun-dried fenugreek with zero raw green chilies. 100% kid-friendly!"
+                    </p>
+                    <div className="bg-charcoal-950 p-2 rounded-xl flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-white">Old Delhi Butter Chicken (₹480)</span>
+                      <span className="text-[9px] bg-amber-500 text-charcoal-950 px-2 py-0.5 rounded font-bold">+ Add</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════ */}
       {/* 5. RESTAURANTS DIRECTORY & INTERACTIVE CARDS               */}
       {/* ═══════════════════════════════════════════════════════════ */}
       <section className="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1">
@@ -637,10 +728,10 @@ export const CustomerHomePage: React.FC = () => {
               Universal Restaurant POS &amp; KOT Ecosystem
             </span>
             <h2 className="font-serif font-bold text-2xl sm:text-3xl text-white">
-              Instant Kitchen KOT Sync With Your Existing Software
+              Take All 3 Connections Available: Setup Can Be Done Any How
             </h2>
             <p className="text-xs sm:text-sm text-charcoal-300 leading-relaxed">
-              Connect to any restaurant's KOT in <strong>under 2 minutes</strong> without developer help or technical setup. Whether you operate on Petpooja, RoyalPOS, Recaho, RanceLab FusionResto, or direct ESC/POS thermal printer hardware, orders placed on Menuz fire kitchen tickets in 1 second.
+              Don't choose just one channel — <strong>take all 3 connections simultaneously</strong> for zero-downtime triple redundancy! Cloud POS API (Petpooja, Recaho, RanceLab) + Local Wi-Fi Tablet (RoyalPOS / Android / Windows) + Direct Hardware ESC/POS Printer (Port 9100). Setup can be done any how in under 2 minutes without developer help.
             </p>
           </div>
 

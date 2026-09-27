@@ -9,6 +9,7 @@ interface AiAssistantDrawerProps {
   onClose: () => void;
   focusDish: MenuItem | null;
   onConfirmAdd: (dish: MenuItem) => void;
+  initialQuery?: string | null;
 }
 
 interface Message {
@@ -78,6 +79,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
   onClose,
   focusDish,
   onConfirmAdd,
+  initialQuery,
 }) => {
   const restaurant = useRestaurantStore((state) => state.restaurant);
   const menuItems = useRestaurantStore((state) => state.menuItems);
@@ -93,7 +95,9 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
 
   useEffect(() => {
     if (isOpen) {
-      if (focusDish) {
+      if (initialQuery) {
+        handleSendQuery(initialQuery, focusDish);
+      } else if (focusDish) {
         handleSendQuery(`Tell me about ${focusDish.name} — flavor profile, ingredients, and allergens.`, focusDish);
       } else if (messages.length === 0) {
         setMessages([
@@ -104,7 +108,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
         ]);
       }
     }
-  }, [isOpen, focusDish]);
+  }, [isOpen, focusDish, initialQuery]);
 
   if (!isOpen) return null;
 
@@ -249,7 +253,30 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
       }
       // ── General queries (no dish focused) ─────────────────
       else {
-        if (lower.includes('popular') || lower.includes('best seller') || lower.includes('recommend')) {
+        if (lower.includes('secret') || lower.includes('recipe') || lower.includes('behind the scene')) {
+          reply = "🧑‍🍳 From Chef Sanjeev's Kitchen Diary:\n\nOur Dal Makhani simmers for 18 continuous hours on low charcoal embers with slow-churned white butter. Our Old Delhi Butter Chicken uses tender tandoor-roasted chicken simmered in vine-ripened tomatoes, raw cashew cream, and sun-dried Nagauri kasuri methi.\n\nEvery base is prepared from scratch daily without artificial color or commercial preservatives!";
+          const secrets = availableItems.filter(i => i.is_chef_recommended || i.is_bestseller).slice(0, 2);
+          recs = secrets.map(item => ({
+            item,
+            reason: `Chef's Signature — ${item.chef_notes || item.short_description.slice(0, 60)}`
+          }));
+        } else if (lower.includes('wine') || lower.includes('owner') || lower.includes('pairing') || (lower.includes('pair') && !targetDish)) {
+          reply = "🍷 Curated by Owner Rohit:\n\n• For Rich Creamy Curries: A chilled Saffron Cardamom Lassi or a crisp Sula Sauvignon Blanc.\n• For Smoky Tandoori Kebabs: Our Signature Kokum Mojito or a full-bodied Cabernet Sauvignon cuts through the tandoori char.\n• For Royal Biryanis: Paired best with tempered mint burani raita and chilled lemonade.";
+          const drinks = availableItems.filter(i => i.item_type === 'drink').slice(0, 2);
+          recs = drinks.map(item => ({
+            item,
+            reason: `Owner's Handpicked Beverage — ${item.short_description.slice(0, 60)}`
+          }));
+        } else if (lower.includes('table of 4') || lower.includes('feast') || lower.includes('family') || lower.includes('group')) {
+          reply = "👨‍👩‍👧‍👦 Chef Sanjeev's Feast for 4:\n\nWe recommend 2 appetizers (1 veg + 1 kebab), 1 rich curry, 1 slow-cooked Dal Makhani, a basket of 4 assorted tandoori naans, and 1 royal dum biryani. Perfect balance without food waste!";
+          const feast = availableItems.filter(i => i.is_bestseller || i.is_chef_recommended).slice(0, 3);
+          recs = feast.map(item => ({
+            item,
+            reason: `Core Feast Dish — ${item.serving_size} • ${item.short_description.slice(0, 50)}`
+          }));
+        } else if (lower.includes('gluten') || lower.includes('nut') || lower.includes('celiac')) {
+          reply = "🌾 Allergen Kitchen Protocol (Chef Sanjeev):\n\n• Nut-Free Options: Many curries use cashew paste for richness, but our Rogan Josh and yellow lentils are prepared 100% nut-free.\n• Gluten-Free Options: All tandoori starters, curries, and Basmati biryanis are naturally wheat-free. Pair with rice rather than tandoori rotis/naans.\n\n⚠️ We flag all allergy tickets in bold red on the kitchen KOT!";
+        } else if (lower.includes('popular') || lower.includes('best seller') || lower.includes('recommend')) {
           const bestsellers = availableItems.filter(i => i.is_bestseller).slice(0, 2);
           const chefPicks = availableItems.filter(i => i.is_chef_recommended).slice(0, 2);
           const picks = bestsellers.length > 0 ? bestsellers : chefPicks.length > 0 ? chefPicks : availableItems.slice(0, 2);

@@ -116,11 +116,18 @@ export const DinerMenu: React.FC = () => {
   const [activeDish, setActiveDish] = useState<MenuItem | null>(null);
   const [isAiOpen, setIsAiOpen] = useState<boolean>(false);
   const [aiFocusDish, setAiFocusDish] = useState<MenuItem | null>(null);
+  const [aiInitialQuery, setAiInitialQuery] = useState<string | null>(null);
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [waiterCalled, setWaiterCalled] = useState(false);
   const [waiterToast, setWaiterToast] = useState<string | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
+
+  const handleOpenAi = (dish: MenuItem | null = null, query: string | null = null) => {
+    setAiFocusDish(dish);
+    setAiInitialQuery(query);
+    setIsAiOpen(true);
+  };
 
   // Challenge & Wheel modal state
   const [isChallengeModalOpen, setIsChallengeModalOpen] = useState(false);
@@ -442,6 +449,77 @@ export const DinerMenu: React.FC = () => {
       )}
 
       {/* ═══════════════════════════════════════════════════════════ */}
+      {/* 🧑‍🍳 CHEF & OWNER AI DINING CONCIERGE (MAIN HOOK)           */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <div className="max-w-xl mx-auto px-4 mt-3 mb-1">
+        <div className="bg-gradient-to-br from-[#121824] via-[#0d121c] to-[#121824] text-white p-4 rounded-3xl border border-amber-500/30 shadow-float relative overflow-hidden">
+          {/* Subtle gold glow */}
+          <div className="absolute -top-12 -right-12 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
+
+          <div className="flex items-start justify-between gap-3 mb-2.5">
+            <div className="flex items-center space-x-3 min-w-0">
+              <div className="relative flex-shrink-0">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-saffron-600 flex items-center justify-center text-2xl shadow-md border-2 border-amber-300/40">
+                  🧑‍🍳
+                </div>
+                <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-[#121824] flex items-center justify-center">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                </span>
+              </div>
+              <div className="min-w-0">
+                <div className="flex items-center space-x-1.5">
+                  <h3 className="font-serif font-bold text-sm sm:text-base text-white truncate">
+                    Ask Chef's AI Concierge
+                  </h3>
+                  <span className="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-md bg-amber-400/20 text-amber-300 border border-amber-400/30 flex-shrink-0">
+                    Main Hook
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-300 mt-0.5 line-clamp-1">
+                  Trained by Head Chef &amp; Owner • Secret recipes, spice levels &amp; pairings
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => handleOpenAi(null, null)}
+              className="px-3.5 py-2 bg-gradient-to-r from-amber-500 to-saffron-600 hover:brightness-110 active:scale-95 text-charcoal-950 text-xs font-bold rounded-xl transition-all shadow-subtle flex items-center space-x-1 flex-shrink-0 cursor-pointer"
+            >
+              <span>Chat</span>
+              <span>→</span>
+            </button>
+          </div>
+
+          {/* Quick interactive prompt pills */}
+          <div className="space-y-1 pt-1 border-t border-slate-800/80">
+            <div className="text-[10px] text-amber-400/90 font-bold uppercase tracking-wider flex items-center gap-1">
+              <Sparkles className="w-3 h-3 text-amber-400 inline" />
+              <span>Ask the Kitchen:</span>
+            </div>
+            <div className="flex space-x-1.5 overflow-x-auto pb-1 scrollbar-none">
+              {[
+                { label: "🧑‍🍳 Chef's Special Tonight", query: "What does the Chef recommend for first-time diners tonight?" },
+                { label: "🔥 Check 1–5 Spice Heat", query: "How spicy are the curries? Are they suitable for kids?" },
+                { label: "🍷 Owner's Wine & Cooler Pairing", query: "What drink or bread does the owner recommend pairing with curries?" },
+                { label: "🌾 Nut-free & Gluten-free", query: "Which dishes are safely prepared gluten-free and nut-free?" },
+                { label: "👨‍👩‍👧‍👦 Table of 4 Feast", query: "Can you recommend a balanced feast for a family table of 4?" }
+              ].map((pill, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => handleOpenAi(null, pill.query)}
+                  className="whitespace-nowrap px-2.5 py-1 bg-slate-900/90 hover:bg-slate-800 text-amber-200 hover:text-white border border-amber-500/20 hover:border-amber-400/50 text-[11px] rounded-full transition-all flex-shrink-0 cursor-pointer font-medium"
+                >
+                  {pill.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════════ */}
       {/* STICKY SEARCH & CATEGORY BAR                                */}
       {/* ═══════════════════════════════════════════════════════════ */}
       <div ref={menuSectionRef} className="sticky top-0 z-30 bg-ivory-50/95 backdrop-blur-md pt-4 pb-2 border-b border-ivory-200/60 shadow-xs">
@@ -583,19 +661,18 @@ export const DinerMenu: React.FC = () => {
                           </span>
 
                           <div className="flex items-center space-x-2">
-                            {/* Ask AI quick button */}
+                            {/* Ask Chef quick button */}
                             <button
                               type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setAiFocusDish(dish);
-                                setIsAiOpen(true);
+                                handleOpenAi(dish, `Tell me about ${dish.name} — chef's secret notes, spice level, and pairing.`);
                               }}
-                              className="px-2 py-1 rounded-lg bg-saffron-50 text-saffron-700 hover:bg-saffron-100 border border-saffron-200 flex items-center space-x-1 text-[11px] font-semibold transition-colors"
-                              title={`Ask AI about ${dish.name}`}
+                              className="px-2.5 py-1 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 flex items-center space-x-1 text-[11px] font-bold shadow-xs transition-all active:scale-95 cursor-pointer"
+                              title={`Ask Chef about ${dish.name}`}
                             >
-                              <Sparkles className="w-3 h-3 text-saffron-600" />
-                              <span>Ask AI</span>
+                              <span className="text-xs">🧑‍🍳</span>
+                              <span>Ask Chef</span>
                             </button>
 
                             {dish.is_available ? (
@@ -715,11 +792,41 @@ export const DinerMenu: React.FC = () => {
         onOpenCart={() => setIsCartOpen(true)}
       />
 
+      {/* Floating Chef & Owner AI Concierge Trigger (Main Hook) */}
+      <div className={`fixed z-40 transition-all duration-300 ${totalCartCount > 0 ? 'bottom-20 right-4' : 'bottom-6 right-4'}`}>
+        <button
+          type="button"
+          onClick={() => handleOpenAi(null)}
+          className="group flex items-center space-x-2.5 bg-gradient-to-r from-charcoal-950 via-charcoal-900 to-amber-950 text-white pl-3.5 pr-4 py-2.5 rounded-full shadow-2xl border border-amber-500/40 hover:border-amber-400 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+        >
+          <div className="relative">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-saffron-500 flex items-center justify-center text-white shadow-xs">
+              <Sparkles className="w-4 h-4 animate-pulse" />
+            </div>
+            <span className="absolute -top-1 -right-1 flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+            </span>
+          </div>
+          <div className="text-left">
+            <div className="flex items-center space-x-1">
+              <span className="text-xs font-bold font-serif tracking-tight text-amber-200">Ask Chef's AI</span>
+              <span className="text-[9px] bg-amber-500/20 text-amber-300 px-1 rounded uppercase font-mono font-bold">Main Hook</span>
+            </div>
+            <p className="text-[10px] text-ivory-300/80 leading-none">Trained by Chef &amp; Owner</p>
+          </div>
+        </button>
+      </div>
+
       {/* AI Assistant Drawer */}
       <AiAssistantDrawer
         isOpen={isAiOpen}
-        onClose={() => setIsAiOpen(false)}
+        onClose={() => {
+          setIsAiOpen(false);
+          setAiInitialQuery(null);
+        }}
         focusDish={aiFocusDish}
+        initialQuery={aiInitialQuery}
         onConfirmAdd={(dish) => {
           addItemToCart({
             menu_item_id: dish.id,
