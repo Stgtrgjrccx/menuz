@@ -7,6 +7,7 @@ import { ManagerDashboard } from './pages/ManagerDashboard';
 import { MasterAdminDashboard } from './pages/MasterAdminDashboard';
 import { CustomerHomePage } from './pages/CustomerHomePage';
 import { PitchDeckPage } from './pages/PitchDeckPage';
+import { AiBotOnboardingStudioPage } from './pages/AiBotOnboardingStudioPage';
 
 export const App: React.FC = () => {
   return (
@@ -51,6 +52,10 @@ export const App: React.FC = () => {
             <Route
               path="/admin"
               element={<MasterAdminDashboard />}
+            />
+            <Route
+              path="/ai-studio"
+              element={<AiBotOnboardingStudioPage />}
             />
             <Route
               path="/pitch"

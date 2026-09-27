@@ -636,6 +636,17 @@ export const MasterAdminDashboard: React.FC = () => {
               <Share2 className="w-4 h-4" />
               <span>Marketing & Campaigns ({campaigns.length})</span>
             </button>
+
+            <Link
+              to="/ai-studio"
+              className="px-4 py-2 rounded-xl text-xs font-bold flex items-center space-x-2 whitespace-nowrap transition-all bg-amber-500/15 text-amber-950 border border-amber-300/80 hover:bg-amber-500/25 ml-auto"
+            >
+              <Sparkles className="w-4 h-4 text-amber-600 animate-pulse" />
+              <span>Chef & Owner AI Studio</span>
+              <span className="bg-amber-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md uppercase">
+                Dish Secrets & Sharing
+              </span>
+            </Link>
           </nav>
         </div>
       </div>

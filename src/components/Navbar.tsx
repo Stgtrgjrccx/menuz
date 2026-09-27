@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ChefHat, LayoutDashboard, ShieldCheck, Bell, Menu, X, Check, Trash2, Award, ShoppingBag, UtensilsCrossed, TrendingUp } from 'lucide-react';
+import { ChefHat, LayoutDashboard, ShieldCheck, Bell, Menu, X, Check, Trash2, Award, ShoppingBag, UtensilsCrossed, TrendingUp, Sparkles } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { isWorkingWithMenuz } from '../types';
 
@@ -57,6 +57,7 @@ export const Navbar: React.FC = () => {
   const navLinks = [
     { to: '/', label: 'Customer Home', icon: UtensilsCrossed },
     { to: '/admin', label: 'Master Admin', icon: ShieldCheck, highlight: true },
+    { to: '/ai-studio', label: 'AI Bot Studio', icon: Sparkles },
     { to: '/pitch', label: 'Pitch Mode', icon: TrendingUp },
     { to: dinerUrl, label: 'Table Menu', icon: ShoppingBag },
     { to: `/manage/${restaurant?.slug || 'saffron-house'}`, label: 'Manager Hub', icon: LayoutDashboard },
