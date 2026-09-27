@@ -60,7 +60,8 @@ export const PitchDeckPage: React.FC = () => {
   // Simulator states for Chapter 2: Smart Table Menu
   const [waiterCalled, setWaiterCalled] = useState(false);
 
-  // Simulator states for Chapter 3: Petpooja Kitchen KOT
+  // Simulator states for Chapter 3: Universal Kitchen KOT (Petpooja, RoyalPOS, Recaho, RanceLab)
+  const [selectedDeckPos, setSelectedDeckPos] = useState<'Petpooja' | 'RoyalPOS' | 'Recaho' | 'RanceLab'>('Petpooja');
   const [kotPrinting, setKotPrinting] = useState(false);
   const [kotPrinted, setKotPrinted] = useState(true);
 
@@ -187,7 +188,7 @@ export const PitchDeckPage: React.FC = () => {
   const chapters = [
     { num: '01', short: 'The Dilemma', title: 'The Silent Diner Dilemma' },
     { num: '02', short: 'QR Menu', title: 'Smart Contactless Table Menu' },
-    { num: '03', short: 'Petpooja POS', title: 'Direct Kitchen KOT Print' },
+    { num: '03', short: 'POS Bridge', title: 'Petpooja, RoyalPOS & RanceLab KOT' },
     { num: '04', short: 'Review Shield', title: 'AI Review & 4★ Floor Shield' },
     { num: '05', short: 'Zero Commission', title: 'Anti-Cheat Security & 0% Cut' }
   ];
@@ -480,12 +481,12 @@ export const PitchDeckPage: React.FC = () => {
                 </div>
 
                 <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <Bell className="w-4 h-4 text-blue-400" />
+                  <div className="w-7 h-7 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                    <Sparkles className="w-4 h-4 text-purple-400" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white">1-Tap Waiter & Water Bell</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Guests tap "Call Waiter" or "Request Water" from their seat instead of waving their hands in the dining room.</p>
+                    <h3 className="text-sm font-bold text-white">AI Dining Concierge — Trained by Your Chef</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">Every dish question answered instantly: allergens, spice levels, alternatives, pairings. The AI is trained on your restaurant owner's actual menu data and your head chef's personal notes — not generic knowledge.</p>
                   </div>
                 </div>
               </div>
@@ -562,24 +563,32 @@ export const PitchDeckPage: React.FC = () => {
                   </span>
                 </div>
 
-                {/* Interactive Waiter Bell Button */}
-                <div className="pt-1">
-                  <button
-                    type="button"
-                    onClick={handleCallWaiter}
-                    className={`w-full py-2.5 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2 border ${
-                      waiterCalled
-                        ? 'bg-blue-600 text-white border-blue-400 shadow-md animate-pulse'
-                        : 'bg-slate-900 hover:bg-slate-800 text-slate-200 border-slate-700'
-                    }`}
-                  >
-                    <Bell className="w-3.5 h-3.5 text-amber-400" />
-                    <span>{waiterCalled ? '🔔 Table 4: Waiter Notified on Floor!' : 'Test "Call Waiter" Audio Chime'}</span>
-                  </button>
+                {/* AI Dining Concierge Chat Preview */}
+                <div className="bg-slate-900 border border-purple-500/20 rounded-xl p-3 space-y-2">
+                  <div className="flex items-center space-x-2 border-b border-slate-800 pb-2">
+                    <div className="w-5 h-5 rounded-full bg-purple-500/20 flex items-center justify-center">
+                      <Sparkles className="w-3 h-3 text-purple-400" />
+                    </div>
+                    <span className="text-[11px] font-bold text-purple-300">AI Dining Concierge</span>
+                    <span className="text-[9px] text-slate-500 ml-auto">Trained on Saffron House kitchen data</span>
+                  </div>
+                  {/* Guest question */}
+                  <div className="flex justify-end">
+                    <div className="bg-amber-500/20 border border-amber-500/20 px-2.5 py-1.5 rounded-xl rounded-tr-sm text-[11px] text-amber-200 max-w-[75%]">
+                      Is the Butter Chicken very spicy? I'm sensitive.
+                    </div>
+                  </div>
+                  {/* AI response */}
+                  <div className="flex justify-start">
+                    <div className="bg-slate-800 border border-slate-700 px-2.5 py-1.5 rounded-xl rounded-tl-sm text-[11px] text-slate-200 max-w-[85%] space-y-1">
+                      <p>Old Delhi Butter Chicken is Spice 1/5 — very mild. The makhani sauce is rich and creamy with no chili heat.</p>
+                      <p className="text-[10px] text-purple-300">🧑‍🍳 Chef's note: "Can be made extra mild on request."</p>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="text-[11px] text-slate-400 text-center">
-                  Guests browse with zero friction while servers spend less time waving across the floor.
+                  Chef's personal notes & allergen data built in — no waiter needed for basic questions.
                 </div>
               </div>
             </div>
@@ -603,11 +612,11 @@ export const PitchDeckPage: React.FC = () => {
               </div>
 
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-                Direct to Petpooja. <span className="text-amber-400">Zero Waiter Re-Typing.</span>
+                Direct to Your POS. <span className="text-amber-400">Zero Waiter Re-Typing.</span>
               </h2>
 
               <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-                Menuz doesn't replace your billing software — it supercharges it. Orders placed on Menuz sync directly with your existing Petpooja terminal and print to the kitchen thermal printer in 1 second.
+                Menuz doesn't replace your billing software — it supercharges it. Seamlessly integrated with <strong>Petpooja, RoyalPOS, Recaho, and RanceLab FusionResto</strong>. Orders placed on Menuz sync with your existing terminal and print to the kitchen thermal printer in 1 second.
               </p>
 
               {/* 3 Core Points */}
@@ -627,8 +636,8 @@ export const PitchDeckPage: React.FC = () => {
                     <ShieldCheck className="w-4 h-4 text-emerald-400" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white">Zero Order Handwriting Mistakes</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">No more illegible paper slips or forgotten customizations during peak 9:30 PM dinner rush.</p>
+                    <h3 className="text-sm font-bold text-white">Pune's Most Widely Used Systems</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">Pre-built drivers for Petpooja (50k+ outlets), RoyalPOS (FC Road/Pune local), Recaho (PCMC), and RanceLab (Chains).</p>
                   </div>
                 </div>
 
@@ -638,7 +647,7 @@ export const PitchDeckPage: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-sm font-bold text-white">2-Way Menu Synchronization</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Mark a dish out of stock (86) in Petpooja, and it instantly disappears from all diner table menus.</p>
+                    <p className="text-xs text-slate-300 mt-0.5">Mark a dish out of stock (86) in your POS, and it instantly disappears from all diner table menus.</p>
                   </div>
                 </div>
               </div>
@@ -656,14 +665,15 @@ export const PitchDeckPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Interactive Visual: Petpooja Thermal KOT Printout */}
+            {/* Right Interactive Visual: Universal POS Thermal KOT Printout */}
             <div className="lg:col-span-6">
               <div className="bg-[#111622] border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
+                {/* Header & Re-Print */}
                 <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                   <div className="flex items-center space-x-2">
                     <Printer className="w-4 h-4 text-amber-400" />
                     <span className="text-xs font-bold text-white uppercase tracking-wider">
-                      Petpooja Kitchen Thermal Printer
+                      {selectedDeckPos} Kitchen Thermal Printer
                     </span>
                   </div>
                   <button
@@ -675,6 +685,24 @@ export const PitchDeckPage: React.FC = () => {
                     <RotateCw className={`w-3 h-3 ${kotPrinting ? 'animate-spin' : ''}`} />
                     <span>{kotPrinting ? 'Printing...' : 'Re-Print KOT'}</span>
                   </button>
+                </div>
+
+                {/* POS Selector Pills */}
+                <div className="grid grid-cols-4 gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-center">
+                  {(['Petpooja', 'RoyalPOS', 'Recaho', 'RanceLab'] as const).map((pos) => (
+                    <button
+                      key={pos}
+                      type="button"
+                      onClick={() => setSelectedDeckPos(pos)}
+                      className={`py-1.5 px-2 rounded-lg text-[10px] font-bold transition-all ${
+                        selectedDeckPos === pos
+                          ? 'bg-amber-500 text-slate-950 shadow-xs'
+                          : 'text-slate-400 hover:text-white hover:bg-slate-850'
+                      }`}
+                    >
+                      {pos}
+                    </button>
+                  ))}
                 </div>
 
                 {/* 80mm ESC/POS Thermal Receipt Simulation */}
@@ -706,9 +734,13 @@ export const PitchDeckPage: React.FC = () => {
                   <div className="pt-2 border-t border-dashed border-slate-400 text-[10px] text-slate-600 space-y-0.5">
                     <div className="flex justify-between">
                       <span>SOURCE: Menuz QR In-Table</span>
-                      <span className="text-emerald-700 font-bold">PETPOOJA STATUS: OK (200)</span>
+                      <span className="text-emerald-700 font-bold">
+                        {selectedDeckPos.toUpperCase()} STATUS: OK (200)
+                      </span>
                     </div>
-                    <div className="text-center text-slate-500 pt-1">*** KITCHEN COPY • NO CASH VALUE ***</div>
+                    <div className="text-center text-slate-500 pt-1">
+                      *** {selectedDeckPos.toUpperCase()} KITCHEN COPY • NO CASH VALUE ***
+                    </div>
                   </div>
                 </div>
 
@@ -741,8 +773,14 @@ export const PitchDeckPage: React.FC = () => {
                 Public 5★ Reviews. <span className="text-amber-400">Complaints Stay Private.</span>
               </h2>
 
+              {/* Timing callout */}
+              <div className="inline-flex items-center space-x-2 bg-red-500/10 border border-red-500/20 px-3 py-2 rounded-xl text-red-300 text-xs">
+                <span className="text-red-400 font-black text-base">⚡</span>
+                <span><strong className="text-white">Triggered the moment they scan</strong> — before they even browse the menu. Not at bill time.</span>
+              </div>
+
               <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-                At bill payment, diners rate their meal. 4-and-5 star diners get an AI-written Google review and spin the Lucky Wheel. But if someone rates 1, 2, or 3 stars, it is blocked from Google Maps and alerts the manager to fix it on the spot.
+                The review challenge appears instantly when a diner scans the QR code. They rate, get an AI-written Google review, and spin the Lucky Wheel — all before they've even placed an order. A 1-3 star rating never reaches Google Maps; it silently alerts your manager to fix it at the table.
               </p>
 
               {/* 3 Core Points */}
@@ -762,8 +800,8 @@ export const PitchDeckPage: React.FC = () => {
                     <RotateCw className="w-4 h-4 text-amber-400" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white">Lucky Wheel Incentivizes Posting</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Guests spin to unlock real table treats (15% off food bill, free dessert) immediately after posting.</p>
+                    <h3 className="text-sm font-bold text-white">Lucky Wheel Hooks Them on the Way In</h3>
+                    <p className="text-xs text-slate-300 mt-0.5">Guests spin immediately on scan — winning 15% off their bill or a free dessert before they've even ordered. That reward guarantees they stay, eat, and enjoy.</p>
                   </div>
                 </div>
 
@@ -799,7 +837,7 @@ export const PitchDeckPage: React.FC = () => {
                     <Star className="w-4 h-4 text-amber-400" />
                     <span className="text-xs font-bold text-white">Test The Reputation Gate</span>
                   </div>
-                  <span className="text-[10px] text-slate-400">Click a Star Rating:</span>
+                  <span className="text-[10px] font-bold bg-red-500/15 text-red-400 px-2 py-0.5 rounded-full border border-red-500/20">⚡ Fires on QR Scan</span>
                 </div>
 
                 {/* Star Selector Buttons */}
@@ -1016,48 +1054,12 @@ export const PitchDeckPage: React.FC = () => {
                     Valid for Table 4 dine-in only. Must be redeemed before leaving table.
                   </div>
 
-                  {/* Staff PIN Validation Box */}
-                  <div className="pt-2 border-t border-slate-800 space-y-2">
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="font-semibold text-slate-300">Staff Redemption PIN:</span>
-                      <span className="text-[10px] text-slate-500">(Demo PIN: 1234)</span>
+                  {/* Anti-cheat protection note */}
+                  <div className="pt-2 border-t border-slate-800">
+                    <div className="p-2.5 bg-slate-950 rounded-xl text-[11px] text-slate-400 flex items-start gap-2">
+                      <Lock className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
+                      <span>Countdown is dynamically generated server-side — no static code or screenshot can ever replicate it. Voucher auto-expires and cannot be reused across tables or sessions.</span>
                     </div>
-
-                    {pinVerified ? (
-                      <div className="p-3 bg-emerald-950/50 border border-emerald-500/50 rounded-xl text-center space-y-1">
-                        <span className="text-xs font-bold text-emerald-400 flex items-center justify-center gap-1.5">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                          <span>Voucher Successfully Redeemed & Voided!</span>
-                        </span>
-                        <span className="text-[10px] text-slate-400 block">
-                          Discount applied to Petpooja bill #1042 • Cannot be reused.
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="password"
-                          maxLength={4}
-                          value={enteredPin}
-                          onChange={(e) => setEnteredPin(e.target.value)}
-                          placeholder="Enter 4-digit PIN..."
-                          className="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white tracking-widest text-center focus:outline-none focus:border-amber-500"
-                        />
-                        <button
-                          type="button"
-                          onClick={handleVerifyPin}
-                          className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition-colors shadow-xs"
-                        >
-                          Verify & Void
-                        </button>
-                      </div>
-                    )}
-
-                    {pinError && (
-                      <span className="text-[11px] text-red-400 block text-center font-semibold">
-                        ❌ Invalid PIN. Please enter staff PIN 1234.
-                      </span>
-                    )}
                   </div>
                 </div>
 

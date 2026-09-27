@@ -771,28 +771,14 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               </div>
             </div>
 
-            {/* 3. Generated Ready-To-Post Review Preview */}
-            <div className="w-full text-left space-y-1">
-              <label className="block text-xs font-bold text-charcoal-800 flex items-center justify-between">
-                <span>3. Ready Review for Google Maps:</span>
-                <span className="text-[10px] text-green-700 font-semibold bg-green-50 px-2 py-0.5 rounded border border-green-200">
-                  Ready to Post
-                </span>
-              </label>
-
-              <div className="bg-ivory-50 border border-ivory-200 rounded-xl p-3 text-xs text-charcoal-800 italic leading-relaxed relative">
-                "{aiDraft}"
-              </div>
-            </div>
-
-            {/* Primary Action: Copy & Post on Google Reviews */}
+            {/* Primary Action: Post on Google to Unlock Reward */}
             <button
               type="button"
               onClick={handleCopyAndPostToGoogle}
               className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-saffron-600 via-amber-500 to-saffron-700 hover:brightness-105 active:scale-95 text-white font-serif text-sm font-bold shadow-float flex items-center justify-center space-x-2 transition-all mt-1"
             >
               <ExternalLink className="w-4 h-4 text-amber-200" />
-              <span>Copy &amp; Post on Google Reviews ↗</span>
+              <span>Post on Google &amp; Unlock Your Reward ↗</span>
             </button>
           </div>
         )}
@@ -815,9 +801,30 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               </p>
             </div>
 
-            {/* Review excerpt */}
-            <div className="w-full bg-ivory-50 border border-ivory-200 rounded-xl p-3 text-[11px] text-charcoal-700 text-left italic">
-              "{aiDraft.slice(0, 140)}..."
+            {/* Full AI-generated review — shown only after user decides to participate */}
+            <div className="w-full text-left space-y-1">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-bold text-charcoal-800">Your ready-made review:</label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(aiDraft);
+                    setCopiedReview(true);
+                    setTimeout(() => setCopiedReview(false), 2000);
+                  }}
+                  className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-colors flex items-center gap-1 ${
+                    copiedReview
+                      ? 'bg-green-50 text-green-700 border-green-200'
+                      : 'bg-ivory-50 text-charcoal-700 border-ivory-200 hover:bg-ivory-100'
+                  }`}
+                >
+                  {copiedReview ? <><Check className="w-3 h-3" /> Copied!</> : <><Copy className="w-3 h-3" /> Copy</>}
+                </button>
+              </div>
+              <div className="bg-ivory-50 border border-ivory-200 rounded-xl p-3 text-[11px] text-charcoal-800 italic leading-relaxed">
+                “{aiDraft}”
+              </div>
+              <p className="text-[10px] text-charcoal-500 text-center">Paste this into Google Maps → then confirm below to unlock your spin.</p>
             </div>
 
             {/* Confirm & Unlock Wheel Button */}

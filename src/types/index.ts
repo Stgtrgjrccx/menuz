@@ -24,8 +24,11 @@ export interface Restaurant {
   ordering_enabled?: boolean;
   google_place_url?: string;
   authentic_photography_statement?: string;
-  pos_provider?: 'petpooja' | 'rancelab' | 'toast' | 'square' | 'clover' | 'micros' | 'universal_api';
+  pos_provider?: 'petpooja' | 'royalpos' | 'recaho' | 'rancelab' | 'toast' | 'square' | 'clover' | 'micros' | 'universal_api';
   petpooja_config?: PetpoojaConfig;
+  royalpos_config?: RoyalPosConfig;
+  recaho_config?: RecahoConfig;
+  rancelab_config?: RancelabConfig;
   is_menuz_partner?: boolean;
   aliases?: string[];
 }
@@ -64,6 +67,65 @@ export interface PetpoojaKotReceipt {
   taxes: number;
   grand_total: number;
   raw_payload?: any;
+}
+
+// ─── Shared KOT receipt shape used by RoyalPOS, Recaho & RanceLab ─────────────
+export interface GenericKotReceipt {
+  kot_number: string;
+  pos_order_id: string;
+  pos_provider: 'RoyalPOS' | 'Recaho' | 'RanceLab';
+  table_label: string;
+  restaurant_name: string;
+  timestamp: string;
+  server_name: string;
+  items: Array<{
+    name: string;
+    quantity: number;
+    price: number;
+    options?: string[];
+    special_notes?: string;
+  }>;
+  subtotal: number;
+  discount_amount: number;
+  discount_name?: string;
+  taxes: number;
+  grand_total: number;
+  raw_payload?: any;
+}
+
+// ─── RoyalPOS Configuration ────────────────────────────────────────────────────
+export interface RoyalPosConfig {
+  enabled: boolean;
+  outlet_id: string;       // From RoyalPOS admin → Settings → Outlet Info
+  bearer_token: string;    // From RoyalPOS admin → Settings → Integrations → API Token
+  device_ip: string;       // LAN IP of the Android/Windows POS terminal (e.g. 192.168.1.101)
+  device_port: number;     // Usually 8080
+  environment: 'sandbox' | 'production';
+  auto_push_kot: boolean;
+  last_synced_at?: string;
+}
+
+// ─── Recaho Configuration ──────────────────────────────────────────────────────
+export interface RecahoConfig {
+  enabled: boolean;
+  outlet_token: string;    // Per-outlet token from Recaho partner dashboard
+  api_key: string;         // Account-level key from Recaho (X-Api-Key header)
+  environment: 'sandbox' | 'production';
+  auto_push_kot: boolean;
+  auto_sync_menu: boolean;
+  last_synced_at?: string;
+}
+
+// ─── RanceLab Configuration ────────────────────────────────────────────────────
+export interface RancelabConfig {
+  enabled: boolean;
+  branch_code: string;     // Unique branch code from RanceLab admin panel
+  partner_key: string;     // X-Partner-Key header (issued by RanceLab to Menuz as integration partner)
+  environment: 'sandbox' | 'production';
+  auto_push_kot: boolean;
+  auto_sync_menu: boolean;
+  gst_slab: 5 | 12 | 18 | 28;  // Indian GST slab applicable to this restaurant
+  last_synced_at?: string;
 }
 
 export const isWorkingWithMenuz = (r?: { id?: string; slug?: string } | null): boolean => {

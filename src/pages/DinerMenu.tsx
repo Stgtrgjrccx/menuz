@@ -127,6 +127,9 @@ export const DinerMenu: React.FC = () => {
   const [challengeModalMode, setChallengeModalMode] = useState<'review' | 'wheel'>('review');
   const [selectedChallenge, setSelectedChallenge] = useState<ReviewChallenge | null>(null);
 
+  // Reward teaser banner dismiss state
+  const [rewardBannerDismissed, setRewardBannerDismissed] = useState(false);
+
   // Scrollytelling section refs
   const heroRef = useRef<HTMLDivElement>(null);
   const menuSectionRef = useRef<HTMLDivElement>(null);
@@ -359,44 +362,81 @@ export const DinerMenu: React.FC = () => {
       {/* ═══════════════════════════════════════════════════════════ */}
       {/* SLEEK SURPRISE TABLE REWARD TEASER CARD                    */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <div className="max-w-xl mx-auto px-4 -mt-3 relative z-20">
-        <div
-          onClick={() => handleOpenChallenge()}
-          className="w-full bg-gradient-to-r from-amber-500 via-saffron-600 to-amber-600 p-0.5 rounded-2xl shadow-float cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-all group"
-        >
-          <div className="bg-charcoal-950/95 backdrop-blur-md px-4 py-3 rounded-[14px] flex items-center justify-between space-x-3 text-white">
-            <div className="flex items-center space-x-3 min-w-0">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-saffron-600 flex items-center justify-center text-lg flex-shrink-0 shadow-sm animate-bounce">
-                🎁
-              </div>
-              <div className="min-w-0">
-                <div className="flex items-center space-x-2">
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-amber-400">
-                    {activeTable?.label || 'Table 1'} Surprise Treat
-                  </span>
-                  <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-green-500/20 text-green-300">
-                    Guaranteed Win
-                  </span>
+      {!rewardBannerDismissed && (
+        <div className="max-w-xl mx-auto px-4 -mt-3 relative z-20">
+          <div
+            className="w-full bg-gradient-to-r from-amber-500 via-saffron-600 to-amber-600 p-0.5 rounded-2xl shadow-float"
+          >
+            <div className="bg-charcoal-950/95 backdrop-blur-md px-4 py-3 rounded-[14px] flex items-center justify-between space-x-3 text-white">
+              <div
+                onClick={() => handleOpenChallenge()}
+                className="flex items-center space-x-3 min-w-0 cursor-pointer flex-1"
+              >
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-saffron-600 flex items-center justify-center text-lg flex-shrink-0 shadow-sm animate-bounce">
+                  🎁
                 </div>
-                <h3 className="font-serif font-bold text-sm sm:text-base text-white truncate">
-                  Win Today's Surprise Table Reward!
-                </h3>
-                <p className="text-[11px] text-charcoal-300 truncate">
-                  Complimentary chef treats, drinks, or up to 20% off your bill
-                </p>
+                <div className="min-w-0">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-amber-400">
+                      {activeTable?.label || 'Table 1'} Surprise Treat
+                    </span>
+                    <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-green-500/20 text-green-300">
+                      Guaranteed Win
+                    </span>
+                  </div>
+                  <h3 className="font-serif font-bold text-sm sm:text-base text-white truncate">
+                    Win Today's Surprise Table Reward!
+                  </h3>
+                  <p className="text-[11px] text-charcoal-300 truncate">
+                    Complimentary chef treats, drinks, or up to 20% off your bill
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-1.5 flex-shrink-0">
+                <button
+                  type="button"
+                  onClick={() => handleOpenChallenge()}
+                  className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-saffron-500 hover:brightness-110 text-charcoal-950 font-bold text-xs flex items-center space-x-1 shadow-sm transition-all"
+                >
+                  <span>Win</span>
+                  <span>→</span>
+                </button>
+                <button
+                  type="button"
+                  title="Maybe later"
+                  onClick={() => setRewardBannerDismissed(true)}
+                  className="p-1.5 rounded-full bg-charcoal-800/80 text-charcoal-400 hover:text-white hover:bg-charcoal-700 transition-colors"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
               </div>
             </div>
-
-            <button
-              type="button"
-              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-saffron-500 hover:brightness-110 text-charcoal-950 font-bold text-xs flex items-center space-x-1 flex-shrink-0 shadow-sm transition-all"
-            >
-              <span>Win</span>
-              <span>→</span>
-            </button>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/* FLOATING REWARD BUBBLE — shows when banner is dismissed    */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {rewardBannerDismissed && !isChallengeModalOpen && (
+        <button
+          type="button"
+          onClick={() => {
+            setRewardBannerDismissed(false);
+            handleOpenChallenge();
+          }}
+          title="Claim your table reward"
+          className="fixed right-3 top-1/2 -translate-y-1/2 z-40 flex flex-col items-center gap-1 group"
+        >
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-saffron-600 flex items-center justify-center shadow-float text-2xl animate-bounce border-2 border-amber-300/60">
+            🎁
+          </div>
+          <span className="text-[9px] font-bold text-amber-600 bg-white/90 border border-amber-200 px-1.5 py-0.5 rounded-full shadow-xs whitespace-nowrap">
+            Your Reward
+          </span>
+        </button>
+      )}
 
       {/* ═══════════════════════════════════════════════════════════ */}
       {/* STICKY SEARCH & CATEGORY BAR                                */}

@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useRestaurantStore, WhatsAppCampaign } from '../store/restaurantStore';
-import { Restaurant, PosSyncEvent, isWorkingWithMenuz, PetpoojaConfig } from '../types';
+import { Restaurant, PosSyncEvent, isWorkingWithMenuz, PetpoojaConfig, RoyalPosConfig, RecahoConfig, RancelabConfig } from '../types';
 import { PUNE_RESTAURANT_DIRECTORY, searchPuneRestaurants, PuneRestaurantEntry, normalizePuneSearch, matchesPuneQuery } from '../data/puneRestaurantDirectory';
 import { PetpoojaIntegrationPanel } from '../components/PetpoojaIntegrationPanel';
+import { RoyalPosIntegrationPanel } from '../components/RoyalPosIntegrationPanel';
+import { RecahoIntegrationPanel } from '../components/RecahoIntegrationPanel';
+import { RancelabIntegrationPanel } from '../components/RancelabIntegrationPanel';
 import {
   Building2,
   Users,
@@ -62,6 +65,7 @@ export const MasterAdminDashboard: React.FC = () => {
   const assignImageToItem = useRestaurantStore((state) => state.assignImageToItem);
 
   const [activeTab, setActiveTab] = useState<'restaurants' | 'reviews' | 'challenges' | 'pos' | 'images' | 'marketing'>('restaurants');
+  const [selectedPosTab, setSelectedPosTab] = useState<'petpooja' | 'royalpos' | 'recaho' | 'rancelab'>('petpooja');
   const [searchQuery, setSearchQuery] = useState('');
   const [voucherInput, setVoucherInput] = useState('');
   const [voucherMessage, setVoucherMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
@@ -1799,12 +1803,131 @@ export const MasterAdminDashboard: React.FC = () => {
         {/* ========================================================================= */}
         {activeTab === 'pos' && (
           <div className="space-y-6">
-            {/* Direct Petpooja POS Bridge & KOT Dispatch Simulator */}
+            {/* POS Provider Switcher Header */}
+            <div className="bg-white p-5 rounded-3xl border border-ivory-300 shadow-subtle space-y-4">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                <div>
+                  <span className="text-[10px] uppercase font-bold tracking-widest text-saffron-700">Supported POS Ecosystems</span>
+                  <h3 className="text-xl font-bold font-serif text-charcoal-900 mt-0.5">Pune & India Restaurant POS Bridges</h3>
+                  <p className="text-xs text-charcoal-500 mt-0.5">
+                    Direct two-way KOT sync, dynamic menu updates, and live thermal printing bridges.
+                  </p>
+                </div>
+                <div className="flex items-center space-x-2 text-xs">
+                  <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 font-bold rounded-lg border border-emerald-200 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    4 POS Adapters Active
+                  </span>
+                </div>
+              </div>
+
+              {/* Provider Selection Tabs */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2 border-t border-ivory-200">
+                <button
+                  type="button"
+                  onClick={() => setSelectedPosTab('petpooja')}
+                  className={`p-3 rounded-2xl border text-left transition-all ${
+                    selectedPosTab === 'petpooja'
+                      ? 'bg-orange-50/80 border-orange-400 shadow-xs ring-1 ring-orange-400'
+                      : 'bg-white border-ivory-300 hover:bg-ivory-50 text-charcoal-700'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-bold text-orange-900">Petpooja</span>
+                    <span className="text-[9px] uppercase px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-700 font-bold">50k+ Outlets</span>
+                  </div>
+                  <p className="text-[11px] text-charcoal-500 line-clamp-1">National & Pune #1 REST API</p>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedPosTab('royalpos')}
+                  className={`p-3 rounded-2xl border text-left transition-all ${
+                    selectedPosTab === 'royalpos'
+                      ? 'bg-purple-50/80 border-purple-400 shadow-xs ring-1 ring-purple-400'
+                      : 'bg-white border-ivory-300 hover:bg-ivory-50 text-charcoal-700'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-bold text-purple-900">RoyalPOS</span>
+                    <span className="text-[9px] uppercase px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700 font-bold">Pune Local</span>
+                  </div>
+                  <p className="text-[11px] text-charcoal-500 line-clamp-1">FC Road, Hinjewadi & QSRs</p>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedPosTab('recaho')}
+                  className={`p-3 rounded-2xl border text-left transition-all ${
+                    selectedPosTab === 'recaho'
+                      ? 'bg-blue-50/80 border-blue-400 shadow-xs ring-1 ring-blue-400'
+                      : 'bg-white border-ivory-300 hover:bg-ivory-50 text-charcoal-700'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-bold text-blue-900">Recaho</span>
+                    <span className="text-[9px] uppercase px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-700 font-bold">PCMC / Chakan</span>
+                  </div>
+                  <p className="text-[11px] text-charcoal-500 line-clamp-1">Suburban & Family Eateries</p>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedPosTab('rancelab')}
+                  className={`p-3 rounded-2xl border text-left transition-all ${
+                    selectedPosTab === 'rancelab'
+                      ? 'bg-emerald-50/80 border-emerald-400 shadow-xs ring-1 ring-emerald-400'
+                      : 'bg-white border-ivory-300 hover:bg-ivory-50 text-charcoal-700'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-bold text-emerald-900">RanceLab</span>
+                    <span className="text-[9px] uppercase px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold">FusionResto</span>
+                  </div>
+                  <p className="text-[11px] text-charcoal-500 line-clamp-1">Chains & Fine Dining</p>
+                </button>
+              </div>
+            </div>
+
+            {/* Active POS Provider Panel */}
             {restaurants.length > 0 && (
-              <PetpoojaIntegrationPanel
-                restaurant={restaurants[0]}
-                onUpdateConfig={(cfg: PetpoojaConfig) => updateRestaurant(restaurants[0].id, { petpooja_config: cfg })}
-              />
+              <>
+                {selectedPosTab === 'petpooja' && (
+                  <PetpoojaIntegrationPanel
+                    restaurant={restaurants[0]}
+                    onUpdateConfig={(cfg: PetpoojaConfig) =>
+                      updateRestaurant(restaurants[0].id, { petpooja_config: cfg, pos_provider: 'petpooja' })
+                    }
+                  />
+                )}
+
+                {selectedPosTab === 'royalpos' && (
+                  <RoyalPosIntegrationPanel
+                    restaurant={restaurants[0]}
+                    onUpdateConfig={(cfg: RoyalPosConfig) =>
+                      updateRestaurant(restaurants[0].id, { royalpos_config: cfg, pos_provider: 'royalpos' })
+                    }
+                  />
+                )}
+
+                {selectedPosTab === 'recaho' && (
+                  <RecahoIntegrationPanel
+                    restaurant={restaurants[0]}
+                    onUpdateConfig={(cfg: RecahoConfig) =>
+                      updateRestaurant(restaurants[0].id, { recaho_config: cfg, pos_provider: 'recaho' })
+                    }
+                  />
+                )}
+
+                {selectedPosTab === 'rancelab' && (
+                  <RancelabIntegrationPanel
+                    restaurant={restaurants[0]}
+                    onUpdateConfig={(cfg: RancelabConfig) =>
+                      updateRestaurant(restaurants[0].id, { rancelab_config: cfg, pos_provider: 'rancelab' })
+                    }
+                  />
+                )}
+              </>
             )}
 
             <div className="bg-white p-5 rounded-3xl border border-ivory-300 shadow-subtle flex flex-col md:flex-row md:items-center justify-between gap-4">
