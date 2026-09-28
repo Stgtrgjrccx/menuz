@@ -291,6 +291,55 @@ export const CustomerHomePage: React.FC = () => {
             Seated at a restaurant? Scan the QR sticker on your table to browse chef menus, order food, and post a quick Google review to spin the <strong>Lucky Dining Wheel</strong> for guaranteed free treats and discounts!
           </p>
 
+          {/* ── Prominent Executive Pitch Deck Action Bar ── */}
+          <div className="max-w-3xl mx-auto bg-gradient-to-r from-charcoal-900 via-charcoal-800 to-charcoal-900 text-white rounded-2xl p-4 sm:p-5 border border-charcoal-700 shadow-float flex flex-col md:flex-row items-center justify-between gap-4 text-left">
+            <div className="flex items-center space-x-3.5">
+              <div className="w-12 h-12 rounded-xl bg-saffron-500/20 border border-saffron-500/40 flex items-center justify-center flex-shrink-0">
+                <TrendingUp className="w-6 h-6 text-saffron-400" />
+              </div>
+              <div>
+                <div className="flex items-center space-x-2">
+                  <span className="font-serif font-bold text-sm sm:text-base text-white">Menuz Executive Pitch Deck</span>
+                  <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-saffron-500 text-slate-950">18 Slides</span>
+                </div>
+                <p className="text-xs text-charcoal-300 mt-0.5">
+                  The Complete Dine-In Operating System &amp; Growth Engine (15-Restaurant Boardroom Approved)
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center flex-wrap gap-2 w-full md:w-auto justify-end">
+              <Link
+                to="/pitch"
+                className="px-3.5 py-2 bg-saffron-600 hover:bg-saffron-500 text-white font-bold text-xs rounded-xl transition-all shadow-xs flex items-center space-x-1.5 active:scale-95"
+              >
+                <span>Interactive Deck</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </Link>
+
+              <a
+                href="./menuz_executive_pitch_deck.pptx"
+                download="Menuz_Executive_Pitch_Deck.pptx"
+                className="px-3 py-2 bg-charcoal-800 hover:bg-charcoal-700 text-amber-300 hover:text-white font-semibold text-xs rounded-xl border border-charcoal-600 transition-colors flex items-center space-x-1.5"
+                title="Download 16:9 PowerPoint Presentation"
+              >
+                <Zap className="w-3.5 h-3.5 text-amber-400" />
+                <span>PPTX</span>
+              </a>
+
+              <a
+                href="./menuz_executive_pitch_deck.pdf"
+                download="Menuz_Executive_Pitch_Deck.pdf"
+                target="_blank"
+                rel="noreferrer"
+                className="px-3 py-2 bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-200 hover:text-white font-semibold text-xs rounded-xl border border-charcoal-600 transition-colors flex items-center space-x-1.5"
+                title="Download Executive Pitch Deck PDF"
+              >
+                <span>PDF</span>
+              </a>
+            </div>
+          </div>
+
           {/* Dual Action: Search Bar & Scan Button */}
           <div className="max-w-2xl mx-auto pt-2">
             <div className="bg-white p-2 rounded-2xl sm:rounded-3xl shadow-float border border-charcoal-200/80 flex flex-col sm:flex-row items-center gap-2">

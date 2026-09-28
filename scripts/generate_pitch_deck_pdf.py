@@ -1,15 +1,18 @@
 import os
 import sys
-from reportlab.lib.pagesizes import letter, A4
+from reportlab.lib.units import inch
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import inch
 from reportlab.platypus import (
-    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, KeepTogether, HRFlowable
+    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
 )
 from reportlab.pdfgen import canvas
 
-class NumberedCanvas(canvas.Canvas):
+# Exact 16:9 Widescreen slide dimensions in points (13.333 x 7.5 inches = 960 x 540 pt)
+SLIDE_WIDTH = 13.333 * 72   # 960 pt
+SLIDE_HEIGHT = 7.5 * 72     # 540 pt
+
+class MidnightSlideCanvas(canvas.Canvas):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._saved_page_states = []
@@ -22,489 +25,747 @@ class NumberedCanvas(canvas.Canvas):
         num_pages = len(self._saved_page_states)
         for state in self._saved_page_states:
             self.__dict__.update(state)
-            self.draw_header_footer(num_pages)
+            self.draw_slide_decorations(num_pages)
             super().showPage()
         super().save()
 
-    def draw_header_footer(self, page_count):
+    def draw_slide_decorations(self, page_count):
         self.saveState()
-        if self._pageNumber > 1:
-            # Header
-            self.setFont("Helvetica-Bold", 8)
-            self.setFillColor(colors.HexColor("#C84B00"))
-            self.drawString(54, 755, "MENUZ")
-            self.setFont("Helvetica", 8)
-            self.setFillColor(colors.HexColor("#78716C"))
-            self.drawString(95, 755, "|  Restaurant Experience & Operations Operating System")
-            self.setStrokeColor(colors.HexColor("#EFE9DE"))
-            self.setLineWidth(0.75)
-            self.line(54, 748, 540, 748)
-
-            # Footer
-            self.line(54, 45, 540, 45)
-            self.setFont("Helvetica", 8)
-            self.setFillColor(colors.HexColor("#78716C"))
-            self.drawString(54, 32, "Confidential — For Restaurant Partners & Operators")
-            page_text = f"Page {self._pageNumber} of {page_count}"
-            self.drawRightString(540, 32, page_text)
+        # Draw Midnight Obsidian Background for entire slide
+        self.setFillColor(colors.HexColor("#090D16"))
+        self.rect(0, 0, SLIDE_WIDTH, SLIDE_HEIGHT, fill=1, stroke=0)
+        
+        # Bottom Navigation & Slide Indicator
+        self.setFont("Helvetica-Bold", 8.5)
+        self.setFillColor(colors.HexColor("#F59E0B"))
+        self.drawString(50, 20, "MENUZ")
+        self.setFont("Helvetica", 8.5)
+        self.setFillColor(colors.HexColor("#64748B"))
+        self.drawString(100, 20, "|   The Complete Dine-In Operating System & Growth Engine")
+        
+        slide_text = f"Slide {self._pageNumber} of {page_count}"
+        self.drawRightString(SLIDE_WIDTH - 50, 20, slide_text)
+        
+        # Subtle glowing neon bottom line
+        self.setStrokeColor(colors.HexColor("#1E293B"))
+        self.setLineWidth(1)
+        self.line(50, 30, SLIDE_WIDTH - 50, 30)
         self.restoreState()
 
-def generate_pdf(output_path):
+def generate_landscape_slide_pdf(output_path):
     doc = SimpleDocTemplate(
         output_path,
-        pagesize=letter,
-        leftMargin=54,
-        rightMargin=54,
-        topMargin=54,
-        bottomMargin=54
+        pagesize=(SLIDE_WIDTH, SLIDE_HEIGHT),
+        leftMargin=50,
+        rightMargin=50,
+        topMargin=32,
+        bottomMargin=45
     )
 
     styles = getSampleStyleSheet()
-    
-    # Custom Palette
-    PRIMARY = colors.HexColor("#E85D04")
-    DARK = colors.HexColor("#1C1917")
-    MUTED = colors.HexColor("#57534E")
-    LIGHT_BG = colors.HexColor("#FDFBF7")
-    ACCENT_TEAL = colors.HexColor("#0D9488")
-    ACCENT_BLUE = colors.HexColor("#1D4ED8")
-    BORDER_COLOR = colors.HexColor("#E7E5E4")
 
-    # Typography Styles
-    title_style = ParagraphStyle(
-        'CoverTitle',
+    # Brand Colors
+    c_gold = colors.HexColor("#F59E0B")
+    c_cyan = colors.HexColor("#06B6D4")
+    c_emerald = colors.HexColor("#10B981")
+    c_rose = colors.HexColor("#F43F5E")
+    c_violet = colors.HexColor("#8B5CF6")
+    c_card_bg = colors.HexColor("#131C2E")
+    c_card_alt = colors.HexColor("#18243B")
+    c_border = colors.HexColor("#27364F")
+    c_border_cyan = colors.HexColor("#0891B2")
+    c_border_gold = colors.HexColor("#D97706")
+    c_text_white = colors.HexColor("#FAFAFA")
+    c_text_sub = colors.HexColor("#CBD5E1")
+    c_text_muted = colors.HexColor("#94A3B8")
+
+    # Typography Styles for Large 16:9 Slides
+    tag_cyan = ParagraphStyle(
+        'TagCyan',
         parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=28,
-        leading=34,
-        textColor=DARK,
-        spaceAfter=8
+        fontSize=12,
+        leading=15,
+        textColor=c_cyan,
+        spaceAfter=2
+    )
+    tag_gold = ParagraphStyle(
+        'TagGold',
+        parent=styles['Normal'],
+        fontName='Helvetica-Bold',
+        fontSize=12,
+        leading=15,
+        textColor=c_gold,
+        spaceAfter=2
+    )
+    tag_rose = ParagraphStyle(
+        'TagRose',
+        parent=styles['Normal'],
+        fontName='Helvetica-Bold',
+        fontSize=12,
+        leading=15,
+        textColor=c_rose,
+        spaceAfter=2
+    )
+    tag_emerald = ParagraphStyle(
+        'TagEmerald',
+        parent=styles['Normal'],
+        fontName='Helvetica-Bold',
+        fontSize=12,
+        leading=15,
+        textColor=c_emerald,
+        spaceAfter=2
     )
 
-    subtitle_style = ParagraphStyle(
-        'CoverSubtitle',
+    title_style = ParagraphStyle(
+        'SlideTitle',
+        parent=styles['Normal'],
+        fontName='Helvetica-Bold',
+        fontSize=25,
+        leading=29,
+        textColor=c_text_white,
+        spaceAfter=4
+    )
+    sub_style = ParagraphStyle(
+        'SlideSub',
         parent=styles['Normal'],
         fontName='Helvetica',
         fontSize=13,
-        leading=18,
-        textColor=PRIMARY,
-        spaceAfter=20
+        leading=17,
+        textColor=c_text_sub,
+        spaceAfter=12
     )
 
-    h1_style = ParagraphStyle(
-        'Heading1_Custom',
-        parent=styles['Heading1'],
+    card_h_gold = ParagraphStyle(
+        'CardHGold',
+        parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=18,
-        leading=22,
-        textColor=DARK,
-        spaceBefore=14,
-        spaceAfter=8
+        fontSize=16,
+        leading=20,
+        textColor=c_gold,
+        spaceAfter=4
+    )
+    card_h_cyan = ParagraphStyle(
+        'CardHCyan',
+        parent=styles['Normal'],
+        fontName='Helvetica-Bold',
+        fontSize=16,
+        leading=20,
+        textColor=c_cyan,
+        spaceAfter=4
+    )
+    card_h_emerald = ParagraphStyle(
+        'CardHEmerald',
+        parent=styles['Normal'],
+        fontName='Helvetica-Bold',
+        fontSize=16,
+        leading=20,
+        textColor=c_emerald,
+        spaceAfter=4
+    )
+    card_h_rose = ParagraphStyle(
+        'CardHRose',
+        parent=styles['Normal'],
+        fontName='Helvetica-Bold',
+        fontSize=16,
+        leading=20,
+        textColor=c_rose,
+        spaceAfter=4
     )
 
-    h2_style = ParagraphStyle(
-        'Heading2_Custom',
-        parent=styles['Heading2'],
-        fontName='Helvetica-Bold',
+    card_body = ParagraphStyle(
+        'CardBody',
+        parent=styles['Normal'],
+        fontName='Helvetica',
         fontSize=12,
-        leading=16,
-        textColor=PRIMARY,
-        spaceBefore=10,
+        leading=16.5,
+        textColor=c_text_sub,
         spaceAfter=4
-    )
-
-    body_style = ParagraphStyle(
-        'Body_Custom',
-        parent=styles['Normal'],
-        fontName='Helvetica',
-        fontSize=9.5,
-        leading=14,
-        textColor=DARK,
-        spaceAfter=6
-    )
-
-    bullet_style = ParagraphStyle(
-        'Bullet_Custom',
-        parent=styles['Normal'],
-        fontName='Helvetica',
-        fontSize=9,
-        leading=13,
-        textColor=DARK,
-        leftIndent=15,
-        spaceAfter=4
-    )
-
-    callout_style = ParagraphStyle(
-        'Callout_Text',
-        parent=styles['Normal'],
-        fontName='Helvetica-Oblique',
-        fontSize=9.5,
-        leading=14,
-        textColor=DARK
-    )
-
-    table_header_style = ParagraphStyle(
-        'TableHeader',
-        parent=styles['Normal'],
-        fontName='Helvetica-Bold',
-        fontSize=9,
-        leading=11,
-        textColor=colors.white
-    )
-
-    table_body_style = ParagraphStyle(
-        'TableBody',
-        parent=styles['Normal'],
-        fontName='Helvetica',
-        fontSize=8.5,
-        leading=11,
-        textColor=DARK
     )
 
     story = []
 
     # =========================================================================
-    # PAGE 1: COVER & EXECUTIVE SUMMARY
+    # SLIDE 1: COVER SLIDE (16:9 MIDNIGHT LUXURY)
     # =========================================================================
-    story.append(Spacer(1, 20))
-    story.append(Paragraph("MENUZ", ParagraphStyle('SuperLogo', fontName='Helvetica-Bold', fontSize=14, textColor=PRIMARY, spaceAfter=4)))
-    story.append(Paragraph("The Restaurant Experience & Operations Operating System", title_style))
-    story.append(Paragraph("Turn Every Table into High-Margin Orders, 5-Star Reviews & Zero-Downtime Kitchen KOTs", subtitle_style))
-    story.append(HRFlowable(width="100%", thickness=2, color=PRIMARY, spaceBefore=4, spaceAfter=18))
-
-    exec_summary_text = (
-        "<b>Executive Summary:</b> Menuz is an all-in-one in-restaurant dining operating system engineered "
-        "to solve the three biggest profit leaks in modern restaurants: (1) lost review volume and negative public ratings, "
-        "(2) kitchen order delays from brittle POS integrations, and (3) under-trained staff unable to articulate chef backstories "
-        "and signature pairings. Menuz combines a frictionless, zero-app diner interface, a personalized AI Concierge trained directly "
-        "by the head chef & owner, and a triple-redundant KOT dispatch engine that connects to any kitchen in minutes."
-    )
-    story.append(Paragraph(exec_summary_text, body_style))
-    story.append(Spacer(1, 10))
-
-    # Key Value Props Table
-    props_data = [
+    s1_content = [
         [
-            Paragraph("<b>Core Pillar</b>", table_header_style),
-            Paragraph("<b>The Problem It Solves</b>", table_header_style),
-            Paragraph("<b>Menuz Solution & Impact</b>", table_header_style)
+            Paragraph("<b>MENUZ</b>", ParagraphStyle('CoverHuge', fontName='Helvetica-Bold', fontSize=48, leading=52, textColor=c_text_white)),
         ],
         [
-            Paragraph("<b>Chef & Owner AI Concierge</b>", table_body_style),
-            Paragraph("Diners ask basic questions to busy waiters; miss out on signature pairings, true spice levels & allergen info.", table_body_style),
-            Paragraph("A bespoke conversational AI trained on the chef's culinary lore, spice calibration (1-5) and pairings — boosting high-margin basket size by 18-24%.", table_body_style)
+            Paragraph("The Modern Dine-In Operating System & Growth Engine", ParagraphStyle('CoverSub', fontName='Helvetica-Bold', fontSize=22, leading=26, textColor=c_gold)),
         ],
         [
-            Paragraph("<b>Triple-Redundant KOT Engine</b>", table_body_style),
-            Paragraph("Fragile cloud-only POS systems drop orders when Wi-Fi fluctuates, causing kitchen chaos and lost billing.", table_body_style),
-            Paragraph("Instant multi-channel failover: Cloud POS APIs (Petpooja/Recaho/RanceLab) + Local LAN Sockets (Port 9100) + Direct WebUSB ESC/POS hardware printing.", table_body_style)
+            Paragraph(
+                "⚡  <b>Interactive HD Menus & Real-Time Multiplayer Sync (<100ms):</b> Co-ordering with zero app downloads.<br/>"
+                "⚡  <b>Chef & Owner AI Sommelier:</b> Margin-focused drink & pairing upsells (+22% average check size).<br/>"
+                "⚡  <b>Reputation Floor Shield:</b> Multiplies 5★ Google reviews while intercepting 1-3★ issues in <60s table-side.<br/>"
+                "⚡  <b>Direct Kitchen KOT & POS Integration:</b> Mode A (1-sec direct) or Mode B (Captain review); syncs with Petpooja.<br/>"
+                "⚡  <b>Commercial Model:</b> Flat ₹1,999/mo, 0% commission, and 100% customer WhatsApp data ownership.",
+                ParagraphStyle('CoverBullets', fontName='Helvetica', fontSize=13, leading=20, textColor=c_text_sub)
+            )
         ],
         [
-            Paragraph("<b>AI Review Booster & Floor Shield</b>", table_body_style),
-            Paragraph("Happy guests leave without rating; 1 upset diner posts a permanent 1-star Google review.", table_body_style),
-            Paragraph("Verified 5-star Google review funnel with gamified rewards, paired with an instant manager red-alert shield for sub-4 star feedback.", table_body_style)
-        ],
-        [
-            Paragraph("<b>Manager Hub & Live KDS</b>", table_body_style),
-            Paragraph("Managing stock (86-ing) and kitchen dispatch requires expensive proprietary hardware.", table_body_style),
-            Paragraph("Real-time browser-based operations console running on any tablet, phone, or billing PC with zero installation.", table_body_style)
+            Paragraph("MASTER RESTAURANT PARTNERSHIP DECK • 15 RESTAURANT VALIDATION EDITION • MENUZ PLATFORM", ParagraphStyle('CoverFoot', fontName='Helvetica-Bold', fontSize=10, leading=12, textColor=c_text_muted))
         ]
     ]
-
-    t_props = Table(props_data, colWidths=[1.4*inch, 2.5*inch, 2.8*inch])
-    t_props.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), PRIMARY),
-        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('TEXTCOLOR', (0, 0), (-1, -1), DARK),
-        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
-        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, LIGHT_BG]),
-        ('TOPPADDING', (0, 0), (-1, -1), 6),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
-        ('LEFTPADDING', (0, 0), (-1, -1), 6),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+    t_s1 = Table(s1_content, colWidths=[SLIDE_WIDTH - 100])
+    t_s1.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
+        ('BOX', (0,0), (-1,-1), 2, c_gold),
+        ('PADDING', (0,0), (-1,-1), 22),
+        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
     ]))
-    story.append(t_props)
-
+    story.append(t_s1)
     story.append(PageBreak())
 
     # =========================================================================
-    # PAGE 2: WHAT EXACTLY IS MENUZ? COMPLETE ARCHITECTURE & ENGINE
+    # SLIDE 2: THE MODERN DINE-IN CRISIS
     # =========================================================================
-    story.append(Paragraph("Chapter 1: What Exactly is Menuz?", h1_style))
-    story.append(Paragraph("A Deep-Dive into the Five Core Layers of Menuz", h2_style))
-    story.append(HRFlowable(width="100%", thickness=1, color=BORDER_COLOR, spaceBefore=2, spaceAfter=12))
+    story.append(Paragraph("// INDUSTRY CHALLENGE", tag_rose))
+    story.append(Paragraph("The 4 Critical Operational Traps Bleeding Restaurant Profits", title_style))
+    story.append(Paragraph("Why traditional paper menus, delivery aggregators, and unmanaged public reviews harm dining revenue.", sub_style))
 
-    story.append(Paragraph("Menuz is not just a digital menu. It is an end-to-end guest experience and kitchen operations bridge operating across five integrated modules:", body_style))
-    story.append(Spacer(1, 4))
-
-    modules = [
-        ("1. Diner Touchpoint & Interactive Menu", 
-         "Diners access the rich, responsive web application without downloading any apps or logging into accounts. "
-         "Features high-resolution authentic food photography, interactive dish customization (spice, add-ons, dietary filters), "
-         "instant table waiter calling, and real-time order tracking."),
-        
-        ("2. Chef & Owner Personalized AI Concierge", 
-         "Each restaurant receives its own distinct, fine-tuned AI dining assistant. The AI speaks in the authentic voice "
-         "of the executive chef and owner, explaining preparation techniques, secret family recipes, precise spice levels (1-5), "
-         "allergen precautions, and sommelier beverage pairings. It turns passive browsing into active high-ticket orders."),
-        
-        ("3. Triple-Redundant Universal KOT Dispatcher", 
-         "Orders placed on tables are instantly converted into industry-standard ESC/POS thermal kitchen tickets and sent through 3 simultaneous redundant pipelines: "
-         "Cloud REST APIs (Petpooja, Recaho, RanceLab), Local Area Network raw TCP sockets (RoyalPOS port 8080/9100), and Direct Hardware WebUSB/Serial printing. "
-         "If the restaurant's internet drops, local printing continues seamlessly with zero lost tickets."),
-
-        ("4. Gamified Review Booster & Private Floor Shield", 
-         "At the end of the meal, guests are invited to participate in a gamified review experience. "
-         "5-Star ratings are routed to the restaurant's verified Google Maps listing via an intelligent anti-fraud verification gate. "
-         "Sub-4 star ratings trigger an immediate private red-alert to the restaurant manager's console, allowing staff to resolve concerns tableside before the customer departs."),
-
-        ("5. Manager Operations Console & Kitchen Display System (KDS)", 
-         "A unified management hub enabling instant dish 86-ing (marking out-of-stock items), real-time catalog editing, "
-         "thermal printer test spooling, multi-channel POS configuration, and live table order fulfillment.")
+    p1 = [
+        Paragraph("1. Aggregator Trap (25-30% Cut)", card_h_rose),
+        Paragraph("Delivery platforms charge crippling commissions and withhold diner phone numbers. Restaurants do all the cooking while aggregators own the diner relationship.", card_body)
+    ]
+    p2 = [
+        Paragraph("2. Paper Menu Blindness", card_h_gold),
+        Paragraph("Static paper menus fail to upsell drinks or show plating. Updating single dish prices requires expensive re-printing and days of delay.", card_body)
+    ]
+    p3 = [
+        Paragraph("3. The 1-Star Google Ambush", card_h_rose),
+        Paragraph("Diners leave quietly without complaining to staff, then post devastating 1-star Google reviews from home at 11 PM, permanently lowering your SEO rank.", card_body)
+    ]
+    p4 = [
+        Paragraph("4. Waiter Dispatch Bottlenecks", card_h_cyan),
+        Paragraph("Guests wave hands frantically for water or bills during peak rush. Table turnover slows by 15-20 minutes, costing thousands in lost seatings.", card_body)
     ]
 
-    for title, desc in modules:
-        story.append(Paragraph(f"<b>{title}</b>", h2_style))
-        story.append(Paragraph(desc, bullet_style))
-        story.append(Spacer(1, 2))
-
-    story.append(Spacer(1, 8))
-    story.append(Paragraph("Zero-Downtime Multi-POS Architecture", h2_style))
-    
-    pos_summary = (
-        "<b>Supported Integrations:</b><br/>"
-        "• <b>Petpooja POS:</b> Full cloud REST bridge with menu sync, custom add-on mapping, and automatic KOT printing.<br/>"
-        "• <b>RoyalPOS:</b> Local Wi-Fi socket bridge (Port 8080) with zero internet dependence.<br/>"
-        "• <b>Recaho:</b> Cloud kitchen API bridge with instant ticket generation across multi-outlet chains.<br/>"
-        "• <b>RanceLab:</b> Enterprise ERP billing suite integration with automated GST slab calculations and inventory deduction.<br/>"
-        "• <b>Direct WebUSB / Serial ESC-POS:</b> 1-click driverless printing to any 80mm thermal hardware printer."
-    )
-    story.append(Paragraph(pos_summary, body_style))
-
+    t_s2 = Table([[p1, p2], [p3, p4]], colWidths=[(SLIDE_WIDTH - 110)/2, (SLIDE_WIDTH - 110)/2])
+    t_s2.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
+        ('BOX', (0,0), (-1,-1), 1, c_border),
+        ('INNERGRID', (0,0), (-1,-1), 0.75, c_border),
+        ('PADDING', (0,0), (-1,-1), 12),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+    ]))
+    story.append(t_s2)
     story.append(PageBreak())
 
     # =========================================================================
-    # PAGE 3: THE CHEF & OWNER ONBOARDING QUESTIONNAIRE
+    # SLIDE 3: FACTUAL MARKETING MATRIX
     # =========================================================================
-    story.append(Paragraph("Chapter 2: Chef & Owner AI Intake Questionnaire", h1_style))
-    story.append(Paragraph("Ready-to-Fill Intake Document for Restaurant Owners & Head Chefs", h2_style))
-    story.append(HRFlowable(width="100%", thickness=1, color=BORDER_COLOR, spaceBefore=2, spaceAfter=12))
+    story.append(Paragraph("// FACTUAL MARKETING MATRIX", tag_cyan))
+    story.append(Paragraph("Public Google Reviews vs. Instagram UGC vs. Private Floor Shield", title_style))
+    story.append(Paragraph("Demystifying reviews: Google Search SEO vs. Social Media Virality vs. Table Damage Control.", sub_style))
 
-    story.append(Paragraph(
-        "<i>Give this questionnaire to the restaurant owner and executive head chef during onboarding. "
-        "The responses are fed directly into the restaurant's Menuz AI engine to personalize the conversational dining concierge.</i>",
-        callout_style
-    ))
-    story.append(Spacer(1, 10))
-
-    q_data = [
-        [
-            Paragraph("<b>Intake Field</b>", table_header_style),
-            Paragraph("<b>Question for Owner & Chef</b>", table_header_style),
-            Paragraph("<b>Example / Notes</b>", table_header_style)
-        ],
-        [
-            Paragraph("<b>1. Head Chef Profile</b>", table_body_style),
-            Paragraph("What is the Head Chef's full name, title, culinary training background, and years of master experience?", table_body_style),
-            Paragraph("e.g. Chef Sanjay Rawat, 22 years specializing in Awadhi Dum Pukht and copper deg cooking.", table_body_style)
-        ],
-        [
-            Paragraph("<b>2. Culinary Philosophy</b>", table_body_style),
-            Paragraph("What is your core kitchen standard? (e.g. hand-pounded spices, 24-hr braising, cold-pressed oils, no food colors)", table_body_style),
-            Paragraph("e.g. We slow-roast whole Kashmiri chilies over charcoal and never use commercial bases.", table_body_style)
-        ],
-        [
-            Paragraph("<b>3. Owner Lore & Voice</b>", table_body_style),
-            Paragraph("Who is the founder/owner? What is the welcome message & tone? (Warm traditional, cozy bistro, or fine dining sommelier)", table_body_style),
-            Paragraph("e.g. Vikramaditya Singhania — 'At Saffron House, our guests are treated as royal patrons.'", table_body_style)
-        ],
-        [
-            Paragraph("<b>4. Spice Calibration (1-5)</b>", table_body_style),
-            Paragraph("How should the AI describe your spice scale to diners?", table_body_style),
-            Paragraph("e.g. 1 = Mild aromatic; 3 = Authentic North Indian warmth; 5 = Fiery Guntur chili heat.", table_body_style)
-        ],
-        [
-            Paragraph("<b>5. Secret Dish Backstories</b>", table_body_style),
-            Paragraph("List 3-5 signature dishes and their heirloom origin, preparation secrets, or special ingredients.", table_body_style),
-            Paragraph("e.g. Dal Makhani simmers for 36 hours over glowing tandoor charcoal embers with churned dairy butter.", table_body_style)
-        ],
-        [
-            Paragraph("<b>6. Signature Pairings</b>", table_body_style),
-            Paragraph("Which beverages or wines do the chef & owner recommend with your top 3 main courses, and why?", table_body_style),
-            Paragraph("e.g. Old Delhi Butter Chicken paired with Smoked Saffron Lassi to cut through rich makkhan.", table_body_style)
-        ],
-        [
-            Paragraph("<b>7. Dietary & Allergen Protocols</b>", table_body_style),
-            Paragraph("What are your kitchen protocols for vegetarian separation, gluten-free prep, and nut allergy isolation?", table_body_style),
-            Paragraph("e.g. 100% separate fryers and cookware for vegetarian dishes; explicit KOT allergy tags.", table_body_style)
-        ]
+    c3_a = [
+        Paragraph("A. Public Google Reviews", card_h_gold),
+        Paragraph("<b>Platform:</b> Google Maps / Local 3-Pack<br/>"
+                  "<b>Format:</b> Permanent star score + text review.<br/>"
+                  "<b>Impact:</b> Dictates organic ranking for search ('best cafe near me') and walk-in footfall.<br/>"
+                  "<b>Menuz Role:</b> Multiplies 5★ reviews via 1-tap AI drafts and gamified Lucky Wheel rewards.", card_body)
+    ]
+    c3_b = [
+        Paragraph("B. Instagram / Social UGC", card_h_rose),
+        Paragraph("<b>Platform:</b> Instagram Stories & Reels<br/>"
+                  "<b>Format:</b> 9:16 Vertical branded dish cards.<br/>"
+                  "<b>Impact:</b> Reaches 500–2,000 local friends of the guest, creating visual FOMO and buzz.<br/>"
+                  "<b>Menuz Role:</b> Auto-generates branded 9:16 story cards with @restaurant tag in 1 tap.", card_body)
+    ]
+    c3_c = [
+        Paragraph("C. Private Floor Shield", card_h_emerald),
+        Paragraph("<b>Platform:</b> Internal Manager Tablet / SMS<br/>"
+                  "<b>Format:</b> Private 1-3★ table grievance alert.<br/>"
+                  "<b>Impact:</b> Stops complaints from reaching Google; alerts floor manager in <60s.<br/>"
+                  "<b>Menuz Role:</b> Manager resolves issue at table before guest ever leaves.", card_body)
     ]
 
-    t_q = Table(q_data, colWidths=[1.5*inch, 2.7*inch, 2.5*inch])
-    t_q.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), ACCENT_TEAL),
-        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
-        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, LIGHT_BG]),
-        ('TOPPADDING', (0, 0), (-1, -1), 5),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
-        ('LEFTPADDING', (0, 0), (-1, -1), 5),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 5),
+    t_s3 = Table([[c3_a, c3_b, c3_c]], colWidths=[(SLIDE_WIDTH - 120)/3, (SLIDE_WIDTH - 120)/3, (SLIDE_WIDTH - 120)/3])
+    t_s3.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
+        ('BOX', (0,0), (-1,-1), 1, c_border),
+        ('INNERGRID', (0,0), (-1,-1), 0.75, c_border),
+        ('PADDING', (0,0), (-1,-1), 12),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
     ]))
-    story.append(t_q)
-
+    story.append(t_s3)
     story.append(PageBreak())
 
     # =========================================================================
-    # PAGE 4: DINER EXPERIENCE & GOOGLE REVIEW FUNNEL
+    # SLIDE 4: VISUAL DIGITAL MENU & SERVICE CONTROLS
     # =========================================================================
-    story.append(Paragraph("Chapter 3: The Gamified Review Booster & Floor Shield", h1_style))
-    story.append(Paragraph("How Menuz Accelerates 5-Star Reviews While Eliminating Negative Feedback", h2_style))
-    story.append(HRFlowable(width="100%", thickness=1, color=BORDER_COLOR, spaceBefore=2, spaceAfter=12))
+    story.append(Paragraph("// DINER TABLE INTERFACE", tag_cyan))
+    story.append(Paragraph("Visual Digital Menu: Engaging Appetites with Culinary Storytelling", title_style))
+    story.append(Paragraph("Replacing paper text with high-res plating photos, calibrated spice meters, and instant service calls.", sub_style))
 
-    story.append(Paragraph(
-        "Online reviews dictate restaurant discovery. A 0.5-star rating increase on Google Maps translates to a "
-        "<b>19% to 27% increase in walk-in footfall</b> during peak dining hours. Menuz turns every satisfied diner into a verified reviewer.",
-        body_style
-    ))
-    story.append(Spacer(1, 6))
-
-    steps_data = [
-        [
-            Paragraph("<b>Step</b>", table_header_style),
-            Paragraph("<b>Customer Experience Flow</b>", table_header_style),
-            Paragraph("<b>Restaurant Benefit</b>", table_header_style)
-        ],
-        [
-            Paragraph("<b>1. Post-Meal Prompt</b>", table_body_style),
-            Paragraph("Diner finishes meal and taps 'Claim Chef Dessert / Reward' on their table screen.", table_body_style),
-            Paragraph("Captures diner attention when satisfaction is at its peak.", table_body_style)
-        ],
-        [
-            Paragraph("<b>2. Rating Gate</b>", table_body_style),
-            Paragraph("Guest selects star rating (1 to 5 stars) and selects quick highlight tags (Food Quality, Ambiance, Service).", table_body_style),
-            Paragraph("Instantly segments happy diners from unhappy diners.", table_body_style)
-        ],
-        [
-            Paragraph("<b>3A. If 5 Stars (Boost)</b>", table_body_style),
-            Paragraph("AI crafts a personalized review draft based on their ordered dishes. Guest copies and pastes to Google Maps in 1 click.", table_body_style),
-            Paragraph("High keyword density (dish names, ambiance) boosts local SEO and Google Maps ranking.", table_body_style)
-        ],
-        [
-            Paragraph("<b>3B. If &lt;4 Stars (Shield)</b>", table_body_style),
-            Paragraph("Review is kept strictly private. An instant High-Priority Alert flashes red on the Manager Console.", table_body_style),
-            Paragraph("Prevents public negative reviews by enabling managers to fix complaints before the bill is paid.", table_body_style)
-        ],
-        [
-            Paragraph("<b>4. Anti-Fraud Reward</b>", table_body_style),
-            Paragraph("Guest receives reward voucher (e.g. complimentary dessert) secured by a 15-minute countdown timer and 4-digit staff PIN.", table_body_style),
-            Paragraph("100% immune to fraud, screenshot sharing, or unauthorized reuse.", table_body_style)
-        ]
+    c4_left = [
+        Paragraph("Visual Menu Architecture", card_h_cyan),
+        Paragraph("• <b>High-Res Plating Photos:</b> Triggers visual appetite stimulation and higher check size.<br/>"
+                  "• <b>Spice Meters (Levels 1 to 5):</b> Prevents spice mismatches (Level 1: Cashew Cream, Level 5: Guntur Chili).<br/>"
+                  "• <b>Dietary & Allergen Filtering:</b> Instant 1-tap filtering for Pure Veg (🟢), Non-Veg (🔴), Vegan, Jain, and Gluten-Free.<br/>"
+                  "• <b>Chef's Secret Lore:</b> Highlights slow-braising and charcoal tandoor heritage.", card_body)
+    ]
+    c4_right = [
+        Paragraph("Zero-Friction Service Controls", card_h_gold),
+        Paragraph("• <b>Zero App Downloads:</b> Runs instantly in Safari/Chrome via lightweight PWA.<br/>"
+                  "• <b>1-Tap Floor Service SOS:</b> Diners tap 'Call Waiter', 'Water', or 'Bill' — staff tablet buzzes instantly.<br/>"
+                  "• <b>Live Kitchen Preparation Tracking:</b> Diners see 'Received' → 'Preparing' → 'Served'.<br/>"
+                  "• <b>Instant Itemized Bill View:</b> Transparent checkout cuts wait times by 80%.", card_body)
     ]
 
-    t_steps = Table(steps_data, colWidths=[1.3*inch, 3.2*inch, 2.2*inch])
-    t_steps.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), ACCENT_BLUE),
-        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
-        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, LIGHT_BG]),
-        ('TOPPADDING', (0, 0), (-1, -1), 5),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
-        ('LEFTPADDING', (0, 0), (-1, -1), 5),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 5),
+    t_s4 = Table([[c4_left, c4_right]], colWidths=[(SLIDE_WIDTH - 110)/2, (SLIDE_WIDTH - 110)/2])
+    t_s4.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
+        ('BOX', (0,0), (-1,-1), 1, c_border_cyan),
+        ('INNERGRID', (0,0), (-1,-1), 0.75, c_border),
+        ('PADDING', (0,0), (-1,-1), 13),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
     ]))
-    story.append(t_steps)
-
-    story.append(Spacer(1, 14))
-    story.append(Paragraph("Restaurateur ROI & Unit Economics", h2_style))
-    story.append(Paragraph(
-        "• <b>Zero Forced Bill Discounts:</b> Unlike coupon aggregators that force 20-50% margins cuts, Menuz rewards guests with high-perceived-value, low-cost complimentary items (e.g. chef dessert at ₹25 food cost).<br/>"
-        "• <b>+250 to +400 New 5-Star Reviews/Month:</b> Dramatically outranks local competitors on Google Search and Maps.<br/>"
-        "• <b>Zero Additional Hardware Cost:</b> Runs directly on existing Android/iOS smartphones, billing PCs, and thermal printers.",
-        body_style
-    ))
-
+    story.append(t_s4)
     story.append(PageBreak())
 
     # =========================================================================
-    # PAGE 5: HARDWARE, KOT MATRIX & PARTNER ONBOARDING
+    # SLIDE 5: REAL-TIME MULTIPLAYER TABLE SYNC
     # =========================================================================
-    story.append(Paragraph("Chapter 4: Technical Specifications & Deployment Roadmap", h1_style))
-    story.append(Paragraph("Triple Redundancy Engine & 2-Minute Onboarding Workflow", h2_style))
-    story.append(HRFlowable(width="100%", thickness=1, color=BORDER_COLOR, spaceBefore=2, spaceAfter=12))
+    story.append(Paragraph("// GROUP DINING INNOVATION", tag_cyan))
+    story.append(Paragraph("Real-Time Multiplayer Table Sync: Group Dining Reimagined", title_style))
+    story.append(Paragraph("Multiple phones at the same table add dishes together into one synchronized live cart.", sub_style))
 
-    story.append(Paragraph("Triple-Redundancy KOT Dispatch Engine Specifications", h2_style))
-
-    tech_specs_data = [
-        [
-            Paragraph("<b>Channel</b>", table_header_style),
-            Paragraph("<b>Protocol / Port</b>", table_header_style),
-            Paragraph("<b>Hardware & POS Supported</b>", table_header_style),
-            Paragraph("<b>Setup Time</b>", table_header_style)
-        ],
-        [
-            Paragraph("<b>Channel 1: Cloud POS Bridge</b>", table_body_style),
-            Paragraph("HTTPS REST / JSON Webhooks (Encrypted)", table_body_style),
-            Paragraph("Petpooja API, Recaho Cloud API, RanceLab ERP API", table_body_style),
-            Paragraph("<b>60 Seconds</b> (App Key & Rest ID)", table_body_style)
-        ],
-        [
-            Paragraph("<b>Channel 2: Local LAN Socket</b>", table_body_style),
-            Paragraph("TCP Raw Socket / Port 8080 & 9100", table_body_style),
-            Paragraph("RoyalPOS Local Server, Epson JetDirect, TVS RP-3160 Network", table_body_style),
-            Paragraph("<b>45 Seconds</b> (Device Local IP)", table_body_style)
-        ],
-        [
-            Paragraph("<b>Channel 3: Direct WebUSB / Serial</b>", table_body_style),
-            Paragraph("USB Bulk Transfer (Class 7) / WebUSB API", table_body_style),
-            Paragraph("All 80mm & 58mm ESC/POS USB thermal receipt printers", table_body_style),
-            Paragraph("<b>15 Seconds</b> (1-Click Browser Grant)", table_body_style)
-        ]
+    c5_1 = [
+        Paragraph("Live Shared Tray (<100ms)", card_h_cyan),
+        Paragraph("All guests at Table 4 connect to the same real-time WebSocket room. When Rohan adds Butter Naan, Priya sees it on her screen in milliseconds.", card_body)
+    ]
+    c5_2 = [
+        Paragraph("Guest Attribution Tags", card_h_gold),
+        Paragraph("Every item displays who ordered it ('👤 Rohan', '👤 Priya'), eliminating the awkward confusion of duplicate orders.", card_body)
+    ]
+    c5_3 = [
+        Paragraph("Harmonious Kitchen KOT", card_h_emerald),
+        Paragraph("The table reviews the unified cart together before dispatching, ensuring the kitchen receives one organized ticket.", card_body)
     ]
 
-    t_tech = Table(tech_specs_data, colWidths=[1.6*inch, 1.8*inch, 2.3*inch, 1.0*inch])
-    t_tech.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), PRIMARY),
-        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
-        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, LIGHT_BG]),
-        ('TOPPADDING', (0, 0), (-1, -1), 5),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
-        ('LEFTPADDING', (0, 0), (-1, -1), 5),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 5),
+    t_s5 = Table([[c5_1, c5_2, c5_3]], colWidths=[(SLIDE_WIDTH - 120)/3, (SLIDE_WIDTH - 120)/3, (SLIDE_WIDTH - 120)/3])
+    t_s5.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
+        ('BOX', (0,0), (-1,-1), 1, c_border),
+        ('INNERGRID', (0,0), (-1,-1), 0.75, c_border),
+        ('PADDING', (0,0), (-1,-1), 13),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
     ]))
-    story.append(t_tech)
+    story.append(t_s5)
+    story.append(PageBreak())
 
-    story.append(Spacer(1, 14))
-    story.append(Paragraph("Partner Restaurant 3-Step Rollout Workflow", h2_style))
-    story.append(Paragraph(
-        "<b>Day 1: AI Persona & Catalog Ingestion (15 Minutes)</b><br/>"
-        "• Manager/Owner fills out the Chef & Owner Questionnaire.<br/>"
-        "• Menuz AI auto-ingests the digital catalog, dietary tags, allergens, and signature stories.<br/><br/>"
-        "<b>Day 1: KOT Dispatch Verification (2 Minutes)</b><br/>"
-        "• Open the 2-Minute KOT Setup Wizard in Manager Hub.<br/>"
-        "• Fire a live test ticket to verify thermal printer output and kitchen layout.<br/><br/>"
-        "<b>Day 2: Live Floor Launch</b><br/>"
-        "• Guests enjoy seamless ordering, AI chef recommendations, and automated 5-star Google review generation.",
-        body_style
-    ))
+    # =========================================================================
+    # SLIDE 6: CHEF & OWNER-TRAINED AI SOMMELIER
+    # =========================================================================
+    story.append(Paragraph("// AI DINING CONCIERGE", tag_gold))
+    story.append(Paragraph("Chef AI Sommelier: Always Guiding Choices & Answering Questions", title_style))
+    story.append(Paragraph("A conversational AI trained directly on your chef's recipes and owner's upsell rules.", sub_style))
 
-    story.append(Spacer(1, 20))
-    story.append(HRFlowable(width="100%", thickness=1, color=PRIMARY, spaceBefore=4, spaceAfter=10))
-    story.append(Paragraph(
-        "<b>Ready to deploy Menuz in your restaurant?</b> Contact our partner engineering team or launch your live operations hub at <b>stgtrgjrccx.github.io/menuz/#/admin</b>",
-        ParagraphStyle('ContactFooter', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=10, textColor=PRIMARY, alignment=1)
-    ))
+    c6_content = [
+        Paragraph("How the In-Menu AI Concierge Drives Higher Check Sizes", card_h_gold),
+        Paragraph(
+            "• <b>Trained on Head Chef's Recipes:</b> Speaks with authentic culinary authority on marinades, braising times, and heat levels with zero hallucinations.<br/>"
+            "• <b>Trained on Owner's Upsell Playbook:</b> When asked what goes with Biryani, the AI naturally recommends high-margin coolers, specialty naans, and house desserts.<br/>"
+            "• <b>Smart Auto-Scroll UX & Suggestion Chips:</b> Diners tap quick chips ('Pair a drink with Paneer Tikka', 'Is Mutton Curry spicy?'). The chat window smoothly auto-scrolls without typing.<br/>"
+            "• <b>Dietary & Allergen Guarantee:</b> Instantly verifies kitchen protocols for Jain, nut-free, vegan, and gluten-free items with 100% confidence.",
+            card_body
+        )
+    ]
+    t_s6 = Table([[c6_content]], colWidths=[SLIDE_WIDTH - 100])
+    t_s6.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
+        ('BOX', (0,0), (-1,-1), 1.5, c_border_gold),
+        ('PADDING', (0,0), (-1,-1), 15),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+    ]))
+    story.append(t_s6)
+    story.append(PageBreak())
 
-    doc.build(story, canvasmaker=NumberedCanvas)
-    print(f"Successfully generated PDF: {output_path}")
+    # =========================================================================
+    # SLIDE 7: CHEF PAIRINGS & REVENUE UPSELL ENGINE
+    # =========================================================================
+    story.append(Paragraph("// REVENUE ACCELERATION", tag_emerald))
+    story.append(Paragraph("Smart Chef Pairings: Boosting Average Ticket Size by +22%", title_style))
+    story.append(Paragraph("Automated contextual beverage and side bundle recommendations served right inside the cart.", sub_style))
 
-if __name__ == '__main__':
+    c7_1 = [
+        Paragraph("Contextual Dish Matching", card_h_cyan),
+        Paragraph("Selecting Awadhi Murgh Biryani automatically surfaces the Chef's Pairing: Garlic Butter Naan + Royal Kokum Mint Cooler with 1-tap addition.", card_body)
+    ]
+    c7_2 = [
+        Paragraph("Configurable Bundle Deals", card_h_gold),
+        Paragraph("Owners configure bundle discounts (e.g. 10-15% off when added as a pair). Diners love the value while restaurants sell more beverages and desserts.", card_body)
+    ]
+    c7_3 = [
+        Paragraph("1-Click In-Tray Quick Add", card_h_emerald),
+        Paragraph("Suggested pairings appear inside the bottom cart sheet so diners add them instantly without browsing separate menu categories.", card_body)
+    ]
+
+    t_s7 = Table([[c7_1, c7_2, c7_3]], colWidths=[(SLIDE_WIDTH - 120)/3, (SLIDE_WIDTH - 120)/3, (SLIDE_WIDTH - 120)/3])
+    t_s7.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
+        ('BOX', (0,0), (-1,-1), 1, c_border),
+        ('INNERGRID', (0,0), (-1,-1), 0.75, c_border),
+        ('PADDING', (0,0), (-1,-1), 13),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+    ]))
+    story.append(t_s7)
+    story.append(PageBreak())
+
+    # =========================================================================
+    # SLIDE 8: THE REPUTATION FLOOR SHIELD
+    # =========================================================================
+    story.append(Paragraph("// REPUTATION DEFENSE", tag_emerald))
+    story.append(Paragraph("The Reputation Floor Shield: 5★ to Google, 1-3★ to Manager", title_style))
+    story.append(Paragraph("How Menuz channels positive reviews to Google Maps while intercepting complaints table-side.", sub_style))
+
+    c8_1 = [
+        Paragraph("4-5★ -> Public Google Maps Multiplier", card_h_gold),
+        Paragraph("Delighted diners receive AI-generated dish-specific review drafts and are deep-linked straight to your Google Maps review page in 1 tap.", card_body)
+    ]
+    c8_2 = [
+        Paragraph("1-3★ -> Silent Manager SOS Alert", card_h_cyan),
+        Paragraph("Ratings under 4 stars NEVER touch Google Maps. An urgent alert buzzes the manager's tablet: 'Table 4: Soup lukewarm'.", card_body)
+    ]
+    c8_3 = [
+        Paragraph("Tableside Recovery in <60 Seconds", card_h_emerald),
+        Paragraph("Floor manager visits Table 4 immediately with a fresh dish or personal apology, converting an upset guest before they leave.", card_body)
+    ]
+    c8_4 = [
+        Paragraph("Permanent 4.8+ Google Rating", card_h_gold),
+        Paragraph("Guarantees your public Google rating stays high, driving continuous search footfall while giving kitchen staff honest feedback.", card_body)
+    ]
+
+    t_s8 = Table([[c8_1, c8_2], [c8_3, c8_4]], colWidths=[(SLIDE_WIDTH - 110)/2, (SLIDE_WIDTH - 110)/2])
+    t_s8.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
+        ('BOX', (0,0), (-1,-1), 1, c_border),
+        ('INNERGRID', (0,0), (-1,-1), 0.75, c_border),
+        ('PADDING', (0,0), (-1,-1), 12),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+    ]))
+    story.append(t_s8)
+    story.append(PageBreak())
+
+    # =========================================================================
+    # SLIDE 9: PUBLIC GOOGLE MAPS SEO ENGINE
+    # =========================================================================
+    story.append(Paragraph("// SEARCH DOMINANCE", tag_gold))
+    story.append(Paragraph("Google Maps 3-Pack Dominance & AI Review Multiplication", title_style))
+    story.append(Paragraph("Turn every happy dining table into a high-ranking Google SEO asset.", sub_style))
+
+    c9_content = [
+        Paragraph("How Menuz Powers Local Search Discovery on Google", card_h_gold),
+        Paragraph(
+            "• <b>AI Dish-Specific Review Drafts:</b> Diners hate typing reviews. Menuz creates authentic 2-sentence reviews highlighting dishes ordered in 1 tap.<br/>"
+            "• <b>1-Tap Deep Linking to Google Maps:</b> Copies review to clipboard and opens Google Place Review page in 3 seconds.<br/>"
+            "• <b>Rich Local Keyword Injection:</b> Reviews naturally incorporate high-intent keywords ('best butter chicken in Koregaon Park'), ranking your restaurant in Google's Top 3 Pack.<br/>"
+            "• <b>+300 Verified Reviews Monthly:</b> A 20-table restaurant serving 100 tables/day averages 10-15 new 5-star Google reviews daily.",
+            card_body
+        )
+    ]
+    t_s9 = Table([[c9_content]], colWidths=[SLIDE_WIDTH - 100])
+    t_s9.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
+        ('BOX', (0,0), (-1,-1), 1.5, c_border_gold),
+        ('PADDING', (0,0), (-1,-1), 15),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+    ]))
+    story.append(t_s9)
+    story.append(PageBreak())
+
+    # =========================================================================
+    # SLIDE 10: VIRAL 9:16 INSTAGRAM STORY STUDIO
+    # =========================================================================
+    story.append(Paragraph("// SOCIAL MEDIA VIRALITY", tag_rose))
+    story.append(Paragraph("Viral 9:16 Instagram Story Studio: Organic Word-of-Mouth", title_style))
+    story.append(Paragraph("Empower diners to share gorgeous, branded dish stories to thousands of local followers.", sub_style))
+
+    c10_content = [
+        Paragraph("How the 9:16 Visual Social Engine Drives Virality", card_h_rose),
+        Paragraph(
+            "• <b>Automated 9:16 Story Cards:</b> Diners tap 'Share to Story'. Menuz generates a studio-grade 9:16 vertical card with dish photo and restaurant logo in seconds.<br/>"
+            "• <b>Pre-Configured @Handle & Location Tags:</b> Includes your exact Instagram handle (@restaurantname) and geo-location tag so friends tap directly to your profile.<br/>"
+            "• <b>Zero Influencer Spend:</b> Replaces expensive food bloggers with 200+ authentic local diners posting real dining stories every week to their friends.<br/>"
+            "• <b>Owner Choice: Dual Mode:</b> Owners can set reward unlock requirements to Google Review, Instagram Story, or allow diners to choose.",
+            card_body
+        )
+    ]
+    t_s10 = Table([[c10_content]], colWidths=[SLIDE_WIDTH - 100])
+    t_s10.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
+        ('BOX', (0,0), (-1,-1), 1.5, c_border),
+        ('PADDING', (0,0), (-1,-1), 15),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+    ]))
+    story.append(t_s10)
+    story.append(PageBreak())
+
+    # =========================================================================
+    # SLIDE 11: GAMIFIED LUCKY WHEEL & ANTI-CHEAT SECURITY
+    # =========================================================================
+    story.append(Paragraph("// FRAUD PROTECTION", tag_cyan))
+    story.append(Paragraph("Gamified Lucky Wheel & Triple-Layer Anti-Cheat Security", title_style))
+    story.append(Paragraph("Diners love winning table rewards — while owners remain 100% protected against voucher fraud.", sub_style))
+
+    c11_l = [
+        Paragraph("Interactive Lucky Wheel", card_h_gold),
+        Paragraph("• <b>Animated Wheel Spin:</b> Unlocked immediately after review or social post.<br/>"
+                  "• <b>Customizable Prizes:</b> 15% off food bill, free dessert, or mocktail upgrade.<br/>"
+                  "• <b>High Engagement:</b> Creates excitement at the table, boosting dining retention.<br/>"
+                  "• <b>Tied to Billing:</b> Redemption is validated directly at checkout.", card_body)
+    ]
+    c11_r = [
+        Paragraph("Triple Anti-Cheat Security", card_h_cyan),
+        Paragraph("• <b>Live 15-Minute Ticking Clock:</b> Displays a dynamic seconds clock. Static screenshots or forwarded images are instantly rejected.<br/>"
+                  "• <b>Waiter PIN Verification (1234):</b> Server physically enters secret PIN on diner's phone to void voucher.<br/>"
+                  "• <b>Single-Use Cryptographic Lock:</b> Tied to Table X and session ID — cannot be forwarded.", card_body)
+    ]
+
+    t_s11 = Table([[c11_l, c11_r]], colWidths=[(SLIDE_WIDTH - 110)/2, (SLIDE_WIDTH - 110)/2])
+    t_s11.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
+        ('BOX', (0,0), (-1,-1), 1, c_border_cyan),
+        ('INNERGRID', (0,0), (-1,-1), 0.75, c_border),
+        ('PADDING', (0,0), (-1,-1), 13),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+    ]))
+    story.append(t_s11)
+    story.append(PageBreak())
+
+    # =========================================================================
+    # SLIDE 12: KITCHEN OPERATIONS (MODE A VS MODE B)
+    # =========================================================================
+    story.append(Paragraph("// KITCHEN OPERATIONS", tag_cyan))
+    story.append(Paragraph("Direct Kitchen KOT & Universal POS Bridge (Mode A vs Mode B)", title_style))
+    story.append(Paragraph("Owner-controlled dispatching with thermal printer hardware compatibility.", sub_style))
+
+    c12_1 = [
+        Paragraph("Mode A: Direct Auto-KOT to Kitchen", card_h_cyan),
+        Paragraph("• Fires 80mm ESC/POS thermal ticket directly to kitchen printer in 1 second.<br/>"
+                  "• Zero waiter re-typing — eliminates manual transcription mistakes and delays.<br/>"
+                  "• Pre-formatted with preparation notes (spice calibration, allergen tags).<br/>"
+                  "• <b>Best for:</b> High-turnover cafes, bistros, QSRs, and casual dining.", card_body)
+    ]
+    c12_2 = [
+        Paragraph("Mode B: Floor Captain Review First", card_h_gold),
+        Paragraph("• Order lands on Floor Captain's tablet first for review and verification.<br/>"
+                  "• Captain checks bar inventory, course pacing, and custom guest requests.<br/>"
+                  "• Captain taps 'Approve & Fire' to send KOT to kitchen thermal stations.<br/>"
+                  "• <b>Best for:</b> Fine dining, multi-course dining, and rooftop lounges.", card_body)
+    ]
+
+    t_s12 = Table([[c12_1, c12_2]], colWidths=[(SLIDE_WIDTH - 110)/2, (SLIDE_WIDTH - 110)/2])
+    t_s12.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
+        ('BOX', (0,0), (-1,-1), 1, c_border),
+        ('INNERGRID', (0,0), (-1,-1), 0.75, c_border),
+        ('PADDING', (0,0), (-1,-1), 13),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+    ]))
+    story.append(t_s12)
+    story.append(PageBreak())
+
+    # =========================================================================
+    # SLIDE 13: LIVE FLOOR COMMAND CENTER & KDS
+    # =========================================================================
+    story.append(Paragraph("// OPERATIONS HUB", tag_cyan))
+    story.append(Paragraph("Live Floor Command Center & Kitchen Display System (KDS)", title_style))
+    story.append(Paragraph("Real-time tablet management for managers, floor captains, and kitchen expeditors.", sub_style))
+
+    c13_content = [
+        Paragraph("Real-Time Operational Controls for Floor Staff & Kitchen", card_h_cyan),
+        Paragraph(
+            "• <b>Live Visual Table Map & Status Grid:</b> Color-coded table grid (🟢 Green = Dining, 🟡 Amber = Ordering, 🔵 Blue = Bill Requested, ⚪ Gray = Vacant).<br/>"
+            "• <b>Service Call Management with Timers:</b> Push alerts for 'Waiter Summoned', 'Water Needed', or 'Bill' with response tracking to maintain <60s speed.<br/>"
+            "• <b>Kitchen Expeditor Timers (KDS):</b> Countdown clocks on kitchen screens (Green <15m, Amber 15-25m, Red >25m) eliminate food delays.<br/>"
+            "• <b>Universal POS Adapters:</b> Bi-directional bridging with Petpooja, RoyalPOS, Recaho, and RanceLab, plus direct network ESC/POS thermal printing.",
+            card_body
+        )
+    ]
+    t_s13 = Table([[c13_content]], colWidths=[SLIDE_WIDTH - 100])
+    t_s13.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
+        ('BOX', (0,0), (-1,-1), 1.5, c_border_cyan),
+        ('PADDING', (0,0), (-1,-1), 15),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+    ]))
+    story.append(t_s13)
+    story.append(PageBreak())
+
+    # =========================================================================
+    # SLIDE 14: 5-MIN AI ONBOARDING STUDIO
+    # =========================================================================
+    story.append(Paragraph("// RAPID ONBOARDING", tag_gold))
+    story.append(Paragraph("5-Minute AI Onboarding Studio & Partitioned Multi-Tenancy", title_style))
+    story.append(Paragraph("Get any restaurant live in under 5 minutes with voice intake and isolated cloud storage.", sub_style))
+
+    c14_1 = [
+        Paragraph("AI Menu & Recipe Intake", card_h_cyan),
+        Paragraph("Chefs speak or upload a photo of the paper menu. AI extracts dish names, categorizes courses, drafts flavor notes, and calibrates spice ratings in minutes.", card_body)
+    ]
+    c14_2 = [
+        Paragraph("Partitioned Media Library", card_h_gold),
+        Paragraph("Every partner restaurant has an isolated cloud image bank. High-res dish photography and branding are segregated with zero cross-tenant clutter.", card_body)
+    ]
+    c14_3 = [
+        Paragraph("Standalone Branded Routes", card_h_emerald),
+        Paragraph("Each restaurant operates on a dedicated URL (/r/:restaurantSlug) with custom brand theme, logo, and table tokens for direct Google Maps and bio links.", card_body)
+    ]
+
+    t_s14 = Table([[c14_1, c14_2, c14_3]], colWidths=[(SLIDE_WIDTH - 120)/3, (SLIDE_WIDTH - 120)/3, (SLIDE_WIDTH - 120)/3])
+    t_s14.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
+        ('BOX', (0,0), (-1,-1), 1, c_border),
+        ('INNERGRID', (0,0), (-1,-1), 0.75, c_border),
+        ('PADDING', (0,0), (-1,-1), 13),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+    ]))
+    story.append(t_s14)
+    story.append(PageBreak())
+
+    # =========================================================================
+    # SLIDE 15: REGIONAL INCLUSIVITY (ENGLISH + HINDI + MARATHI)
+    # =========================================================================
+    story.append(Paragraph("// MULTILINGUAL HOSPITALITY", tag_cyan))
+    story.append(Paragraph("Regional Inclusivity: English Primary with Hindi & Marathi", title_style))
+    story.append(Paragraph("Preserving global appeal while honoring local hospitality and regional language preferences.", sub_style))
+
+    c15_1 = [
+        Paragraph("English (Default Primary)", card_h_gold),
+        Paragraph("Hardcoded as the primary launch language for 100% of devices. No arbitrary IP or browser locale redirection. Global and tech-savvy diners feel instantly at home.", card_body)
+    ]
+    c15_2 = [
+        Paragraph("हिन्दी (Hindi Native)", card_h_cyan),
+        Paragraph("Comprehensive native translation for Starters, Main Course, Biryani, special kitchen cooking notes (खास स्वयंपाक सूचना), and kitchen dispatch.", card_body)
+    ]
+    c15_3 = [
+        Paragraph("मराठी (Marathi Native)", card_h_emerald),
+        Paragraph("Full regional translation celebrating Maharashtra's food culture (बिर्याणी, स्टार्टर्स, गोड पदार्थ, कॅप्टनला बोलवा), providing warm familiarity for family dining.", card_body)
+    ]
+
+    t_s15 = Table([[c15_1, c15_2, c15_3]], colWidths=[(SLIDE_WIDTH - 120)/3, (SLIDE_WIDTH - 120)/3, (SLIDE_WIDTH - 120)/3])
+    t_s15.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
+        ('BOX', (0,0), (-1,-1), 1, c_border),
+        ('INNERGRID', (0,0), (-1,-1), 0.75, c_border),
+        ('PADDING', (0,0), (-1,-1), 13),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+    ]))
+    story.append(t_s15)
+    story.append(PageBreak())
+
+    # =========================================================================
+    # SLIDE 16: COMMERCIAL MODEL
+    # =========================================================================
+    story.append(Paragraph("// COMMERCIAL MODEL", tag_gold))
+    story.append(Paragraph("Flat ₹1,999/Month • 0% Commission • 100% Data Ownership", title_style))
+    story.append(Paragraph("Transparent pricing with no arbitrary trial limitations or revenue deductions.", sub_style))
+
+    c16_content = [
+        Paragraph("Why Restaurant Owners Choose Menuz over Delivery Aggregators", card_h_gold),
+        Paragraph(
+            "• <b>Direct Access Onboarding (No Arbitrary Trial Timers):</b> Full, unrestricted operational access granted directly upon partnership.<br/>"
+            "• <b>Flat ₹1,999 / Month Flat Subscription:</b> Zero commission on food sales. Restaurants keep 100% of their billing revenue — saving ₹30k–₹80k monthly compared to aggregators.<br/>"
+            "• <b>100% Customer WhatsApp Data Ownership:</b> Restaurants own their verified customer phone numbers and dining histories for targeted remarketing campaigns.<br/>"
+            "• <b>High-Durability Acrylic QR Stands Included:</b> Premium acrylic QR table stands and kitchen thermal printer configuration guides supplied on rollout.",
+            card_body
+        )
+    ]
+    t_s16 = Table([[c16_content]], colWidths=[SLIDE_WIDTH - 100])
+    t_s16.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
+        ('BOX', (0,0), (-1,-1), 1.5, c_border_gold),
+        ('PADDING', (0,0), (-1,-1), 15),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+    ]))
+    story.append(t_s16)
+    story.append(PageBreak())
+
+    # =========================================================================
+    # SLIDE 17: 15-RESTAURANT BOARDROOM STRESS TEST
+    # =========================================================================
+    story.append(Paragraph("// MARKET VALIDATION", tag_cyan))
+    story.append(Paragraph("The 15-Restaurant Boardroom Stress Test: Unanimous Approval", title_style))
+    story.append(Paragraph("How Menuz addresses the hardest operational objections across diverse dining formats.", sub_style))
+
+    c17_1 = [
+        Paragraph("Cafes & High-Turnover", card_h_cyan),
+        Paragraph("<b>German Bakery, Le Plaisir, Vaishali</b><br/>"
+                  "• <i>Objection:</i> 'We serve 200+ tables/day, tech must be instant.'<br/>"
+                  "• <i>Solution:</i> Zero app downloads. Mode A fires direct 80mm KOT in 1s.<br/>"
+                  "• <i>Outcome:</i> Turns tables 14 minutes faster per seating.", card_body)
+    ]
+    c17_2 = [
+        Paragraph("Fine Dining & Bistros", card_h_gold),
+        Paragraph("<b>Arthur's Theme, Malaka Spice, Terttulia</b><br/>"
+                  "• <i>Objection:</i> 'We cannot lose human captain hospitality.'<br/>"
+                  "• <i>Solution:</i> Mode B captain review preserves personal touch.<br/>"
+                  "• <i>Outcome:</i> Chef AI wine pairings increase beverage checks by +24%.", card_body)
+    ]
+    c17_3 = [
+        Paragraph("Breweries & Restobars", card_h_rose),
+        Paragraph("<b>Effingut, FC Road Social, Agent Jack's</b><br/>"
+                  "• <i>Objection:</i> 'Large groups cause duplicate ordering chaos.'<br/>"
+                  "• <i>Solution:</i> Multiplayer table sync unifies orders with guest tags.<br/>"
+                  "• <i>Outcome:</i> 9:16 Instagram Story engine drives massive weekend reach.", card_body)
+    ]
+
+    t_s17 = Table([[c17_1, c17_2, c17_3]], colWidths=[(SLIDE_WIDTH - 120)/3, (SLIDE_WIDTH - 120)/3, (SLIDE_WIDTH - 120)/3])
+    t_s17.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
+        ('BOX', (0,0), (-1,-1), 1, c_border),
+        ('INNERGRID', (0,0), (-1,-1), 0.75, c_border),
+        ('PADDING', (0,0), (-1,-1), 12),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+    ]))
+    story.append(t_s17)
+    story.append(PageBreak())
+
+    # =========================================================================
+    # SLIDE 18: SUMMARY, METRICS & LIVE PLATFORM
+    # =========================================================================
+    s18_content = [
+        [
+            Paragraph("<b>Transform Your Restaurant with Menuz</b>", ParagraphStyle('EndTitle', fontName='Helvetica-Bold', fontSize=34, leading=38, textColor=c_text_white)),
+        ],
+        [
+            Paragraph("The All-in-One Dine-In Operating System & Growth Engine", ParagraphStyle('EndSub', fontName='Helvetica-Bold', fontSize=18, leading=22, textColor=c_gold)),
+        ],
+        [
+            Paragraph(
+                "⚡  <b>+22% Average Ticket Value</b> via Smart Pairings & Upsells<br/>"
+                "⚡  <b>+300 Verified 5-Star Reviews</b> or Viral Instagram Stories Monthly<br/>"
+                "⚡  <b>Zero Lost Orders</b> with Multi-Channel KOT Failover (Port 9100 / LAN / POS)<br/>"
+                "⚡  <b>Diner Service Response Times</b> Cut from 10 Mins to Under 60 Seconds<br/>"
+                "⚡  <b>100% Customer Data Ownership</b> with Zero Delivery Commissions",
+                ParagraphStyle('EndStats', fontName='Helvetica', fontSize=14, leading=22, textColor=c_text_sub)
+            )
+        ],
+        [
+            Paragraph("<b>Live Platform:</b> stgtrgjrccx.github.io/menuz  •  <b>Contact:</b> partner@menuz.in", ParagraphStyle('EndContact', fontName='Helvetica-Bold', fontSize=13, leading=16, textColor=c_cyan))
+        ]
+    ]
+    t_s18 = Table(s18_content, colWidths=[SLIDE_WIDTH - 100])
+    t_s18.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
+        ('BOX', (0,0), (-1,-1), 2, c_cyan),
+        ('PADDING', (0,0), (-1,-1), 20),
+        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+    ]))
+    story.append(t_s18)
+
+    # Build PDF with MidnightSlideCanvas
+    doc.build(story, canvasmaker=MidnightSlideCanvas)
+    print(f"Successfully generated Midnight Obsidian 16:9 Landscape PDF: {output_path}")
+
+if __name__ == "__main__":
     out_dir = os.path.join(os.getcwd(), 'public')
     os.makedirs(out_dir, exist_ok=True)
-    out_file = os.path.join(out_dir, 'menuz_complete_pitch_and_product_deck.pdf')
-    generate_pdf(out_file)
+    out_pdf = os.path.join(out_dir, 'menuz_executive_pitch_deck.pdf')
+    generate_landscape_slide_pdf(out_pdf)
+    generate_landscape_slide_pdf(os.path.join(out_dir, 'menuz_complete_pitch_and_product_deck.pdf'))

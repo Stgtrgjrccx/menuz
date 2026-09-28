@@ -309,19 +309,19 @@ export const PitchDeckPage: React.FC = () => {
               title="Download 16:9 Widescreen PowerPoint Presentation (PPTX)"
             >
               <Download className="w-3.5 h-3.5 text-slate-950" />
-              <span className="hidden sm:inline">Download Deck (PPTX)</span>
+              <span className="hidden sm:inline">Download PPTX</span>
               <span className="sm:hidden">PPTX</span>
             </a>
             <a
-              href="./menuz_complete_pitch_and_product_deck.pdf"
-              download="Menuz_Complete_Pitch_and_Product_Deck.pdf"
+              href="./menuz_executive_pitch_deck.pdf"
+              download="Menuz_Executive_Pitch_Deck.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-amber-400 hover:text-amber-300 font-bold text-xs rounded-lg transition-colors flex items-center gap-1.5 border border-amber-500/30 shadow-xs"
-              title="Download Full Multi-Page Pitch & Product Architecture PDF"
+              title="Download Executive Pitch Deck PDF"
             >
               <FileText className="w-3.5 h-3.5 text-amber-400" />
-              <span className="hidden sm:inline">PDF</span>
+              <span className="hidden sm:inline">Download PDF</span>
               <span className="sm:hidden">PDF</span>
             </a>
             <Link
