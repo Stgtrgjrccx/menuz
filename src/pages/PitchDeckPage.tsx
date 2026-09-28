@@ -27,7 +27,18 @@ import {
   Download,
   Globe,
   Share2,
-  Sliders
+  Sliders,
+  DollarSign,
+  TrendingUp,
+  Award,
+  Zap,
+  Building2,
+  Shield,
+  Eye,
+  MessageSquare,
+  Instagram,
+  RefreshCw,
+  Play
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { SelfServeKotSetupWizard } from '../components/SelfServeKotSetupWizard';
@@ -56,7 +67,7 @@ function playTone(freq: number, type: OscillatorType = 'sine', duration: number 
 const DEMO_DISH_DATA = {
   en: {
     title: 'Awadhi Murgh Dum Biryani',
-    desc: 'Slow-simmered fragrant basmati rice layered with marinated chicken, saffron & whole Awadhi spices.',
+    desc: 'Slow-simmered fragrant basmati rice layered with marinated tender chicken, saffron & whole Awadhi spices.',
     price: '₹480',
     addBtn: 'Add to Table Cart',
     addedBtn: 'In Table Cart',
@@ -88,86 +99,64 @@ const DEMO_STORIES = {
     title: 'Awadhi Murgh Dum Biryani',
     tag: 'Signature Charcoal Dum',
     image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=800&auto=format&fit=crop&q=80',
-    quote: '"Unmatched aroma and royal flavors. A must-try in Pune!"'
+    quote: '"Unmatched royal aroma and melt-in-mouth chicken! A must-visit dining experience in Pune."'
   },
   curry: {
     title: 'Old Delhi Butter Chicken',
-    tag: '36-Hour Simmered Makkhan',
+    tag: '36-Hour Simmered Makkhan Gravy',
     image: 'https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=800&auto=format&fit=crop&q=80',
-    quote: '"Velvety rich gravy with tandoor charcoal smoky chicken."'
+    quote: '"Silky smooth velvety gravy with deep tandoor charcoal smokiness."'
   },
   cocktail: {
     title: 'Royal Saffron Smoked Cooler',
-    tag: 'Artisan Beverage Pairing',
+    tag: 'Artisan Mixology Pairing',
     image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&auto=format&fit=crop&q=80',
-    quote: '"The perfect balance to elevate authentic North Indian spices."'
+    quote: '"The crisp citrus notes balance authentic rich North Indian spices perfectly."'
   }
 };
 
 export const PitchDeckPage: React.FC = () => {
   const restaurant = useRestaurantStore((state) => state.restaurant);
 
-  // Active section (0 to 5)
+  // View Mode: 'slides' (Interactive 18-Slide HTML Deck) or 'scroll' (Long-Form Executive Scrollytelling)
+  const [viewMode, setViewMode] = useState<'slides' | 'scroll'>('slides');
+  const [currentSlide, setCurrentSlide] = useState<number>(0);
+
+  // Active section for scrollytelling
   const [activeSection, setActiveSection] = useState<number>(0);
-  const totalSections = 6;
 
-  // Simulator states for Chapter 1: The Google Rating Dilemma
+  // Simulator states for Chapter 1 / Slide 4: The Google Rating Dilemma & Review Generator
   const [demoRating, setDemoRating] = useState<'average' | 'stellar'>('stellar');
+  const [selectedStars, setSelectedStars] = useState<number>(5);
+  const [generatedReviewText, setGeneratedReviewText] = useState(
+    'Had an incredible dinner! The Awadhi Dum Biryani was exceptionally flavorful and the ambiance was top-notch. Fast service via QR!'
+  );
+  const [copiedReview, setCopiedReview] = useState(false);
 
-  // Simulator states for Chapter 2: Multiplayer Table Sync & Multilingual Engine
+  // Simulator states for Chapter 2 / Slide 8 & 9: Multiplayer Table Sync & Multilingual Engine
   const [demoLang, setDemoLang] = useState<'en' | 'hi' | 'mr'>('en');
   const [demoGuestAdded, setDemoGuestAdded] = useState<boolean>(false);
 
-  // Simulator states for Chapter 3: Chef & Owner AI Chatbot & Pairings
-  const [selectedAiQuery, setSelectedAiQuery] = useState<'chef' | 'spice' | 'allergen' | 'pairing'>('chef');
-  const [aiItemAdded, setAiItemAdded] = useState(false);
-  const [pairingAdded, setPairingAdded] = useState(false);
-  const [isWizardOpen, setIsWizardOpen] = useState(false);
-
-  // Simulator states for Chapter 4: Universal Kitchen KOT & Direct Line Mode
+  // Simulator states for Chapter 3 / Slide 7: Kitchen KOT & Direct Line Mode
   const [activeKotMode, setActiveKotMode] = useState<'direct' | 'captain'>('direct');
   const [selectedDeckPos, setSelectedDeckPos] = useState<'Petpooja' | 'RoyalPOS' | 'Recaho' | 'RanceLab' | 'Direct ESC/POS'>('Petpooja');
   const [kotPrinting, setKotPrinting] = useState(false);
   const [kotPrinted, setKotPrinted] = useState(true);
+  const [isWizardOpen, setIsWizardOpen] = useState(false);
 
-  // Simulator states for Chapter 5: Viral Growth Gateway (Instagram vs Google) & Platform Architecture
-  const [rewardGatewayChoice, setRewardGatewayChoice] = useState<'google' | 'instagram' | 'both'>('both');
+  // Simulator states for Chapter 4 / Slide 5: Instagram UGC Virality
   const [selectedStoryDish, setSelectedStoryDish] = useState<'biryani' | 'curry' | 'cocktail'>('biryani');
-  const [storyGenerated, setStoryGenerated] = useState(false);
+  const [storyShared, setStoryShared] = useState(false);
 
-  // Simulator states for Chapter 6: AI Review Booster & Floor Shield & Direct Access
-  const [selectedStars, setSelectedStars] = useState<number>(5);
-  const [isSpinning, setIsSpinning] = useState(false);
-  const [wonPrize, setWonPrize] = useState<string | null>('15% Off Food Bill');
+  // Simulator states for Chapter 5 / Slide 6: Private Floor Shield & Escalation
   const [voucherSeconds, setVoucherSeconds] = useState(882); // 14m 42s
   const [enteredPin, setEnteredPin] = useState('');
   const [pinVerified, setPinVerified] = useState(false);
   const [pinError, setPinError] = useState(false);
 
-  // Dedicated 18-Slide Deck Presentation State
-  const [activeViewMode, setActiveViewMode] = useState<'slides' | 'interactive'>('slides');
-  const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(0);
-
-  const SLIDE_DATA = [
-    { num: 1, title: 'MENUZ Executive Master Pitch Deck', tag: 'Brand Identity', file: './pitch_slides/slide_01.png' },
-    { num: 2, title: 'The Multi-Crore Dining Reality & 3 Severe Fractures', tag: 'Market Crisis', file: './pitch_slides/slide_02.png' },
-    { num: 3, title: 'The 3 Reputation Channels Decoupled (Google vs IG vs Shield)', tag: 'Reputation Architecture', file: './pitch_slides/slide_03.png' },
-    { num: 4, title: 'Channel 1: Public Google Reviews (SEO Ranking Engine)', tag: 'Google SEO Engine', file: './pitch_slides/slide_04.png' },
-    { num: 5, title: 'Channel 2: Instagram UGC Virality (Word-of-Mouth Engine)', tag: 'Instagram Virality', file: './pitch_slides/slide_05.png' },
-    { num: 6, title: 'Channel 3: Private Floor Shield & Table Escalation', tag: 'Floor Grievance Shield', file: './pitch_slides/slide_06.png' },
-    { num: 7, title: 'Hardware-Free Smart KOT Engine (Zero-CapEx WhatsApp & Web)', tag: 'Kitchen Automation', file: './pitch_slides/slide_07.png' },
-    { num: 8, title: 'Real-Time Collaborative Table Sync (Multi-Diner Cart)', tag: 'Table Sync Protocol', file: './pitch_slides/slide_08.png' },
-    { num: 9, title: 'High-Converting Visual Menu & Multi-Language AI Storytelling', tag: 'Menu Engineering', file: './pitch_slides/slide_09.png' },
-    { num: 10, title: 'Frictionless Dining Protocol (Zero App Download, Zero Login)', tag: 'Diner Experience', file: './pitch_slides/slide_10.png' },
-    { num: 11, title: 'Enterprise Multi-Outlet Architecture & Real-Time Sync', tag: 'Enterprise Cloud', file: './pitch_slides/slide_11.png' },
-    { num: 12, title: 'Boardroom Pitch: 15 Diverse Restaurant Formats (100% Approval)', tag: 'Boardroom Validation', file: './pitch_slides/slide_12.png' },
-    { num: 13, title: 'Unit Economics & Verified ROI Model (+₹3.8L Net Margin)', tag: 'Financial Model', file: './pitch_slides/slide_13.png' },
-    { num: 14, title: 'Rapid 30-Minute Zero-Downtime Deployment Roadmap', tag: 'Deployment Speed', file: './pitch_slides/slide_14.png' },
-    { num: 15, title: 'Competitive Hegemony Matrix (Menuz vs POS vs Aggregators)', tag: 'Competitive Edge', file: './pitch_slides/slide_15.png' },
-    { num: 16, title: 'Customer Retention & Repeat Diner Engine (Gamified Rewards)', tag: 'Retention & Loyalty', file: './pitch_slides/slide_16.png' },
-    { num: 17, title: 'Transparent Enterprise Subscription & Revenue Model', tag: 'Commercial Terms', file: './pitch_slides/slide_17.png' },
-    { num: 18, title: 'Conclusion & Boardroom Onboarding Partnership', tag: 'Onboarding Call to Action', file: './pitch_slides/slide_18.png' },
-  ];
+  // Simulator states for Chapter 6 / Slide 16: Gamified Spin Wheel
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [wonPrize, setWonPrize] = useState<string | null>('15% Off Total Food Bill');
 
   // Live countdown timer for voucher demo
   useEffect(() => {
@@ -219,145 +208,122 @@ export const PitchDeckPage: React.FC = () => {
     }, 1200);
   };
 
-  // Keyboard navigation between sections
+  // Keyboard navigation for slide deck mode
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-        e.preventDefault();
-        scrollToSection(Math.min(totalSections - 1, activeSection + 1));
-      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-        e.preventDefault();
-        scrollToSection(Math.max(0, activeSection - 1));
+      if (viewMode === 'slides') {
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+          e.preventDefault();
+          setCurrentSlide((prev) => Math.min(SLIDES_DATA.length - 1, prev + 1));
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          e.preventDefault();
+          setCurrentSlide((prev) => Math.max(0, prev - 1));
+        }
       }
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [activeSection]);
+  }, [viewMode]);
 
-  // Automatic scroll spy using IntersectionObserver
-  useEffect(() => {
-    const observers: IntersectionObserver[] = [];
-    sectionRefs.forEach((ref, idx) => {
-      if (!ref.current) return;
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              setActiveSection(idx);
-            }
-          });
-        },
-        { rootMargin: '-20% 0px -40% 0px', threshold: 0.2 }
-      );
-      observer.observe(ref.current);
-      observers.push(observer);
-    });
-
-    return () => {
-      observers.forEach((obs) => obs.disconnect());
-    };
-  }, []);
-
-  const sectionRefs = [
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null)
-  ];
-
-  const scrollToSection = (index: number) => {
-    setActiveSection(index);
-    sectionRefs[index]?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
-  const chapters = [
-    { num: '01', short: 'The Dilemma', title: 'The Silent Diner Dilemma' },
-    { num: '02', short: 'Table Sync & Service', title: 'Real-Time Table Sync & Joint Ordering' },
-    { num: '03', short: "Chef's AI & Pairings", title: 'Chef AI Sommelier & Smart Pairings' },
-    { num: '04', short: 'Direct Kitchen KOT', title: 'Direct Kitchen KOT & Universal POS Bridge' },
-    { num: '05', short: 'Instagram vs. Google', title: "Owner's Growth Gateway: Instagram Story vs. Google Review" },
-    { num: '06', short: 'Shield & Multilingual', title: 'Reputation Shield, Direct Access & Multilingual' }
+  const SLIDES_DATA = [
+    { num: 1, tag: 'Brand Vision & Identity', short: 'Cover & Mission' },
+    { num: 2, tag: 'Market Crisis', short: 'The Dining Crisis' },
+    { num: 3, tag: 'Reputation Decoupled', short: '3 Reputation Channels' },
+    { num: 4, tag: 'Channel 1: Google SEO', short: 'Google Maps SEO' },
+    { num: 5, tag: 'Channel 2: Instagram UGC', short: 'Instagram Virality' },
+    { num: 6, tag: 'Channel 3: Floor Shield', short: 'Private Floor Shield' },
+    { num: 7, tag: 'Kitchen Automation', short: 'Hardware-Free KOT' },
+    { num: 8, tag: 'Table Sync Protocol', short: 'Multiplayer Cart' },
+    { num: 9, tag: 'Menu Engineering', short: 'Multilingual Menu' },
+    { num: 10, tag: 'Diner Experience', short: 'Zero-App Friction' },
+    { num: 11, tag: 'Enterprise Scale', short: 'Multi-Outlet Cloud' },
+    { num: 12, tag: 'Boardroom Validation', short: '15 Formats Analyzed' },
+    { num: 13, tag: 'Financial Model', short: 'Unit Economics & ROI' },
+    { num: 14, tag: 'Deployment Speed', short: '30-Min Onboarding' },
+    { num: 15, tag: 'Competitive Edge', short: 'Competitive Matrix' },
+    { num: 16, tag: 'Loyalty & Retention', short: 'Gamified Rewards' },
+    { num: 17, tag: 'Commercial Terms', short: 'Subscription Pricing' },
+    { num: 18, tag: 'Executive CTA', short: 'Partner With Menuz' }
   ];
 
   return (
-    <div className="min-h-screen bg-[#090d14] text-slate-100 flex flex-col font-sans selection:bg-amber-500 selection:text-black antialiased">
+    <div className="min-h-screen bg-[#090D16] text-slate-100 flex flex-col font-sans selection:bg-amber-500 selection:text-black antialiased">
       {/* ══════════════════════════════════════════════════════════════════ */}
       {/* 1. TOP STICKY EXECUTIVE NAVIGATION BAR                            */}
       {/* ══════════════════════════════════════════════════════════════════ */}
-      <header className="sticky top-0 z-50 bg-[#0d121c]/95 backdrop-blur-md border-b border-slate-800/80 px-4 sm:px-6 py-3">
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
+      <header className="sticky top-0 z-50 bg-[#0D121C]/95 backdrop-blur-md border-b border-slate-800 px-4 sm:px-6 py-3">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           {/* Brand Logo */}
           <div className="flex items-center space-x-3">
             <Link to="/" className="flex items-center space-x-2 group">
-              <span className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center font-black text-slate-950 shadow-md text-sm">
+              <span className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center font-black text-slate-950 shadow-md text-base">
                 M
               </span>
               <div className="flex flex-col">
-                <span className="text-lg font-black tracking-tight text-white group-hover:text-amber-400 transition-colors">
+                <span className="text-xl font-black tracking-tight text-white group-hover:text-amber-400 transition-colors">
                   MENU<span className="text-amber-500">Z</span>
                 </span>
-                <span className="text-[9px] uppercase tracking-widest text-slate-400 font-bold -mt-1 hidden sm:block">
-                  Restaurant Partner Deck
+                <span className="text-[10px] uppercase tracking-widest text-amber-400 font-bold -mt-1 hidden sm:block">
+                  Executive Pitch Deck
                 </span>
               </div>
             </Link>
           </div>
 
-          {/* Quick Jump Chapter Pills */}
-          <nav className="flex items-center space-x-1 sm:space-x-1.5 bg-slate-900/90 border border-slate-800 p-1 rounded-xl">
-            {chapters.map((ch, idx) => (
-              <button
-                key={ch.num}
-                type="button"
-                onClick={() => scrollToSection(idx)}
-                className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
-                  activeSection === idx
-                    ? 'bg-amber-500 text-slate-950 font-bold shadow-xs'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-                }`}
-                title={ch.title}
-              >
-                <span>{ch.num}</span>
-                <span className="hidden md:inline">{ch.short}</span>
-              </button>
-            ))}
-          </nav>
+          {/* View Mode Toggle (Slide Deck vs Full Document) */}
+          <div className="flex items-center bg-slate-900 border border-slate-700/80 p-1 rounded-xl">
+            <button
+              type="button"
+              onClick={() => setViewMode('slides')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                viewMode === 'slides'
+                  ? 'bg-amber-500 text-slate-950 shadow-sm'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>18-Slide Deck Mode</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('scroll')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                viewMode === 'scroll'
+                  ? 'bg-amber-500 text-slate-950 shadow-sm'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>Full Scrollytelling</span>
+            </button>
+          </div>
 
-          {/* Live System Demo Links & PDF Download */}
+          {/* Action Downloads & Links */}
           <div className="flex items-center space-x-2">
             <a
               href="./menuz_executive_pitch_deck.pptx"
               download="Menuz_Executive_Pitch_Deck.pptx"
-              className="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg transition-colors flex items-center gap-1.5 shadow-xs"
+              className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 shadow-sm"
               title="Download 16:9 Widescreen PowerPoint Presentation (PPTX)"
             >
-              <Download className="w-3.5 h-3.5 text-slate-950" />
-              <span className="hidden sm:inline">Download PPTX</span>
-              <span className="sm:hidden">PPTX</span>
+              <Download className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">Download PPTX</span>
+              <span className="md:hidden">PPTX</span>
             </a>
             <a
               href="./menuz_executive_pitch_deck.pdf"
               download="Menuz_Executive_Pitch_Deck.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-amber-400 hover:text-amber-300 font-bold text-xs rounded-lg transition-colors flex items-center gap-1.5 border border-amber-500/30 shadow-xs"
-              title="Download Executive Pitch Deck PDF"
+              className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 border border-amber-500/30"
+              title="Download High-Resolution PDF"
             >
-              <FileText className="w-3.5 h-3.5 text-amber-400" />
-              <span className="hidden sm:inline">Download PDF</span>
-              <span className="sm:hidden">PDF</span>
+              <FileText className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">PDF</span>
             </a>
             <Link
-              to="/admin"
-              className="text-xs text-slate-400 hover:text-white px-2.5 py-1.5 rounded-lg border border-slate-800 hover:border-slate-700 transition-colors hidden lg:inline-flex items-center gap-1"
-            >
-              <span>Admin Floor</span>
-            </Link>
-            <Link
               to={`/r/${restaurant.slug}/menu?t=table-token-01-saffron`}
-              className="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg transition-colors flex items-center gap-1.5 shadow-sm"
+              className="px-3.5 py-1.5 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 hidden sm:flex"
             >
               <Smartphone className="w-3.5 h-3.5" />
               <span>Live Diner Menu</span>
@@ -367,1607 +333,998 @@ export const PitchDeckPage: React.FC = () => {
       </header>
 
       {/* ══════════════════════════════════════════════════════════════════ */}
-      {/* 2. EXECUTIVE 18-SLIDE VISUAL PRESENTATION VIEWER (TOP HERO STAGE)  */}
+      {/* MODE 1: NATIVE 18-SLIDE WIDESCREEN PRESENTATION VIEWER             */}
       {/* ══════════════════════════════════════════════════════════════════ */}
-      <section className="bg-[#05070d] border-b border-slate-800/80 px-4 sm:px-6 py-6 sm:py-8">
-        <div className="max-w-6xl mx-auto space-y-4">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div className="space-y-1">
-              <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-full text-amber-400 text-xs font-bold uppercase tracking-wider">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                <span>Executive Presentation Deck • 18 Widescreen Slides</span>
-              </div>
-              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-                {SLIDE_DATA[currentSlideIndex].title}
+      {viewMode === 'slides' && (
+        <main className="flex-1 flex flex-col p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+          {/* Slide Navigation Top Bar */}
+          <div className="flex items-center justify-between mb-4 bg-slate-900/80 border border-slate-800 p-3 rounded-2xl backdrop-blur-md">
+            <div className="flex items-center gap-3">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-cyan-400 bg-cyan-950/60 border border-cyan-500/30 px-3 py-1 rounded-full">
+                Slide {currentSlide + 1} of 18 • {SLIDES_DATA[currentSlide].tag}
+              </span>
+              <h2 className="text-base sm:text-lg font-bold text-white hidden md:block">
+                {SLIDES_DATA[currentSlide].short}
               </h2>
             </div>
 
-            <div className="flex items-center gap-2 self-stretch sm:self-auto justify-between sm:justify-end">
-              <a
-                href="./presentation.html"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-3.5 py-1.5 bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 font-bold text-xs rounded-lg transition-all flex items-center gap-1.5"
-              >
-                <Globe className="w-3.5 h-3.5" />
-                <span>Fullscreen Player</span>
-              </a>
-              <a
-                href="./menuz_executive_pitch_deck.pptx"
-                download="Menuz_Executive_Pitch_Deck.pptx"
-                className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 shadow-xs"
-              >
-                <Download className="w-3.5 h-3.5" />
-                <span>Download .PPTX</span>
-              </a>
-            </div>
-          </div>
-
-          {/* Slide Stage Container */}
-          <div className="relative w-full aspect-[16/9] bg-black rounded-2xl border border-slate-800 overflow-hidden shadow-2xl group flex items-center justify-center">
-            <img
-              src={SLIDE_DATA[currentSlideIndex].file}
-              alt={`Slide ${currentSlideIndex + 1}`}
-              className="w-full h-full object-contain select-none"
-            />
-
-            {/* Left Prev Arrow */}
-            <button
-              type="button"
-              onClick={() => setCurrentSlideIndex(prev => Math.max(0, prev - 1))}
-              disabled={currentSlideIndex === 0}
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-slate-900/80 hover:bg-amber-500 hover:text-slate-950 text-white border border-slate-700/80 flex items-center justify-center transition-all disabled:opacity-30 disabled:pointer-events-none backdrop-blur-md z-10 shadow-lg"
-              title="Previous Slide (Left Arrow)"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-
-            {/* Right Next Arrow */}
-            <button
-              type="button"
-              onClick={() => setCurrentSlideIndex(prev => Math.min(SLIDE_DATA.length - 1, prev + 1))}
-              disabled={currentSlideIndex === SLIDE_DATA.length - 1}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-slate-900/80 hover:bg-amber-500 hover:text-slate-950 text-white border border-slate-700/80 flex items-center justify-center transition-all disabled:opacity-30 disabled:pointer-events-none backdrop-blur-md z-10 shadow-lg"
-              title="Next Slide (Right Arrow)"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
-
-            {/* Slide Index Badge */}
-            <div className="absolute bottom-4 right-4 bg-slate-950/80 backdrop-blur-md border border-slate-800 px-3 py-1 rounded-lg text-xs font-bold text-slate-300">
-              Slide <span className="text-amber-400 font-black">{currentSlideIndex + 1}</span> / {SLIDE_DATA.length}
-            </div>
-          </div>
-
-          {/* Thumbnails Scroller */}
-          <div className="flex gap-2.5 overflow-x-auto pb-2 scrollbar-thin">
-            {SLIDE_DATA.map((s, idx) => (
+            <div className="flex items-center gap-2">
               <button
-                key={s.num}
                 type="button"
-                onClick={() => setCurrentSlideIndex(idx)}
-                className={`relative shrink-0 w-28 sm:w-36 aspect-[16/9] rounded-lg overflow-hidden border-2 transition-all bg-black ${
-                  currentSlideIndex === idx
-                    ? 'border-amber-500 shadow-md shadow-amber-500/20 scale-105 opacity-100'
-                    : 'border-slate-800 opacity-60 hover:opacity-90'
-                }`}
+                onClick={() => setCurrentSlide((prev) => Math.max(0, prev - 1))}
+                disabled={currentSlide === 0}
+                className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold transition-all disabled:opacity-30 disabled:pointer-events-none flex items-center gap-1"
               >
-                <img src={s.file} alt={`Thumb ${s.num}`} className="w-full h-full object-cover" />
-                <span className="absolute top-1 left-1 bg-black/80 text-[10px] font-bold text-white px-1.5 py-0.5 rounded">
-                  {s.num}
-                </span>
+                <ChevronLeft className="w-4 h-4" />
+                <span>Prev</span>
               </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════════════ */}
-      {/* 3. MAIN SCROLLYTELLING CONTAINER                                   */}
-      {/* ══════════════════════════════════════════════════════════════════ */}
-      <main className="flex-1 flex flex-col">
-        {/* ──────────────────────────────────────────────────────────────── */}
-        {/* CHAPTER 01: THE SILENT DINER DILEMMA                             */}
-        {/* ──────────────────────────────────────────────────────────────── */}
-        <section
-          ref={sectionRefs[0]}
-          className="min-h-[calc(100vh-60px)] scroll-mt-16 py-12 lg:py-16 flex items-center justify-center p-4 sm:p-8 lg:p-12 border-b border-slate-800/60"
-        >
-          <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* Left Narrative Column (15-Second Glance) */}
-            <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full text-amber-400 text-xs font-bold tracking-wide">
-                <span>CHAPTER 01</span>
-                <span>•</span>
-                <span>THE REPUTATION BOTTLENECK</span>
-              </div>
-
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-                95% of Happy Diners <span className="text-amber-400">Leave Silently.</span>
-              </h1>
-
-              <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-                Satisfied guests rarely post on Google Maps. But if just one guest encounters a delay or cold soup, they leave a permanent 1-star review that damages your weekend walk-in footfall forever.
-              </p>
-
-              {/* 3 Core Owner Pain Points */}
-              <div className="space-y-3 pt-1">
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-red-500/15 border border-red-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <AlertTriangle className="w-4 h-4 text-red-400" />
-                  </div>
-                  <div>
-                    <h2 className="text-sm font-bold text-white">Negative Reviews Live Forever</h2>
-                    <p className="text-xs text-slate-300 mt-0.5">A single 1-star review on Google Maps lowers your search rank and repels new walk-in diners.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <Clock className="w-4 h-4 text-amber-400" />
-                  </div>
-                  <div>
-                    <h2 className="text-sm font-bold text-white">Managers Hear Too Late</h2>
-                    <p className="text-xs text-slate-300 mt-0.5">By the time the floor manager reads the complaint on Google, the customer has already left unhappy.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <Star className="w-4 h-4 text-emerald-400" />
-                  </div>
-                  <div>
-                    <h2 className="text-sm font-bold text-white">The 4.8★ Revenue Advantage</h2>
-                    <p className="text-xs text-slate-300 mt-0.5">Restaurants above 4.7★ on Google Maps command 30% higher table reservations and zero marketing spend.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom Next Button */}
-              <div className="pt-2">
-                <button
-                  type="button"
-                  onClick={() => scrollToSection(1)}
-                  className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition-all flex items-center gap-2 shadow-sm"
-                >
-                  <span>See How Menuz Fixes This</span>
-                  <ChevronDown className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Right Interactive Visual Card: Google Maps Impact Simulator */}
-            <div className="lg:col-span-6">
-              <div className="bg-[#111622] border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-5">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                  <div className="flex items-center space-x-2">
-                    <MapPin className="w-4 h-4 text-red-500" />
-                    <span className="text-xs font-bold text-white uppercase tracking-wider">
-                      Google Maps Restaurant Profile
-                    </span>
-                  </div>
-                  <span className="text-[11px] text-slate-400 font-mono">Pune Fine Dining</span>
-                </div>
-
-                {/* Rating State Toggle */}
-                <div className="grid grid-cols-2 gap-2 bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs font-semibold">
-                  <button
-                    type="button"
-                    onClick={() => setDemoRating('average')}
-                    className={`py-2 rounded-lg transition-all ${
-                      demoRating === 'average'
-                        ? 'bg-red-500/20 text-red-300 border border-red-500/30 font-bold'
-                        : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    Without Menuz (4.1★)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setDemoRating('stellar')}
-                    className={`py-2 rounded-lg transition-all ${
-                      demoRating === 'stellar'
-                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold'
-                        : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    With Menuz Engine (4.8★)
-                  </button>
-                </div>
-
-                {/* Interactive Card Display */}
-                {demoRating === 'average' ? (
-                  <div className="bg-slate-900/80 border border-red-500/30 rounded-xl p-5 space-y-4">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <h3 className="text-base font-extrabold text-white">Saffron House Contemporary Dining</h3>
-                        <p className="text-xs text-slate-400">North Indian • Koregaon Park</p>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-2xl font-black text-amber-400 font-mono">4.1</span>
-                        <div className="text-xs text-amber-400">★★★★☆</div>
-                        <span className="text-[10px] text-slate-400 block">42 reviews</span>
-                      </div>
-                    </div>
-
-                    <div className="bg-red-950/30 border border-red-500/20 p-3 rounded-lg text-xs space-y-1">
-                      <div className="flex items-center text-red-400 font-bold gap-1">
-                        <span>★☆☆☆☆</span>
-                        <span>"Food was delayed by 25 mins. Terrible service."</span>
-                      </div>
-                      <span className="text-[10px] text-slate-400 block">Public Google review posted 3 days ago • Unresolved</span>
-                    </div>
-
-                    <div className="p-3 bg-slate-950 rounded-lg flex items-center justify-between text-xs">
-                      <span className="text-slate-400">Weekend Table Occupancy:</span>
-                      <span className="font-bold text-red-400 font-mono">55% (Empty Tables)</span>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="bg-slate-900/80 border border-emerald-500/30 rounded-xl p-5 space-y-4">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <h3 className="text-base font-extrabold text-white">Saffron House Contemporary Dining</h3>
-                        <p className="text-xs text-emerald-400 font-medium">Verified Top Rated in Koregaon Park</p>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-2xl font-black text-emerald-400 font-mono">4.8</span>
-                        <div className="text-xs text-amber-400">★★★★★</div>
-                        <span className="text-[10px] text-slate-400 block">284 verified reviews</span>
-                      </div>
-                    </div>
-
-                    <div className="bg-emerald-950/30 border border-emerald-500/20 p-3 rounded-lg text-xs space-y-1">
-                      <div className="flex items-center text-emerald-400 font-bold gap-1">
-                        <span>★★★★★</span>
-                        <span>"Exceptional Old Delhi Butter Chicken! Fast service at Table 4."</span>
-                      </div>
-                      <span className="text-[10px] text-emerald-400/80 block">AI-Assisted diner review with dish mention • 2 hours ago</span>
-                    </div>
-
-                    <div className="p-3 bg-slate-950 rounded-lg flex items-center justify-between text-xs">
-                      <span className="text-slate-400">Weekend Table Occupancy:</span>
-                      <span className="font-bold text-emerald-400 font-mono">98% (Waitlist at Door)</span>
-                    </div>
-                  </div>
-                )}
-
-                <div className="text-[11px] text-slate-400 text-center italic">
-                  💡 Menuz turns 95% of happy silent diners into verified 5-star Google reviews.
-                </div>
-              </div>
+              <span className="text-xs font-bold text-slate-400 px-2">
+                {currentSlide + 1} / 18
+              </span>
+              <button
+                type="button"
+                onClick={() => setCurrentSlide((prev) => Math.min(SLIDES_DATA.length - 1, prev + 1))}
+                disabled={currentSlide === SLIDES_DATA.length - 1}
+                className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-xs font-bold transition-all disabled:opacity-30 disabled:pointer-events-none flex items-center gap-1 shadow-sm"
+              >
+                <span>Next</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
           </div>
-        </section>
 
-        {/* ──────────────────────────────────────────────────────────────── */}
-        {/* CHAPTER 02: REAL-TIME TABLE SYNC & MULTILINGUAL ENGINE            */}
-        {/* ──────────────────────────────────────────────────────────────── */}
-        <section
-          ref={sectionRefs[1]}
-          className="min-h-[calc(100vh-60px)] scroll-mt-16 py-12 lg:py-16 flex items-center justify-center p-4 sm:p-8 lg:p-12 border-b border-slate-800/60 bg-[#0b0f18]"
-        >
-          <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* Left Narrative Column */}
-            <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full text-amber-400 text-xs font-bold tracking-wide">
-                <span>CHAPTER 02</span>
-                <span>•</span>
-                <span>MULTIPLAYER TABLE CART SYNC</span>
-              </div>
+          {/* ════════════════════════════════════════════════════════════════ */}
+          {/* SLIDE CANVAS (16:9 WIDESCREEN HIGH-CONTRAST HTML COMPONENT)      */}
+          {/* ════════════════════════════════════════════════════════════════ */}
+          <div className="relative w-full bg-[#0E1524] border-2 border-slate-700/80 rounded-3xl p-6 sm:p-10 lg:p-12 shadow-2xl overflow-hidden flex flex-col justify-between min-h-[640px]">
+            {/* Background Ambient Glows */}
+            <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-                Real-Time Table Sync. <span className="text-amber-400">Multiplayer Co-Ordering.</span>
-                <span className="block text-xl sm:text-2xl font-bold text-slate-300 mt-1">
-                  1-Tap Waiter Calls &amp; Unified Joint Table Ordering.
-                </span>
-              </h2>
-
-              <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-                When a family or group sits at Table 4, multiple phones can scan the QR code and co-order simultaneously. Items appear instantly across all diners' screens with guest tags. Diners can also summon waitstaff with 1-tap quick actions ("Call Waiter", "Request Water", "Clean Table", "Request Bill") with zero hand-waving friction.
-              </p>
-
-              {/* 3 Core Points */}
-              <div className="space-y-3 pt-1">
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <Users className="w-4 h-4 text-amber-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">Multiplayer Table Cart Synchronization</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Live cart tray sync across all diners at Table 4. Guest 1 and Guest 2 add dishes seamlessly with zero duplicate orders and unified table billing.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <Bell className="w-4 h-4 text-emerald-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">1-Tap Service Calls &amp; Floor SOS</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Diners summon floor staff with 1 tap: 'Call Waiter', 'Water Needed', or 'Bill Requested' — buzzing the captain's tablet in real time.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <Sparkles className="w-4 h-4 text-blue-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">Seamless Guest Attribution &amp; Joint Dispatch</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Each dish is labeled with its respective guest ("👤 Host", "👤 Guest 2 - Rohan"), giving waitstaff and kitchen perfect order clarity.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom Next Button */}
-              <div className="pt-2 flex flex-wrap items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => scrollToSection(2)}
-                  className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition-all flex items-center gap-2 shadow-sm cursor-pointer"
-                >
-                  <span>Explore Chef AI &amp; Upsell Pairings</span>
-                  <ChevronDown className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Right Interactive Visual: Live Table Sync & Language Simulator */}
-            <div className="lg:col-span-6">
-              <div className="bg-[#111622] border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
-                {/* Header */}
-                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-xs text-emerald-400 font-bold">
-                      T4
-                    </div>
-                    <div>
-                      <span className="text-xs font-bold text-white block">Table 4 • Live Shared Session</span>
-                      <span className="text-[10px] text-emerald-400 font-mono">● 2 Diners Connected (Host + Guest)</span>
-                    </div>
-                  </div>
-                  <span className="text-[10px] font-bold bg-amber-500/15 text-amber-300 px-2.5 py-0.5 rounded-full border border-amber-500/30">
-                    Live Table Cart Sync
+            {/* SLIDE 1: COVER & MISSION */}
+            {currentSlide === 0 && (
+              <div className="space-y-8 my-auto relative z-10">
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-10 bg-amber-500 rounded-full" />
+                  <span className="text-amber-400 font-extrabold uppercase tracking-widest text-sm">
+                    Executive Master Pitch Deck
                   </span>
                 </div>
 
-                {/* Language Switcher Bar */}
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between text-[10px] uppercase font-bold text-slate-400">
-                    <span>Select Language (English Default):</span>
-                    <span className="text-amber-400 font-mono">{demoLang.toUpperCase()} Active</span>
-                  </div>
-                  <div className="grid grid-cols-3 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setDemoLang('en');
-                        playTone(523.25, 'sine', 0.15);
-                      }}
-                      className={`py-1.5 px-2 rounded-lg text-xs font-bold transition-all ${
-                        demoLang === 'en'
-                          ? 'bg-amber-500 text-slate-950 shadow-xs'
-                          : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
-                      }`}
-                    >
-                      🇬🇧 English (Default)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setDemoLang('hi');
-                        playTone(587.33, 'sine', 0.15);
-                      }}
-                      className={`py-1.5 px-2 rounded-lg text-xs font-bold transition-all ${
-                        demoLang === 'hi'
-                          ? 'bg-amber-500 text-slate-950 shadow-xs'
-                          : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
-                      }`}
-                    >
-                      🇮🇳 हिन्दी (Hindi)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setDemoLang('mr');
-                        playTone(659.25, 'sine', 0.15);
-                      }}
-                      className={`py-1.5 px-2 rounded-lg text-xs font-bold transition-all ${
-                        demoLang === 'mr'
-                          ? 'bg-amber-500 text-slate-950 shadow-xs'
-                          : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
-                      }`}
-                    >
-                      🚩 मराठी (Marathi)
-                    </button>
-                  </div>
-                </div>
-
-                {/* Localized Dish Card Demo */}
-                <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 space-y-3">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="space-y-1">
-                      <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider block">
-                        {DEMO_DISH_DATA[demoLang].category}
-                      </span>
-                      <h4 className="text-sm font-extrabold text-white">
-                        {DEMO_DISH_DATA[demoLang].title}
-                      </h4>
-                      <p className="text-xs text-slate-300 leading-relaxed">
-                        {DEMO_DISH_DATA[demoLang].desc}
-                      </p>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <span className="text-sm font-black text-amber-400 font-mono">
-                        {DEMO_DISH_DATA[demoLang].price}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="pt-2 flex items-center justify-between border-t border-slate-800">
-                    <span className="text-[10px] font-medium text-slate-400">
-                      Ordered by: <strong className="text-amber-300">{DEMO_DISH_DATA[demoLang].guest}</strong>
-                    </span>
-                    <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                      ✓ In Table Cart
-                    </span>
-                  </div>
-                </div>
-
-                {/* Multiplayer Co-Ordering Simulation Tray */}
-                <div className="bg-slate-950 border border-slate-800/80 rounded-xl p-3.5 space-y-2.5">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-white flex items-center gap-1.5">
-                      <Users className="w-3.5 h-3.5 text-amber-400" />
-                      <span>Table 4 Unified Cart (2 Diners)</span>
-                    </span>
-                    <span className="font-mono font-bold text-amber-400">
-                      ₹{demoGuestAdded ? '960' : '480'}
-                    </span>
-                  </div>
-
-                  {/* Guest 1 Item */}
-                  <div className="flex items-center justify-between text-xs bg-slate-900/60 p-2 rounded-lg border border-slate-800">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-[10px] bg-amber-500/20 text-amber-300 font-bold px-1.5 py-0.2 rounded">Host</span>
-                      <span className="text-white font-medium text-[11px]">{DEMO_DISH_DATA[demoLang].title}</span>
-                    </div>
-                    <span className="text-slate-300 font-mono text-[11px]">₹480</span>
-                  </div>
-
-                  {/* Guest 2 Simulated Item */}
-                  {demoGuestAdded ? (
-                    <div className="flex items-center justify-between text-xs bg-emerald-950/30 p-2 rounded-lg border border-emerald-500/30 animate-fadeIn">
-                      <div className="flex items-center space-x-2">
-                        <span className="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-1.5 py-0.2 rounded">Guest 2 (Rohan)</span>
-                        <span className="text-emerald-200 font-medium text-[11px]">Kashmiri Mutton Rogan Josh</span>
-                      </div>
-                      <span className="text-emerald-400 font-mono text-[11px]">₹480</span>
-                    </div>
-                  ) : (
-                    <div className="text-[11px] text-slate-500 italic p-1.5 text-center">
-                      Guest 2 is currently browsing appetizers on their phone...
-                    </div>
-                  )}
-
-                  {/* Action to simulate Guest 2 co-ordering */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setDemoGuestAdded(!demoGuestAdded);
-                      playTone(demoGuestAdded ? 330 : 660, 'triangle', 0.2);
-                    }}
-                    className="w-full py-2 bg-slate-900 hover:bg-slate-850 text-amber-300 hover:text-amber-200 text-xs font-bold rounded-lg border border-amber-500/30 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                  >
-                    <span>{demoGuestAdded ? '✕ Remove Guest 2 Dish' : '⚡ Simulate Guest 2 Adding Item to Cart'}</span>
-                  </button>
-                </div>
-
-                <div className="text-[11px] text-slate-400 text-center italic">
-                  💡 Zero app downloads required. Table cart syncs in &lt;100ms via WebSocket state channels.
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ──────────────────────────────────────────────────────────────── */}
-        {/* CHAPTER 03: CHEF AI SOMMELIER & SMART PAIRING ENGINE             */}
-        {/* ──────────────────────────────────────────────────────────────── */}
-        <section
-          ref={sectionRefs[2]}
-          className="min-h-[calc(100vh-60px)] scroll-mt-16 py-12 lg:py-16 flex items-center justify-center p-4 sm:p-8 lg:p-12 border-b border-slate-800/60"
-        >
-          <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* Left Narrative Column */}
-            <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full text-amber-400 text-xs font-bold tracking-wide">
-                <span>CHAPTER 03</span>
-                <span>•</span>
-                <span>CHEF AI &amp; UPSELL SOMMELIER</span>
-              </div>
-
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-                Trained by Your Chef. <span className="text-amber-400">Upsells Like an Owner.</span>
-                <span className="block text-xl sm:text-2xl font-bold text-slate-300 mt-1">
-                  Auto-Scroll Conversational UX &amp; Intelligent Dish Pairings.
-                </span>
-              </h2>
-
-              <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-                Generic AI chatbots hallucinate ingredients. Menuz elevates the table experience: <strong>a personalized concierge trained directly by your Head Chef and Restaurant Owner</strong>. It knows your kitchen's secret recipe notes, calibrated spice levels (1-5), allergen cautions, and your owner's high-margin pairing rules.
-              </p>
-
-              {/* 3 Core Points */}
-              <div className="space-y-3 pt-1">
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-sm">🧑‍🍳</span>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">Trained by Head Chef: True Spice &amp; Recipes</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Calibrated spice meters (1-5), secret marinades, preparation styles, and exact allergen cross-contamination warnings.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <UtensilsCrossed className="w-4 h-4 text-emerald-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">Smart Beverage &amp; Side Pairings (+22% Order Value)</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Suggests signature coolers, artisan mocktails, and tandoor breads paired with the guest's selection, unlocking bundle savings.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <Sparkles className="w-4 h-4 text-blue-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">Frictionless Auto-Scroll UX</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">When diners tap quick suggestions, the chat window smoothly auto-follows to reveal the newest reply without awkward manual scrolling.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom Next Button */}
-              <div className="pt-2 flex flex-wrap items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => scrollToSection(3)}
-                  className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition-all flex items-center gap-2 shadow-sm cursor-pointer"
-                >
-                  <span>See Direct Kitchen KOT Architecture</span>
-                  <ChevronDown className="w-4 h-4" />
-                </button>
-                <Link
-                  to="/ai-studio"
-                  className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-amber-300 hover:text-amber-200 border border-amber-500/30 font-bold text-xs rounded-xl transition-all flex items-center gap-1.5 shadow-sm"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Try AI Onboarding Studio Live</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
-
-            {/* Right Interactive Visual: Live AI Sommelier & Pairings Simulator */}
-            <div className="lg:col-span-6">
-              <div className="bg-[#111622] border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-amber-500 to-saffron-600 flex items-center justify-center text-xs">
-                      🧑‍🍳
-                    </div>
-                    <div>
-                      <span className="text-xs font-bold text-white block">Saffron House • Chef's AI Assistant</span>
-                      <span className="text-[10px] text-amber-400/90 font-mono">Trained directly by Chef Sanjeev &amp; Owner Rohit</span>
-                    </div>
-                  </div>
-                  <span className="text-[10px] font-bold bg-purple-500/20 text-purple-300 px-2.5 py-0.5 rounded-full border border-purple-500/30">
-                    Live Chat Simulation
-                  </span>
-                </div>
-
-                {/* Interactive Query Chips */}
-                <div className="space-y-1.5">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
-                    Click a question to test Chef &amp; Owner training:
-                  </span>
-                  <div className="grid grid-cols-2 gap-1.5">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSelectedAiQuery('chef');
-                        setAiItemAdded(false);
-                      }}
-                      className={`px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-left transition-all ${
-                        selectedAiQuery === 'chef'
-                          ? 'bg-amber-500 text-slate-950 font-bold shadow-xs'
-                          : 'bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800'
-                      }`}
-                    >
-                      🧑‍🍳 Chef recommendations
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSelectedAiQuery('spice');
-                        setAiItemAdded(false);
-                      }}
-                      className={`px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-left transition-all ${
-                        selectedAiQuery === 'spice'
-                          ? 'bg-amber-500 text-slate-950 font-bold shadow-xs'
-                          : 'bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800'
-                      }`}
-                    >
-                      🔥 Spice level check
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSelectedAiQuery('pairing');
-                        setAiItemAdded(false);
-                      }}
-                      className={`px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-left transition-all ${
-                        selectedAiQuery === 'pairing'
-                          ? 'bg-amber-500 text-slate-950 font-bold shadow-xs'
-                          : 'bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800'
-                      }`}
-                    >
-                      🍷 Owner's pairing upsell
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSelectedAiQuery('allergen');
-                        setAiItemAdded(false);
-                      }}
-                      className={`px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-left transition-all ${
-                        selectedAiQuery === 'allergen'
-                          ? 'bg-amber-500 text-slate-950 font-bold shadow-xs'
-                          : 'bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800'
-                      }`}
-                    >
-                      🌾 Gluten &amp; nut-free check
-                    </button>
-                  </div>
-                </div>
-
-                {/* Dialogue Container */}
-                <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 space-y-3 min-h-[220px] flex flex-col justify-between">
-                  {/* Diner Bubble */}
-                  <div className="flex justify-end">
-                    <div className="bg-amber-500/20 border border-amber-500/30 px-3 py-2 rounded-2xl rounded-tr-sm text-xs text-amber-200 max-w-[80%]">
-                      {selectedAiQuery === 'chef' && "What does the Chef recommend for first-time diners tonight?"}
-                      {selectedAiQuery === 'spice' && "Is the Butter Chicken spicy? We have elderly parents and kids."}
-                      {selectedAiQuery === 'pairing' && "What drink and bread does the owner recommend with curries?"}
-                      {selectedAiQuery === 'allergen' && "Do you have gluten-free or nut-free dishes prepared safely?"}
-                    </div>
-                  </div>
-
-                  {/* AI Response Bubble */}
-                  <div className="flex justify-start">
-                    <div className="bg-slate-950 border border-slate-800 px-3.5 py-2.5 rounded-2xl rounded-tl-sm text-xs text-slate-200 max-w-[90%] space-y-2">
-                      <p className="leading-relaxed">
-                        {selectedAiQuery === 'chef' && "Chef Sanjeev highlights our Awadhi Murgh Dum Biryani and Slow-Cooked Dal Makhani. Both are slow-cooked in sealed handis with authentic Awadhi spices."}
-                        {selectedAiQuery === 'spice' && "Old Delhi Butter Chicken is calibrated at Spice 1/5 (very mild). The gravy is tomato, cream, and cashew based with zero harsh green chilies. It's 100% kid and senior-friendly."}
-                        {selectedAiQuery === 'pairing' && "Owner Rohit recommends pairing rich curries with our clay-oven Garlic Butter Naan and chilled Royal Kokum Cooler to refresh your palate between bites."}
-                        {selectedAiQuery === 'allergen' && "Our Slow-Cooked Dal Makhani and Tandoori Murgh are 100% gluten-free. For nut allergies, our kitchen uses dedicated allergen-safe pans and separate ladles."}
-                      </p>
-
-                      {/* Chef / Owner Note Box */}
-                      <div className="bg-amber-500/10 border-l-2 border-amber-500 px-2.5 py-1.5 rounded-r-md text-[11px] text-amber-300">
-                        {selectedAiQuery === 'chef' && "🧑‍🍳 Chef's Secret: Hand-smoked charcoal tandoori finish gives it the iconic Old Delhi flavor."}
-                        {selectedAiQuery === 'spice' && "🧑‍🍳 Chef's Note: Spice can be customized to zero heat upon your request."}
-                        {selectedAiQuery === 'pairing' && "💼 Owner's Tip: Pairing cooler + naan completes the meal and unlocks a bundle discount!"}
-                        {selectedAiQuery === 'allergen' && "🧑‍🍳 Chef's Safety Guarantee: All cross-contamination protocols verified in our kitchen."}
-                      </div>
-
-                      {/* 1-Tap Add to Tray */}
-                      <div className="pt-1 flex items-center justify-between border-t border-slate-800">
-                        <span className="text-[11px] font-bold text-white">
-                          {selectedAiQuery === 'chef' && "Awadhi Murgh Biryani • ₹480"}
-                          {selectedAiQuery === 'spice' && "Kid-Friendly Butter Chicken • ₹480"}
-                          {selectedAiQuery === 'pairing' && "Garlic Naan & Kokum Cooler • ₹240"}
-                          {selectedAiQuery === 'allergen' && "Gluten-Free Dal Makhani • ₹360"}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setAiItemAdded(true);
-                            playTone(587.33, 'triangle', 0.2);
-                          }}
-                          className={`px-3 py-1 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 ${
-                            aiItemAdded
-                              ? 'bg-emerald-500 text-slate-950'
-                              : 'bg-amber-500 hover:bg-amber-400 text-slate-950'
-                          }`}
-                        >
-                          {aiItemAdded ? (
-                            <>
-                              <CheckCircle2 className="w-3 h-3" />
-                              <span>Added to Tray ✓</span>
-                            </>
-                          ) : (
-                            <>
-                              <span>+ Add to Table Tray</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Chef Recommended Pairing Upsell Card */}
-                <div className="bg-gradient-to-r from-amber-500/15 via-orange-500/15 to-purple-500/15 border border-amber-500/30 rounded-xl p-3.5 flex items-center justify-between gap-3 shadow-md">
-                  <div className="space-y-0.5">
-                    <div className="flex items-center space-x-1.5">
-                      <span className="text-xs">🍷</span>
-                      <span className="text-xs font-bold text-white">Chef's Recommended Pairing</span>
-                      <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-mono font-bold">
-                        Save 15%
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-slate-300">
-                      Garlic Butter Naan + Royal Kokum Cooler bundle with Biryani (₹240 bundle price).
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setPairingAdded(!pairingAdded);
-                      playTone(pairingAdded ? 330 : 660, 'sine', 0.2);
-                    }}
-                    className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
-                      pairingAdded
-                        ? 'bg-emerald-500 text-slate-950'
-                        : 'bg-amber-500 hover:bg-amber-400 text-slate-950'
-                    }`}
-                  >
-                    {pairingAdded ? 'Pairing Added ✓' : '+ Add Pairing Deal'}
-                  </button>
-                </div>
-
-                <div className="text-[11px] text-slate-400 text-center italic">
-                  💡 Zero hallucinations: The AI answers only using your exact menu recipes, spice data, and owner upsell rules.
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ──────────────────────────────────────────────────────────────── */}
-        {/* CHAPTER 04: DIRECT KITCHEN KOT & UNIVERSAL POS BRIDGE            */}
-        {/* ──────────────────────────────────────────────────────────────── */}
-        <section
-          ref={sectionRefs[3]}
-          className="min-h-[calc(100vh-60px)] scroll-mt-16 py-12 lg:py-16 flex items-center justify-center p-4 sm:p-8 lg:p-12 border-b border-slate-800/60 bg-[#0b0f18]"
-        >
-          <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* Left Narrative Column */}
-            <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full text-amber-400 text-xs font-bold tracking-wide">
-                <span>CHAPTER 04</span>
-                <span>•</span>
-                <span>DIRECT KITCHEN KOT &amp; POS BRIDGE</span>
-              </div>
-
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-                Direct Line to Kitchen. <span className="text-amber-400">Owner Decides Workflow.</span>
-                <span className="block text-xl sm:text-2xl font-bold text-slate-300 mt-1">
-                  Mode A Instant Auto-KOT or Mode B Captain Review First.
-                </span>
-              </h2>
-
-              <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-                Every restaurant runs differently. Menuz leaves the choice 100% in the owner's hands: <strong>Send orders directly to the kitchen thermal printer in 1 second (Mode A)</strong>, or <strong>route them to the floor captain for quick verification first (Mode B)</strong>. Coupled with triple-redundant POS integration (Petpooja, RoyalPOS, Recaho, RanceLab, and direct ESC/POS network hardware).
-              </p>
-
-              {/* Owner Options Comparison Cards */}
-              <div className="grid grid-cols-2 gap-3 pt-1">
-                <div
-                  onClick={() => setActiveKotMode('direct')}
-                  className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
-                    activeKotMode === 'direct'
-                      ? 'bg-amber-500/15 border-amber-500/50 shadow-md'
-                      : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
-                  }`}
-                >
-                  <div className="flex items-center space-x-2 mb-1">
-                    <span className="text-sm">⚡</span>
-                    <h3 className="text-xs font-bold text-white uppercase tracking-wider">Mode A: Direct Auto-KOT</h3>
-                  </div>
-                  <p className="text-[11px] text-slate-300">
-                    Order prints directly in kitchen in 1 second. Zero staff delay. Perfect for high-speed QSRs and casual dining.
+                <div className="space-y-3">
+                  <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight">
+                    MENUZ
+                  </h1>
+                  <p className="text-xl sm:text-2xl font-bold text-amber-400">
+                    The Autonomous Dining & Reputation Operating System
+                  </p>
+                  <p className="text-base sm:text-lg text-slate-300 max-w-3xl leading-relaxed">
+                    Zero-CapEx Table QR Ordering, Real-Time Multiplayer Cart, Decoupled 3-Channel Reputation Engine, and Hardware-Free Kitchen Automation.
                   </p>
                 </div>
 
-                <div
-                  onClick={() => setActiveKotMode('captain')}
-                  className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
-                    activeKotMode === 'captain'
-                      ? 'bg-amber-500/15 border-amber-500/50 shadow-md'
-                      : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
-                  }`}
-                >
-                  <div className="flex items-center space-x-2 mb-1">
-                    <span className="text-sm">👨‍✈️</span>
-                    <h3 className="text-xs font-bold text-white uppercase tracking-wider">Mode B: Captain Review</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
+                  <div className="bg-[#131C2E] border border-amber-500/30 p-5 rounded-2xl">
+                    <div className="text-amber-400 font-black text-2xl mb-1">0% CapEx</div>
+                    <div className="text-sm font-bold text-white">Zero Hardware Investment</div>
+                    <div className="text-xs text-slate-400 mt-1">Works on existing thermal printers & smartphones</div>
                   </div>
-                  <p className="text-[11px] text-slate-300">
-                    Captain reviews and approves on floor tablet before KOT prints. Ideal for fine dining and course coordination.
-                  </p>
-                </div>
-              </div>
-
-              {/* 3 Core Points */}
-              <div className="space-y-3 pt-1">
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <Printer className="w-4 h-4 text-amber-400" />
+                  <div className="bg-[#131C2E] border border-cyan-500/30 p-5 rounded-2xl">
+                    <div className="text-cyan-400 font-black text-2xl mb-1">+₹3.8L / Mo</div>
+                    <div className="text-sm font-bold text-white">Verified Net Margin Boost</div>
+                    <div className="text-xs text-slate-400 mt-1">Via upsells, faster table turns & direct orders</div>
                   </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">Instant 80mm ESC/POS Thermal Printing</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Kitchen printer beeps and prints immediately with table number, items, guest tags, and spice notes.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">Triple-Redundancy Zero Downtime</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">If cloud internet drops, orders fail over seamlessly to Local Wi-Fi LAN bridge and Port 9100 direct printing.</p>
+                  <div className="bg-[#131C2E] border border-emerald-500/30 p-5 rounded-2xl">
+                    <div className="text-emerald-400 font-black text-2xl mb-1">100% Floor Shield</div>
+                    <div className="text-sm font-bold text-white">Zero Negative Public Leak</div>
+                    <div className="text-xs text-slate-400 mt-1">15-Minute private manager grievance recovery</div>
                   </div>
                 </div>
               </div>
+            )}
 
-              {/* Bottom Next Button */}
-              <div className="pt-2 flex flex-wrap items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => scrollToSection(4)}
-                  className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition-all flex items-center gap-2 shadow-sm cursor-pointer"
-                >
-                  <span>Explore Viral Instagram Stories</span>
-                  <ChevronDown className="w-4 h-4" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsWizardOpen(true)}
-                  className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/30 font-bold text-xs rounded-xl transition-all flex items-center gap-1.5 shadow-sm cursor-pointer"
-                >
-                  <Printer className="w-3.5 h-3.5" />
-                  <span>2-Min KOT Wizard</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Right Interactive Visual: Universal POS Thermal KOT Printout */}
-            <div className="lg:col-span-6">
-              <div className="bg-[#111622] border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
-                {/* Header & Re-Print */}
-                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                  <div className="flex items-center space-x-2">
-                    <Printer className="w-4 h-4 text-amber-400" />
-                    <span className="text-xs font-bold text-white uppercase tracking-wider">
-                      {selectedDeckPos} Kitchen Thermal Printer
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded">
-                      {activeKotMode === 'direct' ? 'MODE A: AUTO-KOT' : 'MODE B: CAPTAIN APPROVED'}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={handlePrintKot}
-                      disabled={kotPrinting}
-                      className="text-[11px] font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 px-2.5 py-1 rounded-lg border border-amber-500/30 transition-colors flex items-center gap-1.5 cursor-pointer"
-                    >
-                      <RotateCw className={`w-3 h-3 ${kotPrinting ? 'animate-spin' : ''}`} />
-                      <span>{kotPrinting ? 'Printing...' : 'Re-Print KOT'}</span>
-                    </button>
-                  </div>
+            {/* SLIDE 2: THE MULTI-CRORE DINING CRISIS */}
+            {currentSlide === 1 && (
+              <div className="space-y-6 my-auto relative z-10">
+                <div className="flex items-center gap-2 text-red-400 text-xs font-bold uppercase tracking-wider bg-red-500/10 border border-red-500/30 px-3 py-1 rounded-full w-fit">
+                  <AlertTriangle className="w-4 h-4" />
+                  <span>Market Reality & Revenue Leakage</span>
                 </div>
+                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                  The ₹4,20,000 Monthly Revenue Drain
+                </h2>
+                <p className="text-base sm:text-lg text-slate-300 max-w-3xl">
+                  Modern restaurants face 3 severe systemic fractures that destroy margins and public reputation.
+                </p>
 
-                {/* POS Selector Pills */}
-                <div className="grid grid-cols-3 sm:grid-cols-5 gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-center">
-                  {(['Petpooja', 'RoyalPOS', 'Recaho', 'RanceLab', 'Direct ESC/POS'] as const).map((pos) => (
-                    <button
-                      key={pos}
-                      type="button"
-                      onClick={() => setSelectedDeckPos(pos)}
-                      className={`py-1.5 px-1.5 rounded-lg text-[10px] font-bold transition-all truncate cursor-pointer ${
-                        selectedDeckPos === pos
-                          ? 'bg-amber-500 text-slate-950 shadow-xs'
-                          : 'text-slate-400 hover:text-white hover:bg-slate-850'
-                      }`}
-                    >
-                      {pos}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Connection Protocol Pill */}
-                <div className="text-[10px] text-center font-mono text-slate-400 bg-slate-900/80 px-2.5 py-1.5 rounded-lg border border-slate-800">
-                  {selectedDeckPos === 'Petpooja' && '⚡ Cloud REST API (restID + app_key) • 50k+ Outlets in India'}
-                  {selectedDeckPos === 'RoyalPOS' && '📶 Local LAN Wi-Fi API (Port 8080) • FC Road & Pune QSRs'}
-                  {selectedDeckPos === 'Recaho' && '☁️ Cloud REST API (X-Api-Key) • PCMC & Suburban Pune Hub'}
-                  {selectedDeckPos === 'RanceLab' && '🏢 FusionResto Enterprise API • Multi-Outlet Chains & Fine Dining'}
-                  {selectedDeckPos === 'Direct ESC/POS' && '🖨️ Wi-Fi / Ethernet TCP Direct (Port 9100) • Works Without POS API'}
-                </div>
-
-                {/* 80mm ESC/POS Thermal Receipt Simulation */}
-                <div className="bg-[#fffdfa] text-slate-950 p-5 rounded-xl font-mono text-xs shadow-lg space-y-2 border-t-4 border-amber-500">
-                  <div className="text-center pb-2 border-b border-dashed border-slate-400">
-                    <span className="font-extrabold text-sm tracking-wide block">SAFFRON HOUSE • KOREGAON PARK</span>
-                    <span className="font-bold text-xs text-slate-800 block">KITCHEN ORDER TICKET (KOT #1042)</span>
-                    <div className="flex justify-between text-[11px] text-slate-600 mt-1">
-                      <span>TABLE: #4 (PATIO)</span>
-                      <span>TIME: 20:45:12</span>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+                  <div className="bg-[#131C2E] border border-red-500/30 p-6 rounded-2xl space-y-3">
+                    <div className="w-10 h-10 rounded-xl bg-red-500/20 text-red-400 font-black flex items-center justify-center text-lg">
+                      95%
                     </div>
-                  </div>
-
-                  <div className="space-y-1.5 py-1 text-xs">
-                    <div className="flex justify-between font-bold">
-                      <span>1x AWADHI MURGH BIRYANI [GUEST 1]</span>
-                      <span>₹480</span>
-                    </div>
-                    <div className="text-[10px] text-slate-600 pl-2">
-                      Notes: Medium spice, layered dum, salan on side
-                    </div>
-
-                    <div className="flex justify-between font-bold">
-                      <span>1x GARLIC NAAN &amp; KOKUM COOLER [PAIRING]</span>
-                      <span>₹240</span>
-                    </div>
-                    <div className="text-[10px] text-emerald-800 pl-2">
-                      Bundle Discount Applied (15% Off)
-                    </div>
-
-                    <div className="flex justify-between font-bold">
-                      <span>1x MUTTON ROGAN JOSH [GUEST 2]</span>
-                      <span>₹480</span>
-                    </div>
-                  </div>
-
-                  <div className="pt-2 border-t border-dashed border-slate-400 text-[10px] text-slate-600 space-y-0.5">
-                    <div className="flex justify-between">
-                      <span>DISPATCH: {activeKotMode === 'direct' ? 'DIRECT TO KITCHEN' : 'CAPTAIN VERIFIED'}</span>
-                      <span className="text-emerald-700 font-bold">
-                        {selectedDeckPos === 'Direct ESC/POS'
-                          ? 'ESC/POS: OK (RAW PRINT)'
-                          : `${selectedDeckPos.toUpperCase()} STATUS: OK (200)`}
-                      </span>
-                    </div>
-                    <div className="text-center text-slate-500 pt-1">
-                      *** KITCHEN THERMAL COPY • ZERO RE-TYPING ***
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between text-xs bg-slate-900 p-3 rounded-xl border border-slate-800">
-                  <span className="text-slate-400">Order Routing Mode:</span>
-                  <span className="font-bold text-amber-400 font-mono">
-                    {activeKotMode === 'direct' ? 'Mode A: Instant Direct (0 min lag)' : 'Mode B: Captain Approved First'}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ──────────────────────────────────────────────────────────────── */}
-        {/* ──────────────────────────────────────────────────────────────── */}
-        {/* CHAPTER 05: OWNER'S REWARD GATEWAY (INSTAGRAM VS GOOGLE REVIEW)   */}
-        {/* ──────────────────────────────────────────────────────────────── */}
-        <section
-          ref={sectionRefs[4]}
-          className="min-h-[calc(100vh-60px)] scroll-mt-16 py-12 lg:py-16 flex items-center justify-center p-4 sm:p-8 lg:p-12 border-b border-slate-800/60"
-        >
-          <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* Left Narrative Column */}
-            <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center space-x-2 bg-pink-500/10 border border-pink-500/20 px-3 py-1 rounded-full text-pink-400 text-xs font-bold tracking-wide">
-                <span>CHAPTER 05</span>
-                <span>•</span>
-                <span>OWNER REWARD GATEWAY</span>
-              </div>
-
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-                Instagram Story vs. Google Review. <span className="text-amber-400">Owner Decides.</span>
-                <span className="block text-xl sm:text-2xl font-bold text-slate-300 mt-1">
-                  Choose How Diners Unlock Free Dishes, Drinks &amp; Table Discounts.
-                </span>
-              </h2>
-
-              <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-                Every restaurant brand has different marketing priorities. Menuz empowers the owner to configure which social channel unlocks the table reward (e.g. 15% discount or free signature dessert): <strong>5-Star Google Reviews</strong> to dominate Google Maps rankings, <strong>9:16 Instagram Stories</strong> to reach diners' local followers, or <strong>Dual Mode</strong> where the guest chooses.
-              </p>
-
-              {/* Owner Gateway Configuration Selector */}
-              <div className="space-y-2 bg-slate-900/80 border border-slate-800 p-3.5 rounded-2xl">
-                <div className="flex items-center justify-between text-xs font-bold">
-                  <span className="text-white flex items-center gap-1.5">
-                    <Sliders className="w-3.5 h-3.5 text-amber-400" />
-                    <span>Owner Reward Gateway Setting:</span>
-                  </span>
-                  <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">
-                    {rewardGatewayChoice === 'both' ? 'Dual Mode Active' : `${rewardGatewayChoice.toUpperCase()} ONLY`}
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-3 gap-2 pt-1">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setRewardGatewayChoice('google');
-                      playTone(523.25, 'sine', 0.15);
-                    }}
-                    className={`py-2 px-2.5 rounded-xl text-xs font-bold transition-all text-center cursor-pointer ${
-                      rewardGatewayChoice === 'google'
-                        ? 'bg-amber-500 text-slate-950 shadow-md'
-                        : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
-                    }`}
-                  >
-                    ⭐ Google Review
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setRewardGatewayChoice('instagram');
-                      playTone(587.33, 'sine', 0.15);
-                    }}
-                    className={`py-2 px-2.5 rounded-xl text-xs font-bold transition-all text-center cursor-pointer ${
-                      rewardGatewayChoice === 'instagram'
-                        ? 'bg-pink-600 text-white shadow-md'
-                        : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
-                    }`}
-                  >
-                    📸 Instagram Story
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setRewardGatewayChoice('both');
-                      playTone(659.25, 'sine', 0.15);
-                    }}
-                    className={`py-2 px-2.5 rounded-xl text-xs font-bold transition-all text-center cursor-pointer ${
-                      rewardGatewayChoice === 'both'
-                        ? 'bg-gradient-to-r from-amber-500 to-pink-500 text-slate-950 font-black shadow-md'
-                        : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
-                    }`}
-                  >
-                    ⚡ Diner's Choice
-                  </button>
-                </div>
-
-                <div className="text-[11px] text-slate-300 pt-1">
-                  {rewardGatewayChoice === 'google' && "Diners post an AI-crafted 5-star Google review to unlock their 15% discount. Best for fast Google Maps SEO growth."}
-                  {rewardGatewayChoice === 'instagram' && "Diners share a branded 9:16 Instagram Story tagging @restaurant to unlock their free dessert. Best for weekend social buzz."}
-                  {rewardGatewayChoice === 'both' && "Diners choose either Google Review or Instagram Story on their phone to unlock the reward. Maximum participation rate!"}
-                </div>
-              </div>
-
-              {/* 3 Core Points */}
-              <div className="space-y-3 pt-1">
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-pink-500/15 border border-pink-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <Share2 className="w-4 h-4 text-pink-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">Branded 9:16 Vertical Story Asset</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Auto-generates high-aesthetic Instagram stories with high-res dish photography, verified 5★ stickers, and your Instagram tag (@saffronhouse.pune).</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <Layers className="w-4 h-4 text-amber-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">Multi-Restaurant Partitioned Image Library</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Each restaurant operates with a completely isolated cloud image repository. Dish photography and logos are saved in segregated namespaces permanently.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom Next Button */}
-              <div className="pt-2 flex flex-wrap items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => scrollToSection(5)}
-                  className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition-all flex items-center gap-2 shadow-sm cursor-pointer"
-                >
-                  <span>See Review Shield &amp; Direct Access</span>
-                  <ChevronDown className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Right Interactive Visual: 9:16 Instagram Story Preview Simulator */}
-            <div className="lg:col-span-6 flex justify-center">
-              <div className="w-full max-w-sm bg-[#111622] border border-slate-800 rounded-3xl p-5 shadow-2xl space-y-4">
-                {/* Header */}
-                <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-base">📸</span>
-                    <span className="text-xs font-bold text-white">Instagram Story Generator</span>
-                  </div>
-                  <span className="text-[10px] font-bold text-pink-400 bg-pink-500/10 px-2 py-0.5 rounded-full border border-pink-500/20">
-                    9:16 Format
-                  </span>
-                </div>
-
-                {/* Dish Selector Pills */}
-                <div className="grid grid-cols-3 gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-center">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedStoryDish('biryani');
-                      playTone(523.25, 'sine', 0.15);
-                    }}
-                    className={`py-1 rounded-lg text-[10px] font-bold transition-all ${
-                      selectedStoryDish === 'biryani'
-                        ? 'bg-amber-500 text-slate-950 shadow-xs'
-                        : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    Biryani
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedStoryDish('curry');
-                      playTone(587.33, 'sine', 0.15);
-                    }}
-                    className={`py-1 rounded-lg text-[10px] font-bold transition-all ${
-                      selectedStoryDish === 'curry'
-                        ? 'bg-amber-500 text-slate-950 shadow-xs'
-                        : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    Butter Chicken
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedStoryDish('cocktail');
-                      playTone(659.25, 'sine', 0.15);
-                    }}
-                    className={`py-1 rounded-lg text-[10px] font-bold transition-all ${
-                      selectedStoryDish === 'cocktail'
-                        ? 'bg-amber-500 text-slate-950 shadow-xs'
-                        : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    Cocktail
-                  </button>
-                </div>
-
-                {/* Realistic 9:16 Vertical Story Mockup */}
-                <div className="relative aspect-[9/14] rounded-2xl overflow-hidden shadow-2xl border border-slate-700/60 group">
-                  {/* Background Image */}
-                  <img
-                    src={DEMO_STORIES[selectedStoryDish].image}
-                    alt={DEMO_STORIES[selectedStoryDish].title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  {/* Dark Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/60" />
-
-                  {/* Top Instagram Story Bar */}
-                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between text-white z-10">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-7 h-7 rounded-full bg-amber-500 p-0.5 flex items-center justify-center">
-                        <span className="text-[10px] font-bold text-slate-950">M</span>
-                      </div>
-                      <div>
-                        <span className="text-xs font-bold block text-white drop-shadow">@saffronhouse.pune</span>
-                        <span className="text-[9px] text-slate-300 block drop-shadow">Koregaon Park • 12m ago</span>
-                      </div>
-                    </div>
-                    <span className="text-[10px] bg-black/40 backdrop-blur-md px-2 py-0.5 rounded-full text-slate-200">
-                      ★ 5.0 Google Review
-                    </span>
-                  </div>
-
-                  {/* Center Dish Tag & Quote */}
-                  <div className="absolute bottom-16 left-3 right-3 space-y-2 z-10">
-                    <div className="inline-block bg-amber-500 text-slate-950 font-black text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-md shadow-md">
-                      {DEMO_STORIES[selectedStoryDish].tag}
-                    </div>
-                    <h4 className="text-base font-black text-white leading-tight drop-shadow-md">
-                      {DEMO_STORIES[selectedStoryDish].title}
-                    </h4>
-                    <p className="text-xs text-slate-200 italic leading-snug drop-shadow">
-                      {DEMO_STORIES[selectedStoryDish].quote}
+                    <h3 className="text-lg font-bold text-white">The Silent Guest Exodus</h3>
+                    <p className="text-sm text-slate-300 leading-relaxed">
+                      95% of satisfied guests pay their bill and leave silently without writing a Google review or sharing on Instagram.
                     </p>
                   </div>
 
-                  {/* Bottom Share Trigger Button */}
-                  <div className="absolute bottom-3 left-3 right-3 z-10">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setStoryGenerated(true);
-                        playTone(784, 'triangle', 0.25);
-                      }}
-                      className="w-full py-2 bg-gradient-to-r from-pink-600 via-rose-500 to-amber-500 hover:brightness-110 text-white font-bold text-xs rounded-xl shadow-lg flex items-center justify-center gap-1.5 cursor-pointer"
-                    >
-                      <Share2 className="w-3.5 h-3.5" />
-                      <span>{storyGenerated ? 'Story Shared to @Instagram ✓' : 'Share to Instagram Story'}</span>
-                    </button>
+                  <div className="bg-[#131C2E] border border-amber-500/30 p-6 rounded-2xl space-y-3">
+                    <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 font-black flex items-center justify-center text-lg">
+                      1★
+                    </div>
+                    <h3 className="text-lg font-bold text-white">Permanent 1-Star Damage</h3>
+                    <p className="text-sm text-slate-300 leading-relaxed">
+                      A single minor table delay or cold soup gets vented on Google Maps permanently, costing an estimated 30+ future walk-ins.
+                    </p>
                   </div>
-                </div>
 
-                <div className="text-[11px] text-slate-400 text-center italic">
-                  💡 Zero design effort for diner: Menuz auto-generates branded 9:16 stickers ready to post.
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ──────────────────────────────────────────────────────────────── */}
-        {/* CHAPTER 06: AI REVIEW SHIELD & DIRECT ACCESS ONBOARDING          */}
-        {/* ──────────────────────────────────────────────────────────────── */}
-        <section
-          ref={sectionRefs[5]}
-          className="min-h-[calc(100vh-60px)] scroll-mt-16 py-12 lg:py-16 flex items-center justify-center p-4 sm:p-8 lg:p-12 bg-[#0b0f18]"
-        >
-          <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* Left Narrative Column */}
-            <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full text-amber-400 text-xs font-bold tracking-wide">
-                <span>CHAPTER 06</span>
-                <span>•</span>
-                <span>REPUTATION SHIELD &amp; DIRECT ACCESS</span>
-              </div>
-
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-                Public 5★ Reviews. <span className="text-amber-400">Direct Access Onboarding.</span>
-                <span className="block text-xl sm:text-2xl font-bold text-slate-300 mt-1">
-                  Floor Shield, Anti-Cheat Voucher Timers &amp; 0% Commission.
-                </span>
-              </h2>
-
-              <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-                Menuz turns happy diners into verified 5-star Google reviews using an AI-crafted review generator and Lucky Wheel hook on the way in. Unhappy ratings (1-3★) silently alert your floor manager to resolve issues at the table. Plus, we've <strong>removed arbitrary 7-day trials — the platform owner directly grants complete access</strong> with flat ₹1,999/month pricing and 0% food commission.
-              </p>
-
-              {/* 3 Core Points */}
-              <div className="space-y-3 pt-1">
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <Sparkles className="w-4 h-4 text-emerald-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">AI Dish-Specific Review Builder</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">Mentions actual dishes ("Awadhi Murgh Dum Biryani", "crispy garlic naan") so Google Maps indexes your high-margin specialties.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-red-500/15 border border-red-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <ShieldCheck className="w-4 h-4 text-red-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">Negative Review Floor Shield</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">1-3 star ratings NEVER reach Google Maps. A silent floor buzzer alerts your manager to Table 4 to resolve complaints before the guest walks out.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3 bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl">
-                  <div className="w-7 h-7 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                    <CheckCircle2 className="w-4 h-4 text-blue-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">Direct Owner-Granted Access (0% Commission)</h3>
-                    <p className="text-xs text-slate-300 mt-0.5">No arbitrary 7-day trials. Complete operational platform unlocked on demand. Flat ₹1,999/month subscription — zero commission on your food sales.</p>
+                  <div className="bg-[#131C2E] border border-purple-500/30 p-6 rounded-2xl space-y-3">
+                    <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 font-black flex items-center justify-center text-lg">
+                      30%
+                    </div>
+                    <h3 className="text-lg font-bold text-white">Aggregator Commission Trap</h3>
+                    <p className="text-sm text-slate-300 leading-relaxed">
+                      Restaurants bleed 22% to 30% commissions to Zomato & Swiggy because they lack direct customer acquisition at the table.
+                    </p>
                   </div>
                 </div>
               </div>
+            )}
 
-              {/* Bottom Actions */}
-              <div className="pt-2 flex flex-wrap items-center gap-3">
-                <Link
-                  to="/admin"
-                  className="px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm rounded-xl transition-all flex items-center gap-2 shadow-lg"
-                >
-                  <span>Launch Operations Hub</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link
-                  to={`/r/${restaurant.slug}/menu?t=table-token-01-saffron`}
-                  className="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl transition-colors border border-slate-700"
-                >
-                  Test Diner Menu Live
-                </Link>
-              </div>
-            </div>
-
-            {/* Right Interactive Visual: Dual Review Gate & Live Anti-Cheat Voucher */}
-            <div className="lg:col-span-6 space-y-4">
-              <div className="bg-[#111622] border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                  <div className="flex items-center space-x-2">
-                    <Star className="w-4 h-4 text-amber-400" />
-                    <span className="text-xs font-bold text-white uppercase tracking-wider">
-                      Reputation Shield Simulator
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-bold bg-red-500/15 text-red-400 px-2 py-0.5 rounded-full border border-red-500/20">
-                    ⚡ Fires on QR Scan
-                  </span>
+            {/* SLIDE 3: THE 3 REPUTATION CHANNELS DECOUPLED */}
+            {currentSlide === 2 && (
+              <div className="space-y-6 my-auto relative z-10">
+                <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full w-fit">
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>Strategic Decoupling</span>
                 </div>
+                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                  Public Reviews vs. Instagram UGC vs. Floor Shield
+                </h2>
+                <p className="text-base sm:text-lg text-slate-300 max-w-3xl">
+                  They are completely different channels with distinct objectives, algorithms, and conversion mechanics.
+                </p>
 
-                {/* Star Selector Buttons */}
-                <div className="flex items-center justify-center space-x-2 py-1">
-                  {[1, 2, 3, 4, 5].map((st) => (
-                    <button
-                      key={st}
-                      type="button"
-                      onClick={() => {
-                        setSelectedStars(st);
-                        if (st < 4) {
-                          playTone(220, 'sawtooth', 0.25);
-                        } else {
-                          playTone(523.25, 'sine', 0.2);
-                        }
-                      }}
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold transition-all cursor-pointer ${
-                        selectedStars >= st
-                          ? st < 4
-                            ? 'bg-red-500/20 text-red-400 border border-red-500/40'
-                            : 'bg-amber-500 text-slate-950 shadow-md scale-105'
-                          : 'bg-slate-900 text-slate-600 border border-slate-800'
-                      }`}
-                    >
-                      ★
-                    </button>
-                  ))}
-                </div>
-
-                {/* Branch 1: 4 or 5 Stars -> Google Review & Wheel Spin */}
-                {selectedStars >= 4 ? (
-                  <div className="bg-slate-900 border border-emerald-500/30 rounded-xl p-4 space-y-3">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+                  <div className="bg-[#131C2E] border-2 border-amber-500/50 p-6 rounded-2xl space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-emerald-400 flex items-center gap-1">
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                        <span>Eligible for Google Review &amp; Wheel</span>
+                      <span className="text-xs font-bold uppercase px-2.5 py-1 rounded bg-amber-500/20 text-amber-300">
+                        Channel 1
                       </span>
-                      <span className="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded">
-                        Goes to Google Maps
+                      <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
+                    </div>
+                    <h3 className="text-xl font-black text-white">Google Maps SEO</h3>
+                    <p className="text-sm text-slate-300">
+                      <strong>Goal:</strong> Boost local search ranking when users search "best dining near me". Permanent public 5-star validation.
+                    </p>
+                    <div className="text-xs text-amber-400 font-semibold bg-amber-950/40 p-2.5 rounded-lg border border-amber-500/20">
+                      Action: AI Keyword Review Builder
+                    </div>
+                  </div>
+
+                  <div className="bg-[#131C2E] border-2 border-rose-500/50 p-6 rounded-2xl space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold uppercase px-2.5 py-1 rounded bg-rose-500/20 text-rose-300">
+                        Channel 2
+                      </span>
+                      <Instagram className="w-5 h-5 text-rose-400" />
+                    </div>
+                    <h3 className="text-xl font-black text-white">Instagram UGC Stories</h3>
+                    <p className="text-sm text-slate-300">
+                      <strong>Goal:</strong> Social proof & peer word-of-mouth. Friends see friends dining, creating instant FOMO & viral footfall.
+                    </p>
+                    <div className="text-xs text-rose-400 font-semibold bg-rose-950/40 p-2.5 rounded-lg border border-rose-500/20">
+                      Action: 1-Click Aesthetic Food Story Card
+                    </div>
+                  </div>
+
+                  <div className="bg-[#131C2E] border-2 border-cyan-500/50 p-6 rounded-2xl space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold uppercase px-2.5 py-1 rounded bg-cyan-500/20 text-cyan-300">
+                        Channel 3
+                      </span>
+                      <Shield className="w-5 h-5 text-cyan-400" />
+                    </div>
+                    <h3 className="text-xl font-black text-white">Private Floor Shield</h3>
+                    <p className="text-sm text-slate-300">
+                      <strong>Goal:</strong> Intercept grievances instantly (1-3 stars) while the diner is still seated. 100% confidential.
+                    </p>
+                    <div className="text-xs text-cyan-400 font-semibold bg-cyan-950/40 p-2.5 rounded-lg border border-cyan-500/20">
+                      Action: 15-Min Manager Alert & Recovery
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* SLIDE 4: CHANNEL 1 DEEP DIVE — GOOGLE MAPS SEO ENGINE */}
+            {currentSlide === 3 && (
+              <div className="space-y-6 my-auto relative z-10">
+                <div className="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-full w-fit">
+                  <Star className="w-4 h-4 fill-amber-400" />
+                  <span>Channel 1 Breakdown</span>
+                </div>
+                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                  Google Maps SEO Review Generator
+                </h2>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-2">
+                  <div className="lg:col-span-6 space-y-4">
+                    <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
+                      Instead of a blank, intimidating review box, Menuz provides 1-tap positive keyword tags (e.g. <em>#AuthenticDumBiryani, #SuperbAmbiance, #FastService</em>) that construct high-converting Google reviews with rich SEO weight.
+                    </p>
+                    <ul className="space-y-2.5 text-sm text-slate-300">
+                      <li className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <span>Pre-injects target food keywords into Google's search index</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <span>Multi-language auto-generation in English, Hindi, and Marathi</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <span>1-Click direct redirect to restaurant's verified Google Maps Place ID</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="lg:col-span-6 bg-[#131C2E] border border-amber-500/40 p-6 rounded-2xl shadow-xl space-y-4">
+                    <div className="text-xs font-bold text-amber-400 uppercase">Live Review Builder Preview</div>
+                    <div className="flex gap-1">
+                      {[1, 2, 3, 4, 5].map((s) => (
+                        <Star key={s} className="w-6 h-6 text-amber-400 fill-amber-400" />
+                      ))}
+                    </div>
+                    <div className="p-4 bg-slate-900/90 rounded-xl border border-slate-700 text-sm text-slate-200">
+                      "{generatedReviewText}"
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCopiedReview(true);
+                        setTimeout(() => setCopiedReview(false), 2000);
+                      }}
+                      className="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold rounded-xl text-sm transition-all hover:brightness-110 flex items-center justify-center gap-2 shadow-md"
+                    >
+                      {copiedReview ? <Check className="w-4 h-4" /> : <Star className="w-4 h-4 fill-slate-950" />}
+                      <span>{copiedReview ? 'Copied & Ready to Post!' : '1-Click Copy & Open Google Maps'}</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* SLIDE 5: CHANNEL 2 DEEP DIVE — INSTAGRAM UGC VIRALITY */}
+            {currentSlide === 4 && (
+              <div className="space-y-6 my-auto relative z-10">
+                <div className="flex items-center gap-2 text-rose-400 text-xs font-bold uppercase tracking-wider bg-rose-500/10 border border-rose-500/30 px-3 py-1 rounded-full w-fit">
+                  <Instagram className="w-4 h-4" />
+                  <span>Channel 2 Breakdown</span>
+                </div>
+                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                  Instagram UGC Story Virality Engine
+                </h2>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-2">
+                  <div className="lg:col-span-6 space-y-4">
+                    <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
+                      Turn every table into a social media influencer station. Guests generate formatted 9:16 Instagram Stories featuring high-res imagery, custom chef quotes, and mandatory restaurant account tags.
+                    </p>
+                    <div className="grid grid-cols-2 gap-3 pt-2">
+                      <div className="bg-[#131C2E] p-4 rounded-xl border border-slate-700">
+                        <div className="text-rose-400 font-bold text-xl">450+ Views</div>
+                        <div className="text-xs text-slate-300 mt-1">Average reach per diner story tag</div>
+                      </div>
+                      <div className="bg-[#131C2E] p-4 rounded-xl border border-slate-700">
+                        <div className="text-amber-400 font-bold text-xl">Zero Cost</div>
+                        <div className="text-xs text-slate-300 mt-1">Authentic organic UGC marketing</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-6 flex justify-center">
+                    <div className="w-72 bg-gradient-to-br from-purple-900/80 to-rose-950/80 border-2 border-rose-500/50 rounded-3xl p-5 shadow-2xl space-y-4">
+                      <div className="flex items-center justify-between text-xs text-rose-300 font-bold">
+                        <span>📸 INSTAGRAM STORY CARD</span>
+                        <span>@saffron_house</span>
+                      </div>
+                      <div className="h-44 rounded-2xl overflow-hidden relative">
+                        <img
+                          src={DEMO_STORIES[selectedStoryDish].image}
+                          alt="Story"
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-3">
+                          <span className="text-xs font-bold text-amber-300">
+                            {DEMO_STORIES[selectedStoryDish].tag}
+                          </span>
+                        </div>
+                      </div>
+                      <p className="text-xs text-slate-200 italic">
+                        {DEMO_STORIES[selectedStoryDish].quote}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setStoryShared(true);
+                          setTimeout(() => setStoryShared(false), 2500);
+                        }}
+                        className="w-full py-2.5 bg-gradient-to-r from-rose-500 to-pink-600 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg"
+                      >
+                        <Share2 className="w-3.5 h-3.5" />
+                        <span>{storyShared ? 'Shared to Instagram Story!' : 'Share Story & Unlock Reward'}</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* SLIDE 6: CHANNEL 3 DEEP DIVE — PRIVATE FLOOR SHIELD */}
+            {currentSlide === 5 && (
+              <div className="space-y-6 my-auto relative z-10">
+                <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full w-fit">
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>Channel 3 Breakdown</span>
+                </div>
+                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                  Private Floor Shield & 15-Minute Recovery
+                </h2>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-2">
+                  <div className="lg:col-span-6 space-y-4">
+                    <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
+                      When a guest selects 1, 2, or 3 stars, they are NEVER sent to Google Maps. Instead, their grievance routes instantly to the Floor Manager's WhatsApp & Admin Dashboard with an active 15-minute countdown clock.
+                    </p>
+                    <div className="space-y-2 text-sm text-slate-300">
+                      <div className="flex items-center gap-2 text-emerald-400 font-semibold">
+                        <CheckCircle2 className="w-4 h-4" />
+                        <span>Manager visits table with a complimentary dessert / apology</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-emerald-400 font-semibold">
+                        <CheckCircle2 className="w-4 h-4" />
+                        <span>Guest issue resolved on-premise BEFORE they walk out the door</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-emerald-400 font-semibold">
+                        <CheckCircle2 className="w-4 h-4" />
+                        <span>Zero permanent 1-star reviews posted to public search engines</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-6 bg-[#131C2E] border-2 border-red-500/50 p-6 rounded-2xl shadow-xl space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold bg-red-500/20 text-red-400 px-3 py-1 rounded-full flex items-center gap-1.5">
+                        <Bell className="w-3.5 h-3.5 animate-pulse" />
+                        <span>URGENT TABLE ALERT</span>
+                      </span>
+                      <span className="font-mono text-xs text-amber-400 font-bold bg-slate-900 px-2 py-1 rounded">
+                        ⏱️ {formatTimer(voucherSeconds)} REMAINING
                       </span>
                     </div>
 
-                    <div className="bg-slate-950 p-3 rounded-lg border border-slate-800 text-xs space-y-1">
-                      <span className="text-[10px] text-slate-400 block uppercase font-bold">
-                        AI-Generated Review Preview:
-                      </span>
-                      <p className="text-slate-200 italic text-[11px]">
-                        "Had an unforgettable dinner at Saffron House! The Awadhi Murgh Dum Biryani was rich, aromatic, and tender, and the garlic butter naan was perfection. 5 stars all the way!"
+                    <div className="bg-slate-900/90 p-4 rounded-xl border border-red-500/30 text-sm text-slate-200">
+                      <strong>Table 4 (4 Guests):</strong> "Soup was served lukewarm and we waited 20 minutes for drinks."
+                    </div>
+
+                    <div className="flex gap-2">
+                      <input
+                        type="password"
+                        maxLength={4}
+                        placeholder="Manager PIN (1234)"
+                        value={enteredPin}
+                        onChange={(e) => setEnteredPin(e.target.value)}
+                        className="bg-slate-900 border border-slate-700 px-3 py-2 rounded-xl text-sm text-white w-40 focus:outline-none focus:border-amber-500"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleVerifyPin}
+                        className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl transition-all"
+                      >
+                        Resolve & Close
+                      </button>
+                    </div>
+                    {pinVerified && (
+                      <div className="text-xs font-bold text-emerald-400">
+                        ✅ Table grievance resolved on-floor! Guest satisfied.
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* SLIDE 7: HARDWARE-FREE SMART KOT ENGINE */}
+            {currentSlide === 6 && (
+              <div className="space-y-6 my-auto relative z-10">
+                <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full w-fit">
+                  <Printer className="w-4 h-4" />
+                  <span>Kitchen Automation</span>
+                </div>
+                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                  Zero-CapEx Universal Kitchen KOT Bridge
+                </h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
+                    <div className="text-amber-400 font-bold text-lg">1. WhatsApp Kitchen Bot</div>
+                    <p className="text-sm text-slate-300">
+                      Orders route straight to a kitchen tablet or chef smartphone via WhatsApp with instant loud chime alert.
+                    </p>
+                  </div>
+                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
+                    <div className="text-cyan-400 font-bold text-lg">2. Direct ESC/POS Print</div>
+                    <p className="text-sm text-slate-300">
+                      Prints instantly to standard 80mm/58mm thermal printers over LAN, USB, or Bluetooth without driver installs.
+                    </p>
+                  </div>
+                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
+                    <div className="text-emerald-400 font-bold text-lg">3. Universal POS Bridge</div>
+                    <p className="text-sm text-slate-300">
+                      Seamless Webhook & API integration with Petpooja, RoyalPOS, Recaho, and RanceLab.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* SLIDE 8: REAL-TIME COLLABORATIVE TABLE SYNC */}
+            {currentSlide === 7 && (
+              <div className="space-y-6 my-auto relative z-10">
+                <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full w-fit">
+                  <Users className="w-4 h-4" />
+                  <span>Multiplayer Table Sync</span>
+                </div>
+                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                  Real-Time Joint Table Ordering
+                </h2>
+                <p className="text-base sm:text-lg text-slate-300 max-w-3xl">
+                  Multiple guests seated at the same table can scan their QR codes and add dishes into a unified shared cart simultaneously over WebSockets.
+                </p>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-white">Guest 1 (Host Device)</span>
+                      <span className="text-xs bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded">Cart Host</span>
+                    </div>
+                    <div className="p-3 bg-slate-900 rounded-xl text-sm text-slate-300">
+                      🥘 1x Awadhi Murgh Dum Biryani (₹480)
+                    </div>
+                    <div className="text-xs text-emerald-400 font-bold">
+                      ✓ Synchronized across all 4 guest screens in &lt;50ms
+                    </div>
+                  </div>
+
+                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-white">Guest 2 (Companion Device)</span>
+                      <span className="text-xs bg-cyan-500/20 text-cyan-300 px-2.5 py-1 rounded">Participant</span>
+                    </div>
+                    <div className="p-3 bg-slate-900 rounded-xl text-sm text-slate-300">
+                      🍹 2x Royal Saffron Cooler (₹560)
+                    </div>
+                    <div className="text-xs text-emerald-400 font-bold">
+                      ✓ Instant table cart update with host checkout control
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* SLIDE 9: MULTI-LANGUAGE AI STORYTELLING */}
+            {currentSlide === 8 && (
+              <div className="space-y-6 my-auto relative z-10">
+                <div className="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-full w-fit">
+                  <Globe className="w-4 h-4" />
+                  <span>Multilingual AI Menu</span>
+                </div>
+                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                  Instant English, Hindi & Marathi AI Menu
+                </h2>
+
+                <div className="flex gap-2">
+                  {(['en', 'hi', 'mr'] as const).map((l) => (
+                    <button
+                      key={l}
+                      type="button"
+                      onClick={() => setDemoLang(l)}
+                      className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${
+                        demoLang === l
+                          ? 'bg-amber-500 text-slate-950 shadow-md'
+                          : 'bg-slate-800 text-slate-300 hover:text-white'
+                      }`}
+                    >
+                      {l === 'en' ? '🇬🇧 English' : l === 'hi' ? '🇮🇳 हिन्दी (Hindi)' : '🇮🇳 मराठी (Marathi)'}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="bg-[#131C2E] border border-amber-500/30 p-6 rounded-2xl max-w-2xl space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-2xl font-black text-white">{DEMO_DISH_DATA[demoLang].title}</h3>
+                    <span className="text-xl font-bold text-amber-400">{DEMO_DISH_DATA[demoLang].price}</span>
+                  </div>
+                  <p className="text-base text-slate-300 leading-relaxed">
+                    {DEMO_DISH_DATA[demoLang].desc}
+                  </p>
+                  <button className="px-5 py-2.5 bg-amber-500 text-slate-950 font-bold rounded-xl text-sm">
+                    {DEMO_DISH_DATA[demoLang].addBtn}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* SLIDE 10: ZERO-APP FRICTION PROTOCOL */}
+            {currentSlide === 9 && (
+              <div className="space-y-6 my-auto relative z-10">
+                <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full w-fit">
+                  <Smartphone className="w-4 h-4" />
+                  <span>Frictionless Protocol</span>
+                </div>
+                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                  Zero App Download. Zero Login Barrier.
+                </h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
+                    <div className="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 font-bold flex items-center justify-center">
+                      ⚡
+                    </div>
+                    <h3 className="text-lg font-bold text-white">&lt; 1 Second Load Time</h3>
+                    <p className="text-sm text-slate-300">
+                      Ultra-optimized Vite & Tailwind progressive web app loads instantly on 3G, 4G, 5G, and venue Wi-Fi.
+                    </p>
+                  </div>
+
+                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
+                    <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center">
+                      🚫
+                    </div>
+                    <h3 className="text-lg font-bold text-white">No App Store Install</h3>
+                    <p className="text-sm text-slate-300">
+                      Dinners do not want to download 50MB apps for a 45-minute meal. Instant browser access via standard iOS & Android camera.
+                    </p>
+                  </div>
+
+                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center">
+                      🔒
+                    </div>
+                    <h3 className="text-lg font-bold text-white">Secure Encrypted Token</h3>
+                    <p className="text-sm text-slate-300">
+                      Each table QR has an embedded cryptographic token preventing remote unauthorized order spam.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* SLIDE 11: ENTERPRISE MULTI-OUTLET ARCHITECTURE */}
+            {currentSlide === 10 && (
+              <div className="space-y-6 my-auto relative z-10">
+                <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full w-fit">
+                  <Building2 className="w-4 h-4" />
+                  <span>Enterprise Cloud</span>
+                </div>
+                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                  Multi-Outlet Centralized Cloud Control
+                </h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-4">
+                    <h3 className="text-xl font-bold text-white">Headquarters HQ Master Dashboard</h3>
+                    <ul className="space-y-2 text-sm text-slate-300">
+                      <li className="flex items-center gap-2">✓ 1-Click global menu item updates across all 15 branches</li>
+                      <li className="flex items-center gap-2">✓ Centralized revenue analytics, table turnaround & staff metrics</li>
+                      <li className="flex items-center gap-2">✓ Aggregated Google & Instagram reputation tracker</li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-4">
+                    <h3 className="text-xl font-bold text-white">Local Branch Autonomy</h3>
+                    <ul className="space-y-2 text-sm text-slate-300">
+                      <li className="flex items-center gap-2">✓ Floor manager live view & table grievance alert channel</li>
+                      <li className="flex items-center gap-2">✓ Real-time item stockout toggle (Out of Stock in 1 tap)</li>
+                      <li className="flex items-center gap-2">✓ Branch-specific kitchen thermal printer routing</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* SLIDE 12: BOARDROOM PITCH: 15 RESTAURANT FORMATS (100% APPROVAL) */}
+            {currentSlide === 11 && (
+              <div className="space-y-6 my-auto relative z-10">
+                <div className="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-full w-fit">
+                  <Award className="w-4 h-4" />
+                  <span>Boardroom Validation</span>
+                </div>
+                <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+                  15 Diverse Restaurant Formats Analyzed (100% Boardroom Approval)
+                </h2>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 pt-2 max-h-[380px] overflow-y-auto pr-2">
+                  {[
+                    { name: '1. Fine Dining', metric: '+28% Wine & Dessert Pairing Upsell' },
+                    { name: '2. High-Volume Cafe', metric: '+3.2x Faster Table Turns on Weekends' },
+                    { name: '3. Microbrewery', metric: 'Real-Time Multiplayer Shared Cart' },
+                    { name: '4. Restobar & Lounge', metric: 'Zero Server Wait in Loud Ambiance' },
+                    { name: '5. Fast Casual / QSR', metric: '60% Reduction in Cashier Queues' },
+                    { name: '6. Buffet & Live Grill', metric: 'Instant 1-Tap Refill Requests' },
+                    { name: '7. Rooftop Lounge', metric: 'Massive Instagram UGC Social Reach' },
+                    { name: '8. Heritage Thali', metric: 'Multilingual Marathi & Hindi Storytelling' },
+                    { name: '9. Multi-Outlet Chain', metric: 'Centralized HQ Cloud Menu Sync' },
+                    { name: '10. Pizzeria', metric: 'Custom Crust & Topping Multi-Selection' },
+                    { name: '11. Cloud Kitchen Dine-in', metric: 'Direct Zero-Commission Orders' },
+                    { name: '12. Coastal Seafood', metric: 'Dynamic Daily Catch Pricing Updates' },
+                    { name: '13. Pure Veg Casual', metric: '100% Floor Grievance Recovery Shield' },
+                    { name: '14. Asian Noodle Bar', metric: 'Interactive Spice Level Customization' },
+                    { name: '15. Hotel Diner', metric: 'Room Charge & Table Token Verification' }
+                  ].map((r, i) => (
+                    <div key={i} className="bg-[#131C2E] border border-slate-700/80 p-3.5 rounded-xl space-y-1">
+                      <div className="text-xs font-black text-amber-400">{r.name}</div>
+                      <div className="text-[11px] text-slate-300">{r.metric}</div>
+                      <div className="text-[10px] font-bold text-emerald-400">✓ Approved</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* SLIDE 13: UNIT ECONOMICS & ROI MODEL */}
+            {currentSlide === 12 && (
+              <div className="space-y-6 my-auto relative z-10">
+                <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full w-fit">
+                  <TrendingUp className="w-4 h-4" />
+                  <span>Financial Validation</span>
+                </div>
+                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                  +₹3,84,000 Net Monthly Profit Impact
+                </h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-2">
+                  <div className="bg-[#131C2E] border border-amber-500/30 p-5 rounded-2xl">
+                    <div className="text-2xl font-black text-amber-400">+₹1,44,000</div>
+                    <div className="text-sm font-bold text-white mt-1">AI Upsell & Pairings</div>
+                    <div className="text-xs text-slate-400 mt-1">18% increase in beverage & dessert attachment</div>
+                  </div>
+                  <div className="bg-[#131C2E] border border-cyan-500/30 p-5 rounded-2xl">
+                    <div className="text-2xl font-black text-cyan-400">+₹1,20,000</div>
+                    <div className="text-sm font-bold text-white mt-1">Faster Table Turns</div>
+                    <div className="text-xs text-slate-400 mt-1">12 minutes saved per table during peak rush</div>
+                  </div>
+                  <div className="bg-[#131C2E] border border-purple-500/30 p-5 rounded-2xl">
+                    <div className="text-2xl font-black text-purple-400">+₹85,000</div>
+                    <div className="text-sm font-bold text-white mt-1">Commission Savings</div>
+                    <div className="text-xs text-slate-400 mt-1">Direct diner repeat orders vs aggregator fees</div>
+                  </div>
+                  <div className="bg-[#131C2E] border border-emerald-500/30 p-5 rounded-2xl">
+                    <div className="text-2xl font-black text-emerald-400">+₹35,000</div>
+                    <div className="text-sm font-bold text-white mt-1">Staff Efficiency</div>
+                    <div className="text-xs text-slate-400 mt-1">Waiters focus on hospitality rather than order taking</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* SLIDE 14: 30-MINUTE DEPLOYMENT ROADMAP */}
+            {currentSlide === 13 && (
+              <div className="space-y-6 my-auto relative z-10">
+                <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full w-fit">
+                  <Zap className="w-4 h-4" />
+                  <span>Rapid Rollout</span>
+                </div>
+                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                  Zero Downtime 30-Minute Deployment
+                </h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
+                    <div className="text-amber-400 font-black text-3xl">01</div>
+                    <h3 className="text-lg font-bold text-white">Menu Ingestion (10 Mins)</h3>
+                    <p className="text-sm text-slate-300">
+                      Upload physical menu PDF/photo. AI auto-extracts categories, prices, diet tags, and creates English/Hindi/Marathi translations.
+                    </p>
+                  </div>
+                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
+                    <div className="text-cyan-400 font-black text-3xl">02</div>
+                    <h3 className="text-lg font-bold text-white">QR Table Generation (10 Mins)</h3>
+                    <p className="text-sm text-slate-300">
+                      Download pre-designed, branded printable acrylic table standees with dynamic cryptographic table tokens.
+                    </p>
+                  </div>
+                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
+                    <div className="text-emerald-400 font-black text-3xl">03</div>
+                    <h3 className="text-lg font-bold text-white">Staff Go-Live (10 Mins)</h3>
+                    <p className="text-sm text-slate-300">
+                      Connect existing thermal printer or WhatsApp bot. 10-minute floor staff orientation and full service go-live.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* SLIDE 15: COMPETITIVE HEGEMONY MATRIX */}
+            {currentSlide === 14 && (
+              <div className="space-y-6 my-auto relative z-10">
+                <div className="flex items-center gap-2 text-purple-400 text-xs font-bold uppercase tracking-wider bg-purple-500/10 border border-purple-500/30 px-3 py-1 rounded-full w-fit">
+                  <Award className="w-4 h-4" />
+                  <span>Market Comparison</span>
+                </div>
+                <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+                  Competitive Hegemony Matrix
+                </h2>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse text-sm">
+                    <thead>
+                      <tr className="border-b border-slate-700 text-slate-400 text-xs uppercase">
+                        <th className="py-3 px-4">Feature & Capability</th>
+                        <th className="py-3 px-4 text-amber-400 font-bold bg-amber-500/10 rounded-t-xl">MENUZ</th>
+                        <th className="py-3 px-4">Legacy POS (Petpooja/POSist)</th>
+                        <th className="py-3 px-4">Food Aggregators</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-800 text-slate-300">
+                      <tr>
+                        <td className="py-3 px-4 font-semibold text-white">Hardware Requirements</td>
+                        <td className="py-3 px-4 font-bold text-emerald-400 bg-amber-500/5">Zero CapEx (Existing Phone/Printer)</td>
+                        <td className="py-3 px-4 text-slate-400">High (Proprietary terminals/touchpads)</td>
+                        <td className="py-3 px-4 text-slate-400">Merchant tablets</td>
+                      </tr>
+                      <tr>
+                        <td className="py-3 px-4 font-semibold text-white">Reputation Interception Shield</td>
+                        <td className="py-3 px-4 font-bold text-emerald-400 bg-amber-500/5">15-Min Private Manager Escalation</td>
+                        <td className="py-3 px-4 text-red-400">None</td>
+                        <td className="py-3 px-4 text-red-400">Public ratings destroy rank</td>
+                      </tr>
+                      <tr>
+                        <td className="py-3 px-4 font-semibold text-white">Commission on In-Venue Dining</td>
+                        <td className="py-3 px-4 font-bold text-emerald-400 bg-amber-500/5">0% Commission</td>
+                        <td className="py-3 px-4 text-slate-400">0% (Flat SaaS)</td>
+                        <td className="py-3 px-4 text-red-400">22% - 30% per order</td>
+                      </tr>
+                      <tr>
+                        <td className="py-3 px-4 font-semibold text-white">Multiplayer Table Sync</td>
+                        <td className="py-3 px-4 font-bold text-emerald-400 bg-amber-500/5">Real-Time WebSockets</td>
+                        <td className="py-3 px-4 text-slate-400">Single device only</td>
+                        <td className="py-3 px-4 text-slate-400">Single diner only</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* SLIDE 16: GAMIFIED CUSTOMER RETENTION ENGINE */}
+            {currentSlide === 15 && (
+              <div className="space-y-6 my-auto relative z-10">
+                <div className="flex items-center gap-2 text-rose-400 text-xs font-bold uppercase tracking-wider bg-rose-500/10 border border-rose-500/30 px-3 py-1 rounded-full w-fit">
+                  <Sparkles className="w-4 h-4" />
+                  <span>Customer Loyalty</span>
+                </div>
+                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                  Gamified Repeat Diner Retention Engine
+                </h2>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-2">
+                  <div className="lg:col-span-6 space-y-4">
+                    <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
+                      Guests spin the interactive wheel after submitting a review or sharing an Instagram story. They unlock a time-locked voucher valid on their next visit within 30 days.
+                    </p>
+                    <div className="bg-[#131C2E] p-4 rounded-xl border border-slate-700 space-y-2">
+                      <div className="text-emerald-400 font-bold text-base">34% Repeat Visit Conversion</div>
+                      <p className="text-xs text-slate-300">
+                        Diners return with friends and family within 3 weeks to redeem their won voucher, boosting long-term customer lifetime value (LTV).
                       </p>
                     </div>
+                  </div>
 
+                  <div className="lg:col-span-6 bg-[#131C2E] border-2 border-amber-500/40 p-6 rounded-2xl text-center space-y-4 shadow-xl">
+                    <div className="text-xs font-bold text-amber-400 uppercase">Interactive Lucky Spin Wheel</div>
+                    <div className="w-40 h-40 mx-auto rounded-full border-4 border-amber-500 bg-gradient-to-tr from-amber-600 via-rose-600 to-purple-600 flex items-center justify-center text-slate-950 font-black text-lg shadow-xl animate-spin-slow">
+                      🎯 SPIN
+                    </div>
+                    {wonPrize && (
+                      <div className="p-3 bg-slate-900 rounded-xl border border-amber-500/30 text-amber-400 font-bold text-sm">
+                        🎉 Prize: {wonPrize}
+                      </div>
+                    )}
                     <button
                       type="button"
                       onClick={handleSpinWheel}
                       disabled={isSpinning}
-                      className="w-full py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:brightness-110 text-slate-950 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer"
+                      className="px-6 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-sm transition-all"
                     >
-                      <RotateCw className={`w-3.5 h-3.5 ${isSpinning ? 'animate-spin' : ''}`} />
-                      <span>{isSpinning ? 'Spinning Lucky Wheel...' : 'Spin Lucky Wheel for Table Discount'}</span>
+                      {isSpinning ? 'Spinning...' : 'Spin the Wheel Demo'}
                     </button>
-
-                    {wonPrize && (
-                      <div className="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-lg text-center text-xs font-bold text-amber-400">
-                        🎉 Prize Unlocked: {wonPrize}!
-                      </div>
-                    )}
                   </div>
-                ) : (
-                  /* Branch 2: 1 to 3 Stars -> Silent Floor Manager Shield */
-                  <div className="bg-red-950/40 border border-red-500/40 rounded-xl p-4 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-red-400 flex items-center gap-1">
-                        <ShieldCheck className="w-4 h-4 text-red-400" />
-                        <span>Blocked from Google Maps</span>
-                      </span>
-                      <span className="text-[10px] bg-red-500/20 text-red-300 font-bold px-2 py-0.5 rounded">
-                        Manager Intercept
-                      </span>
-                    </div>
-
-                    <div className="bg-slate-950 p-3 rounded-lg border border-red-500/20 space-y-1.5">
-                      <span className="text-xs font-extrabold text-red-400 flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
-                        <span>🚨 URGENT FLOOR ALERT (TABLE 4)</span>
-                      </span>
-                      <p className="text-[11px] text-slate-300">
-                        "Guest reported slow bread service &amp; lukewarm curry. Floor manager alerted via SOS buzzer to resolve at table."
-                      </p>
-                    </div>
-
-                    <div className="p-2 bg-emerald-950/40 border border-emerald-500/30 rounded-lg text-[11px] text-emerald-300 text-center font-semibold">
-                      ✓ Saved: Customer leaves satisfied after table visit; 0 bad reviews posted online!
-                    </div>
-                  </div>
-                )}
-
-                {/* Anti-Cheat Voucher Simulator Card */}
-                <div className="bg-gradient-to-b from-slate-900 to-slate-950 border border-amber-500/40 p-4 rounded-xl space-y-2.5 relative">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <span className="text-[10px] text-amber-400 font-bold uppercase tracking-wider block">
-                        Table 4 Verified Reward
-                      </span>
-                      <h4 className="text-sm font-black text-white">15% Off Total Food Bill</h4>
-                    </div>
-                    {/* Live Ticking Seconds Pill */}
-                    <div className="bg-amber-500/20 border border-amber-500/40 px-2.5 py-0.5 rounded-lg text-center">
-                      <span className="text-[8px] text-amber-300 font-bold block uppercase">Expires in</span>
-                      <span className="text-xs font-extrabold text-amber-400 font-mono">
-                        {formatTimer(voucherSeconds)}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Waiter PIN verification box */}
-                  <div className="pt-2 border-t border-slate-800 flex items-center justify-between gap-2">
-                    <div className="flex items-center space-x-1.5">
-                      <Lock className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                      <span className="text-[10px] text-slate-400">Waiter PIN (Enter 1234):</span>
-                    </div>
-                    {pinVerified ? (
-                      <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">
-                        ✓ Voided &amp; Redeemed
-                      </span>
-                    ) : (
-                      <div className="flex items-center space-x-1.5">
-                        <input
-                          type="password"
-                          maxLength={4}
-                          value={enteredPin}
-                          onChange={(e) => setEnteredPin(e.target.value)}
-                          placeholder="PIN"
-                          className="w-14 bg-slate-900 border border-slate-700 px-2 py-1 rounded text-center text-xs font-mono text-white tracking-widest focus:border-amber-500 focus:outline-none"
-                        />
-                        <button
-                          type="button"
-                          onClick={handleVerifyPin}
-                          className="px-2 py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[10px] rounded cursor-pointer"
-                        >
-                          Verify
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                  {pinError && (
-                    <div className="text-[10px] text-red-400 text-right">Invalid PIN! Try 1234</div>
-                  )}
                 </div>
+              </div>
+            )}
 
-                {/* Transparent Direct Access Callout */}
-                <div className="bg-slate-900/80 border border-slate-800 p-3 rounded-xl flex items-center justify-between text-xs">
-                  <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
-                      Direct Access Onboarding
+            {/* SLIDE 17: TRANSPARENT SUBSCRIPTION & PRICING */}
+            {currentSlide === 16 && (
+              <div className="space-y-6 my-auto relative z-10">
+                <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full w-fit">
+                  <DollarSign className="w-4 h-4" />
+                  <span>Transparent Pricing</span>
+                </div>
+                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                  Flat Monthly Subscription. Zero Commissions.
+                </h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 max-w-4xl">
+                  <div className="bg-[#131C2E] border border-slate-700 p-8 rounded-3xl space-y-4">
+                    <div className="text-sm font-bold text-slate-400 uppercase">Single Outlet Plan</div>
+                    <div className="text-4xl font-black text-white">₹2,499 <span className="text-sm text-slate-400 font-normal">/ month</span></div>
+                    <ul className="space-y-2.5 text-sm text-slate-300">
+                      <li className="flex items-center gap-2">✓ Unlimited table QR codes & orders</li>
+                      <li className="flex items-center gap-2">✓ 3-Channel Reputation Engine</li>
+                      <li className="flex items-center gap-2">✓ WhatsApp & ESC/POS Kitchen KOT</li>
+                      <li className="flex items-center gap-2">✓ 15-Minute Floor Shield</li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-[#131C2E] border-2 border-amber-500 p-8 rounded-3xl space-y-4 relative shadow-2xl">
+                    <span className="absolute -top-3 right-6 bg-amber-500 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-full">
+                      ENTERPRISE FAVORITE
                     </span>
-                    <span className="font-bold text-white">Flat ₹1,999 / Month • 0% Commission</span>
+                    <div className="text-sm font-bold text-amber-400 uppercase">Multi-Outlet Enterprise</div>
+                    <div className="text-4xl font-black text-white">₹4,999 <span className="text-sm text-slate-400 font-normal">/ month</span></div>
+                    <ul className="space-y-2.5 text-sm text-slate-300">
+                      <li className="flex items-center gap-2">✓ All Single Outlet features</li>
+                      <li className="flex items-center gap-2">✓ Centralized HQ Master Dashboard</li>
+                      <li className="flex items-center gap-2">✓ POS Direct API Integration</li>
+                      <li className="flex items-center gap-2">✓ Dedicated 24/7 Priority Support</li>
+                    </ul>
                   </div>
-                  <span className="font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-lg border border-emerald-500/20 text-[11px]">
-                    Direct Owner Access
-                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* SLIDE 18: EXECUTIVE ONBOARDING & INSTANT TRIAL */}
+            {currentSlide === 17 && (
+              <div className="space-y-8 my-auto relative z-10 text-center max-w-3xl mx-auto">
+                <div className="inline-flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-full">
+                  <Sparkles className="w-4 h-4" />
+                  <span>Ready to Transform Your Dining Floor?</span>
                 </div>
 
-                {/* Regional Inclusivity (English Primary, Hindi & Marathi) */}
-                <div className="bg-slate-900/60 border border-slate-800 p-3 rounded-xl space-y-2">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-white font-bold flex items-center gap-1.5">
-                      <Globe className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>Regional Languages (English Default Primary):</span>
-                    </span>
-                    <span className="text-[10px] text-amber-400 font-mono font-bold">{demoLang.toUpperCase()} Active</span>
-                  </div>
-                  <div className="grid grid-cols-3 gap-1.5">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setDemoLang('en');
-                        playTone(523.25, 'sine', 0.15);
-                      }}
-                      className={`py-1 px-2 rounded-lg text-[10px] font-bold transition-all text-center cursor-pointer ${
-                        demoLang === 'en'
-                          ? 'bg-amber-500 text-slate-950 font-bold'
-                          : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
-                      }`}
-                    >
-                      🇬🇧 English (Default)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setDemoLang('hi');
-                        playTone(587.33, 'sine', 0.15);
-                      }}
-                      className={`py-1 px-2 rounded-lg text-[10px] font-bold transition-all text-center cursor-pointer ${
-                        demoLang === 'hi'
-                          ? 'bg-amber-500 text-slate-950 font-bold'
-                          : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
-                      }`}
-                    >
-                      🇮🇳 हिन्दी
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setDemoLang('mr');
-                        playTone(659.25, 'sine', 0.15);
-                      }}
-                      className={`py-1 px-2 rounded-lg text-[10px] font-bold transition-all text-center cursor-pointer ${
-                        demoLang === 'mr'
-                          ? 'bg-amber-500 text-slate-950 font-bold'
-                          : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
-                      }`}
-                    >
-                      🚩 मराठी
-                    </button>
-                  </div>
-                  <p className="text-[10px] text-slate-400 italic">
-                    Always opens in English by default. Guests can toggle physically to Hindi or Marathi without losing their cart state.
-                  </p>
+                <h2 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight">
+                  Launch Menuz In <span className="text-amber-400">30 Minutes</span>
+                </h2>
+
+                <p className="text-base sm:text-xl text-slate-300 leading-relaxed">
+                  Join the next generation of profitable, reputation-shielded restaurants. Zero hardware purchase required.
+                </p>
+
+                <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+                  <Link
+                    to={`/r/${restaurant.slug}/menu?t=table-token-01-saffron`}
+                    className="px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-base rounded-2xl transition-all shadow-xl hover:scale-105 flex items-center gap-2"
+                  >
+                    <Smartphone className="w-5 h-5" />
+                    <span>Experience Live Table Menu</span>
+                  </Link>
+
+                  <Link
+                    to="/admin"
+                    className="px-8 py-4 bg-[#131C2E] hover:bg-slate-800 text-white font-bold text-base rounded-2xl transition-all border border-slate-700 flex items-center gap-2"
+                  >
+                    <Building2 className="w-5 h-5 text-amber-400" />
+                    <span>Open Floor Manager Dashboard</span>
+                  </Link>
                 </div>
+              </div>
+            )}
+
+            {/* Bottom Footer Controls inside Slide Canvas */}
+            <div className="flex items-center justify-between pt-6 border-t border-slate-800/80 text-xs text-slate-400 mt-6">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                <span>Menuz Autonomous OS</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <span>Use <strong>←</strong> / <strong>→</strong> or <strong>Space</strong> to navigate</span>
+                <span className="font-mono text-amber-400 font-bold">Slide {currentSlide + 1} / 18</span>
               </div>
             </div>
           </div>
-        </section>
-      </main>
+
+          {/* Bottom Thumbnails Scroller Bar */}
+          <div className="flex gap-2.5 overflow-x-auto py-4 scrollbar-thin mt-2">
+            {SLIDES_DATA.map((s, idx) => (
+              <button
+                key={s.num}
+                type="button"
+                onClick={() => setCurrentSlide(idx)}
+                className={`relative shrink-0 px-3.5 py-2.5 rounded-xl border text-left transition-all ${
+                  currentSlide === idx
+                    ? 'bg-amber-500/20 border-amber-500 text-white shadow-md shadow-amber-500/10'
+                    : 'bg-slate-900/80 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                }`}
+              >
+                <div className="text-[10px] font-bold text-amber-400">SLIDE {s.num}</div>
+                <div className="text-xs font-semibold whitespace-nowrap">{s.short}</div>
+              </button>
+            ))}
+          </div>
+        </main>
+      )}
 
       {/* ══════════════════════════════════════════════════════════════════ */}
-      {/* 3. PRESENTATION FOOTER CONTROLS                                   */}
+      {/* MODE 2: CONTINUOUS EXECUTIVE SCROLLYTELLING (LONG-FORM)            */}
       {/* ══════════════════════════════════════════════════════════════════ */}
-      <footer className="bg-[#0b0e16] border-t border-slate-800/80 py-4 px-6 text-center text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-3 max-w-6xl mx-auto w-full">
-        <div className="flex items-center space-x-2">
-          <span className="font-extrabold text-white">MENU<span className="text-amber-500">Z</span></span>
-          <span>•</span>
-          <span>Dine-In Operating System & Reputation Engine</span>
-        </div>
-        <div className="flex items-center space-x-4">
-          <button
-            type="button"
-            onClick={() => scrollToSection(0)}
-            className="hover:text-amber-400 transition-colors"
-          >
-            Back to Top
-          </button>
-          <span>•</span>
-          <Link to="/admin" className="hover:text-white transition-colors">
-            Master Admin
-          </Link>
-          <span>•</span>
-          <Link to="/" className="hover:text-white transition-colors">
-            Customer Directory
-          </Link>
-        </div>
-      </footer>
+      {viewMode === 'scroll' && (
+        <main className="flex-1 flex flex-col max-w-6xl mx-auto w-full px-4 sm:px-6 py-12 space-y-16">
+          {/* Section 1 */}
+          <section className="bg-[#131C2E] border border-slate-800 p-8 sm:p-12 rounded-3xl space-y-6">
+            <span className="text-amber-400 font-bold text-xs uppercase tracking-widest bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-full">
+              CHAPTER 01 • THE SILENT REPUTATION CRISIS
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-black text-white">
+              95% of Happy Diners Leave Silently.
+            </h2>
+            <p className="text-lg text-slate-300 leading-relaxed">
+              Satisfied guests rarely take the initiative to post on Google Maps. But if just one guest encounters a delay, they leave a permanent 1-star review that damages your weekend walk-in footfall forever.
+            </p>
+          </section>
 
-      {/* 2-Minute Self-Service KOT Setup Wizard Modal */}
+          {/* Section 2 */}
+          <section className="bg-[#131C2E] border border-slate-800 p-8 sm:p-12 rounded-3xl space-y-6">
+            <span className="text-cyan-400 font-bold text-xs uppercase tracking-widest bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full">
+              CHAPTER 02 • THE 3 REPUTATION CHANNELS DECOUPLED
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-black text-white">
+              Stop Mixing Google Reviews, Instagram, and Table Complaints.
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+              <div className="bg-slate-900/90 p-6 rounded-2xl border border-amber-500/30 space-y-2">
+                <div className="text-amber-400 font-bold text-lg">1. Google Maps SEO</div>
+                <p className="text-sm text-slate-300">Targeted keyword reviews that rank you #1 in local search.</p>
+              </div>
+              <div className="bg-slate-900/90 p-6 rounded-2xl border border-rose-500/30 space-y-2">
+                <div className="text-rose-400 font-bold text-lg">2. Instagram UGC</div>
+                <p className="text-sm text-slate-300">High-aesthetic food stories that friends share with friends.</p>
+              </div>
+              <div className="bg-slate-900/90 p-6 rounded-2xl border border-cyan-500/30 space-y-2">
+                <div className="text-cyan-400 font-bold text-lg">3. Floor Shield</div>
+                <p className="text-sm text-slate-300">15-minute table grievance interception before anyone leaves.</p>
+              </div>
+            </div>
+          </section>
+
+          {/* Section 3 */}
+          <section className="bg-[#131C2E] border border-slate-800 p-8 sm:p-12 rounded-3xl space-y-6">
+            <span className="text-emerald-400 font-bold text-xs uppercase tracking-widest bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full">
+              CHAPTER 03 • ZERO-CAPEX KITCHEN KOT ENGINE
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-black text-white">
+              No New Hardware. Works On What You Already Own.
+            </h2>
+            <p className="text-lg text-slate-300 leading-relaxed">
+              Connect your existing ESC/POS thermal printers via Web Thermal API, route orders to a kitchen tablet via WhatsApp, or bridge directly to Petpooja, RoyalPOS, Recaho, and RanceLab.
+            </p>
+          </section>
+        </main>
+      )}
+
+      {/* KOT Setup Wizard Modal */}
       {isWizardOpen && (
-        <SelfServeKotSetupWizard
-          restaurant={restaurant}
-          onComplete={(_updates) => {
-            setIsWizardOpen(false);
-          }}
-          onCancel={() => setIsWizardOpen(false)}
-        />
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-3xl border border-slate-700 p-6">
+            <SelfServeKotSetupWizard 
+              restaurant={restaurant} 
+              onComplete={() => setIsWizardOpen(false)} 
+              onCancel={() => setIsWizardOpen(false)} 
+            />
+          </div>
+        </div>
       )}
     </div>
   );
 };
+export default PitchDeckPage;
