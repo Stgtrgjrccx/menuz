@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MENUZ — Executive Pitch Deck (18 Slides)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-midnight: #090D16;
+      --card-slate: #131C2E;
+      --card-hover: #1E293B;
+      --accent-amber: #F59E0B;
+      --accent-cyan: #06B6D4;
+      --accent-emerald: #10B981;
+      --accent-rose: #F43F5E;
+      --text-white: #FAFAFA;
+      --text-sub: #CBD5E1;
+      --text-muted: #94A3B8;
+      --border-glow: #27364F;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-midnight);
+      color: var(--text-white);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation Bar */
+    header {
+      background: rgba(19, 28, 46, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-glow);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, var(--accent-amber), var(--accent-rose));
+      color: #000;
+      font-weight: 800;
+      font-size: 14px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 1px;
+    }
+
+    .brand-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-white);
+    }
+
+    .deck-tag {
+      font-size: 12px;
+      color: var(--accent-cyan);
+      background: rgba(6, 182, 212, 0.1);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      padding: 3px 8px;
+      border-radius: 100px;
+      font-weight: 600;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .btn-pptx {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: rgba(245, 158, 11, 0.4);
+      color: var(--accent-amber);
+    }
+    .btn-pptx:hover {
+      background: rgba(245, 158, 11, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .btn-pdf {
+      background: rgba(244, 63, 94, 0.15);
+      border-color: rgba(244, 63, 94, 0.4);
+      color: #FB7185;
+    }
+    .btn-pdf:hover {
+      background: rgba(244, 63, 94, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-amber), #D97706);
+      color: #090D16;
+    }
+    .btn-primary:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    /* Main Presentation Stage */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .stage-container {
+      width: 100%;
+      background: #000;
+      border-radius: 16px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px var(--border-glow);
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      user-select: none;
+      transition: opacity 0.25s ease-in-out;
+    }
+
+    /* Stage Navigation Overlays */
+    .nav-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(19, 28, 46, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-white);
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: all 0.2s ease;
+      z-index: 10;
+    }
+
+    .nav-arrow:hover {
+      background: var(--accent-amber);
+      color: #000;
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .nav-prev { left: 18px; }
+    .nav-next { right: 18px; }
+
+    /* Controls Bar Below Stage */
+    .controls-bar {
+      width: 100%;
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .slide-counter {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-sub);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .slide-counter span {
+      color: var(--accent-amber);
+      font-size: 18px;
+    }
+
+    .slide-title-display {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-white);
+      max-width: 600px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .action-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Thumbnails Scroller */
+    .thumbnails-scroller {
+      width: 100%;
+      margin-top: 24px;
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-glow) transparent;
+    }
+
+    .thumbnails-scroller::-webkit-scrollbar {
+      height: 6px;
+    }
+    .thumbnails-scroller::-webkit-scrollbar-thumb {
+      background: var(--border-glow);
+      border-radius: 3px;
+    }
+
+    .thumb-card {
+      flex: 0 0 160px;
+      aspect-ratio: 16 / 9;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      cursor: pointer;
+      position: relative;
+      opacity: 0.6;
+      transition: all 0.2s ease;
+      background: #000;
+    }
+
+    .thumb-card:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .thumb-card.active {
+      border-color: var(--accent-amber);
+      opacity: 1;
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.4);
+    }
+
+    .thumb-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .thumb-number {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* Quick Shortcuts Helper */
+    .keyboard-hint {
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .key-badge {
+      background: var(--card-slate);
+      border: 1px solid var(--border-glow);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--text-sub);
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header>
+    <div class="brand-group">
+      <div class="logo-badge">MENUZ</div>
+      <div class="brand-title">Executive Pitch Deck</div>
+      <div class="deck-tag">18 Widescreen Slides • Midnight Obsidian Edition</div>
+    </div>
+
+    <div class="header-actions">
+      <a href="menuz_executive_pitch_deck.pptx" download class="btn btn-pptx">
+        <span>📥</span> Download PowerPoint (.PPTX)
+      </a>
+      <a href="menuz_executive_pitch_deck.pdf" target="_blank" class="btn btn-pdf">
+        <span>📄</span> Download PDF
+      </a>
+      <a href="./#/" class="btn btn-primary">
+        <span>🍽️</span> Launch Live App
+      </a>
+    </div>
+  </header>
+
+  <!-- Presentation Stage -->
+  <main>
+    <div class="stage-container" id="stage">
+      <button class="nav-arrow nav-prev" id="prevBtn" title="Previous Slide (Left Arrow)">‹</button>
+      <img src="pitch_slides/slide_01.png" alt="Slide" class="slide-image" id="slideImg">
+      <button class="nav-arrow nav-next" id="nextBtn" title="Next Slide (Right Arrow)">›</button>
+    </div>
+
+    <div class="controls-bar">
+      <div class="slide-counter">
+        Slide <span id="currentSlideNum">1</span> of <span id="totalSlides">18</span>
+      </div>
+
+      <div class="slide-title-display" id="slideTitle">
+        Slide 1: MENUZ Executive Master Pitch Deck
+      </div>
+
+      <div class="action-group">
+        <button class="btn btn-pptx" id="fullscreenBtn">
+          <span>⛶</span> Fullscreen
+        </button>
+      </div>
+    </div>
+
+    <!-- Thumbnails Scroller -->
+    <div class="thumbnails-scroller" id="thumbsContainer">
+      <!-- Injected by JS -->
+    </div>
+
+    <div class="keyboard-hint">
+      <span>Keyboard Shortcuts:</span>
+      <span><span class="key-badge">←</span> / <span class="key-badge">→</span> Navigate Slides</span>
+      <span><span class="key-badge">F</span> Fullscreen</span>
+      <span><span class="key-badge">Space</span> Next Slide</span>
+    </div>
+  </main>
+
+  <script>
+    const SLIDES = [
+      { num: 1, title: "1. MENUZ Executive Master Pitch Deck (Title & Brand Identity)", file: "pitch_slides/slide_01.png" },
+      { num: 2, title: "2. The Multi-Crore Dining Reality & Crisis (3 Severe Fractures)", file: "pitch_slides/slide_02.png" },
+      { num: 3, title: "3. The 3 Reputation Channels Decoupled (Google SEO vs IG Virality vs Floor Shield)", file: "pitch_slides/slide_03.png" },
+      { num: 4, title: "4. Architectural Breakdown: Channel 1 — Public Google Reviews (SEO Ranking Engine)", file: "pitch_slides/slide_04.png" },
+      { num: 5, title: "5. Architectural Breakdown: Channel 2 — Instagram UGC Virality (Word-of-Mouth Engine)", file: "pitch_slides/slide_05.png" },
+      { num: 6, title: "6. Architectural Breakdown: Channel 3 — Private Floor Shield & Urgent Escalation", file: "pitch_slides/slide_06.png" },
+      { num: 7, title: "7. Hardware-Free Smart KOT Engine (Zero-CapEx WhatsApp & Web Thermal Routing)", file: "pitch_slides/slide_07.png" },
+      { num: 8, title: "8. Real-Time Collaborative Table Sync (Multi-Diner Cart Orchestration)", file: "pitch_slides/slide_08.png" },
+      { num: 9, title: "9. High-Converting Visual Menu & Multi-Language AI Storytelling", file: "pitch_slides/slide_09.png" },
+      { num: 10, title: "10. Frictionless Dining Protocol (Zero App Download, Zero Login Barrier)", file: "pitch_slides/slide_10.png" },
+      { num: 11, title: "11. Enterprise Multi-Outlet Architecture & Real-Time Sync", file: "pitch_slides/slide_11.png" },
+      { num: 12, title: "12. Boardroom Pitch: 15 Diverse Restaurant Formats Analyzed (All 15 Approve)", file: "pitch_slides/slide_12.png" },
+      { num: 13, title: "13. Unit Economics & Verified ROI Model (+₹3.8L Net Monthly Margin)", file: "pitch_slides/slide_13.png" },
+      { num: 14, title: "14. Rapid 30-Minute Zero-Downtime Deployment Roadmap", file: "pitch_slides/slide_14.png" },
+      { num: 15, title: "15. Competitive Hegemony Matrix (Menuz vs Legacy POS vs Food Aggregators)", file: "pitch_slides/slide_15.png" },
+      { num: 16, title: "16. Customer Retention & Repeat Diner Engine (Gamified Rewards)", file: "pitch_slides/slide_16.png" },
+      { num: 17, title: "17. Transparent Enterprise Subscription & Revenue Model", file: "pitch_slides/slide_17.png" },
+      { num: 18, title: "18. Conclusion & Boardroom Onboarding Partnership", file: "pitch_slides/slide_18.png" }
+    ];
+
+    let currentIndex = 0;
+    const slideImg = document.getElementById('slideImg');
+    const currentSlideNum = document.getElementById('currentSlideNum');
+    const slideTitle = document.getElementById('slideTitle');
+    const thumbsContainer = document.getElementById('thumbsContainer');
+    const stage = document.getElementById('stage');
+
+    function renderThumbs() {
+      thumbsContainer.innerHTML = SLIDES.map((slide, idx) => `
+        <div class="thumb-card ${idx === currentIndex ? 'active' : ''}" onclick="goToSlide(${idx})">
+          <span class="thumb-number">${slide.num}</span>
+          <img src="${slide.file}" alt="Thumbnail ${slide.num}">
+        </div>
+      `).join('');
+    }
+
+    function updateSlide() {
+      const slide = SLIDES[currentIndex];
+      slideImg.style.opacity = '0.3';
+      setTimeout(() => {
+        slideImg.src = slide.file;
+        slideImg.style.opacity = '1';
+      }, 100);
+      
+      currentSlideNum.textContent = slide.num;
+      slideTitle.textContent = slide.title;
+      renderThumbs();
+
+      const activeThumb = thumbsContainer.children[currentIndex];
+      if (activeThumb) {
+        activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    }
+
+    function nextSlide() {
+      if (currentIndex < SLIDES.length - 1) {
+        currentIndex++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateSlide();
+      }
+    }
+
+    function goToSlide(idx) {
+      currentIndex = idx;
+      updateSlide();
+    }
+
+    document.getElementById('nextBtn').addEventListener('click', nextSlide);
+    document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key.toLowerCase() === 'f') {
+        toggleFullscreen();
+      }
+    });
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        stage.requestFullscreen().catch(err => alert(err.message));
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
+
+    // Initial render
+    renderThumbs();
+    updateSlide();
+  </script>
+</body>
+</html>

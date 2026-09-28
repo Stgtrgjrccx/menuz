@@ -144,6 +144,31 @@ export const PitchDeckPage: React.FC = () => {
   const [pinVerified, setPinVerified] = useState(false);
   const [pinError, setPinError] = useState(false);
 
+  // Dedicated 18-Slide Deck Presentation State
+  const [activeViewMode, setActiveViewMode] = useState<'slides' | 'interactive'>('slides');
+  const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(0);
+
+  const SLIDE_DATA = [
+    { num: 1, title: 'MENUZ Executive Master Pitch Deck', tag: 'Brand Identity', file: './pitch_slides/slide_01.png' },
+    { num: 2, title: 'The Multi-Crore Dining Reality & 3 Severe Fractures', tag: 'Market Crisis', file: './pitch_slides/slide_02.png' },
+    { num: 3, title: 'The 3 Reputation Channels Decoupled (Google vs IG vs Shield)', tag: 'Reputation Architecture', file: './pitch_slides/slide_03.png' },
+    { num: 4, title: 'Channel 1: Public Google Reviews (SEO Ranking Engine)', tag: 'Google SEO Engine', file: './pitch_slides/slide_04.png' },
+    { num: 5, title: 'Channel 2: Instagram UGC Virality (Word-of-Mouth Engine)', tag: 'Instagram Virality', file: './pitch_slides/slide_05.png' },
+    { num: 6, title: 'Channel 3: Private Floor Shield & Table Escalation', tag: 'Floor Grievance Shield', file: './pitch_slides/slide_06.png' },
+    { num: 7, title: 'Hardware-Free Smart KOT Engine (Zero-CapEx WhatsApp & Web)', tag: 'Kitchen Automation', file: './pitch_slides/slide_07.png' },
+    { num: 8, title: 'Real-Time Collaborative Table Sync (Multi-Diner Cart)', tag: 'Table Sync Protocol', file: './pitch_slides/slide_08.png' },
+    { num: 9, title: 'High-Converting Visual Menu & Multi-Language AI Storytelling', tag: 'Menu Engineering', file: './pitch_slides/slide_09.png' },
+    { num: 10, title: 'Frictionless Dining Protocol (Zero App Download, Zero Login)', tag: 'Diner Experience', file: './pitch_slides/slide_10.png' },
+    { num: 11, title: 'Enterprise Multi-Outlet Architecture & Real-Time Sync', tag: 'Enterprise Cloud', file: './pitch_slides/slide_11.png' },
+    { num: 12, title: 'Boardroom Pitch: 15 Diverse Restaurant Formats (100% Approval)', tag: 'Boardroom Validation', file: './pitch_slides/slide_12.png' },
+    { num: 13, title: 'Unit Economics & Verified ROI Model (+₹3.8L Net Margin)', tag: 'Financial Model', file: './pitch_slides/slide_13.png' },
+    { num: 14, title: 'Rapid 30-Minute Zero-Downtime Deployment Roadmap', tag: 'Deployment Speed', file: './pitch_slides/slide_14.png' },
+    { num: 15, title: 'Competitive Hegemony Matrix (Menuz vs POS vs Aggregators)', tag: 'Competitive Edge', file: './pitch_slides/slide_15.png' },
+    { num: 16, title: 'Customer Retention & Repeat Diner Engine (Gamified Rewards)', tag: 'Retention & Loyalty', file: './pitch_slides/slide_16.png' },
+    { num: 17, title: 'Transparent Enterprise Subscription & Revenue Model', tag: 'Commercial Terms', file: './pitch_slides/slide_17.png' },
+    { num: 18, title: 'Conclusion & Boardroom Onboarding Partnership', tag: 'Onboarding Call to Action', file: './pitch_slides/slide_18.png' },
+  ];
+
   // Live countdown timer for voucher demo
   useEffect(() => {
     const timer = setInterval(() => {
@@ -342,7 +367,103 @@ export const PitchDeckPage: React.FC = () => {
       </header>
 
       {/* ══════════════════════════════════════════════════════════════════ */}
-      {/* 2. MAIN SCROLLYTELLING CONTAINER                                   */}
+      {/* 2. EXECUTIVE 18-SLIDE VISUAL PRESENTATION VIEWER (TOP HERO STAGE)  */}
+      {/* ══════════════════════════════════════════════════════════════════ */}
+      <section className="bg-[#05070d] border-b border-slate-800/80 px-4 sm:px-6 py-6 sm:py-8">
+        <div className="max-w-6xl mx-auto space-y-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-full text-amber-400 text-xs font-bold uppercase tracking-wider">
+                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <span>Executive Presentation Deck • 18 Widescreen Slides</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                {SLIDE_DATA[currentSlideIndex].title}
+              </h2>
+            </div>
+
+            <div className="flex items-center gap-2 self-stretch sm:self-auto justify-between sm:justify-end">
+              <a
+                href="./presentation.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3.5 py-1.5 bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 font-bold text-xs rounded-lg transition-all flex items-center gap-1.5"
+              >
+                <Globe className="w-3.5 h-3.5" />
+                <span>Fullscreen Player</span>
+              </a>
+              <a
+                href="./menuz_executive_pitch_deck.pptx"
+                download="Menuz_Executive_Pitch_Deck.pptx"
+                className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 shadow-xs"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Download .PPTX</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Slide Stage Container */}
+          <div className="relative w-full aspect-[16/9] bg-black rounded-2xl border border-slate-800 overflow-hidden shadow-2xl group flex items-center justify-center">
+            <img
+              src={SLIDE_DATA[currentSlideIndex].file}
+              alt={`Slide ${currentSlideIndex + 1}`}
+              className="w-full h-full object-contain select-none"
+            />
+
+            {/* Left Prev Arrow */}
+            <button
+              type="button"
+              onClick={() => setCurrentSlideIndex(prev => Math.max(0, prev - 1))}
+              disabled={currentSlideIndex === 0}
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-slate-900/80 hover:bg-amber-500 hover:text-slate-950 text-white border border-slate-700/80 flex items-center justify-center transition-all disabled:opacity-30 disabled:pointer-events-none backdrop-blur-md z-10 shadow-lg"
+              title="Previous Slide (Left Arrow)"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+
+            {/* Right Next Arrow */}
+            <button
+              type="button"
+              onClick={() => setCurrentSlideIndex(prev => Math.min(SLIDE_DATA.length - 1, prev + 1))}
+              disabled={currentSlideIndex === SLIDE_DATA.length - 1}
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-slate-900/80 hover:bg-amber-500 hover:text-slate-950 text-white border border-slate-700/80 flex items-center justify-center transition-all disabled:opacity-30 disabled:pointer-events-none backdrop-blur-md z-10 shadow-lg"
+              title="Next Slide (Right Arrow)"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+
+            {/* Slide Index Badge */}
+            <div className="absolute bottom-4 right-4 bg-slate-950/80 backdrop-blur-md border border-slate-800 px-3 py-1 rounded-lg text-xs font-bold text-slate-300">
+              Slide <span className="text-amber-400 font-black">{currentSlideIndex + 1}</span> / {SLIDE_DATA.length}
+            </div>
+          </div>
+
+          {/* Thumbnails Scroller */}
+          <div className="flex gap-2.5 overflow-x-auto pb-2 scrollbar-thin">
+            {SLIDE_DATA.map((s, idx) => (
+              <button
+                key={s.num}
+                type="button"
+                onClick={() => setCurrentSlideIndex(idx)}
+                className={`relative shrink-0 w-28 sm:w-36 aspect-[16/9] rounded-lg overflow-hidden border-2 transition-all bg-black ${
+                  currentSlideIndex === idx
+                    ? 'border-amber-500 shadow-md shadow-amber-500/20 scale-105 opacity-100'
+                    : 'border-slate-800 opacity-60 hover:opacity-90'
+                }`}
+              >
+                <img src={s.file} alt={`Thumb ${s.num}`} className="w-full h-full object-cover" />
+                <span className="absolute top-1 left-1 bg-black/80 text-[10px] font-bold text-white px-1.5 py-0.5 rounded">
+                  {s.num}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════ */}
+      {/* 3. MAIN SCROLLYTELLING CONTAINER                                   */}
       {/* ══════════════════════════════════════════════════════════════════ */}
       <main className="flex-1 flex flex-col">
         {/* ──────────────────────────────────────────────────────────────── */}
