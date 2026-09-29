@@ -26,7 +26,7 @@ def draw_slide_decorations(canvas, doc):
     canvas.setFillColor(colors.HexColor("#94A3B8"))
     canvas.drawString(100, 18, "|   The Autonomous Dining OS & Decoupled Reputation Engine")
     
-    slide_text = f"Slide {doc.page} of 18"
+    slide_text = f"Slide {doc.page} of 19"
     canvas.drawRightString(SLIDE_WIDTH - 50, 18, slide_text)
     
     # Subtle glowing neon bottom line
@@ -646,31 +646,131 @@ def generate_landscape_slide_pdf(output_path):
     # SLIDE 16: COMMERCIAL MODEL
     # =========================================================================
     story.append(Paragraph("// COMMERCIAL MODEL", tag_gold))
-    story.append(Paragraph("Flat ₹1,999/Month • 0% Commission • 100% Data Ownership", title_style))
-    story.append(Paragraph("Transparent pricing with no arbitrary trial limitations or revenue deductions.", sub_style))
+    story.append(Paragraph("Single Outlet ₹5,000/Mo • Enterprise ₹10,000/Mo • 0% Commission", title_style))
+    story.append(Paragraph("Transparent subscription pricing with zero commission on food sales and 100% data ownership.", sub_style))
 
-    c16_content = [
-        Paragraph("Why Restaurant Owners Choose Menuz over Delivery Aggregators", card_h_gold),
+    c16_single = [
+        Paragraph("Single Outlet Plan — ₹5,000 / Month", card_h_cyan),
         Paragraph(
-            "• <b>Direct Access Onboarding (No Arbitrary Trial Timers):</b> Full, unrestricted operational access granted directly upon partnership.<br/>"
-            "• <b>Flat ₹1,999 / Month Flat Subscription:</b> Zero commission on food sales. Restaurants keep 100% of their billing revenue — saving ₹30k–₹80k monthly compared to aggregators.<br/>"
-            "• <b>100% Customer WhatsApp Data Ownership:</b> Restaurants own their verified customer phone numbers and dining histories for targeted remarketing campaigns.<br/>"
-            "• <b>High-Durability Acrylic QR Stands Included:</b> Premium acrylic QR table stands and kitchen thermal printer configuration guides supplied on rollout.",
+            "<b>Ideal for Standalone Cafes, Fine Dining & High-Footfall Bistros:</b><br/>"
+            "• <b>Full Interactive Dining OS:</b> Multiplayer cart sync, zero app download QR menus.<br/>"
+            "• <b>Hardware-Free KOT Routing:</b> Instant thermal ESC/POS 80mm printing + WhatsApp failover.<br/>"
+            "• <b>Reputation Triad Engine:</b> 1-Click Google review generator + 15-min floor shield recovery.<br/>"
+            "• <b>Gamified Lucky Wheel:</b> 100% Owner Configured prizes (Zero forced bill discounts).<br/>"
+            "• <b>100% Customer Data Ownership:</b> Full guest phone numbers & dining histories.<br/>"
+            "• <b>Zero Setup Fees:</b> Month-to-month billing with no lock-in contracts.",
             card_body
         )
     ]
-    t_s16 = Table([[c16_content]], colWidths=[SLIDE_WIDTH - 100])
+
+    c16_enterprise = [
+        Paragraph("Multi-Outlet Enterprise — ₹10,000 / Month", card_h_gold),
+        Paragraph(
+            "<b>Built for Restaurant Groups, Pub Chains & Multi-Branch Franchises:</b><br/>"
+            "• <b>Centralized Multi-Branch HQ:</b> Unified menu catalog sync & brand-wide performance.<br/>"
+            "• <b>Multi-Kitchen & Bar Routing:</b> Load-balanced KOTs across separate culinary sections.<br/>"
+            "• <b>Custom POS Integrations:</b> 2-Way REST API bridge for Petpooja, POSist, RanceLab, etc.<br/>"
+            "• <b>White-Label Branding:</b> Custom domain, branded QR stands, and tailor-made themes.<br/>"
+            "• <b>Branch Loyalty Rules:</b> Location-specific wheel reward quotas & fraud limits.<br/>"
+            "• <b>24/7 Priority SLA:</b> Dedicated account manager and on-premise staff training.",
+            card_body
+        )
+    ]
+
+    t_s16 = Table([[c16_single, c16_enterprise]], colWidths=[(SLIDE_WIDTH - 110)/2, (SLIDE_WIDTH - 110)/2])
     t_s16.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
         ('BOX', (0,0), (-1,-1), 1.5, c_border_gold),
-        ('PADDING', (0,0), (-1,-1), 15),
+        ('INNERGRID', (0,0), (-1,-1), 0.75, c_border),
+        ('PADDING', (0,0), (-1,-1), 12),
         ('VALIGN', (0,0), (-1,-1), 'TOP'),
     ]))
     story.append(t_s16)
     story.append(PageBreak())
 
     # =========================================================================
-    # SLIDE 17: 15-RESTAURANT BOARDROOM STRESS TEST
+    # SLIDE 17: DETAILED PLAN COMPARISON & FEATURE MATRIX
+    # =========================================================================
+    story.append(Paragraph("// IN-DEPTH PLAN COMPARISON", tag_cyan))
+    story.append(Paragraph("What Exactly You Get in Each Plan: Side-by-Side Matrix", title_style))
+    story.append(Paragraph("Transparent feature breakdown between Single Outlet (₹5,000/mo) and Multi-Outlet Enterprise (₹10,000/mo).", sub_style))
+
+    th_style = ParagraphStyle('ThStyle', fontName='Helvetica-Bold', fontSize=9, leading=11, textColor=c_gold)
+    th_single = ParagraphStyle('ThSingle', fontName='Helvetica-Bold', fontSize=9, leading=11, textColor=c_cyan)
+    th_ent = ParagraphStyle('ThEnt', fontName='Helvetica-Bold', fontSize=9, leading=11, textColor=c_gold)
+    td_feat = ParagraphStyle('TdFeat', fontName='Helvetica-Bold', fontSize=8, leading=10, textColor=c_text_white)
+    td_sub = ParagraphStyle('TdSub', fontName='Helvetica', fontSize=7, leading=9, textColor=c_text_muted)
+    td_val_c = ParagraphStyle('TdValC', fontName='Helvetica', fontSize=8, leading=10, textColor=c_cyan)
+    td_val_g = ParagraphStyle('TdValG', fontName='Helvetica', fontSize=8, leading=10, textColor=c_gold)
+    td_chk = ParagraphStyle('TdChk', fontName='Helvetica-Bold', fontSize=8, leading=10, textColor=c_emerald)
+
+    matrix_rows = [
+        [
+            Paragraph("<b>Capability / Module</b>", th_style),
+            Paragraph("<b>Single Outlet (₹5,000/mo)</b>", th_single),
+            Paragraph("<b>Multi-Outlet Enterprise (₹10,000/mo)</b>", th_ent)
+        ],
+        [
+            Paragraph("<b>Venue & Table Scale</b><br/><font color='#94A3B8'>Locations & QR codes</font>", td_feat),
+            Paragraph("1 Location (Unlimited Tables)", td_val_c),
+            Paragraph("Multi-Outlet (Unlimited Venues & Tables)", td_val_g)
+        ],
+        [
+            Paragraph("<b>Interactive Dining & Multiplayer Cart</b><br/><font color='#94A3B8'>Live sync, zero app download</font>", td_feat),
+            Paragraph("✓ Full Access", td_chk),
+            Paragraph("✓ Full Access", td_chk)
+        ],
+        [
+            Paragraph("<b>Multilingual AI Menu Engine</b><br/><font color='#94A3B8'>English, Hindi & Marathi + dietary</font>", td_feat),
+            Paragraph("✓ Included", td_chk),
+            Paragraph("✓ Included", td_chk)
+        ],
+        [
+            Paragraph("<b>Kitchen KOT Thermal Printing</b><br/><font color='#94A3B8'>ESC/POS 80mm + WhatsApp alert</font>", td_feat),
+            Paragraph("✓ Single Kitchen Station", td_chk),
+            Paragraph("✓ Multi-Kitchen & Bar Routing", td_chk)
+        ],
+        [
+            Paragraph("<b>POS System Integrations</b><br/><font color='#94A3B8'>Petpooja, POSist, RanceLab, etc.</font>", td_feat),
+            Paragraph("Standard POS Bridge", td_val_c),
+            Paragraph("Enterprise 2-Way REST API Sync", td_val_g)
+        ],
+        [
+            Paragraph("<b>Google Maps SEO Review Engine</b><br/><font color='#94A3B8'>1-Click tags + 15-min floor shield</font>", td_feat),
+            Paragraph("✓ Included", td_chk),
+            Paragraph("✓ Included", td_chk)
+        ],
+        [
+            Paragraph("<b>Gamified Wheel & Retention</b><br/><font color='#94A3B8'>100% Owner Configured Rewards</font>", td_feat),
+            Paragraph("✓ Full Owner Control", td_chk),
+            Paragraph("✓ Full Owner Control + Branch Rules", td_chk)
+        ],
+        [
+            Paragraph("<b>Multi-Branch Centralized HQ</b><br/><font color='#94A3B8'>Cross-venue comparison & menu push</font>", td_feat),
+            Paragraph("— (Single venue analytics)", td_sub),
+            Paragraph("✓ Multi-Outlet Live Dashboard", td_val_g)
+        ],
+        [
+            Paragraph("<b>Support SLA & Training</b><br/><font color='#94A3B8'>Deployment and team onboarding</font>", td_feat),
+            Paragraph("Standard Email & Chat Support", td_val_c),
+            Paragraph("24/7 Dedicated Account Manager", td_val_g)
+        ]
+    ]
+
+    t_s17_matrix = Table(matrix_rows, colWidths=[(SLIDE_WIDTH - 100)*0.40, (SLIDE_WIDTH - 100)*0.30, (SLIDE_WIDTH - 100)*0.30])
+    t_s17_matrix.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,0), colors.HexColor("#1A2436")),
+        ('BACKGROUND', (0,1), (-1,-1), c_card_bg),
+        ('BOX', (0,0), (-1,-1), 1.5, c_border),
+        ('INNERGRID', (0,0), (-1,-1), 0.5, c_border),
+        ('PADDING', (0,0), (-1,-1), 5),
+        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+    ]))
+    story.append(t_s17_matrix)
+    story.append(PageBreak())
+
+    # =========================================================================
+    # SLIDE 18: 15-RESTAURANT BOARDROOM STRESS TEST
     # =========================================================================
     story.append(Paragraph("// MARKET VALIDATION", tag_cyan))
     story.append(Paragraph("The 15-Restaurant Boardroom Stress Test: Unanimous Approval", title_style))
@@ -698,21 +798,21 @@ def generate_landscape_slide_pdf(output_path):
                   "• <i>Outcome:</i> 9:16 Instagram Story engine drives massive weekend reach.", card_body)
     ]
 
-    t_s17 = Table([[c17_1, c17_2, c17_3]], colWidths=[(SLIDE_WIDTH - 120)/3, (SLIDE_WIDTH - 120)/3, (SLIDE_WIDTH - 120)/3])
-    t_s17.setStyle(TableStyle([
+    t_s18_stress = Table([[c17_1, c17_2, c17_3]], colWidths=[(SLIDE_WIDTH - 120)/3, (SLIDE_WIDTH - 120)/3, (SLIDE_WIDTH - 120)/3])
+    t_s18_stress.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
         ('BOX', (0,0), (-1,-1), 1, c_border),
         ('INNERGRID', (0,0), (-1,-1), 0.75, c_border),
         ('PADDING', (0,0), (-1,-1), 12),
         ('VALIGN', (0,0), (-1,-1), 'TOP'),
     ]))
-    story.append(t_s17)
+    story.append(t_s18_stress)
     story.append(PageBreak())
 
     # =========================================================================
-    # SLIDE 18: SUMMARY, METRICS & LIVE PLATFORM
+    # SLIDE 19: SUMMARY, METRICS & LIVE PLATFORM
     # =========================================================================
-    s18_content = [
+    s19_content = [
         [
             Paragraph("<b>Transform Your Restaurant with Menuz</b>", ParagraphStyle('EndTitle', fontName='Helvetica-Bold', fontSize=28, leading=32, textColor=c_text_white)),
         ],
@@ -733,14 +833,14 @@ def generate_landscape_slide_pdf(output_path):
             Paragraph("<b>Live Platform:</b> stgtrgjrccx.github.io/menuz  •  <b>Contact:</b> partner@menuz.in", ParagraphStyle('EndContact', fontName='Helvetica-Bold', fontSize=12, leading=15, textColor=c_cyan))
         ]
     ]
-    t_s18 = Table(s18_content, colWidths=[SLIDE_WIDTH - 100])
-    t_s18.setStyle(TableStyle([
+    t_s19 = Table(s19_content, colWidths=[SLIDE_WIDTH - 100])
+    t_s19.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
         ('BOX', (0,0), (-1,-1), 2, c_cyan),
         ('PADDING', (0,0), (-1,-1), 10),
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
     ]))
-    story.append(t_s18)
+    story.append(t_s19)
 
     # Build PDF with slide background & footer callbacks
     doc.build(story, onFirstPage=draw_slide_decorations, onLaterPages=draw_slide_decorations)

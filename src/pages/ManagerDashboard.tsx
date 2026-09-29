@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   DollarSign,
   ShoppingBag,
@@ -51,6 +51,7 @@ const SAMPLE_FOOD_IMAGES = [
 ];
 
 export const ManagerDashboard: React.FC = () => {
+  const navigate = useNavigate();
   const { restaurantSlug } = useParams<{ restaurantSlug?: string }>();
   const restaurants = useRestaurantStore((state) => state.restaurants);
   const restaurant = useRestaurantStore((state) => state.restaurant);
@@ -257,63 +258,97 @@ export const ManagerDashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-ivory-50 p-4 md:p-8 max-w-5xl mx-auto space-y-6 pb-20">
       {/* Top Quick Navigation Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-ivory-200/80">
-        <Link
-          to="/admin"
-          className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-700 hover:text-saffron-700 transition-colors bg-white px-3.5 py-2 rounded-xl border border-ivory-200 shadow-xs hover:border-saffron-300"
-        >
-          <ArrowLeft className="w-3.5 h-3.5 text-saffron-600" />
-          <span>Back to Master Admin Portal</span>
-        </Link>
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-ivory-300">
+        <div className="flex items-center space-x-2">
+          <Link
+            to="/admin"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-700 hover:text-saffron-700 transition-colors bg-white px-3.5 py-2 rounded-xl border border-ivory-300 shadow-xs hover:border-saffron-300 cursor-pointer"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 text-saffron-600" />
+            <span>Master Admin HQ</span>
+          </Link>
+          <Link
+            to="/pitch"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-cyan-800 hover:text-cyan-900 transition-colors bg-cyan-50/80 hover:bg-cyan-100 px-3 py-2 rounded-xl border border-cyan-200/90 shadow-xs cursor-pointer"
+          >
+            <span className="text-xs">📊</span>
+            <span>Pitch Deck</span>
+          </Link>
+        </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          {/* Active Venue Switcher */}
+          <div className="flex items-center space-x-1.5 bg-white border border-ivory-300 rounded-xl px-2.5 py-1.5 shadow-xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[10px] font-bold text-charcoal-500 uppercase tracking-wider hidden sm:inline">Active Venue:</span>
+            <select
+              value={restaurant.id}
+              onChange={(e) => {
+                const target = restaurants.find((r) => r.id === e.target.value);
+                if (target) {
+                  setCurrentRestaurant(target.id);
+                  navigate(`/manage/${target.slug}`);
+                }
+              }}
+              className="bg-transparent text-xs font-bold text-charcoal-900 focus:outline-none cursor-pointer max-w-[170px] truncate"
+              title="Switch Active Venue Hub"
+            >
+              {restaurants.map((r) => (
+                <option key={r.id} value={r.id}>
+                  {r.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <button
             type="button"
             onClick={() => setIsAiStudioOpen(true)}
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-amber-950 hover:text-amber-900 transition-colors bg-amber-100/90 hover:bg-amber-200 px-3.5 py-2 rounded-xl border border-amber-300 shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-800 hover:text-amber-800 transition-colors bg-white hover:bg-amber-50/60 px-3.5 py-2 rounded-xl border border-amber-300/80 shadow-xs cursor-pointer"
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-700" />
-            <span>Chef & Owner AI Studio</span>
-            <span className="text-[9px] uppercase font-mono px-1.5 py-0.2 rounded-md bg-amber-200 text-amber-900 font-bold">
-              Personalized
-            </span>
+            <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+            <span>Chef AI Studio</span>
           </button>
+
           <button
             type="button"
             disabled={usbPrintLoading}
             onClick={handleTestUsbPrint}
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-blue-950 hover:text-blue-900 transition-colors bg-blue-100/90 hover:bg-blue-200 px-3.5 py-2 rounded-xl border border-blue-300 shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-800 hover:text-blue-800 transition-colors bg-white hover:bg-blue-50/60 px-3.5 py-2 rounded-xl border border-blue-300/80 shadow-xs cursor-pointer"
             title="Connect USB Thermal Printer & Test Print ESC/POS Ticket"
           >
-            <Printer className="w-3.5 h-3.5 text-blue-700" />
-            <span>{usbPrintLoading ? 'Sending ESC/POS...' : 'Test USB Thermal Print'}</span>
+            <Printer className="w-3.5 h-3.5 text-blue-600" />
+            <span>{usbPrintLoading ? 'Sending...' : 'Test ESC/POS'}</span>
           </button>
+
           <Link
             to="/kitchen"
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-700 hover:text-saffron-700 transition-colors bg-white px-3.5 py-2 rounded-xl border border-ivory-200 shadow-xs hover:border-saffron-300"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-700 hover:text-saffron-700 transition-colors bg-white px-3.5 py-2 rounded-xl border border-ivory-300 shadow-xs hover:border-saffron-300"
           >
             <ChefHat className="w-3.5 h-3.5 text-saffron-600" />
             <span>Kitchen KDS</span>
           </Link>
+
           <button
             type="button"
             onClick={() => setIsPosModalOpen(true)}
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-orange-900 hover:text-orange-950 transition-colors bg-orange-100/90 hover:bg-orange-200 px-3.5 py-2 rounded-xl border border-orange-300 shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-800 hover:text-orange-800 transition-colors bg-white hover:bg-orange-50/60 px-3.5 py-2 rounded-xl border border-orange-300/80 shadow-xs cursor-pointer"
           >
-            <Printer className="w-3.5 h-3.5 text-orange-700" />
+            <Printer className="w-3.5 h-3.5 text-orange-600" />
             <span>POS & KOT</span>
-            <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded-md bg-orange-200/80 text-orange-800">
+            <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded-md bg-ivory-100 text-charcoal-700 font-bold border border-ivory-300">
               {restaurant.pos_provider || 'Petpooja'}
             </span>
           </button>
+
           <button
             type="button"
             onClick={() => setIsTableModalOpen(true)}
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-emerald-950 hover:text-emerald-900 transition-colors bg-emerald-100/90 hover:bg-emerald-200 px-3.5 py-2 rounded-xl border border-emerald-300 shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-800 hover:text-emerald-800 transition-colors bg-white hover:bg-emerald-50/60 px-3.5 py-2 rounded-xl border border-emerald-300/80 shadow-xs cursor-pointer"
           >
             <span className="text-xs">🪑</span>
-            <span>Floor Plan & QRs</span>
-            <span className="text-[9px] uppercase font-mono px-1.5 py-0.2 rounded-md bg-emerald-200/90 text-emerald-900 font-bold">
+            <span>Floor Plan</span>
+            <span className="text-[9px] uppercase font-mono px-1.5 py-0.5 rounded-md bg-ivory-100 text-charcoal-700 font-bold border border-ivory-300">
               {activeTablesList.length} Tables
             </span>
           </button>
@@ -334,12 +369,15 @@ export const ManagerDashboard: React.FC = () => {
       )}
 
       {/* Top Bar */}
-      <header className="flex flex-wrap justify-between items-center pb-5 border-b border-ivory-200 gap-4">
+      <header className="flex flex-wrap justify-between items-center pb-5 border-b border-ivory-300 gap-4">
         <div>
-          <span className="text-[10px] uppercase font-bold tracking-widest text-saffron-700 block">
-            Restaurant Operations Console
-          </span>
-          <h1 className="font-serif text-3xl font-bold text-charcoal-900">{restaurant.name}</h1>
+          <div className="flex items-center space-x-2">
+            <span className="px-2 py-0.5 rounded-md text-[10px] uppercase font-bold tracking-wider bg-amber-500/15 text-amber-800 border border-amber-500/30">
+              Active Venue Hub
+            </span>
+            <span className="text-xs text-charcoal-500 font-medium">Operational Console</span>
+          </div>
+          <h1 className="font-serif text-3xl font-bold text-charcoal-900 mt-1">{restaurant.name}</h1>
         </div>
 
         <div className="flex items-center space-x-2">
@@ -762,31 +800,31 @@ export const ManagerDashboard: React.FC = () => {
       {/* Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white p-5 rounded-3xl border border-ivory-200 shadow-subtle flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-2xl bg-saffron-100 flex items-center justify-center text-saffron-700">
+          <div className="w-12 h-12 rounded-2xl bg-saffron-50 border border-saffron-200/80 flex items-center justify-center text-saffron-600 shadow-xs">
             <DollarSign className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs text-charcoal-700/60 font-medium">Session Revenue</span>
+            <span className="text-xs text-charcoal-500 font-medium">Session Revenue</span>
             <p className="font-serif text-2xl font-bold text-charcoal-900">₹{totalVolume.toFixed(2)}</p>
           </div>
         </div>
 
         <div className="bg-white p-5 rounded-3xl border border-ivory-200 shadow-subtle flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-amber-800">
+          <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-600 shadow-xs">
             <ShoppingBag className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs text-charcoal-700/60 font-medium">Orders Placed</span>
+            <span className="text-xs text-charcoal-500 font-medium">Orders Placed</span>
             <p className="font-serif text-2xl font-bold text-charcoal-900">{totalOrdersCount} tickets</p>
           </div>
         </div>
 
         <div className="bg-white p-5 rounded-3xl border border-ivory-200 shadow-subtle flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-2xl bg-green-100 flex items-center justify-center text-green-800">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-center text-emerald-600 shadow-xs">
             <CheckCircle2 className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs text-charcoal-700/60 font-medium">Active QR Tables</span>
+            <span className="text-xs text-charcoal-500 font-medium">Active QR Tables</span>
             <p className="font-serif text-2xl font-bold text-charcoal-900">{activeTablesList.length} tables</p>
           </div>
         </div>
@@ -1247,7 +1285,7 @@ export const ManagerDashboard: React.FC = () => {
           <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-6 relative space-y-5">
             <button
               onClick={() => setIsPosModalOpen(false)}
-              className="absolute top-5 right-5 p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors z-10"
+              className="absolute top-5 right-5 p-2 rounded-full bg-ivory-100 hover:bg-ivory-200 text-charcoal-700 transition-colors z-10 border border-ivory-300"
             >
               <X className="w-5 h-5" />
             </button>

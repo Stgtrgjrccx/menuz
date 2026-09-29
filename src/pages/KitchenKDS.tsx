@@ -4,10 +4,10 @@ import { useRestaurantStore } from '../store/restaurantStore';
 import { Order, OrderStatus } from '../types';
 
 const KDS_COLUMNS: Array<{ key: OrderStatus; label: string; headerColor: string; bgBadge: string }> = [
-  { key: 'received', label: '1. Received', headerColor: 'border-amber-400 text-amber-900', bgBadge: 'bg-amber-100 text-amber-800' },
-  { key: 'preparing', label: '2. In Tandoor / Preparing', headerColor: 'border-blue-500 text-blue-900', bgBadge: 'bg-blue-100 text-blue-800' },
-  { key: 'ready', label: '3. Plated & Ready', headerColor: 'border-green-500 text-green-900', bgBadge: 'bg-green-100 text-green-800' },
-  { key: 'served', label: '4. Served to Table', headerColor: 'border-gray-400 text-gray-800', bgBadge: 'bg-gray-100 text-gray-800' },
+  { key: 'received', label: '1. Received', headerColor: 'border-amber-400 text-amber-400', bgBadge: 'bg-amber-500/20 text-amber-300 border border-amber-500/40' },
+  { key: 'preparing', label: '2. In Tandoor / Preparing', headerColor: 'border-blue-400 text-blue-400', bgBadge: 'bg-blue-500/20 text-blue-300 border border-blue-500/40' },
+  { key: 'ready', label: '3. Plated & Ready', headerColor: 'border-emerald-400 text-emerald-400', bgBadge: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' },
+  { key: 'served', label: '4. Served to Table', headerColor: 'border-charcoal-500 text-charcoal-300', bgBadge: 'bg-charcoal-700 text-charcoal-300 border border-charcoal-600' },
 ];
 
 export const KitchenKDS: React.FC = () => {

@@ -705,7 +705,7 @@ export const DinerMenu: React.FC = () => {
                       key={dish.id}
                       onClick={() => setActiveDish(dish)}
                       className={`bg-white rounded-2xl p-3.5 shadow-subtle border border-ivory-200/90 flex items-start space-x-3 cursor-pointer transition-all hover:border-saffron-500/40 hover:shadow-md ${
-                        !dish.is_available ? 'opacity-65 bg-gray-50/80' : ''
+                        !dish.is_available ? 'opacity-65 bg-ivory-100/60' : ''
                       }`}
                     >
                       <div className="w-24 h-24 rounded-xl flex-shrink-0 bg-ivory-100 overflow-hidden relative shadow-inner">
@@ -779,7 +779,7 @@ export const DinerMenu: React.FC = () => {
                                 Customize +
                               </span>
                             ) : (
-                              <span className="text-[11px] text-gray-400 font-medium">Sold Out</span>
+                              <span className="text-[11px] text-charcoal-400 font-semibold">Sold Out</span>
                             )}
                           </div>
                         </div>

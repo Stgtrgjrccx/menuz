@@ -933,7 +933,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
             </div>
 
             {/* ANTI-CHEAT DYNAMIC LIVE VOUCHER CARD */}
-            <div className="w-full relative overflow-hidden rounded-2xl border-2 border-amber-400 shadow-float text-left bg-gradient-to-br from-charcoal-950 via-gray-900 to-charcoal-950 text-white p-4 space-y-3">
+            <div className="w-full relative overflow-hidden rounded-2xl border-2 border-amber-400 shadow-float text-left bg-gradient-to-br from-charcoal-950 via-charcoal-900 to-charcoal-950 text-white p-4 space-y-3">
               {/* Animated Live Security Watermark Banner */}
               <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
                 <div className="flex items-center space-x-2">

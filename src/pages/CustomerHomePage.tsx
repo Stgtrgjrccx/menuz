@@ -20,6 +20,7 @@ import {
   Camera,
   HeartHandshake,
   TrendingUp,
+  LayoutDashboard,
   SlidersHorizontal,
   ExternalLink,
   Plus,
@@ -35,6 +36,7 @@ import { QrScannerModal } from '../components/QrScannerModal';
 export const CustomerHomePage: React.FC = () => {
   const navigate = useNavigate();
   const restaurants = useRestaurantStore((state) => state.restaurants);
+  const restaurant = useRestaurantStore((state) => state.restaurant);
   const addRestaurant = useRestaurantStore((state) => state.addRestaurant);
   const tables = useRestaurantStore((state) => state.tables);
 
@@ -232,6 +234,25 @@ export const CustomerHomePage: React.FC = () => {
               <span>Scan Table QR</span>
             </button>
 
+            {/* Active Venue Hub */}
+            <Link
+              to={`/manage/${restaurant?.slug || 'saffron-house'}`}
+              className="hidden sm:flex items-center space-x-1.5 py-2 px-3 rounded-xl bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-200 hover:text-white text-xs font-semibold border border-charcoal-700 transition-colors"
+              title={`Open Active Venue Hub for ${restaurant?.name || 'Saffron House'}`}
+            >
+              <LayoutDashboard className="w-3.5 h-3.5 text-saffron-400" />
+              <span>Active Venue Hub</span>
+            </Link>
+
+            {/* Pitch Deck */}
+            <Link
+              to="/pitch"
+              className="flex items-center space-x-1.5 py-2 px-3 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 hover:text-white text-xs font-bold border border-amber-500/30 transition-colors"
+            >
+              <TrendingUp className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden sm:inline">Pitch Deck</span>
+            </Link>
+
             {/* Restaurant Admin / Staff portal link */}
             <Link
               to="/admin"
@@ -300,7 +321,7 @@ export const CustomerHomePage: React.FC = () => {
               <div>
                 <div className="flex items-center space-x-2">
                   <span className="font-serif font-bold text-sm sm:text-base text-white">Menuz Executive Pitch Deck</span>
-                  <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-saffron-500 text-slate-950">18 Slides</span>
+                  <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-saffron-500 text-slate-950">19 Slides</span>
                 </div>
                 <p className="text-xs text-charcoal-300 mt-0.5">
                   The Complete Dine-In Operating System &amp; Growth Engine (15-Restaurant Boardroom Approved)

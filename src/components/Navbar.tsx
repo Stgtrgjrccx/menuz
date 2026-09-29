@@ -46,23 +46,13 @@ export const Navbar: React.FC = () => {
       const restTables = tables.filter((t) => t.restaurant_id === target.id);
       const token = restTables[0]?.public_token || `table-token-01-${target.slug}`;
       navigate(`/r/${target.slug}/menu?t=${token}`);
-    } else if (location.pathname.startsWith('/manage') || location.pathname.startsWith('/dashboard')) {
+    } else {
       navigate(`/manage/${target.slug}`);
     }
   };
   const currentRestTables = tables.filter((t) => t.restaurant_id === restaurant?.id);
   const defaultToken = currentRestTables[0]?.public_token || tables[0]?.public_token || 'table-token-01-saffron';
   const dinerUrl = `/r/${restaurant?.slug || 'saffron-house'}/menu?t=${defaultToken}`;
-
-  const navLinks = [
-    { to: '/', label: 'Customer Home', icon: UtensilsCrossed },
-    { to: '/admin', label: 'Master Admin', icon: ShieldCheck, highlight: true },
-    { to: '/ai-studio', label: 'AI Bot Studio', icon: Sparkles },
-    { to: '/pitch', label: 'Pitch Mode', icon: TrendingUp },
-    { to: dinerUrl, label: 'Table Menu', icon: ShoppingBag },
-    { to: `/manage/${restaurant?.slug || 'saffron-house'}`, label: 'Manager Hub', icon: LayoutDashboard },
-    { to: '/kitchen', label: 'Kitchen KDS', icon: ChefHat },
-  ];
 
   const isActive = (path: string) => {
     if (path.startsWith('/manage') && location.pathname.startsWith('/manage')) return true;
@@ -77,12 +67,12 @@ export const Navbar: React.FC = () => {
     return `${Math.floor(diffSec / 3600)}h ago`;
   };
 
-  // 1. Hide completely on customer-facing routes and pitch presentation
-  if (location.pathname.startsWith('/r/') || location.pathname === '/' || location.pathname === '/pitch') {
+  // 1. Hide on diner table experience
+  if (location.pathname.startsWith('/r/')) {
     return null;
   }
 
-  // 2. Venue Operations Portal: Scoped strictly to the active restaurant (No Master Admin leakage)
+  // 2. Venue Operations Portal: Scoped to active restaurant, with rapid switch and admin jump
   const isVenueOperations = location.pathname.startsWith('/manage') || location.pathname.startsWith('/kitchen') || location.pathname.startsWith('/ai-studio');
 
   if (isVenueOperations) {
@@ -93,37 +83,54 @@ export const Navbar: React.FC = () => {
     return (
       <nav className="bg-charcoal-900 text-white border-b border-charcoal-800 relative z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-12">
-            {/* Restaurant Brand Identity */}
+          <div className="flex items-center justify-between h-13 gap-2">
+            {/* Restaurant Brand Identity & Quick Switcher */}
             <div className="flex items-center space-x-2.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
               <div className="flex items-center space-x-1.5">
-                <span className="font-serif font-bold text-sm text-white truncate max-w-[180px] sm:max-w-none">
+                <span className="font-serif font-bold text-sm text-white truncate max-w-[150px] sm:max-w-none">
                   {venueName}
                 </span>
                 <span className="text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                  Operations Hub
+                  Active Venue Hub
                 </span>
+              </div>
+
+              {/* Instant Switch Venue Dropdown */}
+              <div className="hidden lg:block ml-2">
+                <select
+                  value={restaurant?.id || ''}
+                  onChange={(e) => handleSelectRestaurant(e.target.value)}
+                  className="bg-charcoal-800 text-saffron-400 hover:text-saffron-300 border border-charcoal-700 hover:border-saffron-500/50 rounded-lg px-2 py-1 text-xs font-semibold focus:outline-none cursor-pointer max-w-[180px] truncate transition-colors"
+                  title="Switch Active Restaurant Hub"
+                >
+                  {activeWorkingRestaurants.map((r) => (
+                    <option key={r.id} value={r.id} className="bg-charcoal-900 text-white">
+                      {r.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
             {/* Venue Scoped Navigation Links */}
-            <div className="flex items-center space-x-1 sm:space-x-2">
+            <div className="flex items-center space-x-1 sm:space-x-1.5">
               <Link
                 to={`/manage/${venueSlug}`}
-                className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   location.pathname.startsWith('/manage')
                     ? 'bg-saffron-600 text-white shadow-xs'
                     : 'text-charcoal-300 hover:text-white hover:bg-charcoal-800'
                 }`}
+                title="Active Venue Operations & Floor Management"
               >
                 <LayoutDashboard className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Manager Hub</span>
+                <span className="hidden sm:inline">Venue Hub</span>
               </Link>
 
               <Link
                 to="/kitchen"
-                className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   location.pathname.startsWith('/kitchen')
                     ? 'bg-saffron-600 text-white shadow-xs'
                     : 'text-charcoal-300 hover:text-white hover:bg-charcoal-800'
@@ -135,27 +142,47 @@ export const Navbar: React.FC = () => {
 
               <Link
                 to="/ai-studio"
-                className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   location.pathname.startsWith('/ai-studio')
                     ? 'bg-amber-500 text-charcoal-950 shadow-xs'
                     : 'text-amber-400/90 hover:text-amber-300 hover:bg-charcoal-800'
                 }`}
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Chef AI Studio</span>
+                <span className="hidden sm:inline">Chef AI</span>
               </Link>
 
               <a
                 href={`#${venueDinerUrl}`}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-200 hover:text-white border border-charcoal-700 transition-all ml-1"
+                className="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-200 hover:text-white border border-charcoal-700 transition-all ml-0.5"
                 title="Open live customer dining menu in a new tab"
               >
                 <ShoppingBag className="w-3.5 h-3.5 text-saffron-400" />
-                <span className="hidden sm:inline">Live Diner Menu</span>
-                <span className="sm:hidden">Diner</span>
+                <span className="hidden sm:inline">Table Menu</span>
+                <span className="sm:hidden">Menu</span>
               </a>
+
+              {/* Jump to Master Admin Hub */}
+              <Link
+                to="/admin"
+                className="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 transition-all ml-1"
+                title="Go to Master Super Admin HQ"
+              >
+                <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+                <span className="hidden md:inline">Master Admin HQ</span>
+              </Link>
+
+              {/* Jump to Pitch Deck */}
+              <Link
+                to="/pitch"
+                className="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold text-cyan-300 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 transition-all"
+                title="View Menuz Pitch Deck"
+              >
+                <TrendingUp className="w-3.5 h-3.5 text-cyan-400" />
+                <span className="hidden md:inline">Pitch</span>
+              </Link>
             </div>
           </div>
         </div>
@@ -167,7 +194,7 @@ export const Navbar: React.FC = () => {
   const masterNavLinks = [
     { to: '/admin', label: 'Master Admin Hub', icon: ShieldCheck, highlight: true },
     { to: '/pitch', label: 'Pitch Deck', icon: TrendingUp },
-    { to: `/manage/${restaurant?.slug || 'saffron-house'}`, label: 'Active Venue Hub', icon: LayoutDashboard },
+    { to: `/manage/${restaurant?.slug || 'saffron-house'}`, label: `Active Venue Hub (${restaurant?.name || 'Saffron House'})`, icon: LayoutDashboard },
     { to: '/kitchen', label: 'Kitchen KDS', icon: ChefHat },
     { to: '/ai-studio', label: 'Chef AI Studio', icon: Sparkles },
     { to: dinerUrl, label: 'Table Menu', icon: ShoppingBag }
@@ -388,7 +415,7 @@ export const Navbar: React.FC = () => {
             </select>
           </div>
 
-          {navLinks.map((link) => {
+          {masterNavLinks.map((link) => {
             const Icon = link.icon;
             const active = isActive(link.to);
             return (

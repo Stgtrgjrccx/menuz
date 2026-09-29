@@ -516,10 +516,10 @@ export const MasterAdminDashboard: React.FC = () => {
               <Link
                 to="/pitch"
                 className="px-3.5 py-2.5 bg-gradient-to-r from-amber-500 to-saffron-600 hover:brightness-110 text-slate-950 text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-all cursor-pointer"
-                title="Open Interactive Scrollytelling Pitch Deck"
+                title="Open Interactive Pitch Deck (19 Slides)"
               >
                 <TrendingUp className="w-4 h-4 text-slate-950" />
-                <span>Pitch Deck (18 Slides)</span>
+                <span>Pitch Deck (19 Slides)</span>
               </Link>
               <a
                 href="./menuz_executive_pitch_deck.pptx"

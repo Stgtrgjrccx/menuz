@@ -136,7 +136,7 @@ def create_deck(output_pptx_path):
         ("Chef AI Sommelier & Pairings", "Contextual drink and dessert recommendations drive +22% average check sizes.", C_GOLD_ACCENT),
         ("Reputation Floor Shield", "Channels 5★ reviews to Google while intercepting 1-3★ table grievances in <60s.", C_EMERALD_NEON),
         ("Direct Kitchen KOT & POS Integration", "Owner-controlled 1-sec auto-KOT or captain review; syncs with Petpooja & RoyalPOS.", C_VIOLET_NEON),
-        ("Commercial Model", "Flat ₹1,999/mo, 0% commission, and 100% customer WhatsApp data ownership.", C_GOLD_ACCENT)
+        ("Commercial Model", "Single Outlet ₹5,000/mo, Enterprise ₹10,000/mo, 0% commission, and 100% data ownership.", C_GOLD_ACCENT)
     ]
     for h, b, col in bullets1:
         p_b = tf1_desc.add_paragraph()
@@ -758,56 +758,143 @@ def create_deck(output_pptx_path):
         p_desc.space_before = Pt(14)
 
     # =========================================================================
-    # SLIDE 16: COMMERCIAL MODEL & DIRECT ACCESS
+    # SLIDE 16: COMMERCIAL MODEL & TWO TRANSPARENT PLANS
     # =========================================================================
     s16 = prs.slides.add_slide(blank_layout)
     add_bg(s16)
-    add_header(s16, "Commercial Model", "Flat ₹1,999/Month • 0% Commission • 100% Data Ownership", "Transparent pricing with no arbitrary trial limitations or revenue deductions.", tag_color=C_GOLD_ACCENT)
+    add_header(s16, "Commercial Model", "Single Outlet ₹5,000/Mo • Enterprise ₹10,000/Mo • 0% Commission", "Transparent subscription pricing with zero commission on food sales and 100% data ownership.", tag_color=C_GOLD_ACCENT)
 
-    add_card(s16, Inches(0.8), Inches(2.0), Inches(11.7), Inches(5.0), C_CARD_BG, C_BORDER_GOLD)
-    tb16 = s16.shapes.add_textbox(Inches(1.1), Inches(2.25), Inches(11.1), Inches(4.5))
-    tf16 = tb16.text_frame
-    tf16.word_wrap = True
-
-    p = tf16.paragraphs[0]
-    p.text = "Why Restaurant Owners Choose Menuz over Delivery Aggregators"
-    p.font.name = "Georgia"
-    p.font.size = Pt(20)
-    p.font.bold = True
-    p.font.color.rgb = C_GOLD_ACCENT
-
-    model_points = [
-        ("Direct Access Onboarding (No Arbitrary Trial Timers)", "As platform owner, you grant full, unrestricted operational access directly to partner restaurants upon partnership."),
-        ("Flat ₹1,999 / Month Flat Subscription", "Zero commission on food sales. Restaurants keep 100% of their billing revenue — saving ₹30,000 to ₹80,000 monthly compared to aggregator commissions."),
-        ("100% Customer WhatsApp Data Ownership", "Restaurants own their verified customer phone numbers and dining histories for targeted festival and weekend remarketing campaigns."),
-        ("High-Durability Acrylic QR Stands Included", "Premium acrylic QR table stands and kitchen thermal printer configuration guides supplied on rollout.")
+    # Card 1: Single Outlet
+    add_card(s16, Inches(0.8), Inches(2.0), Inches(5.7), Inches(5.0), C_CARD_BG, C_CYAN_ACCENT)
+    tb16_1 = s16.shapes.add_textbox(Inches(1.0), Inches(2.2), Inches(5.3), Inches(4.6))
+    tf16_1 = tb16_1.text_frame
+    tf16_1.word_wrap = True
+    p1 = tf16_1.paragraphs[0]
+    p1.text = "Single Outlet Plan — ₹5,000 / Month"
+    p1.font.name = "Georgia"
+    p1.font.size = Pt(18)
+    p1.font.bold = True
+    p1.font.color.rgb = C_CYAN_ACCENT
+    single_features = [
+        ("Full Interactive Dining OS", "Multiplayer cart sync, zero app download QR menus."),
+        ("Hardware-Free KOT Routing", "Direct thermal ESC/POS 80mm printing + WhatsApp alerts."),
+        ("Reputation Triad Engine", "1-Click Google review generator + 15-min floor shield recovery."),
+        ("Gamified Lucky Wheel", "100% Owner Configured prizes (Zero forced bill discounts)."),
+        ("100% Data Ownership", "Full verified guest phone numbers & dining histories."),
+        ("Zero Setup Fees", "Month-to-month billing with no lock-in contracts.")
     ]
-    for h, d in model_points:
-        p_mp = tf16.add_paragraph()
-        p_mp.text = f"💼 {h}: {d}"
-        p_mp.font.name = "Arial"
-        p_mp.font.size = Pt(13.5)
-        p_mp.font.color.rgb = C_TEXT_SUB
-        p_mp.space_before = Pt(12)
+    for h, d in single_features:
+        p_sf = tf16_1.add_paragraph()
+        p_sf.text = f"• {h}: {d}"
+        p_sf.font.name = "Arial"
+        p_sf.font.size = Pt(11.5)
+        p_sf.font.color.rgb = C_TEXT_SUB
+        p_sf.space_before = Pt(6)
+
+    # Card 2: Enterprise
+    add_card(s16, Inches(6.8), Inches(2.0), Inches(5.7), Inches(5.0), C_CARD_BG, C_BORDER_GOLD)
+    tb16_2 = s16.shapes.add_textbox(Inches(7.0), Inches(2.2), Inches(5.3), Inches(4.6))
+    tf16_2 = tb16_2.text_frame
+    tf16_2.word_wrap = True
+    p2 = tf16_2.paragraphs[0]
+    p2.text = "Multi-Outlet Enterprise — ₹10,000 / Month"
+    p2.font.name = "Georgia"
+    p2.font.size = Pt(18)
+    p2.font.bold = True
+    p2.font.color.rgb = C_GOLD_ACCENT
+    enterprise_features = [
+        ("Centralized Multi-Branch HQ", "Unified menu catalog sync & brand-wide analytics."),
+        ("Multi-Kitchen Routing", "Load-balanced KOTs across separate culinary sections."),
+        ("Custom POS Integrations", "2-Way REST API bridge for Petpooja, POSist, RanceLab."),
+        ("White-Label Branding", "Custom domain, branded QR stands, and bespoke themes."),
+        ("Branch Loyalty Rules", "Location-specific wheel reward quotas & fraud limits."),
+        ("24/7 Dedicated SLA", "Personal account manager and on-premise staff training.")
+    ]
+    for h, d in enterprise_features:
+        p_ef = tf16_2.add_paragraph()
+        p_ef.text = f"• {h}: {d}"
+        p_ef.font.name = "Arial"
+        p_ef.font.size = Pt(11.5)
+        p_ef.font.color.rgb = C_TEXT_SUB
+        p_ef.space_before = Pt(6)
 
     # =========================================================================
-    # SLIDE 17: 15-RESTAURANT BOARDROOM VALIDATION & STRESS TEST
+    # SLIDE 17: DETAILED PLAN COMPARISON & FEATURE MATRIX
     # =========================================================================
     s17 = prs.slides.add_slide(blank_layout)
     add_bg(s17)
-    add_header(s17, "Market Validation", "The 15-Restaurant Boardroom Stress Test: Unanimous Approval", "How Menuz addresses the toughest operational objections across diverse dining formats.", tag_color=C_CYAN_ACCENT)
+    add_header(s17, "In-Depth Comparison", "What Exactly You Get in Each Plan: Side-by-Side Matrix", "Transparent capability breakdown between Single Outlet (₹5,000/mo) and Enterprise (₹10,000/mo).", tag_color=C_CYAN_ACCENT)
 
-    c17_1 = add_card(s17, Inches(0.8), Inches(2.0), Inches(3.7), Inches(5.0), C_CARD_BG, C_BORDER_SLATE)
-    tb17_1 = s17.shapes.add_textbox(Inches(1.05), Inches(2.2), Inches(3.2), Inches(4.6))
-    tf17_1 = tb17_1.text_frame
-    tf17_1.word_wrap = True
-    p = tf17_1.paragraphs[0]
+    rows, cols = 10, 3
+    left, top, width, height = Inches(0.8), Inches(2.0), Inches(11.7), Inches(5.0)
+    table_shape = s17.shapes.add_table(rows, cols, left, top, width, height)
+    tbl = table_shape.table
+    tbl.columns[0].width = Inches(4.7)
+    tbl.columns[1].width = Inches(3.5)
+    tbl.columns[2].width = Inches(3.5)
+
+    headers = ["Capability / Module", "Single Outlet (₹5,000/mo)", "Multi-Outlet Enterprise (₹10,000/mo)"]
+    for c_idx, h_text in enumerate(headers):
+        cell = tbl.cell(0, c_idx)
+        cell.fill.solid()
+        cell.fill.fore_color.rgb = RGBColor(26, 36, 54)
+        p_th = cell.text_frame.paragraphs[0]
+        p_th.text = h_text
+        p_th.font.name = "Georgia"
+        p_th.font.size = Pt(12)
+        p_th.font.bold = True
+        p_th.font.color.rgb = C_GOLD_ACCENT if c_idx != 1 else C_CYAN_ACCENT
+
+    matrix_data = [
+        ("Venue & Table Scale", "1 Location (Unlimited Tables)", "Multi-Outlet (Unlimited Venues & Tables)"),
+        ("Interactive Dining & Multiplayer Cart", "✓ Full Access (Zero App Download)", "✓ Full Access (Zero App Download)"),
+        ("Multilingual AI Menu Engine", "✓ English, Hindi & Marathi + Dietary", "✓ English, Hindi & Marathi + Dietary"),
+        ("Kitchen KOT Thermal Printing", "✓ Single Kitchen Station ESC/POS", "✓ Multi-Kitchen & Bar Routing"),
+        ("POS Integrations", "Standard POS Bridge", "Enterprise 2-Way REST API Sync"),
+        ("Google Maps SEO & AI Review Builder", "✓ Included (1-Click Tags)", "✓ Included (1-Click Tags)"),
+        ("Gamified Wheel & Retention", "✓ Full Owner Control (Zero Discounts)", "✓ Full Control + Branch Rules"),
+        ("Multi-Branch Centralized HQ", "— (Single venue analytics)", "✓ Centralized Multi-Branch Dashboard"),
+        ("Support SLA & Onboarding", "Standard Email & Chat Support", "24/7 Dedicated Account Manager"),
+    ]
+
+    for r_idx, (feat, plan_a, plan_b) in enumerate(matrix_data, start=1):
+        for c_idx, val in enumerate([feat, plan_a, plan_b]):
+            cell = tbl.cell(r_idx, c_idx)
+            cell.fill.solid()
+            cell.fill.fore_color.rgb = RGBColor(19, 28, 46) if r_idx % 2 == 1 else RGBColor(14, 20, 34)
+            p_td = cell.text_frame.paragraphs[0]
+            p_td.text = val
+            p_td.font.name = "Arial"
+            p_td.font.size = Pt(10.5)
+            if c_idx == 0:
+                p_td.font.bold = True
+                p_td.font.color.rgb = C_TEXT_WHITE
+            elif "✓" in val:
+                p_td.font.bold = True
+                p_td.font.color.rgb = C_EMERALD_NEON
+            elif c_idx == 1:
+                p_td.font.color.rgb = C_CYAN_ACCENT
+            else:
+                p_td.font.color.rgb = C_GOLD_ACCENT
+
+    # =========================================================================
+    # SLIDE 18: 15-RESTAURANT BOARDROOM VALIDATION & STRESS TEST
+    # =========================================================================
+    s18 = prs.slides.add_slide(blank_layout)
+    add_bg(s18)
+    add_header(s18, "Market Validation", "The 15-Restaurant Boardroom Stress Test: Unanimous Approval", "How Menuz addresses the toughest operational objections across diverse dining formats.", tag_color=C_CYAN_ACCENT)
+
+    c18_1 = add_card(s18, Inches(0.8), Inches(2.0), Inches(3.7), Inches(5.0), C_CARD_BG, C_BORDER_SLATE)
+    tb18_1 = s18.shapes.add_textbox(Inches(1.05), Inches(2.2), Inches(3.2), Inches(4.6))
+    tf18_1 = tb18_1.text_frame
+    tf18_1.word_wrap = True
+    p = tf18_1.paragraphs[0]
     p.text = "Cafes & High-Turnover"
     p.font.name = "Georgia"
     p.font.size = Pt(17)
     p.font.bold = True
     p.font.color.rgb = C_CYAN_ACCENT
-    p_sub1 = tf17_1.add_paragraph()
+    p_sub1 = tf18_1.add_paragraph()
     p_sub1.text = "German Bakery, Le Plaisir, Vaishali"
     p_sub1.font.name = "Arial"
     p_sub1.font.size = Pt(10.5)
@@ -820,24 +907,24 @@ def create_deck(output_pptx_path):
         "Outcome: Table turnover accelerated by 14 minutes per group."
     ]
     for r in cafe_res:
-        p_r = tf17_1.add_paragraph()
+        p_r = tf18_1.add_paragraph()
         p_r.text = f"• {r}"
         p_r.font.name = "Arial"
         p_r.font.size = Pt(12.5)
         p_r.font.color.rgb = C_TEXT_SUB
         p_r.space_before = Pt(10)
 
-    c17_2 = add_card(s17, Inches(4.8), Inches(2.0), Inches(3.7), Inches(5.0), C_CARD_BG, C_BORDER_SLATE)
-    tb17_2 = s17.shapes.add_textbox(Inches(5.05), Inches(2.2), Inches(3.2), Inches(4.6))
-    tf17_2 = tb17_2.text_frame
-    tf17_2.word_wrap = True
-    p = tf17_2.paragraphs[0]
+    c18_2 = add_card(s18, Inches(4.8), Inches(2.0), Inches(3.7), Inches(5.0), C_CARD_BG, C_BORDER_SLATE)
+    tb18_2 = s18.shapes.add_textbox(Inches(5.05), Inches(2.2), Inches(3.2), Inches(4.6))
+    tf18_2 = tb18_2.text_frame
+    tf18_2.word_wrap = True
+    p = tf18_2.paragraphs[0]
     p.text = "Fine Dining & Bistros"
     p.font.name = "Georgia"
     p.font.size = Pt(17)
     p.font.bold = True
     p.font.color.rgb = C_GOLD_ACCENT
-    p_sub2 = tf17_2.add_paragraph()
+    p_sub2 = tf18_2.add_paragraph()
     p_sub2.text = "Arthur's Theme, Malaka Spice, Terttulia"
     p_sub2.font.name = "Arial"
     p_sub2.font.size = Pt(10.5)
@@ -850,24 +937,24 @@ def create_deck(output_pptx_path):
         "Outcome: Chef AI wine pairings increase beverage check size by +24%."
     ]
     for r in fine_res:
-        p_r = tf17_2.add_paragraph()
+        p_r = tf18_2.add_paragraph()
         p_r.text = f"• {r}"
         p_r.font.name = "Arial"
         p_r.font.size = Pt(12.5)
         p_r.font.color.rgb = C_TEXT_SUB
         p_r.space_before = Pt(10)
 
-    c17_3 = add_card(s17, Inches(8.8), Inches(2.0), Inches(3.7), Inches(5.0), C_CARD_BG, C_BORDER_SLATE)
-    tb17_3 = s17.shapes.add_textbox(Inches(9.05), Inches(2.2), Inches(3.2), Inches(4.6))
-    tf17_3 = tb17_3.text_frame
-    tf17_3.word_wrap = True
-    p = tf17_3.paragraphs[0]
+    c18_3 = add_card(s18, Inches(8.8), Inches(2.0), Inches(3.7), Inches(5.0), C_CARD_BG, C_BORDER_SLATE)
+    tb18_3 = s18.shapes.add_textbox(Inches(9.05), Inches(2.2), Inches(3.2), Inches(4.6))
+    tf18_3 = tb18_3.text_frame
+    tf18_3.word_wrap = True
+    p = tf18_3.paragraphs[0]
     p.text = "Breweries & Restobars"
     p.font.name = "Georgia"
     p.font.size = Pt(17)
     p.font.bold = True
     p.font.color.rgb = C_ROSE_NEON
-    p_sub3 = tf17_3.add_paragraph()
+    p_sub3 = tf18_3.add_paragraph()
     p_sub3.text = "Effingut, FC Road Social, Agent Jack's"
     p_sub3.font.name = "Arial"
     p_sub3.font.size = Pt(10.5)
@@ -880,7 +967,7 @@ def create_deck(output_pptx_path):
         "Outcome: 9:16 Instagram Story engine drives massive weekend viral reach."
     ]
     for r in brew_res:
-        p_r = tf17_3.add_paragraph()
+        p_r = tf18_3.add_paragraph()
         p_r.text = f"• {r}"
         p_r.font.name = "Arial"
         p_r.font.size = Pt(12.5)
@@ -888,23 +975,23 @@ def create_deck(output_pptx_path):
         p_r.space_before = Pt(10)
 
     # =========================================================================
-    # SLIDE 18: SUMMARY, METRICS & LIVE ONBOARDING
+    # SLIDE 19: SUMMARY, METRICS & LIVE ONBOARDING
     # =========================================================================
-    s18 = prs.slides.add_slide(blank_layout)
-    add_bg(s18)
+    s19 = prs.slides.add_slide(blank_layout)
+    add_bg(s19)
 
-    tb18 = s18.shapes.add_textbox(Inches(0.8), Inches(1.0), Inches(11.7), Inches(5.8))
-    tf18 = tb18.text_frame
-    tf18.word_wrap = True
+    tb19 = s19.shapes.add_textbox(Inches(0.8), Inches(1.0), Inches(11.7), Inches(5.8))
+    tf19 = tb19.text_frame
+    tf19.word_wrap = True
 
-    p = tf18.paragraphs[0]
+    p = tf19.paragraphs[0]
     p.text = "Transform Your Restaurant with Menuz"
     p.font.name = "Georgia"
     p.font.size = Pt(40)
     p.font.bold = True
     p.font.color.rgb = C_TEXT_WHITE
 
-    p_sub = tf18.add_paragraph()
+    p_sub = tf19.add_paragraph()
     p_sub.text = "The All-in-One Dine-In Operating System & Growth Engine"
     p_sub.font.name = "Georgia"
     p_sub.font.size = Pt(22)
@@ -920,14 +1007,14 @@ def create_deck(output_pptx_path):
         "100% Customer Data Ownership with Zero Delivery Commissions"
     ]
     for s in stats:
-        p_stat = tf18.add_paragraph()
+        p_stat = tf19.add_paragraph()
         p_stat.text = f"✓  {s}"
         p_stat.font.name = "Arial"
         p_stat.font.size = Pt(15)
         p_stat.font.color.rgb = C_TEXT_SUB
         p_stat.space_before = Pt(10)
 
-    p_cta = tf18.add_paragraph()
+    p_cta = tf19.add_paragraph()
     p_cta.text = "Live Interactive Platform: stgtrgjrccx.github.io/menuz • Contact: partner@menuz.in"
     p_cta.font.name = "Arial"
     p_cta.font.size = Pt(15)
