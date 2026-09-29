@@ -391,7 +391,7 @@ def create_deck(output_pptx_path):
 
     cards_7 = [
         ("Contextual Dish Matching", "Intelligent Pairing", C_CYAN_ACCENT, "Selecting Awadhi Murgh Biryani automatically surfaces the Chef's Pairing: Garlic Butter Naan + Royal Kokum Mint Cooler in 1 tap."),
-        ("Configurable Bundle Deals", "Owner Profit Control", C_GOLD_ACCENT, "Owners configure bundle discounts (e.g. 10-15% off when added as a pair). Diners love the value while restaurants sell more beverages and desserts."),
+        ("Curated Pairing Add-Ons", "High Margin Pairings", C_GOLD_ACCENT, "Owners configure high-margin beverage and dessert pairings. Diners enjoy chef-recommended combinations while restaurants sell more appetizers and drinks without price slashing."),
         ("1-Click In-Tray Quick Add", "Zero Category Hopping", C_EMERALD_NEON, "Suggested pairings appear right inside the bottom cart sheet so diners add them instantly without browsing separate menu categories.")
     ]
 
@@ -547,9 +547,10 @@ def create_deck(output_pptx_path):
 
     wheel_pts = [
         "Exciting animated spin wheel unlocked after review or social post.",
-        "Customizable prizes: 15% off food bill, free dessert, or mocktail upgrade.",
-        "Creates playful dining excitement, guaranteeing high table engagement.",
-        "Ties reward redemption directly to final billing."
+        "Zero Forced Discounting: 100% margin safe by default with chef treats & VIP passes.",
+        "Optional Owner-Decided Discount: Operators can toggle discounts ON and set custom % (e.g. 5%, 10%, 15%).",
+        "Creates playful dining excitement while keeping operators in 100% pricing control.",
+        "Ties reward redemption directly to final billing with single-use session locks."
     ]
     for pt in wheel_pts:
         p_pt = tf11_l.add_paragraph()

@@ -12,45 +12,28 @@ from reportlab.pdfgen import canvas
 SLIDE_WIDTH = 13.333 * 72   # 960 pt
 SLIDE_HEIGHT = 7.5 * 72     # 540 pt
 
-class MidnightSlideCanvas(canvas.Canvas):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._saved_page_states = []
+def draw_slide_decorations(canvas, doc):
+    canvas.saveState()
+    # Draw Midnight Obsidian Background for entire slide BEHIND all flowables
+    canvas.setFillColor(colors.HexColor("#090D16"))
+    canvas.rect(0, 0, SLIDE_WIDTH, SLIDE_HEIGHT, fill=1, stroke=0)
 
-    def showPage(self):
-        self._saved_page_states.append(dict(self.__dict__))
-        self._startPage()
-
-    def save(self):
-        num_pages = len(self._saved_page_states)
-        for state in self._saved_page_states:
-            self.__dict__.update(state)
-            self.draw_slide_decorations(num_pages)
-            super().showPage()
-        super().save()
-
-    def draw_slide_decorations(self, page_count):
-        self.saveState()
-        # Draw Midnight Obsidian Background for entire slide
-        self.setFillColor(colors.HexColor("#090D16"))
-        self.rect(0, 0, SLIDE_WIDTH, SLIDE_HEIGHT, fill=1, stroke=0)
-        
-        # Bottom Navigation & Slide Indicator
-        self.setFont("Helvetica-Bold", 8.5)
-        self.setFillColor(colors.HexColor("#F59E0B"))
-        self.drawString(50, 20, "MENUZ")
-        self.setFont("Helvetica", 8.5)
-        self.setFillColor(colors.HexColor("#64748B"))
-        self.drawString(100, 20, "|   The Complete Dine-In Operating System & Growth Engine")
-        
-        slide_text = f"Slide {self._pageNumber} of {page_count}"
-        self.drawRightString(SLIDE_WIDTH - 50, 20, slide_text)
-        
-        # Subtle glowing neon bottom line
-        self.setStrokeColor(colors.HexColor("#1E293B"))
-        self.setLineWidth(1)
-        self.line(50, 30, SLIDE_WIDTH - 50, 30)
-        self.restoreState()
+    # Bottom footer line and slide indicator
+    canvas.setFont("Helvetica-Bold", 9)
+    canvas.setFillColor(colors.HexColor("#F59E0B"))
+    canvas.drawString(50, 18, "MENUZ")
+    canvas.setFont("Helvetica", 9)
+    canvas.setFillColor(colors.HexColor("#94A3B8"))
+    canvas.drawString(100, 18, "|   The Autonomous Dining OS & Decoupled Reputation Engine")
+    
+    slide_text = f"Slide {doc.page} of 18"
+    canvas.drawRightString(SLIDE_WIDTH - 50, 18, slide_text)
+    
+    # Subtle glowing neon bottom line
+    canvas.setStrokeColor(colors.HexColor("#27364F"))
+    canvas.setLineWidth(1)
+    canvas.line(50, 30, SLIDE_WIDTH - 50, 30)
+    canvas.restoreState()
 
 def generate_landscape_slide_pdf(output_path):
     doc = SimpleDocTemplate(
@@ -397,8 +380,8 @@ def generate_landscape_slide_pdf(output_path):
         Paragraph("Selecting Awadhi Murgh Biryani automatically surfaces the Chef's Pairing: Garlic Butter Naan + Royal Kokum Mint Cooler with 1-tap addition.", card_body)
     ]
     c7_2 = [
-        Paragraph("Configurable Bundle Deals", card_h_gold),
-        Paragraph("Owners configure bundle discounts (e.g. 10-15% off when added as a pair). Diners love the value while restaurants sell more beverages and desserts.", card_body)
+        Paragraph("Curated Pairing Add-Ons", card_h_gold),
+        Paragraph("Owners configure high-margin beverage and dessert pairings. Diners enjoy chef-recommended combinations while restaurants sell more appetizers and drinks without price slashing.", card_body)
     ]
     c7_3 = [
         Paragraph("1-Click In-Tray Quick Add", card_h_emerald),
@@ -514,8 +497,8 @@ def generate_landscape_slide_pdf(output_path):
 
     c11_l = [
         Paragraph("Interactive Lucky Wheel", card_h_gold),
-        Paragraph("• <b>Animated Wheel Spin:</b> Unlocked immediately after review or social post.<br/>"
-                  "• <b>Customizable Prizes:</b> 15% off food bill, free dessert, or mocktail upgrade.<br/>"
+        Paragraph("• <b>Zero Forced Discounting:</b> Default prizes are 100% margin-safe culinary treats (Chef's dessert, artisanal cooler, VIP weekend pass).<br/>"
+                  "• <b>Optional Owner-Decided Discount:</b> Operators can optionally enable custom % bill discounts (e.g. 5%, 10%, 15%) if preferred for off-peak days.<br/>"
                   "• <b>High Engagement:</b> Creates excitement at the table, boosting dining retention.<br/>"
                   "• <b>Tied to Billing:</b> Redemption is validated directly at checkout.", card_body)
     ]
@@ -731,36 +714,36 @@ def generate_landscape_slide_pdf(output_path):
     # =========================================================================
     s18_content = [
         [
-            Paragraph("<b>Transform Your Restaurant with Menuz</b>", ParagraphStyle('EndTitle', fontName='Helvetica-Bold', fontSize=34, leading=38, textColor=c_text_white)),
+            Paragraph("<b>Transform Your Restaurant with Menuz</b>", ParagraphStyle('EndTitle', fontName='Helvetica-Bold', fontSize=28, leading=32, textColor=c_text_white)),
         ],
         [
-            Paragraph("The All-in-One Dine-In Operating System & Growth Engine", ParagraphStyle('EndSub', fontName='Helvetica-Bold', fontSize=18, leading=22, textColor=c_gold)),
+            Paragraph("The All-in-One Dine-In Operating System & Growth Engine", ParagraphStyle('EndSub', fontName='Helvetica-Bold', fontSize=16, leading=20, textColor=c_gold)),
         ],
         [
             Paragraph(
-                "⚡  <b>+22% Average Ticket Value</b> via Smart Pairings & Upsells<br/>"
+                "⚡  <b>+22% Average Ticket Value</b> via Smart Pairings & Upsells (Zero Forced Discounts)<br/>"
                 "⚡  <b>+300 Verified 5-Star Reviews</b> or Viral Instagram Stories Monthly<br/>"
                 "⚡  <b>Zero Lost Orders</b> with Multi-Channel KOT Failover (Port 9100 / LAN / POS)<br/>"
                 "⚡  <b>Diner Service Response Times</b> Cut from 10 Mins to Under 60 Seconds<br/>"
                 "⚡  <b>100% Customer Data Ownership</b> with Zero Delivery Commissions",
-                ParagraphStyle('EndStats', fontName='Helvetica', fontSize=14, leading=22, textColor=c_text_sub)
+                ParagraphStyle('EndStats', fontName='Helvetica', fontSize=13, leading=19, textColor=c_text_sub)
             )
         ],
         [
-            Paragraph("<b>Live Platform:</b> stgtrgjrccx.github.io/menuz  •  <b>Contact:</b> partner@menuz.in", ParagraphStyle('EndContact', fontName='Helvetica-Bold', fontSize=13, leading=16, textColor=c_cyan))
+            Paragraph("<b>Live Platform:</b> stgtrgjrccx.github.io/menuz  •  <b>Contact:</b> partner@menuz.in", ParagraphStyle('EndContact', fontName='Helvetica-Bold', fontSize=12, leading=15, textColor=c_cyan))
         ]
     ]
     t_s18 = Table(s18_content, colWidths=[SLIDE_WIDTH - 100])
     t_s18.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,-1), c_card_bg),
         ('BOX', (0,0), (-1,-1), 2, c_cyan),
-        ('PADDING', (0,0), (-1,-1), 20),
+        ('PADDING', (0,0), (-1,-1), 10),
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
     ]))
     story.append(t_s18)
 
-    # Build PDF with MidnightSlideCanvas
-    doc.build(story, canvasmaker=MidnightSlideCanvas)
+    # Build PDF with slide background & footer callbacks
+    doc.build(story, onFirstPage=draw_slide_decorations, onLaterPages=draw_slide_decorations)
     print(f"Successfully generated Midnight Obsidian 16:9 Landscape PDF: {output_path}")
 
 if __name__ == "__main__":

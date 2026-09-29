@@ -98,6 +98,12 @@ export interface Restaurant {
     badge_text: string;
     discount_percent?: number;
   };
+  reward_settings?: {
+    allow_bill_discounts: boolean;
+    discount_percentage?: number;
+    reward_mode: 'hospitality_food_only' | 'owner_custom_discount' | 'hybrid';
+    custom_discount_label?: string;
+  };
 }
 
 export interface WhiteLabelConfig {

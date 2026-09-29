@@ -15,7 +15,8 @@ import {
   Calendar,
   DollarSign,
   Star,
-  Tag
+  Tag,
+  Gift
 } from 'lucide-react';
 import { Restaurant } from '../types';
 
@@ -24,7 +25,7 @@ interface SmartOperationsSettingsModalProps {
   onClose: () => void;
   restaurant: Restaurant;
   onSave: (updates: Partial<Restaurant>) => void;
-  initialTab?: 'kot' | 'happy_hour' | 'instagram' | 'pairings';
+  initialTab?: 'kot' | 'happy_hour' | 'instagram' | 'pairings' | 'rewards';
 }
 
 export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModalProps> = ({
@@ -34,7 +35,7 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
   onSave,
   initialTab = 'kot'
 }) => {
-  const [activeTab, setActiveTab] = useState<'kot' | 'happy_hour' | 'instagram' | 'pairings'>(initialTab);
+  const [activeTab, setActiveTab] = useState<'kot' | 'happy_hour' | 'instagram' | 'pairings' | 'rewards'>(initialTab);
   const [savedSuccess, setSavedSuccess] = useState(false);
 
   // KOT State
@@ -92,6 +93,7 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
   );
 
   // Smart Pairings State
+  // Smart Pairings State
   const [pairingsEnabled, setPairingsEnabled] = useState(
     restaurant.smart_pairings_config?.enabled ?? true
   );
@@ -100,6 +102,17 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
   );
   const [pairingsDiscount, setPairingsDiscount] = useState(
     restaurant.smart_pairings_config?.discount_percent ?? 0
+  );
+
+  // Rewards & Loyalty (Spin Wheel & Review Incentives)
+  const [allowBillDiscounts, setAllowBillDiscounts] = useState(
+    restaurant.reward_settings?.allow_bill_discounts ?? false
+  );
+  const [rewardDiscountPercent, setRewardDiscountPercent] = useState(
+    restaurant.reward_settings?.discount_percentage ?? 10
+  );
+  const [rewardMode, setRewardMode] = useState<'hospitality_food_only' | 'owner_custom_discount' | 'hybrid'>(
+    restaurant.reward_settings?.reward_mode ?? 'hospitality_food_only'
   );
 
   if (!isOpen) return null;
@@ -134,6 +147,12 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
         enabled: pairingsEnabled,
         badge_text: pairingsBadge,
         discount_percent: Number(pairingsDiscount)
+      },
+      reward_settings: {
+        allow_bill_discounts: allowBillDiscounts,
+        discount_percentage: Number(rewardDiscountPercent),
+        reward_mode: allowBillDiscounts ? (rewardMode === 'hospitality_food_only' ? 'owner_custom_discount' : rewardMode) : 'hospitality_food_only',
+        custom_discount_label: `${rewardDiscountPercent}% Off Next Dine-In Visit`
       }
     });
 
@@ -220,6 +239,19 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
           >
             <UtensilsCrossed className="w-3.5 h-3.5 text-emerald-500" />
             <span>Smart Upsell Pairings</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('rewards')}
+            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 flex-shrink-0 cursor-pointer ${
+              activeTab === 'rewards'
+                ? 'bg-white text-charcoal-900 shadow-xs border border-ivory-200'
+                : 'text-charcoal-600 hover:text-charcoal-900'
+            }`}
+          >
+            <Gift className="w-3.5 h-3.5 text-purple-600" />
+            <span>Spin Wheel & Rewards</span>
           </button>
         </div>
 
@@ -534,6 +566,135 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
                     className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-ivory-300 focus:outline-none focus:border-saffron-600"
                   />
                   <span className="text-[10px] text-charcoal-500 mt-1 block">0% = regular dish price, 10% = bundle deal</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 5: REWARDS & SPIN WHEEL (OWNER SOVEREIGN DISCOUNT CONTROL) */}
+          {activeTab === 'rewards' && (
+            <div className="space-y-5">
+              <div className="p-4 bg-purple-50/60 border border-purple-200 rounded-2xl space-y-2">
+                <div className="flex items-center space-x-2">
+                  <Gift className="w-4 h-4 text-purple-600" />
+                  <h4 className="font-bold text-xs text-charcoal-900">Owner-Controlled Loyalty &amp; Rewards Policy</h4>
+                </div>
+                <p className="text-[11px] text-charcoal-600 leading-relaxed">
+                  Unlike delivery aggregators that mandate 20%–40% discounts, Menuz puts operators in 100% control. By default, your margin is protected with zero cash discounting (using chef culinary treats &amp; VIP perks). You decide whether bill discounts are allowed and at what percentage.
+                </p>
+              </div>
+
+              {/* Toggle: Allow Bill Discounts */}
+              <div className="flex items-center justify-between p-4 bg-ivory-50 border border-ivory-200 rounded-2xl">
+                <div>
+                  <h5 className="font-bold text-xs text-charcoal-900">Allow Bill Discounts on Spin Wheel</h5>
+                  <p className="text-[11px] text-charcoal-600">
+                    {allowBillDiscounts 
+                      ? 'Enabled: Guests can win your custom percentage discount voucher.'
+                      : 'Disabled (Recommended): 100% Food-only treats & VIP passes. Zero bill discounting.'}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setAllowBillDiscounts(!allowBillDiscounts)}
+                  className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${
+                    allowBillDiscounts ? 'bg-purple-600' : 'bg-charcoal-300'
+                  }`}
+                >
+                  <span
+                    className={`block w-4 h-4 rounded-full bg-white shadow-md transform transition-transform absolute top-1 ${
+                      allowBillDiscounts ? 'left-7' : 'left-1'
+                    }`}
+                  />
+                </button>
+              </div>
+
+              {/* If Allowed: Configure Custom Percentage */}
+              {allowBillDiscounts && (
+                <div className="p-4 bg-ivory-50 border border-purple-200 rounded-2xl space-y-4 animate-in fade-in">
+                  <div>
+                    <div className="flex justify-between items-center mb-1.5">
+                      <label className="text-xs font-bold text-charcoal-800">
+                        Owner-Defined Discount Percentage
+                      </label>
+                      <span className="text-xs font-black text-purple-700 bg-purple-100 px-2.5 py-0.5 rounded-full">
+                        {rewardDiscountPercent}% OFF
+                      </span>
+                    </div>
+                    <input
+                      type="range"
+                      min={5}
+                      max={30}
+                      step={5}
+                      value={rewardDiscountPercent}
+                      onChange={(e) => setRewardDiscountPercent(Number(e.target.value))}
+                      className="w-full accent-purple-600 cursor-pointer"
+                    />
+                    <div className="flex justify-between text-[10px] text-charcoal-500 mt-1">
+                      <span>5% (Conservative)</span>
+                      <span>10% (Balanced)</span>
+                      <span>15%</span>
+                      <span>20%</span>
+                      <span>25%</span>
+                      <span>30% (Max)</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-charcoal-800 mb-1.5">Voucher Label on Wheel</label>
+                    <input
+                      type="text"
+                      value={`${rewardDiscountPercent}% Off Next Dine-In Visit`}
+                      readOnly
+                      className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-ivory-300 bg-ivory-100 text-charcoal-700"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Reward Strategy Selector */}
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-charcoal-800">Reward Distribution Strategy</label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div 
+                    onClick={() => {
+                      setRewardMode('hospitality_food_only');
+                      setAllowBillDiscounts(false);
+                    }}
+                    className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
+                      !allowBillDiscounts
+                        ? 'border-emerald-500 bg-emerald-50/50 shadow-xs'
+                        : 'border-ivory-200 bg-white hover:bg-ivory-50'
+                    }`}
+                  >
+                    <div className="font-bold text-xs text-charcoal-900 flex items-center justify-between">
+                      <span>🛡️ Food-Only Perks</span>
+                      {!allowBillDiscounts && <span className="text-[10px] bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded">Active</span>}
+                    </div>
+                    <p className="text-[11px] text-charcoal-600 mt-1">
+                      Complimentary desserts, starters &amp; mocktails. 100% margin safe, zero cash discount.
+                    </p>
+                  </div>
+
+                  <div 
+                    onClick={() => {
+                      setRewardMode('owner_custom_discount');
+                      setAllowBillDiscounts(true);
+                    }}
+                    className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
+                      allowBillDiscounts
+                        ? 'border-purple-500 bg-purple-50/50 shadow-xs'
+                        : 'border-ivory-200 bg-white hover:bg-ivory-50'
+                    }`}
+                  >
+                    <div className="font-bold text-xs text-charcoal-900 flex items-center justify-between">
+                      <span>🏷️ Custom % Discount</span>
+                      {allowBillDiscounts && <span className="text-[10px] bg-purple-600 text-white font-bold px-1.5 py-0.5 rounded">Active</span>}
+                    </div>
+                    <p className="text-[11px] text-charcoal-600 mt-1">
+                      {rewardDiscountPercent}% discount voucher set by you. Great for off-peak days.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

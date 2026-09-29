@@ -154,9 +154,11 @@ export const PitchDeckPage: React.FC = () => {
   const [pinVerified, setPinVerified] = useState(false);
   const [pinError, setPinError] = useState(false);
 
-  // Simulator states for Chapter 6 / Slide 16: Gamified Spin Wheel
+  // Simulator states for Chapter 6 / Slide 16: Gamified Spin Wheel (Owner Controlled)
   const [isSpinning, setIsSpinning] = useState(false);
-  const [wonPrize, setWonPrize] = useState<string | null>('15% Off Total Food Bill');
+  const [ownerAllowsDiscount, setOwnerAllowsDiscount] = useState(false);
+  const [ownerDiscountPct, setOwnerDiscountPct] = useState(10);
+  const [wonPrize, setWonPrize] = useState<string | null>("Complimentary Chef's Saffron Shahi Tukda (Zero Margin Loss)");
 
   // Live countdown timer for voucher demo
   useEffect(() => {
@@ -203,7 +205,11 @@ export const PitchDeckPage: React.FC = () => {
     setTimeout(() => playTone(523.25, 'sine', 0.15), 600);
     setTimeout(() => {
       setIsSpinning(false);
-      setWonPrize('15% Off Total Food Bill');
+      if (ownerAllowsDiscount) {
+        setWonPrize(`Owner-Configured ${ownerDiscountPct}% Off Next Visit`);
+      } else {
+        setWonPrize("Complimentary Chef's Saffron Shahi Tukda (Zero Margin Loss)");
+      }
       playTone(659.25, 'triangle', 0.35);
     }, 1200);
   };
@@ -1098,47 +1104,109 @@ export const PitchDeckPage: React.FC = () => {
               </div>
             )}
 
-            {/* SLIDE 16: GAMIFIED CUSTOMER RETENTION ENGINE */}
+            {/* SLIDE 16: GAMIFIED CUSTOMER RETENTION ENGINE (OWNER SOVEREIGN CONTROL) */}
             {currentSlide === 15 && (
               <div className="space-y-6 my-auto relative z-10">
                 <div className="flex items-center gap-2 text-rose-400 text-xs font-bold uppercase tracking-wider bg-rose-500/10 border border-rose-500/30 px-3 py-1 rounded-full w-fit">
                   <Sparkles className="w-4 h-4" />
-                  <span>Customer Loyalty</span>
+                  <span>Owner-Controlled Incentive Engine</span>
                 </div>
                 <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-                  Gamified Repeat Diner Retention Engine
+                  Gamified Retention: <span className="text-amber-400">Zero Forced Discounting</span>
                 </h2>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-2">
                   <div className="lg:col-span-6 space-y-4">
                     <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
-                      Guests spin the interactive wheel after submitting a review or sharing an Instagram story. They unlock a time-locked voucher valid on their next visit within 30 days.
+                      Unlike aggregators (Zomato/Swiggy) that mandate 20%–40% discounts, <strong>Menuz gives the restaurant owner 100% sovereign control</strong> over loyalty incentives.
                     </p>
-                    <div className="bg-[#131C2E] p-4 rounded-xl border border-slate-700 space-y-2">
-                      <div className="text-emerald-400 font-bold text-base">34% Repeat Visit Conversion</div>
-                      <p className="text-xs text-slate-300">
-                        Diners return with friends and family within 3 weeks to redeem their won voucher, boosting long-term customer lifetime value (LTV).
-                      </p>
+
+                    <div className="space-y-3">
+                      <div className="bg-[#131C2E] p-4 rounded-xl border border-emerald-500/40 space-y-1">
+                        <div className="text-emerald-400 font-bold text-sm flex items-center gap-2">
+                          <ShieldCheck className="w-4 h-4" />
+                          <span>100% Food-Only Perks (Default — Zero Margin Loss)</span>
+                        </div>
+                        <p className="text-xs text-slate-300">
+                          Reward guests with chef desserts (e.g. Saffron Shahi Tukda), artisan mocktails, or VIP table passes without slashing bill prices.
+                        </p>
+                      </div>
+
+                      <div className="bg-[#131C2E] p-4 rounded-xl border border-purple-500/40 space-y-1">
+                        <div className="text-purple-400 font-bold text-sm flex items-center gap-2">
+                          <Sliders className="w-4 h-4" />
+                          <span>Optional Owner-Defined Discount % (You Decide)</span>
+                        </div>
+                        <p className="text-xs text-slate-300">
+                          If an owner chooses to run an off-peak promo, they can toggle discounts ON and set the exact percentage (e.g. 5%, 10%, 15%, 20%).
+                        </p>
+                      </div>
                     </div>
                   </div>
 
                   <div className="lg:col-span-6 bg-[#131C2E] border-2 border-amber-500/40 p-6 rounded-2xl text-center space-y-4 shadow-xl">
-                    <div className="text-xs font-bold text-amber-400 uppercase">Interactive Lucky Spin Wheel</div>
-                    <div className="w-40 h-40 mx-auto rounded-full border-4 border-amber-500 bg-gradient-to-tr from-amber-600 via-rose-600 to-purple-600 flex items-center justify-center text-slate-950 font-black text-lg shadow-xl animate-spin-slow">
+                    {/* Interactive Owner Control Bar on Slide */}
+                    <div className="bg-slate-900/90 border border-slate-700/80 p-3 rounded-xl text-left space-y-2.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">
+                          ⚙️ Owner Control Simulator
+                        </span>
+                        <div className="flex items-center gap-1.5 bg-slate-800 px-2 py-0.5 rounded-lg border border-slate-700">
+                          <span className="text-[11px] text-slate-300 font-bold">Discounts:</span>
+                          <button
+                            type="button"
+                            onClick={() => setOwnerAllowsDiscount(!ownerAllowsDiscount)}
+                            className={`text-[10px] font-black px-2 py-0.5 rounded transition-all ${
+                              ownerAllowsDiscount
+                                ? 'bg-purple-600 text-white'
+                                : 'bg-emerald-600 text-white'
+                            }`}
+                          >
+                            {ownerAllowsDiscount ? 'OPTIONAL ON' : 'DISABLED (FOOD ONLY)'}
+                          </button>
+                        </div>
+                      </div>
+
+                      {ownerAllowsDiscount ? (
+                        <div className="space-y-1 pt-1 border-t border-slate-800">
+                          <div className="flex justify-between text-xs text-slate-300">
+                            <span>Owner Custom Discount:</span>
+                            <span className="font-bold text-purple-400">{ownerDiscountPct}% OFF</span>
+                          </div>
+                          <input
+                            type="range"
+                            min={5}
+                            max={25}
+                            step={5}
+                            value={ownerDiscountPct}
+                            onChange={(e) => setOwnerDiscountPct(Number(e.target.value))}
+                            className="w-full accent-purple-500 cursor-pointer"
+                          />
+                        </div>
+                      ) : (
+                        <div className="text-[11px] text-emerald-400 font-medium pt-1 border-t border-slate-800">
+                          ✓ Margin Protection Active: Prizes are 100% Culinary Treats &amp; VIP Perks
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="w-36 h-36 mx-auto rounded-full border-4 border-amber-500 bg-gradient-to-tr from-amber-600 via-rose-600 to-purple-600 flex items-center justify-center text-slate-950 font-black text-base shadow-xl">
                       🎯 SPIN
                     </div>
+
                     {wonPrize && (
-                      <div className="p-3 bg-slate-900 rounded-xl border border-amber-500/30 text-amber-400 font-bold text-sm">
-                        🎉 Prize: {wonPrize}
+                      <div className="p-3 bg-slate-900 rounded-xl border border-amber-500/30 text-amber-300 font-bold text-xs sm:text-sm">
+                        🎉 Won: {wonPrize}
                       </div>
                     )}
+
                     <button
                       type="button"
                       onClick={handleSpinWheel}
                       disabled={isSpinning}
-                      className="px-6 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-sm transition-all"
+                      className="px-6 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-xs sm:text-sm transition-all shadow-md"
                     >
-                      {isSpinning ? 'Spinning...' : 'Spin the Wheel Demo'}
+                      {isSpinning ? 'Spinning...' : 'Test Spin (Simulate Diner)'}
                     </button>
                   </div>
                 </div>

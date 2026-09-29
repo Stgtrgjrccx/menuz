@@ -213,24 +213,32 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
 
   const quickTags = getQuickTagsForRestaurant(restaurant?.cuisine);
 
+  const allowDiscounts = restaurant?.reward_settings?.allow_bill_discounts ?? false;
+  const ownerDiscountPct = restaurant?.reward_settings?.discount_percentage ?? 10;
+  const discountLabel = restaurant?.reward_settings?.custom_discount_label || `${ownerDiscountPct}% Off Next Visit`;
+
   const prizes: PrizeOption[] = isItalian
     ? [
         { id: 'p1', label: 'Complimentary Tiramisu Tradizionale', shortLabel: 'Tiramisu', emoji: '🍮', color: '#D97706', textColor: '#FFFFFF', probabilityWeight: 25 },
-        { id: 'p2', label: '15% Off Your Entire Bill', shortLabel: '15% Off', emoji: '🏷️', color: '#0F766E', textColor: '#FFFFFF', probabilityWeight: 15 },
+        allowDiscounts 
+          ? { id: 'p2', label: discountLabel, shortLabel: `${ownerDiscountPct}% Off`, emoji: '🏷️', color: '#0F766E', textColor: '#FFFFFF', probabilityWeight: 15 }
+          : { id: 'p2', label: 'Chef\'s Artisan Truffle Arancini', shortLabel: 'Truffle Arancini', emoji: '🧀', color: '#0F766E', textColor: '#FFFFFF', probabilityWeight: 15 },
         { id: 'p3', label: 'Garlic Herb Focaccia on the House', shortLabel: 'Focaccia', emoji: '🥖', color: '#C2410C', textColor: '#FFFFFF', probabilityWeight: 20 },
         { id: 'p4', label: 'Artisanal Illy Double Espresso', shortLabel: 'Espresso', emoji: '☕', color: '#B45309', textColor: '#FFFFFF', probabilityWeight: 10 },
-        { id: 'p5', label: '₹100 Off Today\'s Bill', shortLabel: '₹100 Off', emoji: '💰', color: '#047857', textColor: '#FFFFFF', probabilityWeight: 15 },
+        { id: 'p5', label: 'VIP Priority Weekend Table Pass', shortLabel: 'VIP Table Pass', emoji: '⭐', color: '#047857', textColor: '#FFFFFF', probabilityWeight: 15 },
         { id: 'p6', label: 'Sparkling San Pellegrino Cooler', shortLabel: 'Cooler', emoji: '🍹', color: '#0369A1', textColor: '#FFFFFF', probabilityWeight: 10 },
         { id: 'p7', label: 'Truffle Burrata Bruschetta', shortLabel: 'Bruschetta', emoji: '🥗', color: '#9333EA', textColor: '#FFFFFF', probabilityWeight: 5 }
       ]
     : [
-        { id: 'p1', label: 'Free Alphonso Mango Lassi', shortLabel: 'Mango Lassi', emoji: '🍨', color: '#EA580C', textColor: '#FFFFFF', probabilityWeight: 25 },
-        { id: 'p2', label: '15% Off Your Entire Bill', shortLabel: '15% Off', emoji: '🏷️', color: '#059669', textColor: '#FFFFFF', probabilityWeight: 15 },
-        { id: 'p3', label: 'Tandoori Truffle Garlic Naan', shortLabel: 'Truffle Naan', emoji: '🫓', color: '#D97706', textColor: '#FFFFFF', probabilityWeight: 20 },
+        { id: 'p1', label: 'Complimentary Alphonso Mango Lassi', shortLabel: 'Mango Lassi', emoji: '🍨', color: '#EA580C', textColor: '#FFFFFF', probabilityWeight: 25 },
+        allowDiscounts
+          ? { id: 'p2', label: discountLabel, shortLabel: `${ownerDiscountPct}% Off`, emoji: '🏷️', color: '#059669', textColor: '#FFFFFF', probabilityWeight: 15 }
+          : { id: 'p2', label: 'Chef\'s Special Saffron Shahi Tukda', shortLabel: 'Shahi Tukda', emoji: '🍮', color: '#059669', textColor: '#FFFFFF', probabilityWeight: 15 },
+        { id: 'p3', label: 'Tandoori Truffle Garlic Naan Basket', shortLabel: 'Truffle Naan', emoji: '🫓', color: '#D97706', textColor: '#FFFFFF', probabilityWeight: 20 },
         { id: 'p4', label: 'Royal Rose Petal Kulfi Pop', shortLabel: 'Kulfi Pop', emoji: '🍦', color: '#BE123C', textColor: '#FFFFFF', probabilityWeight: 10 },
-        { id: 'p5', label: '₹100 Off Today\'s Bill', shortLabel: '₹100 Off', emoji: '💰', color: '#0284C7', textColor: '#FFFFFF', probabilityWeight: 15 },
-        { id: 'p6', label: 'Chilled Kokum Spiced Cooler', shortLabel: 'Kokum Cooler', emoji: '🍹', color: '#7C3AED', textColor: '#FFFFFF', probabilityWeight: 10 },
-        { id: 'p7', label: 'Truffle Potli Samosa Basket', shortLabel: 'Potli Samosa', emoji: '🥟', color: '#C2410C', textColor: '#FFFFFF', probabilityWeight: 5 }
+        { id: 'p5', label: 'VIP Priority Weekend Table Reservation', shortLabel: 'VIP Reservation', emoji: '⭐', color: '#0284C7', textColor: '#FFFFFF', probabilityWeight: 15 },
+        { id: 'p6', label: 'Chilled Kokum Spiced Artisan Cooler', shortLabel: 'Kokum Cooler', emoji: '🍹', color: '#7C3AED', textColor: '#FFFFFF', probabilityWeight: 10 },
+        { id: 'p7', label: 'Crispy Truffle Potli Samosa Basket', shortLabel: 'Potli Samosa', emoji: '🥟', color: '#C2410C', textColor: '#FFFFFF', probabilityWeight: 5 }
       ];
 
   // Initialize or reset modal state
