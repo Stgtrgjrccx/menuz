@@ -1,0 +1,17 @@
+# Robots.txt for Menuz - Autonomous Restaurant OS & Reputation Engine
+# https://stgtrgjrccx.github.io/menuz/
+
+User-agent: *
+Allow: /
+Allow: /pitch
+Allow: /admin
+Allow: /manage/
+Allow: /menu/
+Allow: /presentation.html
+
+# Prevent search engine indexing of internal ephemeral test endpoints if any
+Disallow: /scratch/
+Disallow: /api/private/
+
+# Sitemap Location
+Sitemap: https://stgtrgjrccx.github.io/menuz/sitemap.xml

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Homepage: Autonomous Restaurant OS & Pune Dining Directory -->
+  <url>
+    <loc>https://stgtrgjrccx.github.io/menuz/</loc>
+    <lastmod>2026-09-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Executive Pitch Deck (19 Slides Presentation) -->
+  <url>
+    <loc>https://stgtrgjrccx.github.io/menuz/#/pitch</loc>
+    <lastmod>2026-09-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Standalone Widescreen Presentation Player -->
+  <url>
+    <loc>https://stgtrgjrccx.github.io/menuz/presentation.html</loc>
+    <lastmod>2026-09-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Master Admin Operations Portal -->
+  <url>
+    <loc>https://stgtrgjrccx.github.io/menuz/#/admin</loc>
+    <lastmod>2026-09-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Demo Venue Hub: Saffron House Pune -->
+  <url>
+    <loc>https://stgtrgjrccx.github.io/menuz/#/manage/saffron-house</loc>
+    <lastmod>2026-09-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Demo Diner Table Menu: Saffron House Table 1 -->
+  <url>
+    <loc>https://stgtrgjrccx.github.io/menuz/#/menu/saffron-house/table-1</loc>
+    <lastmod>2026-09-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Demo Venue Hub: Casa Bella Italian Trattoria -->
+  <url>
+    <loc>https://stgtrgjrccx.github.io/menuz/#/manage/casa-bella</loc>
+    <lastmod>2026-09-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <!-- Kitchen Display System (KDS) -->
+  <url>
+    <loc>https://stgtrgjrccx.github.io/menuz/#/kitchen</loc>
+    <lastmod>2026-09-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Chef & Owner AI Onboarding Studio -->
+  <url>
+    <loc>https://stgtrgjrccx.github.io/menuz/#/ai-studio</loc>
+    <lastmod>2026-09-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+</urlset>

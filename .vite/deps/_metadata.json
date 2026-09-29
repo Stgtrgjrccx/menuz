@@ -1,62 +1,62 @@
 {
-  "hash": "3f226763",
+  "hash": "e4615daf",
   "configHash": "83c53a48",
-  "lockfileHash": "c70eb27a",
-  "browserHash": "cf7a31dc",
+  "lockfileHash": "ca3ebd27",
+  "browserHash": "1942cbbd",
   "optimized": {
     "react/jsx-dev-runtime": {
       "src": "../../node_modules/react/jsx-dev-runtime.js",
       "file": "react_jsx-dev-runtime.js",
-      "fileHash": "eb734443",
+      "fileHash": "418818cb",
       "needsInterop": true
     },
     "react": {
       "src": "../../node_modules/react/index.js",
       "file": "react.js",
-      "fileHash": "b20868c2",
+      "fileHash": "b49cf653",
       "needsInterop": true
     },
     "react-dom/client": {
       "src": "../../node_modules/react-dom/client.js",
       "file": "react-dom_client.js",
-      "fileHash": "aca82108",
+      "fileHash": "aa959261",
       "needsInterop": true
     },
     "react-router-dom": {
       "src": "../../node_modules/react-router-dom/dist/index.js",
       "file": "react-router-dom.js",
-      "fileHash": "42673b3e",
+      "fileHash": "fbcca4cb",
       "needsInterop": false
     },
     "lucide-react": {
       "src": "../../node_modules/lucide-react/dist/esm/lucide-react.js",
       "file": "lucide-react.js",
-      "fileHash": "8902d14d",
+      "fileHash": "94cdd9a0",
       "needsInterop": false
     },
     "zustand": {
       "src": "../../node_modules/zustand/esm/index.mjs",
       "file": "zustand.js",
-      "fileHash": "78ad2df1",
+      "fileHash": "266a6af1",
       "needsInterop": false
     },
     "zustand/middleware": {
       "src": "../../node_modules/zustand/esm/middleware.mjs",
       "file": "zustand_middleware.js",
-      "fileHash": "c4a15699",
-      "needsInterop": false
-    },
-    "@supabase/supabase-js": {
-      "src": "../../node_modules/@supabase/supabase-js/dist/index.mjs",
-      "file": "@supabase_supabase-js.js",
-      "fileHash": "65bcbd27",
+      "fileHash": "6f785d4d",
       "needsInterop": false
     },
     "react-dom": {
       "src": "../../node_modules/react-dom/index.js",
       "file": "react-dom.js",
-      "fileHash": "00444170",
+      "fileHash": "40b80cc5",
       "needsInterop": true
+    },
+    "@supabase/supabase-js": {
+      "src": "../../node_modules/@supabase/supabase-js/dist/index.mjs",
+      "file": "@supabase_supabase-js.js",
+      "fileHash": "519e8616",
+      "needsInterop": false
     }
   },
   "chunks": {
