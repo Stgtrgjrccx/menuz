@@ -23,7 +23,15 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
 
   if (!dish) return null;
 
-  const isVeg = dish.dietary_flags.includes('Vegetarian') || dish.dietary_flags.includes('Vegan') || dish.dietary_flags.includes('Jain');
+  const flags = Array.isArray(dish.dietary_flags) ? dish.dietary_flags : [];
+  const isVeg = flags.some((f) => {
+    const lf = String(f).toLowerCase();
+    return lf === 'veg' || lf === 'vegetarian' || lf === 'vegan' || lf === 'jain';
+  });
+
+  const ingredients = Array.isArray(dish.ingredients) ? dish.ingredients : [];
+  const allergens = Array.isArray(dish.allergens) ? dish.allergens : [];
+  const optionGroups = Array.isArray(dish.option_groups) ? dish.option_groups : [];
 
   const handleOptionToggle = (groupId: string, optionId: string, name: string, priceModifier: number) => {
     setSelectedOptions((prev) => {
@@ -31,15 +39,16 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
       if (next[groupId]?.option_id === optionId) {
         delete next[groupId];
       } else {
-        next[groupId] = { option_id: optionId, name, price_modifier: priceModifier };
+        next[groupId] = { option_id: optionId, name, price_modifier: Number(priceModifier) || 0 };
       }
       return next;
     });
   };
 
-  const optionsTotal = Object.values(selectedOptions).reduce((sum, opt) => sum + opt.price_modifier, 0);
-  const unitPrice = dish.price + optionsTotal;
-  const totalPrice = unitPrice * quantity;
+  const optionsTotal = Object.values(selectedOptions).reduce((sum, opt) => sum + (Number(opt.price_modifier) || 0), 0);
+  const dishPrice = typeof dish.price === 'number' ? dish.price : Number(dish.price) || 0;
+  const unitPrice = dishPrice + optionsTotal;
+  const totalPrice = unitPrice * (quantity || 1);
 
   const handleAddToCart = () => {
     if (!dish.is_available) return;
@@ -128,11 +137,11 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
 
           {/* Badges */}
           <div className="bg-ivory-100/70 p-3 rounded-xl space-y-2 text-xs">
-            {dish.dietary_flags.length > 0 && (
+            {flags.length > 0 && (
               <div className="flex items-center space-x-2">
                 <span className="font-semibold text-charcoal-900 w-20 flex-shrink-0">Dietary:</span>
                 <div className="flex flex-wrap gap-1">
-                  {dish.dietary_flags.map((d, idx) => (
+                  {flags.map((d, idx) => (
                     <span key={idx} className="bg-white border border-ivory-200 text-green-800 px-2 py-0.5 rounded-md font-medium text-[11px]">
                       {d}
                     </span>
@@ -141,11 +150,11 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
               </div>
             )}
 
-            {dish.allergens.length > 0 ? (
+            {allergens.length > 0 ? (
               <div className="flex items-center space-x-2">
                 <span className="font-semibold text-charcoal-900 w-20 flex-shrink-0">Allergens:</span>
                 <div className="flex flex-wrap gap-1">
-                  {dish.allergens.map((a, idx) => (
+                  {allergens.map((a, idx) => (
                     <span key={idx} className="bg-amber-50 border border-amber-200 text-amber-900 px-2 py-0.5 rounded-md font-medium text-[11px]">
                       {a}
                     </span>
@@ -161,14 +170,16 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
 
             <div className="flex items-start space-x-2">
               <span className="font-semibold text-charcoal-900 w-20 flex-shrink-0">Ingredients:</span>
-              <span className="text-charcoal-700 text-[11px] leading-tight">{dish.ingredients.join(', ')}</span>
+              <span className="text-charcoal-700 text-[11px] leading-tight">
+                {ingredients.length > 0 ? ingredients.join(', ') : 'Chef signature culinary recipe'}
+              </span>
             </div>
           </div>
 
           {/* Option Groups */}
-          {dish.option_groups && dish.option_groups.length > 0 && (
+          {optionGroups.length > 0 && (
             <div className="space-y-3 pt-2">
-              {dish.option_groups.map((group) => (
+              {optionGroups.map((group) => (
                 <div key={group.id} className="border border-ivory-200 rounded-xl p-3">
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-serif font-bold text-xs text-charcoal-900">{group.name}</span>

@@ -31,8 +31,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   if (!isOpen) return null;
 
   const subtotal = cart.reduce((sum, item) => {
-    const optsSum = item.selected_options.reduce((s, o) => s + o.price_modifier, 0);
-    return sum + (item.price + optsSum) * item.quantity;
+    const opts = Array.isArray(item.selected_options) ? item.selected_options : [];
+    const optsSum = opts.reduce((s, o) => s + (Number(o?.price_modifier) || 0), 0);
+    const itemPrice = typeof item.price === 'number' ? item.price : Number(item.price) || 0;
+    return sum + (itemPrice + optsSum) * (item.quantity || 1);
   }, 0);
 
   const taxRate = restaurant.tax_rate_percent || 5;
@@ -115,13 +117,15 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             {/* Items list */}
             <div className="flex-1 overflow-y-auto py-2 divide-y divide-ivory-100">
               {cart.map((item) => {
-                const optsTotal = item.selected_options.reduce((s, o) => s + o.price_modifier, 0);
-                const lineTotal = (item.price + optsTotal) * item.quantity;
+                const opts = Array.isArray(item.selected_options) ? item.selected_options : [];
+                const optsTotal = opts.reduce((s, o) => s + (Number(o?.price_modifier) || 0), 0);
+                const itemPrice = typeof item.price === 'number' ? item.price : Number(item.price) || 0;
+                const lineTotal = (itemPrice + optsTotal) * (item.quantity || 1);
                 return (
                   <div key={item.menu_item_id} className="py-3 flex items-start justify-between gap-3">
                     <img
-                      src={item.image_url}
-                      alt={item.name}
+                      src={item.image_url || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=200'}
+                      alt={item.name || 'Dish'}
                       className="w-14 h-14 rounded-xl object-cover flex-shrink-0 bg-ivory-100"
                     />
 
@@ -140,13 +144,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       )}
 
                       <span className="text-xs text-saffron-700 font-semibold block mt-0.5">
-                        ₹{item.price.toFixed(2)}
+                        ₹{itemPrice.toFixed(2)}
                       </span>
 
                       {/* Options list */}
-                      {item.selected_options.length > 0 && (
+                      {opts.length > 0 && (
                         <div className="mt-1 space-y-0.5">
-                          {item.selected_options.map((opt) => (
+                          {opts.map((opt) => (
                             <span key={opt.option_id} className="inline-block bg-ivory-100 text-[10px] text-charcoal-800 px-1.5 py-0.5 rounded-sm mr-1">
                               +{opt.name} {opt.price_modifier > 0 ? `(₹${opt.price_modifier})` : ''}
                             </span>

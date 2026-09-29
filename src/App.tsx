@@ -10,6 +10,8 @@ import { PitchDeckPage } from './pages/PitchDeckPage';
 import { AiBotOnboardingStudioPage } from './pages/AiBotOnboardingStudioPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
+import { ErrorBoundary } from './components/ErrorBoundary';
+
 // Yoast-style Dynamic Route SEO Metadata Manager
 const RouteSEOManager: React.FC = () => {
   const location = useLocation();
@@ -72,85 +74,87 @@ export const App: React.FC = () => {
       <div className="min-h-screen flex flex-col bg-ivory-50 text-charcoal-900 font-sans">
         <Navbar />
         <div className="flex-1">
-          <Routes>
-            {/* Customer Home Page: Search database, scan table QR, explore restaurants */}
-            <Route
-              path="/"
-              element={<CustomerHomePage />}
-            />
-            <Route
-              path="/r/:restaurantSlug/menu"
-              element={<DinerMenu />}
-            />
-            <Route
-              path="/r/:restaurantSlug"
-              element={<DinerMenu />}
-            />
-            <Route
-              path="/menu/:restaurantSlug"
-              element={<DinerMenu />}
-            />
-            <Route
-              path="/menu/:restaurantSlug/:tableId"
-              element={<DinerMenu />}
-            />
-            <Route
-              path="/r/:restaurantSlug/:tableId"
-              element={<DinerMenu />}
-            />
-            <Route
-              path="/kitchen"
-              element={<KitchenKDS />}
-            />
-            <Route
-              path="/manage"
-              element={<ManagerDashboard />}
-            />
-            <Route
-              path="/operations"
-              element={<ManagerDashboard />}
-            />
-            <Route
-              path="/dashboard"
-              element={<ManagerDashboard />}
-            />
-            <Route
-              path="/manager"
-              element={<ManagerDashboard />}
-            />
-            <Route
-              path="/manager/:restaurantSlug"
-              element={<ManagerDashboard />}
-            />
-            <Route
-              path="/manage/:restaurantSlug"
-              element={<ManagerDashboard />}
-            />
-            <Route
-              path="/dashboard/:restaurantSlug"
-              element={<ManagerDashboard />}
-            />
-            <Route
-              path="/admin"
-              element={<MasterAdminDashboard />}
-            />
-            <Route
-              path="/ai-studio"
-              element={<AiBotOnboardingStudioPage />}
-            />
-            <Route
-              path="/pitch"
-              element={<PitchDeckPage />}
-            />
-            <Route
-              path="/qr"
-              element={<Navigate to="/" replace />}
-            />
-            <Route
-              path="*"
-              element={<NotFoundPage />}
-            />
-          </Routes>
+          <ErrorBoundary>
+            <Routes>
+              {/* Customer Home Page: Search database, scan table QR, explore restaurants */}
+              <Route
+                path="/"
+                element={<CustomerHomePage />}
+              />
+              <Route
+                path="/r/:restaurantSlug/menu"
+                element={<DinerMenu />}
+              />
+              <Route
+                path="/r/:restaurantSlug"
+                element={<DinerMenu />}
+              />
+              <Route
+                path="/menu/:restaurantSlug"
+                element={<DinerMenu />}
+              />
+              <Route
+                path="/menu/:restaurantSlug/:tableId"
+                element={<DinerMenu />}
+              />
+              <Route
+                path="/r/:restaurantSlug/:tableId"
+                element={<DinerMenu />}
+              />
+              <Route
+                path="/kitchen"
+                element={<KitchenKDS />}
+              />
+              <Route
+                path="/manage"
+                element={<ManagerDashboard />}
+              />
+              <Route
+                path="/operations"
+                element={<ManagerDashboard />}
+              />
+              <Route
+                path="/dashboard"
+                element={<ManagerDashboard />}
+              />
+              <Route
+                path="/manager"
+                element={<ManagerDashboard />}
+              />
+              <Route
+                path="/manager/:restaurantSlug"
+                element={<ManagerDashboard />}
+              />
+              <Route
+                path="/manage/:restaurantSlug"
+                element={<ManagerDashboard />}
+              />
+              <Route
+                path="/dashboard/:restaurantSlug"
+                element={<ManagerDashboard />}
+              />
+              <Route
+                path="/admin"
+                element={<MasterAdminDashboard />}
+              />
+              <Route
+                path="/ai-studio"
+                element={<AiBotOnboardingStudioPage />}
+              />
+              <Route
+                path="/pitch"
+                element={<PitchDeckPage />}
+              />
+              <Route
+                path="/qr"
+                element={<Navigate to="/" replace />}
+              />
+              <Route
+                path="*"
+                element={<NotFoundPage />}
+              />
+            </Routes>
+          </ErrorBoundary>
         </div>
       </div>
     </HashRouter>

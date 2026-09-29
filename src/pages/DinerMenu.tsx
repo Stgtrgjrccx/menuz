@@ -235,14 +235,23 @@ export const DinerMenu: React.FC = () => {
         is_active: true
       };
 
-    setActiveTable(matchedTable);
+    if (!activeTable || activeTable.id !== matchedTable.id || activeTable.restaurant_id !== matchedTable.restaurant_id) {
+      setActiveTable(matchedTable);
+    }
     setErrorMsg(null);
 
     // Ensure session ID
     if (!sessionStorage.getItem('menuz_session_id')) {
       sessionStorage.setItem('menuz_session_id', 'sess_' + crypto.randomUUID());
     }
-  }, [tableToken, tables, setActiveTable, restaurant]);
+  }, [tableToken, tables, setActiveTable, restaurant.id, activeTable]);
+
+  // Reset selected category, search query, and active dish whenever the venue or route slug changes
+  useEffect(() => {
+    setSelectedCategory('all');
+    setSearchQuery('');
+    setActiveDish(null);
+  }, [restaurantSlug, restaurant.id]);
 
   // Track scroll for back-to-top button
   useEffect(() => {
@@ -257,27 +266,34 @@ export const DinerMenu: React.FC = () => {
 
   const filteredDishes = useMemo(() => {
     return currentRestMenuItems.filter((dish) => {
+      if (!dish) return false;
       const matchesCat = selectedCategory === 'all' || dish.category_id === selectedCategory;
       const q = searchQuery.toLowerCase().trim();
+      const ingredients = Array.isArray(dish.ingredients) ? dish.ingredients : [];
+      const dishName = dish.name || '';
+      const dishDesc = dish.short_description || dish.full_description || '';
       const matchesSearch =
         !q ||
-        dish.name.toLowerCase().includes(q) ||
-        dish.short_description.toLowerCase().includes(q) ||
-        dish.ingredients.some((ing) => ing.toLowerCase().includes(q));
+        dishName.toLowerCase().includes(q) ||
+        dishDesc.toLowerCase().includes(q) ||
+        ingredients.some((ing) => (ing || '').toLowerCase().includes(q));
       return matchesCat && matchesSearch;
     });
   }, [currentRestMenuItems, selectedCategory, searchQuery]);
 
-  // Group dishes by category for scrollytelling sections
+  // Group dishes by category for scrollytelling sections with defensive fallback
   const dishesByCategory = useMemo(() => {
     if (selectedCategory !== 'all') {
-      return [{ category: currentRestCategories.find((c) => c.id === selectedCategory), items: filteredDishes }];
+      const foundCat = currentRestCategories.find((c) => c && c.id === selectedCategory);
+      if (foundCat) {
+        return [{ category: foundCat, items: filteredDishes }];
+      }
     }
     return currentRestCategories
-      .filter((cat) => filteredDishes.some((d) => d.category_id === cat.id))
+      .filter((cat) => cat && filteredDishes.some((d) => d && d.category_id === cat.id))
       .map((cat) => ({
         category: cat,
-        items: filteredDishes.filter((d) => d.category_id === cat.id)
+        items: filteredDishes.filter((d) => d && d.category_id === cat.id)
       }));
   }, [currentRestCategories, filteredDishes, selectedCategory]);
 
@@ -708,10 +724,11 @@ export const DinerMenu: React.FC = () => {
             <p className="text-xs text-charcoal-700/60 mt-1">Try adjusting your search keywords or filter category.</p>
           </div>
         ) : (
-          dishesByCategory.map(({ category, items }) => (
-            <section key={category?.id || 'all'} className="space-y-4">
-              {/* Category Header */}
-              {category && (
+          dishesByCategory.map(({ category, items }) => {
+            if (!category || !category.id) return null;
+            return (
+              <section key={category.id} className="space-y-4">
+                {/* Category Header */}
                 <div className="relative py-3">
                   <div className="absolute inset-0 flex items-center" aria-hidden="true">
                     <div className="w-full border-t border-ivory-300" />
@@ -719,79 +736,79 @@ export const DinerMenu: React.FC = () => {
                   <div className="relative flex justify-center">
                     <span className="bg-ivory-50 px-4 py-1 rounded-full border border-ivory-200 shadow-xs">
                       <h3 className="font-serif text-sm font-bold text-charcoal-900 tracking-wide">
-                        {getCategoryTitle(category.name, selectedLanguage)}
+                        {getCategoryTitle(category.name || 'Menu Selection', selectedLanguage)}
                       </h3>
                     </span>
                   </div>
                 </div>
-              )}
 
-              {/* Dish Cards */}
-              <div className="space-y-3">
-                {items.map((dish) => {
-                  const isVeg =
-                    dish.dietary_flags.includes('Vegetarian') ||
-                    dish.dietary_flags.includes('Vegan') ||
-                    dish.dietary_flags.includes('Jain');
+                {/* Dish Cards */}
+                <div className="space-y-3">
+                  {(items || []).filter(Boolean).map((dish) => {
+                    const flags = Array.isArray(dish.dietary_flags) ? dish.dietary_flags : [];
+                    const isVeg = flags.some((f) => {
+                      const lf = String(f).toLowerCase();
+                      return lf === 'veg' || lf === 'vegetarian' || lf === 'vegan' || lf === 'jain';
+                    });
 
-                  return (
-                    <div
-                      key={dish.id}
-                      onClick={() => setActiveDish(dish)}
-                      className={`bg-white rounded-2xl p-3.5 shadow-subtle border border-ivory-200/90 flex items-start space-x-3 cursor-pointer transition-all hover:border-saffron-500/40 hover:shadow-md ${
-                        !dish.is_available ? 'opacity-65 bg-ivory-100/60' : ''
-                      }`}
-                    >
-                      <div className="w-24 h-24 rounded-xl flex-shrink-0 bg-ivory-100 overflow-hidden relative shadow-inner">
-                        <img src={dish.image_url} alt={dish.name} className="w-full h-full object-cover" />
-                        {!dish.is_available && (
-                          <div className="absolute inset-0 bg-charcoal-900/70 flex items-center justify-center p-1 text-center">
-                            <span className="text-[9px] uppercase font-bold text-white tracking-widest px-1.5 py-0.5 rounded bg-red-600/90">
-                              Sold Out
-                            </span>
-                          </div>
-                        )}
-                        {dish.is_bestseller && (
-                          <div className="absolute top-1 left-1 px-1.5 py-0.5 bg-amber-500 rounded text-[8px] font-bold text-white flex items-center space-x-0.5">
-                            <Star className="w-2.5 h-2.5 fill-white" />
-                            <span>Best</span>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center space-x-1.5 mb-1">
-                          <span
-                            className={`w-3 h-3 rounded-xs border flex items-center justify-center ${
-                              isVeg ? 'border-green-600' : 'border-red-600'
-                            }`}
-                          >
-                            <span className={`w-1.5 h-1.5 rounded-full ${isVeg ? 'bg-green-600' : 'bg-red-600'}`} />
-                          </span>
-                          {dish.spice_level > 0 && (
-                            <div className="flex items-center text-saffron-600 pl-1 border-l border-ivory-200">
-                              <Flame className="w-3 h-3 fill-saffron-600" />
-                              <span className="text-[10px] font-bold ml-0.5">{dish.spice_level}</span>
+                    return (
+                      <div
+                        key={dish.id}
+                        onClick={() => setActiveDish(dish)}
+                        className={`bg-white rounded-2xl p-3.5 shadow-subtle border border-ivory-200/90 flex items-start space-x-3 cursor-pointer transition-all hover:border-saffron-500/40 hover:shadow-md ${
+                          !dish.is_available ? 'opacity-65 bg-ivory-100/60' : ''
+                        }`}
+                      >
+                        <div className="w-24 h-24 rounded-xl flex-shrink-0 bg-ivory-100 overflow-hidden relative shadow-inner">
+                          <img src={dish.image_url || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400'} alt={dish.name || 'Dish'} className="w-full h-full object-cover" />
+                          {!dish.is_available && (
+                            <div className="absolute inset-0 bg-charcoal-900/70 flex items-center justify-center p-1 text-center">
+                              <span className="text-[9px] uppercase font-bold text-white tracking-widest px-1.5 py-0.5 rounded bg-red-600/90">
+                                Sold Out
+                              </span>
                             </div>
                           )}
-                          {dish.is_chef_recommended && (
-                            <span className="text-[9px] font-bold text-saffron-700 bg-saffron-50 px-1.5 py-0.5 rounded border border-saffron-200">
-                              Chef's Pick
-                            </span>
+                          {dish.is_bestseller && (
+                            <div className="absolute top-1 left-1 px-1.5 py-0.5 bg-amber-500 rounded text-[8px] font-bold text-white flex items-center space-x-0.5">
+                              <Star className="w-2.5 h-2.5 fill-white" />
+                              <span>Best</span>
+                            </div>
                           )}
                         </div>
 
-                        <h3 className="font-serif font-bold text-sm text-charcoal-900 leading-tight truncate">
-                          {dish.name}
-                        </h3>
-                        <p className="text-xs text-charcoal-700/70 line-clamp-2 mt-0.5 leading-snug">
-                          {dish.short_description}
-                        </p>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center space-x-1.5 mb-1">
+                            <span
+                              className={`w-3 h-3 rounded-xs border flex items-center justify-center ${
+                                isVeg ? 'border-green-600' : 'border-red-600'
+                              }`}
+                            >
+                              <span className={`w-1.5 h-1.5 rounded-full ${isVeg ? 'bg-green-600' : 'bg-red-600'}`} />
+                            </span>
+                            {(dish.spice_level || 0) > 0 && (
+                              <div className="flex items-center text-saffron-600 pl-1 border-l border-ivory-200">
+                                <Flame className="w-3 h-3 fill-saffron-600" />
+                                <span className="text-[10px] font-bold ml-0.5">{dish.spice_level}</span>
+                              </div>
+                            )}
+                            {dish.is_chef_recommended && (
+                              <span className="text-[9px] font-bold text-saffron-700 bg-saffron-50 px-1.5 py-0.5 rounded border border-saffron-200">
+                                Chef's Pick
+                              </span>
+                            )}
+                          </div>
 
-                        <div className="flex items-center justify-between mt-2 pt-1.5 border-t border-ivory-100">
-                          <span className="font-bold text-sm text-charcoal-900">
-                            ₹{dish.price.toFixed(2)}
-                          </span>
+                          <h3 className="font-serif font-bold text-sm text-charcoal-900 leading-tight truncate">
+                            {dish.name}
+                          </h3>
+                          <p className="text-xs text-charcoal-700/70 line-clamp-2 mt-0.5 leading-snug">
+                            {dish.short_description || dish.full_description || ''}
+                          </p>
+
+                          <div className="flex items-center justify-between mt-2 pt-1.5 border-t border-ivory-100">
+                            <span className="font-bold text-sm text-charcoal-900">
+                              ₹{typeof dish.price === 'number' ? dish.price.toFixed(2) : (Number(dish.price) || 0).toFixed(2)}
+                            </span>
 
                           <div className="flex items-center space-x-2">
                             {/* Ask Chef quick button */}
@@ -823,8 +840,9 @@ export const DinerMenu: React.FC = () => {
                 })}
               </div>
             </section>
-          ))
-        )}
+          );
+        })
+      )}
       </main>
 
       {/* ═══════════════════════════════════════════════════════════ */}

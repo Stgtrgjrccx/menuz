@@ -214,7 +214,14 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
 
       // ── Dish-specific queries ─────────────────────────────
       if (targetDish) {
-        const dishName = targetDish.name;
+        const dishName = targetDish.name || 'This specialty';
+        const dishAllergens = Array.isArray(targetDish.allergens) ? targetDish.allergens : [];
+        const dishFlags = Array.isArray(targetDish.dietary_flags) ? targetDish.dietary_flags : [];
+        const dishIngredients = Array.isArray(targetDish.ingredients) ? targetDish.ingredients : [];
+        const isTargetVeg = dishFlags.some(f => {
+          const lf = String(f).toLowerCase();
+          return lf === 'veg' || lf === 'vegetarian' || lf === 'vegan' || lf === 'jain';
+        });
 
         if (lower.includes('spicy') || lower.includes('spice') || lower.includes('how spicy')) {
           reply = `${dishName} has a verified spice intensity of ${targetDish.spice_level}/5. ${
@@ -233,35 +240,36 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
             if (milder.length > 0) {
               recs = milder.map(item => ({
                 item,
-                reason: `Milder option (Spice ${item.spice_level}/5) — ${item.short_description.slice(0, 60)}...`
+                reason: `Milder option (Spice ${item.spice_level}/5) — ${(item.short_description || '').slice(0, 60)}...`
               }));
             }
           }
         } else if (lower.includes('allergen') || lower.includes('allergy')) {
-          reply = targetDish.allergens.length > 0
-            ? `⚠️ ${dishName} contains: ${targetDish.allergens.join(', ')}.\n\n${ALLERGY_DISCLAIMER}`
+          reply = dishAllergens.length > 0
+            ? `⚠️ ${dishName} contains: ${dishAllergens.join(', ')}.\n\n${ALLERGY_DISCLAIMER}`
             : `${dishName} has no declared allergens. However, ${ALLERGY_DISCLAIMER}`;
         } else if (lower.includes('vegetarian alternative') || lower.includes('veg alternative') || lower.includes('non-veg alternative')) {
-          const isVeg = targetDish.dietary_flags.includes('Vegetarian');
-          const alternatives = availableItems.filter(i =>
-            i.id !== targetDish.id &&
-            i.category_id === targetDish.category_id &&
-            (isVeg
-              ? !i.dietary_flags.includes('Vegetarian')
-              : i.dietary_flags.includes('Vegetarian'))
-          ).slice(0, 2);
+          const alternatives = availableItems.filter(i => {
+            if (i.id === targetDish.id || i.category_id !== targetDish.category_id) return false;
+            const iFlags = Array.isArray(i.dietary_flags) ? i.dietary_flags : [];
+            const iIsVeg = iFlags.some(f => {
+              const lf = String(f).toLowerCase();
+              return lf === 'veg' || lf === 'vegetarian' || lf === 'vegan' || lf === 'jain';
+            });
+            return isTargetVeg ? !iIsVeg : iIsVeg;
+          }).slice(0, 2);
 
-          reply = isVeg
+          reply = isTargetVeg
             ? `Looking for a non-vegetarian alternative to ${dishName}? Here are my recommendations:`
             : `Here are vegetarian alternatives to ${dishName}:`;
 
           recs = alternatives.map(item => ({
             item,
-            reason: `${item.dietary_flags.join(', ')} — ${item.short_description.slice(0, 50)}`
+            reason: `${(item.dietary_flags || []).join(', ') || 'Alternative'} — ${(item.short_description || '').slice(0, 50)}`
           }));
 
           if (alternatives.length === 0) {
-            reply += ` Unfortunately, I couldn't find a direct ${isVeg ? 'non-veg' : 'vegetarian'} match in the same category. Try browsing other sections!`;
+            reply += ` Unfortunately, I couldn't find a direct ${isTargetVeg ? 'non-veg' : 'vegetarian'} match in the same category. Try browsing other sections!`;
           }
         } else if (lower.includes('drink') || lower.includes('pair') || lower.includes('beverage') || lower.includes('bread')) {
           const drinks = availableItems.filter(i => i.item_type === 'drink').slice(0, 2);
@@ -304,9 +312,9 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
           }
         } else {
           // General dish info
-          reply = `**${dishName}**\n${targetDish.full_description}\n\n• Ingredients: ${targetDish.ingredients.join(', ')}\n• Spice Level: ${targetDish.spice_level}/5\n• Serving: ${targetDish.serving_size}\n• Diet: ${targetDish.dietary_flags.join(', ') || 'No specific flags'}`;
-          if (targetDish.allergens.length > 0) {
-            reply += `\n• ⚠️ Allergens: ${targetDish.allergens.join(', ')}`;
+          reply = `**${dishName}**\n${targetDish.full_description || targetDish.short_description || ''}\n\n• Ingredients: ${dishIngredients.length > 0 ? dishIngredients.join(', ') : 'Chef signature recipe'}\n• Spice Level: ${targetDish.spice_level || 0}/5\n• Serving: ${targetDish.serving_size || '1 portion'}\n• Diet: ${dishFlags.join(', ') || 'Freshly prepared'}`;
+          if (dishAllergens.length > 0) {
+            reply += `\n• ⚠️ Allergens: ${dishAllergens.join(', ')}`;
           }
           if (targetDish.chef_notes) {
             reply += `\n• Chef's Note: ${targetDish.chef_notes}`;
@@ -349,11 +357,15 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
             reason: `Core Feast Dish — ${item.serving_size} • ${item.short_description.slice(0, 50)}`
           }));
         } else if (lower.includes('jain')) {
-          const jainSafe = availableItems.filter(i =>
-            i.dietary_flags.some(f => f.toLowerCase() === 'jain') ||
-            (i.dietary_flags.some(f => f.toLowerCase() === 'veg' || f.toLowerCase() === 'vegetarian') &&
-             !i.ingredients.some(ing => /onion|garlic|ginger|potato|root/i.test(ing)))
-          ).slice(0, 3);
+          const jainSafe = availableItems.filter(i => {
+            const flags = Array.isArray(i.dietary_flags) ? i.dietary_flags : [];
+            const ings = Array.isArray(i.ingredients) ? i.ingredients : [];
+            return (
+              flags.some(f => String(f).toLowerCase() === 'jain') ||
+              (flags.some(f => String(f).toLowerCase() === 'veg' || String(f).toLowerCase() === 'vegetarian') &&
+               !ings.some(ing => /onion|garlic|ginger|potato|root/i.test(ing)))
+            );
+          }).slice(0, 3);
 
           reply = `🌱 **100% Jain Dining Safe Protocol**:\n\nOur kitchen maintains dedicated cookware and preparation stations without onion, garlic, or root vegetables.\n\nHere are verified Jain-friendly preparations:`;
           recs = jainSafe.map(item => ({
@@ -361,10 +373,14 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
             reason: `100% Jain Safe • Prepared with isolated utensils & zero root vegetables`
           }));
         } else if (lower.includes('gluten') || lower.includes('celiac')) {
-          const glutenFree = availableItems.filter(i =>
-            !i.allergens.some(a => /gluten|wheat|flour|maida/i.test(a)) &&
-            !i.ingredients.some(ing => /wheat|maida|semolina|soy sauce/i.test(ing))
-          ).slice(0, 3);
+          const glutenFree = availableItems.filter(i => {
+            const allergens = Array.isArray(i.allergens) ? i.allergens : [];
+            const ings = Array.isArray(i.ingredients) ? i.ingredients : [];
+            return (
+              !allergens.some(a => /gluten|wheat|flour|maida/i.test(a)) &&
+              !ings.some(ing => /wheat|maida|semolina|soy sauce/i.test(ing))
+            );
+          }).slice(0, 3);
 
           reply = `🌾 **Gluten-Free & Celiac Safe Guide**:\n\nAll tandoori grills, basmati rice preparations, and select gravies are naturally wheat-free. Avoid tandoori rotis/naans and fried battered starters.\n\nRecommended Gluten-Free dishes:`;
           recs = glutenFree.map(item => ({
@@ -372,10 +388,14 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
             reason: `Verified Wheat-Free • Cooked with pure rice, corn, or gram flour`
           }));
         } else if (lower.includes('nut') || lower.includes('peanut')) {
-          const nutFree = availableItems.filter(i =>
-            !i.allergens.some(a => /nut|peanut|cashew|almond|walnut/i.test(a)) &&
-            !i.ingredients.some(ing => /cashew|almond|pista|nut|peanut/i.test(ing))
-          ).slice(0, 3);
+          const nutFree = availableItems.filter(i => {
+            const allergens = Array.isArray(i.allergens) ? i.allergens : [];
+            const ings = Array.isArray(i.ingredients) ? i.ingredients : [];
+            return (
+              !allergens.some(a => /nut|peanut|cashew|almond|walnut/i.test(a)) &&
+              !ings.some(ing => /cashew|almond|pista|nut|peanut/i.test(ing))
+            );
+          }).slice(0, 3);
 
           reply = `🥜 **Nut Allergy Safe Protocol**:\n\nWe tag nut-allergy tickets in bold red on the kitchen KOT. These dishes are prepared without cashew paste, peanuts, or nut oils:`;
           recs = nutFree.map(item => ({
@@ -383,12 +403,17 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
             reason: `100% Nut-Free Recipe • Zero peanuts, cashews, or almond paste`
           }));
         } else if (lower.includes('vegan')) {
-          const veganSafe = availableItems.filter(i =>
-            i.dietary_flags.some(f => f.toLowerCase() === 'vegan') ||
-            (!i.allergens.some(a => /dairy|milk|cheese|butter|ghee/i.test(a)) &&
-             !i.ingredients.some(ing => /paneer|butter|cream|ghee|curd|yogurt|honey/i.test(ing)) &&
-             !i.dietary_flags.some(f => f.toLowerCase() === 'non-veg'))
-          ).slice(0, 3);
+          const veganSafe = availableItems.filter(i => {
+            const flags = Array.isArray(i.dietary_flags) ? i.dietary_flags : [];
+            const allergens = Array.isArray(i.allergens) ? i.allergens : [];
+            const ings = Array.isArray(i.ingredients) ? i.ingredients : [];
+            return (
+              flags.some(f => String(f).toLowerCase() === 'vegan') ||
+              (!allergens.some(a => /dairy|milk|cheese|butter|ghee/i.test(a)) &&
+               !ings.some(ing => /paneer|butter|cream|ghee|curd|yogurt|honey/i.test(ing)) &&
+               !flags.some(f => String(f).toLowerCase() === 'non-veg'))
+            );
+          }).slice(0, 3);
 
           reply = `🥬 **100% Plant-Based Vegan Selections**:\n\nPrepared using cold-pressed oils, zero dairy makkhan, zero paneer, and zero ghee:`;
           recs = veganSafe.map(item => ({
@@ -396,11 +421,11 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
             reason: `Pure Plant-Based Vegan • Zero dairy, makkhan, cream, or ghee`
           }));
         } else if (lower.includes('kid') || lower.includes('child') || lower.includes('mildest')) {
-          const kidSafe = availableItems.filter(i => i.spice_level === 0 || (i.spice_level === 1 && i.item_type !== 'drink')).slice(0, 3);
+          const kidSafe = availableItems.filter(i => (i.spice_level || 0) === 0 || ((i.spice_level || 0) === 1 && i.item_type !== 'drink')).slice(0, 3);
           reply = `👶 **Kid-Friendly & Gentle Flavors**:\n\nThese dishes have zero harsh chilies or pungent spices, focusing on creamy, naturally sweet, or buttery notes that kids love:`;
           recs = kidSafe.map(item => ({
             item,
-            reason: `Spice Level ${item.spice_level}/5 • Gentle aroma, zero chili bite`
+            reason: `Spice Level ${item.spice_level || 0}/5 • Gentle aroma, zero chili bite`
           }));
         } else if (lower.includes('popular') || lower.includes('best seller') || lower.includes('recommend')) {
           const bestsellers = availableItems.filter(i => i.is_bestseller).slice(0, 2);
@@ -409,21 +434,30 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
           reply = "Here are our most popular dishes, loved by our guests:";
           recs = picks.map(item => ({
             item,
-            reason: item.is_bestseller ? `⭐ Bestseller — ${item.short_description.slice(0, 50)}` : `Chef recommended — ${item.short_description.slice(0, 50)}`
+            reason: item.is_bestseller ? `⭐ Bestseller — ${(item.short_description || '').slice(0, 50)}` : `Chef recommended — ${(item.short_description || '').slice(0, 50)}`
           }));
         } else if (lower.includes('vegetarian') || lower.includes('veg')) {
-          const vegDishes = availableItems.filter(i => i.dietary_flags.includes('Vegetarian')).slice(0, 3);
+          const vegDishes = availableItems.filter(i => {
+            const flags = Array.isArray(i.dietary_flags) ? i.dietary_flags : [];
+            return flags.some(f => {
+              const lf = String(f).toLowerCase();
+              return lf === 'veg' || lf === 'vegetarian' || lf === 'vegan' || lf === 'jain';
+            });
+          }).slice(0, 3);
           reply = "Here are our finest vegetarian offerings:";
           recs = vegDishes.map(item => ({
             item,
-            reason: `100% Vegetarian — ${item.short_description.slice(0, 50)}`
+            reason: `100% Vegetarian — ${(item.short_description || '').slice(0, 50)}`
           }));
         } else if (lower.includes('light') || lower.includes('healthy') || lower.includes('salad')) {
-          const light = availableItems.filter(i => i.dietary_flags.includes('Vegan') || i.dietary_flags.includes('Jain') || i.spice_level === 0).slice(0, 2);
+          const light = availableItems.filter(i => {
+            const flags = Array.isArray(i.dietary_flags) ? i.dietary_flags : [];
+            return flags.some(f => ['vegan', 'jain'].includes(String(f).toLowerCase())) || (i.spice_level || 0) === 0;
+          }).slice(0, 2);
           reply = "Looking for lighter fare? Here are our gentler options:";
           recs = light.map(item => ({
             item,
-            reason: `Light & fresh — ${item.dietary_flags.join(', ')}`
+            reason: `Light & fresh — ${(item.dietary_flags || []).join(', ') || 'Gentle flavors'}`
           }));
         } else if (lower.includes('chef') || lower.includes('favourite') || lower.includes('favorite')) {
           const chefPicks = availableItems.filter(i => i.is_chef_recommended);

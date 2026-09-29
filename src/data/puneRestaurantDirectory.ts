@@ -1587,7 +1587,6 @@ export const PUNE_RESTAURANT_DIRECTORY: PuneRestaurantEntry[] = [
     imageUrl: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&auto=format&fit=crop',
     posProvider: 'universal_api'
   },
-,
   {
     name: "Domino's Pizza - Pimpri",
     cuisine: "Pizza, Fast Food, Desserts",
@@ -2258,8 +2257,7 @@ export const PUNE_RESTAURANT_DIRECTORY: PuneRestaurantEntry[] = [
     rating: 4.6,
     imageUrl: "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?w=200&auto=format&fit=crop",
     posProvider: "toast"
-  }
-,
+  },
   {
     name: "Murphies Bistro & Bar",
     cuisine: "European, Jacket Potatoes, Continental, Cocktails",
@@ -3090,6 +3088,7 @@ export function matchesPuneQuery(
   item: { name: string; cuisine?: string; location?: string; address?: string; aliases?: string[] },
   query: string
 ): boolean {
+  if (!item || !item.name) return false;
   if (!query || !query.trim()) return true;
 
   const rawQ = query.trim().toLowerCase();
