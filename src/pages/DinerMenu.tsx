@@ -36,9 +36,9 @@ import { TRANSLATIONS, getCategoryTitle } from '../utils/i18n';
 import { PUNE_RESTAURANT_DIRECTORY } from '../data/puneRestaurantDirectory';
 
 export const DinerMenu: React.FC = () => {
-  const { restaurantSlug } = useParams<{ restaurantSlug: string }>();
+  const { restaurantSlug, tableId } = useParams<{ restaurantSlug: string; tableId?: string }>();
   const [searchParams] = useSearchParams();
-  const tableToken = searchParams.get('t') || '';
+  const tableToken = searchParams.get('t') || tableId || '';
 
   const restaurants = useRestaurantStore((state) => state.restaurants);
   const restaurant = useRestaurantStore((state) => state.restaurant);
@@ -190,8 +190,28 @@ export const DinerMenu: React.FC = () => {
   // Table Token Verification
   useEffect(() => {
     const restTables = tables.filter((t) => t.restaurant_id === restaurant.id);
+    const cleanToken = tableToken.toLowerCase().trim();
     const matchedTable =
-      (tableToken ? (restTables.find((t) => t.public_token === tableToken && t.is_active) || tables.find((t) => t.public_token === tableToken && t.is_active)) : null) ||
+      (cleanToken
+        ? restTables.find(
+            (t) =>
+              (t.public_token === tableToken ||
+                t.id.toLowerCase() === cleanToken ||
+                t.label.toLowerCase() === cleanToken ||
+                t.label.toLowerCase() === `table ${cleanToken}` ||
+                t.label.toLowerCase() === `table ${cleanToken.replace(/[^0-9]/g, '')}`) &&
+              t.is_active
+          ) ||
+          tables.find(
+            (t) =>
+              (t.public_token === tableToken ||
+                t.id.toLowerCase() === cleanToken ||
+                t.label.toLowerCase() === cleanToken ||
+                t.label.toLowerCase() === `table ${cleanToken}` ||
+                t.label.toLowerCase() === `table ${cleanToken.replace(/[^0-9]/g, '')}`) &&
+              t.is_active
+          )
+        : null) ||
       restTables[0] ||
       tables[0] || {
         id: 'tbl-01',

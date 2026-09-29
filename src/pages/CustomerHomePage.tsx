@@ -237,26 +237,26 @@ export const CustomerHomePage: React.FC = () => {
             {/* Active Venue Hub */}
             <Link
               to={`/manage/${restaurant?.slug || 'saffron-house'}`}
-              className="hidden sm:flex items-center space-x-1.5 py-2 px-3 rounded-xl bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-200 hover:text-white text-xs font-semibold border border-charcoal-700 transition-colors"
+              className="hidden sm:flex items-center space-x-1.5 py-2 px-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 hover:text-white text-xs font-bold border border-amber-500/40 transition-all active:scale-95 shadow-xs"
               title={`Open Active Venue Hub for ${restaurant?.name || 'Saffron House'}`}
             >
-              <LayoutDashboard className="w-3.5 h-3.5 text-saffron-400" />
+              <LayoutDashboard className="w-3.5 h-3.5 text-amber-400" />
               <span>Active Venue Hub</span>
             </Link>
 
             {/* Pitch Deck */}
             <Link
               to="/pitch"
-              className="flex items-center space-x-1.5 py-2 px-3 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 hover:text-white text-xs font-bold border border-amber-500/30 transition-colors"
+              className="flex items-center space-x-1.5 py-2 px-3 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 hover:text-white text-xs font-bold border border-cyan-500/40 transition-all active:scale-95 shadow-xs"
             >
-              <TrendingUp className="w-3.5 h-3.5 text-amber-400" />
+              <TrendingUp className="w-3.5 h-3.5 text-cyan-400" />
               <span className="hidden sm:inline">Pitch Deck</span>
             </Link>
 
             {/* Restaurant Admin / Staff portal link */}
             <Link
               to="/admin"
-              className="hidden md:flex items-center space-x-1.5 py-2 px-3 rounded-xl bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-300 hover:text-white text-xs font-semibold border border-charcoal-700 transition-colors"
+              className="hidden md:flex items-center space-x-1.5 py-2 px-3 rounded-xl bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-200 hover:text-white text-xs font-bold border border-charcoal-700 transition-all active:scale-95 shadow-xs"
             >
               <ShieldCheck className="w-3.5 h-3.5 text-saffron-400" />
               <span>Admin Portal</span>
@@ -766,7 +766,7 @@ export const CustomerHomePage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleOpenRestaurantMenu(item)}
-                      className="flex-1 py-2.5 px-3 rounded-xl bg-charcoal-900 hover:bg-charcoal-800 text-white font-serif text-xs font-bold flex items-center justify-center space-x-1.5 transition-colors cursor-pointer"
+                      className="flex-1 py-2.5 px-3 rounded-xl bg-charcoal-900 hover:bg-black active:scale-95 text-white font-serif text-xs font-bold flex items-center justify-center space-x-1.5 transition-all shadow-sm cursor-pointer"
                     >
                       <span>Explore Menu &amp; Rewards</span>
                       <ArrowRight className="w-3.5 h-3.5 text-saffron-400" />
@@ -776,9 +776,9 @@ export const CustomerHomePage: React.FC = () => {
                       type="button"
                       onClick={() => handleOpenScannerForRestaurant(item.slug)}
                       title={`Scan Table QR for ${item.name}`}
-                      className="p-2.5 rounded-xl border border-ivory-300 hover:border-saffron-400 hover:bg-saffron-50 text-charcoal-700 hover:text-saffron-700 transition-colors flex items-center justify-center cursor-pointer"
+                      className="p-2.5 rounded-xl border border-saffron-300 hover:border-saffron-400 bg-saffron-50 hover:bg-saffron-100 text-saffron-800 transition-all flex items-center justify-center cursor-pointer active:scale-95 shadow-xs"
                     >
-                      <QrCode className="w-4 h-4" />
+                      <QrCode className="w-4 h-4 text-saffron-700" />
                     </button>
                   </div>
                 </div>

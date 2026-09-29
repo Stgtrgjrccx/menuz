@@ -515,7 +515,7 @@ export const MasterAdminDashboard: React.FC = () => {
             <div className="flex flex-wrap items-center gap-2">
               <Link
                 to="/pitch"
-                className="px-3.5 py-2.5 bg-gradient-to-r from-amber-500 to-saffron-600 hover:brightness-110 text-slate-950 text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-all cursor-pointer"
+                className="px-3.5 py-2.5 bg-gradient-to-r from-amber-500 to-saffron-600 hover:brightness-110 active:scale-95 text-slate-950 text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-all cursor-pointer"
                 title="Open Interactive Pitch Deck (19 Slides)"
               >
                 <TrendingUp className="w-4 h-4 text-slate-950" />
@@ -524,7 +524,7 @@ export const MasterAdminDashboard: React.FC = () => {
               <a
                 href="./menuz_executive_pitch_deck.pptx"
                 download="Menuz_Executive_Pitch_Deck.pptx"
-                className="px-3 py-2.5 bg-charcoal-800 hover:bg-charcoal-700 text-amber-300 text-xs font-bold rounded-xl border border-charcoal-600 shadow-subtle flex items-center space-x-1.5 transition-all"
+                className="px-3 py-2.5 bg-charcoal-800 hover:bg-charcoal-700 active:scale-95 text-amber-300 text-xs font-bold rounded-xl border border-charcoal-600 shadow-subtle flex items-center space-x-1.5 transition-all"
                 title="Download 16:9 Widescreen PowerPoint Presentation"
               >
                 <Download className="w-3.5 h-3.5 text-amber-400" />
@@ -535,7 +535,7 @@ export const MasterAdminDashboard: React.FC = () => {
                 download="Menuz_Executive_Pitch_Deck.pdf"
                 target="_blank"
                 rel="noreferrer"
-                className="px-3 py-2.5 bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-200 text-xs font-bold rounded-xl border border-charcoal-600 shadow-subtle flex items-center space-x-1.5 transition-all"
+                className="px-3 py-2.5 bg-charcoal-800 hover:bg-charcoal-700 active:scale-95 text-charcoal-200 text-xs font-bold rounded-xl border border-charcoal-600 shadow-subtle flex items-center space-x-1.5 transition-all"
                 title="Download Executive Pitch Deck PDF"
               >
                 <FileText className="w-3.5 h-3.5 text-charcoal-300" />
@@ -543,14 +543,14 @@ export const MasterAdminDashboard: React.FC = () => {
               </a>
               <button
                 onClick={() => setIsAddRestaurantOpen(true)}
-                className="px-4 py-2.5 bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-all cursor-pointer"
+                className="px-4 py-2.5 bg-saffron-600 hover:bg-saffron-700 active:scale-95 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-all cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 <span>Onboard Restaurant</span>
               </button>
               <button
                 onClick={() => setIsCampaignModalOpen(true)}
-                className="px-4 py-2.5 bg-green-700 hover:bg-green-800 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-all cursor-pointer"
+                className="px-4 py-2.5 bg-green-700 hover:bg-green-800 active:scale-95 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-all cursor-pointer"
               >
                 <Send className="w-4 h-4" />
                 <span>WhatsApp Campaign</span>

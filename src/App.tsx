@@ -82,8 +82,32 @@ export const App: React.FC = () => {
               element={<DinerMenu />}
             />
             <Route
+              path="/r/:restaurantSlug"
+              element={<DinerMenu />}
+            />
+            <Route
+              path="/menu/:restaurantSlug"
+              element={<DinerMenu />}
+            />
+            <Route
+              path="/menu/:restaurantSlug/:tableId"
+              element={<DinerMenu />}
+            />
+            <Route
+              path="/r/:restaurantSlug/:tableId"
+              element={<DinerMenu />}
+            />
+            <Route
               path="/kitchen"
               element={<KitchenKDS />}
+            />
+            <Route
+              path="/manage"
+              element={<ManagerDashboard />}
+            />
+            <Route
+              path="/operations"
+              element={<ManagerDashboard />}
             />
             <Route
               path="/dashboard"

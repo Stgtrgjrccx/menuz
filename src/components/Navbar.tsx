@@ -68,12 +68,17 @@ export const Navbar: React.FC = () => {
   };
 
   // 1. Hide on diner table experience
-  if (location.pathname.startsWith('/r/')) {
+  if (location.pathname.startsWith('/r/') || location.pathname.startsWith('/menu/')) {
     return null;
   }
 
   // 2. Venue Operations Portal: Scoped to active restaurant, with rapid switch and admin jump
-  const isVenueOperations = location.pathname.startsWith('/manage') || location.pathname.startsWith('/kitchen') || location.pathname.startsWith('/ai-studio');
+  const isVenueOperations =
+    location.pathname.startsWith('/manage') ||
+    location.pathname.startsWith('/dashboard') ||
+    location.pathname.startsWith('/manager') ||
+    location.pathname.startsWith('/kitchen') ||
+    location.pathname.startsWith('/ai-studio');
 
   if (isVenueOperations) {
     const venueName = restaurant?.name || 'Restaurant Hub';
@@ -117,8 +122,8 @@ export const Navbar: React.FC = () => {
             <div className="flex items-center space-x-1 sm:space-x-1.5">
               <Link
                 to={`/manage/${venueSlug}`}
-                className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                  location.pathname.startsWith('/manage')
+                className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all active:scale-95 ${
+                  location.pathname.startsWith('/manage') || location.pathname.startsWith('/dashboard') || location.pathname.startsWith('/manager')
                     ? 'bg-saffron-600 text-white shadow-xs'
                     : 'text-charcoal-300 hover:text-white hover:bg-charcoal-800'
                 }`}
@@ -130,9 +135,9 @@ export const Navbar: React.FC = () => {
 
               <Link
                 to="/kitchen"
-                className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all active:scale-95 ${
                   location.pathname.startsWith('/kitchen')
-                    ? 'bg-saffron-600 text-white shadow-xs'
+                    ? 'bg-purple-600 text-white shadow-xs'
                     : 'text-charcoal-300 hover:text-white hover:bg-charcoal-800'
                 }`}
               >
@@ -142,7 +147,7 @@ export const Navbar: React.FC = () => {
 
               <Link
                 to="/ai-studio"
-                className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all active:scale-95 ${
                   location.pathname.startsWith('/ai-studio')
                     ? 'bg-amber-500 text-charcoal-950 shadow-xs'
                     : 'text-amber-400/90 hover:text-amber-300 hover:bg-charcoal-800'
@@ -153,10 +158,10 @@ export const Navbar: React.FC = () => {
               </Link>
 
               <a
-                href={`#${venueDinerUrl}`}
+                href={`${window.location.pathname}#${venueDinerUrl}`}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-200 hover:text-white border border-charcoal-700 transition-all ml-0.5"
+                className="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-200 hover:text-white border border-charcoal-700 transition-all ml-0.5 active:scale-95 cursor-pointer"
                 title="Open live customer dining menu in a new tab"
               >
                 <ShoppingBag className="w-3.5 h-3.5 text-saffron-400" />
@@ -167,7 +172,7 @@ export const Navbar: React.FC = () => {
               {/* Jump to Master Admin Hub */}
               <Link
                 to="/admin"
-                className="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 transition-all ml-1"
+                className="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold text-amber-300 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 transition-all ml-1 active:scale-95"
                 title="Go to Master Super Admin HQ"
               >
                 <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
@@ -177,7 +182,7 @@ export const Navbar: React.FC = () => {
               {/* Jump to Pitch Deck */}
               <Link
                 to="/pitch"
-                className="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold text-cyan-300 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 transition-all"
+                className="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold text-cyan-300 bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 transition-all active:scale-95"
                 title="View Menuz Pitch Deck"
               >
                 <TrendingUp className="w-3.5 h-3.5 text-cyan-400" />
