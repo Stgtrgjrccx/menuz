@@ -8,6 +8,7 @@ import { MasterAdminDashboard } from './pages/MasterAdminDashboard';
 import { CustomerHomePage } from './pages/CustomerHomePage';
 import { PitchDeckPage } from './pages/PitchDeckPage';
 import { AiBotOnboardingStudioPage } from './pages/AiBotOnboardingStudioPage';
+import { NotFoundPage } from './pages/NotFoundPage';
 
 // Yoast-style Dynamic Route SEO Metadata Manager
 const RouteSEOManager: React.FC = () => {
@@ -143,11 +144,11 @@ export const App: React.FC = () => {
             />
             <Route
               path="/qr"
-              element={<Navigate to="/admin" replace />}
+              element={<Navigate to="/" replace />}
             />
             <Route
               path="*"
-              element={<Navigate to="/admin" replace />}
+              element={<NotFoundPage />}
             />
           </Routes>
         </div>

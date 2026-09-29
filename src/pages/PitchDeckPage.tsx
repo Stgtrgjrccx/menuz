@@ -1223,20 +1223,21 @@ export const PitchDeckPage: React.FC = () => {
                         ₹5,000 <span className="text-sm text-slate-400 font-normal">/ month</span>
                       </div>
                       <p className="text-xs text-slate-300 leading-relaxed">
-                        Complete digital ordering, hardware-free KOT, and reputation machine for independent restaurants, cafes, and bistros.
+                        Complete digital ordering, single-station KOT, and reputation machine for independent restaurants, cafes, and bistros.
                       </p>
                       <ul className="space-y-2 text-xs text-slate-300 pt-2 border-t border-slate-800">
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400 shrink-0" /> <span>Unlimited Tables &amp; Diner QR Menus</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400 shrink-0" /> <span>Real-time Multiplayer Table Cart Sync</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400 shrink-0" /> <span>Multilingual AI Menu (EN, HI, MR)</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400 shrink-0" /> <span>Direct Thermal ESC/POS &amp; WhatsApp KOT</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400 shrink-0" /> <span>Google Maps AI Review Writer (1-Click)</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400 shrink-0" /> <span>15-Minute Floor Grievance Interception Shield</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400 shrink-0" /> <span>Lucky Wheel Perks (100% Owner Controlled)</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400 shrink-0" /> <span>1 Dedicated Outlet (Up to 25 QR Tables • Digital PDF Stickers)</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400 shrink-0" /> <span>Fast Mobile Table Ordering (Zero diner app download)</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400 shrink-0" /> <span>Single-Station Thermal ESC/POS KOT &amp; WhatsApp Alerts</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400 shrink-0" /> <span>Standard 1-Way Cloud Order Push to POS (Petpooja / RoyalPOS)</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400 shrink-0" /> <span>Single-Venue Chef AI Studio (Spice &amp; allergen calibration)</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400 shrink-0" /> <span>1-Click Google Maps Review Builder &amp; Floor Grievance Shield</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400 shrink-0" /> <span>Standalone Spin Wheel (100% Owner-controlled next-visit perks)</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400 shrink-0" /> <span>Standard Support (9 AM – 9 PM WhatsApp &amp; Email)</span></li>
                       </ul>
                     </div>
                     <div className="pt-2">
-                      <div className="text-[11px] text-slate-400 bg-slate-900/60 p-2.5 rounded-xl border border-slate-800 text-center font-medium">
+                      <div className="text-[11px] text-cyan-300 bg-cyan-950/40 p-2.5 rounded-xl border border-cyan-500/30 text-center font-medium">
                         Ideal for high-turnover single-location restaurants &amp; cafes
                       </div>
                     </div>
@@ -1260,13 +1261,15 @@ export const PitchDeckPage: React.FC = () => {
                         Full multi-branch oversight with centralized master control, cross-outlet menu pushes, and 2-way POS REST integration.
                       </p>
                       <ul className="space-y-2 text-xs text-slate-300 pt-2 border-t border-slate-800">
-                        <li className="flex items-center gap-2 font-semibold text-white"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>Everything in Single Outlet Plan</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>Centralized HQ Dashboard across Unlimited Branches</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>Full 2-Way REST API Sync (Petpooja, RoyalPOS, etc.)</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>White-label Custom CNAME Domain (`menu.brand.com`)</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>Cross-Outlet Real-Time Analytics &amp; Tax Slabs</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>Dedicated Account Manager &amp; 24/7 Priority SLA</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>Custom Ingestion of Brand Culinary Photography</span></li>
+                        <li className="flex items-center gap-2 font-semibold text-white"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>Unlimited Outlets &amp; Tables + Custom Shipped QR Hardware Kit</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>Real-Time Multiplayer Table Sync + Floor Captain Terminal Bridging</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>Multi-Kitchen Smart Routing (Auto-splits Bar, Tandoor, Curry &amp; Pantry)</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>Full 2-Way REST API Bridge (Live 86 item sync, bill settlements, table status)</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>Multi-Chef AI Studio with City-Level Overrides &amp; Franchise Tone</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>100% White-Label on Your Domain (`order.brand.com` • Zero Menuz Badge)</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>Cross-Outlet Benchmarks &amp; Heatmaps (Comparative sales &amp; turn speed)</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>Granular Multi-Role RBAC (HQ Director, Regional GM, Chef, Waiter)</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>VIP 24/7 Priority Emergency SLA (Dedicated Director • &lt;15 min response)</span></li>
                       </ul>
                     </div>
                     <div className="pt-2">
@@ -1324,141 +1327,141 @@ export const PitchDeckPage: React.FC = () => {
                       <tbody className="divide-y divide-slate-800 text-slate-200">
                         {/* Row 1 */}
                         <tr className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-2 px-4 font-medium text-white">
-                            <div>Venue &amp; Table Scale</div>
-                            <span className="text-[10px] text-slate-400">Supported locations &amp; table QR generation</span>
+                          <td className="py-2.5 px-4 font-medium text-white">
+                            <div>Outlet Scale &amp; Hardware Kit</div>
+                            <span className="text-[10px] text-slate-400">Supported locations &amp; table QR materials</span>
                           </td>
-                          <td className="py-2 px-4 bg-cyan-950/10 border-l border-slate-800 font-semibold text-cyan-200">
-                            1 Venue (Unlimited Tables)
+                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-slate-800 font-semibold text-cyan-200">
+                            1 Venue (Up to 25 Tables • Digital PDF Stickers)
                           </td>
-                          <td className="py-2 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
-                            Multi-Outlet (Unlimited Venues &amp; Tables)
+                          <td className="py-2.5 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
+                            Unlimited Venues &amp; Tables + Custom Shipped Acrylic &amp; Metal QR Hardware Kit
                           </td>
                         </tr>
 
                         {/* Row 2 */}
                         <tr className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-2 px-4 font-medium text-white">
-                            <div>Interactive Dining &amp; Multiplayer Cart</div>
-                            <span className="text-[10px] text-slate-400">Real-time table sync, zero app download (iOS/Android)</span>
+                          <td className="py-2.5 px-4 font-medium text-white">
+                            <div>Interactive Dining &amp; Floor Sync</div>
+                            <span className="text-[10px] text-slate-400">Guest table ordering &amp; device synchronization</span>
                           </td>
-                          <td className="py-2 px-4 bg-cyan-950/10 border-l border-slate-800 text-emerald-400 font-bold">
-                            ✓ Full Access
+                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-slate-800 text-cyan-300 font-medium">
+                            Standard Mobile Table Ordering (Zero Diner App Download)
                           </td>
-                          <td className="py-2 px-4 bg-amber-950/10 border-l border-slate-800 text-emerald-400 font-bold">
-                            ✓ Full Access
+                          <td className="py-2.5 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
+                            Real-Time Multiplayer Table Cart Sync + Waiter &amp; Captain Terminal Bridging
                           </td>
                         </tr>
 
                         {/* Row 3 */}
                         <tr className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-2 px-4 font-medium text-white">
-                            <div>Multilingual AI Menu Engine</div>
-                            <span className="text-[10px] text-slate-400">English, Hindi &amp; Marathi with local dietary filters</span>
+                          <td className="py-2.5 px-4 font-medium text-white">
+                            <div>Chef AI Studio &amp; Customization</div>
+                            <span className="text-[10px] text-slate-400">Multilingual translation &amp; recipe adaptations</span>
                           </td>
-                          <td className="py-2 px-4 bg-cyan-950/10 border-l border-slate-800 text-emerald-400 font-bold">
-                            ✓ Included
+                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-slate-800 text-slate-300">
+                            Single Venue Profile (Head Chef Spice &amp; Allergen Guard)
                           </td>
-                          <td className="py-2 px-4 bg-amber-950/10 border-l border-slate-800 text-emerald-400 font-bold">
-                            ✓ Included
+                          <td className="py-2.5 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
+                            Multi-Branch AI Studio with City Overrides, Regional Price Tiers &amp; Franchise Voice
                           </td>
                         </tr>
 
                         {/* Row 4 */}
                         <tr className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-2 px-4 font-medium text-white">
-                            <div>Hardware-Free Kitchen KOT Printing</div>
-                            <span className="text-[10px] text-slate-400">Direct Thermal USB/LAN ESC/POS + WhatsApp KOT alerts</span>
+                          <td className="py-2.5 px-4 font-medium text-white">
+                            <div>Kitchen KOT &amp; Order Routing</div>
+                            <span className="text-[10px] text-slate-400">Thermal ticket dispatching &amp; printer architecture</span>
                           </td>
-                          <td className="py-2 px-4 bg-cyan-950/10 border-l border-slate-800 text-emerald-400 font-bold">
-                            ✓ Included
+                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-slate-800 text-slate-300">
+                            Single-Station KOT (1 ESC/POS Thermal Printer or WhatsApp Alerts)
                           </td>
-                          <td className="py-2 px-4 bg-amber-950/10 border-l border-slate-800 text-emerald-400 font-bold">
-                            ✓ Multi-Kitchen Routing Included
+                          <td className="py-2.5 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
+                            Multi-Kitchen Smart Routing (Auto-splits items to Bar, Tandoor, Curry &amp; Pantry KDS)
                           </td>
                         </tr>
 
                         {/* Row 5 */}
                         <tr className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-2 px-4 font-medium text-white">
-                            <div>POS Integrations</div>
+                          <td className="py-2.5 px-4 font-medium text-white">
+                            <div>POS Integration Architecture</div>
                             <span className="text-[10px] text-slate-400">Petpooja, RoyalPOS, Recaho, RanceLab, POSist</span>
                           </td>
-                          <td className="py-2 px-4 bg-cyan-950/10 border-l border-slate-800 text-slate-300">
-                            Standard POS Bridge
+                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-slate-800 text-slate-300">
+                            Standard 1-Way Cloud Order Relay (Pushes placed orders to POS)
                           </td>
-                          <td className="py-2 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
-                            Enterprise 2-Way REST API Sync
+                          <td className="py-2.5 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
+                            Full 2-Way Live REST API Bridge (Real-time 86'd stockout sync, bill settlement &amp; inventory)
                           </td>
                         </tr>
 
                         {/* Row 6 */}
                         <tr className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-2 px-4 font-medium text-white">
-                            <div>Google Maps SEO &amp; AI Review Writer</div>
-                            <span className="text-[10px] text-slate-400">1-Click review builder + 15-minute floor grievance shield</span>
+                          <td className="py-2.5 px-4 font-medium text-white">
+                            <div>Google Maps SEO &amp; Reputation Engine</div>
+                            <span className="text-[10px] text-slate-400">Review generation &amp; floor resolution shield</span>
                           </td>
-                          <td className="py-2 px-4 bg-cyan-950/10 border-l border-slate-800 text-emerald-400 font-bold">
-                            ✓ Included
+                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-slate-800 text-slate-300">
+                            Single-Branch 1-Click Review Assist + Floor Grievance Private Form
                           </td>
-                          <td className="py-2 px-4 bg-amber-950/10 border-l border-slate-800 text-emerald-400 font-bold">
-                            ✓ Included
+                          <td className="py-2.5 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
+                            Multi-Branch Local SEO Command Center (Cross-location Google profile sync &amp; benchmarks)
                           </td>
                         </tr>
 
                         {/* Row 7 */}
                         <tr className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-2 px-4 font-medium text-white">
-                            <div>Gamified Rewards &amp; Lucky Wheel</div>
-                            <span className="text-[10px] text-slate-400">100% Owner Configured, ZERO Forced Bill Discounts</span>
+                          <td className="py-2.5 px-4 font-medium text-white">
+                            <div>Gamified Loyalty &amp; Retention Engine</div>
+                            <span className="text-[10px] text-slate-400">Lucky wheel, repeat guest incentives &amp; visit triggers</span>
                           </td>
-                          <td className="py-2 px-4 bg-cyan-950/10 border-l border-slate-800 text-emerald-400 font-bold">
-                            ✓ Full Owner Control
+                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-slate-800 text-slate-300">
+                            Standard Venue Spin Wheel (Owner-configured next-visit perks)
                           </td>
-                          <td className="py-2 px-4 bg-amber-950/10 border-l border-slate-800 text-emerald-400 font-bold">
-                            ✓ Full Owner Control + Branch Rules
+                          <td className="py-2.5 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
+                            Cross-Outlet Loyalty Pass &amp; Branch Dynamic Reward Engine (Geo-targeted retention campaigns)
                           </td>
                         </tr>
 
                         {/* Row 8 */}
                         <tr className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-2 px-4 font-medium text-white">
-                            <div>Multi-Branch Central HQ Dashboard</div>
-                            <span className="text-[10px] text-slate-400">Network-wide menu pushes, sales reporting &amp; audit trails</span>
+                          <td className="py-2.5 px-4 font-medium text-white">
+                            <div>Brand Identity &amp; Custom Domain</div>
+                            <span className="text-[10px] text-slate-400">Custom URLs, domain CNAME &amp; white-labeling</span>
                           </td>
-                          <td className="py-2 px-4 bg-cyan-950/10 border-l border-slate-800 text-slate-500 font-mono text-[11px]">
-                            Single Venue Console
+                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-slate-800 text-slate-400 font-mono text-[11px]">
+                            Hosted Branded Menu (`menuz.in/r/your-slug` with custom logo &amp; theme)
                           </td>
-                          <td className="py-2 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
-                            ✓ Master Admin HQ Included
+                          <td className="py-2.5 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
+                            100% White-Label on Your Domain (`order.yourbrand.com` • Zero Menuz Badge • Custom SSL)
                           </td>
                         </tr>
 
                         {/* Row 9 */}
                         <tr className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-2 px-4 font-medium text-white">
-                            <div>White-Label Custom Domain</div>
-                            <span className="text-[10px] text-slate-400">Direct CNAME routing (`menu.yourbrand.com`) with auto SSL</span>
+                          <td className="py-2.5 px-4 font-medium text-white">
+                            <div>Team Governance &amp; Multi-Role RBAC</div>
+                            <span className="text-[10px] text-slate-400">Access controls, regional oversight &amp; staff permissions</span>
                           </td>
-                          <td className="py-2 px-4 bg-cyan-950/10 border-l border-slate-800 text-slate-400">
-                            Available as add-on
+                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-slate-800 text-slate-400">
+                            Single Owner / Floor Manager Access
                           </td>
-                          <td className="py-2 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
-                            ✓ Included Free
+                          <td className="py-2.5 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
+                            Granular Multi-Role Governance (HQ Director, Regional GM, Outlet Manager, Chef, Waiter)
                           </td>
                         </tr>
 
                         {/* Row 10 */}
                         <tr className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-2 px-4 font-medium text-white">
-                            <div>Support &amp; Onboarding SLA</div>
-                            <span className="text-[10px] text-slate-400">Account manager, staff training &amp; emergency hotline</span>
+                          <td className="py-2.5 px-4 font-medium text-white">
+                            <div>Support SLA &amp; Dedicated Operations</div>
+                            <span className="text-[10px] text-slate-400">Account executive, response guarantee &amp; rush support</span>
                           </td>
-                          <td className="py-2 px-4 bg-cyan-950/10 border-l border-slate-800 text-slate-300">
-                            Remote Setup (30 min) + 12h WhatsApp
+                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-slate-800 text-slate-300">
+                            Standard Business Hours Support (9 AM – 9 PM WhatsApp &amp; Email, &lt;4h SLA)
                           </td>
-                          <td className="py-2 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
-                            Dedicated Manager + 24/7 Priority SLA
+                          <td className="py-2.5 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
+                            VIP 24/7 Priority Emergency SLA (Dedicated Director • Weekend Rush War-Room • &lt;15 min SLA)
                           </td>
                         </tr>
                       </tbody>

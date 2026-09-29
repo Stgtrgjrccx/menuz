@@ -653,12 +653,14 @@ def generate_landscape_slide_pdf(output_path):
         Paragraph("Single Outlet Plan — ₹5,000 / Month", card_h_cyan),
         Paragraph(
             "<b>Ideal for Standalone Cafes, Fine Dining & High-Footfall Bistros:</b><br/>"
-            "• <b>Full Interactive Dining OS:</b> Multiplayer cart sync, zero app download QR menus.<br/>"
-            "• <b>Hardware-Free KOT Routing:</b> Instant thermal ESC/POS 80mm printing + WhatsApp failover.<br/>"
-            "• <b>Reputation Triad Engine:</b> 1-Click Google review generator + 15-min floor shield recovery.<br/>"
-            "• <b>Gamified Lucky Wheel:</b> 100% Owner Configured prizes (Zero forced bill discounts).<br/>"
-            "• <b>100% Customer Data Ownership:</b> Full guest phone numbers & dining histories.<br/>"
-            "• <b>Zero Setup Fees:</b> Month-to-month billing with no lock-in contracts.",
+            "• <b>1 Dedicated Location:</b> Up to 25 QR Tables with Digital PDF Stickers.<br/>"
+            "• <b>Fast Mobile Table Ordering:</b> Zero diner app download or login barriers.<br/>"
+            "• <b>Single-Station KOT:</b> Direct ESC/POS Thermal 80mm & WhatsApp alerts.<br/>"
+            "• <b>1-Way Cloud POS Push:</b> Standard order intake to Petpooja / RoyalPOS.<br/>"
+            "• <b>Chef AI Studio:</b> Single-venue recipe notes, spice & allergen calibration.<br/>"
+            "• <b>Reputation Booster:</b> 1-Click Google review generator & floor grievance recovery.<br/>"
+            "• <b>Venue Lucky Wheel:</b> 100% Owner-configured perks (Zero forced bill discounts).<br/>"
+            "• <b>Standard Support:</b> 9 AM – 9 PM WhatsApp & Email support (&lt;4h response).",
             card_body
         )
     ]
@@ -667,12 +669,14 @@ def generate_landscape_slide_pdf(output_path):
         Paragraph("Multi-Outlet Enterprise — ₹10,000 / Month", card_h_gold),
         Paragraph(
             "<b>Built for Restaurant Groups, Pub Chains & Multi-Branch Franchises:</b><br/>"
-            "• <b>Centralized Multi-Branch HQ:</b> Unified menu catalog sync & brand-wide performance.<br/>"
-            "• <b>Multi-Kitchen & Bar Routing:</b> Load-balanced KOTs across separate culinary sections.<br/>"
-            "• <b>Custom POS Integrations:</b> 2-Way REST API bridge for Petpooja, POSist, RanceLab, etc.<br/>"
-            "• <b>White-Label Branding:</b> Custom domain, branded QR stands, and tailor-made themes.<br/>"
-            "• <b>Branch Loyalty Rules:</b> Location-specific wheel reward quotas & fraud limits.<br/>"
-            "• <b>24/7 Priority SLA:</b> Dedicated account manager and on-premise staff training.",
+            "• <b>Unlimited Outlets & Tables:</b> Includes Shipped Custom Acrylic & Metal QR Standees.<br/>"
+            "• <b>Multiplayer Cart & Floor Bridging:</b> Real-time guest sync + floor captain terminals.<br/>"
+            "• <b>Multi-Kitchen Smart Routing:</b> Auto-splits Bar, Tandoor, Curry & Pantry KDS.<br/>"
+            "• <b>Full 2-Way REST API Bridge:</b> Live 86 item sync, bill settlements & inventory deduction.<br/>"
+            "• <b>Multi-Chef AI Studio:</b> City-specific branch overrides, localized pricing & franchise tone.<br/>"
+            "• <b>100% White-Label:</b> Custom domain (`order.yourbrand.com`), Zero Menuz branding & SSL.<br/>"
+            "• <b>Granular Team RBAC:</b> HQ Director, Regional GM, Outlet Manager, Chef & Waiter roles.<br/>"
+            "• <b>VIP 24/7 Priority Emergency SLA:</b> Dedicated Director & Weekend Rush War-Room (&lt;15 min SLA).",
             card_body
         )
     ]
@@ -711,53 +715,58 @@ def generate_landscape_slide_pdf(output_path):
             Paragraph("<b>Multi-Outlet Enterprise (₹10,000/mo)</b>", th_ent)
         ],
         [
-            Paragraph("<b>Venue & Table Scale</b><br/><font color='#94A3B8'>Locations & QR codes</font>", td_feat),
-            Paragraph("1 Location (Unlimited Tables)", td_val_c),
-            Paragraph("Multi-Outlet (Unlimited Venues & Tables)", td_val_g)
+            Paragraph("<b>Outlet Scale &amp; Hardware Kit</b><br/><font color='#94A3B8'>Locations &amp; table QR materials</font>", td_feat),
+            Paragraph("1 Venue (Up to 25 Tables • Digital PDF Stickers)", td_val_c),
+            Paragraph("Unlimited Outlets &amp; Tables + Shipped Acrylic/Metal Stands", td_val_g)
         ],
         [
-            Paragraph("<b>Interactive Dining & Multiplayer Cart</b><br/><font color='#94A3B8'>Live sync, zero app download</font>", td_feat),
-            Paragraph("✓ Full Access", td_chk),
-            Paragraph("✓ Full Access", td_chk)
+            Paragraph("<b>Interactive Dining &amp; Floor Sync</b><br/><font color='#94A3B8'>Table ordering &amp; device sync</font>", td_feat),
+            Paragraph("Standard Mobile Web Menu (Zero App)", td_val_c),
+            Paragraph("Real-Time Multiplayer Sync + Floor Captain Terminals", td_val_g)
         ],
         [
-            Paragraph("<b>Multilingual AI Menu Engine</b><br/><font color='#94A3B8'>English, Hindi & Marathi + dietary</font>", td_feat),
-            Paragraph("✓ Included", td_chk),
-            Paragraph("✓ Included", td_chk)
+            Paragraph("<b>Chef AI Studio &amp; Customization</b><br/><font color='#94A3B8'>Multilingual &amp; recipe adaptations</font>", td_feat),
+            Paragraph("Single Venue Profile (Spice &amp; Allergen Guard)", td_val_c),
+            Paragraph("Multi-Branch AI Studio + City Overrides &amp; Franchise Tone", td_val_g)
         ],
         [
-            Paragraph("<b>Kitchen KOT Thermal Printing</b><br/><font color='#94A3B8'>ESC/POS 80mm + WhatsApp alert</font>", td_feat),
-            Paragraph("✓ Single Kitchen Station", td_chk),
-            Paragraph("✓ Multi-Kitchen & Bar Routing", td_chk)
+            Paragraph("<b>Kitchen KOT &amp; Order Routing</b><br/><font color='#94A3B8'>Thermal dispatching &amp; printer load</font>", td_feat),
+            Paragraph("Single-Station KOT (1 Printer or WhatsApp)", td_val_c),
+            Paragraph("Multi-Kitchen Smart Routing (Bar, Tandoor, Curry &amp; Pantry)", td_val_g)
         ],
         [
-            Paragraph("<b>POS System Integrations</b><br/><font color='#94A3B8'>Petpooja, POSist, RanceLab, etc.</font>", td_feat),
-            Paragraph("Standard POS Bridge", td_val_c),
-            Paragraph("Enterprise 2-Way REST API Sync", td_val_g)
+            Paragraph("<b>POS Integration Architecture</b><br/><font color='#94A3B8'>Petpooja, POSist, RanceLab, etc.</font>", td_feat),
+            Paragraph("Standard 1-Way Cloud Order Relay", td_val_c),
+            Paragraph("Full 2-Way REST API Bridge (Live 86 Sync &amp; Settlements)", td_val_g)
         ],
         [
-            Paragraph("<b>Google Maps SEO Review Engine</b><br/><font color='#94A3B8'>1-Click tags + 15-min floor shield</font>", td_feat),
-            Paragraph("✓ Included", td_chk),
-            Paragraph("✓ Included", td_chk)
+            Paragraph("<b>Google Maps SEO &amp; Reputation</b><br/><font color='#94A3B8'>Review boost &amp; floor resolution</font>", td_feat),
+            Paragraph("Single-Branch 1-Click Review Assist + Floor Shield", td_val_c),
+            Paragraph("Multi-Branch SEO Command Center &amp; City Benchmarks", td_val_g)
         ],
         [
-            Paragraph("<b>Gamified Wheel & Retention</b><br/><font color='#94A3B8'>100% Owner Configured Rewards</font>", td_feat),
-            Paragraph("✓ Full Owner Control", td_chk),
-            Paragraph("✓ Full Owner Control + Branch Rules", td_chk)
+            Paragraph("<b>Gamified Loyalty &amp; Retention</b><br/><font color='#94A3B8'>Lucky wheel &amp; repeat visit triggers</font>", td_feat),
+            Paragraph("Standard Venue Spin Wheel (Owner Controlled)", td_val_c),
+            Paragraph("Cross-Outlet Loyalty Pass &amp; Geo-Targeted Campaigns", td_val_g)
         ],
         [
-            Paragraph("<b>Multi-Branch Centralized HQ</b><br/><font color='#94A3B8'>Cross-venue comparison & menu push</font>", td_feat),
-            Paragraph("— (Single venue analytics)", td_sub),
-            Paragraph("✓ Multi-Outlet Live Dashboard", td_val_g)
+            Paragraph("<b>Brand Identity &amp; Custom Domain</b><br/><font color='#94A3B8'>URL branding &amp; white-labeling</font>", td_feat),
+            Paragraph("Hosted Menu (`menuz.in/r/slug` with logo)", td_val_c),
+            Paragraph("100% White-Label (`order.brand.com` • Zero Menuz Badge)", td_val_g)
         ],
         [
-            Paragraph("<b>Support SLA & Training</b><br/><font color='#94A3B8'>Deployment and team onboarding</font>", td_feat),
-            Paragraph("Standard Email & Chat Support", td_val_c),
-            Paragraph("24/7 Dedicated Account Manager", td_val_g)
+            Paragraph("<b>Team Governance &amp; Multi-Role RBAC</b><br/><font color='#94A3B8'>Access control &amp; staff permissions</font>", td_feat),
+            Paragraph("Single Owner / Floor Manager Access", td_val_c),
+            Paragraph("Granular Multi-Role (HQ Director, GM, Manager, Chef, Waiter)", td_val_g)
+        ],
+        [
+            Paragraph("<b>Support SLA &amp; Operations</b><br/><font color='#94A3B8'>Deployment &amp; emergency hotline</font>", td_feat),
+            Paragraph("Business Hours Support (9 AM - 9 PM, &lt;4h SLA)", td_val_c),
+            Paragraph("VIP 24/7 Priority Emergency SLA (Dedicated Director, &lt;15m)", td_val_g)
         ]
     ]
 
-    t_s17_matrix = Table(matrix_rows, colWidths=[(SLIDE_WIDTH - 100)*0.40, (SLIDE_WIDTH - 100)*0.30, (SLIDE_WIDTH - 100)*0.30])
+    t_s17_matrix = Table(matrix_rows, colWidths=[(SLIDE_WIDTH - 100)*0.36, (SLIDE_WIDTH - 100)*0.32, (SLIDE_WIDTH - 100)*0.32])
     t_s17_matrix.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,0), colors.HexColor("#1A2436")),
         ('BACKGROUND', (0,1), (-1,-1), c_card_bg),

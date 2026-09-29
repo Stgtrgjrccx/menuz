@@ -1203,10 +1203,29 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               type="button"
               onClick={handleSubmitUrgentDetails}
               disabled={isAlertingTeam}
-              className="w-full py-3 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-serif text-xs font-bold rounded-xl shadow-subtle transition-all flex items-center justify-center space-x-1.5"
+              className="w-full py-3 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-serif text-xs font-bold rounded-xl shadow-subtle transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
             >
               <span>🚨 Send Manager to Table Now</span>
             </button>
+
+            <div className="w-full flex items-center justify-between gap-2 pt-2 border-t border-red-100 text-xs">
+              <a
+                href={restaurant?.google_place_url || 'https://maps.google.com'}
+                target="_blank"
+                rel="noreferrer"
+                className="text-[11px] text-charcoal-600 hover:text-charcoal-900 underline flex items-center gap-1 font-medium"
+              >
+                <span>Leave public review on Google Maps</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+              <button
+                type="button"
+                onClick={() => setStep('wheel')}
+                className="text-[11px] text-amber-700 font-bold hover:underline cursor-pointer"
+              >
+                Spin Table Wheel →
+              </button>
+            </div>
           </div>
         )}
 
@@ -1222,13 +1241,22 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
             <p className="text-xs text-charcoal-600 max-w-sm leading-relaxed">
               Our restaurant management has received your notes and is walking to your table right now.
             </p>
-            <button
-              type="button"
-              onClick={onClose}
-              className="w-full py-3 bg-charcoal-900 text-white rounded-xl text-xs font-bold"
-            >
-              Return to Menu
-            </button>
+            <div className="w-full space-y-2 pt-1">
+              <button
+                type="button"
+                onClick={() => setStep('wheel')}
+                className="w-full py-2.5 bg-amber-500 hover:bg-amber-600 active:scale-95 text-slate-950 font-bold rounded-xl text-xs shadow-sm cursor-pointer"
+              >
+                Claim Table Appreciation Wheel Treat
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="w-full py-2 bg-charcoal-100 text-charcoal-800 rounded-xl text-xs font-semibold hover:bg-charcoal-200 cursor-pointer"
+              >
+                Return to Menu
+              </button>
+            </div>
           </div>
         )}
       </div>

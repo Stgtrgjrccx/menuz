@@ -4,12 +4,12 @@
 User-agent: *
 Allow: /
 Allow: /pitch
-Allow: /admin
-Allow: /manage/
-Allow: /menu/
 Allow: /presentation.html
 
-# Prevent search engine indexing of internal ephemeral test endpoints if any
+# Prevent search engine indexing of internal operations and admin portals
+Disallow: /admin
+Disallow: /manage/
+Disallow: /dashboard
 Disallow: /scratch/
 Disallow: /api/private/
 

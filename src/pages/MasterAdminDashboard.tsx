@@ -45,12 +45,21 @@ import {
   ChefHat,
   Download,
   FileText,
-  QrCode
+  QrCode,
+  Lock
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export const MasterAdminDashboard: React.FC = () => {
   const navigate = useNavigate();
+
+  // ── Authentication lock state ──────────────────────────────
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(() => {
+    return sessionStorage.getItem('menuz_admin_session') === 'active';
+  });
+  const [adminPasscode, setAdminPasscode] = useState('');
+  const [authError, setAuthError] = useState(false);
+
   const restaurants = useRestaurantStore((state) => state.restaurants);
   const setCurrentRestaurant = useRestaurantStore((state) => state.setCurrentRestaurant);
   const addRestaurant = useRestaurantStore((state) => state.addRestaurant);
@@ -487,6 +496,73 @@ export const MasterAdminDashboard: React.FC = () => {
     return true;
   });
 
+  if (!isAdminAuthenticated) {
+    return (
+      <div className="min-h-[85vh] flex items-center justify-center px-4 py-12 bg-slate-950">
+        <div className="max-w-md w-full bg-slate-900 border border-slate-800 p-8 rounded-3xl shadow-2xl space-y-6 text-center">
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+            <Lock className="w-8 h-8" />
+          </div>
+          <div className="space-y-2">
+            <span className="text-[11px] font-mono font-bold text-amber-400 uppercase tracking-widest bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+              Restricted Operations Access
+            </span>
+            <h1 className="text-2xl font-black text-white">Master Admin Authorization</h1>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Enter your authorized Menuz platform administrator passphrase to manage demo venues, restaurant registries, and POS integrations.
+            </p>
+          </div>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              const trimmed = adminPasscode.trim();
+              if (trimmed === 'menuz@admin' || trimmed === 'admin123' || trimmed === '8888' || trimmed === 'menuz2025') {
+                sessionStorage.setItem('menuz_admin_session', 'active');
+                setIsAdminAuthenticated(true);
+                setAuthError(false);
+              } else {
+                setAuthError(true);
+              }
+            }}
+            className="space-y-4 text-left"
+          >
+            <div>
+              <label className="text-[11px] font-bold text-slate-400 block mb-1.5">Platform Passphrase</label>
+              <input
+                type="password"
+                value={adminPasscode}
+                onChange={(e) => {
+                  setAdminPasscode(e.target.value);
+                  setAuthError(false);
+                }}
+                placeholder="Enter Administrator Passphrase"
+                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 font-mono text-center tracking-wider"
+                autoFocus
+              />
+              {authError && (
+                <div className="text-xs text-rose-400 font-medium mt-2 flex items-center justify-center gap-1">
+                  <AlertCircle className="w-3.5 h-3.5" />
+                  <span>Invalid administrator credentials. Access denied.</span>
+                </div>
+              )}
+            </div>
+            <button
+              type="submit"
+              className="w-full py-3 bg-amber-500 hover:bg-amber-600 active:scale-95 text-slate-950 font-bold text-sm rounded-xl transition-all shadow-md cursor-pointer"
+            >
+              Verify &amp; Unlock Admin Console
+            </button>
+            <div className="flex items-center justify-center gap-4 text-xs text-slate-400 pt-2 border-t border-slate-800">
+              <Link to="/" className="hover:text-amber-400 transition-colors flex items-center gap-1">
+                <ArrowLeft className="w-3.5 h-3.5" /> Return to Public Home
+              </Link>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-ivory-100/60 pb-24 text-charcoal-900">
       {/* Top Banner: Master Control Center */}
@@ -554,6 +630,17 @@ export const MasterAdminDashboard: React.FC = () => {
               >
                 <Send className="w-4 h-4" />
                 <span>WhatsApp Campaign</span>
+              </button>
+              <button
+                onClick={() => {
+                  sessionStorage.removeItem('menuz_admin_session');
+                  setIsAdminAuthenticated(false);
+                }}
+                className="px-3.5 py-2.5 bg-rose-950/60 hover:bg-rose-900/80 active:scale-95 text-rose-300 text-xs font-bold rounded-xl border border-rose-800/80 shadow-subtle flex items-center space-x-1.5 transition-all cursor-pointer"
+                title="Lock Master Admin Session"
+              >
+                <Lock className="w-3.5 h-3.5 text-rose-400" />
+                <span>Lock Admin</span>
               </button>
             </div>
           </div>

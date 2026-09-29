@@ -776,20 +776,22 @@ def create_deck(output_pptx_path):
     p1.font.bold = True
     p1.font.color.rgb = C_CYAN_ACCENT
     single_features = [
-        ("Full Interactive Dining OS", "Multiplayer cart sync, zero app download QR menus."),
-        ("Hardware-Free KOT Routing", "Direct thermal ESC/POS 80mm printing + WhatsApp alerts."),
-        ("Reputation Triad Engine", "1-Click Google review generator + 15-min floor shield recovery."),
-        ("Gamified Lucky Wheel", "100% Owner Configured prizes (Zero forced bill discounts)."),
-        ("100% Data Ownership", "Full verified guest phone numbers & dining histories."),
-        ("Zero Setup Fees", "Month-to-month billing with no lock-in contracts.")
+        ("1 Dedicated Outlet", "Up to 25 QR Tables with Digital PDF Stickers."),
+        ("Fast Mobile Ordering", "Zero diner app download or login barriers."),
+        ("Single-Station KOT", "Direct thermal ESC/POS 80mm printing + WhatsApp alerts."),
+        ("1-Way Cloud POS Push", "Standard order intake to Petpooja / RoyalPOS."),
+        ("Single-Venue Chef AI", "Recipe notes, spice & allergen calibration."),
+        ("Reputation Booster", "1-Click Google review generator + floor grievance recovery."),
+        ("Venue Lucky Wheel", "100% Owner-configured next-visit perks."),
+        ("Standard Support", "9 AM – 9 PM WhatsApp & Email support (<4h response).")
     ]
     for h, d in single_features:
         p_sf = tf16_1.add_paragraph()
         p_sf.text = f"• {h}: {d}"
         p_sf.font.name = "Arial"
-        p_sf.font.size = Pt(11.5)
+        p_sf.font.size = Pt(11)
         p_sf.font.color.rgb = C_TEXT_SUB
-        p_sf.space_before = Pt(6)
+        p_sf.space_before = Pt(4)
 
     # Card 2: Enterprise
     add_card(s16, Inches(6.8), Inches(2.0), Inches(5.7), Inches(5.0), C_CARD_BG, C_BORDER_GOLD)
@@ -803,20 +805,22 @@ def create_deck(output_pptx_path):
     p2.font.bold = True
     p2.font.color.rgb = C_GOLD_ACCENT
     enterprise_features = [
-        ("Centralized Multi-Branch HQ", "Unified menu catalog sync & brand-wide analytics."),
-        ("Multi-Kitchen Routing", "Load-balanced KOTs across separate culinary sections."),
-        ("Custom POS Integrations", "2-Way REST API bridge for Petpooja, POSist, RanceLab."),
-        ("White-Label Branding", "Custom domain, branded QR stands, and bespoke themes."),
-        ("Branch Loyalty Rules", "Location-specific wheel reward quotas & fraud limits."),
-        ("24/7 Dedicated SLA", "Personal account manager and on-premise staff training.")
+        ("Unlimited Outlets & Tables", "Includes Shipped Custom Acrylic & Metal QR Standees."),
+        ("Multiplayer Cart & Floor Bridging", "Real-time guest sync + floor captain terminals."),
+        ("Multi-Kitchen Smart Routing", "Auto-splits Bar, Tandoor, Curry & Pantry KDS."),
+        ("Full 2-Way REST API Bridge", "Live 86 item sync, bill settlements & inventory."),
+        ("Multi-Chef AI Studio", "City-specific branch overrides & franchise tone."),
+        ("100% White-Label", "Custom domain (`order.brand.com`), zero Menuz branding."),
+        ("Granular Team RBAC", "HQ Director, Regional GM, Manager, Chef & Waiter roles."),
+        ("VIP 24/7 Priority SLA", "Dedicated Director & Weekend Rush War-Room (<15m SLA).")
     ]
     for h, d in enterprise_features:
         p_ef = tf16_2.add_paragraph()
         p_ef.text = f"• {h}: {d}"
         p_ef.font.name = "Arial"
-        p_ef.font.size = Pt(11.5)
+        p_ef.font.size = Pt(11)
         p_ef.font.color.rgb = C_TEXT_SUB
-        p_ef.space_before = Pt(6)
+        p_ef.space_before = Pt(4)
 
     # =========================================================================
     # SLIDE 17: DETAILED PLAN COMPARISON & FEATURE MATRIX
@@ -825,13 +829,13 @@ def create_deck(output_pptx_path):
     add_bg(s17)
     add_header(s17, "In-Depth Comparison", "What Exactly You Get in Each Plan: Side-by-Side Matrix", "Transparent capability breakdown between Single Outlet (₹5,000/mo) and Enterprise (₹10,000/mo).", tag_color=C_CYAN_ACCENT)
 
-    rows, cols = 10, 3
+    rows, cols = 11, 3
     left, top, width, height = Inches(0.8), Inches(2.0), Inches(11.7), Inches(5.0)
     table_shape = s17.shapes.add_table(rows, cols, left, top, width, height)
     tbl = table_shape.table
-    tbl.columns[0].width = Inches(4.7)
-    tbl.columns[1].width = Inches(3.5)
-    tbl.columns[2].width = Inches(3.5)
+    tbl.columns[0].width = Inches(4.3)
+    tbl.columns[1].width = Inches(3.7)
+    tbl.columns[2].width = Inches(3.7)
 
     headers = ["Capability / Module", "Single Outlet (₹5,000/mo)", "Multi-Outlet Enterprise (₹10,000/mo)"]
     for c_idx, h_text in enumerate(headers):
@@ -846,15 +850,16 @@ def create_deck(output_pptx_path):
         p_th.font.color.rgb = C_GOLD_ACCENT if c_idx != 1 else C_CYAN_ACCENT
 
     matrix_data = [
-        ("Venue & Table Scale", "1 Location (Unlimited Tables)", "Multi-Outlet (Unlimited Venues & Tables)"),
-        ("Interactive Dining & Multiplayer Cart", "✓ Full Access (Zero App Download)", "✓ Full Access (Zero App Download)"),
-        ("Multilingual AI Menu Engine", "✓ English, Hindi & Marathi + Dietary", "✓ English, Hindi & Marathi + Dietary"),
-        ("Kitchen KOT Thermal Printing", "✓ Single Kitchen Station ESC/POS", "✓ Multi-Kitchen & Bar Routing"),
-        ("POS Integrations", "Standard POS Bridge", "Enterprise 2-Way REST API Sync"),
-        ("Google Maps SEO & AI Review Builder", "✓ Included (1-Click Tags)", "✓ Included (1-Click Tags)"),
-        ("Gamified Wheel & Retention", "✓ Full Owner Control (Zero Discounts)", "✓ Full Control + Branch Rules"),
-        ("Multi-Branch Centralized HQ", "— (Single venue analytics)", "✓ Centralized Multi-Branch Dashboard"),
-        ("Support SLA & Onboarding", "Standard Email & Chat Support", "24/7 Dedicated Account Manager"),
+        ("Outlet Scale & Hardware Kit", "1 Venue (Up to 25 Tables • PDF Stickers)", "Unlimited Outlets & Tables + Shipped Acrylic/Metal Stands"),
+        ("Interactive Dining & Floor Sync", "Standard Mobile Web Menu (Zero App)", "Real-Time Multiplayer Sync + Floor Captain Terminals"),
+        ("Chef AI Studio & Customization", "Single Venue Profile (Spice & Allergen Guard)", "Multi-Branch AI Studio + City Overrides & Franchise Tone"),
+        ("Kitchen KOT & Order Routing", "Single-Station KOT (1 Printer / WhatsApp)", "Multi-Kitchen Smart Routing (Bar, Tandoor, Curry & Pantry)"),
+        ("POS Integration Architecture", "Standard 1-Way Cloud Order Relay", "Full 2-Way REST API Bridge (Live 86 Sync & Settlements)"),
+        ("Google Maps SEO & Reputation", "Single-Branch 1-Click Review Assist + Floor Shield", "Multi-Branch SEO Command Center & City Benchmarks"),
+        ("Gamified Loyalty & Retention", "Standard Venue Spin Wheel (Owner Controlled)", "Cross-Outlet Loyalty Pass & Geo-Targeted Campaigns"),
+        ("Brand Identity & Custom Domain", "Hosted Menu (`menuz.in/r/slug` with logo)", "100% White-Label (`order.brand.com` • Zero Menuz Badge)"),
+        ("Team Governance & RBAC", "Single Owner / Floor Manager Access", "Granular Multi-Role (HQ Director, GM, Manager, Chef, Waiter)"),
+        ("Support SLA & Operations", "Business Hours Support (9 AM - 9 PM, <4h SLA)", "VIP 24/7 Priority Emergency SLA (Dedicated Director, <15m)"),
     ]
 
     for r_idx, (feat, plan_a, plan_b) in enumerate(matrix_data, start=1):
