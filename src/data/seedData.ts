@@ -323,7 +323,7 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     id: 'item-curry-2',
     restaurant_id: 'rest-saffron-house-01',
     category_id: 'cat-curry',
-    name: 'Dal Makhani Saffron House (Slow 36-Hr)',
+    name: 'Dal Makhani Bukhara (Slow 36-Hr)',
     price: 440.00,
     short_description: 'Black urad lentils slow-simmered over low charcoal embers with churned butter.',
     full_description: 'Organic black lentils and red kidney beans simmered continuously for 36 hours with plum tomatoes and churned mountain butter. Rich, creamy, and gently smoky.',

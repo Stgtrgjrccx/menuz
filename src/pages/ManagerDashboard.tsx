@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { generateCuisineMenu } from '../data/cuisineMenuGenerator';
+
 import {
   DollarSign,
   ShoppingBag,
@@ -90,16 +92,25 @@ export const ManagerDashboard: React.FC = () => {
 
   // Scoped entities for active restaurant
   const currentRestTables = tables.filter((t) => t.restaurant_id === restaurant.id);
-  const activeTablesList = currentRestTables.length > 0 ? currentRestTables : tables;
+  const activeTablesList = currentRestTables;
+
+  const fallbackCuisineMenu = useMemo(() => {
+    return generateCuisineMenu(
+      restaurant.id,
+      restaurant.slug || 'venue',
+      restaurant.cuisine,
+      restaurant.name
+    );
+  }, [restaurant.id, restaurant.slug, restaurant.cuisine, restaurant.name]);
 
   const currentRestCategories = categories.filter((c) => c.restaurant_id === restaurant.id);
-  const activeCategoriesList = currentRestCategories.length > 0 ? currentRestCategories : categories;
+  const activeCategoriesList = currentRestCategories.length > 0 ? currentRestCategories : fallbackCuisineMenu.categories;
 
   const currentRestMenuItems = menuItems.filter((m) => m.restaurant_id === restaurant.id);
-  const activeMenuItemsList = currentRestMenuItems.length > 0 ? currentRestMenuItems : menuItems;
+  const activeMenuItemsList = currentRestMenuItems.length > 0 ? currentRestMenuItems : fallbackCuisineMenu.dishes;
 
   const currentRestOrders = orders.filter((o) => o.restaurant_id === restaurant.id);
-  const activeOrdersList = currentRestOrders.length > 0 ? currentRestOrders : orders;
+  const activeOrdersList = currentRestOrders;
 
   const currentRestNotifications = notifications.filter((n) => !n.restaurant_id || n.restaurant_id === restaurant.id);
   const activeNotificationsList = currentRestNotifications;

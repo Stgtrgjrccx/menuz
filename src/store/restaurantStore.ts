@@ -31,6 +31,8 @@ import {
   SEED_ORDERS,
   SEED_CAMPAIGNS
 } from '../data/seedData';
+import { generateCuisineMenu } from '../data/cuisineMenuGenerator';
+
 
 export interface CartItem {
   menu_item_id: string;
@@ -243,16 +245,42 @@ const getInitialPersistedTables = (): RestaurantTable[] => {
   return Array.from(map.values());
 };
 
-const getInitialPersistedMenuItems = (): MenuItem[] => {
-  if (typeof window === 'undefined' || !window.localStorage) return SEED_MENU_ITEMS;
+const cleanDishItem = (m: MenuItem, restNames: string[] = []): MenuItem => {
+  if (!m || !m.name) return m;
+  let newName = m.name;
+  if (newName.includes('Dal Makhani Saffron House')) {
+    newName = newName.replace('Dal Makhani Saffron House', 'Dal Makhani Bukhara');
+  }
+  if (newName.includes('Crispy Signature Starter')) {
+    newName = 'Crispy Truffle Herb Croquettes';
+  }
+  if (newName.includes('Head Chef Specialty Main')) {
+    newName = 'Chef Special Slow-Cooked Curry Bowl';
+  }
+  for (const rName of restNames) {
+    if (rName && newName.toLowerCase().startsWith(rName.toLowerCase() + ' ')) {
+      newName = newName.slice(rName.length).trim();
+    }
+  }
+  return { ...m, name: newName };
+};
+
+const getInitialPersistedMenuItems = (knownRestaurants: Restaurant[] = []): MenuItem[] => {
+  const restNames = [
+    ...SEED_RESTAURANTS.map((r) => r.name),
+    ...knownRestaurants.map((r) => r.name)
+  ];
+  if (typeof window === 'undefined' || !window.localStorage) {
+    return SEED_MENU_ITEMS.map((m) => cleanDishItem(m, restNames));
+  }
   const map = new Map<string, MenuItem>();
-  for (const m of SEED_MENU_ITEMS) map.set(m.id, m);
+  for (const m of SEED_MENU_ITEMS) map.set(m.id, cleanDishItem(m, restNames));
   try {
     const raw = localStorage.getItem(DEDICATED_ITEMS_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed)) {
-        for (const m of parsed) if (m?.id) map.set(m.id, m);
+        for (const m of parsed) if (m?.id) map.set(m.id, cleanDishItem(m, restNames));
       }
     }
   } catch (e) {}
@@ -262,7 +290,9 @@ const getInitialPersistedMenuItems = (): MenuItem[] => {
       if (raw) {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed?.state?.menuItems)) {
-          for (const m of parsed.state.menuItems) if (m?.id && !map.has(m.id)) map.set(m.id, m);
+          for (const m of parsed.state.menuItems) {
+            if (m?.id && !map.has(m.id)) map.set(m.id, cleanDishItem(m, restNames));
+          }
         }
       }
     } catch (e) {}
@@ -299,7 +329,7 @@ const getInitialPersistedCategories = (): MenuCategory[] => {
 
 const initialRestaurants = getInitialPersistedRestaurants();
 const initialTables = getInitialPersistedTables();
-const initialMenuItems = getInitialPersistedMenuItems();
+const initialMenuItems = getInitialPersistedMenuItems(initialRestaurants);
 const initialCategories = getInitialPersistedCategories();
 
 export const useRestaurantStore = create<RestaurantStoreState>()(
@@ -342,98 +372,15 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
           { id: `tbl-${cleanSlug}-06`, restaurant_id: newRest.id, label: 'Bar Counter 1', public_token: `token-${cleanSlug}-06`, is_active: true, capacity: 2, section: 'Bar Lounge', status: 'vacant' }
         ];
 
-        const newCategories: MenuCategory[] = [
-          { id: `cat-${cleanSlug}-starters`, restaurant_id: newRest.id, name: 'Starters & Small Bites', sort_order: 1, is_active: true },
-          { id: `cat-${cleanSlug}-mains`, restaurant_id: newRest.id, name: 'Chef Signature Mains', sort_order: 2, is_active: true },
-          { id: `cat-${cleanSlug}-desserts`, restaurant_id: newRest.id, name: 'Desserts & Beverages', sort_order: 3, is_active: true },
-        ];
+        const generatedMenu = generateCuisineMenu(
+          newRest.id,
+          cleanSlug,
+          newRest.cuisine,
+          newRest.name
+        );
+        const newCategories: MenuCategory[] = generatedMenu.categories;
+        const newDishes: MenuItem[] = generatedMenu.dishes;
 
-        const newDishes: MenuItem[] = [
-          {
-            id: `item-${cleanSlug}-01`,
-            restaurant_id: newRest.id,
-            category_id: `cat-${cleanSlug}-starters`,
-            name: `${newRest.name} Crispy Signature Starter`,
-            price: 340,
-            short_description: `Artisanal small plate crafted with freshly sourced seasonal ingredients and chef spices.`,
-            full_description: `Crisp handcrafted delight served with authentic house dips and fresh microgreens.`,
-            ingredients: ['Farm Fresh Produce', 'House Spice Blend', 'Cold Pressed Oil'],
-            allergens: [],
-            dietary_flags: ['veg'],
-            spice_level: 2,
-            serving_size: 'Serves 2',
-            image_url: newRest.logo_url || 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=800&auto=format&fit=crop',
-            is_available: true,
-            is_signature: true,
-            is_chef_recommended: true,
-            is_bestseller: true,
-            pairing_item_ids: [`item-${cleanSlug}-04`],
-            sort_order: 1
-          },
-          {
-            id: `item-${cleanSlug}-02`,
-            restaurant_id: newRest.id,
-            category_id: `cat-${cleanSlug}-mains`,
-            name: `${newRest.name} Head Chef Specialty Main`,
-            price: 520,
-            short_description: `Slow-cooked signature preparation infused with rich heritage spices and culinary precision.`,
-            full_description: `Prepared following our kitchen's secret recipe with premium ingredients and slow-simmered aromas.`,
-            ingredients: ['Artisanal Spices', 'Organic Butter/Oil', 'Premium Produce'],
-            allergens: ['Dairy'],
-            dietary_flags: ['veg'],
-            spice_level: 2,
-            serving_size: 'Serves 1-2',
-            image_url: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&auto=format&fit=crop',
-            is_available: true,
-            is_signature: true,
-            is_chef_recommended: true,
-            is_bestseller: true,
-            pairing_item_ids: [],
-            sort_order: 2
-          },
-          {
-            id: `item-${cleanSlug}-03`,
-            restaurant_id: newRest.id,
-            category_id: `cat-${cleanSlug}-desserts`,
-            name: `Artisanal House Dessert`,
-            price: 260,
-            short_description: `Decadent sweet creation prepared fresh daily in-house.`,
-            full_description: `A delicate sweet finale to celebrate your dining experience at ${newRest.name}.`,
-            ingredients: ['Organic Dairy', 'Raw Cane Sugar', 'Pistachio'],
-            allergens: ['Dairy', 'Nuts'],
-            dietary_flags: ['veg', 'dessert'],
-            spice_level: 0,
-            serving_size: '1 Portion',
-            image_url: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800&auto=format&fit=crop',
-            is_available: true,
-            is_signature: false,
-            is_chef_recommended: true,
-            is_bestseller: false,
-            pairing_item_ids: [],
-            sort_order: 3
-          },
-          {
-            id: `item-${cleanSlug}-04`,
-            restaurant_id: newRest.id,
-            category_id: `cat-${cleanSlug}-desserts`,
-            name: `Botanical Craft Refresher`,
-            price: 190,
-            short_description: `Handcrafted beverage with fresh citrus, garden mint, and sparkling tonic.`,
-            full_description: `Chilled botanical drink freshly muddled to pair with flavorful dishes.`,
-            ingredients: ['Cold Pressed Citrus', 'Fresh Garden Herbs', 'Sparkling Soda'],
-            allergens: [],
-            dietary_flags: ['beverage'],
-            spice_level: 0,
-            serving_size: '350ml',
-            image_url: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&auto=format&fit=crop',
-            is_available: true,
-            is_signature: false,
-            is_chef_recommended: false,
-            item_type: 'drink',
-            pairing_item_ids: [],
-            sort_order: 4
-          }
-        ];
 
         const newChallenge: ReviewChallenge = {
           id: `chal-${cleanSlug}-01`,

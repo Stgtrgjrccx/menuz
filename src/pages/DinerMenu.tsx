@@ -34,6 +34,8 @@ import { InstagramStoryModal } from '../components/InstagramStoryModal';
 import { LanguageSelector } from '../components/LanguageSelector';
 import { TRANSLATIONS, getCategoryTitle } from '../utils/i18n';
 import { PUNE_RESTAURANT_DIRECTORY } from '../data/puneRestaurantDirectory';
+import { generateCuisineMenu } from '../data/cuisineMenuGenerator';
+
 
 export const DinerMenu: React.FC = () => {
   const { restaurantSlug, tableId } = useParams<{ restaurantSlug: string; tableId?: string }>();
@@ -100,13 +102,25 @@ export const DinerMenu: React.FC = () => {
   // Scoped dishes, categories, and tables for this restaurant
   const currentRestMenuItems = useMemo(() => {
     const list = menuItems.filter((m) => m.restaurant_id === restaurant.id);
-    return list.length > 0 ? list : menuItems;
-  }, [menuItems, restaurant.id]);
+    if (list.length > 0) return list;
+    return generateCuisineMenu(
+      restaurant.id,
+      restaurant.slug || 'menu',
+      restaurant.cuisine,
+      restaurant.name
+    ).dishes;
+  }, [menuItems, restaurant.id, restaurant.slug, restaurant.cuisine, restaurant.name]);
 
   const currentRestCategories = useMemo(() => {
     const list = categories.filter((c) => c.restaurant_id === restaurant.id);
-    return list.length > 0 ? list : categories;
-  }, [categories, restaurant.id]);
+    if (list.length > 0) return list;
+    return generateCuisineMenu(
+      restaurant.id,
+      restaurant.slug || 'menu',
+      restaurant.cuisine,
+      restaurant.name
+    ).categories;
+  }, [categories, restaurant.id, restaurant.slug, restaurant.cuisine, restaurant.name]);
 
   const restaurantChallenges = useMemo(() => {
     const list = challenges.filter((c) => c.restaurant_id === restaurant.id && c.is_active);

@@ -3,6 +3,8 @@ import { X, Send, Sparkles, Plus, AlertTriangle, Flame, ShieldAlert, Check } fro
 import { MenuItem } from '../types';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { supabase, isSupabaseConfigured } from '../lib/supabaseClient';
+import { generateCuisineMenu } from '../data/cuisineMenuGenerator';
+
 
 interface AiAssistantDrawerProps {
   isOpen: boolean;
@@ -124,7 +126,16 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const availableItems = menuItems.filter((i) => i.is_available);
+  const availableItems = useMemo(() => {
+    const list = menuItems.filter((i) => i.restaurant_id === restaurant.id && i.is_available);
+    if (list.length > 0) return list;
+    return generateCuisineMenu(
+      restaurant.id,
+      restaurant.slug || 'menu',
+      restaurant.cuisine,
+      restaurant.name
+    ).dishes.filter((i) => i.is_available);
+  }, [menuItems, restaurant]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll whenever messages or loading state change so user immediately sees replies
