@@ -35,7 +35,18 @@ export class ErrorBoundary extends Component<Props, State> {
 
   private handleGoHome = () => {
     this.setState({ hasError: false, error: null, errorInfo: null });
-    window.location.href = window.location.origin + window.location.pathname;
+    window.location.hash = '#/';
+    window.location.reload();
+  };
+
+  private handleClearCache = () => {
+    try {
+      localStorage.clear();
+      sessionStorage.clear();
+    } catch (e) {}
+    this.setState({ hasError: false, error: null, errorInfo: null });
+    window.location.hash = '#/';
+    window.location.reload();
   };
 
   public render() {
@@ -79,7 +90,15 @@ export class ErrorBoundary extends Component<Props, State> {
               </button>
             </div>
 
-            {import.meta.env.DEV && this.state.error && (
+            <button
+              type="button"
+              onClick={this.handleClearCache}
+              className="text-[11px] text-charcoal-400 hover:text-red-500 transition-colors underline cursor-pointer"
+            >
+              Reset local storage cache &amp; restore default catalog
+            </button>
+
+            {(typeof import.meta !== 'undefined' && import.meta.env?.DEV) && this.state.error && (
               <details className="text-left text-[11px] bg-charcoal-950 text-emerald-400 p-3 rounded-xl overflow-x-auto mt-4 font-mono">
                 <summary className="cursor-pointer text-gray-400 font-semibold mb-1">
                   Technical Diagnostics

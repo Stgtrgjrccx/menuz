@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ChefHat, LayoutDashboard, ShieldCheck, Bell, Menu, X, Check, Trash2, Award, ShoppingBag, UtensilsCrossed, TrendingUp, Sparkles } from 'lucide-react';
+import { ChefHat, LayoutDashboard, ShieldCheck, Bell, Menu, X, Check, Trash2, Award, ShoppingBag, UtensilsCrossed, TrendingUp, Sparkles, Home } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { isWorkingWithMenuz } from '../types';
 
@@ -121,6 +121,15 @@ export const Navbar: React.FC = () => {
             {/* Venue Scoped Navigation Links */}
             <div className="flex items-center space-x-1 sm:space-x-1.5">
               <Link
+                to="/"
+                className="flex items-center space-x-1 px-2 py-1.5 rounded-xl text-xs font-bold text-charcoal-300 hover:text-white hover:bg-charcoal-800 transition-all active:scale-95"
+                title="Public Dining Directory & Discovery"
+              >
+                <Home className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="hidden lg:inline">Customer Home</span>
+              </Link>
+
+              <Link
                 to={`/manage/${venueSlug}`}
                 className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all active:scale-95 ${
                   location.pathname.startsWith('/manage') || location.pathname.startsWith('/dashboard') || location.pathname.startsWith('/manager')
@@ -140,6 +149,7 @@ export const Navbar: React.FC = () => {
                     ? 'bg-purple-600 text-white shadow-xs'
                     : 'text-charcoal-300 hover:text-white hover:bg-charcoal-800'
                 }`}
+                title="Kitchen Display System"
               >
                 <ChefHat className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Kitchen KDS</span>
@@ -152,22 +162,21 @@ export const Navbar: React.FC = () => {
                     ? 'bg-amber-500 text-charcoal-950 shadow-xs'
                     : 'text-amber-400/90 hover:text-amber-300 hover:bg-charcoal-800'
                 }`}
+                title="AI Menu & Chef Assistant"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Chef AI</span>
               </Link>
 
-              <a
-                href={`${window.location.pathname}#${venueDinerUrl}`}
-                target="_blank"
-                rel="noreferrer"
+              <Link
+                to={venueDinerUrl}
                 className="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-200 hover:text-white border border-charcoal-700 transition-all ml-0.5 active:scale-95 cursor-pointer"
-                title="Open live customer dining menu in a new tab"
+                title="Open live customer dining table menu"
               >
                 <ShoppingBag className="w-3.5 h-3.5 text-saffron-400" />
                 <span className="hidden sm:inline">Table Menu</span>
                 <span className="sm:hidden">Menu</span>
-              </a>
+              </Link>
 
               {/* Jump to Master Admin Hub */}
               <Link
@@ -197,9 +206,10 @@ export const Navbar: React.FC = () => {
 
   // 3. Master Super Admin Portal (Full network oversight)
   const masterNavLinks = [
+    { to: '/', label: 'Customer Home', icon: Home },
     { to: '/admin', label: 'Master Admin Hub', icon: ShieldCheck, highlight: true },
     { to: '/pitch', label: 'Pitch Deck', icon: TrendingUp },
-    { to: `/manage/${restaurant?.slug || 'saffron-house'}`, label: `Active Venue Hub (${restaurant?.name || 'Saffron House'})`, icon: LayoutDashboard },
+    { to: `/manage/${restaurant?.slug || 'saffron-house'}`, label: `Venue Hub (${restaurant?.name || 'Saffron House'})`, icon: LayoutDashboard },
     { to: '/kitchen', label: 'Kitchen KDS', icon: ChefHat },
     { to: '/ai-studio', label: 'Chef AI Studio', icon: Sparkles },
     { to: dinerUrl, label: 'Table Menu', icon: ShoppingBag }

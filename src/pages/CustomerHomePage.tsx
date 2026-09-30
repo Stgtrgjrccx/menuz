@@ -98,8 +98,9 @@ export const CustomerHomePage: React.FC = () => {
 
     // Only show restaurants working with Menuz on the customer site (the 2 demos)
     const workingRestaurants = restaurants.filter((r) => isWorkingWithMenuz(r));
+    const activeWorking = workingRestaurants.length > 0 ? workingRestaurants : restaurants.slice(0, 2);
 
-    workingRestaurants.forEach((r) => {
+    activeWorking.forEach((r) => {
       const isItalian = r.slug === 'casa-bella';
       map.set(r.slug, {
         id: r.id,
@@ -125,10 +126,10 @@ export const CustomerHomePage: React.FC = () => {
     return directoryList
       .filter((r) => {
         return (
-          r.name.toLowerCase().includes(q) ||
-          r.cuisine.toLowerCase().includes(q) ||
-          r.location.toLowerCase().includes(q) ||
-          r.tags.some((t) => t.toLowerCase().includes(q))
+          (r.name || '').toLowerCase().includes(q) ||
+          (r.cuisine || '').toLowerCase().includes(q) ||
+          (r.location || '').toLowerCase().includes(q) ||
+          (r.tags || []).some((t) => (t || '').toLowerCase().includes(q))
         );
       })
       .slice(0, 8);
@@ -148,7 +149,7 @@ export const CustomerHomePage: React.FC = () => {
     return directoryList.filter((item) => {
       const matchesSearch = matchesPuneQuery(item, searchQuery);
       const matchesFilter =
-        activeFilter === 'all' || item.tags.includes(activeFilter.toLowerCase());
+        activeFilter === 'all' || (item.tags || []).includes(activeFilter.toLowerCase());
 
       return matchesSearch && matchesFilter;
     });

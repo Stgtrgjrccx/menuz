@@ -262,7 +262,16 @@ const cleanDishItem = (m: MenuItem, restNames: string[] = []): MenuItem => {
       newName = newName.slice(rName.length).trim();
     }
   }
-  return { ...m, name: newName };
+  return {
+    ...m,
+    name: newName,
+    price: typeof m.price === 'number' && !isNaN(m.price) ? m.price : Number(m.price) || 0,
+    dietary_flags: Array.isArray(m.dietary_flags) ? m.dietary_flags : ['Vegetarian'],
+    ingredients: Array.isArray(m.ingredients) ? m.ingredients : [],
+    allergens: Array.isArray(m.allergens) ? m.allergens : [],
+    option_groups: Array.isArray(m.option_groups) ? m.option_groups : [],
+    is_available: m.is_available !== false
+  };
 };
 
 const getInitialPersistedMenuItems = (knownRestaurants: Restaurant[] = []): MenuItem[] => {
@@ -940,8 +949,8 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
 
         const persistedItems = getInitialPersistedMenuItems();
         const itemsMap = new Map<string, MenuItem>();
-        for (const m of state.menuItems || []) if (m?.id) itemsMap.set(m.id, m);
-        for (const m of persistedItems) if (m?.id && !itemsMap.has(m.id)) itemsMap.set(m.id, m);
+        for (const m of state.menuItems || []) if (m?.id) itemsMap.set(m.id, cleanDishItem(m));
+        for (const m of persistedItems) if (m?.id && !itemsMap.has(m.id)) itemsMap.set(m.id, cleanDishItem(m));
         state.menuItems = Array.from(itemsMap.values());
 
         const persistedCats = getInitialPersistedCategories();

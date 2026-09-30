@@ -178,7 +178,7 @@ export const DinerMenu: React.FC = () => {
 
   // Real-time Table Cart Multiplayer Broadcast Listener
   useEffect(() => {
-    if (!activeTable?.public_token) return;
+    if (!activeTable?.public_token || typeof BroadcastChannel === 'undefined') return;
     const channelName = `menuz_table_sync_${activeTable.public_token}`;
     let channel: BroadcastChannel | null = null;
     try {
@@ -192,7 +192,9 @@ export const DinerMenu: React.FC = () => {
     } catch (e) {}
 
     return () => {
-      channel?.close();
+      try {
+        channel?.close();
+      } catch (e) {}
     };
   }, [activeTable?.public_token]);
 
@@ -240,11 +242,19 @@ export const DinerMenu: React.FC = () => {
     }
     setErrorMsg(null);
 
-    // Ensure session ID
-    if (!sessionStorage.getItem('menuz_session_id')) {
-      sessionStorage.setItem('menuz_session_id', 'sess_' + crypto.randomUUID());
-    }
-  }, [tableToken, tables, setActiveTable, restaurant.id, activeTable]);
+    // Ensure session ID safely
+    try {
+      if (typeof window !== 'undefined' && 'sessionStorage' in window && window.sessionStorage) {
+        if (!window.sessionStorage.getItem('menuz_session_id')) {
+          const uid =
+            typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+              ? crypto.randomUUID()
+              : Date.now().toString(36) + Math.random().toString(36).slice(2);
+          window.sessionStorage.setItem('menuz_session_id', 'sess_' + uid);
+        }
+      }
+    } catch (e) {}
+  }, [tableToken, tables, setActiveTable, restaurant.id, activeTable?.id, activeTable?.restaurant_id]);
 
   // Reset selected category, search query, and active dish whenever the venue or route slug changes
   useEffect(() => {
