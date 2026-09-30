@@ -12,7 +12,7 @@ import {
   Sparkles,
   ArrowRight
 } from 'lucide-react';
-import { useRestaurantStore } from '../store/restaurantStore';
+import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantStore';
 import { isWorkingWithMenuz } from '../types';
 import { QrScannerModal } from './QrScannerModal';
 
@@ -28,7 +28,11 @@ export const SwitchRestaurantModal: React.FC<SwitchRestaurantModalProps> = ({
   currentSlug
 }) => {
   const navigate = useNavigate();
-  const restaurants = useRestaurantStore((state) => state.restaurants);
+  const rawRestaurants = useRestaurantStore((state) => state.restaurants);
+  const restaurants = useMemo(
+    () => rawRestaurants.filter((r) => !isDishNameAsRestaurant(r)),
+    [rawRestaurants]
+  );
   const tables = useRestaurantStore((state) => state.tables);
 
   const [query, setQuery] = useState('');
@@ -36,7 +40,7 @@ export const SwitchRestaurantModal: React.FC<SwitchRestaurantModalProps> = ({
 
   // Strictly show restaurants working with Menuz (the active demos)
   const workingRestaurants = useMemo(() => {
-    return restaurants.filter((r) => isWorkingWithMenuz(r));
+    return restaurants.filter((r) => isWorkingWithMenuz(r) && !isDishNameAsRestaurant(r));
   }, [restaurants]);
 
   const filteredRestaurants = useMemo(() => {

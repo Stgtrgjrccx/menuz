@@ -28,7 +28,8 @@ import {
   Sliders,
   Settings
 } from 'lucide-react';
-import { useRestaurantStore } from '../store/restaurantStore';
+import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantStore';
+import { SEED_RESTAURANTS } from '../data/seedData';
 import { MenuItem, MenuCategory, PetpoojaConfig, RoyalPosConfig, RecahoConfig, RancelabConfig } from '../types';
 import { PetpoojaIntegrationPanel } from '../components/PetpoojaIntegrationPanel';
 import { RoyalPosIntegrationPanel } from '../components/RoyalPosIntegrationPanel';
@@ -80,15 +81,21 @@ export const ManagerDashboard: React.FC = () => {
     (restaurant.pos_provider as any) || 'petpooja'
   );
 
-  // Sync route slug to current active restaurant
+  // Sync route slug to current active restaurant & protect against any dish items
   useEffect(() => {
+    if (isDishNameAsRestaurant(restaurant)) {
+      const valid = restaurants.find((r) => !isDishNameAsRestaurant(r)) || SEED_RESTAURANTS[0];
+      setCurrentRestaurant(valid.id);
+      navigate(`/manage/${valid.slug}`);
+      return;
+    }
     if (restaurantSlug) {
-      const match = restaurants.find((r) => r.slug === restaurantSlug);
+      const match = restaurants.find((r) => r.slug === restaurantSlug && !isDishNameAsRestaurant(r));
       if (match && match.id !== restaurant.id) {
         setCurrentRestaurant(match.id);
       }
     }
-  }, [restaurantSlug, restaurants, restaurant.id, setCurrentRestaurant]);
+  }, [restaurantSlug, restaurants, restaurant, setCurrentRestaurant, navigate]);
 
   // Scoped entities for active restaurant
   const currentRestTables = tables.filter((t) => t.restaurant_id === restaurant.id);
@@ -295,7 +302,7 @@ export const ManagerDashboard: React.FC = () => {
             <select
               value={restaurant.id}
               onChange={(e) => {
-                const target = restaurants.find((r) => r.id === e.target.value);
+                const target = restaurants.find((r) => r.id === e.target.value && !isDishNameAsRestaurant(r));
                 if (target) {
                   setCurrentRestaurant(target.id);
                   navigate(`/manage/${target.slug}`);
@@ -304,56 +311,52 @@ export const ManagerDashboard: React.FC = () => {
               className="bg-transparent text-xs font-bold text-charcoal-900 focus:outline-none cursor-pointer max-w-[170px] truncate"
               title="Switch Active Venue Hub"
             >
-              {restaurants.map((r) => (
-                <option key={r.id} value={r.id}>
-                  {r.name}
-                </option>
-              ))}
+              {restaurants
+                .filter((r) => !isDishNameAsRestaurant(r))
+                .map((r) => (
+                  <option key={r.id} value={r.id}>
+                    {r.name}
+                  </option>
+                ))}
             </select>
           </div>
 
           <button
             type="button"
             onClick={() => setIsAiStudioOpen(true)}
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-amber-950 hover:text-amber-900 transition-all bg-amber-100 hover:bg-amber-200 active:scale-95 px-3.5 py-2 rounded-xl border border-amber-300 shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-800 hover:text-amber-800 transition-colors bg-white hover:bg-amber-50/60 px-3.5 py-2 rounded-xl border border-amber-300/80 shadow-xs cursor-pointer"
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-700" />
+            <Sparkles className="w-3.5 h-3.5 text-amber-600" />
             <span>Chef AI Studio</span>
-            <span className="text-[9px] uppercase font-mono px-1.5 py-0.5 rounded-md bg-amber-200 text-amber-900 font-bold border border-amber-300">
-              Personalized
-            </span>
           </button>
 
           <button
             type="button"
             disabled={usbPrintLoading}
             onClick={handleTestUsbPrint}
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-blue-950 hover:text-blue-900 transition-all bg-blue-100 hover:bg-blue-200 active:scale-95 px-3.5 py-2 rounded-xl border border-blue-300 shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-800 hover:text-blue-800 transition-colors bg-white hover:bg-blue-50/60 px-3.5 py-2 rounded-xl border border-blue-300/80 shadow-xs cursor-pointer"
             title="Connect USB Thermal Printer & Test Print ESC/POS Ticket"
           >
-            <Printer className="w-3.5 h-3.5 text-blue-700" />
-            <span>{usbPrintLoading ? 'Sending ESC/POS...' : 'Test USB Thermal Print'}</span>
+            <Printer className="w-3.5 h-3.5 text-blue-600" />
+            <span>{usbPrintLoading ? 'Sending...' : 'Test ESC/POS'}</span>
           </button>
 
           <Link
             to="/kitchen"
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-purple-950 hover:text-purple-900 transition-all bg-purple-100 hover:bg-purple-200 active:scale-95 px-3.5 py-2 rounded-xl border border-purple-300 shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-700 hover:text-saffron-700 transition-colors bg-white px-3.5 py-2 rounded-xl border border-ivory-300 shadow-xs hover:border-saffron-300"
           >
-            <ChefHat className="w-3.5 h-3.5 text-purple-700" />
+            <ChefHat className="w-3.5 h-3.5 text-saffron-600" />
             <span>Kitchen KDS</span>
-            <span className="text-[9px] uppercase font-mono px-1.5 py-0.5 rounded-md bg-purple-200 text-purple-900 font-bold border border-purple-300">
-              Live
-            </span>
           </Link>
 
           <button
             type="button"
             onClick={() => setIsPosModalOpen(true)}
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-orange-950 hover:text-orange-900 transition-all bg-orange-100 hover:bg-orange-200 active:scale-95 px-3.5 py-2 rounded-xl border border-orange-300 shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-800 hover:text-orange-800 transition-colors bg-white hover:bg-orange-50/60 px-3.5 py-2 rounded-xl border border-orange-300/80 shadow-xs cursor-pointer"
           >
-            <Printer className="w-3.5 h-3.5 text-orange-700" />
+            <Printer className="w-3.5 h-3.5 text-orange-600" />
             <span>POS & KOT</span>
-            <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded-md bg-orange-200/90 text-orange-900 font-bold border border-orange-300/80">
+            <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded-md bg-ivory-100 text-charcoal-700 font-bold border border-ivory-300">
               {restaurant.pos_provider || 'Petpooja'}
             </span>
           </button>
@@ -361,11 +364,11 @@ export const ManagerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsTableModalOpen(true)}
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-emerald-950 hover:text-emerald-900 transition-all bg-emerald-100 hover:bg-emerald-200 active:scale-95 px-3.5 py-2 rounded-xl border border-emerald-300 shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-800 hover:text-emerald-800 transition-colors bg-white hover:bg-emerald-50/60 px-3.5 py-2 rounded-xl border border-emerald-300/80 shadow-xs cursor-pointer"
           >
             <span className="text-xs">🪑</span>
-            <span>Floor Plan & QRs</span>
-            <span className="text-[9px] uppercase font-mono px-1.5 py-0.5 rounded-md bg-emerald-200/90 text-emerald-900 font-bold border border-emerald-300/80">
+            <span>Floor Plan</span>
+            <span className="text-[9px] uppercase font-mono px-1.5 py-0.5 rounded-md bg-ivory-100 text-charcoal-700 font-bold border border-ivory-300">
               {activeTablesList.length} Tables
             </span>
           </button>
@@ -397,11 +400,11 @@ export const ManagerDashboard: React.FC = () => {
           <h1 className="font-serif text-3xl font-bold text-charcoal-900 mt-1">{restaurant.name}</h1>
         </div>
 
-        <div className="flex items-center flex-wrap gap-2">
+        <div className="flex items-center space-x-2">
           <button
             type="button"
             onClick={() => setIsLaunchKitOpen(true)}
-            className="flex items-center space-x-1.5 text-xs text-white bg-charcoal-900 hover:bg-black border border-charcoal-700 px-3.5 py-2.5 rounded-xl shadow-subtle transition-all font-bold cursor-pointer active:scale-95"
+            className="flex items-center space-x-1.5 text-xs text-white bg-charcoal-900 hover:bg-saffron-700 border border-charcoal-700 px-3.5 py-2.5 rounded-xl shadow-subtle transition-all font-bold cursor-pointer"
             title="View & Share Guest Links, Table QR Codes, WhatsApp Handover & Custom Domain"
           >
             <Share2 className="w-3.5 h-3.5 text-saffron-400" />
@@ -411,7 +414,7 @@ export const ManagerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsTableModalOpen(true)}
-            className="flex items-center space-x-1.5 text-xs text-emerald-950 bg-emerald-100 hover:bg-emerald-200 border border-emerald-300 px-3.5 py-2.5 rounded-xl shadow-subtle transition-all font-bold cursor-pointer active:scale-95"
+            className="flex items-center space-x-1.5 text-xs text-charcoal-800 bg-ivory-100 hover:bg-ivory-200 border border-ivory-300 px-3.5 py-2.5 rounded-xl shadow-subtle transition-all font-bold cursor-pointer"
             title="Manage Tables, Floor Plan, Capacity, and Edit Restaurant Profile"
           >
             <span className="text-sm">🪑</span>
@@ -421,7 +424,7 @@ export const ManagerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsAiDrawerOpen(true)}
-            className="flex items-center space-x-1.5 text-xs text-purple-950 bg-purple-100 hover:bg-purple-200 border border-purple-300 px-3.5 py-2.5 rounded-xl shadow-subtle transition-all font-bold cursor-pointer active:scale-95"
+            className="flex items-center space-x-1.5 text-xs text-purple-900 bg-purple-50 hover:bg-purple-100 border border-purple-200 px-3.5 py-2.5 rounded-xl shadow-subtle transition-colors font-bold cursor-pointer"
           >
             <span className="text-sm">🧑‍🍳</span>
             <span>Test Chef's AI</span>
@@ -429,9 +432,9 @@ export const ManagerDashboard: React.FC = () => {
 
           <Link
             to={`/r/${restaurant.slug}/menu?t=${activeTablesList[0]?.public_token || 'table-token-01-saffron'}`}
-            className="flex items-center space-x-1.5 text-xs text-saffron-950 bg-saffron-100 hover:bg-saffron-200 border border-saffron-300 px-3.5 py-2.5 rounded-xl shadow-subtle transition-all font-bold active:scale-95"
+            className="flex items-center space-x-1.5 text-xs text-charcoal-700 bg-white border border-ivory-200 px-3.5 py-2.5 rounded-xl shadow-subtle hover:bg-ivory-100 transition-colors font-bold"
           >
-            <UtensilsCrossed className="w-3.5 h-3.5 text-saffron-700" />
+            <UtensilsCrossed className="w-3.5 h-3.5 text-saffron-600" />
             <span>Launch Diner Menu</span>
           </Link>
 
@@ -447,7 +450,7 @@ export const ManagerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={resetToDefaults}
-            className="flex items-center space-x-1.5 text-xs text-charcoal-700 hover:text-red-700 bg-ivory-100 hover:bg-red-50 border border-ivory-300 hover:border-red-300 px-3.5 py-2.5 rounded-xl shadow-xs transition-all font-semibold active:scale-95 cursor-pointer"
+            className="flex items-center space-x-1.5 text-xs text-charcoal-700 bg-white border border-ivory-200 px-3.5 py-2 rounded-xl shadow-subtle hover:bg-ivory-100 transition-colors"
           >
             <RefreshCw className="w-3.5 h-3.5 text-saffron-600" />
             <span>Reset Demo Catalog</span>
@@ -645,9 +648,9 @@ export const ManagerDashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setSmartSettingsTab('kot')}
-                className="w-full py-1.5 px-2 rounded-xl text-[10px] font-bold text-charcoal-800 bg-charcoal-100 hover:bg-charcoal-200 border border-charcoal-300 transition-all flex items-center justify-center space-x-1 cursor-pointer active:scale-95"
+                className="w-full py-1.5 px-2 rounded-xl text-[10px] font-bold text-charcoal-700 bg-white hover:bg-ivory-100 border border-ivory-300 transition-all flex items-center justify-center space-x-1 cursor-pointer"
               >
-                <Settings className="w-3 h-3 text-charcoal-600" />
+                <Settings className="w-3 h-3 text-charcoal-500" />
                 <span>Edit Parameters</span>
               </button>
             </div>
@@ -693,7 +696,7 @@ export const ManagerDashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => {
-                  const isCurrentlyEnabled = !!restaurant.happy_hour_config?.enabled;
+                  const isCurrentlyEnabled = !restaurant.happy_hour_config?.enabled;
                   updateRestaurant(restaurant.id, {
                     happy_hour_config: {
                       enabled: !isCurrentlyEnabled,
@@ -704,7 +707,7 @@ export const ManagerDashboard: React.FC = () => {
                     }
                   });
                 }}
-                className={`w-full py-1.5 px-2 rounded-xl text-[11px] font-bold transition-all flex items-center justify-center space-x-1 shadow-xs cursor-pointer active:scale-95 ${
+                className={`w-full py-1.5 px-2 rounded-xl text-[11px] font-bold transition-all flex items-center justify-center space-x-1 shadow-xs cursor-pointer ${
                   restaurant.happy_hour_config?.enabled
                     ? 'bg-orange-600 hover:bg-orange-700 text-white'
                     : 'bg-charcoal-800 hover:bg-charcoal-900 text-white'
@@ -716,9 +719,9 @@ export const ManagerDashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setSmartSettingsTab('happy_hour')}
-                className="w-full py-1.5 px-2 rounded-xl text-[10px] font-bold text-charcoal-800 bg-charcoal-100 hover:bg-charcoal-200 border border-charcoal-300 transition-all flex items-center justify-center space-x-1 cursor-pointer active:scale-95"
+                className="w-full py-1.5 px-2 rounded-xl text-[10px] font-bold text-charcoal-700 bg-white hover:bg-ivory-100 border border-ivory-300 transition-all flex items-center justify-center space-x-1 cursor-pointer"
               >
-                <Settings className="w-3 h-3 text-charcoal-600" />
+                <Settings className="w-3 h-3 text-charcoal-500" />
                 <span>Edit Schedule</span>
               </button>
             </div>
@@ -759,9 +762,9 @@ export const ManagerDashboard: React.FC = () => {
             <button
               type="button"
               onClick={() => setSmartSettingsTab('instagram')}
-              className="w-full py-2 px-2 rounded-xl text-[11px] font-bold text-pink-950 bg-pink-100 hover:bg-pink-200 border border-pink-300 transition-all flex items-center justify-center space-x-1 cursor-pointer active:scale-95"
+              className="w-full py-2 px-2 rounded-xl text-[11px] font-bold text-charcoal-800 bg-white hover:bg-ivory-100 border border-ivory-300 transition-all flex items-center justify-center space-x-1 cursor-pointer"
             >
-              <Settings className="w-3 h-3 text-pink-700" />
+              <Settings className="w-3 h-3 text-pink-600" />
               <span>Customize Story Card</span>
             </button>
           </div>
@@ -805,9 +808,9 @@ export const ManagerDashboard: React.FC = () => {
             <button
               type="button"
               onClick={() => setSmartSettingsTab('pairings')}
-              className="w-full py-2 px-2 rounded-xl text-[11px] font-bold text-emerald-950 bg-emerald-100 hover:bg-emerald-200 border border-emerald-300 transition-all flex items-center justify-center space-x-1 cursor-pointer active:scale-95"
+              className="w-full py-2 px-2 rounded-xl text-[11px] font-bold text-charcoal-800 bg-white hover:bg-ivory-100 border border-ivory-300 transition-all flex items-center justify-center space-x-1 cursor-pointer"
             >
-              <Settings className="w-3 h-3 text-emerald-700" />
+              <Settings className="w-3 h-3 text-emerald-600" />
               <span>Customize Upsells</span>
             </button>
           </div>
@@ -816,32 +819,32 @@ export const ManagerDashboard: React.FC = () => {
 
       {/* Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white p-5 rounded-3xl border border-ivory-300 shadow-subtle flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-2xl bg-saffron-100 border border-saffron-200 flex items-center justify-center text-saffron-700 shadow-xs">
+        <div className="bg-white p-5 rounded-3xl border border-ivory-200 shadow-subtle flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-2xl bg-saffron-50 border border-saffron-200/80 flex items-center justify-center text-saffron-600 shadow-xs">
             <DollarSign className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs text-charcoal-600 font-medium">Session Revenue</span>
+            <span className="text-xs text-charcoal-500 font-medium">Session Revenue</span>
             <p className="font-serif text-2xl font-bold text-charcoal-900">₹{totalVolume.toFixed(2)}</p>
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-3xl border border-ivory-300 shadow-subtle flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-2xl bg-amber-100 border border-amber-200 flex items-center justify-center text-amber-800 shadow-xs">
+        <div className="bg-white p-5 rounded-3xl border border-ivory-200 shadow-subtle flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-600 shadow-xs">
             <ShoppingBag className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs text-charcoal-600 font-medium">Orders Placed</span>
+            <span className="text-xs text-charcoal-500 font-medium">Orders Placed</span>
             <p className="font-serif text-2xl font-bold text-charcoal-900">{totalOrdersCount} tickets</p>
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-3xl border border-ivory-300 shadow-subtle flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-100 border border-emerald-200 flex items-center justify-center text-emerald-800 shadow-xs">
+        <div className="bg-white p-5 rounded-3xl border border-ivory-200 shadow-subtle flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-center text-emerald-600 shadow-xs">
             <CheckCircle2 className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs text-charcoal-600 font-medium">Active QR Tables</span>
+            <span className="text-xs text-charcoal-500 font-medium">Active QR Tables</span>
             <p className="font-serif text-2xl font-bold text-charcoal-900">{activeTablesList.length} tables</p>
           </div>
         </div>

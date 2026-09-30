@@ -156,6 +156,60 @@ const LEGACY_STORAGE_KEYS = [
   'menuz_storage'
 ];
 
+// Helper to detect if an entity is actually a dish/menu item rather than a restaurant
+export const isDishNameAsRestaurant = (r: Partial<Restaurant> | string | null | undefined): boolean => {
+  if (!r) return false;
+  const name = typeof r === 'string' ? r : r.name || '';
+  const lower = name.trim().toLowerCase();
+  
+  if (typeof r === 'object') {
+    const obj = r as any;
+    // Check dish-only properties
+    if (
+      obj.price !== undefined ||
+      obj.category_id !== undefined ||
+      obj.dietary_flags !== undefined ||
+      obj.ingredients !== undefined ||
+      obj.option_groups !== undefined ||
+      obj.pairing_item_ids !== undefined ||
+      obj.allergens !== undefined ||
+      obj.chef_notes !== undefined ||
+      obj.spice_level !== undefined ||
+      obj.serving_size !== undefined
+    ) {
+      return true;
+    }
+    if (obj.id && (obj.id.startsWith('item-') || obj.id.includes('dish-') || obj.id.includes('menu-item'))) {
+      return true;
+    }
+  }
+
+  const dishPatterns = [
+    'dal makhani',
+    'crispy signature starter',
+    'head chef specialty main',
+    'artisanal house dessert',
+    'crispy truffle herb croquettes',
+    'chef special slow-cooked curry bowl',
+    'craft botanical refresher',
+    'craft refresher',
+    'house dessert',
+    'signature starter',
+    'specialty main',
+    'slow-cooked dal makhani',
+    'slow cooked dal makhani',
+    'royal dal makhani'
+  ];
+
+  for (const pattern of dishPatterns) {
+    if (lower === pattern || lower.startsWith(pattern) || lower.includes(pattern)) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
 // Helper to safely recover any past onboarded restaurants from ANY key in localStorage
 export const getInitialPersistedRestaurants = (): Restaurant[] => {
   if (typeof window === 'undefined' || !window.localStorage) return SEED_RESTAURANTS;
@@ -164,7 +218,9 @@ export const getInitialPersistedRestaurants = (): Restaurant[] => {
 
   // 1. Seed base
   for (const r of SEED_RESTAURANTS) {
-    foundMap.set(r.id, r);
+    if (!isDishNameAsRestaurant(r)) {
+      foundMap.set(r.id, r);
+    }
   }
 
   // 2. Read from permanent vault & dedicated keys
@@ -175,7 +231,7 @@ export const getInitialPersistedRestaurants = (): Restaurant[] => {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed)) {
           for (const r of parsed) {
-            if (r && r.id && r.name) {
+            if (r && r.id && r.name && !isDishNameAsRestaurant(r)) {
               foundMap.set(r.id, { ...r, is_menuz_partner: true, status: r.status || 'active' });
             }
           }
@@ -198,8 +254,11 @@ export const getInitialPersistedRestaurants = (): Restaurant[] => {
             const list = parsed?.state?.restaurants || (Array.isArray(parsed) ? parsed : null);
             if (Array.isArray(list)) {
               for (const r of list) {
-                if (r && r.id && r.name && !foundMap.has(r.id)) {
-                  foundMap.set(r.id, { ...r, is_menuz_partner: true, status: r.status || 'active' });
+                if (r && r.id && r.name && !isDishNameAsRestaurant(r) && !foundMap.has(r.id)) {
+                  // Make sure it doesn't have dish-like attributes
+                  if (r.price === undefined && r.category_id === undefined) {
+                    foundMap.set(r.id, { ...r, is_menuz_partner: true, status: r.status || 'active' });
+                  }
                 }
               }
             }
@@ -209,10 +268,32 @@ export const getInitialPersistedRestaurants = (): Restaurant[] => {
     }
   } catch (e) {}
 
-  const result = Array.from(foundMap.values());
+  const result = Array.from(foundMap.values()).filter((r) => !isDishNameAsRestaurant(r));
   try {
     localStorage.setItem(DEDICATED_REST_KEY, JSON.stringify(result));
-    localStorage.setItem(PERMANENT_VAULT_KEY, JSON.stringify(result.filter((r) => !SEED_RESTAURANTS.some((s) => s.id === r.id))));
+    localStorage.setItem(
+      PERMANENT_VAULT_KEY,
+      JSON.stringify(result.filter((r) => !SEED_RESTAURANTS.some((s) => s.id === r.id)))
+    );
+
+    // Deep purge any dish items from existing storage keys in localStorage
+    for (const key of [PERMANENT_VAULT_KEY, DEDICATED_REST_KEY, ...LEGACY_STORAGE_KEYS, STORAGE_KEY]) {
+      const raw = localStorage.getItem(key);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          const cleaned = parsed.filter((item) => !isDishNameAsRestaurant(item));
+          localStorage.setItem(key, JSON.stringify(cleaned));
+        } else if (parsed?.state?.restaurants) {
+          parsed.state.restaurants = parsed.state.restaurants.filter((item: any) => !isDishNameAsRestaurant(item));
+          if (isDishNameAsRestaurant(parsed.state.restaurant)) {
+            parsed.state.restaurant = parsed.state.restaurants[0] || SEED_RESTAURANTS[0];
+            parsed.state.currentRestaurantId = parsed.state.restaurant?.id || '';
+          }
+          localStorage.setItem(key, JSON.stringify(parsed));
+        }
+      }
+    }
   } catch (e) {}
 
   return result;
@@ -886,13 +967,14 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       resetToDefaults: () => {
         // Recover any custom user-added venues from vault so they are never destroyed by a demo catalog reset!
         const customVaultRests = getInitialPersistedRestaurants().filter(
-          (r) => !SEED_RESTAURANTS.some((s) => s.id === r.id)
+          (r) => !SEED_RESTAURANTS.some((s) => s.id === r.id) && !isDishNameAsRestaurant(r)
         );
-        const resetRestaurants = [...SEED_RESTAURANTS, ...customVaultRests];
+        const resetRestaurants = [...SEED_RESTAURANTS.filter((r) => !isDishNameAsRestaurant(r)), ...customVaultRests];
+        const primaryRest = resetRestaurants[0] || SEED_RESTAURANTS[0];
         set({
           restaurants: resetRestaurants,
-          restaurant: resetRestaurants[0] || SEED_RESTAURANTS[0],
-          currentRestaurantId: resetRestaurants[0]?.id || SEED_RESTAURANTS[0].id,
+          restaurant: primaryRest,
+          currentRestaurantId: primaryRest?.id || SEED_RESTAURANTS[0].id,
           tables: SEED_TABLES,
           categories: SEED_CATEGORIES,
           menuItems: SEED_MENU_ITEMS,
@@ -927,14 +1009,14 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       }),
       onRehydrateStorage: () => (state) => {
         if (!state) return;
-        // Merge missing seeds AND any custom onboarded restaurants from localStorage
-        const persistedAll = getInitialPersistedRestaurants();
+        // Merge missing seeds AND any custom onboarded restaurants from localStorage, strictly rejecting any dish items
+        const persistedAll = getInitialPersistedRestaurants().filter((r) => !isDishNameAsRestaurant(r));
         const currentMap = new Map<string, Restaurant>();
         for (const r of state.restaurants || []) {
-          if (r && r.id) currentMap.set(r.id, r);
+          if (r && r.id && !isDishNameAsRestaurant(r)) currentMap.set(r.id, r);
         }
         for (const r of persistedAll) {
-          if (r && r.id && !currentMap.has(r.id)) {
+          if (r && r.id && !isDishNameAsRestaurant(r) && !currentMap.has(r.id)) {
             currentMap.set(r.id, r);
           }
         }
@@ -959,14 +1041,20 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
         for (const c of persistedCats) if (c?.id && !catsMap.has(c.id)) catsMap.set(c.id, c);
         state.categories = Array.from(catsMap.values());
 
-        if (!state.restaurant || !state.restaurants.some((r: Restaurant) => r.id === state.restaurant.id)) {
-          state.restaurant = state.restaurants[0] || SEED_RESTAURANTS[0];
+        if (
+          !state.restaurant ||
+          isDishNameAsRestaurant(state.restaurant) ||
+          !state.restaurants.some((r: Restaurant) => r.id === state.restaurant.id)
+        ) {
+          state.restaurant = state.restaurants.find((r) => !isDishNameAsRestaurant(r)) || SEED_RESTAURANTS[0];
           state.currentRestaurantId = state.restaurant?.id || '';
         }
 
         try {
           localStorage.setItem(DEDICATED_REST_KEY, JSON.stringify(state.restaurants));
-          const onlyCustom = state.restaurants.filter((r) => !SEED_RESTAURANTS.some((s) => s.id === r.id));
+          const onlyCustom = state.restaurants.filter(
+            (r) => !SEED_RESTAURANTS.some((s) => s.id === r.id) && !isDishNameAsRestaurant(r)
+          );
           localStorage.setItem(PERMANENT_VAULT_KEY, JSON.stringify(onlyCustom));
         } catch (e) {}
       }

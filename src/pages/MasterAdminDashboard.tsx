@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { useRestaurantStore, WhatsAppCampaign } from '../store/restaurantStore';
+import { useRestaurantStore, isDishNameAsRestaurant, WhatsAppCampaign } from '../store/restaurantStore';
 import { Restaurant, PosSyncEvent, isWorkingWithMenuz, PetpoojaConfig, RoyalPosConfig, RecahoConfig, RancelabConfig, MODERN_POS_PROVIDERS } from '../types';
 import { PUNE_RESTAURANT_DIRECTORY, searchPuneRestaurants, PuneRestaurantEntry, normalizePuneSearch, matchesPuneQuery } from '../data/puneRestaurantDirectory';
 import { PetpoojaIntegrationPanel } from '../components/PetpoojaIntegrationPanel';
@@ -77,7 +77,11 @@ export const MasterAdminDashboard: React.FC = () => {
   const [adminPasscode, setAdminPasscode] = useState('');
   const [authError, setAuthError] = useState(false);
 
-  const restaurants = useRestaurantStore((state) => state.restaurants);
+  const rawRestaurants = useRestaurantStore((state) => state.restaurants);
+  const restaurants = useMemo(
+    () => rawRestaurants.filter((r) => !isDishNameAsRestaurant(r)),
+    [rawRestaurants]
+  );
   const setCurrentRestaurant = useRestaurantStore((state) => state.setCurrentRestaurant);
   const addRestaurant = useRestaurantStore((state) => state.addRestaurant);
   const updateRestaurant = useRestaurantStore((state) => state.updateRestaurant);
