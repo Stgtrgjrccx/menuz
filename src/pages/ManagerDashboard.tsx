@@ -5,17 +5,13 @@ import { generateCuisineMenu } from '../data/cuisineMenuGenerator';
 import {
   DollarSign,
   ShoppingBag,
-  ToggleLeft,
-  ToggleRight,
   RefreshCw,
   Sparkles,
   CheckCircle2,
-  Plus,
   Bell,
   Award,
   X,
   Flame,
-  Trash2,
   AlertCircle,
   Check,
   UtensilsCrossed,
@@ -26,11 +22,12 @@ import {
   Share2,
   Globe,
   Sliders,
-  Settings
+  Settings,
+  UserMinus
 } from 'lucide-react';
 import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantStore';
 import { SEED_RESTAURANTS } from '../data/seedData';
-import { MenuItem, MenuCategory, PetpoojaConfig, RoyalPosConfig, RecahoConfig, RancelabConfig } from '../types';
+import { PetpoojaConfig, RoyalPosConfig, RecahoConfig, RancelabConfig } from '../types';
 import { PetpoojaIntegrationPanel } from '../components/PetpoojaIntegrationPanel';
 import { RoyalPosIntegrationPanel } from '../components/RoyalPosIntegrationPanel';
 import { RecahoIntegrationPanel } from '../components/RecahoIntegrationPanel';
@@ -43,31 +40,18 @@ import { SmartOperationsSettingsModal } from '../components/SmartOperationsSetti
 import { printDirectWebUsb } from '../services/webUsbPrinterService';
 import { Order } from '../types';
 
-const SAMPLE_FOOD_IMAGES = [
-  { label: 'Paneer / Curry', url: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80' },
-  { label: 'Biryani / Rice', url: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80' },
-  { label: 'Tandoor / Kebab', url: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?auto=format&fit=crop&w=800&q=80' },
-  { label: 'Dal Makhani', url: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80' },
-  { label: 'Naan / Breads', url: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=800&q=80' },
-  { label: 'Dessert / Sweet', url: 'https://images.unsplash.com/photo-1605197148560-64ab7b8c347f?auto=format&fit=crop&w=800&q=80' },
-  { label: 'Beverage / Drink', url: 'https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=800&q=80' },
-];
-
 export const ManagerDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { restaurantSlug } = useParams<{ restaurantSlug?: string }>();
   const restaurants = useRestaurantStore((state) => state.restaurants);
   const restaurant = useRestaurantStore((state) => state.restaurant);
   const setCurrentRestaurant = useRestaurantStore((state) => state.setCurrentRestaurant);
+  const deleteRestaurant = useRestaurantStore((state) => state.deleteRestaurant);
   const tables = useRestaurantStore((state) => state.tables);
   const menuItems = useRestaurantStore((state) => state.menuItems);
   const categories = useRestaurantStore((state) => state.categories);
   const orders = useRestaurantStore((state) => state.orders);
   const notifications = useRestaurantStore((state) => state.notifications);
-  const toggleItemAvailability = useRestaurantStore((state) => state.toggleItemAvailability);
-  const deleteMenuItem = useRestaurantStore((state) => state.deleteMenuItem);
-  const addMenuItem = useRestaurantStore((state) => state.addMenuItem);
-  const addCategory = useRestaurantStore((state) => state.addCategory);
   const markNotificationRead = useRestaurantStore((state) => state.markNotificationRead);
   const resetToDefaults = useRestaurantStore((state) => state.resetToDefaults);
   const updateRestaurant = useRestaurantStore((state) => state.updateRestaurant);
@@ -76,6 +60,7 @@ export const ManagerDashboard: React.FC = () => {
   const [isAiDrawerOpen, setIsAiDrawerOpen] = useState(false);
   const [isLaunchKitOpen, setIsLaunchKitOpen] = useState(false);
   const [isTableModalOpen, setIsTableModalOpen] = useState(false);
+  const [isOffboardModalOpen, setIsOffboardModalOpen] = useState(false);
   const [smartSettingsTab, setSmartSettingsTab] = useState<'kot' | 'happy_hour' | 'instagram' | 'pairings' | null>(null);
   const [selectedPosTab, setSelectedPosTab] = useState<'petpooja' | 'royalpos' | 'recaho' | 'rancelab'>(
     (restaurant.pos_provider as any) || 'petpooja'
@@ -122,8 +107,6 @@ export const ManagerDashboard: React.FC = () => {
   const currentRestNotifications = notifications.filter((n) => !n.restaurant_id || n.restaurant_id === restaurant.id);
   const activeNotificationsList = currentRestNotifications;
 
-  // Modal state for adding a custom dish
-  const [isAddDishOpen, setIsAddDishOpen] = useState(false);
   const [isAiStudioOpen, setIsAiStudioOpen] = useState(false);
   const [usbPrintLoading, setUsbPrintLoading] = useState(false);
   const [usbPrintStatus, setUsbPrintStatus] = useState<string | null>(null);
@@ -163,23 +146,6 @@ export const ManagerDashboard: React.FC = () => {
     setUsbPrintStatus(res.message);
     setTimeout(() => setUsbPrintStatus(null), 6000);
   };
-  const [dishForm, setDishForm] = useState({
-    name: '',
-    categoryId: activeCategoriesList[0]?.id || '',
-    newCategoryName: '',
-    price: '',
-    isVeg: true,
-    spiceLevel: 1,
-    shortDescription: '',
-    fullDescription: '',
-    chefNotes: '',
-    ingredients: '',
-    allergens: '',
-    dietaryFlags: ['Vegetarian'],
-    imageUrl: SAMPLE_FOOD_IMAGES[0].url,
-    itemType: 'food' as 'food' | 'beverage'
-  });
-  const [addSuccessMsg, setAddSuccessMsg] = useState<string | null>(null);
 
   const totalVolume = activeOrdersList.reduce((sum, o) => sum + o.total_amount, 0);
   const totalOrdersCount = activeOrdersList.length;
@@ -193,85 +159,6 @@ export const ManagerDashboard: React.FC = () => {
       !n.read
   );
   const unreadWaiterCalls = activeNotificationsList.filter((n) => n.type === 'waiter_call' && !n.read);
-
-
-  const handleCreateDish = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!dishForm.name.trim() || !dishForm.price) return;
-
-    let targetCatId = dishForm.categoryId;
-    if (dishForm.categoryId === '__new__' && dishForm.newCategoryName.trim()) {
-      targetCatId = 'cat_' + Date.now();
-      const newCat: MenuCategory = {
-        id: targetCatId,
-        restaurant_id: restaurant.id,
-        name: dishForm.newCategoryName.trim(),
-        category_type: 'food',
-        sort_order: categories.length + 1,
-        is_active: true
-      };
-      addCategory(newCat);
-    }
-
-    const priceNum = parseFloat(dishForm.price) || 0;
-    const ingredientsArr = dishForm.ingredients
-      ? dishForm.ingredients.split(',').map((s) => s.trim()).filter(Boolean)
-      : ['Fresh Spices', 'Herbs'];
-    const allergensArr = dishForm.allergens
-      ? dishForm.allergens.split(',').map((s) => s.trim()).filter(Boolean)
-      : [];
-
-    const flags = [...dishForm.dietaryFlags];
-    if (dishForm.isVeg && !flags.includes('Vegetarian')) {
-      flags.push('Vegetarian');
-    }
-
-    const newDish: MenuItem = {
-      id: 'dish_' + Date.now(),
-      restaurant_id: restaurant.id,
-      category_id: targetCatId || categories[0]?.id || 'cat_default',
-      item_type: dishForm.itemType === 'beverage' ? 'drink' : 'food',
-      name: dishForm.name.trim(),
-      short_description: dishForm.shortDescription.trim() || `${dishForm.name} prepared freshly in our kitchen.`,
-      full_description: dishForm.fullDescription.trim() || dishForm.shortDescription.trim(),
-      chef_notes: dishForm.chefNotes.trim() || undefined,
-      price: priceNum,
-      spice_level: dishForm.spiceLevel,
-      dietary_flags: flags,
-      allergens: allergensArr,
-      ingredients: ingredientsArr,
-      image_url: dishForm.imageUrl || SAMPLE_FOOD_IMAGES[0].url,
-      is_available: true,
-      is_bestseller: false,
-      is_chef_recommended: true,
-      serving_size: '1 Portion',
-      pairing_item_ids: [],
-      sort_order: menuItems.length + 1
-    };
-
-    addMenuItem(newDish);
-    setIsAddDishOpen(false);
-    setAddSuccessMsg(`"${newDish.name}" has been added to the live menu!`);
-    setTimeout(() => setAddSuccessMsg(null), 4000);
-
-    // Reset form
-    setDishForm({
-      name: '',
-      categoryId: categories[0]?.id || '',
-      newCategoryName: '',
-      price: '',
-      isVeg: true,
-      spiceLevel: 1,
-      shortDescription: '',
-      fullDescription: '',
-      chefNotes: '',
-      ingredients: '',
-      allergens: '',
-      dietaryFlags: ['Vegetarian'],
-      imageUrl: SAMPLE_FOOD_IMAGES[0].url,
-      itemType: 'food'
-    });
-  };
 
   return (
     <div className="min-h-screen bg-ivory-50 p-4 md:p-8 max-w-5xl mx-auto space-y-6 pb-20">
@@ -440,11 +327,12 @@ export const ManagerDashboard: React.FC = () => {
 
           <button
             type="button"
-            onClick={() => setIsAddDishOpen(true)}
-            className="flex items-center space-x-1.5 text-xs text-white bg-saffron-600 hover:bg-saffron-700 font-bold px-4 py-2.5 rounded-xl shadow-md transition-all active:scale-95 cursor-pointer"
+            onClick={() => setIsOffboardModalOpen(true)}
+            className="flex items-center space-x-1.5 text-xs text-red-700 hover:text-white bg-red-50 hover:bg-red-600 border border-red-200 hover:border-red-600 px-3.5 py-2.5 rounded-xl shadow-subtle transition-all font-bold cursor-pointer"
+            title={`Offboard ${restaurant.name} from Menuz`}
           >
-            <Plus className="w-4 h-4" />
-            <span>Add Custom Dish</span>
+            <UserMinus className="w-3.5 h-3.5" />
+            <span>Offboard Venue</span>
           </button>
 
           <button
@@ -457,14 +345,6 @@ export const ManagerDashboard: React.FC = () => {
           </button>
         </div>
       </header>
-
-      {/* Success Notification Banner */}
-      {addSuccessMsg && (
-        <div className="bg-emerald-50 border border-emerald-200 text-emerald-900 px-4 py-3 rounded-2xl flex items-center space-x-2 shadow-xs text-xs font-semibold animate-fadeIn">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-          <span>{addSuccessMsg}</span>
-        </div>
-      )}
 
       {/* 🚨 LIVE URGENT SERVICE ALERTS (RATING BELOW 4 STARS) */}
       {unreadServiceAlerts.length > 0 && (
@@ -989,312 +869,56 @@ export const ManagerDashboard: React.FC = () => {
       </section>
 
 
-      {/* Live Menu Availability & Catalog Manager */}
-      <section className="bg-white p-6 rounded-3xl border border-ivory-200 shadow-subtle">
-        <div className="flex flex-wrap justify-between items-center mb-4 gap-2">
-          <div>
-            <h2 className="font-serif text-xl font-bold text-charcoal-900">
-              Live Kitchen Stock Manager & Catalog ({activeMenuItemsList.length} dishes)
-            </h2>
-            <p className="text-xs text-charcoal-700/60 mt-0.5">
-              Toggle dish availability instantly (86-ing) or custom add special dishes to your live menu.
-            </p>
-          </div>
 
-          <button
-            type="button"
-            onClick={() => setIsAddDishOpen(true)}
-            className="flex items-center space-x-1 px-3.5 py-1.5 bg-saffron-50 hover:bg-saffron-100 text-saffron-700 border border-saffron-200 rounded-xl text-xs font-bold transition-colors"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Add Custom Dish</span>
-          </button>
-        </div>
-
-        <div className="divide-y divide-ivory-100">
-          {activeMenuItemsList.map((item) => (
-            <div key={item.id} className="py-3.5 flex items-center justify-between gap-3">
-              <div className="flex items-center space-x-3 min-w-0">
-                <img
-                  src={item.image_url}
-                  alt={item.name}
-                  className="w-12 h-12 rounded-xl object-cover flex-shrink-0 bg-ivory-100"
-                />
-                <div className="min-w-0">
-                  <div className="flex items-center space-x-2">
-                    <h4 className="font-serif font-bold text-sm text-charcoal-900 truncate">{item.name}</h4>
-                    {item.is_chef_recommended && (
-                      <span className="text-[9px] bg-saffron-50 text-saffron-700 px-1.5 py-0.2 rounded font-bold border border-saffron-200">
-                        Chef Pick
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex items-center space-x-2 mt-0.5">
-                    <span className="text-xs text-saffron-700 font-semibold">₹{item.price.toFixed(2)}</span>
-                    <span className="text-[10px] text-charcoal-400">
-                      {activeCategoriesList.find((c) => c.id === item.category_id)?.name || 'General'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <button
-                  type="button"
-                  onClick={() => toggleItemAvailability(item.id)}
-                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all shadow-xs ${
-                    item.is_available
-                      ? 'bg-green-100 text-green-800 hover:bg-green-200'
-                      : 'bg-red-100 text-red-800 hover:bg-red-200'
-                  }`}
-                >
-                  {item.is_available ? (
-                    <>
-                      <ToggleRight className="w-4 h-4 text-green-700" />
-                      <span>Available</span>
-                    </>
-                  ) : (
-                    <>
-                      <ToggleLeft className="w-4 h-4 text-red-700" />
-                      <span>Sold Out (86)</span>
-                    </>
-                  )}
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => deleteMenuItem(item.id)}
-                  className="p-1.5 text-charcoal-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors"
-                  title="Remove Dish"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* MODAL: CUSTOM ADD DISH                                      */}
+      {/* MODAL: CONFIRM RESTAURANT OFFBOARDING                        */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      {isAddDishOpen && (
+      {isOffboardModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 shadow-float border border-ivory-200 animate-scaleUp">
-            <div className="flex justify-between items-center pb-4 border-b border-ivory-200">
-              <div>
-                <h3 className="font-serif text-xl font-bold text-charcoal-900">Add Custom Dish</h3>
-                <p className="text-xs text-charcoal-500 mt-0.5">
-                  Create and publish a new culinary item directly to the live customer menu.
-                </p>
-              </div>
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-float border border-ivory-200 animate-scaleUp text-center space-y-4">
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-red-50 border border-red-200 flex items-center justify-center text-red-600">
+              <UserMinus className="w-7 h-7" />
+            </div>
+            <div>
+              <h3 className="font-serif text-xl font-bold text-charcoal-900">
+                Offboard {restaurant.name}?
+              </h3>
+              <p className="text-xs text-charcoal-600 mt-2 leading-relaxed">
+                This will offboard <strong>{restaurant.name}</strong> from your active operational venues hub.
+              </p>
+              <p className="text-[11px] text-charcoal-500 mt-1">
+                Note: You can re-onboard this restaurant at any time from the Pune Restaurant Directory.
+              </p>
+            </div>
+            <div className="flex items-center justify-center space-x-3 pt-3">
               <button
                 type="button"
-                onClick={() => setIsAddDishOpen(false)}
-                className="p-1.5 rounded-full hover:bg-ivory-100 text-charcoal-400 hover:text-charcoal-700"
+                onClick={() => setIsOffboardModalOpen(false)}
+                className="px-4 py-2.5 rounded-xl border border-ivory-300 text-charcoal-700 hover:bg-ivory-100 text-xs font-bold transition-colors cursor-pointer"
               >
-                <X className="w-5 h-5" />
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const idToOffboard = restaurant.id;
+                  setIsOffboardModalOpen(false);
+                  deleteRestaurant(idToOffboard);
+                  const remaining = restaurants.filter((r) => r.id !== idToOffboard && !isDishNameAsRestaurant(r));
+                  if (remaining.length > 0) {
+                    setCurrentRestaurant(remaining[0].id);
+                    navigate(`/manage/${remaining[0].slug}`);
+                  } else {
+                    navigate('/admin');
+                  }
+                }}
+                className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition-colors shadow-xs cursor-pointer flex items-center space-x-1.5"
+              >
+                <UserMinus className="w-4 h-4" />
+                <span>Confirm Offboard</span>
               </button>
             </div>
-
-            <form onSubmit={handleCreateDish} className="space-y-4 pt-4">
-              {/* Dish Name */}
-              <div>
-                <label className="block text-xs font-bold text-charcoal-700 mb-1">Dish Name *</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Kolhapuri Mutton Sukka or Paneer Lababdar"
-                  value={dishForm.name}
-                  onChange={(e) => setDishForm({ ...dishForm, name: e.target.value })}
-                  className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3.5 py-2.5 text-xs text-charcoal-900 font-medium focus:outline-none focus:border-saffron-600"
-                />
-              </div>
-
-              {/* Category & Price */}
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-bold text-charcoal-700 mb-1">Category *</label>
-                  <select
-                    value={dishForm.categoryId}
-                    onChange={(e) => setDishForm({ ...dishForm, categoryId: e.target.value })}
-                    className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-xs text-charcoal-900 font-medium focus:outline-none focus:border-saffron-600"
-                  >
-                    {activeCategoriesList.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.name}
-                      </option>
-                    ))}
-                    <option value="__new__">+ Create New Category...</option>
-                  </select>
-
-                  {dishForm.categoryId === '__new__' && (
-                    <input
-                      type="text"
-                      placeholder="Category name"
-                      value={dishForm.newCategoryName}
-                      onChange={(e) => setDishForm({ ...dishForm, newCategoryName: e.target.value })}
-                      className="mt-2 w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-1.5 text-xs text-charcoal-900"
-                    />
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-charcoal-700 mb-1">Price (₹) *</label>
-                  <input
-                    type="number"
-                    required
-                    step="0.01"
-                    min="0"
-                    placeholder="450"
-                    value={dishForm.price}
-                    onChange={(e) => setDishForm({ ...dishForm, price: e.target.value })}
-                    className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3.5 py-2 text-xs text-charcoal-900 font-medium focus:outline-none focus:border-saffron-600"
-                  />
-                </div>
-              </div>
-
-              {/* Diet Type & Spice Level */}
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-bold text-charcoal-700 mb-1">Dietary Type</label>
-                  <div className="flex items-center space-x-2">
-                    <button
-                      type="button"
-                      onClick={() => setDishForm({ ...dishForm, isVeg: true, dietaryFlags: ['Vegetarian'] })}
-                      className={`flex-1 py-2 px-2.5 rounded-xl text-xs font-bold border transition-colors flex items-center justify-center space-x-1 ${
-                        dishForm.isVeg
-                          ? 'bg-green-50 border-green-600 text-green-800'
-                          : 'bg-white border-ivory-300 text-charcoal-600'
-                      }`}
-                    >
-                      <span className="w-2 h-2 rounded-full bg-green-600"></span>
-                      <span>Veg</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setDishForm({ ...dishForm, isVeg: false, dietaryFlags: [] })}
-                      className={`flex-1 py-2 px-2.5 rounded-xl text-xs font-bold border transition-colors flex items-center justify-center space-x-1 ${
-                        !dishForm.isVeg
-                          ? 'bg-red-50 border-red-600 text-red-800'
-                          : 'bg-white border-ivory-300 text-charcoal-600'
-                      }`}
-                    >
-                      <span className="w-2 h-2 rounded-full bg-red-600"></span>
-                      <span>Non-Veg</span>
-                    </button>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-charcoal-700 mb-1">
-                    Spice Level ({dishForm.spiceLevel}/5)
-                  </label>
-                  <div className="flex items-center space-x-1 pt-1">
-                    {[0, 1, 2, 3, 4, 5].map((lvl) => (
-                      <button
-                        key={lvl}
-                        type="button"
-                        onClick={() => setDishForm({ ...dishForm, spiceLevel: lvl })}
-                        className={`w-7 h-7 rounded-lg text-xs font-bold flex items-center justify-center border transition-colors ${
-                          dishForm.spiceLevel === lvl
-                            ? 'bg-saffron-600 text-white border-saffron-600'
-                            : 'bg-white text-charcoal-600 border-ivory-300 hover:bg-ivory-100'
-                        }`}
-                      >
-                        {lvl}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Short Description */}
-              <div>
-                <label className="block text-xs font-bold text-charcoal-700 mb-1">Short Description</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Slow-cooked cottage cheese cubes in rich velvety tomato-cashew gravy."
-                  value={dishForm.shortDescription}
-                  onChange={(e) => setDishForm({ ...dishForm, shortDescription: e.target.value })}
-                  className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3.5 py-2 text-xs text-charcoal-900 font-medium focus:outline-none focus:border-saffron-600"
-                />
-              </div>
-
-              {/* Ingredients & Allergens */}
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-bold text-charcoal-700 mb-1">Ingredients (comma-separated)</label>
-                  <input
-                    type="text"
-                    placeholder="Paneer, Cream, Tomatoes, Spices"
-                    value={dishForm.ingredients}
-                    onChange={(e) => setDishForm({ ...dishForm, ingredients: e.target.value })}
-                    className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-xs text-charcoal-900 font-medium focus:outline-none focus:border-saffron-600"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-charcoal-700 mb-1">Allergens (comma-separated)</label>
-                  <input
-                    type="text"
-                    placeholder="Dairy, Cashew"
-                    value={dishForm.allergens}
-                    onChange={(e) => setDishForm({ ...dishForm, allergens: e.target.value })}
-                    className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-xs text-charcoal-900 font-medium focus:outline-none focus:border-saffron-600"
-                  />
-                </div>
-              </div>
-
-              {/* Dish Photo Selection */}
-              <div>
-                <label className="block text-xs font-bold text-charcoal-700 mb-1.5">
-                  Dish Photograph
-                </label>
-                <div className="grid grid-cols-4 gap-2 mb-2">
-                  {SAMPLE_FOOD_IMAGES.map((img) => (
-                    <button
-                      key={img.label}
-                      type="button"
-                      onClick={() => setDishForm({ ...dishForm, imageUrl: img.url })}
-                      className={`relative rounded-xl overflow-hidden aspect-video border-2 transition-all ${
-                        dishForm.imageUrl === img.url ? 'border-saffron-600 scale-95 shadow-md' : 'border-ivory-200 opacity-75'
-                      }`}
-                    >
-                      <img src={img.url} alt={img.label} className="w-full h-full object-cover" />
-                      <span className="absolute bottom-0 inset-x-0 bg-charcoal-900/80 text-[8px] text-white text-center py-0.5 font-bold truncate">
-                        {img.label}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-                <input
-                  type="url"
-                  placeholder="Or enter custom image URL"
-                  value={dishForm.imageUrl}
-                  onChange={(e) => setDishForm({ ...dishForm, imageUrl: e.target.value })}
-                  className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-1.5 text-xs text-charcoal-900 font-mono"
-                />
-              </div>
-
-              {/* Submit Buttons */}
-              <div className="flex items-center space-x-3 pt-3 border-t border-ivory-200">
-                <button
-                  type="button"
-                  onClick={() => setIsAddDishOpen(false)}
-                  className="flex-1 py-2.5 rounded-xl border border-ivory-300 text-xs font-bold text-charcoal-700 hover:bg-ivory-100 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 py-2.5 rounded-xl bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold transition-colors shadow-subtle flex items-center justify-center space-x-1"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>Publish to Live Menu</span>
-                </button>
-              </div>
-            </form>
           </div>
         </div>
       )}

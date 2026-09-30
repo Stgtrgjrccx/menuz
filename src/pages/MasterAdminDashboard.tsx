@@ -46,7 +46,8 @@ import {
   Download,
   FileText,
   QrCode,
-  Lock
+  Lock,
+  UserMinus
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -84,6 +85,7 @@ export const MasterAdminDashboard: React.FC = () => {
   );
   const setCurrentRestaurant = useRestaurantStore((state) => state.setCurrentRestaurant);
   const addRestaurant = useRestaurantStore((state) => state.addRestaurant);
+  const deleteRestaurant = useRestaurantStore((state) => state.deleteRestaurant);
   const updateRestaurant = useRestaurantStore((state) => state.updateRestaurant);
   const toggleRestaurantStatus = useRestaurantStore((state) => state.toggleRestaurantStatus);
   const tables = useRestaurantStore((state) => state.tables);
@@ -129,6 +131,9 @@ export const MasterAdminDashboard: React.FC = () => {
 
   // ── Independent Websites Directory Modal State ──────────────
   const [isIndependentSitesOpen, setIsIndependentSitesOpen] = useState(false);
+
+  // ── Offboard Restaurant Modal State ─────────────────────────
+  const [offboardTarget, setOffboardTarget] = useState<Restaurant | null>(null);
 
   // ── Onboarding form state ──────────────────────────────────
   const [newRestName, setNewRestName] = useState('');
@@ -943,6 +948,14 @@ export const MasterAdminDashboard: React.FC = () => {
                             <UtensilsCrossed className="w-3 h-3 text-saffron-400" />
                             <span>Diner</span>
                           </Link>
+                          <button
+                            type="button"
+                            onClick={() => setOffboardTarget(r)}
+                            className="p-1.5 bg-charcoal-700 hover:bg-red-600 text-charcoal-300 hover:text-white rounded-lg transition-colors border border-charcoal-600 cursor-pointer"
+                            title={`Offboard ${r.name}`}
+                          >
+                            <UserMinus className="w-3.5 h-3.5" />
+                          </button>
                         </div>
                       </div>
                     );
@@ -1616,6 +1629,16 @@ export const MasterAdminDashboard: React.FC = () => {
                               )}
                             </button>
                           </div>
+
+                          <button
+                            type="button"
+                            onClick={() => setOffboardTarget(rest)}
+                            className="w-full mt-2 bg-red-50 hover:bg-red-600 text-red-700 hover:text-white font-bold py-1.5 px-2.5 rounded-xl text-[11px] flex items-center justify-center space-x-1.5 border border-red-200 hover:border-red-600 transition-colors cursor-pointer"
+                            title={`Offboard ${rest.name} from active operational hub`}
+                          >
+                            <UserMinus className="w-3.5 h-3.5" />
+                            <span>Offboard Venue</span>
+                          </button>
                         </div>
                       </div>
                     );
@@ -2747,6 +2770,49 @@ export const MasterAdminDashboard: React.FC = () => {
           setIsTableModalOpen(true);
         }}
       />
+
+      {/* Offboard Restaurant Confirmation Modal */}
+      {offboardTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-900/60 backdrop-blur-xs">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-float border border-ivory-200 animate-scaleUp text-center space-y-4">
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-red-50 border border-red-200 flex items-center justify-center text-red-600">
+              <UserMinus className="w-7 h-7" />
+            </div>
+            <div>
+              <h3 className="font-serif text-xl font-bold text-charcoal-900">
+                Offboard {offboardTarget.name}?
+              </h3>
+              <p className="text-xs text-charcoal-600 mt-2 leading-relaxed">
+                This will remove <strong>{offboardTarget.name}</strong> from your active operational venues hub.
+              </p>
+              <p className="text-[11px] text-charcoal-500 mt-1">
+                Note: You can re-onboard this restaurant at any time from the Pune Restaurant Directory below.
+              </p>
+            </div>
+            <div className="flex items-center justify-center space-x-3 pt-3">
+              <button
+                type="button"
+                onClick={() => setOffboardTarget(null)}
+                className="px-4 py-2.5 rounded-xl border border-ivory-300 text-charcoal-700 hover:bg-ivory-100 text-xs font-bold transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const targetId = offboardTarget.id;
+                  setOffboardTarget(null);
+                  deleteRestaurant(targetId);
+                }}
+                className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition-colors shadow-xs cursor-pointer flex items-center space-x-1.5"
+              >
+                <UserMinus className="w-4 h-4" />
+                <span>Confirm Offboard</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

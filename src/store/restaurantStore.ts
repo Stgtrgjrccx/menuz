@@ -555,11 +555,35 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
           const updated = state.restaurants.filter((r) => r.id !== id);
           try {
             localStorage.setItem(DEDICATED_REST_KEY, JSON.stringify(updated));
+            const customOnly = updated.filter(
+              (r) => !SEED_RESTAURANTS.some((s) => s.id === r.id) && !isDishNameAsRestaurant(r)
+            );
+            localStorage.setItem(PERMANENT_VAULT_KEY, JSON.stringify(customOnly));
+
+            // Also clean from all legacy and current storage keys
+            for (const key of [PERMANENT_VAULT_KEY, DEDICATED_REST_KEY, ...LEGACY_STORAGE_KEYS, STORAGE_KEY]) {
+              const raw = localStorage.getItem(key);
+              if (raw) {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) {
+                  localStorage.setItem(key, JSON.stringify(parsed.filter((item) => item.id !== id)));
+                } else if (parsed?.state?.restaurants) {
+                  parsed.state.restaurants = parsed.state.restaurants.filter((item: any) => item.id !== id);
+                  if (parsed.state.restaurant?.id === id) {
+                    parsed.state.restaurant = updated[0] || SEED_RESTAURANTS[0];
+                    parsed.state.currentRestaurantId = parsed.state.restaurant?.id || '';
+                  }
+                  localStorage.setItem(key, JSON.stringify(parsed));
+                }
+              }
+            }
           } catch (e) {}
+
+          const nextRest = updated[0] || SEED_RESTAURANTS[0];
           return {
             restaurants: updated,
-            restaurant: state.restaurant?.id === id ? updated[0] || SEED_RESTAURANTS[0] : state.restaurant,
-            currentRestaurantId: state.restaurant?.id === id ? (updated[0]?.id || '') : state.currentRestaurantId
+            restaurant: state.restaurant?.id === id ? nextRest : state.restaurant,
+            currentRestaurantId: state.restaurant?.id === id ? (nextRest?.id || '') : state.currentRestaurantId
           };
         });
       },
