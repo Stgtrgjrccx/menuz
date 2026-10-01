@@ -279,20 +279,20 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
   const enabledCount = (enableCloud ? 1 : 0) + (enableLan ? 1 : 0) + (enableDirectPrinter ? 1 : 0);
 
   return (
-    <div className="bg-white rounded-3xl p-6 shadow-2xl border border-ivory-200 max-w-3xl w-full mx-auto space-y-6">
+    <div className="bg-[#0D1322] rounded-3xl p-6 shadow-2xl border border-white/[0.08] max-w-3xl w-full mx-auto space-y-6">
       {/* Wizard Header */}
-      <div className="flex items-center justify-between border-b border-ivory-200 pb-4">
+      <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
         <div>
           <div className="flex items-center space-x-2">
             <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full border border-emerald-200">
               ⚡ 2-Minute Zero-Dev Setup
             </span>
-            <span className="text-xs text-charcoal-400">• Step {step} of 3</span>
+            <span className="text-xs text-slate-500">• Step {step} of 3</span>
           </div>
-          <h2 className="text-xl font-bold font-serif text-charcoal-900 mt-1">
+          <h2 className="text-xl font-bold font-serif text-white mt-1">
             Connect Kitchen KOT &amp; POS (Take All 3 Connections)
           </h2>
-          <p className="text-xs text-charcoal-500 mt-0.5">
+          <p className="text-xs text-slate-500 mt-0.5">
             Setup can be done any how! Use all 3 connections for zero-downtime triple redundancy, or enable whichever you have. No coding or agent assistance needed.
           </p>
         </div>
@@ -301,7 +301,7 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
           <button
             type="button"
             onClick={onCancel}
-            className="text-xs font-bold text-charcoal-400 hover:text-charcoal-700 px-3 py-1.5 rounded-xl hover:bg-ivory-100 transition-colors"
+            className="text-xs font-bold text-slate-500 hover:text-slate-400 px-3 py-1.5 rounded-xl hover:bg-white/[0.04] transition-colors"
           >
             Cancel
           </button>
@@ -316,7 +316,7 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
               ? 'bg-amber-50 border-amber-400 text-amber-950 font-bold'
               : step > 1
               ? 'bg-emerald-50 border-emerald-300 text-emerald-800'
-              : 'bg-ivory-50 border-ivory-200 text-charcoal-400'
+              : 'bg-white/[0.03] border-white/[0.08] text-slate-500'
           }`}
         >
           <span className="text-[10px] uppercase block">1. Select Connections</span>
@@ -329,7 +329,7 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
               ? 'bg-amber-50 border-amber-400 text-amber-950 font-bold'
               : step > 2
               ? 'bg-emerald-50 border-emerald-300 text-emerald-800'
-              : 'bg-ivory-50 border-ivory-200 text-charcoal-400'
+              : 'bg-white/[0.03] border-white/[0.08] text-slate-500'
           }`}
         >
           <span className="text-[10px] uppercase block">2. Multi-Test</span>
@@ -340,7 +340,7 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
           className={`p-2.5 rounded-xl border text-center transition-all ${
             step === 3
               ? 'bg-emerald-50 border-emerald-400 text-emerald-950 font-bold'
-              : 'bg-ivory-50 border-ivory-200 text-charcoal-400'
+              : 'bg-white/[0.03] border-white/[0.08] text-slate-500'
           }`}
         >
           <span className="text-[10px] uppercase block">3. Go Live</span>
@@ -369,8 +369,8 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
                 }}
                 className={`text-[10px] font-bold px-2.5 py-1 rounded-lg transition-all ${
                   enabledCount === 3
-                    ? 'bg-charcoal-900 text-amber-300 shadow-xs'
-                    : 'bg-white text-charcoal-700 hover:bg-ivory-100 border border-ivory-300'
+                    ? 'bg-[#090D16] text-amber-300 shadow-sm'
+                    : 'bg-white text-slate-400 hover:bg-white/[0.04] border border-white/[0.08]'
                 }`}
               >
                 ⚡ All 3 (Tri-Sync)
@@ -384,8 +384,8 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
                 }}
                 className={`text-[10px] font-bold px-2.5 py-1 rounded-lg transition-all ${
                   enableCloud && !enableLan && !enableDirectPrinter
-                    ? 'bg-charcoal-900 text-white shadow-xs'
-                    : 'bg-white text-charcoal-700 hover:bg-ivory-100 border border-ivory-300'
+                    ? 'bg-[#090D16] text-white shadow-sm'
+                    : 'bg-white text-slate-400 hover:bg-white/[0.04] border border-white/[0.08]'
                 }`}
               >
                 Cloud Only
@@ -399,8 +399,8 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
                 }}
                 className={`text-[10px] font-bold px-2.5 py-1 rounded-lg transition-all ${
                   !enableCloud && !enableLan && enableDirectPrinter
-                    ? 'bg-charcoal-900 text-white shadow-xs'
-                    : 'bg-white text-charcoal-700 hover:bg-ivory-100 border border-ivory-300'
+                    ? 'bg-[#090D16] text-white shadow-sm'
+                    : 'bg-white text-slate-400 hover:bg-white/[0.04] border border-white/[0.08]'
                 }`}
               >
                 Printer Only
@@ -414,8 +414,8 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
             <div
               className={`rounded-2xl border transition-all ${
                 enableCloud
-                  ? 'border-orange-400 bg-orange-50/40 shadow-xs'
-                  : 'border-ivory-200 bg-white opacity-70'
+                  ? 'border-orange-400 bg-orange-50/40 shadow-sm'
+                  : 'border-white/[0.08] bg-[#090D16] opacity-70'
               }`}
             >
               <div className="p-4 flex items-start justify-between gap-3">
@@ -425,14 +425,14 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
                   </div>
                   <div>
                     <div className="flex items-center space-x-2">
-                      <h4 className="text-sm font-bold text-charcoal-900">
+                      <h4 className="text-sm font-bold text-white">
                         1. Cloud POS Software API
                       </h4>
                       <span className="text-[9px] uppercase font-bold text-orange-700 bg-orange-100 px-1.5 py-0.5 rounded">
                         Billing &amp; Tax Sync
                       </span>
                     </div>
-                    <p className="text-[11px] text-charcoal-500 mt-0.5">
+                    <p className="text-[11px] text-slate-500 mt-0.5">
                       Syncs orders with Petpooja, Recaho, or RanceLab so sales reflect automatically in daily reporting.
                     </p>
                   </div>
@@ -445,14 +445,14 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
                     onChange={(e) => setEnableCloud(e.target.checked)}
                     className="sr-only peer"
                   />
-                  <div className="w-9 h-5 bg-charcoal-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-charcoal-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-orange-600"></div>
+                  <div className="w-9 h-5 bg-white/[0.08] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-white/20 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-orange-600"></div>
                 </label>
               </div>
 
               {enableCloud && (
                 <div className="px-4 pb-4 pt-1 border-t border-orange-200/60 mt-1 space-y-3">
                   <div className="flex items-center space-x-2">
-                    <span className="text-xs font-bold text-charcoal-800">Provider:</span>
+                    <span className="text-xs font-bold text-slate-200">Provider:</span>
                     <div className="flex gap-2">
                       {(['petpooja', 'recaho', 'rancelab'] as const).map((p) => (
                         <button
@@ -461,8 +461,8 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
                           onClick={() => setCloudProvider(p)}
                           className={`px-3 py-1 rounded-lg text-xs font-bold capitalize transition-colors ${
                             cloudProvider === p
-                              ? 'bg-charcoal-900 text-white shadow-xs'
-                              : 'bg-white border border-ivory-300 text-charcoal-600'
+                              ? 'bg-[#090D16] text-white shadow-sm'
+                              : 'bg-white border border-white/[0.08] text-slate-400'
                           }`}
                         >
                           {p === 'rancelab' ? 'RanceLab FusionResto' : p}
@@ -473,7 +473,7 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="text-[11px] font-bold text-charcoal-700 block mb-1">
+                      <label className="text-[11px] font-bold text-slate-400 block mb-1">
                         {cloudProvider === 'petpooja' && 'Petpooja Restaurant ID (restID)'}
                         {cloudProvider === 'recaho' && 'Recaho Outlet Token'}
                         {cloudProvider === 'rancelab' && 'RanceLab Branch Code'}
@@ -483,11 +483,11 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
                         value={restId}
                         onChange={(e) => setRestId(e.target.value)}
                         placeholder="e.g. rest_pune_saffron_01"
-                        className="w-full bg-white border border-ivory-300 rounded-xl px-3 py-2 text-xs text-charcoal-900 font-mono focus:outline-none focus:border-amber-500"
+                        className="w-full bg-[#090D16] border border-white/[0.08] rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-amber-500"
                       />
                     </div>
                     <div>
-                      <label className="text-[11px] font-bold text-charcoal-700 block mb-1">
+                      <label className="text-[11px] font-bold text-slate-400 block mb-1">
                         {cloudProvider === 'petpooja' && 'App Key / API Key'}
                         {cloudProvider === 'recaho' && 'Account API Key (X-Api-Key)'}
                         {cloudProvider === 'rancelab' && 'Integration Partner Key'}
@@ -497,7 +497,7 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
                         value={appKey}
                         onChange={(e) => setAppKey(e.target.value)}
                         placeholder="Enter API key or leave demo value..."
-                        className="w-full bg-white border border-ivory-300 rounded-xl px-3 py-2 text-xs text-charcoal-900 font-mono focus:outline-none focus:border-amber-500"
+                        className="w-full bg-[#090D16] border border-white/[0.08] rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-amber-500"
                       />
                     </div>
                   </div>
@@ -509,8 +509,8 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
             <div
               className={`rounded-2xl border transition-all ${
                 enableLan
-                  ? 'border-purple-400 bg-purple-50/40 shadow-xs'
-                  : 'border-ivory-200 bg-white opacity-70'
+                  ? 'border-purple-400 bg-purple-50/40 shadow-sm'
+                  : 'border-white/[0.08] bg-[#090D16] opacity-70'
               }`}
             >
               <div className="p-4 flex items-start justify-between gap-3">
@@ -520,14 +520,14 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
                   </div>
                   <div>
                     <div className="flex items-center space-x-2">
-                      <h4 className="text-sm font-bold text-charcoal-900">
+                      <h4 className="text-sm font-bold text-white">
                         2. Local Wi-Fi Counter Tablet / PC (LAN Bridge)
                       </h4>
                       <span className="text-[9px] uppercase font-bold text-purple-700 bg-purple-100 px-1.5 py-0.5 rounded">
                         Offline Fallback
                       </span>
                     </div>
-                    <p className="text-[11px] text-charcoal-500 mt-0.5">
+                    <p className="text-[11px] text-slate-500 mt-0.5">
                       Direct HTTP socket on your local restaurant Wi-Fi (RoyalPOS, Android tablet, or Windows counter PC). Works even if WAN internet drops.
                     </p>
                   </div>
@@ -540,14 +540,14 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
                     onChange={(e) => setEnableLan(e.target.checked)}
                     className="sr-only peer"
                   />
-                  <div className="w-9 h-5 bg-charcoal-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-charcoal-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-purple-600"></div>
+                  <div className="w-9 h-5 bg-white/[0.08] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-white/20 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-purple-600"></div>
                 </label>
               </div>
 
               {enableLan && (
                 <div className="px-4 pb-4 pt-1 border-t border-purple-200/60 mt-1 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-charcoal-600">Terminal Address on Local Wi-Fi:</span>
+                    <span className="text-xs text-slate-400">Terminal Address on Local Wi-Fi:</span>
                     <button
                       type="button"
                       onClick={() => setLanIp('192.168.1.104')}
@@ -559,22 +559,22 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
 
                   <div className="grid grid-cols-3 gap-3">
                     <div className="col-span-2">
-                      <label className="text-[11px] font-bold text-charcoal-700 block mb-1">Terminal IP</label>
+                      <label className="text-[11px] font-bold text-slate-400 block mb-1">Terminal IP</label>
                       <input
                         type="text"
                         value={lanIp}
                         onChange={(e) => setLanIp(e.target.value)}
                         placeholder="192.168.1.101"
-                        className="w-full bg-white border border-ivory-300 rounded-xl px-3 py-2 text-xs font-mono text-charcoal-900 focus:outline-none focus:border-purple-500"
+                        className="w-full bg-[#090D16] border border-white/[0.08] rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-purple-500"
                       />
                     </div>
                     <div>
-                      <label className="text-[11px] font-bold text-charcoal-700 block mb-1">Port</label>
+                      <label className="text-[11px] font-bold text-slate-400 block mb-1">Port</label>
                       <input
                         type="number"
                         value={lanPort}
                         onChange={(e) => setLanPort(Number(e.target.value))}
-                        className="w-full bg-white border border-ivory-300 rounded-xl px-3 py-2 text-xs font-mono text-charcoal-900 focus:outline-none focus:border-purple-500"
+                        className="w-full bg-[#090D16] border border-white/[0.08] rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-purple-500"
                       />
                     </div>
                   </div>
@@ -586,8 +586,8 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
             <div
               className={`rounded-2xl border transition-all ${
                 enableDirectPrinter
-                  ? 'border-emerald-400 bg-emerald-50/40 shadow-xs'
-                  : 'border-ivory-200 bg-white opacity-70'
+                  ? 'border-emerald-400 bg-emerald-50/40 shadow-sm'
+                  : 'border-white/[0.08] bg-[#090D16] opacity-70'
               }`}
             >
               <div className="p-4 flex items-start justify-between gap-3">
@@ -597,14 +597,14 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
                   </div>
                   <div>
                     <div className="flex items-center space-x-2">
-                      <h4 className="text-sm font-bold text-charcoal-900">
+                      <h4 className="text-sm font-bold text-white">
                         3. Direct Hardware ESC/POS Kitchen Printer (Port 9100)
                       </h4>
                       <span className="text-[9px] uppercase font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded">
                         100% Zero-POS Fallback
                       </span>
                     </div>
-                    <p className="text-[11px] text-charcoal-500 mt-0.5">
+                    <p className="text-[11px] text-slate-500 mt-0.5">
                       Direct TCP raw socket to any standard 80mm kitchen printer (Epson, TVS, Rugtek, Star, NGX). Instant buzzer &amp; ticket cut.
                     </p>
                   </div>
@@ -617,7 +617,7 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
                     onChange={(e) => setEnableDirectPrinter(e.target.checked)}
                     className="sr-only peer"
                   />
-                  <div className="w-9 h-5 bg-charcoal-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-charcoal-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                  <div className="w-9 h-5 bg-white/[0.08] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-white/20 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
                 </label>
               </div>
 
@@ -625,22 +625,22 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
                 <div className="px-4 pb-4 pt-1 border-t border-emerald-200/60 mt-1 space-y-3">
                   <div className="grid grid-cols-3 gap-3">
                     <div className="col-span-2">
-                      <label className="text-[11px] font-bold text-charcoal-700 block mb-1">Thermal Printer IP (Wi-Fi / LAN)</label>
+                      <label className="text-[11px] font-bold text-slate-400 block mb-1">Thermal Printer IP (Wi-Fi / LAN)</label>
                       <input
                         type="text"
                         value={printerIp}
                         onChange={(e) => setPrinterIp(e.target.value)}
                         placeholder="192.168.1.200"
-                        className="w-full bg-white border border-ivory-300 rounded-xl px-3 py-2 text-xs font-mono text-charcoal-900 focus:outline-none focus:border-emerald-500"
+                        className="w-full bg-[#090D16] border border-white/[0.08] rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-emerald-500"
                       />
                     </div>
                     <div>
-                      <label className="text-[11px] font-bold text-charcoal-700 block mb-1">RAW Port</label>
+                      <label className="text-[11px] font-bold text-slate-400 block mb-1">RAW Port</label>
                       <input
                         type="number"
                         value={printerPort}
                         onChange={(e) => setPrinterPort(Number(e.target.value))}
-                        className="w-full bg-white border border-ivory-300 rounded-xl px-3 py-2 text-xs font-mono text-charcoal-900 focus:outline-none focus:border-emerald-500"
+                        className="w-full bg-[#090D16] border border-white/[0.08] rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-emerald-500"
                       />
                     </div>
                   </div>
@@ -650,7 +650,7 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
           </div>
 
           <div className="flex items-center justify-between pt-2">
-            <span className="text-xs text-charcoal-500">
+            <span className="text-xs text-slate-500">
               {enabledCount === 3
                 ? '🔥 Triple-redundancy: All 3 channels will fire together.'
                 : `${enabledCount} connection(s) active.`}
@@ -675,16 +675,16 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
       {/* STEP 2: TEST HANDSHAKE & SIMULATED ESC/POS PREVIEW */}
       {step === 2 && (
         <div className="space-y-5">
-          <div className="bg-ivory-50 p-4 rounded-2xl border border-ivory-200 flex items-center justify-between">
+          <div className="bg-white/[0.03] p-4 rounded-2xl border border-white/[0.08] flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${testing ? 'bg-amber-100 text-amber-600 animate-spin' : 'bg-emerald-100 text-emerald-700'}`}>
                 {testing ? <RefreshCw className="w-5 h-5" /> : <Printer className="w-5 h-5" />}
               </div>
               <div>
-                <h4 className="text-sm font-bold text-charcoal-900">
+                <h4 className="text-sm font-bold text-white">
                   {testing ? 'Testing Multi-Channel Handshake...' : 'Multi-Channel Handshake Verified!'}
                 </h4>
-                <p className="text-xs text-charcoal-500">
+                <p className="text-xs text-slate-500">
                   {testing
                     ? 'Dispatched simultaneous test order to all enabled channels...'
                     : 'Check verification badges below and inspect the simulated 80mm kitchen slip.'}
@@ -696,7 +696,7 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
               type="button"
               disabled={testing}
               onClick={handleRunTest}
-              className="px-3.5 py-1.5 bg-white border border-ivory-300 hover:bg-ivory-100 text-xs font-bold rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="px-3.5 py-1.5 bg-[#090D16] border border-white/[0.08] hover:bg-white/[0.04] text-xs font-bold rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${testing ? 'animate-spin' : ''}`} />
               <span>Re-Test</span>
@@ -790,7 +790,7 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
             <button
               type="button"
               onClick={() => setStep(1)}
-              className="text-xs font-bold text-charcoal-600 hover:text-charcoal-900 cursor-pointer"
+              className="text-xs font-bold text-slate-400 hover:text-white cursor-pointer"
             >
               ← Back to Connections
             </button>
@@ -814,15 +814,15 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
             ✓
           </div>
           <div>
-            <h3 className="font-serif font-bold text-2xl text-charcoal-900">
+            <h3 className="font-serif font-bold text-2xl text-white">
               Kitchen KOT Multi-Sync is Live!
             </h3>
-            <p className="text-xs text-charcoal-600 max-w-md mx-auto mt-1">
+            <p className="text-xs text-slate-400 max-w-md mx-auto mt-1">
               Setup is complete. Any diner scanning table QR codes at <strong>{restaurant.name}</strong> will now have orders printed in your kitchen in under 1 second.
             </p>
           </div>
 
-          <div className="bg-ivory-50 p-4 rounded-2xl border border-ivory-200 max-w-md mx-auto text-left text-xs space-y-1.5 font-mono text-charcoal-700">
+          <div className="bg-white/[0.03] p-4 rounded-2xl border border-white/[0.08] max-w-md mx-auto text-left text-xs space-y-1.5 font-mono text-slate-400">
             <div className="flex justify-between">
               <span>Active Architecture:</span>
               <strong className="text-emerald-700 font-bold">
@@ -831,17 +831,17 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
             </div>
             <div className="flex justify-between">
               <span>Cloud Provider:</span>
-              <strong className="text-charcoal-900">{enableCloud ? cloudProvider.toUpperCase() : 'Disabled'}</strong>
+              <strong className="text-white">{enableCloud ? cloudProvider.toUpperCase() : 'Disabled'}</strong>
             </div>
             <div className="flex justify-between">
               <span>Local Wi-Fi LAN:</span>
-              <strong className="text-charcoal-900">{enableLan ? `Active (${lanIp})` : 'Disabled'}</strong>
+              <strong className="text-white">{enableLan ? `Active (${lanIp})` : 'Disabled'}</strong>
             </div>
             <div className="flex justify-between">
               <span>Direct Thermal Hardware:</span>
-              <strong className="text-charcoal-900">{enableDirectPrinter ? `Active (${printerIp})` : 'Disabled'}</strong>
+              <strong className="text-white">{enableDirectPrinter ? `Active (${printerIp})` : 'Disabled'}</strong>
             </div>
-            <div className="flex justify-between pt-1 border-t border-ivory-300">
+            <div className="flex justify-between pt-1 border-t border-white/[0.08]">
               <span>Failover Guarantee:</span>
               <strong className="text-emerald-700">Zero Orders Missed</strong>
             </div>
@@ -851,7 +851,7 @@ export const SelfServeKotSetupWizard: React.FC<SelfServeKotSetupWizardProps> = (
             <button
               type="button"
               onClick={handleSaveAndGoLive}
-              className="px-8 py-3.5 bg-gradient-to-r from-amber-500 to-saffron-600 hover:brightness-110 text-charcoal-950 font-bold text-xs rounded-2xl shadow-float transition-all cursor-pointer"
+              className="px-8 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:brightness-110 text-white font-bold text-xs rounded-2xl  transition-all cursor-pointer"
             >
               Close Setup &amp; View Live Restaurant Dashboard
             </button>

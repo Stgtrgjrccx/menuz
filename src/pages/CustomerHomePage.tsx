@@ -113,7 +113,7 @@ export const CustomerHomePage: React.FC = () => {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center space-y-6 relative z-10">
           
           {/* Eyebrow Badge */}
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.1] text-amber-400 text-xs font-semibold tracking-wide">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#090D16]/[0.04] border border-white/[0.1] text-amber-400 text-xs font-semibold tracking-wide">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span>Autonomous Dine-In Operating System</span>
           </div>
@@ -141,7 +141,7 @@ export const CustomerHomePage: React.FC = () => {
 
             <Link
               to="/r/saffron-house/menu?t=table-token-01-saffron"
-              className="py-3 px-5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-white font-semibold text-xs sm:text-sm border border-white/[0.12] hover:border-amber-400/40 flex items-center space-x-2 transition-all"
+              className="py-3 px-5 rounded-xl bg-[#090D16]/[0.06] hover:bg-white/[0.1] text-white font-semibold text-xs sm:text-sm border border-white/[0.12] hover:border-amber-400/40 flex items-center space-x-2 transition-all"
             >
               <UtensilsCrossed className="w-4 h-4 text-amber-400" />
               <span>Launch Table 1 (Saffron House)</span>
@@ -158,7 +158,7 @@ export const CustomerHomePage: React.FC = () => {
 
           {/* Clean Live Ticker */}
           <div className="pt-6 max-w-3xl mx-auto">
-            <div className="py-2 px-4 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs text-slate-400 flex items-center justify-center space-x-3 overflow-x-auto whitespace-nowrap scrollbar-none">
+            <div className="py-2 px-4 rounded-xl bg-[#090D16]/[0.03] border border-white/[0.06] text-xs text-slate-400 flex items-center justify-center space-x-3 overflow-x-auto whitespace-nowrap scrollbar-none">
               <span className="flex items-center space-x-1.5 text-amber-400 font-bold">
                 <Flame className="w-3.5 h-3.5" />
                 <span>Live At Tables:</span>
@@ -202,7 +202,7 @@ export const CustomerHomePage: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search Pune restaurants by name, area, or cuisine..."
-                className="w-full py-2 pl-9 pr-8 text-xs bg-white/[0.04] text-white placeholder:text-slate-500 rounded-lg border border-white/[0.1] focus:outline-none focus:border-amber-400/60 transition-colors"
+                className="w-full py-2 pl-9 pr-8 text-xs bg-[#090D16]/[0.04] text-white placeholder:text-slate-500 rounded-lg border border-white/[0.1] focus:outline-none focus:border-amber-400/60 transition-colors"
               />
               {searchQuery && (
                 <button
@@ -291,7 +291,7 @@ export const CustomerHomePage: React.FC = () => {
 
                   {/* Highlights Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                    <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center space-x-2">
+                    <div className="p-2.5 rounded-xl bg-[#090D16]/[0.03] border border-white/[0.06] flex items-center space-x-2">
                       <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                       <span className="text-slate-300 truncate">{venue.aiChef}</span>
                     </div>
@@ -318,7 +318,7 @@ export const CustomerHomePage: React.FC = () => {
                     type="button"
                     onClick={() => handleOpenScanner(venue.slug)}
                     title={`Scan Table QR for ${venue.name}`}
-                    className="p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 hover:text-white transition-colors cursor-pointer"
+                    className="p-2.5 rounded-xl bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 hover:text-white transition-colors cursor-pointer"
                   >
                     <QrCode className="w-4 h-4 text-amber-400" />
                   </button>
@@ -326,7 +326,7 @@ export const CustomerHomePage: React.FC = () => {
                   <Link
                     to={`/manage/${venue.slug}`}
                     title="View venue manager operations hub"
-                    className="py-2.5 px-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 hover:text-white text-xs font-semibold flex items-center space-x-1 transition-colors"
+                    className="py-2.5 px-3 rounded-xl bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 hover:text-white text-xs font-semibold flex items-center space-x-1 transition-colors"
                   >
                     <LayoutDashboard className="w-3.5 h-3.5 text-slate-400" />
                     <span className="hidden sm:inline">Hub</span>
@@ -599,7 +599,7 @@ export const CustomerHomePage: React.FC = () => {
             <button
               type="button"
               onClick={() => handleOpenScanner()}
-              className="py-3 px-5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-white font-semibold text-xs border border-white/[0.1] transition-colors flex items-center space-x-1.5 cursor-pointer"
+              className="py-3 px-5 rounded-xl bg-[#090D16]/[0.06] hover:bg-white/[0.1] text-white font-semibold text-xs border border-white/[0.1] transition-colors flex items-center space-x-1.5 cursor-pointer"
             >
               <QrCode className="w-4 h-4 text-amber-400" />
               <span>Test Table QR Scan</span>

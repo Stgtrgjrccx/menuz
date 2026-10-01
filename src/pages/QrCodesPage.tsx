@@ -51,7 +51,7 @@ export const QrCodesPage: React.FC = () => {
       <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-white/[0.08]">
         <Link
           to="/"
-          className="inline-flex items-center space-x-1.5 text-xs font-bold text-slate-300 hover:text-white transition-colors bg-white/[0.04] hover:bg-white/[0.08] px-3.5 py-2 rounded-xl border border-white/[0.08] cursor-pointer"
+          className="inline-flex items-center space-x-1.5 text-xs font-bold text-slate-300 hover:text-white transition-colors bg-[#090D16]/[0.04] hover:bg-white/[0.08] px-3.5 py-2 rounded-xl border border-white/[0.08] cursor-pointer"
         >
           <ArrowLeft className="w-3.5 h-3.5 text-amber-400" />
           <span>Explore Demos</span>
@@ -70,7 +70,7 @@ export const QrCodesPage: React.FC = () => {
 
           <Link
             to={`/manage/${restaurant.slug || 'saffron-house'}`}
-            className="px-3.5 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-semibold text-slate-300 hover:text-white transition-all"
+            className="px-3.5 py-2 rounded-xl bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-semibold text-slate-300 hover:text-white transition-all"
           >
             Floor Ops
           </Link>
@@ -103,11 +103,11 @@ export const QrCodesPage: React.FC = () => {
             value={renderBaseUrl}
             onChange={(e) => setRenderBaseUrl(e.target.value)}
             placeholder="https://your-domain.com"
-            className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:outline-none focus:border-amber-400"
+            className="flex-1 bg-[#090D16]/[0.04] border border-white/[0.08] rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:outline-none focus:border-amber-400"
           />
           <button
             onClick={copyToClipboard}
-            className="px-3.5 py-2.5 bg-white/[0.08] hover:bg-white/[0.12] text-slate-200 rounded-xl text-xs font-semibold flex items-center space-x-1.5 transition-colors border border-white/[0.08] cursor-pointer"
+            className="px-3.5 py-2.5 bg-[#090D16]/[0.08] hover:bg-white/[0.12] text-slate-200 rounded-xl text-xs font-semibold flex items-center space-x-1.5 transition-colors border border-white/[0.08] cursor-pointer"
           >
             {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
             <span>{copied ? 'Copied' : 'Copy'}</span>
@@ -168,7 +168,7 @@ export const QrCodesPage: React.FC = () => {
         </div>
 
         {/* The Live QR Image */}
-        <div className="w-64 h-64 sm:w-72 sm:h-72 mx-auto bg-white rounded-2xl p-4 border border-white/[0.2] flex items-center justify-center shadow-xl">
+        <div className="w-64 h-64 sm:w-72 sm:h-72 mx-auto bg-[#0D1322] rounded-2xl p-4 border border-white/[0.2] flex items-center justify-center shadow-xl">
           <img
             src={qrImageUrl}
             alt={`QR Code for ${selectedTable?.label}`}
@@ -177,7 +177,7 @@ export const QrCodesPage: React.FC = () => {
         </div>
 
         {/* Live Target Destination Link */}
-        <div className="mt-4 p-3 bg-white/[0.03] rounded-xl border border-white/[0.08] text-left">
+        <div className="mt-4 p-3 bg-[#090D16]/[0.03] rounded-xl border border-white/[0.08] text-left">
           <span className="text-[10px] uppercase font-mono font-bold text-slate-400 block mb-0.5">Destination URL:</span>
           <span className="font-mono text-xs text-amber-400 font-semibold break-all leading-relaxed block">
             {deployedMenuUrl}
@@ -201,7 +201,7 @@ export const QrCodesPage: React.FC = () => {
             download={`${restaurant?.name || 'Restaurant'}_${selectedTable?.label}_QR.png`}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-4 bg-white/[0.06] hover:bg-white/[0.1] text-white font-semibold py-3 rounded-xl text-xs border border-white/[0.08] flex items-center justify-center space-x-1.5 transition-colors"
+            className="px-4 bg-[#090D16]/[0.06] hover:bg-white/[0.1] text-white font-semibold py-3 rounded-xl text-xs border border-white/[0.08] flex items-center justify-center space-x-1.5 transition-colors"
           >
             <Download className="w-4 h-4 text-slate-300" />
             <span>PNG</span>

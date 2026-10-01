@@ -169,7 +169,7 @@ export const ManagerDashboard: React.FC = () => {
           {/* Always-Visible Admin Page Top Button */}
           <Link
             to="/admin"
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-amber-300 hover:text-amber-200 transition-colors bg-amber-500/15 hover:bg-amber-500/25 px-3.5 py-2 rounded-xl border border-amber-500/30 hover:border-amber-400/60 shadow-xs cursor-pointer active:scale-95"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-amber-300 hover:text-amber-200 transition-colors bg-amber-500/15 hover:bg-amber-500/25 px-3.5 py-2 rounded-xl border border-amber-500/30 hover:border-amber-400/60 shadow-sm cursor-pointer active:scale-95"
             title="Open Master Admin Control Hub"
           >
             <ShieldCheck className="w-4 h-4 text-amber-400" />
@@ -178,14 +178,14 @@ export const ManagerDashboard: React.FC = () => {
 
           <Link
             to="/"
-            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-slate-300 hover:text-white transition-colors bg-white/[0.04] hover:bg-white/[0.08] px-3.5 py-2 rounded-xl border border-white/[0.08] shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-slate-300 hover:text-white transition-colors bg-[#090D16]/[0.04] hover:bg-white/[0.08] px-3.5 py-2 rounded-xl border border-white/[0.08] shadow-sm cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5 text-slate-400" />
             <span>Explore Demos</span>
           </Link>
           <Link
             to="/pitch"
-            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-cyan-300 hover:text-cyan-200 transition-colors bg-cyan-500/10 hover:bg-cyan-500/20 px-3 py-2 rounded-xl border border-cyan-500/30 shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-cyan-300 hover:text-cyan-200 transition-colors bg-cyan-500/10 hover:bg-cyan-500/20 px-3 py-2 rounded-xl border border-cyan-500/30 shadow-sm cursor-pointer"
           >
             <span className="text-xs">📊</span>
             <span>Pitch Deck</span>
@@ -194,7 +194,7 @@ export const ManagerDashboard: React.FC = () => {
 
         <div className="flex flex-wrap items-center gap-2">
           {/* Active Venue Switcher */}
-          <div className="flex items-center space-x-1.5 bg-[#0D1322] border border-white/[0.08] rounded-xl px-2.5 py-1.5 shadow-xs">
+          <div className="flex items-center space-x-1.5 bg-[#0D1322] border border-white/[0.08] rounded-xl px-2.5 py-1.5 shadow-sm">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider hidden sm:inline">Venue:</span>
             <select
@@ -222,7 +222,7 @@ export const ManagerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsAiStudioOpen(true)}
-            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-amber-300 hover:text-amber-200 transition-colors bg-amber-500/10 hover:bg-amber-500/20 px-3.5 py-2 rounded-xl border border-amber-500/20 shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-amber-300 hover:text-amber-200 transition-colors bg-amber-500/10 hover:bg-amber-500/20 px-3.5 py-2 rounded-xl border border-amber-500/20 shadow-sm cursor-pointer"
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span>Chef AI Studio</span>
@@ -232,7 +232,7 @@ export const ManagerDashboard: React.FC = () => {
             type="button"
             disabled={usbPrintLoading}
             onClick={handleTestUsbPrint}
-            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-blue-300 hover:text-blue-200 transition-colors bg-blue-500/10 hover:bg-blue-500/20 px-3.5 py-2 rounded-xl border border-blue-500/20 shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-blue-300 hover:text-blue-200 transition-colors bg-blue-500/10 hover:bg-blue-500/20 px-3.5 py-2 rounded-xl border border-blue-500/20 shadow-sm cursor-pointer"
             title="Connect USB Thermal Printer & Test Print ESC/POS Ticket"
           >
             <Printer className="w-3.5 h-3.5 text-blue-400" />
@@ -241,7 +241,7 @@ export const ManagerDashboard: React.FC = () => {
 
           <Link
             to="/kitchen"
-            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-slate-200 hover:text-white transition-colors bg-white/[0.04] hover:bg-white/[0.08] px-3.5 py-2 rounded-xl border border-white/[0.08] shadow-xs"
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-slate-200 hover:text-white transition-colors bg-[#090D16]/[0.04] hover:bg-white/[0.08] px-3.5 py-2 rounded-xl border border-white/[0.08] shadow-sm"
           >
             <ChefHat className="w-3.5 h-3.5 text-amber-400" />
             <span>Kitchen KDS</span>
@@ -250,11 +250,11 @@ export const ManagerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsPosModalOpen(true)}
-            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-orange-300 hover:text-orange-200 transition-colors bg-orange-500/10 hover:bg-orange-500/20 px-3.5 py-2 rounded-xl border border-orange-500/20 shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-orange-300 hover:text-orange-200 transition-colors bg-orange-500/10 hover:bg-orange-500/20 px-3.5 py-2 rounded-xl border border-orange-500/20 shadow-sm cursor-pointer"
           >
             <Printer className="w-3.5 h-3.5 text-orange-400" />
             <span>POS & KOT</span>
-            <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded-md bg-white/[0.06] text-orange-300 font-bold border border-white/[0.08]">
+            <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded-md bg-[#090D16]/[0.06] text-orange-300 font-bold border border-white/[0.08]">
               {restaurant.pos_provider || 'Petpooja'}
             </span>
           </button>
@@ -262,11 +262,11 @@ export const ManagerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsTableModalOpen(true)}
-            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-emerald-300 hover:text-emerald-200 transition-colors bg-emerald-500/10 hover:bg-emerald-500/20 px-3.5 py-2 rounded-xl border border-emerald-500/20 shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-emerald-300 hover:text-emerald-200 transition-colors bg-emerald-500/10 hover:bg-emerald-500/20 px-3.5 py-2 rounded-xl border border-emerald-500/20 shadow-sm cursor-pointer"
           >
             <span className="text-xs">🪑</span>
             <span>Floor Plan</span>
-            <span className="text-[9px] uppercase font-mono px-1.5 py-0.5 rounded-md bg-white/[0.06] text-emerald-300 font-bold border border-white/[0.08]">
+            <span className="text-[9px] uppercase font-mono px-1.5 py-0.5 rounded-md bg-[#090D16]/[0.06] text-emerald-300 font-bold border border-white/[0.08]">
               {activeTablesList.length} Tables
             </span>
           </button>
@@ -275,7 +275,7 @@ export const ManagerDashboard: React.FC = () => {
 
       {/* USB Print Notification Banner */}
       {usbPrintStatus && (
-        <div className="bg-blue-950/40 border border-blue-500/40 text-blue-200 p-4 rounded-2xl text-xs font-bold flex items-center justify-between shadow-xs animate-in fade-in">
+        <div className="bg-blue-950/40 border border-blue-500/40 text-blue-200 p-4 rounded-2xl text-xs font-bold flex items-center justify-between shadow-sm animate-in fade-in">
           <div className="flex items-center gap-2">
             <Printer className="w-4 h-4 text-blue-400" />
             <span>{usbPrintStatus}</span>
@@ -312,7 +312,7 @@ export const ManagerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsTableModalOpen(true)}
-            className="flex items-center space-x-1.5 text-xs text-slate-200 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] px-3.5 py-2.5 rounded-xl shadow-xs transition-all font-semibold cursor-pointer"
+            className="flex items-center space-x-1.5 text-xs text-slate-200 bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] px-3.5 py-2.5 rounded-xl shadow-sm transition-all font-semibold cursor-pointer"
             title="Manage Tables, Floor Plan, Capacity, and Edit Restaurant Profile"
           >
             <span className="text-sm">🪑</span>
@@ -322,7 +322,7 @@ export const ManagerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsAiDrawerOpen(true)}
-            className="flex items-center space-x-1.5 text-xs text-purple-300 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 px-3.5 py-2.5 rounded-xl shadow-xs transition-colors font-semibold cursor-pointer"
+            className="flex items-center space-x-1.5 text-xs text-purple-300 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 px-3.5 py-2.5 rounded-xl shadow-sm transition-colors font-semibold cursor-pointer"
           >
             <span className="text-sm">🧑‍🍳</span>
             <span>Test Chef's AI</span>
@@ -330,7 +330,7 @@ export const ManagerDashboard: React.FC = () => {
 
           <Link
             to={`/r/${restaurant.slug}/menu?t=${activeTablesList[0]?.public_token || 'table-token-01-saffron'}`}
-            className="flex items-center space-x-1.5 text-xs text-slate-200 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] px-3.5 py-2.5 rounded-xl shadow-xs transition-colors font-semibold"
+            className="flex items-center space-x-1.5 text-xs text-slate-200 bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] px-3.5 py-2.5 rounded-xl shadow-sm transition-colors font-semibold"
           >
             <UtensilsCrossed className="w-3.5 h-3.5 text-amber-400" />
             <span>Launch Diner Menu</span>
@@ -339,7 +339,7 @@ export const ManagerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsOffboardModalOpen(true)}
-            className="flex items-center space-x-1.5 text-xs text-rose-400 hover:text-white bg-rose-500/10 hover:bg-rose-600 border border-rose-500/20 hover:border-rose-600 px-3.5 py-2.5 rounded-xl shadow-xs transition-all font-semibold cursor-pointer"
+            className="flex items-center space-x-1.5 text-xs text-rose-400 hover:text-white bg-rose-500/10 hover:bg-rose-600 border border-rose-500/20 hover:border-rose-600 px-3.5 py-2.5 rounded-xl shadow-sm transition-all font-semibold cursor-pointer"
             title={`Offboard ${restaurant.name} from Menuz`}
           >
             <UserMinus className="w-3.5 h-3.5" />
@@ -349,7 +349,7 @@ export const ManagerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={resetToDefaults}
-            className="flex items-center space-x-1.5 text-xs text-slate-400 hover:text-white bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] px-3.5 py-2 rounded-xl transition-colors cursor-pointer"
+            className="flex items-center space-x-1.5 text-xs text-slate-400 hover:text-white bg-[#090D16]/[0.03] hover:bg-white/[0.06] border border-white/[0.06] px-3.5 py-2 rounded-xl transition-colors cursor-pointer"
           >
             <RefreshCw className="w-3.5 h-3.5 text-slate-400" />
             <span>Reset Demo</span>
@@ -430,7 +430,7 @@ export const ManagerDashboard: React.FC = () => {
             {unreadWaiterCalls.map((notif) => (
               <div
                 key={notif.id}
-                className="bg-[#0D1322] p-3.5 rounded-xl border border-amber-500/30 shadow-xs flex items-center justify-between"
+                className="bg-[#0D1322] p-3.5 rounded-xl border border-amber-500/30 shadow-sm flex items-center justify-between"
               >
                 <div>
                   <span className="text-[10px] uppercase font-bold text-amber-400 block font-mono">Table Request</span>
@@ -442,7 +442,7 @@ export const ManagerDashboard: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => markNotificationRead(notif.id)}
-                  className="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-lg transition-colors shadow-xs cursor-pointer"
+                  className="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-lg transition-colors shadow-sm cursor-pointer"
                 >
                   Attend
                 </button>
@@ -476,7 +476,7 @@ export const ManagerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={() => setSmartSettingsTab('kot')}
-            className="px-4 py-2 bg-white/[0.06] hover:bg-white/[0.1] text-white border border-white/[0.1] rounded-xl text-xs font-bold flex items-center space-x-1.5 shadow-sm transition-all cursor-pointer"
+            className="px-4 py-2 bg-[#090D16]/[0.06] hover:bg-white/[0.1] text-white border border-white/[0.1] rounded-xl text-xs font-bold flex items-center space-x-1.5 shadow-sm transition-all cursor-pointer"
           >
             <Sliders className="w-3.5 h-3.5 text-amber-400" />
             <span>⚙️ Configure All Smart Options</span>
@@ -504,7 +504,7 @@ export const ManagerDashboard: React.FC = () => {
                 Fires orders directly to kitchen KDS without waiting for manual manager approval.
               </p>
 
-              <div className="mt-2.5 p-2 bg-white/[0.03] rounded-xl border border-white/[0.06] text-[10px] space-y-1">
+              <div className="mt-2.5 p-2 bg-[#090D16]/[0.03] rounded-xl border border-white/[0.06] text-[10px] space-y-1">
                 <div className="flex justify-between text-slate-300">
                   <span className="font-semibold text-slate-400">Station:</span>
                   <span className="truncate max-w-[90px] font-mono text-white">
@@ -527,7 +527,7 @@ export const ManagerDashboard: React.FC = () => {
                   const nextVal = !restaurant.direct_kitchen_kot_enabled;
                   updateRestaurant(restaurant.id, { direct_kitchen_kot_enabled: nextVal });
                 }}
-                className={`w-full py-1.5 px-2 rounded-xl text-[11px] font-bold transition-all flex items-center justify-center space-x-1 shadow-xs cursor-pointer ${
+                className={`w-full py-1.5 px-2 rounded-xl text-[11px] font-bold transition-all flex items-center justify-center space-x-1 shadow-sm cursor-pointer ${
                   restaurant.direct_kitchen_kot_enabled
                     ? 'bg-emerald-600 hover:bg-emerald-500 text-white'
                     : 'bg-white/[0.08] hover:bg-white/[0.12] text-white'
@@ -539,7 +539,7 @@ export const ManagerDashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setSmartSettingsTab('kot')}
-                className="w-full py-1.5 px-2 rounded-xl text-[10px] font-semibold text-slate-300 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-all flex items-center justify-center space-x-1 cursor-pointer"
+                className="w-full py-1.5 px-2 rounded-xl text-[10px] font-semibold text-slate-300 bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-all flex items-center justify-center space-x-1 cursor-pointer"
               >
                 <Settings className="w-3 h-3 text-slate-400" />
                 <span>Edit Parameters</span>
@@ -567,7 +567,7 @@ export const ManagerDashboard: React.FC = () => {
                 Off-peak discounts and optional peak Saturday evening surge markups.
               </p>
 
-              <div className="mt-2.5 p-2 bg-white/[0.03] rounded-xl border border-white/[0.06] text-[10px] space-y-1">
+              <div className="mt-2.5 p-2 bg-[#090D16]/[0.03] rounded-xl border border-white/[0.06] text-[10px] space-y-1">
                 <div className="flex justify-between text-slate-300">
                   <span className="font-semibold text-slate-400">Time:</span>
                   <span className="font-mono text-white">
@@ -598,7 +598,7 @@ export const ManagerDashboard: React.FC = () => {
                     }
                   });
                 }}
-                className={`w-full py-1.5 px-2 rounded-xl text-[11px] font-bold transition-all flex items-center justify-center space-x-1 shadow-xs cursor-pointer ${
+                className={`w-full py-1.5 px-2 rounded-xl text-[11px] font-bold transition-all flex items-center justify-center space-x-1 shadow-sm cursor-pointer ${
                   restaurant.happy_hour_config?.enabled
                     ? 'bg-orange-600 hover:bg-orange-500 text-white'
                     : 'bg-white/[0.08] hover:bg-white/[0.12] text-white'
@@ -610,7 +610,7 @@ export const ManagerDashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setSmartSettingsTab('happy_hour')}
-                className="w-full py-1.5 px-2 rounded-xl text-[10px] font-semibold text-slate-300 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-all flex items-center justify-center space-x-1 cursor-pointer"
+                className="w-full py-1.5 px-2 rounded-xl text-[10px] font-semibold text-slate-300 bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-all flex items-center justify-center space-x-1 cursor-pointer"
               >
                 <Settings className="w-3 h-3 text-slate-400" />
                 <span>Edit Schedule</span>
@@ -634,7 +634,7 @@ export const ManagerDashboard: React.FC = () => {
                 9:16 vertical story generator with dish photos, table stamp, and 1-tap caption copy.
               </p>
 
-              <div className="mt-2.5 p-2 bg-white/[0.03] rounded-xl border border-white/[0.06] text-[10px] space-y-1">
+              <div className="mt-2.5 p-2 bg-[#090D16]/[0.03] rounded-xl border border-white/[0.06] text-[10px] space-y-1">
                 <div className="flex justify-between text-slate-300">
                   <span className="font-semibold text-slate-400">Handle:</span>
                   <span className="font-mono text-white truncate max-w-[85px]">
@@ -653,7 +653,7 @@ export const ManagerDashboard: React.FC = () => {
             <button
               type="button"
               onClick={() => setSmartSettingsTab('instagram')}
-              className="w-full py-2 px-2 rounded-xl text-[11px] font-semibold text-slate-200 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-all flex items-center justify-center space-x-1 cursor-pointer"
+              className="w-full py-2 px-2 rounded-xl text-[11px] font-semibold text-slate-200 bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-all flex items-center justify-center space-x-1 cursor-pointer"
             >
               <Settings className="w-3 h-3 text-pink-400" />
               <span>Customize Story Card</span>
@@ -680,7 +680,7 @@ export const ManagerDashboard: React.FC = () => {
                 Recommends matching wine, desserts, and sides inside diner's cart before checkout.
               </p>
 
-              <div className="mt-2.5 p-2 bg-white/[0.03] rounded-xl border border-white/[0.06] text-[10px] space-y-1">
+              <div className="mt-2.5 p-2 bg-[#090D16]/[0.03] rounded-xl border border-white/[0.06] text-[10px] space-y-1">
                 <div className="flex justify-between text-slate-300">
                   <span className="font-semibold text-slate-400">Section:</span>
                   <span className="truncate max-w-[90px] text-white">
@@ -699,7 +699,7 @@ export const ManagerDashboard: React.FC = () => {
             <button
               type="button"
               onClick={() => setSmartSettingsTab('pairings')}
-              className="w-full py-2 px-2 rounded-xl text-[11px] font-semibold text-slate-200 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-all flex items-center justify-center space-x-1 cursor-pointer"
+              className="w-full py-2 px-2 rounded-xl text-[11px] font-semibold text-slate-200 bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-all flex items-center justify-center space-x-1 cursor-pointer"
             >
               <Settings className="w-3 h-3 text-emerald-400" />
               <span>Customize Upsells</span>
@@ -711,7 +711,7 @@ export const ManagerDashboard: React.FC = () => {
       {/* Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-[#0D1322] p-5 rounded-2xl border border-white/[0.08] shadow-lg flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shadow-xs">
+          <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shadow-sm">
             <DollarSign className="w-6 h-6" />
           </div>
           <div>
@@ -721,7 +721,7 @@ export const ManagerDashboard: React.FC = () => {
         </div>
 
         <div className="bg-[#0D1322] p-5 rounded-2xl border border-white/[0.08] shadow-lg flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shadow-xs">
+          <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shadow-sm">
             <ShoppingBag className="w-6 h-6" />
           </div>
           <div>
@@ -731,7 +731,7 @@ export const ManagerDashboard: React.FC = () => {
         </div>
 
         <div className="bg-[#0D1322] p-5 rounded-2xl border border-white/[0.08] shadow-lg flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shadow-xs">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shadow-sm">
             <CheckCircle2 className="w-6 h-6" />
           </div>
           <div>
@@ -742,10 +742,10 @@ export const ManagerDashboard: React.FC = () => {
       </div>
 
       {/* 🧑‍🍳 CHEF & OWNER AI KNOWLEDGE HUB & KOT ENGINE */}
-      <section className="bg-gradient-to-br from-charcoal-950 via-charcoal-900 to-charcoal-950 text-white p-6 rounded-3xl border border-charcoal-800 shadow-float space-y-5">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-charcoal-800 pb-4">
+      <section className="bg-gradient-to-br from-[#090D16] via-[#090D16] to-[#090D16] text-white p-6 rounded-3xl border border-white/[0.08]  space-y-5">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-saffron-600 flex items-center justify-center text-2xl shadow-md">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center text-2xl shadow-md">
               🧑‍🍳
             </div>
             <div>
@@ -755,7 +755,7 @@ export const ManagerDashboard: React.FC = () => {
                   Live on Table QRs
                 </span>
               </div>
-              <p className="text-xs text-charcoal-300 mt-0.5">
+              <p className="text-xs text-slate-400 mt-0.5">
                 Your dining concierge is trained directly on your head chef's recipes &amp; owner's upselling strategy — not generic LLM web text.
               </p>
             </div>
@@ -765,7 +765,7 @@ export const ManagerDashboard: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsAiDrawerOpen(true)}
-              className="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-charcoal-950 text-xs font-bold rounded-xl shadow-subtle transition-all flex items-center space-x-1.5 cursor-pointer"
+              className="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white text-xs font-bold rounded-xl shadow-lg transition-all flex items-center space-x-1.5 cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>Simulate AI Chat as Diner</span>
@@ -775,7 +775,7 @@ export const ManagerDashboard: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Head Chef Training Box */}
-          <div className="bg-charcoal-900/90 border border-charcoal-800 rounded-2xl p-4 space-y-3">
+          <div className="bg-[#090D16]/90 border border-white/[0.08] rounded-2xl p-4 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <span className="text-base">🧑‍🍳</span>
@@ -785,22 +785,22 @@ export const ManagerDashboard: React.FC = () => {
                 Chef Sanjeev
               </span>
             </div>
-            <div className="space-y-2 text-xs text-charcoal-300">
-              <div className="flex items-start space-x-2 bg-charcoal-950 p-2.5 rounded-xl border border-charcoal-800/60">
+            <div className="space-y-2 text-xs text-slate-400">
+              <div className="flex items-start space-x-2 bg-[#090D16] p-2.5 rounded-xl border border-white/[0.08]/60">
                 <span className="text-amber-400 font-bold">✓</span>
                 <div>
                   <strong className="text-white block">Calibrated 1–5 Spice Index:</strong>
                   <span>Every curry &amp; starter has verified heat notes so diners never get unpleasantly surprised.</span>
                 </div>
               </div>
-              <div className="flex items-start space-x-2 bg-charcoal-950 p-2.5 rounded-xl border border-charcoal-800/60">
+              <div className="flex items-start space-x-2 bg-[#090D16] p-2.5 rounded-xl border border-white/[0.08]/60">
                 <span className="text-amber-400 font-bold">✓</span>
                 <div>
                   <strong className="text-white block">Secret Recipe Preparation Notes:</strong>
                   <span>White butter simmering, clay tandoor smoking, and signature marination secrets are explained seamlessly.</span>
                 </div>
               </div>
-              <div className="flex items-start space-x-2 bg-charcoal-950 p-2.5 rounded-xl border border-charcoal-800/60">
+              <div className="flex items-start space-x-2 bg-[#090D16] p-2.5 rounded-xl border border-white/[0.08]/60">
                 <span className="text-amber-400 font-bold">✓</span>
                 <div>
                   <strong className="text-white block">Kitchen Allergen Guard:</strong>
@@ -811,7 +811,7 @@ export const ManagerDashboard: React.FC = () => {
           </div>
 
           {/* Restaurant Owner Upsell Box */}
-          <div className="bg-charcoal-900/90 border border-charcoal-800 rounded-2xl p-4 space-y-3">
+          <div className="bg-[#090D16]/90 border border-white/[0.08] rounded-2xl p-4 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <span className="text-base">💼</span>
@@ -821,22 +821,22 @@ export const ManagerDashboard: React.FC = () => {
                 Owner Rohit
               </span>
             </div>
-            <div className="space-y-2 text-xs text-charcoal-300">
-              <div className="flex items-start space-x-2 bg-charcoal-950 p-2.5 rounded-xl border border-charcoal-800/60">
+            <div className="space-y-2 text-xs text-slate-400">
+              <div className="flex items-start space-x-2 bg-[#090D16] p-2.5 rounded-xl border border-white/[0.08]/60">
                 <span className="text-emerald-400 font-bold">✓</span>
                 <div>
                   <strong className="text-white block">High-Margin Beverage Pairing:</strong>
                   <span>Automatically recommends signature coolers (Kokum Mint Cooler, Mango Lassi) with rich curries (+18% bill size).</span>
                 </div>
               </div>
-              <div className="flex items-start space-x-2 bg-charcoal-950 p-2.5 rounded-xl border border-charcoal-800/60">
+              <div className="flex items-start space-x-2 bg-[#090D16] p-2.5 rounded-xl border border-white/[0.08]/60">
                 <span className="text-emerald-400 font-bold">✓</span>
                 <div>
                   <strong className="text-white block">Bread Basket Suggestions:</strong>
                   <span>Prompts crispy Garlic Butter Naan and Amritsari Kulcha with every main course gravy.</span>
                 </div>
               </div>
-              <div className="flex items-start space-x-2 bg-charcoal-950 p-2.5 rounded-xl border border-charcoal-800/60">
+              <div className="flex items-start space-x-2 bg-[#090D16] p-2.5 rounded-xl border border-white/[0.08]/60">
                 <span className="text-emerald-400 font-bold">✓</span>
                 <div>
                   <strong className="text-white block">Post-Meal Google Review Incentive:</strong>
@@ -860,7 +860,7 @@ export const ManagerDashboard: React.FC = () => {
                   {restaurant.pos_provider || 'Petpooja'} Configured
                 </span>
               </div>
-              <p className="text-xs text-charcoal-300 mt-0.5">
+              <p className="text-xs text-slate-400 mt-0.5">
                 Orders fire directly to your kitchen thermal printer in &lt;1 second. Connect to any new restaurant in 2 minutes without coding.
               </p>
             </div>
@@ -870,7 +870,7 @@ export const ManagerDashboard: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsPosModalOpen(true)}
-              className="px-4 py-2 bg-saffron-600 hover:bg-saffron-500 text-white text-xs font-bold rounded-xl transition-all shadow-subtle flex items-center space-x-1.5 cursor-pointer whitespace-nowrap"
+              className="px-4 py-2 bg-amber-500 hover:bg-amber-500 text-white text-xs font-bold rounded-xl transition-all shadow-lg flex items-center space-x-1.5 cursor-pointer whitespace-nowrap"
             >
               <span>POS & Thermal Printer Settings</span>
               <span>→</span>
@@ -924,7 +924,7 @@ export const ManagerDashboard: React.FC = () => {
                     navigate('/admin');
                   }
                 }}
-                className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition-colors shadow-xs cursor-pointer flex items-center space-x-1.5"
+                className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition-colors shadow-sm cursor-pointer flex items-center space-x-1.5"
               >
                 <UserMinus className="w-4 h-4" />
                 <span>Confirm Offboard</span>
@@ -940,7 +940,7 @@ export const ManagerDashboard: React.FC = () => {
           <div className="bg-[#0D1322] rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-6 relative space-y-5 border border-white/[0.1] text-white">
             <button
               onClick={() => setIsPosModalOpen(false)}
-              className="absolute top-5 right-5 p-2 rounded-full bg-white/[0.06] hover:bg-white/[0.1] text-slate-300 hover:text-white transition-colors z-10 border border-white/[0.08] cursor-pointer"
+              className="absolute top-5 right-5 p-2 rounded-full bg-[#090D16]/[0.06] hover:bg-white/[0.1] text-slate-300 hover:text-white transition-colors z-10 border border-white/[0.08] cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>

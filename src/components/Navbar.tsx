@@ -139,14 +139,14 @@ export const Navbar: React.FC = () => {
             </Link>
 
             {/* Subtle Divider */}
-            <div className="hidden sm:block w-px h-5 bg-white/[0.1]" />
+            <div className="hidden sm:block w-px h-5 bg-[#090D16]/[0.1]" />
 
             {/* Clean Venue Dropdown */}
             <div className="relative" ref={venueRef}>
               <button
                 type="button"
                 onClick={() => setVenueDropdownOpen(!venueDropdownOpen)}
-                className="flex items-center space-x-2 px-2.5 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.15] text-xs font-semibold text-slate-200 transition-all cursor-pointer"
+                className="flex items-center space-x-2 px-2.5 py-1.5 rounded-lg bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.15] text-xs font-semibold text-slate-200 transition-all cursor-pointer"
                 title="Switch active restaurant venue"
               >
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -226,7 +226,7 @@ export const Navbar: React.FC = () => {
             <button
               type="button"
               onClick={() => setQuickNavOpen(true)}
-              className="p-2 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 hover:text-white transition-all cursor-pointer flex items-center space-x-1.5 text-xs font-medium"
+              className="p-2 rounded-lg bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 hover:text-white transition-all cursor-pointer flex items-center space-x-1.5 text-xs font-medium"
               title="Open Quick Access Launcher"
             >
               <Compass className="w-4 h-4 text-amber-400" />
@@ -364,7 +364,7 @@ export const Navbar: React.FC = () => {
                   setMobileOpen(false);
                   setQuickNavOpen(true);
                 }}
-                className="w-full py-2 px-3 rounded-lg bg-white/[0.05] text-slate-200 text-xs font-semibold flex items-center justify-center space-x-1.5"
+                className="w-full py-2 px-3 rounded-lg bg-[#090D16]/[0.05] text-slate-200 text-xs font-semibold flex items-center justify-center space-x-1.5"
               >
                 <Compass className="w-4 h-4 text-amber-400" />
                 <span>Open All Portals Launcher</span>
@@ -404,7 +404,7 @@ export const Navbar: React.FC = () => {
                   <Link
                     to="/r/saffron-house/menu?t=table-token-01-saffron"
                     onClick={() => setQuickNavOpen(false)}
-                    className="p-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-amber-500/40 transition-all flex items-center justify-between group"
+                    className="p-3 rounded-xl bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-amber-500/40 transition-all flex items-center justify-between group"
                   >
                     <div>
                       <div className="text-xs font-bold text-white group-hover:text-amber-400 transition-colors">
@@ -418,7 +418,7 @@ export const Navbar: React.FC = () => {
                   <Link
                     to="/r/casa-bella/menu?t=table-token-03-casa-bella"
                     onClick={() => setQuickNavOpen(false)}
-                    className="p-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-amber-500/40 transition-all flex items-center justify-between group"
+                    className="p-3 rounded-xl bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-amber-500/40 transition-all flex items-center justify-between group"
                   >
                     <div>
                       <div className="text-xs font-bold text-white group-hover:text-amber-400 transition-colors">
@@ -440,7 +440,7 @@ export const Navbar: React.FC = () => {
                   <Link
                     to="/manage/saffron-house"
                     onClick={() => setQuickNavOpen(false)}
-                    className="p-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-amber-500/40 transition-all flex items-center justify-between group"
+                    className="p-3 rounded-xl bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-amber-500/40 transition-all flex items-center justify-between group"
                   >
                     <div className="flex items-center space-x-2.5">
                       <LayoutDashboard className="w-4 h-4 text-amber-400" />
@@ -455,7 +455,7 @@ export const Navbar: React.FC = () => {
                   <Link
                     to="/kitchen"
                     onClick={() => setQuickNavOpen(false)}
-                    className="p-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-amber-500/40 transition-all flex items-center justify-between group"
+                    className="p-3 rounded-xl bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-amber-500/40 transition-all flex items-center justify-between group"
                   >
                     <div className="flex items-center space-x-2.5">
                       <ChefHat className="w-4 h-4 text-purple-400" />
@@ -478,7 +478,7 @@ export const Navbar: React.FC = () => {
                   <Link
                     to="/pitch"
                     onClick={() => setQuickNavOpen(false)}
-                    className="p-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-cyan-500/40 transition-all flex items-center justify-between group"
+                    className="p-3 rounded-xl bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-cyan-500/40 transition-all flex items-center justify-between group"
                   >
                     <div className="flex items-center space-x-2.5">
                       <TrendingUp className="w-4 h-4 text-cyan-400" />
@@ -493,7 +493,7 @@ export const Navbar: React.FC = () => {
                   <Link
                     to="/admin"
                     onClick={() => setQuickNavOpen(false)}
-                    className="p-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-emerald-500/40 transition-all flex items-center justify-between group"
+                    className="p-3 rounded-xl bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-emerald-500/40 transition-all flex items-center justify-between group"
                   >
                     <div className="flex items-center space-x-2.5">
                       <ShieldCheck className="w-4 h-4 text-emerald-400" />

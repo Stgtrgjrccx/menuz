@@ -113,13 +113,13 @@ export const RecahoIntegrationPanel: React.FC<RecahoIntegrationPanelProps> = ({
     }`;
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+    <div className="bg-[#0D1322] rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
       {/* Banner */}
       <div className="bg-gradient-to-r from-teal-700 via-teal-600 to-emerald-700 text-white p-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center space-x-2.5 mb-2">
-              <span className="bg-white text-teal-700 text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-xs">
+              <span className="bg-white text-teal-700 text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-sm">
                 Cloud REST Bridge
               </span>
               <span className="bg-teal-500/40 text-white text-[11px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1">
@@ -165,7 +165,7 @@ export const RecahoIntegrationPanel: React.FC<RecahoIntegrationPanelProps> = ({
               <div>
                 <label className="block text-xs font-bold text-gray-700 mb-1">Simulated Table</label>
                 <select value={simTable} onChange={(e) => setSimTable(e.target.value)}
-                  className="w-full text-xs font-medium border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-teal-500 bg-white">
+                  className="w-full text-xs font-medium border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-teal-500 bg-[#090D16]">
                   <option>Table 1 (Indoor)</option><option>Table 2 (Indoor)</option>
                   <option>Table 4 (Patio)</option><option>Table 8 (Family AC)</option><option>Table 12 (Balcony)</option>
                 </select>
@@ -201,7 +201,7 @@ export const RecahoIntegrationPanel: React.FC<RecahoIntegrationPanelProps> = ({
                 )}
               </div>
 
-              <div className="border border-gray-200 rounded-xl p-3 bg-white space-y-2">
+              <div className="border border-gray-200 rounded-xl p-3 bg-[#090D16] space-y-2">
                 <div className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Basket (3 Items)</div>
                 {sampleOrder.items.map((it, idx) => (
                   <div key={idx} className="flex justify-between items-center text-xs py-1 border-b border-gray-100 last:border-0">
@@ -349,7 +349,7 @@ export const RecahoIntegrationPanel: React.FC<RecahoIntegrationPanelProps> = ({
               { step: 3, title: 'Enter Credentials & Test in Sandbox', desc: 'Paste both keys into the Credentials tab. Fire test KOTs from the Simulator tab with the environment set to Sandbox.' },
               { step: 4, title: 'Flip to Production', desc: 'Switch environment to Production. All Menuz QR orders now push to Recaho cloud and trigger KOT printing at the kitchen display system in real time.' }
             ].map(({ step, title, desc }) => (
-              <div key={step} className="flex gap-4 items-start p-4 bg-white border border-gray-200 rounded-xl">
+              <div key={step} className="flex gap-4 items-start p-4 bg-[#090D16] border border-gray-200 rounded-xl">
                 <div className="w-8 h-8 rounded-full bg-teal-100 text-teal-700 font-black flex items-center justify-center shrink-0 text-sm">{step}</div>
                 <div>
                   <h4 className="font-bold text-sm text-gray-900">{title}</h4>

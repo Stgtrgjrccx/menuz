@@ -115,13 +115,13 @@ export const RoyalPosIntegrationPanel: React.FC<RoyalPosIntegrationPanelProps> =
     }`;
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+    <div className="bg-[#0D1322] rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
       {/* Banner */}
       <div className="bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 text-white p-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center space-x-2.5 mb-2">
-              <span className="bg-white text-blue-700 text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-xs">
+              <span className="bg-white text-blue-700 text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-sm">
                 LAN / Wi-Fi Bridge
               </span>
               <span className="bg-blue-500/40 text-white text-[11px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1">
@@ -175,7 +175,7 @@ export const RoyalPosIntegrationPanel: React.FC<RoyalPosIntegrationPanelProps> =
               <div>
                 <label className="block text-xs font-bold text-gray-700 mb-1">Simulated Table</label>
                 <select value={simTable} onChange={(e) => setSimTable(e.target.value)}
-                  className="w-full text-xs font-medium border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 bg-white">
+                  className="w-full text-xs font-medium border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 bg-[#090D16]">
                   <option>Table 1 (Indoor)</option>
                   <option>Table 2 (Indoor)</option>
                   <option>Table 4 (Patio)</option>
@@ -206,7 +206,7 @@ export const RoyalPosIntegrationPanel: React.FC<RoyalPosIntegrationPanelProps> =
               </div>
 
               {/* Items preview */}
-              <div className="border border-gray-200 rounded-xl p-3 bg-white space-y-2">
+              <div className="border border-gray-200 rounded-xl p-3 bg-[#090D16] space-y-2">
                 <div className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Basket (3 Items)</div>
                 {sampleOrder.items.map((it, idx) => (
                   <div key={idx} className="flex justify-between items-center text-xs py-1 border-b border-gray-100 last:border-0">
@@ -382,7 +382,7 @@ export const RoyalPosIntegrationPanel: React.FC<RoyalPosIntegrationPanelProps> =
               { step: 3, title: 'You Enter Device IP + Token in Menuz', desc: 'Paste the device IP (visible in the POS under About → Network) and the API Token in the Credentials tab above. Switch to Production.' },
               { step: 4, title: 'Live KOT Printing', desc: 'Every Menuz order fires directly to the RoyalPOS kitchen station. Kitchen items and optional food rewards are structured in real-time.' }
             ].map(({ step, title, desc }) => (
-              <div key={step} className="flex gap-4 items-start p-4 bg-white border border-gray-200 rounded-xl">
+              <div key={step} className="flex gap-4 items-start p-4 bg-[#090D16] border border-gray-200 rounded-xl">
                 <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-black flex items-center justify-center shrink-0 text-sm">{step}</div>
                 <div>
                   <h4 className="font-bold text-sm text-gray-900">{title}</h4>

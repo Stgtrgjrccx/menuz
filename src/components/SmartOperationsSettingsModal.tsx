@@ -164,38 +164,38 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-950/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white border border-ivory-300 w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#090D16]/80 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="bg-white border border-white/[0.08] w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="p-5 border-b border-ivory-200 flex items-center justify-between bg-ivory-50/70">
+        <div className="p-5 border-b border-white/[0.08] flex items-center justify-between bg-[#090D16]/[0.03]/70">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-2xl bg-saffron-100 border border-saffron-300 flex items-center justify-center text-saffron-700 shadow-xs">
+            <div className="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-sm">
               <Sliders className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-serif font-bold text-base text-charcoal-900 flex items-center space-x-2">
+              <h3 className="font-serif font-bold text-base text-white flex items-center space-x-2">
                 <span>Smart Operations & Growth Settings</span>
               </h3>
-              <p className="text-xs text-charcoal-600">Customize operational automation and growth mechanics for {restaurant.name}</p>
+              <p className="text-xs text-slate-400">Customize operational automation and growth mechanics for {restaurant.name}</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-ivory-200 hover:bg-ivory-300 text-charcoal-700 flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-full bg-[#090D16]/[0.06] hover:bg-white/[0.08] text-slate-400 flex items-center justify-center transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex items-center space-x-1 p-2 bg-ivory-100/70 border-b border-ivory-200 overflow-x-auto no-scrollbar">
+        <div className="flex items-center space-x-1 p-2 bg-[#090D16]/[0.04]/70 border-b border-white/[0.08] overflow-x-auto no-scrollbar">
           <button
             type="button"
             onClick={() => setActiveTab('kot')}
             className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 flex-shrink-0 cursor-pointer ${
               activeTab === 'kot'
-                ? 'bg-white text-charcoal-900 shadow-xs border border-ivory-200'
-                : 'text-charcoal-600 hover:text-charcoal-900'
+                ? 'bg-white text-white shadow-sm border border-white/[0.08]'
+                : 'text-slate-400 hover:text-white'
             }`}
           >
             <Flame className="w-3.5 h-3.5 text-orange-500" />
@@ -207,8 +207,8 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
             onClick={() => setActiveTab('happy_hour')}
             className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 flex-shrink-0 cursor-pointer ${
               activeTab === 'happy_hour'
-                ? 'bg-white text-charcoal-900 shadow-xs border border-ivory-200'
-                : 'text-charcoal-600 hover:text-charcoal-900'
+                ? 'bg-white text-white shadow-sm border border-white/[0.08]'
+                : 'text-slate-400 hover:text-white'
             }`}
           >
             <Zap className="w-3.5 h-3.5 text-yellow-500" />
@@ -220,8 +220,8 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
             onClick={() => setActiveTab('instagram')}
             className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 flex-shrink-0 cursor-pointer ${
               activeTab === 'instagram'
-                ? 'bg-white text-charcoal-900 shadow-xs border border-ivory-200'
-                : 'text-charcoal-600 hover:text-charcoal-900'
+                ? 'bg-white text-white shadow-sm border border-white/[0.08]'
+                : 'text-slate-400 hover:text-white'
             }`}
           >
             <Instagram className="w-3.5 h-3.5 text-pink-500" />
@@ -233,8 +233,8 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
             onClick={() => setActiveTab('pairings')}
             className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 flex-shrink-0 cursor-pointer ${
               activeTab === 'pairings'
-                ? 'bg-white text-charcoal-900 shadow-xs border border-ivory-200'
-                : 'text-charcoal-600 hover:text-charcoal-900'
+                ? 'bg-white text-white shadow-sm border border-white/[0.08]'
+                : 'text-slate-400 hover:text-white'
             }`}
           >
             <UtensilsCrossed className="w-3.5 h-3.5 text-emerald-500" />
@@ -246,8 +246,8 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
             onClick={() => setActiveTab('rewards')}
             className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 flex-shrink-0 cursor-pointer ${
               activeTab === 'rewards'
-                ? 'bg-white text-charcoal-900 shadow-xs border border-ivory-200'
-                : 'text-charcoal-600 hover:text-charcoal-900'
+                ? 'bg-white text-white shadow-sm border border-white/[0.08]'
+                : 'text-slate-400 hover:text-white'
             }`}
           >
             <Gift className="w-3.5 h-3.5 text-purple-600" />
@@ -262,8 +262,8 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 bg-orange-50/60 border border-orange-200 rounded-2xl">
                 <div>
-                  <h4 className="font-bold text-xs text-charcoal-900">Direct-to-Kitchen Auto-Dispatch</h4>
-                  <p className="text-[11px] text-charcoal-600">
+                  <h4 className="font-bold text-xs text-white">Direct-to-Kitchen Auto-Dispatch</h4>
+                  <p className="text-[11px] text-slate-400">
                     Bypasses manual floor manager confirmation and fires orders straight to kitchen thermal printers or KDS.
                   </p>
                 </div>
@@ -271,11 +271,11 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
                   type="button"
                   onClick={() => setDirectKotEnabled(!directKotEnabled)}
                   className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${
-                    directKotEnabled ? 'bg-emerald-600' : 'bg-charcoal-300'
+                    directKotEnabled ? 'bg-emerald-600' : 'bg-white/[0.1]'
                   }`}
                 >
                   <span
-                    className={`block w-4 h-4 rounded-full bg-white shadow-md transform transition-transform absolute top-1 ${
+                    className={`block w-4 h-4 rounded-full bg-[#090D16] shadow-md transform transition-transform absolute top-1 ${
                       directKotEnabled ? 'left-7' : 'left-1'
                     }`}
                   />
@@ -284,8 +284,8 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-charcoal-800 mb-1.5 flex items-center space-x-1">
-                    <Printer className="w-3.5 h-3.5 text-charcoal-500" />
+                  <label className="block text-xs font-bold text-slate-200 mb-1.5 flex items-center space-x-1">
+                    <Printer className="w-3.5 h-3.5 text-slate-500" />
                     <span>Kitchen Station / KDS Name</span>
                   </label>
                   <input
@@ -293,19 +293,19 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
                     value={kotStationName}
                     onChange={(e) => setKotStationName(e.target.value)}
                     placeholder="e.g. Main Kitchen Line, Pizza Oven, Bar KOT"
-                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-ivory-300 focus:outline-none focus:border-saffron-600"
+                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-white/[0.08] focus:outline-none focus:border-amber-600/40"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-charcoal-800 mb-1.5 flex items-center space-x-1">
-                    <Clock className="w-3.5 h-3.5 text-charcoal-500" />
+                  <label className="block text-xs font-bold text-slate-200 mb-1.5 flex items-center space-x-1">
+                    <Clock className="w-3.5 h-3.5 text-slate-500" />
                     <span>Auto-Dispatch Delay Buffer</span>
                   </label>
                   <select
                     value={kotDelaySeconds}
                     onChange={(e) => setKotDelaySeconds(Number(e.target.value))}
-                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-ivory-300 focus:outline-none focus:border-saffron-600 bg-white"
+                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-white/[0.08] focus:outline-none focus:border-amber-600/40 bg-[#090D16]"
                   >
                     <option value={0}>Instant (0 Seconds)</option>
                     <option value={30}>30s Waiter Check Window</option>
@@ -317,8 +317,8 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-charcoal-800 mb-1.5 flex items-center space-x-1">
-                    <Printer className="w-3.5 h-3.5 text-charcoal-500" />
+                  <label className="block text-xs font-bold text-slate-200 mb-1.5 flex items-center space-x-1">
+                    <Printer className="w-3.5 h-3.5 text-slate-500" />
                     <span>Printer IP / Port Destination</span>
                   </label>
                   <input
@@ -326,23 +326,23 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
                     value={kotPrinterIp}
                     onChange={(e) => setKotPrinterIp(e.target.value)}
                     placeholder="e.g. 192.168.1.150:9100"
-                    className="w-full text-xs font-mono px-3.5 py-2.5 rounded-xl border border-ivory-300 focus:outline-none focus:border-saffron-600"
+                    className="w-full text-xs font-mono px-3.5 py-2.5 rounded-xl border border-white/[0.08] focus:outline-none focus:border-amber-600/40"
                   />
                 </div>
 
-                <div className="flex items-center justify-between p-3.5 border border-ivory-200 rounded-xl bg-ivory-50/50">
+                <div className="flex items-center justify-between p-3.5 border border-white/[0.08] rounded-xl bg-[#090D16]/[0.03]/50">
                   <div className="flex items-center space-x-2">
-                    <Volume2 className="w-4 h-4 text-charcoal-600" />
+                    <Volume2 className="w-4 h-4 text-slate-400" />
                     <div>
-                      <span className="text-xs font-bold text-charcoal-800 block">KOT Audio Alert Chime</span>
-                      <span className="text-[10px] text-charcoal-500">Play sound when a new order arrives</span>
+                      <span className="text-xs font-bold text-slate-200 block">KOT Audio Alert Chime</span>
+                      <span className="text-[10px] text-slate-500">Play sound when a new order arrives</span>
                     </div>
                   </div>
                   <input
                     type="checkbox"
                     checked={kotAudioChime}
                     onChange={(e) => setKotAudioChime(e.target.checked)}
-                    className="w-4 h-4 text-saffron-600 rounded cursor-pointer"
+                    className="w-4 h-4 text-amber-400 rounded cursor-pointer"
                   />
                 </div>
               </div>
@@ -354,8 +354,8 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 bg-yellow-50/60 border border-yellow-200 rounded-2xl">
                 <div>
-                  <h4 className="font-bold text-xs text-charcoal-900">Happy Hour Schedule & Discount</h4>
-                  <p className="text-[11px] text-charcoal-600">
+                  <h4 className="font-bold text-xs text-white">Happy Hour Schedule & Discount</h4>
+                  <p className="text-[11px] text-slate-400">
                     Automatically triggers off-peak pricing and promotes signature beverages/small bites.
                   </p>
                 </div>
@@ -363,11 +363,11 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
                   type="button"
                   onClick={() => setHappyHourEnabled(!happyHourEnabled)}
                   className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${
-                    happyHourEnabled ? 'bg-orange-600' : 'bg-charcoal-300'
+                    happyHourEnabled ? 'bg-orange-600' : 'bg-white/[0.1]'
                   }`}
                 >
                   <span
-                    className={`block w-4 h-4 rounded-full bg-white shadow-md transform transition-transform absolute top-1 ${
+                    className={`block w-4 h-4 rounded-full bg-[#090D16] shadow-md transform transition-transform absolute top-1 ${
                       happyHourEnabled ? 'left-7' : 'left-1'
                     }`}
                   />
@@ -376,62 +376,62 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-charcoal-800 mb-1.5 flex items-center space-x-1">
-                    <Clock className="w-3.5 h-3.5 text-charcoal-500" />
+                  <label className="block text-xs font-bold text-slate-200 mb-1.5 flex items-center space-x-1">
+                    <Clock className="w-3.5 h-3.5 text-slate-500" />
                     <span>Start Time</span>
                   </label>
                   <input
                     type="time"
                     value={happyHourStartTime}
                     onChange={(e) => setHappyHourStartTime(e.target.value)}
-                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-ivory-300 focus:outline-none focus:border-saffron-600 bg-white"
+                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-white/[0.08] focus:outline-none focus:border-amber-600/40 bg-[#090D16]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-charcoal-800 mb-1.5 flex items-center space-x-1">
-                    <Clock className="w-3.5 h-3.5 text-charcoal-500" />
+                  <label className="block text-xs font-bold text-slate-200 mb-1.5 flex items-center space-x-1">
+                    <Clock className="w-3.5 h-3.5 text-slate-500" />
                     <span>End Time</span>
                   </label>
                   <input
                     type="time"
                     value={happyHourEndTime}
                     onChange={(e) => setHappyHourEndTime(e.target.value)}
-                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-ivory-300 focus:outline-none focus:border-saffron-600 bg-white"
+                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-white/[0.08] focus:outline-none focus:border-amber-600/40 bg-[#090D16]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-charcoal-800 mb-1.5 flex items-center space-x-1">
-                    <Tag className="w-3.5 h-3.5 text-charcoal-500" />
+                  <label className="block text-xs font-bold text-slate-200 mb-1.5 flex items-center space-x-1">
+                    <Tag className="w-3.5 h-3.5 text-slate-500" />
                     <span>Discount (%)</span>
                   </label>
                   <input
                     type="number"
                     value={happyHourDiscount}
                     onChange={(e) => setHappyHourDiscount(Number(e.target.value))}
-                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-ivory-300 focus:outline-none focus:border-saffron-600"
+                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-white/[0.08] focus:outline-none focus:border-amber-600/40"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-charcoal-800 mb-1.5">Announcement Banner Text</label>
+                <label className="block text-xs font-bold text-slate-200 mb-1.5">Announcement Banner Text</label>
                 <input
                   type="text"
                   value={happyHourBanner}
                   onChange={(e) => setHappyHourBanner(e.target.value)}
                   placeholder="e.g. ⚡ Twilight Happy Hour: 20% Off Beverages & Small Bites!"
-                  className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-ivory-300 focus:outline-none focus:border-saffron-600"
+                  className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-white/[0.08] focus:outline-none focus:border-amber-600/40"
                 />
               </div>
 
               {/* Dynamic Surge Pricing */}
-              <div className="pt-2 border-t border-ivory-200">
+              <div className="pt-2 border-t border-white/[0.08]">
                 <div className="flex items-center justify-between p-4 bg-purple-50/60 border border-purple-200 rounded-2xl">
                   <div>
-                    <h4 className="font-bold text-xs text-charcoal-900">Peak Weekend Surge Pricing (Optional)</h4>
-                    <p className="text-[11px] text-charcoal-600">
+                    <h4 className="font-bold text-xs text-white">Peak Weekend Surge Pricing (Optional)</h4>
+                    <p className="text-[11px] text-slate-400">
                       Apply a subtle automatic markup (+5% to +10%) during packed Saturday evening dinner rushes.
                     </p>
                   </div>
@@ -439,11 +439,11 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
                     type="button"
                     onClick={() => setSurgeEnabled(!surgeEnabled)}
                     className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${
-                      surgeEnabled ? 'bg-purple-600' : 'bg-charcoal-300'
+                      surgeEnabled ? 'bg-purple-600' : 'bg-white/[0.1]'
                     }`}
                   >
                     <span
-                      className={`block w-4 h-4 rounded-full bg-white shadow-md transform transition-transform absolute top-1 ${
+                      className={`block w-4 h-4 rounded-full bg-[#090D16] shadow-md transform transition-transform absolute top-1 ${
                         surgeEnabled ? 'left-7' : 'left-1'
                       }`}
                     />
@@ -452,12 +452,12 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
 
                 {surgeEnabled && (
                   <div className="mt-3">
-                    <label className="block text-xs font-bold text-charcoal-800 mb-1.5">Peak Surge Markup (%)</label>
+                    <label className="block text-xs font-bold text-slate-200 mb-1.5">Peak Surge Markup (%)</label>
                     <input
                       type="number"
                       value={surgeMarkup}
                       onChange={(e) => setSurgeMarkup(Number(e.target.value))}
-                      className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-ivory-300 focus:outline-none focus:border-saffron-600"
+                      className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-white/[0.08] focus:outline-none focus:border-amber-600/40"
                     />
                   </div>
                 )}
@@ -470,7 +470,7 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
             <div className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-charcoal-800 mb-1.5 flex items-center space-x-1">
+                  <label className="block text-xs font-bold text-slate-200 mb-1.5 flex items-center space-x-1">
                     <Instagram className="w-3.5 h-3.5 text-pink-600" />
                     <span>Restaurant Instagram Handle</span>
                   </label>
@@ -479,41 +479,41 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
                     value={igHandle}
                     onChange={(e) => setIgHandle(e.target.value)}
                     placeholder="@casabella_bistro"
-                    className="w-full text-xs font-mono px-3.5 py-2.5 rounded-xl border border-ivory-300 focus:outline-none focus:border-saffron-600"
+                    className="w-full text-xs font-mono px-3.5 py-2.5 rounded-xl border border-white/[0.08] focus:outline-none focus:border-amber-600/40"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-charcoal-800 mb-1.5">Campaign Hashtags</label>
+                  <label className="block text-xs font-bold text-slate-200 mb-1.5">Campaign Hashtags</label>
                   <input
                     type="text"
                     value={igHashtag}
                     onChange={(e) => setIgHashtag(e.target.value)}
                     placeholder="#PuneFoodie #MenuzDining #CasaBella"
-                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-ivory-300 focus:outline-none focus:border-saffron-600"
+                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-white/[0.08] focus:outline-none focus:border-amber-600/40"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-charcoal-800 mb-1.5">Default Story Caption Quote</label>
+                <label className="block text-xs font-bold text-slate-200 mb-1.5">Default Story Caption Quote</label>
                 <input
                   type="text"
                   value={igQuote}
                   onChange={(e) => setIgQuote(e.target.value)}
                   placeholder="Incredible culinary experience"
-                  className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-ivory-300 focus:outline-none focus:border-saffron-600"
+                  className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-white/[0.08] focus:outline-none focus:border-amber-600/40"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-charcoal-800 mb-1.5">Story Badge Stamp</label>
+                <label className="block text-xs font-bold text-slate-200 mb-1.5">Story Badge Stamp</label>
                 <input
                   type="text"
                   value={igBadge}
                   onChange={(e) => setIgBadge(e.target.value)}
                   placeholder="5-Star Culinary Night"
-                  className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-ivory-300 focus:outline-none focus:border-saffron-600"
+                  className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-white/[0.08] focus:outline-none focus:border-amber-600/40"
                 />
               </div>
             </div>
@@ -524,8 +524,8 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 bg-emerald-50/60 border border-emerald-200 rounded-2xl">
                 <div>
-                  <h4 className="font-bold text-xs text-charcoal-900">Cart Upsell &amp; Chef's Pairings</h4>
-                  <p className="text-[11px] text-charcoal-600">
+                  <h4 className="font-bold text-xs text-white">Cart Upsell &amp; Chef's Pairings</h4>
+                  <p className="text-[11px] text-slate-400">
                     Displays complementary drinks, sides, and signature desserts right inside the diner's slide-out cart.
                   </p>
                 </div>
@@ -533,11 +533,11 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
                   type="button"
                   onClick={() => setPairingsEnabled(!pairingsEnabled)}
                   className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${
-                    pairingsEnabled ? 'bg-emerald-600' : 'bg-charcoal-300'
+                    pairingsEnabled ? 'bg-emerald-600' : 'bg-white/[0.1]'
                   }`}
                 >
                   <span
-                    className={`block w-4 h-4 rounded-full bg-white shadow-md transform transition-transform absolute top-1 ${
+                    className={`block w-4 h-4 rounded-full bg-[#090D16] shadow-md transform transition-transform absolute top-1 ${
                       pairingsEnabled ? 'left-7' : 'left-1'
                     }`}
                   />
@@ -546,26 +546,26 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-charcoal-800 mb-1.5">Upsell Section Header</label>
+                  <label className="block text-xs font-bold text-slate-200 mb-1.5">Upsell Section Header</label>
                   <input
                     type="text"
                     value={pairingsBadge}
                     onChange={(e) => setPairingsBadge(e.target.value)}
                     placeholder="🧑‍🍳 Chef's Recommended Pairings"
-                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-ivory-300 focus:outline-none focus:border-saffron-600"
+                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-white/[0.08] focus:outline-none focus:border-amber-600/40"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-charcoal-800 mb-1.5">Pairing Incentive Discount (%)</label>
+                  <label className="block text-xs font-bold text-slate-200 mb-1.5">Pairing Incentive Discount (%)</label>
                   <input
                     type="number"
                     value={pairingsDiscount}
                     onChange={(e) => setPairingsDiscount(Number(e.target.value))}
                     placeholder="0"
-                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-ivory-300 focus:outline-none focus:border-saffron-600"
+                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-white/[0.08] focus:outline-none focus:border-amber-600/40"
                   />
-                  <span className="text-[10px] text-charcoal-500 mt-1 block">0% = regular dish price, 10% = bundle deal</span>
+                  <span className="text-[10px] text-slate-500 mt-1 block">0% = regular dish price, 10% = bundle deal</span>
                 </div>
               </div>
             </div>
@@ -577,18 +577,18 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
               <div className="p-4 bg-purple-50/60 border border-purple-200 rounded-2xl space-y-2">
                 <div className="flex items-center space-x-2">
                   <Gift className="w-4 h-4 text-purple-600" />
-                  <h4 className="font-bold text-xs text-charcoal-900">Owner-Controlled Loyalty &amp; Rewards Policy</h4>
+                  <h4 className="font-bold text-xs text-white">Owner-Controlled Loyalty &amp; Rewards Policy</h4>
                 </div>
-                <p className="text-[11px] text-charcoal-600 leading-relaxed">
+                <p className="text-[11px] text-slate-400 leading-relaxed">
                   Unlike delivery aggregators that mandate 20%–40% discounts, Menuz puts operators in 100% control. By default, your margin is protected with zero cash discounting (using chef culinary treats &amp; VIP perks). You decide whether bill discounts are allowed and at what percentage.
                 </p>
               </div>
 
               {/* Toggle: Allow Bill Discounts */}
-              <div className="flex items-center justify-between p-4 bg-ivory-50 border border-ivory-200 rounded-2xl">
+              <div className="flex items-center justify-between p-4 bg-[#090D16]/[0.03] border border-white/[0.08] rounded-2xl">
                 <div>
-                  <h5 className="font-bold text-xs text-charcoal-900">Allow Bill Discounts on Spin Wheel</h5>
-                  <p className="text-[11px] text-charcoal-600">
+                  <h5 className="font-bold text-xs text-white">Allow Bill Discounts on Spin Wheel</h5>
+                  <p className="text-[11px] text-slate-400">
                     {allowBillDiscounts 
                       ? 'Enabled: Guests can win your custom percentage discount voucher.'
                       : 'Disabled (Recommended): 100% Food-only treats & VIP passes. Zero bill discounting.'}
@@ -598,11 +598,11 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
                   type="button"
                   onClick={() => setAllowBillDiscounts(!allowBillDiscounts)}
                   className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${
-                    allowBillDiscounts ? 'bg-purple-600' : 'bg-charcoal-300'
+                    allowBillDiscounts ? 'bg-purple-600' : 'bg-white/[0.1]'
                   }`}
                 >
                   <span
-                    className={`block w-4 h-4 rounded-full bg-white shadow-md transform transition-transform absolute top-1 ${
+                    className={`block w-4 h-4 rounded-full bg-[#090D16] shadow-md transform transition-transform absolute top-1 ${
                       allowBillDiscounts ? 'left-7' : 'left-1'
                     }`}
                   />
@@ -611,10 +611,10 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
 
               {/* If Allowed: Configure Custom Percentage */}
               {allowBillDiscounts && (
-                <div className="p-4 bg-ivory-50 border border-purple-200 rounded-2xl space-y-4 animate-in fade-in">
+                <div className="p-4 bg-[#090D16]/[0.03] border border-purple-200 rounded-2xl space-y-4 animate-in fade-in">
                   <div>
                     <div className="flex justify-between items-center mb-1.5">
-                      <label className="text-xs font-bold text-charcoal-800">
+                      <label className="text-xs font-bold text-slate-200">
                         Owner-Defined Discount Percentage
                       </label>
                       <span className="text-xs font-black text-purple-700 bg-purple-100 px-2.5 py-0.5 rounded-full">
@@ -630,7 +630,7 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
                       onChange={(e) => setRewardDiscountPercent(Number(e.target.value))}
                       className="w-full accent-purple-600 cursor-pointer"
                     />
-                    <div className="flex justify-between text-[10px] text-charcoal-500 mt-1">
+                    <div className="flex justify-between text-[10px] text-slate-500 mt-1">
                       <span>5% (Conservative)</span>
                       <span>10% (Balanced)</span>
                       <span>15%</span>
@@ -641,12 +641,12 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-charcoal-800 mb-1.5">Voucher Label on Wheel</label>
+                    <label className="block text-xs font-bold text-slate-200 mb-1.5">Voucher Label on Wheel</label>
                     <input
                       type="text"
                       value={`${rewardDiscountPercent}% Off Next Dine-In Visit`}
                       readOnly
-                      className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-ivory-300 bg-ivory-100 text-charcoal-700"
+                      className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-white/[0.08] bg-[#090D16]/[0.04] text-slate-400"
                     />
                   </div>
                 </div>
@@ -654,7 +654,7 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
 
               {/* Reward Strategy Selector */}
               <div className="space-y-2">
-                <label className="block text-xs font-bold text-charcoal-800">Reward Distribution Strategy</label>
+                <label className="block text-xs font-bold text-slate-200">Reward Distribution Strategy</label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div 
                     onClick={() => {
@@ -663,15 +663,15 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
                     }}
                     className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
                       !allowBillDiscounts
-                        ? 'border-emerald-500 bg-emerald-50/50 shadow-xs'
-                        : 'border-ivory-200 bg-white hover:bg-ivory-50'
+                        ? 'border-emerald-500 bg-emerald-50/50 shadow-sm'
+                        : 'border-white/[0.08] bg-[#090D16] hover:bg-white/[0.03]'
                     }`}
                   >
-                    <div className="font-bold text-xs text-charcoal-900 flex items-center justify-between">
+                    <div className="font-bold text-xs text-white flex items-center justify-between">
                       <span>🛡️ Food-Only Perks</span>
                       {!allowBillDiscounts && <span className="text-[10px] bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded">Active</span>}
                     </div>
-                    <p className="text-[11px] text-charcoal-600 mt-1">
+                    <p className="text-[11px] text-slate-400 mt-1">
                       Complimentary desserts, starters &amp; mocktails. 100% margin safe, zero cash discount.
                     </p>
                   </div>
@@ -683,15 +683,15 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
                     }}
                     className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
                       allowBillDiscounts
-                        ? 'border-purple-500 bg-purple-50/50 shadow-xs'
-                        : 'border-ivory-200 bg-white hover:bg-ivory-50'
+                        ? 'border-purple-500 bg-purple-50/50 shadow-sm'
+                        : 'border-white/[0.08] bg-[#090D16] hover:bg-white/[0.03]'
                     }`}
                   >
-                    <div className="font-bold text-xs text-charcoal-900 flex items-center justify-between">
+                    <div className="font-bold text-xs text-white flex items-center justify-between">
                       <span>🏷️ Custom % Discount</span>
                       {allowBillDiscounts && <span className="text-[10px] bg-purple-600 text-white font-bold px-1.5 py-0.5 rounded">Active</span>}
                     </div>
-                    <p className="text-[11px] text-charcoal-600 mt-1">
+                    <p className="text-[11px] text-slate-400 mt-1">
                       {rewardDiscountPercent}% discount voucher set by you. Great for off-peak days.
                     </p>
                   </div>
@@ -702,7 +702,7 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-ivory-200 bg-ivory-50 flex items-center justify-between">
+        <div className="p-4 border-t border-white/[0.08] bg-[#090D16]/[0.03] flex items-center justify-between">
           <div className="flex items-center space-x-2">
             {savedSuccess && (
               <span className="text-xs font-bold text-green-700 flex items-center space-x-1 animate-in fade-in">
@@ -715,14 +715,14 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-bold text-charcoal-600 hover:text-charcoal-900 transition-colors"
+              className="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition-colors"
             >
               Cancel
             </button>
             <button
               type="button"
               onClick={handleSaveAll}
-              className="px-5 py-2 bg-saffron-600 hover:bg-saffron-700 text-white rounded-xl text-xs font-bold flex items-center space-x-1.5 shadow-subtle transition-all cursor-pointer"
+              className="px-5 py-2 bg-amber-500 hover:bg-amber-700 text-white rounded-xl text-xs font-bold flex items-center space-x-1.5 shadow-lg transition-all cursor-pointer"
             >
               <Save className="w-4 h-4" />
               <span>Save &amp; Apply Settings</span>

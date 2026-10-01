@@ -209,38 +209,38 @@ export const QrScannerModal: React.FC<QrScannerModalProps> = ({
         bottom: 0,
         zIndex: 99999
       }}
-      className="bg-charcoal-950/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto"
+      className="bg-[#090D16]/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto"
     >
-      <div className="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border border-charcoal-100 flex flex-col relative animate-in fade-in zoom-in-95 duration-200">
+      <div className="bg-[#0D1322] rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border border-white/[0.06] flex flex-col relative animate-in fade-in zoom-in-95 duration-200">
         {/* Modal Header */}
-        <div className="bg-gradient-to-r from-charcoal-900 via-charcoal-800 to-charcoal-900 text-white p-4.5 px-5 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-[#090D16] via-[#0D1322] to-[#090D16] text-white p-4.5 px-5 flex items-center justify-between">
           <div className="flex items-center space-x-2.5">
-            <div className="w-8 h-8 rounded-xl bg-saffron-500/20 text-saffron-400 flex items-center justify-center border border-saffron-500/30">
+            <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center border border-amber-500/30">
               <QrCode className="w-4.5 h-4.5" />
             </div>
             <div>
               <h3 className="font-serif font-bold text-base text-white">Scan Table QR</h3>
-              <p className="text-[11px] text-charcoal-300">Unlock your digital menu &amp; instant rewards</p>
+              <p className="text-[11px] text-slate-400">Unlock your digital menu &amp; instant rewards</p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-300 hover:text-white flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-full bg-[#0D1322] hover:bg-white/[0.06] text-slate-400 hover:text-white flex items-center justify-center transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex border-b border-ivory-200 bg-ivory-50/60 p-1.5 gap-1.5 text-xs font-semibold">
+        <div className="flex border-b border-white/[0.08] bg-[#090D16]/[0.03]/60 p-1.5 gap-1.5 text-xs font-semibold">
           <button
             type="button"
             onClick={() => setActiveTab('camera')}
             className={`flex-1 py-2 rounded-xl flex items-center justify-center space-x-1.5 transition-all ${
               activeTab === 'camera'
-                ? 'bg-white text-saffron-700 shadow-sm font-bold border border-ivory-200'
-                : 'text-charcoal-600 hover:text-charcoal-900'
+                ? 'bg-white text-amber-400 shadow-sm font-bold border border-white/[0.08]'
+                : 'text-slate-400 hover:text-white'
             }`}
           >
             <Camera className="w-3.5 h-3.5" />
@@ -252,8 +252,8 @@ export const QrScannerModal: React.FC<QrScannerModalProps> = ({
             onClick={() => setActiveTab('tables')}
             className={`flex-1 py-2 rounded-xl flex items-center justify-center space-x-1.5 transition-all ${
               activeTab === 'tables'
-                ? 'bg-white text-saffron-700 shadow-sm font-bold border border-ivory-200'
-                : 'text-charcoal-600 hover:text-charcoal-900'
+                ? 'bg-white text-amber-400 shadow-sm font-bold border border-white/[0.08]'
+                : 'text-slate-400 hover:text-white'
             }`}
           >
             <UtensilsCrossed className="w-3.5 h-3.5" />
@@ -265,8 +265,8 @@ export const QrScannerModal: React.FC<QrScannerModalProps> = ({
             onClick={() => setActiveTab('manual')}
             className={`flex-1 py-2 rounded-xl flex items-center justify-center space-x-1.5 transition-all ${
               activeTab === 'manual'
-                ? 'bg-white text-saffron-700 shadow-sm font-bold border border-ivory-200'
-                : 'text-charcoal-600 hover:text-charcoal-900'
+                ? 'bg-white text-amber-400 shadow-sm font-bold border border-white/[0.08]'
+                : 'text-slate-400 hover:text-white'
             }`}
           >
             <Search className="w-3.5 h-3.5" />
@@ -279,7 +279,7 @@ export const QrScannerModal: React.FC<QrScannerModalProps> = ({
           {/* TAB 1: CAMERA SCANNER */}
           {activeTab === 'camera' && (
             <div className="flex flex-col items-center text-center space-y-4">
-              <div className="relative w-full aspect-square max-w-[280px] bg-charcoal-900 rounded-3xl overflow-hidden shadow-inner border-2 border-charcoal-700 flex items-center justify-center">
+              <div className="relative w-full aspect-square max-w-[280px] bg-[#090D16] rounded-3xl overflow-hidden shadow-inner border-2 border-white/[0.08] flex items-center justify-center">
                 {/* Live video feed if available */}
                 <video
                   ref={videoRef}
@@ -305,12 +305,12 @@ export const QrScannerModal: React.FC<QrScannerModalProps> = ({
 
                 {/* Fallback if camera permission is not granted */}
                 {cameraError && (
-                  <div className="absolute inset-0 bg-charcoal-900/90 p-5 flex flex-col items-center justify-center text-white space-y-2.5">
+                  <div className="absolute inset-0 bg-[#090D16]/90 p-5 flex flex-col items-center justify-center text-white space-y-2.5">
                     <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
                       <Camera className="w-6 h-6" />
                     </div>
                     <p className="text-xs font-semibold text-amber-200">Point Camera at Table QR</p>
-                    <p className="text-[11px] text-charcoal-400 max-w-[200px] leading-relaxed">
+                    <p className="text-[11px] text-slate-500 max-w-[200px] leading-relaxed">
                       Camera preview simulated in browser. You can tap below to scan any sample table instantly!
                     </p>
                   </div>
@@ -327,10 +327,10 @@ export const QrScannerModal: React.FC<QrScannerModalProps> = ({
               </div>
 
               <div className="space-y-1.5">
-                <p className="text-xs font-semibold text-charcoal-800">
+                <p className="text-xs font-semibold text-slate-200">
                   Align the table QR sticker within the square
                 </p>
-                <p className="text-[11px] text-charcoal-500">
+                <p className="text-[11px] text-slate-500">
                   Or select any sample table below to test the full diner experience immediately:
                 </p>
               </div>
@@ -342,14 +342,14 @@ export const QrScannerModal: React.FC<QrScannerModalProps> = ({
                   onClick={() =>
                     handleSimulateScan('saffron-house', 'table-token-01-saffron', 'Saffron House - Table 1')
                   }
-                  className="p-2.5 bg-saffron-50 hover:bg-saffron-100 border border-saffron-200 rounded-xl text-left transition-colors flex items-center space-x-2 group"
+                  className="p-2.5 bg-amber-500/10 hover:bg-amber-500/10 border border-amber-500/20 rounded-xl text-left transition-colors flex items-center space-x-2 group"
                 >
                   <span className="text-xl">🍛</span>
                   <div className="min-w-0">
-                    <p className="text-xs font-bold text-charcoal-900 group-hover:text-saffron-700 truncate">
+                    <p className="text-xs font-bold text-white group-hover:text-amber-400 truncate">
                       Saffron House
                     </p>
-                    <p className="text-[10px] text-saffron-700 font-semibold">Table 1 • Indian</p>
+                    <p className="text-[10px] text-amber-400 font-semibold">Table 1 • Indian</p>
                   </div>
                 </button>
 
@@ -362,7 +362,7 @@ export const QrScannerModal: React.FC<QrScannerModalProps> = ({
                 >
                   <span className="text-xl">🍕</span>
                   <div className="min-w-0">
-                    <p className="text-xs font-bold text-charcoal-900 group-hover:text-teal-700 truncate">
+                    <p className="text-xs font-bold text-white group-hover:text-teal-700 truncate">
                       Casa Bella
                     </p>
                     <p className="text-[10px] text-teal-700 font-semibold">Table 3 • Italian</p>
@@ -375,7 +375,7 @@ export const QrScannerModal: React.FC<QrScannerModalProps> = ({
           {/* TAB 2: DEMO TABLES */}
           {activeTab === 'tables' && (
             <div className="space-y-3">
-              <p className="text-xs text-charcoal-600">
+              <p className="text-xs text-slate-400">
                 Choose any active restaurant table to view live digital menus and spin the reward wheel:
               </p>
 
@@ -384,30 +384,30 @@ export const QrScannerModal: React.FC<QrScannerModalProps> = ({
                   <div
                     key={t.slug}
                     onClick={() => handleLaunchTable(t.slug, t.token)}
-                    className="p-3 rounded-2xl border border-ivory-200 hover:border-saffron-300 hover:bg-saffron-50/50 transition-all cursor-pointer flex items-center space-x-3 group shadow-subtle"
+                    className="p-3 rounded-2xl border border-white/[0.08] hover:border-amber-500/30 hover:bg-amber-500/10/50 transition-all cursor-pointer flex items-center space-x-3 group shadow-lg"
                   >
                     <img
                       src={t.image}
                       alt={t.restaurantName}
-                      className="w-16 h-16 min-w-[64px] max-w-[64px] rounded-xl object-cover border border-ivory-300 flex-shrink-0"
+                      className="w-16 h-16 min-w-[64px] max-w-[64px] rounded-xl object-cover border border-white/[0.08] flex-shrink-0"
                     />
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <h4 className="font-serif font-bold text-xs text-charcoal-900 group-hover:text-saffron-700 truncate">
+                        <h4 className="font-serif font-bold text-xs text-white group-hover:text-amber-400 truncate">
                           {t.restaurantName}
                         </h4>
-                        <span className="text-[10px] bg-charcoal-900 text-white px-2 py-0.5 rounded-full font-mono font-bold">
+                        <span className="text-[10px] bg-[#090D16] text-white px-2 py-0.5 rounded-full font-mono font-bold">
                           {t.tableLabel}
                         </span>
                       </div>
-                      <p className="text-[11px] text-charcoal-500 truncate mt-0.5">{t.cuisine}</p>
-                      <p className="text-[10px] text-saffron-700 font-semibold flex items-center space-x-1 mt-0.5">
+                      <p className="text-[11px] text-slate-500 truncate mt-0.5">{t.cuisine}</p>
+                      <p className="text-[10px] text-amber-400 font-semibold flex items-center space-x-1 mt-0.5">
                         <span>{t.badge}</span>
                       </p>
                     </div>
 
-                    <ArrowRight className="w-4 h-4 text-charcoal-400 group-hover:text-saffron-600 transition-transform group-hover:translate-x-0.5" />
+                    <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-amber-400 transition-transform group-hover:translate-x-0.5" />
                   </div>
                 ))}
               </div>
@@ -418,7 +418,7 @@ export const QrScannerModal: React.FC<QrScannerModalProps> = ({
           {activeTab === 'manual' && (
             <form onSubmit={handleManualSubmit} className="space-y-4">
               <div className="space-y-1.5 text-left">
-                <label className="text-xs font-bold text-charcoal-800">
+                <label className="text-xs font-bold text-slate-200">
                   Table Token or Menuz URL:
                 </label>
                 <div className="relative">
@@ -427,11 +427,11 @@ export const QrScannerModal: React.FC<QrScannerModalProps> = ({
                     value={manualCode}
                     onChange={(e) => setManualCode(e.target.value)}
                     placeholder="e.g. table-token-01-saffron"
-                    className="w-full py-2.5 px-3.5 pl-9 rounded-xl border border-ivory-300 text-xs focus:outline-none focus:border-saffron-500 bg-ivory-50 text-charcoal-900"
+                    className="w-full py-2.5 px-3.5 pl-9 rounded-xl border border-white/[0.08] text-xs focus:outline-none focus:border-amber-500 bg-[#090D16]/[0.03] text-white"
                   />
-                  <QrCode className="w-4 h-4 text-charcoal-400 absolute left-3 top-3" />
+                  <QrCode className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
                 </div>
-                <p className="text-[10px] text-charcoal-500">
+                <p className="text-[10px] text-slate-500">
                   You can paste a direct table token or full menu URL from your printed QR card.
                 </p>
               </div>
@@ -439,20 +439,20 @@ export const QrScannerModal: React.FC<QrScannerModalProps> = ({
               <button
                 type="submit"
                 disabled={!manualCode.trim()}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-saffron-600 to-amber-500 hover:brightness-105 active:scale-95 text-white font-serif text-xs font-bold shadow-float transition-all disabled:opacity-50"
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 hover:brightness-105 active:scale-95 text-white font-serif text-xs font-bold  transition-all disabled:opacity-50"
               >
                 Open Table Menu ↗
               </button>
 
-              <div className="pt-2 border-t border-ivory-200">
-                <p className="text-[11px] text-charcoal-600 text-center mb-2">Popular quick tokens:</p>
+              <div className="pt-2 border-t border-white/[0.08]">
+                <p className="text-[11px] text-slate-400 text-center mb-2">Popular quick tokens:</p>
                 <div className="flex flex-wrap gap-1.5 justify-center">
                   {['table-token-01-saffron', 'table-token-03-casabella', 'token-malaka-spice-04'].map((tok) => (
                     <button
                       key={tok}
                       type="button"
                       onClick={() => setManualCode(tok)}
-                      className="text-[10px] font-mono bg-ivory-100 hover:bg-saffron-50 border border-ivory-200 text-charcoal-700 px-2 py-1 rounded-lg transition-colors"
+                      className="text-[10px] font-mono bg-[#090D16]/[0.04] hover:bg-amber-500/10 border border-white/[0.08] text-slate-400 px-2 py-1 rounded-lg transition-colors"
                     >
                       {tok}
                     </button>
@@ -464,7 +464,7 @@ export const QrScannerModal: React.FC<QrScannerModalProps> = ({
         </div>
 
         {/* Modal Footer */}
-        <div className="bg-ivory-50 border-t border-ivory-200 p-3 px-5 flex items-center justify-between text-[11px] text-charcoal-600">
+        <div className="bg-white/[0.03] border-t border-white/[0.08] p-3 px-5 flex items-center justify-between text-[11px] text-slate-400">
           <div className="flex items-center space-x-1.5">
             <Sparkles className="w-3.5 h-3.5 text-amber-500" />
             <span>Guaranteed reward upon Google review</span>
@@ -475,7 +475,7 @@ export const QrScannerModal: React.FC<QrScannerModalProps> = ({
               onClose();
               navigate('/');
             }}
-            className="text-saffron-700 hover:underline font-semibold"
+            className="text-amber-400 hover:underline font-semibold"
           >
             Explore all restaurants →
           </button>

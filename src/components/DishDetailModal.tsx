@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Flame, Sparkles, ShoppingBag, Plus, Minus, AlertTriangle } from 'lucide-react';
+import { X, Flame, Sparkles, ShoppingBag, Plus, Minus } from 'lucide-react';
 import { MenuItem, SelectedOptionSnapshot } from '../types';
 import { useRestaurantStore } from '../store/restaurantStore';
 
@@ -67,18 +67,18 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-50 bg-charcoal-900/60 backdrop-blur-sm flex items-end justify-center">
+    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-end justify-center">
       <div 
-        className="bg-white rounded-t-3xl max-w-xl w-full max-h-[92vh] flex flex-col shadow-float overflow-hidden animate-in slide-in-from-bottom duration-200"
+        className="bg-[#0D1322] rounded-t-3xl max-w-xl w-full max-h-[92vh] flex flex-col  overflow-hidden animate-in slide-in-from-bottom duration-200 border border-white/[0.08]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Drag handle & close */}
-        <div className="relative pt-3 pb-2 px-5 flex items-center justify-between border-b border-ivory-200">
-          <div className="w-10 h-1 bg-ivory-200 rounded-full mx-auto absolute left-1/2 -translate-x-1/2 top-2" />
-          <span className="text-xs font-semibold text-saffron-700 tracking-wide uppercase">Signature Offering</span>
+        <div className="relative pt-3 pb-2 px-5 flex items-center justify-between border-b border-white/[0.08]">
+          <div className="w-10 h-1 bg-[#090D16]/20 rounded-full mx-auto absolute left-1/2 -translate-x-1/2 top-2" />
+          <span className="text-xs font-semibold text-amber-400 tracking-wide uppercase">Signature Offering</span>
           <button
             onClick={onClose}
-            className="p-1 rounded-full text-charcoal-800 hover:bg-ivory-100 transition-colors"
+            className="p-1 rounded-full text-slate-400 hover:bg-white/[0.08] hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -87,12 +87,12 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto p-5 space-y-4">
           {/* Image */}
-          <div className="w-full h-56 rounded-2xl overflow-hidden relative bg-ivory-100 shadow-inner">
+          <div className="w-full h-56 rounded-2xl overflow-hidden relative bg-[#090D16]">
             <img src={dish.image_url} alt={dish.name} className="w-full h-full object-cover" />
             {!dish.is_available && (
-              <div className="absolute inset-0 bg-charcoal-900/75 flex items-center justify-center backdrop-blur-xs">
+              <div className="absolute inset-0 bg-black/75 flex items-center justify-center backdrop-blur-xs">
                 <span className="text-xs uppercase font-bold text-white tracking-widest px-3 py-1.5 bg-red-600 rounded-lg shadow-md">
-                  Currently Sold Out (86)
+                  Currently Sold Out
                 </span>
               </div>
             )}
@@ -102,47 +102,47 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
           <div>
             <div className="flex items-center space-x-2 mb-1.5">
               <span className={`w-3.5 h-3.5 rounded-xs border flex items-center justify-center ${
-                isVeg ? 'border-green-600' : 'border-red-600'
+                isVeg ? 'border-emerald-500' : 'border-red-500'
               }`}>
-                <span className={`w-2 h-2 rounded-full ${isVeg ? 'bg-green-600' : 'bg-red-600'}`} />
+                <span className={`w-2 h-2 rounded-full ${isVeg ? 'bg-emerald-500' : 'bg-red-500'}`} />
               </span>
-              <span className="text-xs font-semibold text-charcoal-700">{isVeg ? 'Vegetarian' : 'Non-Vegetarian'}</span>
+              <span className="text-xs font-semibold text-slate-400">{isVeg ? 'Vegetarian' : 'Non-Vegetarian'}</span>
               
               {dish.spice_level > 0 && (
-                <div className="flex items-center space-x-0.5 text-saffron-600 pl-2 border-l border-ivory-200">
-                  <Flame className="w-3.5 h-3.5 fill-saffron-600" />
+                <div className="flex items-center space-x-0.5 text-amber-400 pl-2 border-l border-white/[0.08]">
+                  <Flame className="w-3.5 h-3.5 fill-amber-400" />
                   <span className="text-xs font-bold">Spice {dish.spice_level}/5</span>
                 </div>
               )}
               {dish.serving_size && (
-                <span className="text-xs text-charcoal-700/60 pl-2 border-l border-ivory-200">
+                <span className="text-xs text-slate-500 pl-2 border-l border-white/[0.08]">
                   {dish.serving_size}
                 </span>
               )}
             </div>
 
             <div className="flex items-baseline justify-between gap-2">
-              <h2 className="font-serif text-2xl font-bold text-charcoal-900 leading-tight">{dish.name}</h2>
-              <span className="font-bold text-xl text-saffron-700 whitespace-nowrap">₹{dish.price.toFixed(2)}</span>
+              <h2 className="font-serif text-2xl font-bold text-slate-100 leading-tight">{dish.name}</h2>
+              <span className="font-bold text-xl text-amber-400 whitespace-nowrap">₹{dish.price.toFixed(2)}</span>
             </div>
-            <p className="text-sm text-charcoal-800 leading-relaxed mt-2">{dish.full_description}</p>
+            <p className="text-sm text-slate-400 leading-relaxed mt-2">{dish.full_description}</p>
           </div>
 
           {/* Chef Notes if present */}
           {dish.chef_notes && (
-            <div className="bg-saffron-50 border border-saffron-200/80 p-3 rounded-xl text-xs text-saffron-900 leading-relaxed">
-              <strong className="font-serif font-bold text-saffron-800">Master Chef's Note:</strong> {dish.chef_notes}
+            <div className="bg-amber-500/10 border border-amber-500/30 p-3 rounded-xl text-xs text-amber-200 leading-relaxed">
+              <strong className="font-serif font-bold text-amber-300">Master Chef's Note:</strong> {dish.chef_notes}
             </div>
           )}
 
           {/* Badges */}
-          <div className="bg-ivory-100/70 p-3 rounded-xl space-y-2 text-xs">
+          <div className="bg-white/[0.04] p-3 rounded-xl space-y-2 text-xs border border-white/[0.06]">
             {flags.length > 0 && (
               <div className="flex items-center space-x-2">
-                <span className="font-semibold text-charcoal-900 w-20 flex-shrink-0">Dietary:</span>
+                <span className="font-semibold text-slate-300 w-20 flex-shrink-0">Dietary:</span>
                 <div className="flex flex-wrap gap-1">
                   {flags.map((d, idx) => (
-                    <span key={idx} className="bg-white border border-ivory-200 text-green-800 px-2 py-0.5 rounded-md font-medium text-[11px]">
+                    <span key={idx} className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-2 py-0.5 rounded-md font-medium text-[11px]">
                       {d}
                     </span>
                   ))}
@@ -152,10 +152,10 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
 
             {allergens.length > 0 ? (
               <div className="flex items-center space-x-2">
-                <span className="font-semibold text-charcoal-900 w-20 flex-shrink-0">Allergens:</span>
+                <span className="font-semibold text-slate-300 w-20 flex-shrink-0">Allergens:</span>
                 <div className="flex flex-wrap gap-1">
                   {allergens.map((a, idx) => (
-                    <span key={idx} className="bg-amber-50 border border-amber-200 text-amber-900 px-2 py-0.5 rounded-md font-medium text-[11px]">
+                    <span key={idx} className="bg-amber-500/10 border border-amber-500/30 text-amber-300 px-2 py-0.5 rounded-md font-medium text-[11px]">
                       {a}
                     </span>
                   ))}
@@ -163,14 +163,14 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
               </div>
             ) : (
               <div className="flex items-center space-x-2">
-                <span className="font-semibold text-charcoal-900 w-20 flex-shrink-0">Allergens:</span>
-                <span className="text-charcoal-700 text-[11px]">None declared in kitchen specs</span>
+                <span className="font-semibold text-slate-300 w-20 flex-shrink-0">Allergens:</span>
+                <span className="text-slate-500 text-[11px]">None declared in kitchen specs</span>
               </div>
             )}
 
             <div className="flex items-start space-x-2">
-              <span className="font-semibold text-charcoal-900 w-20 flex-shrink-0">Ingredients:</span>
-              <span className="text-charcoal-700 text-[11px] leading-tight">
+              <span className="font-semibold text-slate-300 w-20 flex-shrink-0">Ingredients:</span>
+              <span className="text-slate-400 text-[11px] leading-tight">
                 {ingredients.length > 0 ? ingredients.join(', ') : 'Chef signature culinary recipe'}
               </span>
             </div>
@@ -180,10 +180,10 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
           {optionGroups.length > 0 && (
             <div className="space-y-3 pt-2">
               {optionGroups.map((group) => (
-                <div key={group.id} className="border border-ivory-200 rounded-xl p-3">
+                <div key={group.id} className="border border-white/[0.08] rounded-xl p-3 bg-[#090D16]/[0.02]">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="font-serif font-bold text-xs text-charcoal-900">{group.name}</span>
-                    <span className="text-[10px] text-charcoal-700/60 uppercase font-semibold">
+                    <span className="font-serif font-bold text-xs text-slate-200">{group.name}</span>
+                    <span className="text-[10px] text-slate-500 uppercase font-semibold">
                       {group.is_required ? 'Required' : 'Optional'}
                     </span>
                   </div>
@@ -197,8 +197,8 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
                           onClick={() => handleOptionToggle(group.id, opt.id, opt.name, opt.price_modifier)}
                           className={`w-full flex items-center justify-between p-2 rounded-lg text-xs transition-all border ${
                             isSelected
-                              ? 'bg-saffron-50 border-saffron-500 text-saffron-900 font-medium'
-                              : 'bg-white border-ivory-200 text-charcoal-800 hover:bg-ivory-50'
+                              ? 'bg-amber-500/20 border-amber-500/60 text-amber-300 font-medium'
+                              : 'bg-white/[0.03] border-white/[0.08] text-slate-300 hover:border-amber-500/30'
                           }`}
                         >
                           <span>{opt.name}</span>
@@ -216,23 +216,23 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
         </div>
 
         {/* Bottom Actions Bar */}
-        <div className="p-4 bg-white border-t border-ivory-200 space-y-2.5">
+        <div className="p-4 bg-[#090D16] border-t border-white/[0.08] space-y-2.5">
           {dish.is_available ? (
             <div className="flex items-center space-x-3">
               {/* Quantity Selector */}
-              <div className="flex items-center bg-ivory-100 rounded-xl border border-ivory-200 p-1">
+              <div className="flex items-center bg-[#090D16]/[0.04] rounded-xl border border-white/[0.08] p-1">
                 <button
                   type="button"
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-8 h-8 rounded-lg bg-white shadow-xs flex items-center justify-center text-charcoal-800 hover:bg-ivory-50 transition-colors"
+                  className="w-8 h-8 rounded-lg bg-[#090D16]/[0.08] flex items-center justify-center text-slate-300 hover:bg-white/[0.12] transition-colors"
                 >
                   <Minus className="w-3.5 h-3.5" />
                 </button>
-                <span className="w-8 text-center text-xs font-bold text-charcoal-900">{quantity}</span>
+                <span className="w-8 text-center text-xs font-bold text-slate-100">{quantity}</span>
                 <button
                   type="button"
                   onClick={() => setQuantity(quantity + 1)}
-                  className="w-8 h-8 rounded-lg bg-white shadow-xs flex items-center justify-center text-charcoal-800 hover:bg-ivory-50 transition-colors"
+                  className="w-8 h-8 rounded-lg bg-[#090D16]/[0.08] flex items-center justify-center text-slate-300 hover:bg-white/[0.12] transition-colors"
                 >
                   <Plus className="w-3.5 h-3.5" />
                 </button>
@@ -242,7 +242,7 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
               <button
                 type="button"
                 onClick={handleAddToCart}
-                className="flex-1 bg-saffron-600 hover:bg-saffron-700 text-white font-bold py-3 px-4 rounded-xl shadow-subtle flex items-center justify-between text-xs transition-colors"
+                className="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white font-bold py-3 px-4 rounded-xl shadow-lg flex items-center justify-between text-xs transition-all"
               >
                 <div className="flex items-center space-x-1.5">
                   <ShoppingBag className="w-4 h-4" />
@@ -254,7 +254,7 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
           ) : (
             <button
               disabled
-              className="w-full bg-gray-200 text-gray-500 font-bold py-3 px-4 rounded-xl text-xs cursor-not-allowed text-center"
+              className="w-full bg-[#090D16]/[0.05] text-slate-500 font-bold py-3 px-4 rounded-xl text-xs cursor-not-allowed text-center border border-white/[0.08]"
             >
               Currently Unavailable in Kitchen
             </button>
@@ -264,10 +264,10 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
           <button
             type="button"
             onClick={() => onAskAi(dish)}
-            className="w-full bg-ivory-100 hover:bg-ivory-200 text-charcoal-900 font-semibold py-2.5 px-4 rounded-xl border border-ivory-200 flex items-center justify-center space-x-1.5 text-xs transition-colors"
+            className="w-full bg-[#090D16]/[0.04] hover:bg-white/[0.08] text-slate-300 font-semibold py-2.5 px-4 rounded-xl border border-white/[0.08] hover:border-amber-500/30 flex items-center justify-center space-x-1.5 text-xs transition-all"
           >
-            <Sparkles className="w-3.5 h-3.5 text-saffron-600" />
-            <span>Ask AI: Flavors, Spices & Pairing Details</span>
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <span>Ask AI: Flavors, Spices &amp; Pairing Details</span>
           </button>
         </div>
       </div>

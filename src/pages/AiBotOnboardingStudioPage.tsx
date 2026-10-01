@@ -500,12 +500,12 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
           <div className="flex items-center space-x-3">
             <Link
               to="/"
-              className="inline-flex items-center space-x-1.5 text-xs text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] px-3 py-1.5 rounded-xl border border-white/[0.08] transition-colors"
+              className="inline-flex items-center space-x-1.5 text-xs text-slate-300 hover:text-white bg-[#090D16]/[0.04] hover:bg-white/[0.08] px-3 py-1.5 rounded-xl border border-white/[0.08] transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Explore Demos</span>
             </Link>
-            <div className="h-4 w-px bg-white/[0.1]" />
+            <div className="h-4 w-px bg-[#090D16]/[0.1]" />
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
                 <Sparkles className="w-4 h-4 animate-pulse" />
@@ -528,7 +528,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
             {/* Always-Visible Admin Page Top Button */}
             <Link
               to="/admin"
-              className="inline-flex items-center space-x-1.5 text-xs font-bold text-amber-300 hover:text-amber-200 transition-colors bg-amber-500/15 hover:bg-amber-500/25 px-3.5 py-1.5 rounded-xl border border-amber-500/30 hover:border-amber-400/60 shadow-xs cursor-pointer active:scale-95"
+              className="inline-flex items-center space-x-1.5 text-xs font-bold text-amber-300 hover:text-amber-200 transition-colors bg-amber-500/15 hover:bg-amber-500/25 px-3.5 py-1.5 rounded-xl border border-amber-500/30 hover:border-amber-400/60 shadow-sm cursor-pointer active:scale-95"
               title="Open Master Admin Control Hub"
             >
               <ShieldCheck className="w-4 h-4 text-amber-400" />
@@ -548,7 +548,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                 className="bg-transparent text-xs font-bold text-amber-300 focus:outline-hidden cursor-pointer"
               >
                 {activeWorkingRestaurants.map((r) => (
-                  <option key={r.id} value={r.id} className="bg-charcoal-900 text-white">
+                  <option key={r.id} value={r.id} className="bg-[#090D16] text-white">
                     {r.name}
                   </option>
                 ))}
@@ -559,7 +559,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsAddDishModalOpen(true)}
-              className="inline-flex items-center space-x-1.5 text-xs font-bold bg-amber-500 hover:bg-amber-400 text-charcoal-950 px-3.5 py-1.5 rounded-xl transition-all shadow-sm cursor-pointer"
+              className="inline-flex items-center space-x-1.5 text-xs font-bold bg-amber-500 hover:bg-amber-400 text-white px-3.5 py-1.5 rounded-xl transition-all shadow-sm cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add Dish</span>
@@ -568,7 +568,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
             <button
               type="button"
               onClick={handleAutoFillAllMissingSecrets}
-              className="inline-flex items-center space-x-1.5 text-xs font-bold bg-saffron-600 hover:bg-saffron-500 text-white px-3.5 py-1.5 rounded-xl transition-all shadow-sm cursor-pointer"
+              className="inline-flex items-center space-x-1.5 text-xs font-bold bg-amber-500 hover:bg-amber-500 text-white px-3.5 py-1.5 rounded-xl transition-all shadow-sm cursor-pointer"
               title="Automatically generate chef notes and stories for all dishes missing them"
             >
               <Zap className="w-3.5 h-3.5" />
@@ -606,7 +606,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                   type="text"
                   value={dailyFreshHighlight}
                   onChange={(e) => setDailyFreshHighlight(e.target.value)}
-                  className="w-full text-xs bg-white border border-amber-400 rounded-xl px-3 py-1 font-bold text-amber-950"
+                  className="w-full text-xs bg-[#090D16] border border-amber-400 rounded-xl px-3 py-1 font-bold text-amber-950"
                 />
                 <button
                   type="button"
@@ -671,7 +671,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
             </div>
 
             {/* Multi-Platform Sharing Tools */}
-            <div className="col-span-2 lg:col-span-2 flex items-center justify-end gap-2 bg-white/[0.04] text-white p-2.5 rounded-2xl border border-white/[0.08]">
+            <div className="col-span-2 lg:col-span-2 flex items-center justify-end gap-2 bg-[#090D16]/[0.04] text-white p-2.5 rounded-2xl border border-white/[0.08]">
               <span className="text-xs text-slate-300 font-medium mr-1 hidden sm:inline">Share Intake:</span>
               <button
                 type="button"
@@ -694,7 +694,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => window.print()}
-                className="inline-flex items-center space-x-1 text-xs font-bold bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-200 hover:text-white px-2.5 py-1.5 rounded-xl border border-charcoal-700 transition-all"
+                className="inline-flex items-center space-x-1 text-xs font-bold bg-[#0D1322] hover:bg-white/[0.06] text-slate-300 hover:text-white px-2.5 py-1.5 rounded-xl border border-white/[0.08] transition-all"
                 title="Download / Print PDF Questionnaire"
               >
                 <Download className="w-3 h-3" />
@@ -703,7 +703,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
               <button
                 type="button"
                 onClick={handleCopyLink}
-                className="inline-flex items-center space-x-1 text-xs font-bold bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-200 hover:text-white px-2.5 py-1.5 rounded-xl border border-charcoal-700 transition-all"
+                className="inline-flex items-center space-x-1 text-xs font-bold bg-[#0D1322] hover:bg-white/[0.06] text-slate-300 hover:text-white px-2.5 py-1.5 rounded-xl border border-white/[0.08] transition-all"
                 title="Copy Intake URL"
               >
                 <Copy className="w-3 h-3" />
@@ -716,7 +716,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
 
       {/* ── Studio Mode Tabs & Filters ────────────────────────────────────── */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-3.5 rounded-3xl border border-ivory-200 shadow-xs">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#090D16] p-3.5 rounded-3xl border border-white/[0.08] shadow-sm">
           {/* Main Studio View Mode Buttons */}
           <div className="flex items-center space-x-1.5 overflow-x-auto no-scrollbar">
             <button
@@ -724,8 +724,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
               onClick={() => setViewMode('cards')}
               className={`px-3.5 py-2 rounded-2xl text-xs font-bold flex items-center space-x-2 transition-all cursor-pointer ${
                 viewMode === 'cards'
-                  ? 'bg-charcoal-900 text-white shadow-subtle'
-                  : 'text-charcoal-700 hover:bg-ivory-100'
+                  ? 'bg-[#090D16] text-white shadow-lg'
+                  : 'text-slate-400 hover:bg-white/[0.04]'
               }`}
             >
               <Layers className="w-3.5 h-3.5 text-amber-400" />
@@ -737,8 +737,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
               onClick={() => setViewMode('specials')}
               className={`px-3.5 py-2 rounded-2xl text-xs font-bold flex items-center space-x-2 transition-all cursor-pointer ${
                 viewMode === 'specials'
-                  ? 'bg-charcoal-900 text-white shadow-subtle'
-                  : 'text-charcoal-700 hover:bg-ivory-100'
+                  ? 'bg-[#090D16] text-white shadow-lg'
+                  : 'text-slate-400 hover:bg-white/[0.04]'
               }`}
             >
               <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
@@ -750,8 +750,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
               onClick={() => setViewMode('matrix')}
               className={`px-3.5 py-2 rounded-2xl text-xs font-bold flex items-center space-x-2 transition-all cursor-pointer ${
                 viewMode === 'matrix'
-                  ? 'bg-charcoal-900 text-white shadow-subtle'
-                  : 'text-charcoal-700 hover:bg-ivory-100'
+                  ? 'bg-[#090D16] text-white shadow-lg'
+                  : 'text-slate-400 hover:bg-white/[0.04]'
               }`}
             >
               <TableIcon className="w-3.5 h-3.5 text-blue-400" />
@@ -763,11 +763,11 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
               onClick={() => setViewMode('lore')}
               className={`px-3.5 py-2 rounded-2xl text-xs font-bold flex items-center space-x-2 transition-all cursor-pointer ${
                 viewMode === 'lore'
-                  ? 'bg-charcoal-900 text-white shadow-subtle'
-                  : 'text-charcoal-700 hover:bg-ivory-100'
+                  ? 'bg-[#090D16] text-white shadow-lg'
+                  : 'text-slate-400 hover:bg-white/[0.04]'
               }`}
             >
-              <ChefHat className="w-3.5 h-3.5 text-saffron-500" />
+              <ChefHat className="w-3.5 h-3.5 text-amber-400" />
               <span>Chef &amp; Owner Lore &amp; Personality</span>
             </button>
 
@@ -776,8 +776,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
               onClick={() => setViewMode('test')}
               className={`px-3.5 py-2 rounded-2xl text-xs font-bold flex items-center space-x-2 transition-all cursor-pointer ${
                 viewMode === 'test'
-                  ? 'bg-charcoal-900 text-white shadow-subtle'
-                  : 'text-charcoal-700 hover:bg-ivory-100'
+                  ? 'bg-[#090D16] text-white shadow-lg'
+                  : 'text-slate-400 hover:bg-white/[0.04]'
               }`}
             >
               <MessageSquare className="w-3.5 h-3.5 text-green-400" />
@@ -792,13 +792,13 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
               placeholder="Search dish or ingredient..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full text-xs bg-ivory-100/90 border border-ivory-300 rounded-2xl pl-3 pr-8 py-2 text-charcoal-900 placeholder:text-charcoal-400 focus:outline-hidden focus:border-amber-400"
+              className="w-full text-xs bg-[#090D16]/[0.04] border border-white/[0.08] rounded-2xl pl-3 pr-8 py-2 text-white placeholder:text-slate-500 focus:outline-hidden focus:border-amber-400"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute right-2.5 top-2 text-charcoal-400 hover:text-charcoal-600 text-xs"
+                className="absolute right-2.5 top-2 text-slate-500 hover:text-slate-400 text-xs"
               >
                 ✕
               </button>
@@ -808,7 +808,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
 
         {/* ── Sub-Filter Bar (Category & Highlight Types) ───────────────────── */}
         {(viewMode === 'cards' || viewMode === 'specials' || viewMode === 'matrix') && (
-          <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-2xl border border-ivory-200">
+          <div className="flex flex-wrap items-center justify-between gap-3 bg-[#0D1322] p-3 rounded-2xl border border-white/[0.08]">
             {/* Quick Filter Badges */}
             <div className="flex flex-wrap items-center gap-1.5">
               <button
@@ -816,8 +816,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                 onClick={() => setDishFilterType('all')}
                 className={`text-xs font-bold px-3 py-1.5 rounded-xl transition-colors cursor-pointer ${
                   dishFilterType === 'all'
-                    ? 'bg-charcoal-800 text-white'
-                    : 'bg-ivory-100 text-charcoal-700 hover:bg-ivory-200'
+                    ? 'bg-[#0D1322] text-white'
+                    : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.06]'
                 }`}
               >
                 All ({currentMenuItems.length})
@@ -828,7 +828,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                 onClick={() => setDishFilterType('chef_fav')}
                 className={`text-xs font-bold px-3 py-1.5 rounded-xl transition-colors flex items-center space-x-1 cursor-pointer ${
                   dishFilterType === 'chef_fav'
-                    ? 'bg-amber-500 text-charcoal-950 shadow-xs'
+                    ? 'bg-amber-500 text-white shadow-sm'
                     : 'bg-amber-100/80 text-amber-900 hover:bg-amber-200'
                 }`}
               >
@@ -841,7 +841,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                 onClick={() => setDishFilterType('specials')}
                 className={`text-xs font-bold px-3 py-1.5 rounded-xl transition-colors flex items-center space-x-1 cursor-pointer ${
                   dishFilterType === 'specials'
-                    ? 'bg-orange-500 text-white shadow-xs'
+                    ? 'bg-orange-500 text-white shadow-sm'
                     : 'bg-orange-100/80 text-orange-900 hover:bg-orange-200'
                 }`}
               >
@@ -854,7 +854,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                 onClick={() => setDishFilterType('bestsellers')}
                 className={`text-xs font-bold px-3 py-1.5 rounded-xl transition-colors flex items-center space-x-1 cursor-pointer ${
                   dishFilterType === 'bestsellers'
-                    ? 'bg-purple-600 text-white shadow-xs'
+                    ? 'bg-purple-600 text-white shadow-sm'
                     : 'bg-purple-100 text-purple-900 hover:bg-purple-200'
                 }`}
               >
@@ -867,7 +867,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                 onClick={() => setDishFilterType('missing_lore')}
                 className={`text-xs font-bold px-3 py-1.5 rounded-xl transition-colors flex items-center space-x-1 cursor-pointer ${
                   dishFilterType === 'missing_lore'
-                    ? 'bg-red-600 text-white shadow-xs'
+                    ? 'bg-red-600 text-white shadow-sm'
                     : 'bg-red-100 text-red-900 hover:bg-red-200'
                 }`}
               >
@@ -878,11 +878,11 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
 
             {/* Category Dropdown Filter */}
             <div className="flex items-center space-x-2">
-              <span className="text-xs text-charcoal-500 font-medium">Category:</span>
+              <span className="text-xs text-slate-500 font-medium">Category:</span>
               <select
                 value={selectedCatId}
                 onChange={(e) => setSelectedCatId(e.target.value)}
-                className="text-xs font-bold bg-ivory-100 border border-ivory-300 rounded-xl px-2.5 py-1.5 text-charcoal-800 focus:outline-hidden"
+                className="text-xs font-bold bg-[#090D16]/[0.04] border border-white/[0.08] rounded-xl px-2.5 py-1.5 text-slate-200 focus:outline-hidden"
               >
                 <option value="all">All Categories ({currentCategories.length})</option>
                 {currentCategories.map((c) => (
@@ -901,8 +901,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
         {viewMode === 'cards' && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <p className="text-xs text-charcoal-600">
-                Showing <strong className="text-charcoal-900">{filteredDishes.length}</strong> dishes. Click <strong>"✨ Auto-Draft"</strong> or use presets to fill secret recipes in seconds.
+              <p className="text-xs text-slate-400">
+                Showing <strong className="text-white">{filteredDishes.length}</strong> dishes. Click <strong>"✨ Auto-Draft"</strong> or use presets to fill secret recipes in seconds.
               </p>
               <button
                 type="button"
@@ -923,7 +923,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                 return (
                   <div
                     key={dish.id}
-                    className="bg-white rounded-3xl border border-ivory-200/90 shadow-subtle p-5 space-y-4 transition-all hover:border-amber-300/80 relative"
+                    className="bg-[#0D1322] rounded-3xl border border-white/[0.08]/90 shadow-lg p-5 space-y-4 transition-all hover:border-amber-300/80 relative"
                   >
                     {/* Header Row: Image, Name, Badges */}
                     <div className="flex items-start justify-between gap-3">
@@ -931,7 +931,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                         <img
                           src={dish.image_url}
                           alt={dish.name}
-                          className="w-16 h-16 rounded-2xl object-cover border border-ivory-200 shadow-xs flex-shrink-0"
+                          className="w-16 h-16 rounded-2xl object-cover border border-white/[0.08] shadow-sm flex-shrink-0"
                           onError={(e) => {
                             (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80';
                           }}
@@ -948,10 +948,10 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                                 className={`w-2 h-2 rounded-full ${isVeg ? 'bg-green-600' : 'bg-red-600'}`}
                               />
                             </span>
-                            <h3 className="text-sm font-bold text-charcoal-900">{dish.name}</h3>
+                            <h3 className="text-sm font-bold text-white">{dish.name}</h3>
                           </div>
-                          <p className="text-xs text-charcoal-500 mt-0.5">
-                            {category?.name || 'General'} • <span className="font-mono font-bold text-charcoal-800">₹{dish.price}</span>
+                          <p className="text-xs text-slate-500 mt-0.5">
+                            {category?.name || 'General'} • <span className="font-mono font-bold text-slate-200">₹{dish.price}</span>
                           </p>
                         </div>
                       </div>
@@ -974,28 +974,28 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                           className={`text-[11px] font-bold px-2 py-1.5 rounded-xl border transition-all flex items-center space-x-1 cursor-pointer ${
                             isRecording
                               ? 'bg-red-600 text-white animate-pulse border-red-700'
-                              : 'bg-ivory-100 text-charcoal-700 hover:bg-ivory-200 border-ivory-300'
+                              : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.06] border-white/[0.08]'
                           }`}
                           title="Simulate speaking Chef's recipe notes directly via microphone"
                         >
-                          {isRecording ? <MicOff className="w-3 h-3" /> : <Mic className="w-3 h-3 text-saffron-600" />}
+                          {isRecording ? <MicOff className="w-3 h-3" /> : <Mic className="w-3 h-3 text-amber-400" />}
                           <span className="hidden sm:inline">{isRecording ? 'Listening...' : 'Voice'}</span>
                         </button>
                       </div>
                     </div>
 
                     {/* Quick Highlights / Badges Row (Chef's Fav, House Special, Bestseller) */}
-                    <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-ivory-100">
+                    <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-white/[0.06]">
                       <button
                         type="button"
                         onClick={() => updateMenuItem(dish.id, { is_chef_recommended: !dish.is_chef_recommended })}
                         className={`text-[11px] font-bold px-2.5 py-1 rounded-xl transition-all flex items-center space-x-1 border cursor-pointer ${
                           dish.is_chef_recommended
-                            ? 'bg-amber-500 text-charcoal-950 border-amber-600 shadow-xs'
-                            : 'bg-ivory-100/80 text-charcoal-600 border-ivory-200 hover:bg-amber-50 hover:text-amber-900'
+                            ? 'bg-amber-500 text-white border-amber-600 shadow-sm'
+                            : 'bg-white/[0.04]/80 text-slate-400 border-white/[0.08] hover:bg-amber-50 hover:text-amber-900'
                         }`}
                       >
-                        <Star className={`w-3 h-3 ${dish.is_chef_recommended ? 'fill-charcoal-950 text-charcoal-950' : 'text-charcoal-400'}`} />
+                        <Star className={`w-3 h-3 ${dish.is_chef_recommended ? 'fill-white text-white' : 'text-slate-500'}`} />
                         <span>Chef's Favourite</span>
                       </button>
 
@@ -1004,8 +1004,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                         onClick={() => updateMenuItem(dish.id, { is_signature: !dish.is_signature })}
                         className={`text-[11px] font-bold px-2.5 py-1 rounded-xl transition-all flex items-center space-x-1 border cursor-pointer ${
                           dish.is_signature
-                            ? 'bg-orange-500 text-white border-orange-600 shadow-xs'
-                            : 'bg-ivory-100/80 text-charcoal-600 border-ivory-200 hover:bg-orange-50 hover:text-orange-900'
+                            ? 'bg-orange-500 text-white border-orange-600 shadow-sm'
+                            : 'bg-white/[0.04]/80 text-slate-400 border-white/[0.08] hover:bg-orange-50 hover:text-orange-900'
                         }`}
                       >
                         <Flame className="w-3 h-3" />
@@ -1017,8 +1017,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                         onClick={() => updateMenuItem(dish.id, { is_bestseller: !dish.is_bestseller })}
                         className={`text-[11px] font-bold px-2.5 py-1 rounded-xl transition-all flex items-center space-x-1 border cursor-pointer ${
                           dish.is_bestseller
-                            ? 'bg-purple-600 text-white border-purple-700 shadow-xs'
-                            : 'bg-ivory-100/80 text-charcoal-600 border-ivory-200 hover:bg-purple-50 hover:text-purple-900'
+                            ? 'bg-purple-600 text-white border-purple-700 shadow-sm'
+                            : 'bg-white/[0.04]/80 text-slate-400 border-white/[0.08] hover:bg-purple-50 hover:text-purple-900'
                         }`}
                       >
                         <Award className="w-3 h-3" />
@@ -1031,7 +1031,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                           if (e.target.value) handleApplyPresetTemplate(dish, e.target.value);
                         }}
                         defaultValue=""
-                        className="text-[11px] font-bold bg-ivory-100 hover:bg-ivory-200 border border-ivory-300 rounded-xl px-2 py-1 text-charcoal-700 focus:outline-hidden ml-auto"
+                        className="text-[11px] font-bold bg-[#090D16]/[0.04] hover:bg-white/[0.06] border border-white/[0.08] rounded-xl px-2 py-1 text-slate-400 focus:outline-hidden ml-auto"
                       >
                         <option value="" disabled>⚡ Apply Smart Preset...</option>
                         <option value="royal_awadhi">👑 Royal Awadhi 18h Slow-Simmer</option>
@@ -1043,26 +1043,26 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
 
                     {/* Section 1: Secret Preparation Technique & Spices */}
                     <div className="space-y-1">
-                      <label className="text-[11px] font-bold text-charcoal-800 flex items-center justify-between">
+                      <label className="text-[11px] font-bold text-slate-200 flex items-center justify-between">
                         <span className="flex items-center gap-1">
-                          <ChefHat className="w-3 h-3 text-saffron-600" />
+                          <ChefHat className="w-3 h-3 text-amber-400" />
                           Secret Cooking Technique &amp; Heirloom Spices:
                         </span>
-                        <span className="text-[10px] text-charcoal-400 font-normal">Fed directly to AI Bot</span>
+                        <span className="text-[10px] text-slate-500 font-normal">Fed directly to AI Bot</span>
                       </label>
                       <textarea
                         rows={2}
                         value={dish.chef_notes || ''}
                         onChange={(e) => updateMenuItem(dish.id, { chef_notes: e.target.value })}
                         placeholder="e.g. 18-hour charcoal simmer with hand-pounded mace, stone flower, and pure white makkhan..."
-                        className="w-full text-xs bg-ivory-50 border border-ivory-300 rounded-xl p-2.5 text-charcoal-900 placeholder:text-charcoal-400 focus:outline-hidden focus:border-amber-500 focus:bg-white transition-all"
+                        className="w-full text-xs bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl p-2.5 text-white placeholder:text-slate-500 focus:outline-hidden focus:border-amber-500 focus:bg-white transition-all"
                       />
                     </div>
 
                     {/* Section 2: Chef's Story & Owner's Table Pitch */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <label className="text-[11px] font-bold text-charcoal-800 flex items-center gap-1">
+                        <label className="text-[11px] font-bold text-slate-200 flex items-center gap-1">
                           <BookOpen className="w-3 h-3 text-amber-600" />
                           Chef's Origin Lore:
                         </label>
@@ -1071,12 +1071,12 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                           value={dish.chef_story || ''}
                           onChange={(e) => updateMenuItem(dish.id, { chef_story: e.target.value })}
                           placeholder="e.g. 80-year-old grandmother recipe from Amritsar"
-                          className="w-full text-xs bg-ivory-50 border border-ivory-300 rounded-xl px-2.5 py-1.5 text-charcoal-900 placeholder:text-charcoal-400 focus:outline-hidden focus:border-amber-500 focus:bg-white"
+                          className="w-full text-xs bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-2.5 py-1.5 text-white placeholder:text-slate-500 focus:outline-hidden focus:border-amber-500 focus:bg-white"
                         />
                       </div>
 
                       <div className="space-y-1">
-                        <label className="text-[11px] font-bold text-charcoal-800 flex items-center gap-1">
+                        <label className="text-[11px] font-bold text-slate-200 flex items-center gap-1">
                           <Heart className="w-3 h-3 text-red-500" />
                           Owner's Table Pitch:
                         </label>
@@ -1085,7 +1085,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                           value={dish.owner_pitch || ''}
                           onChange={(e) => updateMenuItem(dish.id, { owner_pitch: e.target.value })}
                           placeholder="e.g. Our most beloved comfort dish — light on the stomach"
-                          className="w-full text-xs bg-ivory-50 border border-ivory-300 rounded-xl px-2.5 py-1.5 text-charcoal-900 placeholder:text-charcoal-400 focus:outline-hidden focus:border-amber-500 focus:bg-white"
+                          className="w-full text-xs bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-2.5 py-1.5 text-white placeholder:text-slate-500 focus:outline-hidden focus:border-amber-500 focus:bg-white"
                         />
                       </div>
                     </div>
@@ -1093,7 +1093,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                     {/* Section 3: Beverage Pairing & Serving Temperature */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <label className="text-[11px] font-bold text-charcoal-800 flex items-center gap-1">
+                        <label className="text-[11px] font-bold text-slate-200 flex items-center gap-1">
                           <GlassWater className="w-3 h-3 text-blue-500" />
                           Best Drink Pairing &amp; Reason:
                         </label>
@@ -1102,13 +1102,13 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                           value={dish.pairing_drink_name || ''}
                           onChange={(e) => updateMenuItem(dish.id, { pairing_drink_name: e.target.value })}
                           placeholder="e.g. Saffron Lassi (balances rich butter)"
-                          className="w-full text-xs bg-ivory-50 border border-ivory-300 rounded-xl px-2.5 py-1.5 text-charcoal-900 placeholder:text-charcoal-400 focus:outline-hidden focus:border-blue-400 focus:bg-white"
+                          className="w-full text-xs bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-2.5 py-1.5 text-white placeholder:text-slate-500 focus:outline-hidden focus:border-blue-400 focus:bg-white"
                         />
                       </div>
 
                       <div className="space-y-1">
-                        <label className="text-[11px] font-bold text-charcoal-800 flex items-center gap-1">
-                          <Utensils className="w-3 h-3 text-charcoal-600" />
+                        <label className="text-[11px] font-bold text-slate-200 flex items-center gap-1">
+                          <Utensils className="w-3 h-3 text-slate-400" />
                           Serving Style &amp; Temperature:
                         </label>
                         <input
@@ -1116,16 +1116,16 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                           value={dish.temperature_style || ''}
                           onChange={(e) => updateMenuItem(dish.id, { temperature_style: e.target.value })}
                           placeholder="e.g. Sizzling hot in cast iron skillet"
-                          className="w-full text-xs bg-ivory-50 border border-ivory-300 rounded-xl px-2.5 py-1.5 text-charcoal-900 placeholder:text-charcoal-400 focus:outline-hidden focus:border-amber-500 focus:bg-white"
+                          className="w-full text-xs bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-2.5 py-1.5 text-white placeholder:text-slate-500 focus:outline-hidden focus:border-amber-500 focus:bg-white"
                         />
                       </div>
                     </div>
 
                     {/* Section 4: Spice Calibration & Dietary Tags */}
-                    <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-ivory-100">
+                    <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-white/[0.06]">
                       {/* Spice Calibration Gauge (0-5) */}
                       <div className="flex items-center space-x-2">
-                        <span className="text-[11px] font-bold text-charcoal-700">Spice:</span>
+                        <span className="text-[11px] font-bold text-slate-400">Spice:</span>
                         <div className="flex items-center space-x-1">
                           {[0, 1, 2, 3, 4, 5].map((lvl) => (
                             <button
@@ -1134,15 +1134,15 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                               onClick={() => updateMenuItem(dish.id, { spice_level: lvl })}
                               className={`w-6 h-6 rounded-lg text-[10px] font-bold flex items-center justify-center transition-all cursor-pointer ${
                                 dish.spice_level === lvl
-                                  ? 'bg-red-600 text-white shadow-xs scale-105'
-                                  : 'bg-ivory-100 text-charcoal-600 hover:bg-ivory-200'
+                                  ? 'bg-red-600 text-white shadow-sm scale-105'
+                                  : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.06]'
                               }`}
                             >
                               {lvl}
                             </button>
                           ))}
                         </div>
-                        <span className="text-[10px] text-charcoal-500">
+                        <span className="text-[10px] text-slate-500">
                           {dish.spice_level === 0 ? 'Mild' : dish.spice_level <= 2 ? 'Warm' : dish.spice_level === 3 ? 'Traditional' : 'Fiery'}
                         </span>
                       </div>
@@ -1164,7 +1164,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                               className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${
                                 hasTag
                                   ? 'bg-green-100 text-green-800 border-green-300'
-                                  : 'bg-ivory-50 text-charcoal-400 border-ivory-200 hover:bg-ivory-100'
+                                  : 'bg-white/[0.03] text-slate-500 border-white/[0.08] hover:bg-white/[0.04]'
                               }`}
                             >
                               {tag === 'Gluten-Free' ? 'GF' : tag}
@@ -1211,12 +1211,12 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                 return (
                   <div
                     key={dish.id}
-                    className={`bg-white rounded-3xl p-4 border transition-all space-y-3 ${
+                    className={`bg-[#0D1322] rounded-3xl p-4 border transition-all space-y-3 ${
                       isChefFav
                         ? 'border-amber-400 ring-2 ring-amber-400/20 shadow-md'
                         : isSpecial
                           ? 'border-orange-400 ring-2 ring-orange-400/20 shadow-md'
-                          : 'border-ivory-200'
+                          : 'border-white/[0.08]'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-3">
@@ -1224,31 +1224,31 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                         <img
                           src={dish.image_url}
                           alt={dish.name}
-                          className="w-12 h-12 rounded-xl object-cover border border-ivory-200"
+                          className="w-12 h-12 rounded-xl object-cover border border-white/[0.08]"
                         />
                         <div>
-                          <h4 className="text-xs font-bold text-charcoal-900">{dish.name}</h4>
-                          <span className="text-[11px] font-mono font-bold text-charcoal-600">₹{dish.price}</span>
+                          <h4 className="text-xs font-bold text-white">{dish.name}</h4>
+                          <span className="text-[11px] font-mono font-bold text-slate-400">₹{dish.price}</span>
                         </div>
                       </div>
                     </div>
 
-                    <p className="text-xs text-charcoal-600 line-clamp-2 italic">
+                    <p className="text-xs text-slate-400 line-clamp-2 italic">
                       "{dish.chef_notes || dish.short_description}"
                     </p>
 
                     {/* Tagging Toggles */}
-                    <div className="grid grid-cols-3 gap-1.5 pt-2 border-t border-ivory-100">
+                    <div className="grid grid-cols-3 gap-1.5 pt-2 border-t border-white/[0.06]">
                       <button
                         type="button"
                         onClick={() => updateMenuItem(dish.id, { is_chef_recommended: !isChefFav })}
                         className={`text-[11px] font-bold py-1.5 rounded-xl border flex flex-col items-center justify-center transition-all cursor-pointer ${
                           isChefFav
-                            ? 'bg-amber-500 text-charcoal-950 border-amber-600 shadow-xs'
-                            : 'bg-ivory-100 text-charcoal-600 border-ivory-200 hover:bg-amber-50'
+                            ? 'bg-amber-500 text-white border-amber-600 shadow-sm'
+                            : 'bg-white/[0.04] text-slate-400 border-white/[0.08] hover:bg-amber-50'
                         }`}
                       >
-                        <Star className={`w-3.5 h-3.5 ${isChefFav ? 'fill-charcoal-950 text-charcoal-950' : 'text-charcoal-400'}`} />
+                        <Star className={`w-3.5 h-3.5 ${isChefFav ? 'fill-white text-white' : 'text-slate-500'}`} />
                         <span className="text-[9px] mt-0.5">Chef's Fav</span>
                       </button>
 
@@ -1257,8 +1257,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                         onClick={() => updateMenuItem(dish.id, { is_signature: !isSpecial })}
                         className={`text-[11px] font-bold py-1.5 rounded-xl border flex flex-col items-center justify-center transition-all cursor-pointer ${
                           isSpecial
-                            ? 'bg-orange-500 text-white border-orange-600 shadow-xs'
-                            : 'bg-ivory-100 text-charcoal-600 border-ivory-200 hover:bg-orange-50'
+                            ? 'bg-orange-500 text-white border-orange-600 shadow-sm'
+                            : 'bg-white/[0.04] text-slate-400 border-white/[0.08] hover:bg-orange-50'
                         }`}
                       >
                         <Flame className="w-3.5 h-3.5" />
@@ -1270,8 +1270,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                         onClick={() => updateMenuItem(dish.id, { is_bestseller: !isBestseller })}
                         className={`text-[11px] font-bold py-1.5 rounded-xl border flex flex-col items-center justify-center transition-all cursor-pointer ${
                           isBestseller
-                            ? 'bg-purple-600 text-white border-purple-700 shadow-xs'
-                            : 'bg-ivory-100 text-charcoal-600 border-ivory-200 hover:bg-purple-50'
+                            ? 'bg-purple-600 text-white border-purple-700 shadow-sm'
+                            : 'bg-white/[0.04] text-slate-400 border-white/[0.08] hover:bg-purple-50'
                         }`}
                       >
                         <Award className="w-3.5 h-3.5" />
@@ -1289,21 +1289,21 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
         {/* VIEW 3: SPEED MATRIX TABLE (HIGH-SPEED SPREADSHEET MODE)             */}
         {/* ═════════════════════════════════════════════════════════════════════ */}
         {viewMode === 'matrix' && (
-          <div className="bg-white rounded-3xl border border-ivory-200 shadow-subtle overflow-hidden">
-            <div className="p-4 bg-charcoal-900 text-white flex flex-wrap items-center justify-between gap-3">
+          <div className="bg-[#0D1322] rounded-3xl border border-white/[0.08] shadow-lg overflow-hidden">
+            <div className="p-4 bg-[#090D16] text-white flex flex-wrap items-center justify-between gap-3">
               <div>
                 <h3 className="text-sm font-bold flex items-center gap-2">
                   <TableIcon className="w-4 h-4 text-blue-400" />
                   <span>High-Speed Bulk Matrix Editor</span>
                 </h3>
-                <p className="text-[11px] text-charcoal-400">
+                <p className="text-[11px] text-slate-500">
                   Tab through every dish to quickly edit spice levels, chef notes, pairings, and specials.
                 </p>
               </div>
               <button
                 type="button"
                 onClick={handleAutoFillAllMissingSecrets}
-                className="text-xs font-bold bg-amber-500 hover:bg-amber-400 text-charcoal-950 px-3 py-1.5 rounded-xl"
+                className="text-xs font-bold bg-amber-500 hover:bg-amber-400 text-white px-3 py-1.5 rounded-xl"
               >
                 ✨ Auto-Draft Missing Rows
               </button>
@@ -1312,7 +1312,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="bg-ivory-100/80 text-charcoal-700 font-bold border-b border-ivory-300">
+                  <tr className="bg-white/[0.04]/80 text-slate-400 font-bold border-b border-white/[0.08]">
                     <th className="p-3">Dish Name</th>
                     <th className="p-3">Price</th>
                     <th className="p-3">Flags</th>
@@ -1322,13 +1322,13 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                     <th className="p-3">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-ivory-200">
+                <tbody className="divide-y divide-white/[0.06]">
                   {filteredDishes.map((dish) => (
-                    <tr key={dish.id} className="hover:bg-ivory-50/80 transition-colors">
-                      <td className="p-3 font-bold text-charcoal-900">
+                    <tr key={dish.id} className="hover:bg-white/[0.03]/80 transition-colors">
+                      <td className="p-3 font-bold text-white">
                         {dish.name}
                       </td>
-                      <td className="p-3 font-mono font-bold text-charcoal-700">
+                      <td className="p-3 font-mono font-bold text-slate-400">
                         ₹{dish.price}
                       </td>
                       <td className="p-3">
@@ -1337,7 +1337,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                             type="button"
                             onClick={() => updateMenuItem(dish.id, { is_chef_recommended: !dish.is_chef_recommended })}
                             className={`p-1 rounded-lg cursor-pointer ${
-                              dish.is_chef_recommended ? 'bg-amber-500 text-charcoal-950' : 'bg-ivory-100 text-charcoal-400'
+                              dish.is_chef_recommended ? 'bg-amber-500 text-white' : 'bg-white/[0.04] text-slate-500'
                             }`}
                             title="Chef's Favourite"
                           >
@@ -1347,7 +1347,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                             type="button"
                             onClick={() => updateMenuItem(dish.id, { is_signature: !dish.is_signature })}
                             className={`p-1 rounded-lg cursor-pointer ${
-                              dish.is_signature ? 'bg-orange-500 text-white' : 'bg-ivory-100 text-charcoal-400'
+                              dish.is_signature ? 'bg-orange-500 text-white' : 'bg-white/[0.04] text-slate-500'
                             }`}
                             title="House Special"
                           >
@@ -1359,7 +1359,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                         <select
                           value={dish.spice_level}
                           onChange={(e) => updateMenuItem(dish.id, { spice_level: parseInt(e.target.value) })}
-                          className="bg-ivory-100 font-bold rounded-lg px-2 py-1 text-xs border border-ivory-300"
+                          className="bg-white/[0.04] font-bold rounded-lg px-2 py-1 text-xs border border-white/[0.08]"
                         >
                           <option value="0">0 - None</option>
                           <option value="1">1 - Mild</option>
@@ -1375,7 +1375,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                           value={dish.chef_notes || ''}
                           onChange={(e) => updateMenuItem(dish.id, { chef_notes: e.target.value })}
                           placeholder="Secret spices or cooking technique..."
-                          className="w-full bg-ivory-50 border border-ivory-300 rounded-lg px-2 py-1 text-xs focus:bg-white"
+                          className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-lg px-2 py-1 text-xs focus:bg-white"
                         />
                       </td>
                       <td className="p-3">
@@ -1384,7 +1384,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                           value={dish.pairing_drink_name || ''}
                           onChange={(e) => updateMenuItem(dish.id, { pairing_drink_name: e.target.value })}
                           placeholder="Recommended drink..."
-                          className="w-full bg-ivory-50 border border-ivory-300 rounded-lg px-2 py-1 text-xs focus:bg-white"
+                          className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-lg px-2 py-1 text-xs focus:bg-white"
                         />
                       </td>
                       <td className="p-3">
@@ -1408,20 +1408,20 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
         {/* VIEW 4: CHEF & OWNER LORE, PERSONALITY TONE & FAQS                    */}
         {/* ═════════════════════════════════════════════════════════════════════ */}
         {viewMode === 'lore' && (
-          <div className="bg-white rounded-3xl border border-ivory-200 shadow-subtle p-6 space-y-6 max-w-4xl mx-auto">
-            <div className="border-b border-ivory-200 pb-4">
-              <h3 className="text-base font-bold font-serif text-charcoal-900 flex items-center gap-2">
-                <ChefHat className="w-5 h-5 text-saffron-600" />
+          <div className="bg-[#0D1322] rounded-3xl border border-white/[0.08] shadow-lg p-6 space-y-6 max-w-4xl mx-auto">
+            <div className="border-b border-white/[0.08] pb-4">
+              <h3 className="text-base font-bold font-serif text-white flex items-center gap-2">
+                <ChefHat className="w-5 h-5 text-amber-400" />
                 <span>Executive Chef &amp; Owner Hospitality Persona</span>
               </h3>
-              <p className="text-xs text-charcoal-600 mt-1">
+              <p className="text-xs text-slate-400 mt-1">
                 Configure the master voice, conversational personality style, and custom kitchen FAQs for your AI concierge.
               </p>
             </div>
 
             {/* AI Personality & Tone Selector */}
-            <div className="space-y-2 bg-ivory-50 p-4 rounded-2xl border border-ivory-200">
-              <label className="text-xs font-bold text-charcoal-900 block flex items-center gap-1.5">
+            <div className="space-y-2 bg-[#090D16]/[0.03] p-4 rounded-2xl border border-white/[0.08]">
+              <label className="text-xs font-bold text-white block flex items-center gap-1.5">
                 <Smile className="w-4 h-4 text-amber-600" />
                 <span>AI Conversational Tone &amp; Hospitality Style:</span>
               </label>
@@ -1454,12 +1454,12 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                     onClick={() => setPersona({ ...persona, greeting_tone: tone.id as any })}
                     className={`p-3 rounded-2xl text-left border transition-all cursor-pointer ${
                       persona.greeting_tone === tone.id
-                        ? 'bg-amber-500/15 border-amber-500 shadow-xs ring-2 ring-amber-400/20'
-                        : 'bg-white border-ivory-200 hover:bg-ivory-100'
+                        ? 'bg-amber-500/15 border-amber-500 shadow-sm ring-2 ring-amber-400/20'
+                        : 'bg-white border-white/[0.08] hover:bg-white/[0.04]'
                     }`}
                   >
-                    <p className="text-xs font-bold text-charcoal-900">{tone.title}</p>
-                    <p className="text-[11px] text-charcoal-600 mt-0.5">{tone.desc}</p>
+                    <p className="text-xs font-bold text-white">{tone.title}</p>
+                    <p className="text-[11px] text-slate-400 mt-0.5">{tone.desc}</p>
                   </button>
                 ))}
               </div>
@@ -1473,21 +1473,21 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                   Head Chef Identity
                 </h4>
                 <div>
-                  <label className="text-[11px] font-bold text-charcoal-700 block mb-1">Chef Name &amp; Title</label>
+                  <label className="text-[11px] font-bold text-slate-400 block mb-1">Chef Name &amp; Title</label>
                   <input
                     type="text"
                     value={persona.chef_name}
                     onChange={(e) => setPersona({ ...persona, chef_name: e.target.value })}
-                    className="w-full text-xs bg-white border border-amber-300 rounded-xl px-3 py-2 font-bold"
+                    className="w-full text-xs bg-[#090D16] border border-amber-300 rounded-xl px-3 py-2 font-bold"
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] font-bold text-charcoal-700 block mb-1">Culinary Philosophy</label>
+                  <label className="text-[11px] font-bold text-slate-400 block mb-1">Culinary Philosophy</label>
                   <textarea
                     rows={3}
                     value={persona.chef_philosophy}
                     onChange={(e) => setPersona({ ...persona, chef_philosophy: e.target.value })}
-                    className="w-full text-xs bg-white border border-amber-300 rounded-xl p-2.5"
+                    className="w-full text-xs bg-[#090D16] border border-amber-300 rounded-xl p-2.5"
                   />
                 </div>
               </div>
@@ -1499,38 +1499,38 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                   Owner Hospitality Voice
                 </h4>
                 <div>
-                  <label className="text-[11px] font-bold text-charcoal-700 block mb-1">Owner / Partner Name</label>
+                  <label className="text-[11px] font-bold text-slate-400 block mb-1">Owner / Partner Name</label>
                   <input
                     type="text"
                     value={persona.owner_name}
                     onChange={(e) => setPersona({ ...persona, owner_name: e.target.value })}
-                    className="w-full text-xs bg-white border border-blue-300 rounded-xl px-3 py-2 font-bold"
+                    className="w-full text-xs bg-[#090D16] border border-blue-300 rounded-xl px-3 py-2 font-bold"
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] font-bold text-charcoal-700 block mb-1">Hospitality &amp; Guest Welcome Note</label>
+                  <label className="text-[11px] font-bold text-slate-400 block mb-1">Hospitality &amp; Guest Welcome Note</label>
                   <textarea
                     rows={3}
                     value={persona.owner_hospitality_note}
                     onChange={(e) => setPersona({ ...persona, owner_hospitality_note: e.target.value })}
-                    className="w-full text-xs bg-white border border-blue-300 rounded-xl p-2.5"
+                    className="w-full text-xs bg-[#090D16] border border-blue-300 rounded-xl p-2.5"
                   />
                 </div>
               </div>
             </div>
 
             {/* Custom Kitchen FAQs Trainer */}
-            <div className="space-y-3 bg-white p-4 rounded-2xl border border-ivory-300">
-              <h4 className="text-xs font-bold text-charcoal-900 flex items-center gap-1.5">
-                <HelpCircle className="w-4 h-4 text-saffron-600" />
+            <div className="space-y-3 bg-[#0D1322] p-4 rounded-2xl border border-white/[0.08]">
+              <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
+                <HelpCircle className="w-4 h-4 text-amber-400" />
                 <span>Custom Kitchen FAQs Trainer (Halal, Zero MSG, Celebrations, Elders)</span>
               </h4>
 
               <div className="space-y-2">
                 {customFaqs.map((faq, idx) => (
-                  <div key={idx} className="bg-ivory-50 p-3 rounded-xl border border-ivory-200 text-xs space-y-1">
+                  <div key={idx} className="bg-white/[0.03] p-3 rounded-xl border border-white/[0.08] text-xs space-y-1">
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-charcoal-900">Q: {faq.q}</span>
+                      <span className="font-bold text-white">Q: {faq.q}</span>
                       <button
                         type="button"
                         onClick={() => setCustomFaqs(customFaqs.filter((_, i) => i !== idx))}
@@ -1539,7 +1539,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                         Remove
                       </button>
                     </div>
-                    <p className="text-charcoal-600 italic">A: {faq.a}</p>
+                    <p className="text-slate-400 italic">A: {faq.a}</p>
                   </div>
                 ))}
               </div>
@@ -1551,7 +1551,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                   placeholder="Question (e.g., Is your meat 100% Halal?)"
                   value={newFaqQ}
                   onChange={(e) => setNewFaqQ(e.target.value)}
-                  className="text-xs bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2"
+                  className="text-xs bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2"
                 />
                 <div className="flex items-center space-x-2">
                   <input
@@ -1559,7 +1559,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                     placeholder="Answer for the AI to reply..."
                     value={newFaqA}
                     onChange={(e) => setNewFaqA(e.target.value)}
-                    className="flex-1 text-xs bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2"
+                    className="flex-1 text-xs bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2"
                   />
                   <button
                     type="button"
@@ -1570,7 +1570,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                         setNewFaqA('');
                       }
                     }}
-                    className="text-xs font-bold bg-charcoal-900 text-white px-3 py-2 rounded-xl"
+                    className="text-xs font-bold bg-[#090D16] text-white px-3 py-2 rounded-xl"
                   >
                     Add FAQ
                   </button>
@@ -1582,7 +1582,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
               <button
                 type="button"
                 onClick={handleSavePersona}
-                className="bg-charcoal-900 hover:bg-black text-white px-6 py-2.5 rounded-2xl text-xs font-bold shadow-md flex items-center space-x-2"
+                className="bg-[#090D16] hover:bg-black text-white px-6 py-2.5 rounded-2xl text-xs font-bold shadow-md flex items-center space-x-2"
               >
                 <Save className="w-4 h-4 text-amber-400" />
                 <span>Save Persona Configuration</span>
@@ -1595,14 +1595,14 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
         {/* VIEW 5: INTERACTIVE LIVE CONCIERGE SIMULATOR                          */}
         {/* ═════════════════════════════════════════════════════════════════════ */}
         {viewMode === 'test' && (
-          <div className="bg-white rounded-3xl border border-ivory-200 shadow-subtle p-6 max-w-4xl mx-auto space-y-4">
-            <div className="flex items-center justify-between border-b border-ivory-200 pb-3">
+          <div className="bg-[#0D1322] rounded-3xl border border-white/[0.08] shadow-lg p-6 max-w-4xl mx-auto space-y-4">
+            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
               <div>
-                <h3 className="text-sm font-bold text-charcoal-900 flex items-center gap-2">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
                   <MessageSquare className="w-4 h-4 text-green-600" />
                   <span>Interactive Dining Concierge Simulator</span>
                 </h3>
-                <p className="text-xs text-charcoal-500">
+                <p className="text-xs text-slate-500">
                   Test questions as a diner. The AI uses Chef {persona.chef_name}'s secrets, today's freshness, and your tagged specials.
                 </p>
               </div>
@@ -1616,7 +1616,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                     }
                   ]);
                 }}
-                className="text-xs text-charcoal-500 hover:text-charcoal-800 flex items-center space-x-1"
+                className="text-xs text-slate-500 hover:text-slate-200 flex items-center space-x-1"
               >
                 <RefreshCw className="w-3 h-3" />
                 <span>Reset Chat</span>
@@ -1625,7 +1625,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
 
             {/* Quick Scenario Starters */}
             <div className="space-y-1.5">
-              <span className="text-[10px] font-bold text-charcoal-400 uppercase tracking-wider block">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                 Simulate Real Guest Scenarios:
               </span>
               <div className="flex flex-wrap items-center gap-1.5">
@@ -1642,7 +1642,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                     key={sc.label}
                     type="button"
                     onClick={() => handleSendTestQuery(sc.query)}
-                    className="text-[11px] font-bold bg-ivory-100 hover:bg-amber-100 text-charcoal-800 hover:text-amber-900 border border-ivory-300 px-2.5 py-1 rounded-xl transition-all cursor-pointer"
+                    className="text-[11px] font-bold bg-[#090D16]/[0.04] hover:bg-amber-100 text-slate-200 hover:text-amber-900 border border-white/[0.08] px-2.5 py-1 rounded-xl transition-all cursor-pointer"
                   >
                     {sc.label}
                   </button>
@@ -1651,7 +1651,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
             </div>
 
             {/* Chat History Box */}
-            <div className="bg-ivory-50 rounded-2xl border border-ivory-200 p-4 space-y-3 min-h-[320px] max-h-[460px] overflow-y-auto">
+            <div className="bg-white/[0.03] rounded-2xl border border-white/[0.08] p-4 space-y-3 min-h-[320px] max-h-[460px] overflow-y-auto">
               {testMessages.map((msg, idx) => (
                 <div
                   key={idx}
@@ -1660,21 +1660,21 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                   <div
                     className={`max-w-[85%] rounded-2xl p-3.5 text-xs leading-relaxed ${
                       msg.role === 'user'
-                        ? 'bg-charcoal-900 text-white rounded-tr-none'
-                        : 'bg-white text-charcoal-900 border border-ivory-300 shadow-xs rounded-tl-none space-y-2'
+                        ? 'bg-[#090D16] text-white rounded-tr-none'
+                        : 'bg-white text-white border border-white/[0.08] shadow-sm rounded-tl-none space-y-2'
                     }`}
                   >
                     <div className="whitespace-pre-line">{msg.text}</div>
 
                     {/* Highlighted Dish Cards if any */}
                     {msg.dishHighlights && msg.dishHighlights.length > 0 && (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-ivory-100">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-white/[0.06]">
                         {msg.dishHighlights.map((dish) => (
-                          <div key={dish.id} className="flex items-center space-x-2 bg-ivory-50 p-2 rounded-xl border border-ivory-200">
+                          <div key={dish.id} className="flex items-center space-x-2 bg-[#090D16]/[0.03] p-2 rounded-xl border border-white/[0.08]">
                             <img src={dish.image_url} alt={dish.name} className="w-8 h-8 rounded-lg object-cover" />
                             <div className="overflow-hidden">
-                              <p className="text-[11px] font-bold text-charcoal-900 truncate">{dish.name}</p>
-                              <p className="text-[10px] text-charcoal-500 font-mono">₹{dish.price} • Spice {dish.spice_level}/5</p>
+                              <p className="text-[11px] font-bold text-white truncate">{dish.name}</p>
+                              <p className="text-[10px] text-slate-500 font-mono">₹{dish.price} • Spice {dish.spice_level}/5</p>
                             </div>
                           </div>
                         ))}
@@ -1698,11 +1698,11 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                 value={testInput}
                 onChange={(e) => setTestInput(e.target.value)}
                 placeholder="Ask anything about recipes, spices, chef's specials, pairings..."
-                className="flex-1 text-xs bg-ivory-50 border border-ivory-300 rounded-2xl px-4 py-3 text-charcoal-900 focus:outline-hidden focus:border-amber-500 focus:bg-white"
+                className="flex-1 text-xs bg-[#090D16]/[0.03] border border-white/[0.08] rounded-2xl px-4 py-3 text-white focus:outline-hidden focus:border-amber-500 focus:bg-white"
               />
               <button
                 type="submit"
-                className="bg-amber-500 hover:bg-amber-400 text-charcoal-950 px-5 py-3 rounded-2xl text-xs font-bold flex items-center space-x-1.5 shadow-sm cursor-pointer"
+                className="bg-amber-500 hover:bg-amber-400 text-white px-5 py-3 rounded-2xl text-xs font-bold flex items-center space-x-1.5 shadow-sm cursor-pointer"
               >
                 <span>Send</span>
                 <Send className="w-3.5 h-3.5" />
@@ -1715,16 +1715,16 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
       {/* ── Modal: Add New Dish ───────────────────────────────────────────── */}
       {isAddDishModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-ivory-200 space-y-4">
-            <div className="flex items-center justify-between border-b border-ivory-200 pb-3">
-              <h3 className="text-sm font-bold text-charcoal-900 flex items-center gap-2">
+          <div className="bg-[#0D1322] rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-white/[0.08] space-y-4">
+            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+              <h3 className="text-sm font-bold text-white flex items-center gap-2">
                 <Plus className="w-4 h-4 text-amber-600" />
                 <span>Add New Dish to {restaurant.name}</span>
               </h3>
               <button
                 type="button"
                 onClick={() => setIsAddDishModalOpen(false)}
-                className="text-charcoal-400 hover:text-charcoal-700"
+                className="text-slate-500 hover:text-slate-400"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1732,24 +1732,24 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
 
             <form onSubmit={handleCreateNewDish} className="space-y-3.5">
               <div>
-                <label className="text-xs font-bold text-charcoal-800 block mb-1">Dish Name *</label>
+                <label className="text-xs font-bold text-slate-200 block mb-1">Dish Name *</label>
                 <input
                   type="text"
                   required
                   value={newDishName}
                   onChange={(e) => setNewDishName(e.target.value)}
                   placeholder="e.g. Murg Dum Handi Biryani"
-                  className="w-full text-xs bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-charcoal-900 font-bold focus:outline-hidden focus:border-amber-500 focus:bg-white"
+                  className="w-full text-xs bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 text-white font-bold focus:outline-hidden focus:border-amber-500 focus:bg-white"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-bold text-charcoal-800 block mb-1">Category</label>
+                  <label className="text-xs font-bold text-slate-200 block mb-1">Category</label>
                   <select
                     value={newDishCategory}
                     onChange={(e) => setNewDishCategory(e.target.value)}
-                    className="w-full text-xs bg-ivory-50 border border-ivory-300 rounded-xl px-2.5 py-2 font-bold"
+                    className="w-full text-xs bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-2.5 py-2 font-bold"
                   >
                     {currentCategories.map((c) => (
                       <option key={c.id} value={c.id}>{c.name}</option>
@@ -1758,23 +1758,23 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-charcoal-800 block mb-1">Price (₹)</label>
+                  <label className="text-xs font-bold text-slate-200 block mb-1">Price (₹)</label>
                   <input
                     type="number"
                     value={newDishPrice}
                     onChange={(e) => setNewDishPrice(e.target.value)}
-                    className="w-full text-xs bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 font-mono font-bold"
+                    className="w-full text-xs bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 font-mono font-bold"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-bold text-charcoal-800 block mb-1">Type</label>
+                  <label className="text-xs font-bold text-slate-200 block mb-1">Type</label>
                   <select
                     value={newDishType}
                     onChange={(e) => setNewDishType(e.target.value as any)}
-                    className="w-full text-xs bg-ivory-50 border border-ivory-300 rounded-xl px-2.5 py-2"
+                    className="w-full text-xs bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-2.5 py-2"
                   >
                     <option value="food">Food Dish</option>
                     <option value="drink">Beverage / Drink</option>
@@ -1782,23 +1782,23 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-charcoal-800 block mb-1">Spice Level (0-5)</label>
+                  <label className="text-xs font-bold text-slate-200 block mb-1">Spice Level (0-5)</label>
                   <input
                     type="number"
                     min="0"
                     max="5"
                     value={newDishSpice}
                     onChange={(e) => setNewDishSpice(parseInt(e.target.value) || 0)}
-                    className="w-full text-xs bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 font-mono"
+                    className="w-full text-xs bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 font-mono"
                   />
                 </div>
               </div>
 
               {/* Special Badges Checkboxes */}
-              <div className="bg-ivory-50 p-3 rounded-2xl border border-ivory-200 space-y-2">
-                <span className="text-[11px] font-bold text-charcoal-700 block">Highlight Tags:</span>
+              <div className="bg-white/[0.03] p-3 rounded-2xl border border-white/[0.08] space-y-2">
+                <span className="text-[11px] font-bold text-slate-400 block">Highlight Tags:</span>
                 <div className="flex items-center space-x-4">
-                  <label className="flex items-center space-x-1.5 text-xs font-bold text-charcoal-800 cursor-pointer">
+                  <label className="flex items-center space-x-1.5 text-xs font-bold text-slate-200 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={newDishIsChefFav}
@@ -1808,7 +1808,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                     <span>🌟 Chef's Favourite</span>
                   </label>
 
-                  <label className="flex items-center space-x-1.5 text-xs font-bold text-charcoal-800 cursor-pointer">
+                  <label className="flex items-center space-x-1.5 text-xs font-bold text-slate-200 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={newDishIsSpecial}
@@ -1821,7 +1821,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
               </div>
 
               {/* Auto generate secrets on create toggle */}
-              <label className="flex items-center space-x-2 text-xs text-charcoal-700 cursor-pointer pt-1">
+              <label className="flex items-center space-x-2 text-xs text-slate-400 cursor-pointer pt-1">
                 <input
                   type="checkbox"
                   checked={autoGenOnCreate}
@@ -1831,17 +1831,17 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                 <span>✨ <strong>Auto-Draft AI Secrets &amp; Lore</strong> immediately upon creating</span>
               </label>
 
-              <div className="flex justify-end space-x-2 pt-2 border-t border-ivory-200">
+              <div className="flex justify-end space-x-2 pt-2 border-t border-white/[0.08]">
                 <button
                   type="button"
                   onClick={() => setIsAddDishModalOpen(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-bold text-charcoal-600 hover:bg-ivory-100"
+                  className="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:bg-white/[0.04]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-charcoal-950 shadow-sm"
+                  className="px-5 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-white shadow-sm"
                 >
                   Create &amp; Train AI
                 </button>

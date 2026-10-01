@@ -57,7 +57,7 @@ export const KitchenKDS: React.FC = () => {
 
           <Link
             to={`/manage/${restaurant.slug || 'saffron-house'}`}
-            className="px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-semibold text-slate-300 hover:text-white transition-all"
+            className="px-3 py-1.5 rounded-lg bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-semibold text-slate-300 hover:text-white transition-all"
           >
             Floor Ops
           </Link>
@@ -148,7 +148,7 @@ export const KitchenKDS: React.FC = () => {
                               {item.selected_options_snapshot?.map((opt, i) => (
                                 <span
                                   key={i}
-                                  className="inline-block text-[10px] bg-white/[0.05] text-amber-300/90 px-1.5 py-0.5 rounded mt-0.5 mr-1 border border-white/[0.05]"
+                                  className="inline-block text-[10px] bg-[#090D16]/[0.05] text-amber-300/90 px-1.5 py-0.5 rounded mt-0.5 mr-1 border border-white/[0.05]"
                                 >
                                   {opt.name}
                                 </span>

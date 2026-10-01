@@ -639,7 +639,7 @@ export const MasterAdminDashboard: React.FC = () => {
             <div className="flex flex-wrap items-center gap-2">
               <Link
                 to="/pitch"
-                className="px-3.5 py-2 bg-white/[0.06] hover:bg-white/[0.1] active:scale-95 text-white text-xs font-semibold rounded-xl border border-white/[0.12] flex items-center space-x-1.5 transition-all cursor-pointer"
+                className="px-3.5 py-2 bg-[#090D16]/[0.06] hover:bg-white/[0.1] active:scale-95 text-white text-xs font-semibold rounded-xl border border-white/[0.12] flex items-center space-x-1.5 transition-all cursor-pointer"
                 title="Open Interactive Pitch Deck (19 Slides)"
               >
                 <TrendingUp className="w-4 h-4 text-amber-400" />
@@ -648,7 +648,7 @@ export const MasterAdminDashboard: React.FC = () => {
               <a
                 href="./menuz_executive_pitch_deck.pptx"
                 download="Menuz_Executive_Pitch_Deck.pptx"
-                className="px-3 py-2 bg-white/[0.04] hover:bg-white/[0.08] active:scale-95 text-amber-300 text-xs font-medium rounded-xl border border-white/[0.08] flex items-center space-x-1.5 transition-all"
+                className="px-3 py-2 bg-[#090D16]/[0.04] hover:bg-white/[0.08] active:scale-95 text-amber-300 text-xs font-medium rounded-xl border border-white/[0.08] flex items-center space-x-1.5 transition-all"
                 title="Download 16:9 Widescreen PowerPoint Presentation"
               >
                 <Download className="w-3.5 h-3.5 text-amber-400" />
@@ -659,7 +659,7 @@ export const MasterAdminDashboard: React.FC = () => {
                 download="Menuz_Executive_Pitch_Deck.pdf"
                 target="_blank"
                 rel="noreferrer"
-                className="px-3 py-2 bg-white/[0.04] hover:bg-white/[0.08] active:scale-95 text-slate-300 text-xs font-medium rounded-xl border border-white/[0.08] flex items-center space-x-1.5 transition-all"
+                className="px-3 py-2 bg-[#090D16]/[0.04] hover:bg-white/[0.08] active:scale-95 text-slate-300 text-xs font-medium rounded-xl border border-white/[0.08] flex items-center space-x-1.5 transition-all"
                 title="Download Executive Pitch Deck PDF"
               >
                 <FileText className="w-3.5 h-3.5 text-slate-400" />
@@ -684,7 +684,7 @@ export const MasterAdminDashboard: React.FC = () => {
                   setSafeSession('menuz_admin_session', 'locked');
                   setIsAdminAuthenticated(false);
                 }}
-                className="p-2 bg-white/[0.04] hover:bg-rose-500/20 active:scale-95 text-slate-400 hover:text-rose-400 rounded-xl border border-white/[0.08] transition-all cursor-pointer"
+                className="p-2 bg-[#090D16]/[0.04] hover:bg-rose-500/20 active:scale-95 text-slate-400 hover:text-rose-400 rounded-xl border border-white/[0.08] transition-all cursor-pointer"
                 title="Lock Session"
               >
                 <Lock className="w-4 h-4" />
@@ -856,7 +856,7 @@ export const MasterAdminDashboard: React.FC = () => {
               <div className="flex flex-wrap items-center gap-2">
                 <button
                   onClick={() => setIsIndependentSitesOpen(true)}
-                  className="px-3.5 py-2 bg-white/[0.04] hover:bg-white/[0.08] text-slate-200 text-xs font-semibold rounded-xl border border-white/[0.08] flex items-center space-x-1.5 transition-colors cursor-pointer"
+                  className="px-3.5 py-2 bg-[#090D16]/[0.04] hover:bg-white/[0.08] text-slate-200 text-xs font-semibold rounded-xl border border-white/[0.08] flex items-center space-x-1.5 transition-colors cursor-pointer"
                 >
                   <Globe className="w-4 h-4 text-amber-400" />
                   <span>Independent Websites Directory</span>
@@ -873,18 +873,18 @@ export const MasterAdminDashboard: React.FC = () => {
 
             {/* Empty State */}
             {restaurants.length === 0 && (
-              <div className="bg-white rounded-3xl border border-ivory-300 p-12 text-center shadow-subtle">
-                <div className="w-20 h-20 rounded-full bg-saffron-50 mx-auto flex items-center justify-center mb-4 border-2 border-saffron-200">
-                  <Building2 className="w-10 h-10 text-saffron-500" />
+              <div className="bg-[#0D1322] rounded-3xl border border-white/[0.08] p-12 text-center shadow-lg">
+                <div className="w-20 h-20 rounded-full bg-amber-500/10 mx-auto flex items-center justify-center mb-4 border-2 border-amber-500/20">
+                  <Building2 className="w-10 h-10 text-amber-400" />
                 </div>
-                <h3 className="font-serif text-xl font-bold text-charcoal-900 mt-2">Welcome to Menuz — Pune Edition</h3>
-                <p className="text-sm text-charcoal-600 mt-2 max-w-md mx-auto">
+                <h3 className="font-serif text-xl font-bold text-white mt-2">Welcome to Menuz — Pune Edition</h3>
+                <p className="text-sm text-slate-400 mt-2 max-w-md mx-auto">
                   Your restaurant management ecosystem is ready. Start by onboarding your first restaurant.
                   Our Pune database has 269+ restaurants pre-loaded for instant onboarding.
                 </p>
                 <button
                   onClick={() => setIsAddRestaurantOpen(true)}
-                  className="mt-6 px-6 py-3 bg-saffron-600 hover:bg-saffron-700 text-white font-bold rounded-xl shadow-subtle flex items-center space-x-2 mx-auto transition-colors cursor-pointer"
+                  className="mt-6 px-6 py-3 bg-amber-500 hover:bg-amber-700 text-white font-bold rounded-xl shadow-lg flex items-center space-x-2 mx-auto transition-colors cursor-pointer"
                 >
                   <Plus className="w-5 h-5" />
                   <span>Onboard Your First Restaurant</span>
@@ -935,7 +935,7 @@ export const MasterAdminDashboard: React.FC = () => {
                           <Link
                             to={`/manage/${r.slug}`}
                             onClick={() => setCurrentRestaurant(r.id)}
-                            className="px-2.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-[11px] font-bold rounded-lg transition-all shadow-xs flex items-center space-x-1"
+                            className="px-2.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-[11px] font-bold rounded-lg transition-all shadow-sm flex items-center space-x-1"
                             title={`Open ${r.name} Management Hub`}
                           >
                             <span>Hub</span>
@@ -1087,7 +1087,7 @@ export const MasterAdminDashboard: React.FC = () => {
                                         handleOnboardDirectoryEntry(item);
                                         setShowAdminSuggestions(false);
                                       }}
-                                      className="px-3 py-1 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-[10px] font-bold rounded-lg transition-colors shadow-xs flex items-center space-x-1 cursor-pointer"
+                                      className="px-3 py-1 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-[10px] font-bold rounded-lg transition-colors shadow-sm flex items-center space-x-1 cursor-pointer"
                                     >
                                       <Plus className="w-3 h-3" />
                                       <span>+ Onboard</span>
@@ -1108,7 +1108,7 @@ export const MasterAdminDashboard: React.FC = () => {
                               handleQuickAddPuneRestaurant(restaurantSearch);
                               setShowAdminSuggestions(false);
                             }}
-                            className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-xs rounded-xl shadow-xs inline-flex items-center space-x-1.5 transition-colors cursor-pointer"
+                            className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-xs rounded-xl shadow-sm inline-flex items-center space-x-1.5 transition-colors cursor-pointer"
                           >
                             <Plus className="w-3.5 h-3.5" />
                             <span>Instant 1-Click Register "{restaurantSearch.trim()}"</span>
@@ -1214,7 +1214,7 @@ export const MasterAdminDashboard: React.FC = () => {
                   </div>
                   <button
                     onClick={() => handleQuickAddPuneRestaurant(restaurantSearch)}
-                    className="px-3 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold rounded-xl shadow-xs flex items-center space-x-1.5 flex-shrink-0 transition-colors"
+                    className="px-3 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold rounded-xl shadow-sm flex items-center space-x-1.5 flex-shrink-0 transition-colors"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     <span>Instant 1-Click Register</span>
@@ -1236,7 +1236,7 @@ export const MasterAdminDashboard: React.FC = () => {
                     }}
                     className={`px-3 py-1 rounded-full whitespace-nowrap font-medium transition-all ${
                       selectedNeighborhood === area
-                        ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-xs font-semibold'
+                        ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-sm font-semibold'
                         : 'bg-slate-900/80 text-slate-300 hover:text-white hover:bg-slate-800 border border-white/[0.06]'
                     }`}
                   >
@@ -1678,9 +1678,9 @@ export const MasterAdminDashboard: React.FC = () => {
             {/* If no restaurant selected: Show restaurant list for drill-down */}
             {!selectedReviewRestaurant ? (
               <>
-                <div className="bg-white p-5 rounded-3xl border border-ivory-300 shadow-subtle">
-                  <h2 className="text-lg font-bold font-serif text-charcoal-900">Customer Reviews Dashboard</h2>
-                  <p className="text-xs text-charcoal-600 mt-1">
+                <div className="bg-[#0D1322] p-5 rounded-3xl border border-white/[0.08] shadow-lg">
+                  <h2 className="text-lg font-bold font-serif text-white">Customer Reviews Dashboard</h2>
+                  <p className="text-xs text-slate-400 mt-1">
                     {restaurants.length > 0
                       ? 'Click on a restaurant to view its reviews and customer insights.'
                       : 'No restaurants onboarded yet. Reviews will appear here once you onboard a restaurant.'}
@@ -1689,10 +1689,10 @@ export const MasterAdminDashboard: React.FC = () => {
 
                 {/* Empty state for reviews */}
                 {restaurants.length === 0 && (
-                  <div className="bg-white rounded-3xl border border-ivory-300 p-12 text-center shadow-subtle">
-                    <MessageSquare className="w-12 h-12 text-charcoal-300 mx-auto" />
-                    <h3 className="font-serif text-lg font-bold text-charcoal-900 mt-4">No Reviews Yet</h3>
-                    <p className="text-xs text-charcoal-500 mt-1">Onboard your first restaurant to start collecting reviews.</p>
+                  <div className="bg-[#0D1322] rounded-3xl border border-white/[0.08] p-12 text-center shadow-lg">
+                    <MessageSquare className="w-12 h-12 text-slate-400 mx-auto" />
+                    <h3 className="font-serif text-lg font-bold text-white mt-4">No Reviews Yet</h3>
+                    <p className="text-xs text-slate-500 mt-1">Onboard your first restaurant to start collecting reviews.</p>
                   </div>
                 )}
 
@@ -1709,35 +1709,35 @@ export const MasterAdminDashboard: React.FC = () => {
                       <button
                         key={rest.id}
                         onClick={() => setSelectedReviewRestaurant(rest.id)}
-                        className="bg-white rounded-3xl border border-ivory-300 p-6 shadow-subtle hover:shadow-float hover:border-saffron-300 transition-all text-left group"
+                        className="bg-[#0D1322] rounded-3xl border border-white/[0.08] p-6 shadow-lg hover: hover:border-amber-500/30 transition-all text-left group"
                       >
                         <div className="flex items-center space-x-3">
                           <img
                             src={rest.logo_url}
                             alt={rest.name}
-                            className="w-12 h-12 rounded-2xl object-cover border border-ivory-300"
+                            className="w-12 h-12 rounded-2xl object-cover border border-white/[0.08]"
                           />
                           <div className="flex-1 min-w-0">
-                            <h3 className="font-bold text-sm text-charcoal-900 font-serif truncate group-hover:text-saffron-700 transition-colors">{rest.name}</h3>
-                            <span className="text-[11px] text-charcoal-500">{rest.location}</span>
+                            <h3 className="font-bold text-sm text-white font-serif truncate group-hover:text-amber-400 transition-colors">{rest.name}</h3>
+                            <span className="text-[11px] text-slate-500">{rest.location}</span>
                           </div>
-                          <ChevronRight className="w-5 h-5 text-charcoal-300 group-hover:text-saffron-600 transition-colors" />
+                          <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-amber-400 transition-colors" />
                         </div>
 
                         <div className="grid grid-cols-3 gap-3 mt-4">
-                          <div className="p-2.5 bg-ivory-50 rounded-xl text-center border border-ivory-200">
-                            <span className="text-[10px] text-charcoal-500 block uppercase font-bold">Reviews</span>
-                            <span className="text-lg font-bold font-mono text-charcoal-900">{restReviews.length}</span>
+                          <div className="p-2.5 bg-[#090D16]/[0.03] rounded-xl text-center border border-white/[0.08]">
+                            <span className="text-[10px] text-slate-500 block uppercase font-bold">Reviews</span>
+                            <span className="text-lg font-bold font-mono text-white">{restReviews.length}</span>
                           </div>
-                          <div className="p-2.5 bg-ivory-50 rounded-xl text-center border border-ivory-200">
-                            <span className="text-[10px] text-charcoal-500 block uppercase font-bold">Avg Rating</span>
+                          <div className="p-2.5 bg-[#090D16]/[0.03] rounded-xl text-center border border-white/[0.08]">
+                            <span className="text-[10px] text-slate-500 block uppercase font-bold">Avg Rating</span>
                             <span className="text-lg font-bold font-mono text-amber-600 flex items-center justify-center">
                               <Star className="w-3.5 h-3.5 fill-amber-400 mr-0.5" />
                               {restAvgRating}
                             </span>
                           </div>
-                          <div className="p-2.5 bg-ivory-50 rounded-xl text-center border border-ivory-200">
-                            <span className="text-[10px] text-charcoal-500 block uppercase font-bold">Opt-Ins</span>
+                          <div className="p-2.5 bg-[#090D16]/[0.03] rounded-xl text-center border border-white/[0.08]">
+                            <span className="text-[10px] text-slate-500 block uppercase font-bold">Opt-Ins</span>
                             <span className="text-lg font-bold font-mono text-green-600">{optIns}</span>
                           </div>
                         </div>
@@ -1750,10 +1750,10 @@ export const MasterAdminDashboard: React.FC = () => {
               /* ── Restaurant-specific reviews view ─────────────────── */
               <>
                 {/* Back button + restaurant header */}
-                <div className="bg-white p-5 rounded-3xl border border-ivory-300 shadow-subtle">
+                <div className="bg-[#0D1322] p-5 rounded-3xl border border-white/[0.08] shadow-lg">
                   <button
                     onClick={() => { setSelectedReviewRestaurant(null); setReviewSearchQuery(''); setReviewRatingFilter('all'); }}
-                    className="flex items-center space-x-1.5 text-xs font-bold text-saffron-700 hover:text-saffron-900 mb-3 transition-colors"
+                    className="flex items-center space-x-1.5 text-xs font-bold text-amber-400 hover:text-amber-900 mb-3 transition-colors"
                   >
                     <ArrowLeft className="w-4 h-4" />
                     <span>Back to All Restaurants</span>
@@ -1764,24 +1764,24 @@ export const MasterAdminDashboard: React.FC = () => {
                       <img
                         src={selectedRestForReviews?.logo_url || ''}
                         alt={selectedRestForReviews?.name || ''}
-                        className="w-12 h-12 rounded-2xl object-cover border border-ivory-300"
+                        className="w-12 h-12 rounded-2xl object-cover border border-white/[0.08]"
                       />
                       <div>
-                        <h2 className="text-lg font-bold font-serif text-charcoal-900">{selectedRestForReviews?.name}</h2>
-                        <span className="text-xs text-charcoal-500">{selectedRestForReviews?.location} • {filteredReviews.length} reviews</span>
+                        <h2 className="text-lg font-bold font-serif text-white">{selectedRestForReviews?.name}</h2>
+                        <span className="text-xs text-slate-500">{selectedRestForReviews?.location} • {filteredReviews.length} reviews</span>
                       </div>
                     </div>
 
                     <div className="flex flex-wrap items-center gap-3">
                       {/* Search */}
                       <div className="relative min-w-[220px]">
-                        <Search className="w-4 h-4 absolute left-3.5 top-3 text-charcoal-400" />
+                        <Search className="w-4 h-4 absolute left-3.5 top-3 text-slate-500" />
                         <input
                           type="text"
                           value={reviewSearchQuery}
                           onChange={(e) => setReviewSearchQuery(e.target.value)}
                           placeholder="Search reviews..."
-                          className="w-full bg-ivory-50 border border-ivory-200 rounded-xl pl-9 pr-3 py-2 text-xs text-charcoal-900 focus:outline-none focus:border-saffron-600"
+                          className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl pl-9 pr-3 py-2 text-xs text-white focus:outline-none focus:border-amber-600/40"
                         />
                       </div>
 
@@ -1789,7 +1789,7 @@ export const MasterAdminDashboard: React.FC = () => {
                       <select
                         value={reviewRatingFilter}
                         onChange={(e) => setReviewRatingFilter(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-                        className="bg-ivory-50 border border-ivory-200 rounded-xl px-3 py-2 text-xs text-charcoal-900 focus:outline-none focus:border-saffron-600"
+                        className="bg-white/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-600/40"
                       >
                         <option value="all">All Ratings</option>
                         <option value={5}>5 Stars ★★★★★</option>
@@ -1804,10 +1804,10 @@ export const MasterAdminDashboard: React.FC = () => {
 
                 {/* Review Cards */}
                 {filteredReviews.length === 0 ? (
-                  <div className="bg-white rounded-3xl border border-ivory-300 p-12 text-center shadow-subtle">
-                    <MessageSquare className="w-12 h-12 text-charcoal-300 mx-auto" />
-                    <h3 className="font-serif text-lg font-bold text-charcoal-900 mt-4">No Reviews Yet</h3>
-                    <p className="text-xs text-charcoal-500 mt-1">Reviews from diners will appear here once they submit feedback.</p>
+                  <div className="bg-[#0D1322] rounded-3xl border border-white/[0.08] p-12 text-center shadow-lg">
+                    <MessageSquare className="w-12 h-12 text-slate-400 mx-auto" />
+                    <h3 className="font-serif text-lg font-bold text-white mt-4">No Reviews Yet</h3>
+                    <p className="text-xs text-slate-500 mt-1">Reviews from diners will appear here once they submit feedback.</p>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -1816,7 +1816,7 @@ export const MasterAdminDashboard: React.FC = () => {
                       return (
                         <div
                           key={rev.id}
-                          className="bg-white p-6 rounded-3xl border border-ivory-300 shadow-subtle flex flex-col justify-between space-y-4 hover:shadow-float transition-all"
+                          className="bg-[#0D1322] p-6 rounded-3xl border border-white/[0.08] shadow-lg flex flex-col justify-between space-y-4 hover: transition-all"
                         >
                           <div>
                             {/* Header with Stars */}
@@ -1829,13 +1829,13 @@ export const MasterAdminDashboard: React.FC = () => {
                                       className={`w-4 h-4 ${
                                         star <= rev.rating
                                           ? 'fill-amber-400 text-amber-400'
-                                          : 'fill-ivory-200 text-ivory-300'
+                                          : 'fill-ivory-200 text-slate-400'
                                       }`}
                                     />
                                   ))}
                                 </div>
-                                <h4 className="font-bold text-sm text-charcoal-900 mt-1">{rev.customer_name}</h4>
-                                <span className="text-[11px] text-charcoal-500 font-medium">{new Date(rev.created_at).toLocaleDateString()}</span>
+                                <h4 className="font-bold text-sm text-white mt-1">{rev.customer_name}</h4>
+                                <span className="text-[11px] text-slate-500 font-medium">{new Date(rev.created_at).toLocaleDateString()}</span>
                               </div>
 
                               {/* WhatsApp Consent Badge */}
@@ -1845,7 +1845,7 @@ export const MasterAdminDashboard: React.FC = () => {
                                   <span>WhatsApp</span>
                                 </span>
                               ) : (
-                                <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-ivory-100 text-charcoal-500">
+                                <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-[#090D16]/[0.04] text-slate-500">
                                   No Marketing
                                 </span>
                               )}
@@ -1856,7 +1856,7 @@ export const MasterAdminDashboard: React.FC = () => {
                               {rev.selected_keywords.map((kw) => (
                                 <span
                                   key={kw}
-                                  className="px-2 py-0.5 bg-saffron-50 text-saffron-800 border border-saffron-200 rounded-lg text-[10px] font-semibold"
+                                  className="px-2 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-lg text-[10px] font-semibold"
                                 >
                                   {kw}
                                 </span>
@@ -1864,14 +1864,14 @@ export const MasterAdminDashboard: React.FC = () => {
                             </div>
 
                             {/* Review Text */}
-                            <p className="text-xs text-charcoal-700 mt-3 leading-relaxed bg-ivory-50 p-3 rounded-2xl border border-ivory-200 italic">
+                            <p className="text-xs text-slate-400 mt-3 leading-relaxed bg-[#090D16]/[0.03] p-3 rounded-2xl border border-white/[0.08] italic">
                               "{rev.review_text}"
                             </p>
                           </div>
 
                           {/* Customer Contact */}
-                          <div className="pt-3 border-t border-ivory-200 flex items-center justify-between text-xs">
-                            <span className="font-mono text-charcoal-600 text-[11px]">
+                          <div className="pt-3 border-t border-white/[0.08] flex items-center justify-between text-xs">
+                            <span className="font-mono text-slate-400 text-[11px]">
                               {rev.customer_phone || 'No phone recorded'}
                             </span>
 
@@ -1906,12 +1906,12 @@ export const MasterAdminDashboard: React.FC = () => {
         {activeTab === 'challenges' && (
           <div className="space-y-6">
             {/* Quick Voucher Validator Card */}
-            <div className="bg-white p-6 rounded-3xl border border-ivory-300 shadow-subtle">
+            <div className="bg-[#0D1322] p-6 rounded-3xl border border-white/[0.08] shadow-lg">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                  <span className="text-[10px] uppercase font-bold tracking-widest text-saffron-700">Staff Redemption Center</span>
-                  <h3 className="text-lg font-bold font-serif text-charcoal-900 mt-0.5">Verify Customer Challenge Voucher</h3>
-                  <p className="text-xs text-charcoal-600 mt-0.5">
+                  <span className="text-[10px] uppercase font-bold tracking-widest text-amber-400">Staff Redemption Center</span>
+                  <h3 className="text-lg font-bold font-serif text-white mt-0.5">Verify Customer Challenge Voucher</h3>
+                  <p className="text-xs text-slate-400 mt-0.5">
                     Enter voucher codes from scratch cards or wheels to validate and redeem.
                   </p>
                 </div>
@@ -1922,11 +1922,11 @@ export const MasterAdminDashboard: React.FC = () => {
                     value={voucherInput}
                     onChange={(e) => setVoucherInput(e.target.value)}
                     placeholder="e.g. WIN-9418"
-                    className="bg-ivory-50 border border-ivory-300 rounded-xl px-4 py-2.5 text-xs font-mono font-bold text-charcoal-900 uppercase focus:outline-none focus:border-saffron-600 min-w-[200px]"
+                    className="bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-2.5 text-xs font-mono font-bold text-white uppercase focus:outline-none focus:border-amber-600/40 min-w-[200px]"
                   />
                   <button
                     type="submit"
-                    className="px-5 py-2.5 bg-charcoal-900 hover:bg-charcoal-800 text-white rounded-xl text-xs font-bold transition-colors shadow-subtle"
+                    className="px-5 py-2.5 bg-[#090D16] hover:bg-[#0D1322] text-white rounded-xl text-xs font-bold transition-colors shadow-lg"
                   >
                     Redeem
                   </button>
@@ -1945,40 +1945,40 @@ export const MasterAdminDashboard: React.FC = () => {
 
             {/* Challenge + Redemption grid */}
             {challenges.length === 0 && redemptions.length === 0 ? (
-              <div className="bg-white rounded-3xl border border-ivory-300 p-12 text-center shadow-subtle">
-                <Trophy className="w-12 h-12 text-charcoal-300 mx-auto" />
-                <h3 className="font-serif text-lg font-bold text-charcoal-900 mt-4">No Challenges Configured</h3>
-                <p className="text-xs text-charcoal-500 mt-1">Challenges will be created when restaurants set up their review reward programs.</p>
+              <div className="bg-[#0D1322] rounded-3xl border border-white/[0.08] p-12 text-center shadow-lg">
+                <Trophy className="w-12 h-12 text-slate-400 mx-auto" />
+                <h3 className="font-serif text-lg font-bold text-white mt-4">No Challenges Configured</h3>
+                <p className="text-xs text-slate-500 mt-1">Challenges will be created when restaurants set up their review reward programs.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-white p-6 rounded-3xl border border-ivory-300 shadow-subtle space-y-4">
+                <div className="bg-[#0D1322] p-6 rounded-3xl border border-white/[0.08] shadow-lg space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-base font-bold font-serif text-charcoal-900 flex items-center space-x-2">
-                      <Trophy className="w-5 h-5 text-saffron-600" />
+                    <h3 className="text-base font-bold font-serif text-white flex items-center space-x-2">
+                      <Trophy className="w-5 h-5 text-amber-400" />
                       <span>Configured Review Challenges</span>
                     </h3>
-                    <span className="text-xs text-charcoal-500">{challenges.length} active</span>
+                    <span className="text-xs text-slate-500">{challenges.length} active</span>
                   </div>
 
                   <div className="space-y-3">
                     {challenges.map((c) => {
                       const rest = restaurants.find((r) => r.id === c.restaurant_id);
                       return (
-                        <div key={c.id} className="p-4 bg-ivory-50 rounded-2xl border border-ivory-200 space-y-2">
+                        <div key={c.id} className="p-4 bg-[#090D16]/[0.03] rounded-2xl border border-white/[0.08] space-y-2">
                           <div className="flex items-start justify-between">
                             <div>
-                              <span className="text-[10px] font-bold uppercase tracking-wider text-saffron-700">{rest?.name || 'All'}</span>
-                              <h4 className="font-bold text-sm text-charcoal-900">{c.title}</h4>
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400">{rest?.name || 'All'}</span>
+                              <h4 className="font-bold text-sm text-white">{c.title}</h4>
                             </div>
                             <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-800 border border-green-300">
                               Active
                             </span>
                           </div>
-                          <p className="text-xs text-charcoal-600">{c.description}</p>
-                          <div className="p-2.5 bg-white rounded-xl border border-ivory-200 flex items-center justify-between text-xs">
-                            <span className="text-charcoal-500">Reward:</span>
-                            <span className="font-bold text-saffron-800">{c.reward_item_name}</span>
+                          <p className="text-xs text-slate-400">{c.description}</p>
+                          <div className="p-2.5 bg-[#090D16] rounded-xl border border-white/[0.08] flex items-center justify-between text-xs">
+                            <span className="text-slate-500">Reward:</span>
+                            <span className="font-bold text-amber-400">{c.reward_item_name}</span>
                           </div>
                         </div>
                       );
@@ -1986,36 +1986,36 @@ export const MasterAdminDashboard: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="bg-white p-6 rounded-3xl border border-ivory-300 shadow-subtle space-y-4">
+                <div className="bg-[#0D1322] p-6 rounded-3xl border border-white/[0.08] shadow-lg space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-base font-bold font-serif text-charcoal-900 flex items-center space-x-2">
+                    <h3 className="text-base font-bold font-serif text-white flex items-center space-x-2">
                       <Sparkles className="w-5 h-5 text-amber-500" />
                       <span>Customer Redemption Ledger</span>
                     </h3>
-                    <span className="text-xs text-charcoal-500">{redemptions.length} vouchers</span>
+                    <span className="text-xs text-slate-500">{redemptions.length} vouchers</span>
                   </div>
 
                   {redemptions.length === 0 ? (
-                    <p className="text-xs text-charcoal-500 text-center py-8">No vouchers issued yet.</p>
+                    <p className="text-xs text-slate-500 text-center py-8">No vouchers issued yet.</p>
                   ) : (
                     <div className="space-y-2.5 max-h-[360px] overflow-y-auto pr-1">
                       {redemptions.map((red) => (
                         <div
                           key={red.id}
-                          className="p-3.5 bg-ivory-50 rounded-2xl border border-ivory-200 flex items-center justify-between text-xs"
+                          className="p-3.5 bg-[#090D16]/[0.03] rounded-2xl border border-white/[0.08] flex items-center justify-between text-xs"
                         >
                           <div>
                             <div className="flex items-center space-x-2">
-                              <span className="font-mono font-bold text-charcoal-900 text-sm tracking-wide">{red.voucher_code}</span>
+                              <span className="font-mono font-bold text-white text-sm tracking-wide">{red.voucher_code}</span>
                               <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
                                 red.status === 'redeemed'
-                                  ? 'bg-charcoal-100 text-charcoal-700'
+                                  ? 'bg-white/[0.02] text-slate-400'
                                   : 'bg-green-100 text-green-800'
                               }`}>
                                 {red.status}
                               </span>
                             </div>
-                            <span className="text-[11px] text-charcoal-600 block mt-0.5">
+                            <span className="text-[11px] text-slate-400 block mt-0.5">
                               {red.customer_name} • {red.reward_item_name}
                             </span>
                           </div>
@@ -2027,7 +2027,7 @@ export const MasterAdminDashboard: React.FC = () => {
                                 setVoucherMessage({ text: `Voucher ${red.voucher_code} redeemed!`, type: 'success' });
                                 setTimeout(() => setVoucherMessage(null), 3000);
                               }}
-                              className="px-3 py-1.5 bg-saffron-600 hover:bg-saffron-700 text-white rounded-xl text-xs font-bold transition-colors"
+                              className="px-3 py-1.5 bg-amber-500 hover:bg-amber-700 text-white rounded-xl text-xs font-bold transition-colors"
                             >
                               Mark Used
                             </button>
@@ -2048,12 +2048,12 @@ export const MasterAdminDashboard: React.FC = () => {
         {activeTab === 'pos' && (
           <div className="space-y-6">
             {/* POS Provider Switcher Header */}
-            <div className="bg-white p-5 rounded-3xl border border-ivory-300 shadow-subtle space-y-4">
+            <div className="bg-[#0D1322] p-5 rounded-3xl border border-white/[0.08] shadow-lg space-y-4">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
                 <div>
-                  <span className="text-[10px] uppercase font-bold tracking-widest text-saffron-700">Supported POS Ecosystems</span>
-                  <h3 className="text-xl font-bold font-serif text-charcoal-900 mt-0.5">Pune & India Restaurant POS Bridges</h3>
-                  <p className="text-xs text-charcoal-500 mt-0.5">
+                  <span className="text-[10px] uppercase font-bold tracking-widest text-amber-400">Supported POS Ecosystems</span>
+                  <h3 className="text-xl font-bold font-serif text-white mt-0.5">Pune & India Restaurant POS Bridges</h3>
+                  <p className="text-xs text-slate-500 mt-0.5">
                     Direct two-way KOT sync, dynamic menu updates, and live thermal printing bridges.
                   </p>
                 </div>
@@ -2066,21 +2066,21 @@ export const MasterAdminDashboard: React.FC = () => {
               </div>
 
               {/* Provider Selection Tabs */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2 border-t border-ivory-200">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2 border-t border-white/[0.08]">
                 <button
                   type="button"
                   onClick={() => setSelectedPosTab('petpooja')}
                   className={`p-3 rounded-2xl border text-left transition-all ${
                     selectedPosTab === 'petpooja'
-                      ? 'bg-orange-50/80 border-orange-400 shadow-xs ring-1 ring-orange-400'
-                      : 'bg-white border-ivory-300 hover:bg-ivory-50 text-charcoal-700'
+                      ? 'bg-orange-50/80 border-orange-400 shadow-sm ring-1 ring-orange-400'
+                      : 'bg-white border-white/[0.08] hover:bg-white/[0.03] text-slate-400'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-xs font-bold text-orange-900">Petpooja</span>
                     <span className="text-[9px] uppercase px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-700 font-bold">50k+ Outlets</span>
                   </div>
-                  <p className="text-[11px] text-charcoal-500 line-clamp-1">National & Pune #1 REST API</p>
+                  <p className="text-[11px] text-slate-500 line-clamp-1">National & Pune #1 REST API</p>
                 </button>
 
                 <button
@@ -2088,15 +2088,15 @@ export const MasterAdminDashboard: React.FC = () => {
                   onClick={() => setSelectedPosTab('royalpos')}
                   className={`p-3 rounded-2xl border text-left transition-all ${
                     selectedPosTab === 'royalpos'
-                      ? 'bg-purple-50/80 border-purple-400 shadow-xs ring-1 ring-purple-400'
-                      : 'bg-white border-ivory-300 hover:bg-ivory-50 text-charcoal-700'
+                      ? 'bg-purple-50/80 border-purple-400 shadow-sm ring-1 ring-purple-400'
+                      : 'bg-white border-white/[0.08] hover:bg-white/[0.03] text-slate-400'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-xs font-bold text-purple-900">RoyalPOS</span>
                     <span className="text-[9px] uppercase px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700 font-bold">Pune Local</span>
                   </div>
-                  <p className="text-[11px] text-charcoal-500 line-clamp-1">FC Road, Hinjewadi & QSRs</p>
+                  <p className="text-[11px] text-slate-500 line-clamp-1">FC Road, Hinjewadi & QSRs</p>
                 </button>
 
                 <button
@@ -2104,15 +2104,15 @@ export const MasterAdminDashboard: React.FC = () => {
                   onClick={() => setSelectedPosTab('recaho')}
                   className={`p-3 rounded-2xl border text-left transition-all ${
                     selectedPosTab === 'recaho'
-                      ? 'bg-blue-50/80 border-blue-400 shadow-xs ring-1 ring-blue-400'
-                      : 'bg-white border-ivory-300 hover:bg-ivory-50 text-charcoal-700'
+                      ? 'bg-blue-50/80 border-blue-400 shadow-sm ring-1 ring-blue-400'
+                      : 'bg-white border-white/[0.08] hover:bg-white/[0.03] text-slate-400'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-xs font-bold text-blue-900">Recaho</span>
                     <span className="text-[9px] uppercase px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-700 font-bold">PCMC / Chakan</span>
                   </div>
-                  <p className="text-[11px] text-charcoal-500 line-clamp-1">Suburban & Family Eateries</p>
+                  <p className="text-[11px] text-slate-500 line-clamp-1">Suburban & Family Eateries</p>
                 </button>
 
                 <button
@@ -2120,15 +2120,15 @@ export const MasterAdminDashboard: React.FC = () => {
                   onClick={() => setSelectedPosTab('rancelab')}
                   className={`p-3 rounded-2xl border text-left transition-all ${
                     selectedPosTab === 'rancelab'
-                      ? 'bg-emerald-50/80 border-emerald-400 shadow-xs ring-1 ring-emerald-400'
-                      : 'bg-white border-ivory-300 hover:bg-ivory-50 text-charcoal-700'
+                      ? 'bg-emerald-50/80 border-emerald-400 shadow-sm ring-1 ring-emerald-400'
+                      : 'bg-white border-white/[0.08] hover:bg-white/[0.03] text-slate-400'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-xs font-bold text-emerald-900">RanceLab</span>
                     <span className="text-[9px] uppercase px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold">FusionResto</span>
                   </div>
-                  <p className="text-[11px] text-charcoal-500 line-clamp-1">Chains & Fine Dining</p>
+                  <p className="text-[11px] text-slate-500 line-clamp-1">Chains & Fine Dining</p>
                 </button>
               </div>
             </div>
@@ -2174,11 +2174,11 @@ export const MasterAdminDashboard: React.FC = () => {
               </>
             )}
 
-            <div className="bg-white p-5 rounded-3xl border border-ivory-300 shadow-subtle flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="bg-[#0D1322] p-5 rounded-3xl border border-white/[0.08] shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <span className="text-[10px] uppercase font-bold tracking-widest text-blue-700">Universal Adapter Layer</span>
-                <h3 className="text-lg font-bold font-serif text-charcoal-900 mt-0.5">Two-Way Real-time POS Synchronisation</h3>
-                <p className="text-xs text-charcoal-600 mt-0.5">
+                <h3 className="text-lg font-bold font-serif text-white mt-0.5">Two-Way Real-time POS Synchronisation</h3>
+                <p className="text-xs text-slate-400 mt-0.5">
                   {restaurants.length > 0
                     ? 'Universal adapter integrating Toast, Clover, Square, and restaurant ordering engines.'
                     : 'Connect POS systems once restaurants are onboarded.'}
@@ -2191,7 +2191,7 @@ export const MasterAdminDashboard: React.FC = () => {
                     const firstRest = restaurants[0];
                     simulateIncomingPosOrder(firstRest.id);
                   }}
-                  className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-colors"
+                  className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-lg flex items-center space-x-1.5 transition-colors"
                 >
                   <Smartphone className="w-4 h-4" />
                   <span>Simulate Inbound POS Order</span>
@@ -2200,10 +2200,10 @@ export const MasterAdminDashboard: React.FC = () => {
             </div>
 
             {restaurants.length === 0 ? (
-              <div className="bg-white rounded-3xl border border-ivory-300 p-12 text-center shadow-subtle">
-                <RefreshCw className="w-12 h-12 text-charcoal-300 mx-auto" />
-                <h3 className="font-serif text-lg font-bold text-charcoal-900 mt-4">No POS Connections</h3>
-                <p className="text-xs text-charcoal-500 mt-1">POS integrations will appear here once restaurants are onboarded.</p>
+              <div className="bg-[#0D1322] rounded-3xl border border-white/[0.08] p-12 text-center shadow-lg">
+                <RefreshCw className="w-12 h-12 text-slate-400 mx-auto" />
+                <h3 className="font-serif text-lg font-bold text-white mt-4">No POS Connections</h3>
+                <p className="text-xs text-slate-500 mt-1">POS integrations will appear here once restaurants are onboarded.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -2219,11 +2219,11 @@ export const MasterAdminDashboard: React.FC = () => {
                   };
 
                   return (
-                    <div key={rest.id} className="bg-white p-6 rounded-3xl border border-ivory-300 shadow-subtle space-y-4">
+                    <div key={rest.id} className="bg-[#0D1322] p-6 rounded-3xl border border-white/[0.08] shadow-lg space-y-4">
                       <div className="flex items-start justify-between">
                         <div>
-                          <span className="text-[10px] uppercase font-bold text-saffron-700 tracking-wider">{rest.name}</span>
-                          <h4 className="text-base font-bold text-charcoal-900 capitalize flex items-center space-x-1.5 mt-0.5">
+                          <span className="text-[10px] uppercase font-bold text-amber-400 tracking-wider">{rest.name}</span>
+                          <h4 className="text-base font-bold text-white capitalize flex items-center space-x-1.5 mt-0.5">
                             <span>{config.provider.replace('_', ' ')} POS Bridge</span>
                           </h4>
                         </div>
@@ -2233,24 +2233,24 @@ export const MasterAdminDashboard: React.FC = () => {
                         </span>
                       </div>
 
-                      <div className="p-3 bg-ivory-50 rounded-2xl border border-ivory-200 text-xs space-y-1.5">
+                      <div className="p-3 bg-[#090D16]/[0.03] rounded-2xl border border-white/[0.08] text-xs space-y-1.5">
                         <div className="flex justify-between">
-                          <span className="text-charcoal-500">Latency:</span>
+                          <span className="text-slate-500">Latency:</span>
                           <span className="font-mono font-bold text-green-700">{config.sync_latency_ms} ms</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-charcoal-500">Auto Sync:</span>
-                          <span className="font-bold text-charcoal-800">Enabled (Bidirectional)</span>
+                          <span className="text-slate-500">Auto Sync:</span>
+                          <span className="font-bold text-slate-200">Enabled (Bidirectional)</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-charcoal-500">Last Ping:</span>
-                          <span className="font-mono text-[11px] text-charcoal-600">{new Date(config.last_sync_time).toLocaleTimeString()}</span>
+                          <span className="text-slate-500">Last Ping:</span>
+                          <span className="font-mono text-[11px] text-slate-400">{new Date(config.last_sync_time).toLocaleTimeString()}</span>
                         </div>
                       </div>
 
                       <button
                         onClick={() => triggerPosSync(rest.id)}
-                        className="w-full bg-ivory-100 hover:bg-ivory-200 text-charcoal-900 font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1.5 border border-ivory-300 transition-colors"
+                        className="w-full bg-[#090D16]/[0.04] hover:bg-white/[0.06] text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1.5 border border-white/[0.08] transition-colors"
                       >
                         <RefreshCw className="w-3.5 h-3.5" />
                         <span>Trigger Full Catalog Sync</span>
@@ -2258,15 +2258,15 @@ export const MasterAdminDashboard: React.FC = () => {
 
                       {config.sync_log.length > 0 && (
                         <div>
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-charcoal-400 block mb-1.5">Recent Sync Stream</span>
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1.5">Recent Sync Stream</span>
                           <div className="space-y-1.5 max-h-[140px] overflow-y-auto text-[11px] font-mono">
                             {config.sync_log.map((log) => (
-                              <div key={log.id} className="p-2 bg-ivory-100/70 rounded-xl border border-ivory-200">
-                                <div className="flex justify-between text-charcoal-500 text-[10px]">
+                              <div key={log.id} className="p-2 bg-[#090D16]/[0.04]/70 rounded-xl border border-white/[0.08]">
+                                <div className="flex justify-between text-slate-500 text-[10px]">
                                   <span>{log.event}</span>
                                   <span>{new Date(log.timestamp).toLocaleTimeString()}</span>
                                 </div>
-                                <span className="text-charcoal-800 truncate block mt-0.5">{log.details}</span>
+                                <span className="text-slate-200 truncate block mt-0.5">{log.details}</span>
                               </div>
                             ))}
                           </div>
@@ -2292,18 +2292,18 @@ export const MasterAdminDashboard: React.FC = () => {
         {/* ========================================================================= */}
         {activeTab === 'marketing' && (
           <div className="space-y-6">
-            <div className="bg-white p-5 rounded-3xl border border-ivory-300 shadow-subtle flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="bg-[#0D1322] p-5 rounded-3xl border border-white/[0.08] shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <span className="text-[10px] uppercase font-bold tracking-widest text-green-700">Consent & Privacy Compliant</span>
-                <h3 className="text-lg font-bold font-serif text-charcoal-900 mt-0.5">Customer Marketing & WhatsApp Broadcasting</h3>
-                <p className="text-xs text-charcoal-600 mt-0.5">
+                <h3 className="text-lg font-bold font-serif text-white mt-0.5">Customer Marketing & WhatsApp Broadcasting</h3>
+                <p className="text-xs text-slate-400 mt-0.5">
                   Broadcast promotions strictly to diners who provided explicit consent.
                 </p>
               </div>
 
               <button
                 onClick={() => setIsCampaignModalOpen(true)}
-                className="px-4 py-2.5 bg-green-700 hover:bg-green-800 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-colors self-start md:self-auto"
+                className="px-4 py-2.5 bg-green-700 hover:bg-green-800 text-white text-xs font-bold rounded-xl shadow-lg flex items-center space-x-1.5 transition-colors self-start md:self-auto"
               >
                 <Plus className="w-4 h-4" />
                 <span>Create New Campaign</span>
@@ -2311,34 +2311,34 @@ export const MasterAdminDashboard: React.FC = () => {
             </div>
 
             {campaigns.length === 0 ? (
-              <div className="bg-white rounded-3xl border border-ivory-300 p-12 text-center shadow-subtle">
-                <Send className="w-12 h-12 text-charcoal-300 mx-auto" />
-                <h3 className="font-serif text-lg font-bold text-charcoal-900 mt-4">No Campaigns Yet</h3>
-                <p className="text-xs text-charcoal-500 mt-1">Create your first WhatsApp campaign to reach diners who opted in.</p>
+              <div className="bg-[#0D1322] rounded-3xl border border-white/[0.08] p-12 text-center shadow-lg">
+                <Send className="w-12 h-12 text-slate-400 mx-auto" />
+                <h3 className="font-serif text-lg font-bold text-white mt-4">No Campaigns Yet</h3>
+                <p className="text-xs text-slate-500 mt-1">Create your first WhatsApp campaign to reach diners who opted in.</p>
               </div>
             ) : (
-              <div className="bg-white rounded-3xl border border-ivory-300 overflow-hidden shadow-subtle">
-                <div className="p-5 border-b border-ivory-200 flex items-center justify-between">
-                  <h4 className="font-bold text-sm text-charcoal-900 font-serif">Broadcast Campaign History</h4>
-                  <span className="text-xs text-charcoal-500 font-medium">{campaigns.length} campaigns executed</span>
+              <div className="bg-[#0D1322] rounded-3xl border border-white/[0.08] overflow-hidden shadow-lg">
+                <div className="p-5 border-b border-white/[0.08] flex items-center justify-between">
+                  <h4 className="font-bold text-sm text-white font-serif">Broadcast Campaign History</h4>
+                  <span className="text-xs text-slate-500 font-medium">{campaigns.length} campaigns executed</span>
                 </div>
 
-                <div className="divide-y divide-ivory-200">
+                <div className="divide-y divide-white/[0.06]">
                   {campaigns.map((camp) => {
                     const targetRest = restaurants.find((r) => r.id === camp.target_restaurant_id);
                     return (
-                      <div key={camp.id} className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-ivory-50 transition-colors">
+                      <div key={camp.id} className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-white/[0.03] transition-colors">
                         <div className="space-y-1">
                           <div className="flex items-center space-x-2">
-                            <h5 className="font-bold text-sm text-charcoal-900">{camp.campaign_name}</h5>
+                            <h5 className="font-bold text-sm text-white">{camp.campaign_name}</h5>
                             <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-800 border border-green-200 uppercase">
                               {camp.status}
                             </span>
                           </div>
-                          <p className="text-xs text-charcoal-600 font-mono bg-ivory-100 p-2.5 rounded-xl border border-ivory-200 max-w-2xl">
+                          <p className="text-xs text-slate-400 font-mono bg-[#090D16]/[0.04] p-2.5 rounded-xl border border-white/[0.08] max-w-2xl">
                             "{camp.message_template}"
                           </p>
-                          <span className="text-[11px] text-charcoal-500 block">
+                          <span className="text-[11px] text-slate-500 block">
                             Target: <strong>{targetRest?.name || 'All Opt-In Diners'}</strong> • Sent on {new Date(camp.sent_at).toLocaleString()}
                           </span>
                         </div>
@@ -2347,7 +2347,7 @@ export const MasterAdminDashboard: React.FC = () => {
                           <span className="text-sm font-bold text-green-700 font-mono block">
                             {camp.recipients_count} Diners
                           </span>
-                          <span className="text-[10px] text-charcoal-400">Delivered</span>
+                          <span className="text-[10px] text-slate-500">Delivered</span>
                         </div>
                       </div>
                     );
@@ -2364,28 +2364,28 @@ export const MasterAdminDashboard: React.FC = () => {
       {/* ========================================================================= */}
       {isAddRestaurantOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-float border border-ivory-300 space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-ivory-200">
+          <div className="bg-[#0D1322] rounded-3xl max-w-lg w-full p-6  border border-white/[0.08] space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
               <div>
-                <h3 className="font-serif text-lg font-bold text-charcoal-900">Onboard Restaurant to Menuz</h3>
-                <span className="text-[11px] text-saffron-700 font-semibold flex items-center space-x-1 mt-0.5">
+                <h3 className="font-serif text-lg font-bold text-white">Onboard Restaurant to Menuz</h3>
+                <span className="text-[11px] text-amber-400 font-semibold flex items-center space-x-1 mt-0.5">
                   <Globe className="w-3.5 h-3.5" />
                   <span>Pune Directory — 269+ restaurants ready in city database</span>
                 </span>
               </div>
-              <button onClick={() => { setIsAddRestaurantOpen(false); setAutocompleteQuery(''); setSelectedFromDirectory(false); }} className="text-charcoal-400 hover:text-charcoal-600">
+              <button onClick={() => { setIsAddRestaurantOpen(false); setAutocompleteQuery(''); setSelectedFromDirectory(false); }} className="text-slate-500 hover:text-slate-400">
                 <XCircle className="w-5 h-5" />
               </button>
             </div>
 
             {/* ── Autocomplete Search ─────────────────────────────── */}
             <div ref={autocompleteRef} className="relative">
-              <label className="font-bold text-xs text-charcoal-800 block mb-1.5">
+              <label className="font-bold text-xs text-slate-200 block mb-1.5">
                 Search Pune Restaurants
-                <span className="font-normal text-charcoal-500 ml-1">(type 2+ characters)</span>
+                <span className="font-normal text-slate-500 ml-1">(type 2+ characters)</span>
               </label>
               <div className="relative">
-                <Search className="w-4 h-4 absolute left-3.5 top-3 text-charcoal-400" />
+                <Search className="w-4 h-4 absolute left-3.5 top-3 text-slate-500" />
                 <input
                   type="text"
                   value={autocompleteQuery}
@@ -2394,37 +2394,37 @@ export const MasterAdminDashboard: React.FC = () => {
                     setSelectedFromDirectory(false);
                   }}
                   placeholder="e.g. Malaka Spice, Vaishali, Barbeque..."
-                  className="w-full bg-ivory-50 border border-ivory-300 rounded-xl pl-9 pr-3 py-2.5 text-xs text-charcoal-900 focus:outline-none focus:border-saffron-600 focus:ring-2 focus:ring-saffron-200"
+                  className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl pl-9 pr-3 py-2.5 text-xs text-white focus:outline-none focus:border-amber-600/40 focus:ring-2 focus:ring-amber-400/30"
                 />
               </div>
 
               {/* Autocomplete dropdown */}
               {showAutocomplete && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-ivory-300 rounded-2xl shadow-float max-h-[280px] overflow-y-auto z-[60]">
+                <div className="absolute top-full left-0 right-0 mt-1 bg-[#090D16] border border-white/[0.08] rounded-2xl  max-h-[280px] overflow-y-auto z-[60]">
                   {autocompleteResults.map((entry, idx) => (
                     <button
                       key={idx}
                       type="button"
                       onClick={() => handleSelectAutocomplete(entry)}
-                      className="w-full p-3.5 text-left hover:bg-saffron-50 transition-colors border-b border-ivory-100 last:border-b-0 flex items-start space-x-3"
+                      className="w-full p-3.5 text-left hover:bg-amber-500/10 transition-colors border-b border-white/[0.06] last:border-b-0 flex items-start space-x-3"
                     >
                       <img
                         src={entry.imageUrl}
                         alt={entry.name}
-                        className="w-10 h-10 rounded-xl object-cover border border-ivory-200 flex-shrink-0"
+                        className="w-10 h-10 rounded-xl object-cover border border-white/[0.08] flex-shrink-0"
                       />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
-                          <h4 className="font-bold text-xs text-charcoal-900 truncate">{entry.name}</h4>
+                          <h4 className="font-bold text-xs text-white truncate">{entry.name}</h4>
                           <div className="flex items-center space-x-1 flex-shrink-0 ml-2">
                             <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                            <span className="text-[11px] font-bold text-charcoal-700">{entry.rating}</span>
+                            <span className="text-[11px] font-bold text-slate-400">{entry.rating}</span>
                           </div>
                         </div>
-                        <span className="text-[11px] text-saffron-700 font-medium block truncate">{entry.cuisine}</span>
+                        <span className="text-[11px] text-amber-400 font-medium block truncate">{entry.cuisine}</span>
                         <div className="flex items-center space-x-1 mt-0.5">
-                          <MapPin className="w-3 h-3 text-charcoal-400 flex-shrink-0" />
-                          <span className="text-[10px] text-charcoal-500 truncate">{entry.location}</span>
+                          <MapPin className="w-3 h-3 text-slate-500 flex-shrink-0" />
+                          <span className="text-[10px] text-slate-500 truncate">{entry.location}</span>
                         </div>
                       </div>
                     </button>
@@ -2445,7 +2445,7 @@ export const MasterAdminDashboard: React.FC = () => {
 
             <form onSubmit={handleCreateRestaurant} className="space-y-3.5 text-xs">
               <div>
-                <label className="font-bold text-charcoal-800 block mb-1">Restaurant Name *</label>
+                <label className="font-bold text-slate-200 block mb-1">Restaurant Name *</label>
                 <input
                   type="text"
                   required
@@ -2457,97 +2457,97 @@ export const MasterAdminDashboard: React.FC = () => {
                     }
                   }}
                   placeholder="e.g. Malaka Spice"
-                  className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-charcoal-900 focus:outline-none focus:border-saffron-600"
+                  className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-600/40"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-charcoal-800 block mb-1">URL Slug *</label>
+                  <label className="font-bold text-slate-200 block mb-1">URL Slug *</label>
                   <input
                     type="text"
                     required
                     value={newRestSlug}
                     onChange={(e) => setNewRestSlug(e.target.value)}
                     placeholder="malaka-spice"
-                    className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 font-mono text-charcoal-900 focus:outline-none focus:border-saffron-600"
+                    className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 font-mono text-white focus:outline-none focus:border-amber-600/40"
                   />
                 </div>
                 <div>
-                  <label className="font-bold text-charcoal-800 block mb-1">Cuisine</label>
+                  <label className="font-bold text-slate-200 block mb-1">Cuisine</label>
                   <input
                     type="text"
                     value={newRestCuisine}
                     onChange={(e) => setNewRestCuisine(e.target.value)}
                     placeholder="Pan-Asian, Thai"
-                    className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-charcoal-900 focus:outline-none focus:border-saffron-600"
+                    className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-600/40"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="font-bold text-charcoal-800 block mb-1">Location & City</label>
+                <label className="font-bold text-slate-200 block mb-1">Location & City</label>
                 <input
                   type="text"
                   value={newRestLocation}
                   onChange={(e) => setNewRestLocation(e.target.value)}
                   placeholder="Koregaon Park, Pune"
-                  className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-charcoal-900 focus:outline-none focus:border-saffron-600"
+                  className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-600/40"
                 />
               </div>
 
               <div>
-                <label className="font-bold text-charcoal-800 block mb-1">Full Address</label>
+                <label className="font-bold text-slate-200 block mb-1">Full Address</label>
                 <input
                   type="text"
                   value={newRestAddress}
                   onChange={(e) => setNewRestAddress(e.target.value)}
                   placeholder="Lane No. 5, North Main Road, Koregaon Park, Pune 411001"
-                  className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-charcoal-900 focus:outline-none focus:border-saffron-600"
+                  className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-600/40"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-charcoal-800 block mb-1">Owner Name</label>
+                  <label className="font-bold text-slate-200 block mb-1">Owner Name</label>
                   <input
                     type="text"
                     value={newRestOwner}
                     onChange={(e) => setNewRestOwner(e.target.value)}
                     placeholder="To be filled by owner"
-                    className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-charcoal-900 focus:outline-none focus:border-saffron-600"
+                    className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-600/40"
                   />
                 </div>
                 <div>
-                  <label className="font-bold text-charcoal-800 block mb-1">Contact Phone</label>
+                  <label className="font-bold text-slate-200 block mb-1">Contact Phone</label>
                   <input
                     type="text"
                     value={newRestPhone}
                     onChange={(e) => setNewRestPhone(e.target.value)}
                     placeholder="+91 98200 11223"
-                    className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-charcoal-900 focus:outline-none focus:border-saffron-600"
+                    className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-600/40"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="font-bold text-charcoal-800 block mb-1">Contact Email</label>
+                <label className="font-bold text-slate-200 block mb-1">Contact Email</label>
                 <input
                   type="email"
                   value={newRestEmail}
                   onChange={(e) => setNewRestEmail(e.target.value)}
                   placeholder="contact@restaurant.in"
-                  className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-charcoal-900 focus:outline-none focus:border-saffron-600"
+                  className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-600/40"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-charcoal-800 block mb-1">POS Integration *</label>
+                  <label className="font-bold text-slate-200 block mb-1">POS Integration *</label>
                   <select
                     value={newRestPos}
                     onChange={(e) => setNewRestPos(e.target.value as any)}
-                    className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-charcoal-900 focus:outline-none focus:border-saffron-600 font-medium"
+                    className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-600/40 font-medium"
                   >
                     {MODERN_POS_PROVIDERS.map((p) => (
                       <option key={p.id} value={p.id}>
@@ -2557,30 +2557,30 @@ export const MasterAdminDashboard: React.FC = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="font-bold text-charcoal-800 block mb-1">Brand Accent Color</label>
+                  <label className="font-bold text-slate-200 block mb-1">Brand Accent Color</label>
                   <div className="flex items-center space-x-2">
                     <input
                       type="color"
                       value={newRestColor}
                       onChange={(e) => setNewRestColor(e.target.value)}
-                      className="w-8 h-8 rounded-lg border border-ivory-300 cursor-pointer"
+                      className="w-8 h-8 rounded-lg border border-white/[0.08] cursor-pointer"
                     />
                     <span className="font-mono text-xs">{newRestColor}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-ivory-200 flex justify-end space-x-2">
+              <div className="pt-3 border-t border-white/[0.08] flex justify-end space-x-2">
                 <button
                   type="button"
                   onClick={() => { setIsAddRestaurantOpen(false); setAutocompleteQuery(''); setSelectedFromDirectory(false); }}
-                  className="px-4 py-2 bg-ivory-200 text-charcoal-700 rounded-xl font-semibold"
+                  className="px-4 py-2 bg-[#090D16]/[0.06] text-slate-400 rounded-xl font-semibold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-saffron-600 hover:bg-saffron-700 text-white rounded-xl font-bold shadow-subtle"
+                  className="px-5 py-2 bg-amber-500 hover:bg-amber-700 text-white rounded-xl font-bold shadow-lg"
                 >
                   Create & Onboard
                 </button>
@@ -2595,39 +2595,39 @@ export const MasterAdminDashboard: React.FC = () => {
       {/* ========================================================================= */}
       {isCampaignModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-float border border-ivory-300 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-ivory-200">
+          <div className="bg-[#0D1322] rounded-3xl max-w-lg w-full p-6  border border-white/[0.08] space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
               <div>
-                <h3 className="font-serif text-lg font-bold text-charcoal-900">Broadcast WhatsApp Campaign</h3>
+                <h3 className="font-serif text-lg font-bold text-white">Broadcast WhatsApp Campaign</h3>
                 <span className="text-[11px] text-green-700 font-semibold flex items-center space-x-1 mt-0.5">
                   <ShieldCheck className="w-3.5 h-3.5" />
                   <span>Only diners with explicit WhatsApp consent are messaged</span>
                 </span>
               </div>
-              <button onClick={() => setIsCampaignModalOpen(false)} className="text-charcoal-400 hover:text-charcoal-600">
+              <button onClick={() => setIsCampaignModalOpen(false)} className="text-slate-500 hover:text-slate-400">
                 <XCircle className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleSendCampaign} className="space-y-3.5 text-xs">
               <div>
-                <label className="font-bold text-charcoal-800 block mb-1">Campaign Title *</label>
+                <label className="font-bold text-slate-200 block mb-1">Campaign Title *</label>
                 <input
                   type="text"
                   required
                   value={campaignName}
                   onChange={(e) => setCampaignName(e.target.value)}
                   placeholder="e.g. Midweek Chef's Special Invitation"
-                  className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-charcoal-900 focus:outline-none focus:border-green-600"
+                  className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-green-600"
                 />
               </div>
 
               <div>
-                <label className="font-bold text-charcoal-800 block mb-1">Target Diner Audience</label>
+                <label className="font-bold text-slate-200 block mb-1">Target Diner Audience</label>
                 <select
                   value={campaignTargetRest}
                   onChange={(e) => setCampaignTargetRest(e.target.value)}
-                  className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-charcoal-900 focus:outline-none focus:border-green-600"
+                  className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-green-600"
                 >
                   <option value="all">All Verified Opt-In Reviewers ({whatsappOptInCount} recipients)</option>
                   {restaurants.map((r) => {
@@ -2642,29 +2642,29 @@ export const MasterAdminDashboard: React.FC = () => {
               </div>
 
               <div>
-                <label className="font-bold text-charcoal-800 block mb-1">Message Content *</label>
+                <label className="font-bold text-slate-200 block mb-1">Message Content *</label>
                 <textarea
                   required
                   rows={4}
                   value={campaignMessage}
                   onChange={(e) => setCampaignMessage(e.target.value)}
                   placeholder="Namaste {{name}}! We are featuring an exclusive chef special tasting this Thursday..."
-                  className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-charcoal-900 focus:outline-none focus:border-green-600 leading-relaxed font-sans"
+                  className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-green-600 leading-relaxed font-sans"
                 />
-                <span className="text-[10px] text-charcoal-500 block mt-1">Tip: Use <code>{'{{name}}'}</code> for personal greetings.</span>
+                <span className="text-[10px] text-slate-500 block mt-1">Tip: Use <code>{'{{name}}'}</code> for personal greetings.</span>
               </div>
 
-              <div className="pt-3 border-t border-ivory-200 flex justify-end space-x-2">
+              <div className="pt-3 border-t border-white/[0.08] flex justify-end space-x-2">
                 <button
                   type="button"
                   onClick={() => setIsCampaignModalOpen(false)}
-                  className="px-4 py-2 bg-ivory-200 text-charcoal-700 rounded-xl font-semibold"
+                  className="px-4 py-2 bg-[#090D16]/[0.06] text-slate-400 rounded-xl font-semibold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-green-700 hover:bg-green-800 text-white rounded-xl font-bold shadow-subtle flex items-center space-x-1.5"
+                  className="px-5 py-2 bg-green-700 hover:bg-green-800 text-white rounded-xl font-bold shadow-lg flex items-center space-x-1.5"
                 >
                   <Send className="w-3.5 h-3.5" />
                   <span>Send Broadcast Now</span>
@@ -2680,30 +2680,30 @@ export const MasterAdminDashboard: React.FC = () => {
       {/* ========================================================================= */}
       {isImageAssignModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-float border border-ivory-300 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-ivory-200">
-              <h3 className="font-serif text-lg font-bold text-charcoal-900">Assign Photograph to Dish</h3>
-              <button onClick={() => setIsImageAssignModalOpen(false)} className="text-charcoal-400 hover:text-charcoal-600">
+          <div className="bg-[#0D1322] rounded-3xl max-w-md w-full p-6  border border-white/[0.08] space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+              <h3 className="font-serif text-lg font-bold text-white">Assign Photograph to Dish</h3>
+              <button onClick={() => setIsImageAssignModalOpen(false)} className="text-slate-500 hover:text-slate-400">
                 <XCircle className="w-5 h-5" />
               </button>
             </div>
 
             <div className="space-y-3 text-xs">
               <div>
-                <label className="font-bold text-charcoal-800 block mb-1">Image Preview</label>
+                <label className="font-bold text-slate-200 block mb-1">Image Preview</label>
                 <img
                   src={selectedImageForAssign}
                   alt="Selected"
-                  className="w-full h-40 rounded-2xl object-cover border border-ivory-300"
+                  className="w-full h-40 rounded-2xl object-cover border border-white/[0.08]"
                 />
               </div>
 
               <div>
-                <label className="font-bold text-charcoal-800 block mb-1">Target Menu Item</label>
+                <label className="font-bold text-slate-200 block mb-1">Target Menu Item</label>
                 <select
                   value={targetMenuItemId}
                   onChange={(e) => setTargetMenuItemId(e.target.value)}
-                  className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-charcoal-900 focus:outline-none focus:border-saffron-600"
+                  className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-600/40"
                 >
                   <option value="">Select dish to assign...</option>
                   {menuItems.map((item) => (
@@ -2714,11 +2714,11 @@ export const MasterAdminDashboard: React.FC = () => {
                 </select>
               </div>
 
-              <div className="pt-3 border-t border-ivory-200 flex justify-end space-x-2">
+              <div className="pt-3 border-t border-white/[0.08] flex justify-end space-x-2">
                 <button
                   type="button"
                   onClick={() => setIsImageAssignModalOpen(false)}
-                  className="px-4 py-2 bg-ivory-200 text-charcoal-700 rounded-xl font-semibold"
+                  className="px-4 py-2 bg-[#090D16]/[0.06] text-slate-400 rounded-xl font-semibold"
                 >
                   Cancel
                 </button>
@@ -2731,7 +2731,7 @@ export const MasterAdminDashboard: React.FC = () => {
                       setIsImageAssignModalOpen(false);
                     }
                   }}
-                  className="px-5 py-2 bg-saffron-600 hover:bg-saffron-700 disabled:opacity-50 text-white rounded-xl font-bold shadow-subtle"
+                  className="px-5 py-2 bg-amber-500 hover:bg-amber-700 disabled:opacity-50 text-white rounded-xl font-bold shadow-lg"
                 >
                   Apply & Synchronize
                 </button>
@@ -2775,19 +2775,19 @@ export const MasterAdminDashboard: React.FC = () => {
 
       {/* Offboard Restaurant Confirmation Modal */}
       {offboardTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-float border border-ivory-200 animate-scaleUp text-center space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#090D16]/60 backdrop-blur-xs">
+          <div className="bg-[#0D1322] rounded-3xl max-w-md w-full p-6  border border-white/[0.08] animate-scaleUp text-center space-y-4">
             <div className="w-14 h-14 mx-auto rounded-2xl bg-red-50 border border-red-200 flex items-center justify-center text-red-600">
               <UserMinus className="w-7 h-7" />
             </div>
             <div>
-              <h3 className="font-serif text-xl font-bold text-charcoal-900">
+              <h3 className="font-serif text-xl font-bold text-white">
                 Offboard {offboardTarget.name}?
               </h3>
-              <p className="text-xs text-charcoal-600 mt-2 leading-relaxed">
+              <p className="text-xs text-slate-400 mt-2 leading-relaxed">
                 This will remove <strong>{offboardTarget.name}</strong> from your active operational venues hub.
               </p>
-              <p className="text-[11px] text-charcoal-500 mt-1">
+              <p className="text-[11px] text-slate-500 mt-1">
                 Note: You can re-onboard this restaurant at any time from the Pune Restaurant Directory below.
               </p>
             </div>
@@ -2795,7 +2795,7 @@ export const MasterAdminDashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setOffboardTarget(null)}
-                className="px-4 py-2.5 rounded-xl border border-ivory-300 text-charcoal-700 hover:bg-ivory-100 text-xs font-bold transition-colors cursor-pointer"
+                className="px-4 py-2.5 rounded-xl border border-white/[0.08] text-slate-400 hover:bg-white/[0.04] text-xs font-bold transition-colors cursor-pointer"
               >
                 Cancel
               </button>
@@ -2806,7 +2806,7 @@ export const MasterAdminDashboard: React.FC = () => {
                   setOffboardTarget(null);
                   deleteRestaurant(targetId);
                 }}
-                className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition-colors shadow-xs cursor-pointer flex items-center space-x-1.5"
+                className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition-colors shadow-sm cursor-pointer flex items-center space-x-1.5"
               >
                 <UserMinus className="w-4 h-4" />
                 <span>Confirm Offboard</span>

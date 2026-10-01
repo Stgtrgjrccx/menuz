@@ -337,29 +337,36 @@ export const DinerMenu: React.FC = () => {
 
   if (errorMsg) {
     return (
-      <div className="min-h-screen bg-ivory-50 flex items-center justify-center p-6">
-        <div className="max-w-md w-full bg-white rounded-3xl p-6 shadow-subtle text-center border border-red-100">
-          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-3" />
-          <h2 className="font-serif text-xl font-bold text-charcoal-900 mb-2">QR Code Issue</h2>
-          <p className="text-charcoal-800 text-sm mb-4 leading-relaxed">{errorMsg}</p>
+      <div className="min-h-screen bg-[#090D16] text-slate-100 flex items-center justify-center p-6">
+        <div className="max-w-md w-full bg-[#0D1322] rounded-3xl p-6 shadow-2xl text-center border border-red-500/30">
+          <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-3" />
+          <h2 className="font-serif text-xl font-bold text-white mb-2">QR Code Issue</h2>
+          <p className="text-slate-300 text-sm mb-4 leading-relaxed">{errorMsg}</p>
+          <Link
+            to="/admin"
+            className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold hover:bg-amber-500/30 transition-all"
+          >
+            <ShieldCheck className="w-4 h-4 text-amber-400" />
+            <span>Go to Admin HQ</span>
+          </Link>
         </div>
       </div>
     );
   }
 
   return (
-    <div ref={mainRef} className="min-h-screen bg-ivory-50 pb-28">
+    <div ref={mainRef} className="min-h-screen bg-[#090D16] text-slate-100 pb-28">
       {/* ═══════════════════════════════════════════════════════════ */}
       {/* LIVE TOAST: WAITER CALLED NOTIFICATION                     */}
       {/* ═══════════════════════════════════════════════════════════ */}
       {waiterCalled && (
-        <div className="fixed top-4 left-4 right-4 max-w-sm mx-auto z-50 bg-charcoal-900 text-white p-3.5 rounded-2xl shadow-float border border-saffron-500/50 flex items-center space-x-3 animate-slideDown">
-          <div className="w-8 h-8 rounded-xl bg-saffron-600 flex items-center justify-center flex-shrink-0">
-            <Bell className="w-4 h-4 text-white animate-bounce" />
+        <div className="fixed top-4 left-4 right-4 max-w-sm mx-auto z-50 bg-[#0D1322] text-white p-3.5 rounded-2xl  border border-amber-500/50 flex items-center space-x-3 animate-slideDown">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 flex items-center justify-center flex-shrink-0 text-slate-950">
+            <Bell className="w-4 h-4 text-slate-950 animate-bounce" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-serif font-bold text-xs text-white">Waiter Alert Sent!</p>
-            <p className="text-[10px] text-charcoal-300">
+            <p className="text-[10px] text-slate-400">
               Staff has been notified for {activeTable?.label || 'your table'}. A server is on their way.
             </p>
           </div>
@@ -369,20 +376,20 @@ export const DinerMenu: React.FC = () => {
       {/* ═══════════════════════════════════════════════════════════ */}
       {/* 0. STREAMLINED DINER TOP BAR                                */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <div className="sticky top-0 z-30 bg-charcoal-900/95 backdrop-blur-md text-white border-b border-charcoal-800 px-4 py-2.5 flex items-center justify-between shadow-sm">
+      <div className="sticky top-0 z-30 bg-[#0A0E17]/95 backdrop-blur-md text-white border-b border-white/[0.08] px-4 py-2.5 flex items-center justify-between shadow-sm">
         {/* Link back to Menuz Home */}
         <Link
           to="/"
-          className="flex items-center space-x-1.5 text-xs text-charcoal-300 hover:text-white transition-colors group"
+          className="flex items-center space-x-1.5 text-xs text-slate-400 hover:text-white transition-colors group"
           title="Back to Menuz Home"
         >
-          <span className="w-5 h-5 rounded-lg bg-gradient-to-tr from-saffron-600 to-amber-400 flex items-center justify-center font-bold text-[10px] text-white">
+          <span className="w-5 h-5 rounded-lg bg-gradient-to-tr from-amber-500 to-amber-400 flex items-center justify-center font-bold text-[10px] text-slate-950 shadow-sm">
             M
           </span>
-          <span className="font-serif font-black text-white group-hover:text-saffron-400 transition-colors">
+          <span className="font-serif font-black text-white group-hover:text-amber-400 transition-colors">
             menuz
           </span>
-          <span className="text-[10px] text-charcoal-400 hidden sm:inline">• Home</span>
+          <span className="text-[10px] text-slate-500 hidden sm:inline">• Home</span>
         </Link>
 
         {/* Language selector & Switch Restaurant & Admin */}
@@ -402,10 +409,10 @@ export const DinerMenu: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsSwitchModalOpen(true)}
-            className="py-1 px-3 rounded-full bg-charcoal-800 hover:bg-charcoal-700 text-saffron-400 hover:text-saffron-300 border border-saffron-500/40 text-[11px] font-bold flex items-center space-x-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
+            className="py-1 px-3 rounded-full bg-[#090D16]/[0.05] hover:bg-white/[0.1] text-amber-400 hover:text-amber-300 border border-amber-500/30 text-[11px] font-bold flex items-center space-x-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
             title="Switch Restaurant or Scan a New Table QR Code"
           >
-            <ArrowLeftRight className="w-3 h-3 text-saffron-400" />
+            <ArrowLeftRight className="w-3 h-3 text-amber-400" />
             <span className="hidden sm:inline">Switch Restaurant</span>
             <span className="sm:hidden">Switch</span>
           </button>
@@ -413,10 +420,10 @@ export const DinerMenu: React.FC = () => {
           {cart.length > 0 && (
             <button
               onClick={() => setIsCartOpen(true)}
-              className="relative p-1.5 rounded-lg text-charcoal-300 hover:text-white bg-charcoal-800 transition-colors"
+              className="relative p-1.5 rounded-lg text-slate-300 hover:text-white bg-[#090D16]/[0.06] border border-white/[0.08] transition-colors"
             >
               <ShoppingBag className="w-4 h-4 text-amber-400" />
-              <span className="absolute -top-1 -right-1 bg-saffron-600 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+              <span className="absolute -top-1 -right-1 bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold shadow-sm">
                 {cart.reduce((a, b) => a + b.quantity, 0)}
               </span>
             </button>
@@ -428,7 +435,7 @@ export const DinerMenu: React.FC = () => {
       {/* LIVE TABLE SYNC TOAST                                      */}
       {/* ═══════════════════════════════════════════════════════════ */}
       {tableSyncAlert && (
-        <div className="fixed top-14 left-4 right-4 max-w-sm mx-auto z-40 bg-emerald-950 text-white p-3 rounded-2xl shadow-float border border-emerald-500/50 flex items-center space-x-2.5 animate-slideDown">
+        <div className="fixed top-14 left-4 right-4 max-w-sm mx-auto z-40 bg-emerald-950/90 text-white p-3 rounded-2xl  border border-emerald-500/40 flex items-center space-x-2.5 animate-slideDown">
           <div className="w-7 h-7 rounded-lg bg-emerald-600 flex items-center justify-center flex-shrink-0">
             <Users className="w-3.5 h-3.5 text-white" />
           </div>
@@ -445,7 +452,7 @@ export const DinerMenu: React.FC = () => {
       {isHappyHourActive && (
         <div className="bg-gradient-to-r from-amber-600 via-orange-600 to-amber-600 text-white px-4 py-2 flex items-center justify-between text-xs font-bold shadow-md">
           <div className="flex items-center space-x-2">
-            <span className="w-2 h-2 rounded-full bg-white animate-ping" />
+            <span className="w-2 h-2 rounded-full bg-[#090D16] animate-ping" />
             <span className="tracking-wide">
               {restaurant.happy_hour_config?.banner_label || '⚡ Twilight Happy Hour: 20% Off All Beverages & Chef Starters!'}
             </span>
@@ -466,36 +473,36 @@ export const DinerMenu: React.FC = () => {
         ref={heroRef}
         className="relative min-h-[55vh] flex flex-col items-center justify-center text-center px-6 overflow-hidden pt-8 pb-12"
         style={{
-          background: `linear-gradient(135deg, ${restaurant?.brand_colors?.primary || '#E85D04'}15 0%, #FDFBF7 50%, ${restaurant?.brand_colors?.primary || '#E85D04'}08 100%)`
+          background: `linear-gradient(180deg, rgba(13,19,34,0.95) 0%, #090D16 100%)`
         }}
       >
         <div
-          className="absolute top-10 right-10 w-40 h-40 rounded-full opacity-10 blur-3xl pointer-events-none"
+          className="absolute top-10 right-10 w-48 h-48 rounded-full opacity-20 blur-3xl pointer-events-none"
           style={{ backgroundColor: restaurant?.brand_colors?.primary || '#E85D04' }}
         />
         <div
-          className="absolute bottom-20 left-10 w-32 h-32 rounded-full opacity-10 blur-2xl pointer-events-none"
+          className="absolute bottom-10 left-10 w-40 h-40 rounded-full opacity-15 blur-2xl pointer-events-none"
           style={{ backgroundColor: restaurant?.brand_colors?.primary || '#E85D04' }}
         />
 
         <div className="relative z-10 max-w-lg mx-auto space-y-3.5">
           {/* Restaurant badge with multiplayer session indicator */}
           <div className="flex flex-wrap items-center justify-center gap-1.5">
-            <span className="inline-block px-3 py-1 rounded-full text-[10px] tracking-widest uppercase font-bold border bg-white/80 backdrop-blur-sm shadow-xs text-saffron-700 border-saffron-200">
+            <span className="inline-block px-3 py-1 rounded-full text-[10px] tracking-widest uppercase font-bold border bg-[#090D16]/[0.05] backdrop-blur-sm shadow-sm text-amber-300 border-amber-500/30">
               {activeTable?.label ? `${t.table} ${activeTable.label}` : `${t.table} 1`} • {restaurant?.cuisine || 'Contemporary Dining'}
             </span>
-            <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full text-[10px] font-bold border bg-emerald-50 text-emerald-800 border-emerald-200">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full text-[10px] font-bold border bg-emerald-950/70 text-emerald-300 border-emerald-500/30">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               <span>Multiplayer Sync ({activeTableGuests} Guests)</span>
             </span>
           </div>
 
           {/* Restaurant name */}
-          <h1 className="font-serif text-3xl sm:text-5xl font-bold text-charcoal-900 leading-tight tracking-tight">
+          <h1 className="font-serif text-3xl sm:text-5xl font-bold text-white leading-tight tracking-tight">
             {restaurant?.name || 'Saffron House'}
           </h1>
 
-          <p className="text-xs sm:text-sm text-charcoal-600 leading-relaxed max-w-sm mx-auto">
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-sm mx-auto">
             {restaurant?.authentic_photography_statement ||
               'Explore our carefully curated menu, crafted with passion and authentic Indian spices.'}
           </p>
@@ -504,7 +511,7 @@ export const DinerMenu: React.FC = () => {
           <div className="flex flex-wrap items-center justify-center gap-2.5 pt-2">
             <button
               onClick={() => handleOpenChallenge()}
-              className="px-4 py-2.5 bg-gradient-to-r from-amber-500 via-saffron-600 to-amber-600 hover:brightness-105 active:scale-95 text-white text-xs font-bold rounded-full shadow-float transition-all flex items-center space-x-1.5 animate-pulse cursor-pointer"
+              className="px-4 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:brightness-110 active:scale-95 text-slate-950 text-xs font-bold rounded-full shadow-lg transition-all flex items-center space-x-1.5 animate-pulse cursor-pointer"
             >
               <span className="text-sm">🎁</span>
               <span>Win Reward</span>
@@ -515,22 +522,22 @@ export const DinerMenu: React.FC = () => {
                 setAiFocusDish(null);
                 setIsAiOpen(true);
               }}
-              className="px-4 py-2.5 bg-gradient-to-r from-charcoal-900 to-charcoal-800 hover:from-charcoal-950 hover:to-charcoal-900 text-white text-xs font-bold rounded-full shadow-subtle transition-all flex items-center space-x-1.5 border border-amber-500/30 group cursor-pointer"
+              className="px-4 py-2.5 bg-[#0D1322] hover:bg-[#151D33] text-white text-xs font-bold rounded-full shadow-lg transition-all flex items-center space-x-1.5 border border-white/[0.1] hover:border-amber-500/40 group cursor-pointer"
             >
               <span className="text-sm">🧑‍🍳</span>
               <span>{t.aiSommelier}</span>
-              <span className="hidden sm:inline-block text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300">
+              <span className="hidden sm:inline-block text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30">
                 Trained
               </span>
             </button>
 
             <button
               onClick={() => setIsInstagramStoryOpen(true)}
-              className="px-4 py-2.5 bg-gradient-to-r from-amber-500 via-pink-600 to-purple-600 hover:opacity-95 text-white text-xs font-bold rounded-full shadow-subtle transition-all flex items-center space-x-1.5 cursor-pointer"
+              className="px-4 py-2.5 bg-gradient-to-r from-amber-500 via-pink-600 to-purple-600 hover:opacity-95 text-white text-xs font-bold rounded-full shadow-lg transition-all flex items-center space-x-1.5 cursor-pointer"
             >
               <Instagram className="w-3.5 h-3.5" />
               <span>{t.instagramStory}</span>
-              <span className="text-[9px] bg-white/20 px-1.5 py-0.2 rounded-full">Perk</span>
+              <span className="text-[9px] bg-[#090D16]/20 px-1.5 py-0.2 rounded-full">Perk</span>
             </button>
           </div>
         </div>
@@ -542,14 +549,14 @@ export const DinerMenu: React.FC = () => {
       {!rewardBannerDismissed && (
         <div className="max-w-xl mx-auto px-4 -mt-3 relative z-20">
           <div
-            className="w-full bg-gradient-to-r from-amber-500 via-saffron-600 to-amber-600 p-0.5 rounded-2xl shadow-float"
+            className="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 p-0.5 rounded-2xl "
           >
-            <div className="bg-charcoal-950/95 backdrop-blur-md px-4 py-3 rounded-[14px] flex items-center justify-between space-x-3 text-white">
+            <div className="bg-[#0D1322]/95 backdrop-blur-md px-4 py-3 rounded-[14px] flex items-center justify-between space-x-3 text-white border border-white/[0.08]">
               <div
                 onClick={() => handleOpenChallenge()}
                 className="flex items-center space-x-3 min-w-0 cursor-pointer flex-1"
               >
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-saffron-600 flex items-center justify-center text-lg flex-shrink-0 shadow-sm animate-bounce">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-lg flex-shrink-0 shadow-sm animate-bounce text-slate-950">
                   🎁
                 </div>
                 <div className="min-w-0">
@@ -564,7 +571,7 @@ export const DinerMenu: React.FC = () => {
                   <h3 className="font-serif font-bold text-sm sm:text-base text-white truncate">
                     Win Today's Surprise Table Reward!
                   </h3>
-                  <p className="text-[11px] text-charcoal-300 truncate">
+                  <p className="text-[11px] text-slate-300 truncate">
                     Complimentary chef treats, drinks, or up to 20% off your bill
                   </p>
                 </div>
@@ -574,7 +581,7 @@ export const DinerMenu: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => handleOpenChallenge()}
-                  className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-saffron-500 hover:brightness-110 text-charcoal-950 font-bold text-xs flex items-center space-x-1 shadow-sm transition-all"
+                  className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:brightness-110 text-slate-950 font-bold text-xs flex items-center space-x-1 shadow-sm transition-all"
                 >
                   <span>Win</span>
                   <span>→</span>
@@ -583,7 +590,7 @@ export const DinerMenu: React.FC = () => {
                   type="button"
                   title="Maybe later"
                   onClick={() => setRewardBannerDismissed(true)}
-                  className="p-1.5 rounded-full bg-charcoal-800/80 text-charcoal-400 hover:text-white hover:bg-charcoal-700 transition-colors"
+                  className="p-1.5 rounded-full bg-[#090D16]/[0.06] text-slate-400 hover:text-white hover:bg-white/[0.12] transition-colors"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -604,33 +611,34 @@ export const DinerMenu: React.FC = () => {
             handleOpenChallenge();
           }}
           title="Claim your table reward"
-          className="fixed right-3 top-1/2 -translate-y-1/2 z-40 flex flex-col items-center gap-1 group"
+          className="fixed right-3 top-1/2 -translate-y-1/2 z-40 flex flex-col items-center gap-1 group cursor-pointer"
         >
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-saffron-600 flex items-center justify-center shadow-float text-2xl animate-bounce border-2 border-amber-300/60">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center  text-2xl animate-bounce border-2 border-amber-300/60">
             🎁
           </div>
-          <span className="text-[9px] font-bold text-amber-600 bg-white/90 border border-amber-200 px-1.5 py-0.5 rounded-full shadow-xs whitespace-nowrap">
+          <span className="text-[9px] font-bold text-amber-300 bg-[#0D1322] border border-amber-400/40 px-1.5 py-0.5 rounded-full shadow-sm whitespace-nowrap">
             Your Reward
           </span>
         </button>
       )}
 
+
       {/* ═══════════════════════════════════════════════════════════ */}
       {/* 🧑‍🍳 CHEF & OWNER AI DINING CONCIERGE                      */}
       {/* ═══════════════════════════════════════════════════════════ */}
       <div className="max-w-xl mx-auto px-4 mt-3 mb-1">
-        <div className="bg-gradient-to-br from-[#121824] via-[#0d121c] to-[#121824] text-white p-4 rounded-3xl border border-amber-500/30 shadow-float relative overflow-hidden">
+        <div className="bg-gradient-to-br from-[#121824] via-[#0d121c] to-[#121824] text-white p-4 rounded-3xl border border-amber-500/30  relative overflow-hidden">
           {/* Subtle gold glow */}
           <div className="absolute -top-12 -right-12 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
 
           <div className="flex items-start justify-between gap-3 mb-2.5">
             <div className="flex items-center space-x-3 min-w-0">
               <div className="relative flex-shrink-0">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-saffron-600 flex items-center justify-center text-2xl shadow-md border-2 border-amber-300/40">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center text-2xl shadow-md border-2 border-amber-300/40">
                   🧑‍🍳
                 </div>
                 <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-[#121824] flex items-center justify-center">
-                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#090D16] animate-pulse" />
                 </span>
               </div>
               <div className="min-w-0">
@@ -651,7 +659,7 @@ export const DinerMenu: React.FC = () => {
             <button
               type="button"
               onClick={() => handleOpenAi(null, null)}
-              className="px-3.5 py-2 bg-gradient-to-r from-amber-500 to-saffron-600 hover:brightness-110 active:scale-95 text-charcoal-950 text-xs font-bold rounded-xl transition-all shadow-subtle flex items-center space-x-1 flex-shrink-0 cursor-pointer"
+              className="px-3.5 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:brightness-110 active:scale-95 text-white text-xs font-bold rounded-xl transition-all shadow-lg flex items-center space-x-1 flex-shrink-0 cursor-pointer"
             >
               <span>Chat</span>
               <span>→</span>
@@ -689,17 +697,17 @@ export const DinerMenu: React.FC = () => {
       {/* ═══════════════════════════════════════════════════════════ */}
       {/* STICKY SEARCH & CATEGORY BAR                                */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <div ref={menuSectionRef} className="sticky top-0 z-30 bg-ivory-50/95 backdrop-blur-md pt-4 pb-2 border-b border-ivory-200/60 shadow-xs">
+      <div ref={menuSectionRef} className="sticky top-0 z-30 bg-[#090D16]/95 backdrop-blur-md pt-4 pb-2 border-b border-white/[0.07] shadow-sm">
         <div className="max-w-xl mx-auto px-4 space-y-2.5">
           {/* Search Bar */}
           <div className="relative">
-            <Search className="w-4 h-4 text-charcoal-700/40 absolute left-3.5 top-2.5" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-2.5" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={t.searchPlaceholder}
-              className="w-full pl-9 pr-4 py-2 bg-white rounded-xl text-xs border border-ivory-200 focus:outline-none focus:border-saffron-600 placeholder-charcoal-700/40 text-charcoal-900 shadow-xs"
+              className="w-full pl-9 pr-4 py-2 bg-[#0D1322] rounded-xl text-xs border border-white/[0.08] focus:outline-none focus:border-amber-500/60 placeholder-slate-500 text-slate-100 shadow-sm"
             />
           </div>
 
@@ -710,8 +718,8 @@ export const DinerMenu: React.FC = () => {
               onClick={() => setSelectedCategory('all')}
               className={`whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
                 selectedCategory === 'all'
-                  ? 'bg-charcoal-900 text-white shadow-xs'
-                  : 'bg-white text-charcoal-800 border border-ivory-200 hover:bg-ivory-100'
+                  ? 'bg-amber-500 text-white shadow-sm'
+                  : 'bg-[#0D1322] text-slate-300 border border-white/[0.08] hover:border-amber-500/40 hover:text-amber-300'
               }`}
             >
               {t.filterAll}
@@ -723,8 +731,8 @@ export const DinerMenu: React.FC = () => {
                 onClick={() => setSelectedCategory(cat.id)}
                 className={`whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
                   selectedCategory === cat.id
-                    ? 'bg-charcoal-900 text-white shadow-xs'
-                    : 'bg-white text-charcoal-800 border border-ivory-200 hover:bg-ivory-100'
+                    ? 'bg-amber-500 text-white shadow-sm'
+                    : 'bg-[#0D1322] text-slate-300 border border-white/[0.08] hover:border-amber-500/40 hover:text-amber-300'
                 }`}
               >
                 {getCategoryTitle(cat.name, selectedLanguage)}
@@ -739,9 +747,9 @@ export const DinerMenu: React.FC = () => {
       {/* ═══════════════════════════════════════════════════════════ */}
       <main className="max-w-xl mx-auto px-4 mt-6 space-y-8 pb-6">
         {filteredDishes.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-3xl p-6 border border-ivory-200 shadow-subtle">
-            <p className="font-serif font-bold text-charcoal-900 text-base">No dishes found</p>
-            <p className="text-xs text-charcoal-700/60 mt-1">Try adjusting your search keywords or filter category.</p>
+          <div className="text-center py-16 bg-[#0D1322] rounded-3xl p-6 border border-white/[0.08] shadow-lg">
+            <p className="font-serif font-bold text-slate-100 text-base">No dishes found</p>
+            <p className="text-xs text-slate-400 mt-1">Try adjusting your search keywords or filter category.</p>
           </div>
         ) : (
           dishesByCategory.map(({ category, items }) => {
@@ -751,11 +759,11 @@ export const DinerMenu: React.FC = () => {
                 {/* Category Header */}
                 <div className="relative py-3">
                   <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                    <div className="w-full border-t border-ivory-300" />
+                    <div className="w-full border-t border-white/[0.08]" />
                   </div>
                   <div className="relative flex justify-center">
-                    <span className="bg-ivory-50 px-4 py-1 rounded-full border border-ivory-200 shadow-xs">
-                      <h3 className="font-serif text-sm font-bold text-charcoal-900 tracking-wide">
+                    <span className="bg-[#090D16] px-4 py-1 rounded-full border border-white/[0.08] shadow-sm">
+                      <h3 className="font-serif text-sm font-bold text-amber-300 tracking-wide">
                         {getCategoryTitle(category.name || 'Menu Selection', selectedLanguage)}
                       </h3>
                     </span>
@@ -775,14 +783,14 @@ export const DinerMenu: React.FC = () => {
                       <div
                         key={dish.id}
                         onClick={() => setActiveDish(dish)}
-                        className={`bg-white rounded-2xl p-3.5 shadow-subtle border border-ivory-200/90 flex items-start space-x-3 cursor-pointer transition-all hover:border-saffron-500/40 hover:shadow-md ${
-                          !dish.is_available ? 'opacity-65 bg-ivory-100/60' : ''
+                        className={`bg-[#0D1322] rounded-2xl p-3.5 border border-white/[0.08] flex items-start space-x-3 cursor-pointer transition-all hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/5 ${
+                          !dish.is_available ? 'opacity-50' : ''
                         }`}
                       >
-                        <div className="w-24 h-24 rounded-xl flex-shrink-0 bg-ivory-100 overflow-hidden relative shadow-inner">
+                        <div className="w-24 h-24 rounded-xl flex-shrink-0 bg-[#090D16] overflow-hidden relative">
                           <img src={dish.image_url || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400'} alt={dish.name || 'Dish'} className="w-full h-full object-cover" />
                           {!dish.is_available && (
-                            <div className="absolute inset-0 bg-charcoal-900/70 flex items-center justify-center p-1 text-center">
+                            <div className="absolute inset-0 bg-black/70 flex items-center justify-center p-1 text-center">
                               <span className="text-[9px] uppercase font-bold text-white tracking-widest px-1.5 py-0.5 rounded bg-red-600/90">
                                 Sold Out
                               </span>
@@ -800,33 +808,33 @@ export const DinerMenu: React.FC = () => {
                           <div className="flex items-center space-x-1.5 mb-1">
                             <span
                               className={`w-3 h-3 rounded-xs border flex items-center justify-center ${
-                                isVeg ? 'border-green-600' : 'border-red-600'
+                                isVeg ? 'border-emerald-500' : 'border-red-500'
                               }`}
                             >
-                              <span className={`w-1.5 h-1.5 rounded-full ${isVeg ? 'bg-green-600' : 'bg-red-600'}`} />
+                              <span className={`w-1.5 h-1.5 rounded-full ${isVeg ? 'bg-emerald-500' : 'bg-red-500'}`} />
                             </span>
                             {(dish.spice_level || 0) > 0 && (
-                              <div className="flex items-center text-saffron-600 pl-1 border-l border-ivory-200">
-                                <Flame className="w-3 h-3 fill-saffron-600" />
+                              <div className="flex items-center text-amber-400 pl-1 border-l border-white/[0.08]">
+                                <Flame className="w-3 h-3 fill-amber-400" />
                                 <span className="text-[10px] font-bold ml-0.5">{dish.spice_level}</span>
                               </div>
                             )}
                             {dish.is_chef_recommended && (
-                              <span className="text-[9px] font-bold text-saffron-700 bg-saffron-50 px-1.5 py-0.5 rounded border border-saffron-200">
+                              <span className="text-[9px] font-bold text-cyan-300 bg-cyan-500/10 px-1.5 py-0.5 rounded border border-cyan-500/30">
                                 Chef's Pick
                               </span>
                             )}
                           </div>
 
-                          <h3 className="font-serif font-bold text-sm text-charcoal-900 leading-tight truncate">
+                          <h3 className="font-serif font-bold text-sm text-slate-100 leading-tight truncate">
                             {dish.name}
                           </h3>
-                          <p className="text-xs text-charcoal-700/70 line-clamp-2 mt-0.5 leading-snug">
+                          <p className="text-xs text-slate-400 line-clamp-2 mt-0.5 leading-snug">
                             {dish.short_description || dish.full_description || ''}
                           </p>
 
-                          <div className="flex items-center justify-between mt-2 pt-1.5 border-t border-ivory-100">
-                            <span className="font-bold text-sm text-charcoal-900">
+                          <div className="flex items-center justify-between mt-2 pt-1.5 border-t border-white/[0.06]">
+                            <span className="font-bold text-sm text-amber-400">
                               ₹{typeof dish.price === 'number' ? dish.price.toFixed(2) : (Number(dish.price) || 0).toFixed(2)}
                             </span>
 
@@ -838,7 +846,7 @@ export const DinerMenu: React.FC = () => {
                                 e.stopPropagation();
                                 handleOpenAi(dish, `Tell me about ${dish.name} — chef's secret notes, spice level, and pairing.`);
                               }}
-                              className="px-2.5 py-1 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 flex items-center space-x-1 text-[11px] font-bold shadow-xs transition-all active:scale-95 cursor-pointer"
+                              className="px-2.5 py-1 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center space-x-1 text-[11px] font-bold shadow-sm transition-all active:scale-95 cursor-pointer"
                               title={`Ask Chef about ${dish.name}`}
                             >
                               <span className="text-xs">🧑‍🍳</span>
@@ -846,11 +854,11 @@ export const DinerMenu: React.FC = () => {
                             </button>
 
                             {dish.is_available ? (
-                              <span className="text-xs text-saffron-700 font-semibold hover:underline">
+                              <span className="text-xs text-cyan-400 font-semibold hover:underline">
                                 Customize +
                               </span>
                             ) : (
-                              <span className="text-[11px] text-charcoal-400 font-semibold">Sold Out</span>
+                              <span className="text-[11px] text-slate-500 font-semibold">Sold Out</span>
                             )}
                           </div>
                         </div>
@@ -872,10 +880,10 @@ export const DinerMenu: React.FC = () => {
       {/* Floating Waiter Alert Toast */}
       {waiterToast && (
         <div className="fixed top-5 left-4 right-4 max-w-md mx-auto z-50 animate-bounce">
-          <div className="bg-charcoal-900 text-white px-4 py-3 rounded-2xl shadow-2xl border border-charcoal-700 flex items-center space-x-3 text-xs font-semibold">
+          <div className="bg-[#090D16] text-white px-4 py-3 rounded-2xl shadow-2xl border border-white/[0.08] flex items-center space-x-3 text-xs font-semibold">
             <span className="w-2.5 h-2.5 rounded-full bg-green-400 animate-ping flex-shrink-0" />
             <span className="flex-1">{waiterToast}</span>
-            <button onClick={() => setWaiterToast(null)} className="text-charcoal-400 hover:text-white">
+            <button onClick={() => setWaiterToast(null)} className="text-slate-500 hover:text-white">
               <X className="w-4 h-4" />
             </button>
           </div>
@@ -885,7 +893,7 @@ export const DinerMenu: React.FC = () => {
       {/* Floating Win Rewards Button */}
       <button
         onClick={() => handleOpenChallenge()}
-        className="fixed bottom-36 right-4 z-40 p-3 rounded-full shadow-float bg-gradient-to-r from-amber-500 via-saffron-600 to-amber-600 text-white border-2 border-white hover:scale-105 active:scale-95 transition-all flex items-center space-x-1.5 group"
+        className="fixed bottom-36 right-4 z-40 p-3 rounded-full  bg-gradient-to-r from-amber-500 via-amber-600 to-amber-600 text-white border-2 border-white hover:scale-105 active:scale-95 transition-all flex items-center space-x-1.5 group"
         title="Win Today's Surprise Reward"
       >
         <span className="text-xl group-hover:scale-125 transition-transform duration-300">🎁</span>
@@ -896,10 +904,10 @@ export const DinerMenu: React.FC = () => {
       <button
         onClick={handleCallWaiter}
         disabled={waiterCalled}
-        className={`fixed bottom-20 right-4 z-40 p-3 rounded-full shadow-float transition-all flex items-center space-x-1.5 ${
+        className={`fixed bottom-20 right-4 z-40 p-3 rounded-full  transition-all flex items-center space-x-1.5 ${
           waiterCalled
-            ? 'bg-green-600 text-white'
-            : 'bg-white text-charcoal-800 border border-ivory-300 hover:bg-ivory-100'
+            ? 'bg-emerald-600 text-white'
+            : 'bg-[#0D1322] text-slate-300 border border-white/[0.08] hover:border-amber-500/40 hover:text-amber-300'
         }`}
         title={waiterCalled ? t.waiterCalled : t.callWaiter}
       >
@@ -911,7 +919,7 @@ export const DinerMenu: React.FC = () => {
       {showScrollTop && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-20 left-4 z-40 p-3 rounded-full shadow-float bg-white text-charcoal-700 border border-ivory-300 hover:bg-ivory-100 transition-all"
+          className="fixed bottom-20 left-4 z-40 p-3 rounded-full  bg-[#0D1322] text-slate-300 border border-white/[0.08] hover:border-amber-500/40 hover:text-amber-300 transition-all"
           title="Back to top"
         >
           <ArrowUp className="w-5 h-5" />
@@ -924,10 +932,10 @@ export const DinerMenu: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsCartOpen(true)}
-            className="w-full bg-saffron-600 hover:bg-saffron-700 text-white font-bold py-3.5 px-5 rounded-2xl shadow-float flex items-center justify-between transition-all"
+            className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white font-bold py-3.5 px-5 rounded-2xl  flex items-center justify-between transition-all"
           >
             <div className="flex items-center space-x-2">
-              <span className="bg-white text-saffron-700 text-xs w-6 h-6 rounded-full flex items-center justify-center font-bold">
+              <span className="bg-white/20 text-white text-xs w-6 h-6 rounded-full flex items-center justify-center font-bold">
                 {totalCartCount}
               </span>
               <span className="text-sm font-serif">{t.yourTableCart}</span>
@@ -968,10 +976,10 @@ export const DinerMenu: React.FC = () => {
         <button
           type="button"
           onClick={() => handleOpenAi(null)}
-          className="group flex items-center space-x-2.5 bg-gradient-to-r from-charcoal-950 via-charcoal-900 to-amber-950 text-white pl-3.5 pr-4 py-2.5 rounded-full shadow-2xl border border-amber-500/40 hover:border-amber-400 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+          className="group flex items-center space-x-2.5 bg-gradient-to-r from-[#090D16] via-[#090D16] to-amber-950 text-white pl-3.5 pr-4 py-2.5 rounded-full shadow-2xl border border-amber-500/40 hover:border-amber-400 hover:scale-105 active:scale-95 transition-all cursor-pointer"
         >
           <div className="relative">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-saffron-500 flex items-center justify-center text-white shadow-xs">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-amber-500 flex items-center justify-center text-white shadow-sm">
               <Sparkles className="w-4 h-4 animate-pulse" />
             </div>
             <span className="absolute -top-1 -right-1 flex h-3 w-3">
@@ -984,7 +992,7 @@ export const DinerMenu: React.FC = () => {
               <span className="text-xs font-bold font-serif tracking-tight text-amber-200">Ask Chef's AI</span>
               <span className="text-[9px] bg-amber-500/20 text-amber-300 px-1 rounded uppercase font-mono font-bold">Live Concierge</span>
             </div>
-            <p className="text-[10px] text-ivory-300/80 leading-none">Trained by Chef &amp; Owner</p>
+            <p className="text-[10px] text-slate-400/80 leading-none">Trained by Chef &amp; Owner</p>
           </div>
         </button>
       </div>

@@ -114,13 +114,13 @@ export const RancelabIntegrationPanel: React.FC<RancelabIntegrationPanelProps> =
     }`;
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+    <div className="bg-[#0D1322] rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
       {/* Banner */}
       <div className="bg-gradient-to-r from-violet-800 via-purple-700 to-violet-800 text-white p-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center space-x-2.5 mb-2">
-              <span className="bg-white text-violet-700 text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-xs">
+              <span className="bg-white text-violet-700 text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-sm">
                 Enterprise ERP Bridge
               </span>
               <span className="bg-purple-500/40 text-white text-[11px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1">
@@ -166,7 +166,7 @@ export const RancelabIntegrationPanel: React.FC<RancelabIntegrationPanelProps> =
               <div>
                 <label className="block text-xs font-bold text-gray-700 mb-1">Simulated Table</label>
                 <select value={simTable} onChange={(e) => setSimTable(e.target.value)}
-                  className="w-full text-xs font-medium border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-violet-500 bg-white">
+                  className="w-full text-xs font-medium border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-violet-500 bg-[#090D16]">
                   <option>Table 1 (Indoor)</option><option>Table 2 (Indoor)</option>
                   <option>Table 4 (Patio)</option><option>Table 8 (Family AC)</option><option>Table 12 (Balcony)</option>
                 </select>
@@ -202,7 +202,7 @@ export const RancelabIntegrationPanel: React.FC<RancelabIntegrationPanelProps> =
                 )}
               </div>
 
-              <div className="border border-gray-200 rounded-xl p-3 bg-white space-y-2">
+              <div className="border border-gray-200 rounded-xl p-3 bg-[#090D16] space-y-2">
                 <div className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Basket (3 Items)</div>
                 {sampleOrder.items.map((it, idx) => (
                   <div key={idx} className="flex justify-between items-center text-xs py-1 border-b border-gray-100 last:border-0">
@@ -366,7 +366,7 @@ export const RancelabIntegrationPanel: React.FC<RancelabIntegrationPanelProps> =
               { step: 3, title: 'Configure GST Slab per Restaurant', desc: 'Indian GST varies: 5% for AC restaurants, 12% for non-AC. Enter the correct slab per outlet — RanceLab\'s billing engine applies it to every Menuz-pushed order automatically.' },
               { step: 4, title: 'Live Dispatch with Full ERP Integration', desc: 'Every Menuz QR order pushes to RanceLab, triggers KOT printing, deducts raw material inventory, and appears in the manager\'s consolidated sales report — all in one transaction.' }
             ].map(({ step, title, desc }) => (
-              <div key={step} className="flex gap-4 items-start p-4 bg-white border border-gray-200 rounded-xl">
+              <div key={step} className="flex gap-4 items-start p-4 bg-[#090D16] border border-gray-200 rounded-xl">
                 <div className="w-8 h-8 rounded-full bg-violet-100 text-violet-700 font-black flex items-center justify-center shrink-0 text-sm">{step}</div>
                 <div>
                   <h4 className="font-bold text-sm text-gray-900">{title}</h4>

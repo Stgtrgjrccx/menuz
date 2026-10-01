@@ -138,13 +138,13 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+    <div className="bg-[#0D1322] rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
       {/* Top Banner */}
       <div className="bg-gradient-to-r from-orange-600 via-amber-600 to-amber-700 text-white p-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center space-x-2.5 mb-2">
-              <span className="bg-white text-orange-700 text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-xs">
+              <span className="bg-white text-orange-700 text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-sm">
                 Official POS Bridge
               </span>
               <span className="bg-orange-500/40 text-white text-[11px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1">
@@ -230,7 +230,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
                     <select
                       value={simTable}
                       onChange={(e) => setSimTable(e.target.value)}
-                      className="w-full text-xs font-medium border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-orange-500 bg-white"
+                      className="w-full text-xs font-medium border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-orange-500 bg-[#090D16]"
                     >
                       <option value="Table 1 (Indoor)">Table 1 (Indoor)</option>
                       <option value="Table 2 (Indoor)">Table 2 (Indoor)</option>
@@ -245,7 +245,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
                       type="text"
                       value={simDinerName}
                       onChange={(e) => setSimDinerName(e.target.value)}
-                      className="w-full text-xs font-medium border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-orange-500 bg-white"
+                      className="w-full text-xs font-medium border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-orange-500 bg-[#090D16]"
                     />
                   </div>
                 </div>
@@ -281,7 +281,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
                 </div>
 
                 {/* Items Preview */}
-                <div className="border border-gray-200 rounded-xl p-3 bg-white space-y-2">
+                <div className="border border-gray-200 rounded-xl p-3 bg-[#090D16] space-y-2">
                   <div className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
                     Basket Summary (3 Items)
                   </div>
@@ -345,7 +345,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
                   <pre>{JSON.stringify(lastReceipt.raw_payload, null, 2)}</pre>
                 </div>
               ) : (
-                <div className="bg-amber-50/30 border-2 border-dashed border-gray-300 rounded-xl p-5 shadow-xs font-mono text-xs text-gray-900 leading-relaxed max-w-md mx-auto">
+                <div className="bg-amber-50/30 border-2 border-dashed border-gray-300 rounded-xl p-5 shadow-sm font-mono text-xs text-gray-900 leading-relaxed max-w-md mx-auto">
                   {lastReceipt ? (
                     <div>
                       {/* Thermal Receipt Header */}
@@ -566,7 +566,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
 
             <div className="space-y-4">
               {/* Step 1 */}
-              <div className="flex gap-4 items-start p-4 bg-white border border-gray-200 rounded-xl">
+              <div className="flex gap-4 items-start p-4 bg-[#090D16] border border-gray-200 rounded-xl">
                 <div className="w-8 h-8 rounded-full bg-orange-100 text-orange-700 font-black flex items-center justify-center shrink-0 text-sm">
                   1
                 </div>
@@ -582,7 +582,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
               </div>
 
               {/* Step 2 */}
-              <div className="flex gap-4 items-start p-4 bg-white border border-gray-200 rounded-xl">
+              <div className="flex gap-4 items-start p-4 bg-[#090D16] border border-gray-200 rounded-xl">
                 <div className="w-8 h-8 rounded-full bg-orange-100 text-orange-700 font-black flex items-center justify-center shrink-0 text-sm">
                   2
                 </div>
@@ -595,7 +595,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
               </div>
 
               {/* Step 3 */}
-              <div className="flex gap-4 items-start p-4 bg-white border border-gray-200 rounded-xl">
+              <div className="flex gap-4 items-start p-4 bg-[#090D16] border border-gray-200 rounded-xl">
                 <div className="w-8 h-8 rounded-full bg-orange-100 text-orange-700 font-black flex items-center justify-center shrink-0 text-sm">
                   3
                 </div>
@@ -608,7 +608,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
               </div>
 
               {/* Step 4 */}
-              <div className="flex gap-4 items-start p-4 bg-white border border-gray-200 rounded-xl">
+              <div className="flex gap-4 items-start p-4 bg-[#090D16] border border-gray-200 rounded-xl">
                 <div className="w-8 h-8 rounded-full bg-orange-100 text-orange-700 font-black flex items-center justify-center shrink-0 text-sm">
                   4
                 </div>

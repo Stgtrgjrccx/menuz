@@ -158,20 +158,20 @@ export const MasterImageLibrary: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* 1. TOP HEADER & ASSET CONTROLS */}
-      <div className="bg-white p-6 rounded-3xl border border-ivory-300 shadow-subtle flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+      <div className="bg-[#0D1322] p-6 rounded-3xl border border-white/[0.08] shadow-lg flex flex-col lg:flex-row lg:items-center justify-between gap-5">
         <div>
           <div className="flex items-center space-x-2">
-            <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-saffron-100 text-saffron-800 border border-saffron-200">
+            <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
               Master Culinary Photography Hub
             </span>
             <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-green-100 text-green-800 border border-green-200">
               {partnerRestaurants.length} Restaurants Active
             </span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold font-serif text-charcoal-900 mt-2">
+          <h2 className="text-xl sm:text-2xl font-bold font-serif text-white mt-2">
             Restaurant Image Library &amp; Photography Sections
           </h2>
-          <p className="text-xs text-charcoal-600 mt-1 max-w-2xl">
+          <p className="text-xs text-slate-400 mt-1 max-w-2xl">
             Below is the list of <strong>restaurants working with Menuz</strong>. Under each restaurant name, you will find all the dish photographs, menu items, and ambiance photos belonging strictly to that restaurant.
           </p>
         </div>
@@ -186,7 +186,7 @@ export const MasterImageLibrary: React.FC = () => {
               }
               setIsAddDishModalOpen(true);
             }}
-            className="px-4 py-2.5 bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-2 transition-all"
+            className="px-4 py-2.5 bg-amber-500 hover:bg-amber-700 text-white text-xs font-bold rounded-xl shadow-lg flex items-center space-x-2 transition-all"
           >
             <Plus className="w-4 h-4" />
             <span>Add Dish &amp; Photo</span>
@@ -195,14 +195,14 @@ export const MasterImageLibrary: React.FC = () => {
       </div>
 
       {/* 2. PROMINENT RESTAURANT DIRECTORY TABS */}
-      <div className="bg-white p-5 rounded-3xl border border-ivory-300 shadow-subtle space-y-4">
+      <div className="bg-[#0D1322] p-5 rounded-3xl border border-white/[0.08] shadow-lg space-y-4">
         <div>
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-xs uppercase font-bold tracking-wider text-charcoal-700 flex items-center space-x-1.5">
-              <Building2 className="w-4 h-4 text-saffron-600" />
+            <h3 className="text-xs uppercase font-bold tracking-wider text-slate-400 flex items-center space-x-1.5">
+              <Building2 className="w-4 h-4 text-amber-400" />
               <span>Select Restaurant to View Photos:</span>
             </h3>
-            <span className="text-[11px] text-charcoal-500 font-medium">
+            <span className="text-[11px] text-slate-500 font-medium">
               Showing {partnerRestaurants.length} onboarded venues
             </span>
           </div>
@@ -212,21 +212,21 @@ export const MasterImageLibrary: React.FC = () => {
               onClick={() => setSelectedRestaurantId('all')}
               className={`p-3 rounded-2xl text-left border transition-all flex flex-col justify-between ${
                 selectedRestaurantId === 'all'
-                  ? 'bg-charcoal-900 text-white border-charcoal-900 shadow-md ring-2 ring-saffron-500/50'
-                  : 'bg-ivory-50 text-charcoal-800 hover:bg-ivory-100 border-ivory-300'
+                  ? 'bg-[#090D16] text-white border-white/[0.06] shadow-md ring-2 ring-amber-500/50'
+                  : 'bg-white/[0.03] text-slate-200 hover:bg-white/[0.04] border-white/[0.08]'
               }`}
             >
               <div className="flex items-center justify-between mb-2">
-                <Building2 className={`w-5 h-5 ${selectedRestaurantId === 'all' ? 'text-saffron-400' : 'text-charcoal-500'}`} />
+                <Building2 className={`w-5 h-5 ${selectedRestaurantId === 'all' ? 'text-amber-400' : 'text-slate-500'}`} />
                 <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded-md ${
-                  selectedRestaurantId === 'all' ? 'bg-white/20 text-white' : 'bg-charcoal-200 text-charcoal-700'
+                  selectedRestaurantId === 'all' ? 'bg-white/20 text-white' : 'bg-white/[0.08] text-slate-400'
                 }`}>
                   All
                 </span>
               </div>
               <div>
                 <strong className="text-xs font-bold block leading-tight">All Restaurants</strong>
-                <span className={`text-[10px] block mt-0.5 ${selectedRestaurantId === 'all' ? 'text-charcoal-300' : 'text-charcoal-500'}`}>
+                <span className={`text-[10px] block mt-0.5 ${selectedRestaurantId === 'all' ? 'text-slate-400' : 'text-slate-500'}`}>
                   Full network catalog
                 </span>
               </div>
@@ -241,8 +241,8 @@ export const MasterImageLibrary: React.FC = () => {
                   onClick={() => setSelectedRestaurantId(r.id)}
                   className={`p-3 rounded-2xl text-left border transition-all flex flex-col justify-between ${
                     isSelected
-                      ? 'bg-saffron-600 text-white border-saffron-600 shadow-md ring-2 ring-saffron-400/50'
-                      : 'bg-ivory-50 text-charcoal-800 hover:bg-ivory-100 border-ivory-300'
+                      ? 'bg-amber-500 text-white border-amber-600/40 shadow-md ring-2 ring-amber-400/50'
+                      : 'bg-white/[0.03] text-slate-200 hover:bg-white/[0.04] border-white/[0.08]'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
@@ -252,7 +252,7 @@ export const MasterImageLibrary: React.FC = () => {
                       className="w-6 h-6 rounded-lg object-cover border border-white/40"
                     />
                     <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded-md ${
-                      isSelected ? 'bg-white/25 text-white' : 'bg-saffron-100 text-saffron-800'
+                      isSelected ? 'bg-white/25 text-white' : 'bg-amber-500/10 text-amber-400'
                     }`}>
                       {count} Photos
                     </span>
@@ -261,7 +261,7 @@ export const MasterImageLibrary: React.FC = () => {
                     <strong className="text-xs font-bold block truncate leading-tight" title={r.name}>
                       {r.name}
                     </strong>
-                    <span className={`text-[10px] block truncate mt-0.5 ${isSelected ? 'text-white/90' : 'text-charcoal-500'}`}>
+                    <span className={`text-[10px] block truncate mt-0.5 ${isSelected ? 'text-white/90' : 'text-slate-500'}`}>
                       {r.cuisine}
                     </span>
                   </div>
@@ -272,15 +272,15 @@ export const MasterImageLibrary: React.FC = () => {
         </div>
 
         {/* Search & Dietary Filters */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-3 border-t border-ivory-200">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-3 border-t border-white/[0.08]">
           <div className="relative flex-1 max-w-md">
-            <Search className="w-4 h-4 text-charcoal-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search dish by name, spice, or ingredient..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-ivory-50 border border-ivory-300 rounded-xl pl-9 pr-3 py-2 text-xs text-charcoal-900 focus:outline-none focus:border-saffron-600"
+              className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl pl-9 pr-3 py-2 text-xs text-white focus:outline-none focus:border-amber-600/40"
             />
           </div>
 
@@ -289,8 +289,8 @@ export const MasterImageLibrary: React.FC = () => {
               onClick={() => setFilterType('all')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
                 filterType === 'all'
-                  ? 'bg-charcoal-800 text-white'
-                  : 'bg-ivory-100 text-charcoal-600 hover:bg-ivory-200'
+                  ? 'bg-[#0D1322] text-white'
+                  : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.06]'
               }`}
             >
               All Items
@@ -367,23 +367,23 @@ export const MasterImageLibrary: React.FC = () => {
             return (
               <div
                 key={rest.id}
-                className="bg-white rounded-3xl border-2 border-ivory-300 shadow-float overflow-hidden"
+                className="bg-[#0D1322] rounded-3xl border-2 border-white/[0.08]  overflow-hidden"
               >
                 {/* 🌟 PROMINENT RESTAURANT NAME BANNER 🌟 */}
-                <div className="bg-gradient-to-r from-charcoal-950 via-charcoal-900 to-charcoal-950 text-white p-6 border-b-2 border-saffron-500 flex flex-col md:flex-row md:items-center justify-between gap-5">
+                <div className="bg-gradient-to-r from-[#090D16] via-[#090D16] to-[#090D16] text-white p-6 border-b-2 border-amber-500 flex flex-col md:flex-row md:items-center justify-between gap-5">
                   <div className="flex items-center space-x-4">
                     <img
                       src={rest.logo_url}
                       alt={rest.name}
-                      className="w-16 h-16 rounded-2xl object-cover border-2 border-saffron-500 shadow-md flex-shrink-0"
+                      className="w-16 h-16 rounded-2xl object-cover border-2 border-amber-500 shadow-md flex-shrink-0"
                     />
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-xs uppercase font-black tracking-wider px-3 py-1 rounded-full bg-saffron-500 text-charcoal-950 font-mono shadow-sm flex items-center space-x-1">
+                        <span className="text-xs uppercase font-black tracking-wider px-3 py-1 rounded-full bg-amber-500 text-white font-mono shadow-sm flex items-center space-x-1">
                           <span>🏪 RESTAURANT:</span>
                           <span className="underline">{rest.name}</span>
                         </span>
-                        <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-white/20 text-saffron-200">
+                        <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-[#090D16]/20 text-amber-300">
                           {rest.cuisine}
                         </span>
                         <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-green-500/20 text-green-300 border border-green-500/30">
@@ -394,21 +394,21 @@ export const MasterImageLibrary: React.FC = () => {
                       {/* HUGE BOLD RESTAURANT NAME */}
                       <h3 className="font-serif text-2xl sm:text-3xl font-black text-white mt-2 flex flex-wrap items-center gap-2">
                         <span>{rest.name}</span>
-                        <span className="text-xs font-sans font-medium text-saffron-300 bg-charcoal-800/80 px-2.5 py-0.5 rounded-full border border-saffron-500/30">
+                        <span className="text-xs font-sans font-medium text-amber-300 bg-[#090D16]/[0.03] px-2.5 py-0.5 rounded-full border border-amber-500/30">
                           {restItems.length} Photos in Gallery
                         </span>
                       </h3>
 
-                      <p className="text-xs text-charcoal-300 mt-1 flex flex-wrap items-center gap-3">
+                      <p className="text-xs text-slate-400 mt-1 flex flex-wrap items-center gap-3">
                         <span className="flex items-center space-x-1">
-                          <MapPin className="w-3.5 h-3.5 text-saffron-400" />
+                          <MapPin className="w-3.5 h-3.5 text-amber-400" />
                           <span>{rest.location || 'Pune, India'}</span>
                         </span>
                         <span className="flex items-center space-x-1">
-                          <Phone className="w-3.5 h-3.5 text-saffron-400" />
+                          <Phone className="w-3.5 h-3.5 text-amber-400" />
                           <span>{rest.contact_phone || '+91 20 2600 0000'}</span>
                         </span>
-                        <span className="text-saffron-400 font-semibold">
+                        <span className="text-amber-400 font-semibold">
                           • {restTables.length || 4} Tables Configured • {restItems.length} Dishes
                         </span>
                       </p>
@@ -421,7 +421,7 @@ export const MasterImageLibrary: React.FC = () => {
                         setTargetRestaurantForNewDish(rest.id);
                         setIsAddDishModalOpen(true);
                       }}
-                      className="px-3.5 py-2 bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold rounded-xl transition-all flex items-center space-x-1.5 shadow-subtle cursor-pointer"
+                      className="px-3.5 py-2 bg-amber-500 hover:bg-amber-700 text-white text-xs font-bold rounded-xl transition-all flex items-center space-x-1.5 shadow-lg cursor-pointer"
                     >
                       <Plus className="w-4 h-4" />
                       <span>Add Dish to {rest.name}</span>
@@ -431,9 +431,9 @@ export const MasterImageLibrary: React.FC = () => {
                       href={dinerUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="px-3.5 py-2 bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-200 hover:text-white text-xs font-bold rounded-xl transition-all flex items-center space-x-1.5 border border-charcoal-700"
+                      className="px-3.5 py-2 bg-[#0D1322] hover:bg-white/[0.06] text-slate-300 hover:text-white text-xs font-bold rounded-xl transition-all flex items-center space-x-1.5 border border-white/[0.08]"
                     >
-                      <ExternalLink className="w-3.5 h-3.5 text-saffron-400" />
+                      <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
                       <span>Live Diner Menu</span>
                     </a>
 
@@ -441,7 +441,7 @@ export const MasterImageLibrary: React.FC = () => {
                       href={managerUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="px-3.5 py-2 bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-300 hover:text-white text-xs font-semibold rounded-xl transition-all border border-charcoal-700"
+                      className="px-3.5 py-2 bg-[#0D1322] hover:bg-white/[0.06] text-slate-400 hover:text-white text-xs font-semibold rounded-xl transition-all border border-white/[0.08]"
                     >
                       <span>Manager Hub</span>
                     </a>
@@ -449,24 +449,24 @@ export const MasterImageLibrary: React.FC = () => {
                 </div>
 
                 {/* Restaurant's Dishes & Photographs Grid */}
-                <div className="p-6 bg-ivory-50/50">
-                  <div className="flex items-center justify-between mb-4 pb-2 border-b border-ivory-200">
-                    <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-charcoal-900 flex items-center space-x-2">
-                      <ImageIcon className="w-4 h-4 sm:w-5 sm:h-5 text-saffron-600" />
+                <div className="p-6 bg-[#090D16]/[0.03]/50">
+                  <div className="flex items-center justify-between mb-4 pb-2 border-b border-white/[0.08]">
+                    <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-white flex items-center space-x-2">
+                      <ImageIcon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
                       <span>
-                        📸 Photo Gallery for <strong className="text-saffron-700 underline">{rest.name}</strong> ({restItems.length} items)
+                        📸 Photo Gallery for <strong className="text-amber-400 underline">{rest.name}</strong> ({restItems.length} items)
                       </span>
                     </h4>
-                    <span className="text-[11px] text-charcoal-500 font-medium">
+                    <span className="text-[11px] text-slate-500 font-medium">
                       Changes instantly sync to {rest.name}'s QR menu
                     </span>
                   </div>
 
                   {restItems.length === 0 ? (
-                    <div className="p-8 text-center bg-white rounded-2xl border-2 border-dashed border-ivory-300">
-                      <ImageIcon className="w-12 h-12 text-charcoal-300 mx-auto mb-2" />
-                      <h5 className="font-serif font-bold text-sm text-charcoal-900">No dishes uploaded yet for {rest.name}</h5>
-                      <p className="text-xs text-charcoal-500 mt-1 max-w-md mx-auto">
+                    <div className="p-8 text-center bg-[#0D1322] rounded-2xl border-2 border-dashed border-white/[0.08]">
+                      <ImageIcon className="w-12 h-12 text-slate-400 mx-auto mb-2" />
+                      <h5 className="font-serif font-bold text-sm text-white">No dishes uploaded yet for {rest.name}</h5>
+                      <p className="text-xs text-slate-500 mt-1 max-w-md mx-auto">
                         Click below to create menu dishes and assign photography for {rest.name}.
                       </p>
                       <button
@@ -474,7 +474,7 @@ export const MasterImageLibrary: React.FC = () => {
                           setTargetRestaurantForNewDish(rest.id);
                           setIsAddDishModalOpen(true);
                         }}
-                        className="mt-3.5 px-4 py-2 bg-saffron-600 text-white text-xs font-bold rounded-xl shadow-subtle inline-flex items-center space-x-1.5"
+                        className="mt-3.5 px-4 py-2 bg-amber-500 text-white text-xs font-bold rounded-xl shadow-lg inline-flex items-center space-x-1.5"
                       >
                         <Plus className="w-4 h-4" />
                         <span>Add First Dish to {rest.name}</span>
@@ -489,10 +489,10 @@ export const MasterImageLibrary: React.FC = () => {
                         return (
                           <div
                             key={item.id}
-                            className="bg-white rounded-2xl border border-ivory-300 overflow-hidden shadow-subtle hover:shadow-float transition-all flex flex-col justify-between group"
+                            className="bg-[#0D1322] rounded-2xl border border-white/[0.08] overflow-hidden shadow-lg hover: transition-all flex flex-col justify-between group"
                           >
                             {/* Image Container with Badges */}
-                            <div className="relative aspect-[4/3] overflow-hidden bg-ivory-100">
+                            <div className="relative aspect-[4/3] overflow-hidden bg-[#090D16]/[0.04]">
                               <img
                                 src={item.image_url}
                                 alt={item.name}
@@ -503,23 +503,23 @@ export const MasterImageLibrary: React.FC = () => {
                               {/* Dietary / Special Tags */}
                               <div className="absolute top-2 left-2 flex items-center space-x-1">
                                 {isVeg && (
-                                  <span className="w-4 h-4 bg-white/95 backdrop-blur-sm border border-green-600 rounded flex items-center justify-center">
+                                  <span className="w-4 h-4 bg-[#090D16]/95 backdrop-blur-sm border border-green-600 rounded flex items-center justify-center">
                                     <span className="w-2 h-2 rounded-full bg-green-600" />
                                   </span>
                                 )}
                                 {isNonVeg && (
-                                  <span className="w-4 h-4 bg-white/95 backdrop-blur-sm border border-red-600 rounded flex items-center justify-center">
+                                  <span className="w-4 h-4 bg-[#090D16]/95 backdrop-blur-sm border border-red-600 rounded flex items-center justify-center">
                                     <span className="w-2 h-2 rounded-full bg-red-600" />
                                   </span>
                                 )}
                                 {item.is_chef_recommended && (
-                                  <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-amber-500 text-charcoal-950 shadow-xs flex items-center space-x-0.5">
+                                  <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-amber-500 text-white shadow-sm flex items-center space-x-0.5">
                                     <Award className="w-2.5 h-2.5" />
                                     <span>Chef Fav</span>
                                   </span>
                                 )}
                                 {item.is_signature && (
-                                  <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-red-500 text-white shadow-xs flex items-center space-x-0.5">
+                                  <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-red-500 text-white shadow-sm flex items-center space-x-0.5">
                                     <Star className="w-2.5 h-2.5 fill-white" />
                                     <span>Special</span>
                                   </span>
@@ -529,7 +529,7 @@ export const MasterImageLibrary: React.FC = () => {
                               {/* Copy Link button */}
                               <button
                                 onClick={() => handleCopy(item.image_url)}
-                                className="absolute top-2 right-2 p-1.5 rounded-lg bg-charcoal-900/80 hover:bg-charcoal-900 text-white backdrop-blur-sm transition-colors"
+                                className="absolute top-2 right-2 p-1.5 rounded-lg bg-[#090D16]/80 hover:bg-[#090D16] text-white backdrop-blur-sm transition-colors"
                                 title="Copy direct high-res image link"
                               >
                                 {copiedUrl === item.image_url ? (
@@ -543,31 +543,31 @@ export const MasterImageLibrary: React.FC = () => {
                             {/* Details & Actions */}
                             <div className="p-3.5 flex-1 flex flex-col justify-between space-y-2">
                               <div>
-                                <h5 className="font-bold text-xs text-charcoal-900 leading-tight line-clamp-1" title={item.name}>
+                                <h5 className="font-bold text-xs text-white leading-tight line-clamp-1" title={item.name}>
                                   {item.name}
                                 </h5>
                                 <div className="flex items-center justify-between mt-1">
-                                  <span className="text-xs font-bold text-saffron-700">
+                                  <span className="text-xs font-bold text-amber-400">
                                     ₹{item.price.toFixed(2)}
                                   </span>
-                                  <span className="text-[10px] text-charcoal-500 uppercase tracking-wider font-semibold">
+                                  <span className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">
                                     {item.item_type || 'food'}
                                   </span>
                                 </div>
-                                <p className="text-[10px] text-charcoal-500 line-clamp-2 mt-1 leading-snug">
+                                <p className="text-[10px] text-slate-500 line-clamp-2 mt-1 leading-snug">
                                   {item.short_description}
                                 </p>
                               </div>
 
-                              <div className="space-y-1.5 pt-2 border-t border-ivory-200">
+                              <div className="space-y-1.5 pt-2 border-t border-white/[0.08]">
                                 <button
                                   onClick={() => {
                                     setPhotoPickerItem(item);
                                     setCustomPhotoUrl(item.image_url);
                                   }}
-                                  className="w-full py-1.5 bg-saffron-50 hover:bg-saffron-100 text-saffron-900 text-[11px] font-bold rounded-lg border border-saffron-200 transition-colors flex items-center justify-center space-x-1 cursor-pointer"
+                                  className="w-full py-1.5 bg-amber-500/10 hover:bg-amber-500/10 text-amber-900 text-[11px] font-bold rounded-lg border border-amber-500/20 transition-colors flex items-center justify-center space-x-1 cursor-pointer"
                                 >
-                                  <ImageIcon className="w-3 h-3 text-saffron-700" />
+                                  <ImageIcon className="w-3 h-3 text-amber-400" />
                                   <span>Change Photo</span>
                                 </button>
 
@@ -577,7 +577,7 @@ export const MasterImageLibrary: React.FC = () => {
                                     className={`flex-1 py-1 text-[10px] font-semibold rounded border transition-colors cursor-pointer ${
                                       item.is_chef_recommended
                                         ? 'bg-amber-100 text-amber-900 border-amber-300 font-bold'
-                                        : 'bg-ivory-100 text-charcoal-600 border-ivory-200 hover:bg-ivory-200'
+                                        : 'bg-white/[0.04] text-slate-400 border-white/[0.08] hover:bg-white/[0.06]'
                                     }`}
                                     title="Toggle Chef Favorite"
                                   >
@@ -589,7 +589,7 @@ export const MasterImageLibrary: React.FC = () => {
                                     className={`flex-1 py-1 text-[10px] font-semibold rounded border transition-colors cursor-pointer ${
                                       item.is_signature
                                         ? 'bg-red-100 text-red-900 border-red-300 font-bold'
-                                        : 'bg-ivory-100 text-charcoal-600 border-ivory-200 hover:bg-ivory-200'
+                                        : 'bg-white/[0.04] text-slate-400 border-white/[0.08] hover:bg-white/[0.06]'
                                     }`}
                                     title="Toggle Signature / Special"
                                   >
@@ -602,7 +602,7 @@ export const MasterImageLibrary: React.FC = () => {
                                         deleteMenuItem(item.id);
                                       }
                                     }}
-                                    className="p-1 text-charcoal-400 hover:text-red-500 rounded hover:bg-red-50 border border-transparent hover:border-red-200 transition-colors cursor-pointer"
+                                    className="p-1 text-slate-500 hover:text-red-500 rounded hover:bg-red-50 border border-transparent hover:border-red-200 transition-colors cursor-pointer"
                                     title="Delete dish"
                                   >
                                     <Trash2 className="w-3.5 h-3.5" />
@@ -626,27 +626,27 @@ export const MasterImageLibrary: React.FC = () => {
       {/* ========================================================================= */}
       {photoPickerItem && (
         <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-float border border-ivory-300 max-h-[90vh] overflow-y-auto space-y-5">
-            <div className="flex items-center justify-between pb-3 border-b border-ivory-200">
+          <div className="bg-[#0D1322] rounded-3xl max-w-2xl w-full p-6  border border-white/[0.08] max-h-[90vh] overflow-y-auto space-y-5">
+            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
               <div>
-                <span className="text-[10px] uppercase font-bold text-saffron-700 tracking-wider">
+                <span className="text-[10px] uppercase font-bold text-amber-400 tracking-wider">
                   Photo Editor &amp; Library
                 </span>
-                <h3 className="font-serif text-lg font-bold text-charcoal-900">
+                <h3 className="font-serif text-lg font-bold text-white">
                   Update Photograph for "{photoPickerItem.name}"
                 </h3>
               </div>
               <button
                 onClick={() => setPhotoPickerItem(null)}
-                className="p-1.5 text-charcoal-400 hover:text-charcoal-700 rounded-xl hover:bg-ivory-100"
+                className="p-1.5 text-slate-500 hover:text-slate-400 rounded-xl hover:bg-white/[0.04]"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Custom Image URL Input & Preview */}
-            <div className="space-y-3 bg-ivory-50 p-4 rounded-2xl border border-ivory-200">
-              <label className="text-xs font-bold text-charcoal-800 block">
+            <div className="space-y-3 bg-[#090D16]/[0.03] p-4 rounded-2xl border border-white/[0.08]">
+              <label className="text-xs font-bold text-slate-200 block">
                 Direct Image URL (Custom Upload / Web CDN):
               </label>
               <div className="flex items-center space-x-2">
@@ -655,7 +655,7 @@ export const MasterImageLibrary: React.FC = () => {
                   value={customPhotoUrl}
                   onChange={(e) => setCustomPhotoUrl(e.target.value)}
                   placeholder="https://images.unsplash.com/..."
-                  className="flex-1 bg-white border border-ivory-300 rounded-xl px-3 py-2 text-xs text-charcoal-900 focus:outline-none focus:border-saffron-600"
+                  className="flex-1 bg-[#090D16] border border-white/[0.08] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-600/40"
                 />
                 <button
                   type="button"
@@ -665,7 +665,7 @@ export const MasterImageLibrary: React.FC = () => {
                       setPhotoPickerItem(null);
                     }
                   }}
-                  className="px-4 py-2 bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold rounded-xl shadow-subtle whitespace-nowrap cursor-pointer"
+                  className="px-4 py-2 bg-amber-500 hover:bg-amber-700 text-white text-xs font-bold rounded-xl shadow-lg whitespace-nowrap cursor-pointer"
                 >
                   Save URL
                 </button>
@@ -673,11 +673,11 @@ export const MasterImageLibrary: React.FC = () => {
 
               {customPhotoUrl && (
                 <div className="pt-2">
-                  <span className="text-[10px] text-charcoal-500 font-semibold block mb-1">Live Image Preview:</span>
+                  <span className="text-[10px] text-slate-500 font-semibold block mb-1">Live Image Preview:</span>
                   <img
                     src={customPhotoUrl}
                     alt="Preview"
-                    className="w-full h-36 object-cover rounded-xl border border-ivory-300 shadow-xs"
+                    className="w-full h-36 object-cover rounded-xl border border-white/[0.08] shadow-sm"
                   />
                 </div>
               )}
@@ -686,11 +686,11 @@ export const MasterImageLibrary: React.FC = () => {
             {/* Curated Culinary Photography Library Picker */}
             <div className="space-y-4">
               <div>
-                <h4 className="font-serif font-bold text-sm text-charcoal-900 flex items-center space-x-1.5">
+                <h4 className="font-serif font-bold text-sm text-white flex items-center space-x-1.5">
                   <Sparkles className="w-4 h-4 text-amber-500" />
                   <span>Choose from Menuz Curated Culinary Vault (1-Click Apply)</span>
                 </h4>
-                <p className="text-[11px] text-charcoal-500">
+                <p className="text-[11px] text-slate-500">
                   Select any high-resolution professional studio photography below to immediately assign it to this dish.
                 </p>
               </div>
@@ -698,7 +698,7 @@ export const MasterImageLibrary: React.FC = () => {
               <div className="space-y-4 max-h-72 overflow-y-auto pr-1">
                 {CURATED_CULINARY_LIBRARY.map((cat) => (
                   <div key={cat.category} className="space-y-2">
-                    <h5 className="text-[11px] uppercase font-bold tracking-wider text-saffron-800 bg-saffron-50/70 px-2 py-1 rounded-lg">
+                    <h5 className="text-[11px] uppercase font-bold tracking-wider text-amber-400 bg-amber-500/10/70 px-2 py-1 rounded-lg">
                       {cat.category}
                     </h5>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
@@ -709,7 +709,7 @@ export const MasterImageLibrary: React.FC = () => {
                             assignImageToItem(photoPickerItem.id, libItem.url);
                             setPhotoPickerItem(null);
                           }}
-                          className="group cursor-pointer rounded-xl overflow-hidden border border-ivory-300 hover:border-saffron-600 bg-white p-1 shadow-subtle hover:shadow-float transition-all text-left"
+                          className="group cursor-pointer rounded-xl overflow-hidden border border-white/[0.08] hover:border-amber-600/40 bg-[#090D16] p-1 shadow-lg hover: transition-all text-left"
                         >
                           <div className="aspect-[4/3] rounded-lg overflow-hidden relative">
                             <img
@@ -721,7 +721,7 @@ export const MasterImageLibrary: React.FC = () => {
                               Click to Apply
                             </div>
                           </div>
-                          <p className="text-[10px] font-semibold text-charcoal-800 line-clamp-1 mt-1 px-1">
+                          <p className="text-[10px] font-semibold text-slate-200 line-clamp-1 mt-1 px-1">
                             {libItem.name}
                           </p>
                         </div>
@@ -740,19 +740,19 @@ export const MasterImageLibrary: React.FC = () => {
       {/* ========================================================================= */}
       {isAddDishModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-float border border-ivory-300 max-h-[90vh] overflow-y-auto space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-ivory-200">
+          <div className="bg-[#0D1322] rounded-3xl max-w-lg w-full p-6  border border-white/[0.08] max-h-[90vh] overflow-y-auto space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
               <div>
-                <span className="text-[10px] uppercase font-bold text-saffron-700 tracking-wider">
+                <span className="text-[10px] uppercase font-bold text-amber-400 tracking-wider">
                   Menu Creation
                 </span>
-                <h3 className="font-serif text-lg font-bold text-charcoal-900">
+                <h3 className="font-serif text-lg font-bold text-white">
                   Add New Dish &amp; Photograph
                 </h3>
               </div>
               <button
                 onClick={() => setIsAddDishModalOpen(false)}
-                className="p-1.5 text-charcoal-400 hover:text-charcoal-700 rounded-xl hover:bg-ivory-100"
+                className="p-1.5 text-slate-500 hover:text-slate-400 rounded-xl hover:bg-white/[0.04]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -760,11 +760,11 @@ export const MasterImageLibrary: React.FC = () => {
 
             <form onSubmit={handleCreateNewDish} className="space-y-3.5 text-xs">
               <div>
-                <label className="font-bold text-charcoal-800 block mb-1">Target Restaurant *</label>
+                <label className="font-bold text-slate-200 block mb-1">Target Restaurant *</label>
                 <select
                   value={targetRestaurantForNewDish}
                   onChange={(e) => setTargetRestaurantForNewDish(e.target.value)}
-                  className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-charcoal-900 font-semibold focus:outline-none focus:border-saffron-600"
+                  className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 text-white font-semibold focus:outline-none focus:border-amber-600/40"
                 >
                   {partnerRestaurants.map((r) => (
                     <option key={r.id} value={r.id}>
@@ -775,31 +775,31 @@ export const MasterImageLibrary: React.FC = () => {
               </div>
 
               <div>
-                <label className="font-bold text-charcoal-800 block mb-1">Dish / Item Name *</label>
+                <label className="font-bold text-slate-200 block mb-1">Dish / Item Name *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Artisanal Truffle Ravioli"
                   value={newDishName}
                   onChange={(e) => setNewDishName(e.target.value)}
-                  className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-charcoal-900 font-medium focus:outline-none focus:border-saffron-600"
+                  className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 text-white font-medium focus:outline-none focus:border-amber-600/40"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-charcoal-800 block mb-1">Category</label>
+                  <label className="font-bold text-slate-200 block mb-1">Category</label>
                   <input
                     type="text"
                     placeholder="e.g. Starters, Mains, Desserts"
                     value={newDishCategory}
                     onChange={(e) => setNewDishCategory(e.target.value)}
-                    className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-charcoal-900 focus:outline-none focus:border-saffron-600"
+                    className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-600/40"
                   />
                 </div>
 
                 <div>
-                  <label className="font-bold text-charcoal-800 block mb-1">Price (₹) *</label>
+                  <label className="font-bold text-slate-200 block mb-1">Price (₹) *</label>
                   <input
                     type="number"
                     required
@@ -807,36 +807,36 @@ export const MasterImageLibrary: React.FC = () => {
                     placeholder="450"
                     value={newDishPrice}
                     onChange={(e) => setNewDishPrice(e.target.value)}
-                    className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-charcoal-900 font-bold focus:outline-none focus:border-saffron-600"
+                    className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 text-white font-bold focus:outline-none focus:border-amber-600/40"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="font-bold text-charcoal-800 block mb-1">Culinary Description</label>
+                <label className="font-bold text-slate-200 block mb-1">Culinary Description</label>
                 <textarea
                   rows={2}
                   placeholder="Describe ingredients, cooking technique, and tasting notes..."
                   value={newDishDesc}
                   onChange={(e) => setNewDishDesc(e.target.value)}
-                  className="w-full bg-ivory-50 border border-ivory-300 rounded-xl p-2.5 text-charcoal-900 focus:outline-none focus:border-saffron-600"
+                  className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-600/40"
                 />
               </div>
 
               <div>
-                <label className="font-bold text-charcoal-800 block mb-1">Photograph URL *</label>
+                <label className="font-bold text-slate-200 block mb-1">Photograph URL *</label>
                 <input
                   type="text"
                   required
                   value={newDishImageUrl}
                   onChange={(e) => setNewDishImageUrl(e.target.value)}
-                  className="w-full bg-ivory-50 border border-ivory-300 rounded-xl px-3 py-2 text-charcoal-900 focus:outline-none focus:border-saffron-600"
+                  className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-600/40"
                 />
                 {newDishImageUrl && (
                   <img
                     src={newDishImageUrl}
                     alt="New Preview"
-                    className="w-full h-24 object-cover rounded-xl mt-2 border border-ivory-300"
+                    className="w-full h-24 object-cover rounded-xl mt-2 border border-white/[0.08]"
                   />
                 )}
               </div>
@@ -847,9 +847,9 @@ export const MasterImageLibrary: React.FC = () => {
                     type="checkbox"
                     checked={newDishIsSpecial}
                     onChange={(e) => setNewDishIsSpecial(e.target.checked)}
-                    className="rounded text-saffron-600 focus:ring-0"
+                    className="rounded text-amber-400 focus:ring-0"
                   />
-                  <span className="font-semibold text-charcoal-800">⭐ Mark as Chef's Signature</span>
+                  <span className="font-semibold text-slate-200">⭐ Mark as Chef's Signature</span>
                 </label>
 
                 <label className="flex items-center space-x-2 cursor-pointer">
@@ -859,21 +859,21 @@ export const MasterImageLibrary: React.FC = () => {
                     onChange={(e) => setNewDishIsFavorite(e.target.checked)}
                     className="rounded text-amber-600 focus:ring-0"
                   />
-                  <span className="font-semibold text-charcoal-800">👑 Mark as Chef's Recommendation</span>
+                  <span className="font-semibold text-slate-200">👑 Mark as Chef's Recommendation</span>
                 </label>
               </div>
 
-              <div className="pt-3 border-t border-ivory-200 flex justify-end space-x-2">
+              <div className="pt-3 border-t border-white/[0.08] flex justify-end space-x-2">
                 <button
                   type="button"
                   onClick={() => setIsAddDishModalOpen(false)}
-                  className="px-4 py-2 bg-ivory-100 hover:bg-ivory-200 text-charcoal-700 rounded-xl font-semibold cursor-pointer"
+                  className="px-4 py-2 bg-[#090D16]/[0.04] hover:bg-white/[0.06] text-slate-400 rounded-xl font-semibold cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-saffron-600 hover:bg-saffron-700 text-white rounded-xl font-bold shadow-subtle cursor-pointer"
+                  className="px-5 py-2 bg-amber-500 hover:bg-amber-700 text-white rounded-xl font-bold shadow-lg cursor-pointer"
                 >
                   Save Dish to Menu
                 </button>

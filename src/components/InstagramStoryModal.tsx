@@ -46,10 +46,10 @@ Ordered seamlessly via Menuz Interactive Dining Engine 🚀 ${hashtagText}`;
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-charcoal-900 border border-charcoal-700 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#090D16]/80 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="bg-[#090D16] border border-white/[0.08] w-full max-w-md rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh]">
         {/* Header */}
-        <div className="p-4 border-b border-charcoal-800 flex items-center justify-between bg-charcoal-950/60">
+        <div className="p-4 border-b border-white/[0.08] flex items-center justify-between bg-black/70">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 via-pink-600 to-purple-600 flex items-center justify-center text-white shadow-md">
               <Instagram className="w-4 h-4" />
@@ -61,22 +61,22 @@ Ordered seamlessly via Menuz Interactive Dining Engine 🚀 ${hashtagText}`;
                   9:16 Viral Card
                 </span>
               </h3>
-              <p className="text-[11px] text-charcoal-400">Share your dining moments with followers</p>
+              <p className="text-[11px] text-slate-500">Share your dining moments with followers</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-300 hover:text-white flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-full bg-[#0D1322] hover:bg-white/[0.06] text-slate-400 hover:text-white flex items-center justify-center transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Scrollable Story Preview Canvas */}
-        <div className="p-4 overflow-y-auto flex-1 flex justify-center bg-charcoal-950/40">
+        <div className="p-4 overflow-y-auto flex-1 flex justify-center bg-[#090D16]/40">
           <div
             id="instagram-story-canvas"
-            className="w-full max-w-[280px] aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl relative border-2 border-saffron-500/40 flex flex-col justify-between p-4"
+            className="w-full max-w-[280px] aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl relative border-2 border-amber-500/40 flex flex-col justify-between p-4"
             style={{
               background: `linear-gradient(160deg, #18181b 0%, #09090b 60%, ${restaurant.brand_colors?.primary || '#E85D04'}33 100%)`
             }}
@@ -93,13 +93,13 @@ Ordered seamlessly via Menuz Interactive Dining Engine 🚀 ${hashtagText}`;
                   <div>
                     <h4 className="text-xs font-bold text-white leading-tight flex items-center space-x-1">
                       <span>{restaurant.name}</span>
-                      <Award className="w-3 h-3 text-saffron-400 fill-saffron-400" />
+                      <Award className="w-3 h-3 text-amber-400 fill-amber-400" />
                     </h4>
-                    <p className="text-[10px] text-saffron-300 font-mono font-medium">{handleTag}</p>
+                    <p className="text-[10px] text-amber-300 font-mono font-medium">{handleTag}</p>
                   </div>
                 </div>
 
-                <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-white/10 text-white/90 backdrop-blur-sm border border-white/10">
+                <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-[#090D16]/10 text-white/90 backdrop-blur-sm border border-white/10">
                   {tableLabel}
                 </span>
               </div>
@@ -130,10 +130,10 @@ Ordered seamlessly via Menuz Interactive Dining Engine 🚀 ${hashtagText}`;
                     />
                     <div className="min-w-0 flex-1">
                       <p className="text-xs font-bold text-white truncate">{item.name}</p>
-                      <p className="text-[10px] text-charcoal-300 line-clamp-1">
+                      <p className="text-[10px] text-slate-400 line-clamp-1">
                         {'short_description' in item ? item.short_description : 'Signature Chef Delight'}
                       </p>
-                      <p className="text-[10px] font-mono text-saffron-300 font-bold mt-0.5">
+                      <p className="text-[10px] font-mono text-amber-300 font-bold mt-0.5">
                         ₹{item.price}
                       </p>
                     </div>
@@ -141,7 +141,7 @@ Ordered seamlessly via Menuz Interactive Dining Engine 🚀 ${hashtagText}`;
                 ))
               ) : (
                 <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 text-center border border-white/15">
-                  <Sparkles className="w-8 h-8 text-saffron-400 mx-auto mb-1" />
+                  <Sparkles className="w-8 h-8 text-amber-400 mx-auto mb-1" />
                   <p className="text-xs font-bold text-white">Culinary Magic at {restaurant.name}</p>
                 </div>
               )}
@@ -149,34 +149,34 @@ Ordered seamlessly via Menuz Interactive Dining Engine 🚀 ${hashtagText}`;
 
             {/* Bottom Footer Info */}
             <div className="pt-2 border-t border-white/15">
-              <div className="flex items-center justify-between text-[9px] text-charcoal-300">
+              <div className="flex items-center justify-between text-[9px] text-slate-400">
                 <span className="flex items-center space-x-1">
-                  <MapPin className="w-2.5 h-2.5 text-saffron-400" />
+                  <MapPin className="w-2.5 h-2.5 text-amber-400" />
                   <span className="truncate max-w-[120px]">{restaurant.location || 'Pune'}</span>
                 </span>
-                <span className="font-mono text-charcoal-400">
+                <span className="font-mono text-slate-500">
                   {orderNumber ? `#${orderNumber}` : 'Menuz Verified'}
                 </span>
               </div>
               <div className="mt-1 flex items-center justify-center space-x-1 text-[9px] text-white/60">
                 <span>⚡ Ordered Seamlessly via</span>
-                <span className="font-bold text-saffron-400">Menuz.in</span>
+                <span className="font-bold text-amber-400">Menuz.in</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Action Controls */}
-        <div className="p-4 bg-charcoal-950 border-t border-charcoal-800 space-y-2.5">
-          <div className="p-2.5 rounded-xl bg-charcoal-800/80 border border-charcoal-700 text-xs text-charcoal-300">
+        <div className="p-4 bg-[#090D16] border-t border-white/[0.08] space-y-2.5">
+          <div className="p-2.5 rounded-xl bg-[#090D16]/[0.03] border border-white/[0.08] text-xs text-slate-400">
             <span className="text-white font-bold block mb-1">🎁 Restaurant Story Perk:</span>
-            Tag <strong className="text-saffron-400">{handleTag}</strong> &amp; show your active story to the captain to receive a complimentary dessert treat!
+            Tag <strong className="text-amber-400">{handleTag}</strong> &amp; show your active story to the captain to receive a complimentary dessert treat!
           </div>
 
           <div className="grid grid-cols-2 gap-2">
             <button
               onClick={handleCopyCaption}
-              className="px-3.5 py-2.5 rounded-xl bg-charcoal-800 hover:bg-charcoal-700 text-white text-xs font-bold transition-all border border-charcoal-700 flex items-center justify-center space-x-1.5"
+              className="px-3.5 py-2.5 rounded-xl bg-[#0D1322] hover:bg-white/[0.06] text-white text-xs font-bold transition-all border border-white/[0.08] flex items-center justify-center space-x-1.5"
             >
               {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
               <span>{copied ? 'Caption Copied!' : 'Copy Caption'}</span>

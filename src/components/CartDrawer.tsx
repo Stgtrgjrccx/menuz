@@ -58,25 +58,25 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-charcoal-900/60 backdrop-blur-sm flex items-end justify-center">
+    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-end justify-center">
       <div 
-        className="bg-white rounded-t-3xl max-w-xl w-full max-h-[92vh] flex flex-col p-5 shadow-float animate-in slide-in-from-bottom duration-200"
+        className="bg-[#0D1322] rounded-t-3xl max-w-xl w-full max-h-[92vh] flex flex-col p-5  animate-in slide-in-from-bottom duration-200 border border-white/[0.08]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex justify-between items-center pb-3 border-b border-ivory-200">
+        <div className="flex justify-between items-center pb-3 border-b border-white/[0.08]">
           <div>
-            <h2 className="font-serif text-xl font-bold text-charcoal-900">{t.yourTableCart}</h2>
+            <h2 className="font-serif text-xl font-bold text-slate-100">{t.yourTableCart}</h2>
             <div className="flex items-center space-x-1.5 mt-0.5">
-              <span className="text-xs bg-saffron-100 text-saffron-700 px-2 py-0.5 rounded-full font-semibold">
+              <span className="text-xs bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full font-semibold border border-amber-500/30">
                 {tableLabel}
               </span>
-              <span className="text-xs text-charcoal-700/60">• Pay at counter/table</span>
+              <span className="text-xs text-slate-500">• Pay at counter/table</span>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-full text-charcoal-800 hover:bg-ivory-100 transition-colors"
+            className="p-1 rounded-full text-slate-400 hover:bg-white/[0.08] hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -84,8 +84,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
         {/* Error notice */}
         {errorMessage && (
-          <div className="bg-red-50 border border-red-200 text-red-800 text-xs p-3 rounded-xl my-3 flex items-start space-x-2">
-            <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+          <div className="bg-red-500/10 border border-red-500/30 text-red-300 text-xs p-3 rounded-xl my-3 flex items-start space-x-2">
+            <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
             <span>{errorMessage}</span>
           </div>
         )}
@@ -93,29 +93,29 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
         {/* Content */}
         {cart.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center py-16 text-center">
-            <div className="w-14 h-14 bg-ivory-100 rounded-full flex items-center justify-center text-charcoal-700/30 mb-3">
+            <div className="w-14 h-14 bg-[#090D16]/[0.04] rounded-full flex items-center justify-center text-slate-600 mb-3">
               <ShoppingBag className="w-7 h-7" />
             </div>
-            <p className="font-serif text-charcoal-900 font-bold text-base">{t.cartEmpty}</p>
-            <p className="text-xs text-charcoal-700/60 mt-1 max-w-xs">
+            <p className="font-serif text-slate-200 font-bold text-base">{t.cartEmpty}</p>
+            <p className="text-xs text-slate-500 mt-1 max-w-xs">
               {t.addDishesPrompt}
             </p>
           </div>
         ) : (
           <>
             {/* Real-time shared table indicator */}
-            <div className="bg-emerald-50 border border-emerald-200/80 rounded-xl px-3 py-2 my-2 flex items-center justify-between text-xs text-emerald-900">
+            <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl px-3 py-2 my-2 flex items-center justify-between text-xs text-emerald-300">
               <div className="flex items-center space-x-1.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 <span className="font-bold">{t.tableCartSyncActive}</span>
               </div>
-              <span className="text-[10px] text-emerald-700 font-mono">
+              <span className="text-[10px] text-emerald-500 font-mono">
                 {cart.length} {cart.length === 1 ? 'item' : 'items'} on {tableLabel}
               </span>
             </div>
 
             {/* Items list */}
-            <div className="flex-1 overflow-y-auto py-2 divide-y divide-ivory-100">
+            <div className="flex-1 overflow-y-auto py-2 divide-y divide-white/[0.06]">
               {cart.map((item) => {
                 const opts = Array.isArray(item.selected_options) ? item.selected_options : [];
                 const optsTotal = opts.reduce((s, o) => s + (Number(o?.price_modifier) || 0), 0);
@@ -126,24 +126,24 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     <img
                       src={item.image_url || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=200'}
                       alt={item.name || 'Dish'}
-                      className="w-14 h-14 rounded-xl object-cover flex-shrink-0 bg-ivory-100"
+                      className="w-14 h-14 rounded-xl object-cover flex-shrink-0 bg-[#090D16]"
                     />
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center space-x-1.5">
-                        <h4 className="font-serif font-bold text-sm text-charcoal-900 leading-snug truncate">
+                        <h4 className="font-serif font-bold text-sm text-slate-100 leading-snug truncate">
                           {item.name}
                         </h4>
                       </div>
 
                       {item.added_by_guest && (
-                        <span className="inline-flex items-center space-x-1 text-[10px] text-saffron-800 bg-saffron-50 border border-saffron-200 px-1.5 py-0.2 rounded-md mt-0.5 font-medium">
+                        <span className="inline-flex items-center space-x-1 text-[10px] text-amber-300 bg-amber-500/10 border border-amber-500/30 px-1.5 py-0.5 rounded-md mt-0.5 font-medium">
                           <span>👤</span>
                           <span>{item.added_by_guest}</span>
                         </span>
                       )}
 
-                      <span className="text-xs text-saffron-700 font-semibold block mt-0.5">
+                      <span className="text-xs text-amber-400 font-semibold block mt-0.5">
                         ₹{itemPrice.toFixed(2)}
                       </span>
 
@@ -151,7 +151,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       {opts.length > 0 && (
                         <div className="mt-1 space-y-0.5">
                           {opts.map((opt) => (
-                            <span key={opt.option_id} className="inline-block bg-ivory-100 text-[10px] text-charcoal-800 px-1.5 py-0.5 rounded-sm mr-1">
+                            <span key={opt.option_id} className="inline-block bg-[#090D16]/[0.05] text-[10px] text-slate-400 px-1.5 py-0.5 rounded-sm mr-1 border border-white/[0.08]">
                               +{opt.name} {opt.price_modifier > 0 ? `(₹${opt.price_modifier})` : ''}
                             </span>
                           ))}
@@ -160,29 +160,29 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     </div>
 
                     <div className="flex flex-col items-end space-y-1.5">
-                      <span className="font-bold text-xs text-charcoal-900">
+                      <span className="font-bold text-xs text-slate-100">
                         ₹{lineTotal.toFixed(2)}
                       </span>
-                      <div className="flex items-center space-x-1.5 bg-ivory-100 rounded-lg p-0.5">
+                      <div className="flex items-center space-x-1.5 bg-[#090D16]/[0.04] rounded-lg p-0.5 border border-white/[0.08]">
                         <button
                           type="button"
                           onClick={() => updateCartQuantity(item.menu_item_id, item.quantity - 1)}
-                          className="w-6 h-6 rounded-md bg-white flex items-center justify-center text-charcoal-800 hover:bg-ivory-50 shadow-xs"
+                          className="w-6 h-6 rounded-md bg-[#090D16]/[0.08] flex items-center justify-center text-slate-300 hover:bg-white/[0.14] shadow-sm"
                         >
                           <Minus className="w-3 h-3" />
                         </button>
-                        <span className="w-4 text-center text-xs font-bold text-charcoal-900">{item.quantity}</span>
+                        <span className="w-4 text-center text-xs font-bold text-slate-100">{item.quantity}</span>
                         <button
                           type="button"
                           onClick={() => updateCartQuantity(item.menu_item_id, item.quantity + 1)}
-                          className="w-6 h-6 rounded-md bg-white flex items-center justify-center text-charcoal-800 hover:bg-ivory-50 shadow-xs"
+                          className="w-6 h-6 rounded-md bg-[#090D16]/[0.08] flex items-center justify-center text-slate-300 hover:bg-white/[0.14] shadow-sm"
                         >
                           <Plus className="w-3 h-3" />
                         </button>
                         <button
                           type="button"
                           onClick={() => removeCartItem(item.menu_item_id)}
-                          className="text-red-500 hover:text-red-700 p-1 ml-1"
+                          className="text-red-500 hover:text-red-400 p-1 ml-1"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -209,10 +209,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 return (
                   <div className="pt-3 pb-2">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-bold text-charcoal-900 flex items-center space-x-1">
+                      <span className="text-xs font-bold text-slate-200 flex items-center space-x-1">
                         <span>{badgeTitle}</span>
                       </span>
-                      <span className="text-[10px] text-saffron-700 font-bold uppercase tracking-wider">
+                      <span className="text-[10px] text-amber-400 font-bold uppercase tracking-wider">
                         {pairingDiscount > 0 ? `${pairingDiscount}% ${t.bundleDeal}` : t.add}
                       </span>
                     </div>
@@ -226,21 +226,21 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         return (
                           <div
                             key={dish.id}
-                            className="bg-ivory-50 border border-ivory-200 rounded-xl p-2 flex flex-col justify-between hover:border-saffron-300 transition-all text-left"
+                            className="bg-white/[0.03] border border-white/[0.08] rounded-xl p-2 flex flex-col justify-between hover:border-amber-500/40 transition-all text-left"
                           >
                             <img
                               src={dish.image_url}
                               alt={dish.name}
                               className="w-full aspect-[4/3] rounded-lg object-cover mb-1.5"
                             />
-                            <p className="font-bold text-[11px] text-charcoal-900 truncate leading-tight">
+                            <p className="font-bold text-[11px] text-slate-200 truncate leading-tight">
                               {dish.name}
                             </p>
                             <div className="flex items-center justify-between mt-1">
                               <div>
-                                <span className="text-[10px] font-bold text-saffron-700">₹{finalPrice}</span>
+                                <span className="text-[10px] font-bold text-amber-400">₹{finalPrice}</span>
                                 {pairingDiscount > 0 && (
-                                  <span className="text-[8px] line-through text-charcoal-400 ml-1">₹{dish.price}</span>
+                                  <span className="text-[8px] line-through text-slate-500 ml-1">₹{dish.price}</span>
                                 )}
                               </div>
                               <button
@@ -256,7 +256,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                                     added_by_guest: 'Quick Pairing'
                                   });
                                 }}
-                                className="px-2 py-0.5 bg-saffron-600 hover:bg-saffron-700 text-white text-[10px] font-bold rounded-md shadow-xs transition-colors flex items-center space-x-0.5 cursor-pointer"
+                                className="px-2 py-0.5 bg-amber-500 hover:bg-amber-400 text-white text-[10px] font-bold rounded-md shadow-sm transition-colors flex items-center space-x-0.5 cursor-pointer"
                               >
                                 <Plus className="w-2.5 h-2.5" />
                                 <span>{t.add}</span>
@@ -272,30 +272,30 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
               {/* Kitchen notes */}
               <div className="pt-3">
-                <label className="text-xs font-semibold text-charcoal-900 mb-1 block">{t.specialInstructions}</label>
+                <label className="text-xs font-semibold text-slate-300 mb-1 block">{t.specialInstructions}</label>
                 <input
                   type="text"
                   value={customerNotes}
                   onChange={(e) => setCustomerNotes(e.target.value)}
                   placeholder={t.specialInstructionsPlaceholder}
-                  className="w-full px-3 py-2 text-xs bg-ivory-50 border border-ivory-200 rounded-xl focus:outline-none focus:border-saffron-600 text-charcoal-900"
+                  className="w-full px-3 py-2 text-xs bg-[#090D16]/[0.04] border border-white/[0.08] rounded-xl focus:outline-none focus:border-amber-500/60 text-slate-100 placeholder-slate-500"
                 />
               </div>
             </div>
 
             {/* Calculations & Checkout */}
-            <div className="pt-3 border-t border-ivory-200 space-y-1.5 text-xs">
-              <div className="flex justify-between text-charcoal-700">
+            <div className="pt-3 border-t border-white/[0.08] space-y-1.5 text-xs">
+              <div className="flex justify-between text-slate-400">
                 <span>{t.itemTotal}</span>
                 <span>₹{subtotal.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between text-charcoal-700">
+              <div className="flex justify-between text-slate-400">
                 <span>{t.taxAndGst}</span>
                 <span>₹{taxAmount.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between font-bold text-sm text-charcoal-900 pt-2 border-t border-ivory-100">
+              <div className="flex justify-between font-bold text-sm text-slate-100 pt-2 border-t border-white/[0.06]">
                 <span>{t.grandTotal}</span>
-                <span className="text-saffron-700 text-base">₹{totalAmount.toFixed(2)}</span>
+                <span className="text-amber-400 text-base">₹{totalAmount.toFixed(2)}</span>
               </div>
 
               <div className="pt-2">
@@ -303,7 +303,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   type="button"
                   disabled={submitting}
                   onClick={handlePlaceOrder}
-                  className="w-full bg-saffron-600 hover:bg-saffron-700 disabled:bg-gray-300 text-white font-bold py-3.5 px-4 rounded-xl shadow-subtle flex items-center justify-between text-xs transition-colors"
+                  className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 disabled:opacity-50 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg flex items-center justify-between text-xs transition-all"
                 >
                   <div className="text-left">
                     <span className="block leading-tight font-semibold">{t.sendToKitchen} ({tableLabel})</span>
