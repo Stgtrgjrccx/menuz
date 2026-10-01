@@ -1,4 +1,5 @@
 import { MenuItem, MenuCategory } from '../types';
+import { findAuthenticPuneMenu } from './authenticPuneMenus';
 
 export interface GeneratedMenuData {
   categories: MenuCategory[];
@@ -19,10 +20,21 @@ function finalizeMenu(categories: MenuCategory[], dishes: GeneratedDishInput[]):
   };
 }
 
-
 /**
  * Generates authentic culinary dishes and categories tailored strictly to the
- * restaurant's cuisine type. NEVER prepends or jumbles the restaurant's name into the dish title.
+ * restaurant's identity and cuisine type.
+ *
+ * 1. FIRST checks for dedicated scanned real-world menus for iconic Pune landmarks
+ *    (Vaishali, Cafe Goodluck, Kayani Bakery, Marz-O-Rin, Dorabjee & Sons, Blue Nile,
+ *     Sujata Mastani, Chitale Bandhu, Bedekar, Kata Kirr, Wadeshwar, Arthur's Theme,
+ *     Le Plaisir, Malaka Spice, Toit, Effingut, Doolally, Camp Burger, Durvankur,
+ *     Hotel Shreyas, Sukanta, Kalyan Bhel, We Idliwale, Ginkgo, Paasha, Ukiyo,
+ *     German Bakery, Dario's, KMCY, Cafe Goa, etc.).
+ *
+ * 2. SECONDLY applies deeply authentic regional cuisine generators (Maharashtrian Thali,
+ *    Irani/Parsi, Coastal Malvani Seafood, Craft Brewery, South Indian Tiffin,
+ *    Sourdough Pizza/Italian, Pan-Asian Dim Sum, Chaat/Street Food, Continental Cafe,
+ *    North Indian Mughlai).
  */
 export function generateCuisineMenu(
   restaurantId: string,
@@ -33,7 +45,468 @@ export function generateCuisineMenu(
   const lowerCuisine = (cuisine || '').toLowerCase();
   const slug = restaurantSlug || 'venue';
 
-  // 1. PAN-ASIAN / THAI / CHINESE / VIETNAMESE / JAPANESE
+  // ── STEP 1: Check Scanned Authentic Pune Landmark Blueprint ──
+  const authenticBlueprint = findAuthenticPuneMenu(_restaurantName, restaurantSlug);
+  if (authenticBlueprint) {
+    const categories: MenuCategory[] = authenticBlueprint.categories.map((c) => ({
+      id: `cat-${slug}-${c.idSuffix}`,
+      restaurant_id: restaurantId,
+      name: c.name,
+      sort_order: c.sort_order,
+      is_active: true
+    }));
+
+    const dishes: GeneratedDishInput[] = authenticBlueprint.dishes.map((d, idx) => ({
+      id: `item-${slug}-${idx + 1}`,
+      restaurant_id: restaurantId,
+      category_id: `cat-${slug}-${d.categorySuffix}`,
+      name: d.name,
+      price: d.price,
+      short_description: d.short_description,
+      full_description: d.full_description || d.short_description,
+      ingredients: d.ingredients,
+      allergens: d.allergens,
+      dietary_flags: d.dietary_flags,
+      spice_level: d.spice_level,
+      serving_size: d.serving_size,
+      image_url: d.image_url,
+      is_available: true,
+      is_signature: d.is_signature ?? (idx === 0),
+      is_bestseller: d.is_bestseller ?? true,
+      is_chef_recommended: d.is_chef_recommended ?? (idx < 2),
+      sort_order: idx + 1
+    }));
+
+    return finalizeMenu(categories, dishes);
+  }
+
+  // ── STEP 2: REGIONAL AUTHENTIC CUISINE GENERATORS ───────────
+
+  // A. MAHARASHTRIAN / THALI / KOLHAPURI / PUNERI / MISAL / MARATHA
+  if (
+    lowerCuisine.includes('maharashtrian') ||
+    lowerCuisine.includes('thali') ||
+    lowerCuisine.includes('kolhapuri') ||
+    lowerCuisine.includes('puneri') ||
+    lowerCuisine.includes('misal') ||
+    lowerCuisine.includes('maratha') ||
+    lowerCuisine.includes('sukka') ||
+    lowerCuisine.includes('rassa')
+  ) {
+    const categories: MenuCategory[] = [
+      { id: `cat-${slug}-thali`, restaurant_id: restaurantId, name: 'Special Feast Thalis', sort_order: 1, is_active: true },
+      { id: `cat-${slug}-sukka`, restaurant_id: restaurantId, name: 'Special Mutton & Chicken Sukka', sort_order: 2, is_active: true },
+      { id: `cat-${slug}-veg`, restaurant_id: restaurantId, name: 'Pithla Bhakri & Vegetarian Classics', sort_order: 3, is_active: true },
+      { id: `cat-${slug}-sweets`, restaurant_id: restaurantId, name: 'Traditional Sweets & Solkadhi', sort_order: 4, is_active: true }
+    ];
+
+    const dishes: GeneratedDishInput[] = [
+      {
+        id: `item-${slug}-mh-1`,
+        restaurant_id: restaurantId,
+        category_id: `cat-${slug}-thali`,
+        name: 'Special Kolhapuri Mutton Thali (with Tambda & Pandhra Rassa)',
+        price: 490,
+        short_description: 'Tender goat mutton sukka cooked in black kala masala, unlimited hot Tambda (red) and Pandhra (white) rassa, 2 Jowar/Bajra Bhakris, and Indrayani rice.',
+        full_description: 'The crowning glory of Western Maharashtra culinary heritage. The mutton is braised in cold-pressed groundnut oil with roasted dry coconut and stone-ground spices.',
+        ingredients: ['Mutton', 'Kala Masala', 'Dry Coconut', 'Bone Broth', 'Jowar Bhakri', 'Indrayani Rice'],
+        allergens: [],
+        dietary_flags: ['non_veg', 'gluten_free'],
+        spice_level: 4,
+        serving_size: 'Full Thali Meal for 1',
+        image_url: 'https://images.unsplash.com/photo-1545247181-516773cae754?w=800&auto=format&fit=crop',
+        is_available: true,
+        is_signature: true,
+        is_chef_recommended: true,
+        is_bestseller: true,
+        sort_order: 1
+      },
+      {
+        id: `item-${slug}-mh-2`,
+        restaurant_id: restaurantId,
+        category_id: `cat-${slug}-sukka`,
+        name: 'Chicken Sukka with Kombdi Vade',
+        price: 380,
+        short_description: 'Country chicken slow-roasted with caramelized onions, roasted coconut, and Malvani spices, served with 4 fluffy fried multi-grain kombdi vade.',
+        full_description: 'Konkan-Maratha specialty featuring fragrant, crispy, deep-fried vade made of rice and split gram flour.',
+        ingredients: ['Chicken', 'Dry Coconut Paste', 'Malvani Garam Masala', 'Fluffy Kombdi Vade'],
+        allergens: ['Gluten'],
+        dietary_flags: ['non_veg'],
+        spice_level: 3,
+        serving_size: 'Serves 1-2',
+        image_url: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=800&auto=format&fit=crop',
+        is_available: true,
+        is_signature: true,
+        is_chef_recommended: true,
+        is_bestseller: true,
+        sort_order: 2
+      },
+      {
+        id: `item-${slug}-mh-3`,
+        restaurant_id: restaurantId,
+        category_id: `cat-${slug}-veg`,
+        name: 'Zunka Bhakri with Hirvi Mirchi Thecha',
+        price: 210,
+        short_description: 'Gram flour seasoned with mustard, garlic, and turmeric cooked dry on tawa, served with warm jowar bhakri, raw onion, and fiery green chili thecha.',
+        full_description: 'The rustic heart of Maharashtra farmers’ cuisine.',
+        ingredients: ['Gram Flour (Besan)', 'Garlic', 'Green Chili Thecha', 'Jowar Bhakri', 'Raw Onions'],
+        allergens: [],
+        dietary_flags: ['veg', 'gluten_free'],
+        spice_level: 3,
+        serving_size: 'Serves 1',
+        image_url: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=800&auto=format&fit=crop',
+        is_available: true,
+        is_signature: false,
+        is_chef_recommended: true,
+        is_bestseller: true,
+        sort_order: 3
+      },
+      {
+        id: `item-${slug}-mh-4`,
+        restaurant_id: restaurantId,
+        category_id: `cat-${slug}-sweets`,
+        name: 'Chilled Coconut Solkadhi',
+        price: 60,
+        short_description: 'Traditional pink digestive drink made from freshly pressed coconut milk, wild Amsul (kokum) extract, garlic, and fresh coriander.',
+        full_description: 'A cooling palate cleanser that balances fiery rassa spices.',
+        ingredients: ['Fresh Coconut Milk', 'Kokum', 'Garlic', 'Green Chili', 'Rock Salt'],
+        allergens: [],
+        dietary_flags: ['veg', 'gluten_free'],
+        spice_level: 1,
+        serving_size: '250 ml Glass',
+        image_url: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=800&auto=format&fit=crop',
+        is_available: true,
+        is_signature: false,
+        is_chef_recommended: true,
+        is_bestseller: true,
+        sort_order: 4
+      }
+    ];
+
+    return finalizeMenu(categories, dishes);
+  }
+
+  // B. IRANI CAFE / PARSI / KHEEMA / BUN MASKA
+  if (
+    lowerCuisine.includes('irani') ||
+    lowerCuisine.includes('parsi') ||
+    lowerCuisine.includes('bun maska') ||
+    lowerCuisine.includes('kheema')
+  ) {
+    const categories: MenuCategory[] = [
+      { id: `cat-${slug}-breakfast`, restaurant_id: restaurantId, name: 'Irani Bakery & Bun Maska', sort_order: 1, is_active: true },
+      { id: `cat-${slug}-kheema`, restaurant_id: restaurantId, name: 'Iconic Kheema & Egg Plates', sort_order: 2, is_active: true },
+      { id: `cat-${slug}-chai`, restaurant_id: restaurantId, name: 'Special Dum Chai & Custard', sort_order: 3, is_active: true }
+    ];
+
+    const dishes: GeneratedDishInput[] = [
+      {
+        id: `item-${slug}-irani-1`,
+        restaurant_id: restaurantId,
+        category_id: `cat-${slug}-kheema`,
+        name: 'Mutton Kheema Pav with Sunny Egg',
+        price: 250,
+        short_description: 'Slow-simmered spiced minced goat meat braised with caramelized onions, green chilies, topped with a fried egg and served with hot buttered ladi pav.',
+        full_description: 'Classic Irani cafe breakfast standard cooked in bone-marrow fat and seasoned with stone-ground garam masala.',
+        ingredients: ['Minced Mutton', 'Farm Egg', 'Ladi Pav', 'Onions', 'Ginger-Garlic', 'Butter'],
+        allergens: ['Egg', 'Gluten', 'Dairy'],
+        dietary_flags: ['non_veg'],
+        spice_level: 3,
+        serving_size: 'Serves 1-2',
+        image_url: 'https://images.unsplash.com/photo-1545247181-516773cae754?w=800&auto=format&fit=crop',
+        is_available: true,
+        is_signature: true,
+        is_chef_recommended: true,
+        is_bestseller: true,
+        sort_order: 1
+      },
+      {
+        id: `item-${slug}-irani-2`,
+        restaurant_id: restaurantId,
+        category_id: `cat-${slug}-breakfast`,
+        name: 'Warm Bun Maska with Amul Butter',
+        price: 60,
+        short_description: 'Pillow-soft bakery bun sliced and stuffed with a thick layer of salted Amul butter.',
+        full_description: 'Dip into hot Irani chai for the quintessential morning ritual.',
+        ingredients: ['Fresh Bun', 'Salted Butter'],
+        allergens: ['Gluten', 'Dairy'],
+        dietary_flags: ['veg'],
+        spice_level: 0,
+        serving_size: '1 Bun',
+        image_url: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&auto=format&fit=crop',
+        is_available: true,
+        is_signature: true,
+        is_chef_recommended: true,
+        is_bestseller: true,
+        sort_order: 2
+      },
+      {
+        id: `item-${slug}-irani-3`,
+        restaurant_id: restaurantId,
+        category_id: `cat-${slug}-chai`,
+        name: 'Special Irani Dum Chai',
+        price: 35,
+        short_description: 'Simmered black tea layered with thick sweetened condensed milk infused with green cardamom.',
+        full_description: 'Creamy, rich, and aromatic.',
+        ingredients: ['Black Tea', 'Condensed Milk', 'Cardamom', 'Sugar'],
+        allergens: ['Dairy'],
+        dietary_flags: ['veg'],
+        spice_level: 0,
+        serving_size: '1 Cup',
+        image_url: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=800&auto=format&fit=crop',
+        is_available: true,
+        is_signature: false,
+        is_chef_recommended: true,
+        is_bestseller: true,
+        sort_order: 3
+      }
+    ];
+
+    return finalizeMenu(categories, dishes);
+  }
+
+  // C. SEAFOOD / MALVANI / KONKANI / COASTAL / FISH
+  if (
+    lowerCuisine.includes('seafood') ||
+    lowerCuisine.includes('malvani') ||
+    lowerCuisine.includes('konkani') ||
+    lowerCuisine.includes('coastal') ||
+    lowerCuisine.includes('fish') ||
+    lowerCuisine.includes('prawn')
+  ) {
+    const categories: MenuCategory[] = [
+      { id: `cat-${slug}-fry`, restaurant_id: restaurantId, name: 'Crispy Coastal Rava Fish Fry', sort_order: 1, is_active: true },
+      { id: `cat-${slug}-curry`, restaurant_id: restaurantId, name: 'Authentic Malvani Curries & Thalis', sort_order: 2, is_active: true },
+      { id: `cat-${slug}-sides`, restaurant_id: restaurantId, name: 'Bhakri, Rice & Solkadhi', sort_order: 3, is_active: true }
+    ];
+
+    const dishes: GeneratedDishInput[] = [
+      {
+        id: `item-${slug}-sea-1`,
+        restaurant_id: restaurantId,
+        category_id: `cat-${slug}-fry`,
+        name: 'Surmai (Kingfish) Rava Fry',
+        price: 480,
+        short_description: 'Thick fresh kingfish steak marinated in fiery Malvani red chili-kokum paste, crusted in semolina (rava) and crisp-fried in groundnut oil.',
+        full_description: 'Golden crunchy crust with flaky, juicy, ocean-fresh fish inside. Garnished with onion rings and lemon.',
+        ingredients: ['Fresh Surmai Steak', 'Semolina (Rava)', 'Byadgi Chili Paste', 'Kokum Agal', 'Garlic'],
+        allergens: ['Fish', 'Gluten'],
+        dietary_flags: ['non_veg'],
+        spice_level: 3,
+        serving_size: '1 Large Steak',
+        image_url: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800&auto=format&fit=crop',
+        is_available: true,
+        is_signature: true,
+        is_chef_recommended: true,
+        is_bestseller: true,
+        sort_order: 1
+      },
+      {
+        id: `item-${slug}-sea-2`,
+        restaurant_id: restaurantId,
+        category_id: `cat-${slug}-curry`,
+        name: 'Malvani Prawns Curry with Steamed Rice',
+        price: 440,
+        short_description: 'Succulent sea prawns simmered in freshly ground coconut, triphala, and roasted coriander curry, served with piping hot rice.',
+        full_description: 'Homestyle Konkani recipe cooked in clay pot with fresh coconut extract.',
+        ingredients: ['Sea Prawns', 'Fresh Coconut Paste', 'Triphala', 'Kokum', 'Steamed Rice'],
+        allergens: ['Shellfish'],
+        dietary_flags: ['non_veg', 'gluten_free'],
+        spice_level: 2,
+        serving_size: 'Serves 1-2',
+        image_url: 'https://images.unsplash.com/photo-1545247181-516773cae754?w=800&auto=format&fit=crop',
+        is_available: true,
+        is_signature: true,
+        is_chef_recommended: true,
+        is_bestseller: true,
+        sort_order: 2
+      },
+      {
+        id: `item-${slug}-sea-3`,
+        restaurant_id: restaurantId,
+        category_id: `cat-${slug}-sides`,
+        name: 'Chilled Coconut Solkadhi',
+        price: 65,
+        short_description: 'Freshly extracted coconut milk infused with wild kokum, garlic, and fresh green chilies.',
+        full_description: 'Essential accompaniment for any coastal seafood meal.',
+        ingredients: ['Coconut Milk', 'Kokum', 'Garlic', 'Green Chili', 'Pink Salt'],
+        allergens: [],
+        dietary_flags: ['veg', 'gluten_free'],
+        spice_level: 1,
+        serving_size: '250 ml Glass',
+        image_url: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=800&auto=format&fit=crop',
+        is_available: true,
+        is_signature: false,
+        is_chef_recommended: true,
+        is_bestseller: true,
+        sort_order: 3
+      }
+    ];
+
+    return finalizeMenu(categories, dishes);
+  }
+
+  // D. CRAFT BREWERY / GASTROPUB / TAPROOM / PUB / BEER
+  if (
+    lowerCuisine.includes('brew') ||
+    lowerCuisine.includes('beer') ||
+    lowerCuisine.includes('pub') ||
+    lowerCuisine.includes('taproom') ||
+    lowerCuisine.includes('gastropub')
+  ) {
+    const categories: MenuCategory[] = [
+      { id: `cat-${slug}-brews`, restaurant_id: restaurantId, name: 'Handcrafted Beers on Tap', sort_order: 1, is_active: true },
+      { id: `cat-${slug}-appetizers`, restaurant_id: restaurantId, name: 'Tapas & Loaded Pub Bites', sort_order: 2, is_active: true },
+      { id: `cat-${slug}-pizza`, restaurant_id: restaurantId, name: 'Woodfired Sourdough Pizzas', sort_order: 3, is_active: true }
+    ];
+
+    const dishes: GeneratedDishInput[] = [
+      {
+        id: `item-${slug}-brew-1`,
+        restaurant_id: restaurantId,
+        category_id: `cat-${slug}-brews`,
+        name: 'Belgian Witbier Pint (Craft Brew)',
+        price: 350,
+        short_description: 'Crisp, unfiltered hazy wheat beer brewed with imported coriander seeds and sweet orange peel. Light and citrusy.',
+        full_description: 'ABV 4.8% | IBU 14. Poured fresh from temperature-controlled cellar tanks.',
+        ingredients: ['Malted Wheat', 'Barley', 'Orange Peel', 'Coriander Seeds', 'Belgian Yeast'],
+        allergens: ['Gluten'],
+        dietary_flags: ['veg'],
+        spice_level: 0,
+        serving_size: '500 ml Pint',
+        image_url: 'https://images.unsplash.com/photo-1535958636474-b021ee887b13?w=800&auto=format&fit=crop',
+        is_available: true,
+        is_signature: true,
+        is_chef_recommended: true,
+        is_bestseller: true,
+        sort_order: 1
+      },
+      {
+        id: `item-${slug}-brew-2`,
+        restaurant_id: restaurantId,
+        category_id: `cat-${slug}-appetizers`,
+        name: 'Fiery Buffalo Chicken Wings',
+        price: 420,
+        short_description: 'Crispy fried wings tossed in rich butter hot sauce, served with blue cheese dip and crisp celery.',
+        full_description: 'Classic American brewpub favorite with authentic vinegary cayenne heat.',
+        ingredients: ['Chicken Wings', 'Louisiana Hot Sauce', 'Butter', 'Blue Cheese Dip'],
+        allergens: ['Dairy'],
+        dietary_flags: ['non_veg', 'gluten_free'],
+        spice_level: 3,
+        serving_size: '8 Wings',
+        image_url: 'https://images.unsplash.com/photo-1527477321055-436158a2b00d?w=800&auto=format&fit=crop',
+        is_available: true,
+        is_signature: true,
+        is_chef_recommended: true,
+        is_bestseller: true,
+        sort_order: 2
+      },
+      {
+        id: `item-${slug}-brew-3`,
+        restaurant_id: restaurantId,
+        category_id: `cat-${slug}-pizza`,
+        name: 'Woodfired Sourdough Margherita Pizza',
+        price: 540,
+        short_description: '72-hour slow-fermented crust topped with crushed San Marzano tomatoes, fresh Fior di Latte mozzarella, and sweet basil.',
+        full_description: 'Blistered in a wood-fired stone oven at 450°C.',
+        ingredients: ['Sourdough Crust', 'San Marzano Tomatoes', 'Fior di Latte Mozzarella', 'EVOO', 'Basil'],
+        allergens: ['Gluten', 'Dairy'],
+        dietary_flags: ['veg'],
+        spice_level: 0,
+        serving_size: '11 Inch Pizza',
+        image_url: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&auto=format&fit=crop',
+        is_available: true,
+        is_signature: false,
+        is_chef_recommended: true,
+        is_bestseller: true,
+        sort_order: 3
+      }
+    ];
+
+    return finalizeMenu(categories, dishes);
+  }
+
+  // E. CHAAT / STREET FOOD / MITHAI
+  if (
+    lowerCuisine.includes('chaat') ||
+    lowerCuisine.includes('street') ||
+    lowerCuisine.includes('bhel') ||
+    lowerCuisine.includes('mithai') ||
+    lowerCuisine.includes('sweets')
+  ) {
+    const categories: MenuCategory[] = [
+      { id: `cat-${slug}-chaat`, restaurant_id: restaurantId, name: 'Signature Chaat Specialties', sort_order: 1, is_active: true },
+      { id: `cat-${slug}-farsan`, restaurant_id: restaurantId, name: 'Crisp Farsan & Savouries', sort_order: 2, is_active: true },
+      { id: `cat-${slug}-sweets`, restaurant_id: restaurantId, name: 'Heritage Mithai & Desserts', sort_order: 3, is_active: true }
+    ];
+
+    const dishes: GeneratedDishInput[] = [
+      {
+        id: `item-${slug}-chaat-1`,
+        restaurant_id: restaurantId,
+        category_id: `cat-${slug}-chaat`,
+        name: 'Sev Potato Dahi Puri (SPDP)',
+        price: 110,
+        short_description: 'Crisp handcrafted puris filled with spiced potato mash, sweetened dahi, tamarind date chutney, and a mountain of crunchy sev.',
+        full_description: 'Pune’s quintessential street food crown jewel.',
+        ingredients: ['Crisp Puris', 'Potatoes', 'Sweet Dahi', 'Tamarind Chutney', 'Nylon Sev'],
+        allergens: ['Gluten', 'Dairy'],
+        dietary_flags: ['veg'],
+        spice_level: 1,
+        serving_size: '6 Puris',
+        image_url: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=800&auto=format&fit=crop',
+        is_available: true,
+        is_signature: true,
+        is_chef_recommended: true,
+        is_bestseller: true,
+        sort_order: 1
+      },
+      {
+        id: `item-${slug}-chaat-2`,
+        restaurant_id: restaurantId,
+        category_id: `cat-${slug}-chaat`,
+        name: 'Special Puneri Matki Bhel',
+        price: 85,
+        short_description: 'Fresh puffed rice tossed with boiled sprouted matki, raw mango, diced onions, spicy green chutney, and farsan.',
+        full_description: 'Light, crunchy, and tangy snack.',
+        ingredients: ['Puffed Rice', 'Sprouted Matki', 'Nylon Sev', 'Onions', 'Tamarind Chutney'],
+        allergens: [],
+        dietary_flags: ['veg', 'gluten_free'],
+        spice_level: 2,
+        serving_size: '1 Plate',
+        image_url: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=800&auto=format&fit=crop',
+        is_available: true,
+        is_signature: true,
+        is_chef_recommended: false,
+        is_bestseller: true,
+        sort_order: 2
+      },
+      {
+        id: `item-${slug}-chaat-3`,
+        restaurant_id: restaurantId,
+        category_id: `cat-${slug}-sweets`,
+        name: 'Kesar Mango Mastani',
+        price: 130,
+        short_description: 'Rich Alphonso mango milkshake topped with two scoops of mango ice cream and chopped pistachios.',
+        full_description: 'Pune’s indigenous fruit dessert.',
+        ingredients: ['Alphonso Mango Pulp', 'Milk', 'Mango Ice Cream', 'Dry Fruits'],
+        allergens: ['Dairy', 'Nuts'],
+        dietary_flags: ['veg'],
+        spice_level: 0,
+        serving_size: '350 ml Glass',
+        image_url: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=800&auto=format&fit=crop',
+        is_available: true,
+        is_signature: true,
+        is_chef_recommended: true,
+        is_bestseller: true,
+        sort_order: 3
+      }
+    ];
+
+    return finalizeMenu(categories, dishes);
+  }
+
+  // F. PAN-ASIAN / THAI / CHINESE / VIETNAMESE / JAPANESE
   if (
     lowerCuisine.includes('asian') ||
     lowerCuisine.includes('thai') ||
@@ -58,7 +531,7 @@ export function generateCuisineMenu(
         name: 'Truffle Edamame & Water Chestnut Dim Sum',
         price: 380,
         short_description: 'Translucent steamed crystal dumplings infused with black truffle essence and scallion oil.',
-        full_description: 'Handmade daily using Japanese edamame, crunchy water chestnuts, and cold-pressed sesame oil. Steamed in traditional bamboo baskets.',
+        full_description: 'Handmade daily using Japanese edamame, crunchy water chestnuts, and cold-pressed sesame oil.',
         ingredients: ['Edamame', 'Water Chestnuts', 'Truffle Oil', 'Wheat Starch', 'Scallions'],
         allergens: ['Gluten', 'Soy'],
         dietary_flags: ['veg'],
@@ -98,13 +571,13 @@ export function generateCuisineMenu(
         name: 'Classic Bangkok Pad Thai',
         price: 440,
         short_description: 'Flat rice noodles wok-charred with tamarind pulp, crushed roasted peanuts, and crunchy bean sprouts.',
-        full_description: 'Street-style tamarind reduction wok-seared over high flame with fresh lime, chives, tofu, and crushed roasted peanuts.',
-        ingredients: ['Rice Noodles', 'Tamarind', 'Peanuts', 'Bean Sprouts', 'Chives', 'Tofu'],
+        full_description: 'Wok-charred with traditional palm sugar-tamarind sauce, dried chilies, firm tofu, garlic chives, and fresh lime.',
+        ingredients: ['Rice Noodles', 'Tamarind Pulp', 'Crushed Peanuts', 'Bean Sprouts', 'Tofu', 'Lime'],
         allergens: ['Peanuts', 'Soy'],
-        dietary_flags: ['veg'],
+        dietary_flags: ['veg', 'gluten_free'],
         spice_level: 2,
-        serving_size: 'Large Bowl',
-        image_url: 'https://images.unsplash.com/photo-1559847844-5315695dadae?w=800&auto=format&fit=crop',
+        serving_size: 'Serves 2',
+        image_url: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?w=800&auto=format&fit=crop',
         is_available: true,
         is_signature: true,
         is_chef_recommended: true,
@@ -115,66 +588,28 @@ export function generateCuisineMenu(
         id: `item-${slug}-asian-4`,
         restaurant_id: restaurantId,
         category_id: `cat-${slug}-curry`,
-        name: 'Thai Green Curry with Fragrant Jasmine Rice',
-        price: 520,
-        short_description: 'Aromatic coconut broth simmered with fresh Thai basil, lemongrass, kaffir lime, and baby bamboo shoots.',
-        full_description: 'Hand-pounded green chili and galangal paste simmered in creamy coconut milk with seasonal exotic greens and jasmine rice.',
-        ingredients: ['Coconut Milk', 'Thai Basil', 'Kaffir Lime', 'Galangal', 'Jasmine Rice'],
+        name: 'Aromatic Thai Green Curry with Jasmine Rice',
+        price: 490,
+        short_description: 'Velvety coconut cream curry pounded with fresh green chilies, sweet Thai basil, and bamboo shoots.',
+        full_description: 'Simmered with kaffir lime leaves, pea eggplants, and galangal. Served with steaming fragrant Jasmine rice.',
+        ingredients: ['Coconut Milk', 'Green Curry Paste', 'Thai Basil', 'Bamboo Shoots', 'Jasmine Rice'],
         allergens: [],
-        dietary_flags: ['veg'],
+        dietary_flags: ['veg', 'gluten_free'],
         spice_level: 2,
-        serving_size: 'Serves 2',
+        serving_size: 'Bowl with Rice (Serves 2)',
         image_url: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=800&auto=format&fit=crop',
         is_available: true,
         is_signature: true,
-        is_chef_recommended: true,
-        is_bestseller: false,
-        sort_order: 4
-      },
-      {
-        id: `item-${slug}-asian-5`,
-        restaurant_id: restaurantId,
-        category_id: `cat-${slug}-dessert`,
-        name: 'Mango Sticky Rice with Warm Coconut Cream',
-        price: 280,
-        short_description: 'Sweet glutinous rice steamed with pandan leaves, paired with ripe Alphonso mango slices.',
-        full_description: 'Traditional Southeast Asian delicacy served warm with salted coconut cream glaze and toasted sesame.',
-        ingredients: ['Sticky Rice', 'Alphonso Mango', 'Coconut Milk', 'Pandan', 'Palm Sugar'],
-        allergens: ['Sesame'],
-        dietary_flags: ['veg', 'dessert'],
-        spice_level: 0,
-        serving_size: '1 Portion',
-        image_url: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800&auto=format&fit=crop',
-        is_available: true,
-        is_signature: false,
-        is_chef_recommended: true,
+        is_chef_recommended: false,
         is_bestseller: true,
-        sort_order: 5
-      },
-      {
-        id: `item-${slug}-asian-6`,
-        restaurant_id: restaurantId,
-        category_id: `cat-${slug}-dessert`,
-        name: 'Lemongrass & Kaffir Lime Craft Refresher',
-        price: 190,
-        short_description: 'Muddled fresh lemongrass, bruised kaffir leaves, and sparkling mountain tonic.',
-        full_description: 'Crisp botanical refresher balanced with palm syrup and fresh Meyer lemon juice.',
-        ingredients: ['Lemongrass', 'Kaffir Lime', 'Sparkling Water', 'Lime Juice'],
-        allergens: [],
-        dietary_flags: ['beverage'],
-        spice_level: 0,
-        serving_size: '350ml',
-        image_url: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&auto=format&fit=crop',
-        is_available: true,
-        item_type: 'drink',
-        sort_order: 6
+        sort_order: 4
       }
     ];
 
     return finalizeMenu(categories, dishes);
   }
 
-  // 2. SOUTH INDIAN / UDIPI / COASTAL
+  // G. SOUTH INDIAN / UDIPI / DOSA / CHETTINAD / KERALA
   if (
     lowerCuisine.includes('south indian') ||
     lowerCuisine.includes('udipi') ||
@@ -183,25 +618,26 @@ export function generateCuisineMenu(
     lowerCuisine.includes('chettinad')
   ) {
     const categories: MenuCategory[] = [
-      { id: `cat-${slug}-tiffin`, restaurant_id: restaurantId, name: 'Traditional Tiffins & Crispy Dosas', sort_order: 1, is_active: true },
-      { id: `cat-${slug}-meals`, restaurant_id: restaurantId, name: 'Heritage Meals & Specialties', sort_order: 2, is_active: true },
-      { id: `cat-${slug}-beverages`, restaurant_id: restaurantId, name: 'Filter Coffee & Desserts', sort_order: 3, is_active: true }
+      { id: `cat-${slug}-dosa`, restaurant_id: restaurantId, name: 'Crisp Dosas & Roast Crepes', sort_order: 1, is_active: true },
+      { id: `cat-${slug}-tiffin`, restaurant_id: restaurantId, name: 'Steamed Tiffin & Vada Classics', sort_order: 2, is_active: true },
+      { id: `cat-${slug}-meals`, restaurant_id: restaurantId, name: 'Traditional Meals & Rice Bowls', sort_order: 3, is_active: true },
+      { id: `cat-${slug}-drinks`, restaurant_id: restaurantId, name: 'Traditional Brews & Desserts', sort_order: 4, is_active: true }
     ];
 
     const dishes: GeneratedDishInput[] = [
       {
         id: `item-${slug}-si-1`,
         restaurant_id: restaurantId,
-        category_id: `cat-${slug}-tiffin`,
-        name: 'Ghee Podi Mysore Masala Dosa',
-        price: 190,
-        short_description: 'Crisp golden crepe roasted in pure A2 ghee, smeared with spicy gun-powder and potato masala.',
-        full_description: 'Fermented stone-ground batter roasted to a mahogany crunch with pure ghee, layered with red garlic chutney and spiced potato filling.',
-        ingredients: ['Rice Batter', 'Desi Ghee', 'Podi Gunpowder', 'Potatoes', 'Curry Leaves'],
+        category_id: `cat-${slug}-dosa`,
+        name: 'Benne Mysore Masala Dosa',
+        price: 160,
+        short_description: 'Fermented golden rice crepe roasted in generous white butter, smeared with spicy red chili-garlic chutney.',
+        full_description: 'Cooked on seasoned cast-iron griddles until shatteringly crisp, filled with spiced turmeric potato mash.',
+        ingredients: ['Fermented Rice-Lentil Batter', 'Mysore Red Chutney', 'Potato Bhaji', 'White Butter'],
         allergens: ['Dairy'],
         dietary_flags: ['veg'],
         spice_level: 2,
-        serving_size: '1 Dosa with Sambhar & 3 Chutneys',
+        serving_size: '1 Large Dosa',
         image_url: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=800&auto=format&fit=crop',
         is_available: true,
         is_signature: true,
@@ -213,86 +649,48 @@ export function generateCuisineMenu(
         id: `item-${slug}-si-2`,
         restaurant_id: restaurantId,
         category_id: `cat-${slug}-tiffin`,
-        name: 'Steamed Thatte Idli with White Butter',
-        price: 150,
-        short_description: 'Extra fluffy plate-sized steamed rice cakes served with homemade makhan and drumstick sambhar.',
-        full_description: 'Airy, melt-in-mouth Karnataka style steamed rice cakes crowned with freshly churned white butter and spiced roasted lentils.',
-        ingredients: ['Steamed Rice', 'Urad Dal', 'White Butter', 'Lentils', 'Mustard Seeds'],
+        name: 'Steamed Thatte Idli with Ghee Podi',
+        price: 120,
+        short_description: 'Plate-sized fluffy steamed rice cakes drenched in fragrant molten clarified butter and fiery spiced lentil gunpowder.',
+        full_description: 'Fermented for 16 hours and steamed in traditional flat plates for an ultra-spongy texture.',
+        ingredients: ['Parboiled Rice', 'Urad Dal', 'Desi Ghee', 'Gunpowder Podi'],
         allergens: ['Dairy'],
-        dietary_flags: ['veg'],
-        spice_level: 1,
+        dietary_flags: ['veg', 'gluten_free'],
+        spice_level: 2,
         serving_size: '2 Large Idlis',
-        image_url: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=800&auto=format&fit=crop',
+        image_url: 'https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=800&auto=format&fit=crop',
         is_available: true,
-        is_signature: false,
-        is_chef_recommended: true,
+        is_signature: true,
+        is_chef_recommended: false,
         is_bestseller: true,
         sort_order: 2
       },
       {
         id: `item-${slug}-si-3`,
         restaurant_id: restaurantId,
-        category_id: `cat-${slug}-tiffin`,
-        name: 'Crispy Medu Vada Duo',
-        price: 140,
-        short_description: 'Golden-fried lentil donuts with a crunchy exterior and airy cloud-like center.',
-        full_description: 'Stone-crushed black gram batter seasoned with crushed black pepper, fresh ginger, and curry leaves. Served hot.',
-        ingredients: ['Black Gram', 'Black Pepper', 'Fresh Ginger', 'Curry Leaves', 'Coconut'],
-        allergens: [],
+        category_id: `cat-${slug}-drinks`,
+        name: 'Filter Kaapi in Brass Dabarah',
+        price: 55,
+        short_description: 'Strong chicory-infused decoction pulled with frothy whole milk in a traditional brass cup.',
+        full_description: 'Pulled vigorously by meter-high streams to generate a rich velvety head of foam.',
+        ingredients: ['Plantation Arabica Coffee', 'Chicory', 'Full-Cream Milk', 'Cane Sugar'],
+        allergens: ['Dairy'],
         dietary_flags: ['veg'],
-        spice_level: 1,
-        serving_size: '2 pieces',
-        image_url: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=800&auto=format&fit=crop',
-        is_available: true,
-        is_signature: false,
-        is_chef_recommended: false,
-        is_bestseller: true,
-        sort_order: 3
-      },
-      {
-        id: `item-${slug}-si-4`,
-        restaurant_id: restaurantId,
-        category_id: `cat-${slug}-meals`,
-        name: 'Malabar Flaky Parotta with Veg Kurma',
-        price: 280,
-        short_description: 'Multi-layered Kerala flatbread paired with rich coconut and poppy seed vegetable gravy.',
-        full_description: 'Hand-tossed flaky parotta cooked on cast iron with ghee, paired with aromatic slow-simmered vegetable stew.',
-        ingredients: ['Wheat Flour', 'Coconut Milk', 'Poppy Seeds', 'Seasonal Vegetables', 'Cardamom'],
-        allergens: ['Gluten', 'Dairy'],
-        dietary_flags: ['veg'],
-        spice_level: 2,
-        serving_size: 'Serves 1-2',
-        image_url: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&auto=format&fit=crop',
+        spice_level: 0,
+        serving_size: '1 Dabarah Set',
+        image_url: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=800&auto=format&fit=crop',
         is_available: true,
         is_signature: true,
         is_chef_recommended: true,
-        is_bestseller: false,
-        sort_order: 4
-      },
-      {
-        id: `item-${slug}-si-5`,
-        restaurant_id: restaurantId,
-        category_id: `cat-${slug}-beverages`,
-        name: 'Kumbakonam Degree Filter Coffee',
-        price: 90,
-        short_description: 'Freshly decocted chicory-blend coffee frothed with thick buffalo milk in a brass davarah.',
-        full_description: 'Authentic South Indian brew prepared from fresh morning roasted plantation beans and frothy milk.',
-        ingredients: ['Arabica Coffee', 'Chicory', 'Farm Fresh Milk', 'Jaggery/Sugar'],
-        allergens: ['Dairy'],
-        dietary_flags: ['beverage'],
-        spice_level: 0,
-        serving_size: '1 Brass Davarah',
-        image_url: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=800&auto=format&fit=crop',
-        is_available: true,
-        item_type: 'drink',
-        sort_order: 5
+        is_bestseller: true,
+        sort_order: 3
       }
     ];
 
     return finalizeMenu(categories, dishes);
   }
 
-  // 3. ITALIAN / PIZZA / PASTA / MEDITERRANEAN
+  // H. ITALIAN / PIZZA / PASTA / MEDITERRANEAN
   if (
     lowerCuisine.includes('italian') ||
     lowerCuisine.includes('pizza') ||
@@ -300,27 +698,27 @@ export function generateCuisineMenu(
     lowerCuisine.includes('mediterranean')
   ) {
     const categories: MenuCategory[] = [
-      { id: `cat-${slug}-anti`, restaurant_id: restaurantId, name: 'Antipasti & Crostini', sort_order: 1, is_active: true },
-      { id: `cat-${slug}-pizza`, restaurant_id: restaurantId, name: 'Woodfired Pizza', sort_order: 2, is_active: true },
+      { id: `cat-${slug}-antipasti`, restaurant_id: restaurantId, name: 'Antipasti & Small Plates', sort_order: 1, is_active: true },
+      { id: `cat-${slug}-pizza`, restaurant_id: restaurantId, name: 'Woodfired Sourdough Pizza', sort_order: 2, is_active: true },
       { id: `cat-${slug}-pasta`, restaurant_id: restaurantId, name: 'Handmade Pasta & Risotto', sort_order: 3, is_active: true },
-      { id: `cat-${slug}-dolci`, restaurant_id: restaurantId, name: 'Dolci & Beverages', sort_order: 4, is_active: true }
+      { id: `cat-${slug}-dolci`, restaurant_id: restaurantId, name: 'Dolci & Artisan Coffee', sort_order: 4, is_active: true }
     ];
 
     const dishes: GeneratedDishInput[] = [
       {
         id: `item-${slug}-it-1`,
         restaurant_id: restaurantId,
-        category_id: `cat-${slug}-anti`,
-        name: 'Burrata Pugliese con Pomodorini',
-        price: 520,
-        short_description: 'Creamy artisanal burrata with blistered heirloom tomatoes, cold-pressed olive oil, and basil crisps.',
-        full_description: 'Imported fresh burrata filled with sweet stracciatella, surrounded by flame-roasted vine cherry tomatoes and aged balsamic reduction.',
-        ingredients: ['Burrata Cheese', 'Heirloom Tomatoes', 'Extra Virgin Olive Oil', 'Basil', 'Balsamic'],
-        allergens: ['Dairy'],
+        category_id: `cat-${slug}-pizza`,
+        name: 'Margherita Bufalina Pizza',
+        price: 590,
+        short_description: '72-hour slow fermented dough, San Marzano D.O.P. tomatoes, creamy buffalo mozzarella, and fresh basil leaves.',
+        full_description: 'Hand-stretched and baked in a 480°C volcanic stone oven until blistered with leopard-spotted char.',
+        ingredients: ['Caputo 00 Flour', 'San Marzano Tomatoes', 'Buffalo Mozzarella', 'Fresh Basil', 'EVOO'],
+        allergens: ['Gluten', 'Dairy'],
         dietary_flags: ['veg'],
         spice_level: 0,
-        serving_size: '1 Portion',
-        image_url: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&auto=format&fit=crop',
+        serving_size: '11-inch Pie (6 slices)',
+        image_url: 'https://images.unsplash.com/photo-1604382355076-af4b0eb60143?w=800&auto=format&fit=crop',
         is_available: true,
         is_signature: true,
         is_chef_recommended: true,
@@ -330,17 +728,17 @@ export function generateCuisineMenu(
       {
         id: `item-${slug}-it-2`,
         restaurant_id: restaurantId,
-        category_id: `cat-${slug}-pizza`,
-        name: 'Tartufo Nero & Wild Mushroom Pizza',
+        category_id: `cat-${slug}-pasta`,
+        name: 'Hand-Rolled Truffle & Porcini Tagliatelle',
         price: 640,
-        short_description: 'Woodfired sourdough pizza with black truffle emulsion, roasted porcini, and fontina cheese.',
-        full_description: 'Fermented for 48 hours and charred at 450°C. Finished with aromatic Umbrian black summer truffles and fresh thyme.',
-        ingredients: ['00 Flour', 'Fontina', 'Porcini Mushrooms', 'Black Truffle', 'Fresh Thyme'],
-        allergens: ['Dairy', 'Gluten'],
+        short_description: 'Fresh egg tagliatelle tossed in cultured butter, wild porcini mushrooms, and cracked black pepper.',
+        full_description: 'Freshly extruded bronze-die egg pasta finished with Parmigiano-Reggiano and Piedmont black truffle shavings.',
+        ingredients: ['Fresh Tagliatelle', 'Porcini Mushrooms', 'Black Truffle Paste', 'Parmigiano-Reggiano', 'Butter'],
+        allergens: ['Gluten', 'Dairy', 'Egg'],
         dietary_flags: ['veg'],
-        spice_level: 0,
-        serving_size: '12-inch Pizza',
-        image_url: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800&auto=format&fit=crop',
+        spice_level: 1,
+        serving_size: 'Serves 1',
+        image_url: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=800&auto=format&fit=crop',
         is_available: true,
         is_signature: true,
         is_chef_recommended: true,
@@ -350,96 +748,58 @@ export function generateCuisineMenu(
       {
         id: `item-${slug}-it-3`,
         restaurant_id: restaurantId,
-        category_id: `cat-${slug}-pizza`,
-        name: 'Margherita Verace D.O.P.',
-        price: 490,
-        short_description: 'Classic Neapolitan pizza with crushed San Marzano tomatoes, fresh fior di latte, and sweet basil.',
-        full_description: 'Traditional Campania recipe featuring charred bubbly crust, sweet sun-ripened tomato sauce, and golden Ligurian olive oil.',
-        ingredients: ['San Marzano Tomatoes', 'Fior di Latte Mozzarella', 'Sweet Basil', 'Olive Oil'],
-        allergens: ['Dairy', 'Gluten'],
-        dietary_flags: ['veg'],
-        spice_level: 0,
-        serving_size: '12-inch Pizza',
-        image_url: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&auto=format&fit=crop',
-        is_available: true,
-        is_signature: false,
-        is_chef_recommended: false,
-        is_bestseller: true,
-        sort_order: 3
-      },
-      {
-        id: `item-${slug}-it-4`,
-        restaurant_id: restaurantId,
-        category_id: `cat-${slug}-pasta`,
-        name: 'Handcrafted Tagliolini al Tartufo',
-        price: 580,
-        short_description: 'Fresh egg-yolk ribbon pasta spun in French cultured butter, Parmigiano Reggiano, and shaved truffles.',
-        full_description: 'Hand-rolled every morning in our pasta room. Tossed tableside with 24-month aged Parmigiano and Kampot black pepper.',
-        ingredients: ['Semolina', 'Farm Egg Yolks', 'Parmigiano Reggiano', 'Cultured Butter', 'Truffle'],
-        allergens: ['Dairy', 'Gluten', 'Eggs'],
-        dietary_flags: ['veg'],
-        spice_level: 0,
-        serving_size: '220g Bowl',
-        image_url: 'https://images.unsplash.com/photo-1556760544-74068565f05c?w=800&auto=format&fit=crop',
-        is_available: true,
-        is_signature: true,
-        is_chef_recommended: true,
-        is_bestseller: true,
-        sort_order: 4
-      },
-      {
-        id: `item-${slug}-it-5`,
-        restaurant_id: restaurantId,
         category_id: `cat-${slug}-dolci`,
-        name: 'Classic Venetian Tiramisu',
-        price: 340,
-        short_description: 'Espresso-soaked savoiardi biscuits layered with whipped mascarpone cream and Dutch cocoa.',
-        full_description: 'Authentic 1958 Treviso family recipe with airy ladyfinger biscuits dipped in dark roast espresso.',
-        ingredients: ['Mascarpone', 'Savoiardi', 'Espresso', 'Dutch Cocoa', 'Pasteurized Yolks'],
-        allergens: ['Dairy', 'Gluten', 'Eggs'],
-        dietary_flags: ['veg', 'dessert'],
+        name: 'Classic Venetian Tiramisu Tradizionale',
+        price: 360,
+        short_description: 'Airy Savoiardi ladyfinger biscuits steeped in Italian dark roast espresso, layered with whipped mascarpone cream and cocoa.',
+        full_description: 'Crafted according to the original Treviso recipe.',
+        ingredients: ['Savoiardi Biscuits', 'Mascarpone Cheese', 'Espresso Dark Roast', 'Dutch Cocoa Powder'],
+        allergens: ['Gluten', 'Dairy', 'Egg'],
+        dietary_flags: ['veg'],
         spice_level: 0,
         serving_size: '1 Portion',
         image_url: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800&auto=format&fit=crop',
         is_available: true,
         is_signature: true,
-        is_chef_recommended: true,
+        is_chef_recommended: false,
         is_bestseller: true,
-        sort_order: 5
+        sort_order: 3
       }
     ];
 
     return finalizeMenu(categories, dishes);
   }
 
-  // 4. CAFE / BAKERY / EUROPEAN / CONTINENTAL
+  // I. BAKERY / CAFE / CONTINENTAL / EUROPEAN / DESSERT
   if (
     lowerCuisine.includes('bakery') ||
     lowerCuisine.includes('cafe') ||
     lowerCuisine.includes('continental') ||
     lowerCuisine.includes('european') ||
-    lowerCuisine.includes('dessert')
+    lowerCuisine.includes('dessert') ||
+    lowerCuisine.includes('coffee')
   ) {
     const categories: MenuCategory[] = [
-      { id: `cat-${slug}-bakes`, restaurant_id: restaurantId, name: 'Artisanal Breads & Small Plates', sort_order: 1, is_active: true },
-      { id: `cat-${slug}-mains`, restaurant_id: restaurantId, name: 'Gourmet Bistro Mains', sort_order: 2, is_active: true },
-      { id: `cat-${slug}-brews`, restaurant_id: restaurantId, name: 'Specialty Brews & Patisserie', sort_order: 3, is_active: true }
+      { id: `cat-${slug}-bakes`, restaurant_id: restaurantId, name: 'Fresh Bakes & Viennoiserie', sort_order: 1, is_active: true },
+      { id: `cat-${slug}-brunch`, restaurant_id: restaurantId, name: 'All-Day Brunch & Tartines', sort_order: 2, is_active: true },
+      { id: `cat-${slug}-mains`, restaurant_id: restaurantId, name: 'Gourmet Mains & Bowls', sort_order: 3, is_active: true },
+      { id: `cat-${slug}-coffee`, restaurant_id: restaurantId, name: 'Specialty Coffee & Beverages', sort_order: 4, is_active: true }
     ];
 
     const dishes: GeneratedDishInput[] = [
       {
         id: `item-${slug}-cafe-1`,
         restaurant_id: restaurantId,
-        category_id: `cat-${slug}-bakes`,
-        name: 'Smashed Avocado & Whipped Feta Sourdough Toast',
-        price: 380,
-        short_description: 'Naturally fermented rustic sourdough toasted in butter, topped with hass avocado, dukkah, and pickled onions.',
-        full_description: 'Creamy Hass avocado muddled with lemon juice and sea salt on 36-hour slow-fermented bread. Crowned with feta and micro-greens.',
-        ingredients: ['Artisanal Sourdough', 'Hass Avocado', 'Greek Feta', 'Dukkah Spice', 'Olive Oil'],
+        category_id: `cat-${slug}-brunch`,
+        name: 'Avocado Tartine on Sourdough',
+        price: 390,
+        short_description: 'Toasted country sourdough topped with crushed Hass avocado, crumbled feta cheese, pickled radishes, and toasted seeds.',
+        full_description: 'Finished with extra virgin olive oil and cold-pressed citrus vinaigrette.',
+        ingredients: ['Sourdough Bread', 'Hass Avocado', 'Greek Feta', 'Toasted Pumpkin Seeds', 'Microgreens'],
         allergens: ['Gluten', 'Dairy'],
         dietary_flags: ['veg'],
         spice_level: 1,
-        serving_size: '2 Large Slices',
+        serving_size: '2 Tartines',
         image_url: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=800&auto=format&fit=crop',
         is_available: true,
         is_signature: true,
@@ -451,18 +811,18 @@ export function generateCuisineMenu(
         id: `item-${slug}-cafe-2`,
         restaurant_id: restaurantId,
         category_id: `cat-${slug}-bakes`,
-        name: 'Wild Forest Mushroom & Truffle Crostini',
-        price: 360,
-        short_description: 'Sauteed cremini and button mushrooms deglazed in white grape jus over garlic rubbed ciabatta.',
-        full_description: 'Finished with creamy thyme mascarpone spread, white truffle oil, and shaved aged gouda.',
-        ingredients: ['Wild Mushrooms', 'Garlic Ciabatta', 'Mascarpone', 'Truffle Oil', 'Thyme'],
-        allergens: ['Gluten', 'Dairy'],
+        name: 'Flaky Almond Croissant',
+        price: 210,
+        short_description: 'Butter laminated pastry twice-baked with rich frangipane almond cream and toasted sliced almonds.',
+        full_description: 'Baked fresh at 6:00 AM every morning using French butter.',
+        ingredients: ['French Butter', 'Flour', 'Almond Frangipane', 'Vanilla Bean', 'Icing Sugar'],
+        allergens: ['Gluten', 'Dairy', 'Nuts', 'Egg'],
         dietary_flags: ['veg'],
         spice_level: 0,
-        serving_size: '3 Crostinis',
-        image_url: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&auto=format&fit=crop',
+        serving_size: '1 Croissant',
+        image_url: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=800&auto=format&fit=crop',
         is_available: true,
-        is_signature: false,
+        is_signature: true,
         is_chef_recommended: true,
         is_bestseller: true,
         sort_order: 2
@@ -470,67 +830,29 @@ export function generateCuisineMenu(
       {
         id: `item-${slug}-cafe-3`,
         restaurant_id: restaurantId,
-        category_id: `cat-${slug}-mains`,
-        name: 'Pan-Seared Potato Gnocchi in Sage Butter',
-        price: 480,
-        short_description: 'Pillow-soft potato dumplings crisped in nutty brown butter with fresh garden sage and roasted pine nuts.',
-        full_description: 'Handmade potato gnocchi tossed with caramelized pumpkin puree, crispy sage leaves, and freshly grated Parmigiano.',
-        ingredients: ['Russet Potatoes', 'Brown Butter', 'Fresh Sage', 'Pine Nuts', 'Parmesan'],
-        allergens: ['Gluten', 'Dairy', 'Nuts'],
+        category_id: `cat-${slug}-coffee`,
+        name: 'Specialty Flat White (Single Origin)',
+        price: 180,
+        short_description: 'Double ristretto of estate-grown Arabica beans blended with micro-foamed silky whole milk.',
+        full_description: 'Velvety mouthfeel with subtle notes of chocolate and stone fruit.',
+        ingredients: ['Specialty Espresso Beans', 'Full Cream Milk'],
+        allergens: ['Dairy'],
         dietary_flags: ['veg'],
         spice_level: 0,
-        serving_size: 'Serves 1-2',
-        image_url: 'https://images.unsplash.com/photo-1556760544-74068565f05c?w=800&auto=format&fit=crop',
-        is_available: true,
-        is_signature: true,
-        is_chef_recommended: true,
-        is_bestseller: false,
-        sort_order: 3
-      },
-      {
-        id: `item-${slug}-cafe-4`,
-        restaurant_id: restaurantId,
-        category_id: `cat-${slug}-brews`,
-        name: 'Warm Belgian Dark Chocolate Lava Fondant',
-        price: 320,
-        short_description: '70% Valrhona dark chocolate cake with a molten center, served with Madagascan vanilla bean gelato.',
-        full_description: 'Freshly baked to order. Breaking the delicate sponge releases a river of bittersweet molten chocolate.',
-        ingredients: ['70% Dark Chocolate', 'Butter', 'Farm Eggs', 'Vanilla Bean Gelato'],
-        allergens: ['Gluten', 'Dairy', 'Eggs'],
-        dietary_flags: ['veg', 'dessert'],
-        spice_level: 0,
-        serving_size: '1 Fondant with Gelato',
-        image_url: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800&auto=format&fit=crop',
-        is_available: true,
-        is_signature: true,
-        is_chef_recommended: true,
-        is_bestseller: true,
-        sort_order: 4
-      },
-      {
-        id: `item-${slug}-cafe-5`,
-        restaurant_id: restaurantId,
-        category_id: `cat-${slug}-brews`,
-        name: 'Cold Drip Reserve Coffee with Sweet Cream',
-        price: 220,
-        short_description: 'Single-estate Chikmagalur beans steeped in ice water for 16 hours, served over clear artisan ice.',
-        full_description: 'Smooth, naturally sweet brew with notes of cocoa nibs and roasted hazelnut, topped with a float of fresh cream.',
-        ingredients: ['Arabica Cold Brew', 'Clear Ice', 'Dairy Cream'],
-        allergens: ['Dairy'],
-        dietary_flags: ['beverage'],
-        spice_level: 0,
-        serving_size: '300ml',
+        serving_size: '220 ml Cup',
         image_url: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=800&auto=format&fit=crop',
         is_available: true,
-        item_type: 'drink',
-        sort_order: 5
+        is_signature: false,
+        is_chef_recommended: true,
+        is_bestseller: true,
+        sort_order: 3
       }
     ];
 
     return finalizeMenu(categories, dishes);
   }
 
-  // 5. DEFAULT: NORTH INDIAN / MUGHLAI / BIRYANI / CONTEMPORARY INDIAN
+  // J. DEFAULT: NORTH INDIAN / MUGHLAI / BIRYANI / TANDOOR
   const categories: MenuCategory[] = [
     { id: `cat-${slug}-starters`, restaurant_id: restaurantId, name: 'Tandoori Starters & Kebabs', sort_order: 1, is_active: true },
     { id: `cat-${slug}-curries`, restaurant_id: restaurantId, name: 'Heritage Curries & Biryani', sort_order: 2, is_active: true },
@@ -561,26 +883,6 @@ export function generateCuisineMenu(
     {
       id: `item-${slug}-ind-2`,
       restaurant_id: restaurantId,
-      category_id: `cat-${slug}-starters`,
-      name: 'Crispy Dahi Ke Kebab',
-      price: 360,
-      short_description: 'Velvety hung curd patties spiced with green chilies, fresh coriander, and roasted cumin.',
-      full_description: 'Encased in a delicate crisp crust, melting into a creamy spiced yogurt center. Served with mint chutney.',
-      ingredients: ['Hung Curd', 'Green Chili', 'Roasted Cumin', 'Cardamom', 'Coriander'],
-      allergens: ['Dairy'],
-      dietary_flags: ['veg'],
-      spice_level: 1,
-      serving_size: '4 pieces',
-      image_url: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=800&auto=format&fit=crop',
-      is_available: true,
-      is_signature: false,
-      is_chef_recommended: true,
-      is_bestseller: true,
-      sort_order: 2
-    },
-    {
-      id: `item-${slug}-ind-3`,
-      restaurant_id: restaurantId,
       category_id: `cat-${slug}-curries`,
       name: 'Dal Makhani Bukhara (Slow 36-Hr)',
       price: 420,
@@ -596,10 +898,10 @@ export function generateCuisineMenu(
       is_signature: true,
       is_chef_recommended: true,
       is_bestseller: true,
-      sort_order: 3
+      sort_order: 2
     },
     {
-      id: `item-${slug}-ind-4`,
+      id: `item-${slug}-ind-3`,
       restaurant_id: restaurantId,
       category_id: `cat-${slug}-curries`,
       name: 'Dum Handi Subz Biryani',
@@ -616,10 +918,10 @@ export function generateCuisineMenu(
       is_signature: true,
       is_chef_recommended: false,
       is_bestseller: true,
-      sort_order: 4
+      sort_order: 3
     },
     {
-      id: `item-${slug}-ind-5`,
+      id: `item-${slug}-ind-4`,
       restaurant_id: restaurantId,
       category_id: `cat-${slug}-breads`,
       name: 'Truffle Butter Garlic Naan',
@@ -636,27 +938,7 @@ export function generateCuisineMenu(
       is_signature: false,
       is_chef_recommended: true,
       is_bestseller: true,
-      sort_order: 5
-    },
-    {
-      id: `item-${slug}-ind-6`,
-      restaurant_id: restaurantId,
-      category_id: `cat-${slug}-breads`,
-      name: 'Shahi Kesariya Phirni in Clay Pot',
-      price: 190,
-      short_description: 'Chilled ground rice pudding cooked in reduced milk, infused with Kashmiri saffron and slivered pistachios.',
-      full_description: 'Slowly cooked in thick full-cream milk and set in porous earthen sakoras for a delicate earthy aroma.',
-      ingredients: ['Broken Basmati Rice', 'Full Cream Milk', 'Saffron', 'Cardamom', 'Pistachios'],
-      allergens: ['Dairy', 'Nuts'],
-      dietary_flags: ['veg', 'dessert'],
-      spice_level: 0,
-      serving_size: '1 Earthen Pot',
-      image_url: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800&auto=format&fit=crop',
-      is_available: true,
-      is_signature: false,
-      is_chef_recommended: true,
-      is_bestseller: false,
-      sort_order: 6
+      sort_order: 4
     }
   ];
 
