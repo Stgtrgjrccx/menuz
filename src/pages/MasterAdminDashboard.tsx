@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useRestaurantStore, isDishNameAsRestaurant, WhatsAppCampaign } from '../store/restaurantStore';
 import { Restaurant, PosSyncEvent, isWorkingWithMenuz, PetpoojaConfig, RoyalPosConfig, RecahoConfig, RancelabConfig, MODERN_POS_PROVIDERS } from '../types';
+import { SEED_RESTAURANTS } from '../data/seedData';
 import { PUNE_RESTAURANT_DIRECTORY, searchPuneRestaurants, PuneRestaurantEntry, normalizePuneSearch, matchesPuneQuery } from '../data/puneRestaurantDirectory';
 import { PetpoojaIntegrationPanel } from '../components/PetpoojaIntegrationPanel';
 import { RoyalPosIntegrationPanel } from '../components/RoyalPosIntegrationPanel';
@@ -80,7 +81,12 @@ export const MasterAdminDashboard: React.FC = () => {
 
   const rawRestaurants = useRestaurantStore((state) => state.restaurants);
   const restaurants = useMemo(
-    () => rawRestaurants.filter((r) => !isDishNameAsRestaurant(r)),
+    () =>
+      rawRestaurants.filter(
+        (r) =>
+          !isDishNameAsRestaurant(r) &&
+          (SEED_RESTAURANTS.some((s) => s.id === r.id || s.slug === r.slug) || (r.location && r.cuisine))
+      ),
     [rawRestaurants]
   );
   const setCurrentRestaurant = useRestaurantStore((state) => state.setCurrentRestaurant);
@@ -888,17 +894,17 @@ export const MasterAdminDashboard: React.FC = () => {
 
             {/* Quick Direct-Access Launchpad - Flagship Quick Launch */}
             {restaurants.length > 0 && (
-              <div className="bg-gradient-to-r from-charcoal-950 via-charcoal-900 to-charcoal-950 border border-charcoal-800 rounded-3xl p-5 text-white shadow-subtle">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-charcoal-800/80">
+              <div className="bg-[#0D1526]/90 border border-white/[0.08] backdrop-blur-xl rounded-3xl p-5 text-white shadow-2xl">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
                   <div>
                     <div className="flex items-center space-x-2">
-                      <span className="w-2 h-2 rounded-full bg-saffron-500 animate-pulse" />
-                      <h3 className="text-xs font-bold uppercase tracking-wider text-saffron-400">Active Demos Quick Launch</h3>
-                      <span className="text-[10px] bg-charcoal-800 text-charcoal-300 px-2 py-0.5 rounded-full border border-charcoal-700">
+                      <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-amber-400">Active Demos Quick Launch</h3>
+                      <span className="text-[10px] bg-slate-800 text-slate-300 px-2.5 py-0.5 rounded-full border border-white/[0.08] font-medium">
                         {restaurants.length} Active Venues
                       </span>
                     </div>
-                    <p className="text-xs text-charcoal-300 mt-0.5">Instant one-click direct jump to demo management hub or diner menu</p>
+                    <p className="text-xs text-slate-400 mt-0.5">Instant one-click direct jump to demo management hub or diner menu</p>
                   </div>
                 </div>
 
@@ -909,7 +915,7 @@ export const MasterAdminDashboard: React.FC = () => {
                     return (
                       <div
                         key={`quick-${r.id}`}
-                        className="bg-charcoal-800/90 border border-charcoal-700 rounded-2xl p-3 flex items-center justify-between gap-3 hover:border-saffron-500/50 transition-all"
+                        className="bg-slate-900/80 border border-white/[0.06] rounded-2xl p-3 flex items-center justify-between gap-3 hover:border-amber-500/40 hover:bg-slate-800/80 transition-all"
                       >
                         <div
                           onClick={() => {
@@ -918,10 +924,10 @@ export const MasterAdminDashboard: React.FC = () => {
                           }}
                           className="flex items-center space-x-3 cursor-pointer min-w-0 flex-1 group"
                         >
-                          <img src={r.logo_url} alt={r.name} className="w-10 h-10 rounded-xl object-cover border border-charcoal-700 flex-shrink-0" />
+                          <img src={r.logo_url} alt={r.name} className="w-10 h-10 rounded-xl object-cover border border-white/[0.08] flex-shrink-0" />
                           <div className="truncate">
-                            <h4 className="text-xs font-bold text-white group-hover:text-saffron-400 transition-colors truncate">{r.name}</h4>
-                            <span className="text-[10px] text-charcoal-400 block truncate">{r.cuisine}</span>
+                            <h4 className="text-xs font-bold text-white group-hover:text-amber-400 transition-colors truncate">{r.name}</h4>
+                            <span className="text-[10px] text-slate-400 block truncate">{r.cuisine}</span>
                           </div>
                         </div>
 
@@ -929,7 +935,7 @@ export const MasterAdminDashboard: React.FC = () => {
                           <Link
                             to={`/manage/${r.slug}`}
                             onClick={() => setCurrentRestaurant(r.id)}
-                            className="px-2.5 py-1.5 bg-saffron-600 hover:bg-saffron-500 text-white text-[11px] font-bold rounded-lg transition-colors flex items-center space-x-1"
+                            className="px-2.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-[11px] font-bold rounded-lg transition-all shadow-xs flex items-center space-x-1"
                             title={`Open ${r.name} Management Hub`}
                           >
                             <span>Hub</span>
@@ -938,16 +944,16 @@ export const MasterAdminDashboard: React.FC = () => {
                           <Link
                             to={`/r/${r.slug}/menu?t=${rToken}`}
                             onClick={() => setCurrentRestaurant(r.id)}
-                            className="px-2.5 py-1.5 bg-charcoal-700 hover:bg-charcoal-600 text-charcoal-200 hover:text-white text-[11px] font-bold rounded-lg transition-colors flex items-center space-x-1 border border-charcoal-600"
+                            className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-[11px] font-bold rounded-lg transition-colors flex items-center space-x-1 border border-white/[0.08]"
                             title={`Open ${r.name} Diner Menu (Table 1)`}
                           >
-                            <UtensilsCrossed className="w-3 h-3 text-saffron-400" />
+                            <UtensilsCrossed className="w-3 h-3 text-amber-400" />
                             <span>Diner</span>
                           </Link>
                           <button
                             type="button"
                             onClick={() => setOffboardTarget(r)}
-                            className="p-1.5 bg-charcoal-700 hover:bg-red-600 text-charcoal-300 hover:text-white rounded-lg transition-colors border border-charcoal-600 cursor-pointer"
+                            className="p-1.5 bg-slate-800 hover:bg-rose-600 text-slate-400 hover:text-white rounded-lg transition-colors border border-white/[0.08] cursor-pointer"
                             title={`Offboard ${r.name}`}
                           >
                             <UserMinus className="w-3.5 h-3.5" />
@@ -961,11 +967,11 @@ export const MasterAdminDashboard: React.FC = () => {
             )}
 
             {/* Search, Status, and Neighborhood Filter Control Center */}
-            <div className="bg-white rounded-3xl border border-ivory-300 p-5 shadow-subtle space-y-4">
+            <div className="bg-[#0D1526]/90 rounded-3xl border border-white/[0.08] backdrop-blur-xl p-5 shadow-2xl space-y-4 text-white">
               <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
                 {/* Search Bar with Autocomplete Suggestions Dropdown */}
                 <div className="relative flex-1" ref={adminSearchRef}>
-                  <Search className="w-4 h-4 text-charcoal-400 absolute left-3.5 top-1/2 -translate-y-1/2 z-10" />
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 z-10" />
                   <input
                     type="text"
                     value={restaurantSearch}
@@ -976,7 +982,7 @@ export const MasterAdminDashboard: React.FC = () => {
                       setVisibleCount(24);
                     }}
                     placeholder={`Search Pune city database (${PUNE_RESTAURANT_DIRECTORY.length} restaurants) or active demos...`}
-                    className="w-full pl-10 pr-8 py-2.5 bg-ivory-50 border border-ivory-300 rounded-2xl text-xs text-charcoal-900 placeholder-charcoal-400 focus:outline-none focus:border-saffron-500 focus:bg-white transition-all font-medium"
+                    className="w-full pl-10 pr-8 py-2.5 bg-slate-900/90 border border-white/[0.1] rounded-2xl text-xs text-white placeholder-slate-400 focus:outline-none focus:border-amber-500/60 transition-all font-medium"
                   />
                   {restaurantSearch && (
                     <button
@@ -984,7 +990,7 @@ export const MasterAdminDashboard: React.FC = () => {
                         setRestaurantSearch('');
                         setShowAdminSuggestions(false);
                       }}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-charcoal-400 hover:text-charcoal-700 font-bold z-10 cursor-pointer"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-white font-bold z-10 cursor-pointer"
                     >
                       ✕
                     </button>
@@ -992,17 +998,17 @@ export const MasterAdminDashboard: React.FC = () => {
 
                   {/* Autocomplete Suggestions Dropdown Popup */}
                   {showAdminSuggestions && restaurantSearch.trim().length > 0 && (
-                    <div className="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-float border border-ivory-300 overflow-hidden z-50 animate-in fade-in slide-in-from-top-1 duration-150">
-                      <div className="p-2.5 bg-ivory-100/70 border-b border-ivory-200 flex items-center justify-between text-[11px] text-charcoal-500 font-bold">
+                    <div className="absolute left-0 right-0 top-full mt-2 bg-[#0B1120] rounded-2xl shadow-2xl border border-white/[0.1] overflow-hidden z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                      <div className="p-2.5 bg-slate-900 border-b border-white/[0.08] flex items-center justify-between text-[11px] text-slate-400 font-bold">
                         <span className="flex items-center space-x-1">
-                          <Sparkles className="w-3.5 h-3.5 text-saffron-600 inline" />
+                          <Sparkles className="w-3.5 h-3.5 text-amber-400 inline" />
                           <span>SUGGESTIONS ({adminSuggestions.length} found)</span>
                         </span>
-                        <span className="text-[10px] text-charcoal-400 font-normal">Click to jump or onboard</span>
+                        <span className="text-[10px] text-slate-500 font-normal">Click to jump or onboard</span>
                       </div>
 
                       {adminSuggestions.length > 0 ? (
-                        <div className="max-h-80 overflow-y-auto divide-y divide-ivory-100">
+                        <div className="max-h-80 overflow-y-auto divide-y divide-white/[0.06]">
                           {adminSuggestions.map((item) => {
                             const cleanSlug = item.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
                             const existingRest = restaurants.find(
@@ -1022,31 +1028,31 @@ export const MasterAdminDashboard: React.FC = () => {
                                   setRestaurantSearch(item.name);
                                   setShowAdminSuggestions(false);
                                 }}
-                                className="p-3 hover:bg-saffron-50/60 cursor-pointer flex items-center justify-between gap-3 transition-colors group"
+                                className="p-3 hover:bg-slate-800/80 cursor-pointer flex items-center justify-between gap-3 transition-colors group"
                               >
                                 <div className="flex items-center space-x-3 min-w-0">
                                   <img
                                     src={item.imageUrl}
                                     alt={item.name}
-                                    className="w-10 h-10 rounded-xl object-cover border border-ivory-300 flex-shrink-0 group-hover:scale-105 transition-transform"
+                                    className="w-10 h-10 rounded-xl object-cover border border-white/[0.08] flex-shrink-0 group-hover:scale-105 transition-transform"
                                   />
                                   <div className="truncate">
                                     <div className="flex items-center space-x-2">
-                                      <h4 className="text-xs font-bold text-charcoal-900 group-hover:text-saffron-700 transition-colors truncate">
+                                      <h4 className="text-xs font-bold text-white group-hover:text-amber-400 transition-colors truncate">
                                         {item.name}
                                       </h4>
                                       {isDemoOrPartner ? (
-                                        <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-100 text-amber-900 border border-amber-200">
+                                        <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30">
                                           Interactive Demo
                                         </span>
                                       ) : (
-                                        <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-ivory-200 text-charcoal-700 border border-ivory-300">
+                                        <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-slate-800 text-slate-300 border border-white/[0.08]">
                                           📍 Database Lead
                                         </span>
                                       )}
                                     </div>
-                                    <p className="text-[11px] text-charcoal-500 truncate mt-0.5">
-                                      {item.cuisine} • <span className="text-charcoal-700">{item.location}</span>
+                                    <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                                      {item.cuisine} • <span className="text-slate-300">{item.location}</span>
                                     </p>
                                   </div>
                                 </div>
@@ -1060,7 +1066,7 @@ export const MasterAdminDashboard: React.FC = () => {
                                           setCurrentRestaurant(existingRest.id);
                                           setShowAdminSuggestions(false);
                                         }}
-                                        className="px-2.5 py-1 bg-charcoal-900 hover:bg-charcoal-800 text-white text-[10px] font-bold rounded-lg transition-colors cursor-pointer"
+                                        className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-white text-[10px] font-bold rounded-lg transition-colors border border-white/[0.08] cursor-pointer"
                                       >
                                         Hub
                                       </Link>
@@ -1070,7 +1076,7 @@ export const MasterAdminDashboard: React.FC = () => {
                                           setCurrentRestaurant(existingRest.id);
                                           setShowAdminSuggestions(false);
                                         }}
-                                        className="px-2.5 py-1 bg-saffron-50 hover:bg-saffron-100 text-saffron-800 text-[10px] font-bold rounded-lg transition-colors border border-saffron-200 cursor-pointer"
+                                        className="px-2.5 py-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-[10px] font-bold rounded-lg transition-colors border border-amber-500/30 cursor-pointer"
                                       >
                                         Menu
                                       </Link>
@@ -1081,7 +1087,7 @@ export const MasterAdminDashboard: React.FC = () => {
                                         handleOnboardDirectoryEntry(item);
                                         setShowAdminSuggestions(false);
                                       }}
-                                      className="px-3 py-1 bg-saffron-600 hover:bg-saffron-700 text-white text-[10px] font-bold rounded-lg transition-colors shadow-xs flex items-center space-x-1 cursor-pointer"
+                                      className="px-3 py-1 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-[10px] font-bold rounded-lg transition-colors shadow-xs flex items-center space-x-1 cursor-pointer"
                                     >
                                       <Plus className="w-3 h-3" />
                                       <span>+ Onboard</span>
@@ -1094,7 +1100,7 @@ export const MasterAdminDashboard: React.FC = () => {
                         </div>
                       ) : (
                         <div className="p-4 text-center">
-                          <p className="text-xs text-charcoal-600 mb-2">
+                          <p className="text-xs text-slate-400 mb-2">
                             No restaurant in Pune database matches <strong>"{restaurantSearch}"</strong>.
                           </p>
                           <button
@@ -1102,7 +1108,7 @@ export const MasterAdminDashboard: React.FC = () => {
                               handleQuickAddPuneRestaurant(restaurantSearch);
                               setShowAdminSuggestions(false);
                             }}
-                            className="px-4 py-2 bg-saffron-600 hover:bg-saffron-700 text-white font-bold text-xs rounded-xl shadow-xs inline-flex items-center space-x-1.5 transition-colors cursor-pointer"
+                            className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-xs rounded-xl shadow-xs inline-flex items-center space-x-1.5 transition-colors cursor-pointer"
                           >
                             <Plus className="w-3.5 h-3.5" />
                             <span>Instant 1-Click Register "{restaurantSearch.trim()}"</span>
@@ -1110,11 +1116,11 @@ export const MasterAdminDashboard: React.FC = () => {
                         </div>
                       )}
 
-                      <div className="p-2 bg-ivory-50 border-t border-ivory-200 flex items-center justify-between text-[11px] text-charcoal-500">
+                      <div className="p-2 bg-slate-900 border-t border-white/[0.08] flex items-center justify-between text-[11px] text-slate-400">
                         <span>Showing top matches from {PUNE_RESTAURANT_DIRECTORY.length} Pune restaurants</span>
                         <button
                           onClick={() => setShowAdminSuggestions(false)}
-                          className="text-saffron-700 hover:underline font-bold text-[10px] cursor-pointer"
+                          className="text-amber-400 hover:underline font-bold text-[10px] cursor-pointer"
                         >
                           Close Suggestions ✕
                         </button>
@@ -1124,7 +1130,7 @@ export const MasterAdminDashboard: React.FC = () => {
                 </div>
 
                 {/* Active Demos vs Pune City Database Filter */}
-                <div className="flex flex-wrap items-center gap-1.5 bg-ivory-100 p-1 rounded-2xl border border-ivory-300 flex-shrink-0">
+                <div className="flex flex-wrap items-center gap-1.5 bg-slate-900/90 p-1 rounded-2xl border border-white/[0.08] flex-shrink-0">
                   <button
                     onClick={() => {
                       setPartnerFilter('menuz_partners');
@@ -1132,8 +1138,8 @@ export const MasterAdminDashboard: React.FC = () => {
                     }}
                     className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${
                       partnerFilter === 'menuz_partners'
-                        ? 'bg-saffron-600 text-white shadow-sm'
-                        : 'text-charcoal-600 hover:text-charcoal-900'
+                        ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-sm'
+                        : 'text-slate-400 hover:text-white'
                     }`}
                   >
                     <span>✨ Active Demo Venues ({restaurants.length})</span>
@@ -1145,8 +1151,8 @@ export const MasterAdminDashboard: React.FC = () => {
                     }}
                     className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${
                       partnerFilter === 'directory'
-                        ? 'bg-charcoal-900 text-white shadow-sm'
-                        : 'text-charcoal-600 hover:text-charcoal-900'
+                        ? 'bg-slate-800 text-white shadow-sm border border-white/[0.1]'
+                        : 'text-slate-400 hover:text-white'
                     }`}
                   >
                     <span>📍 Pune City Database ({PUNE_RESTAURANT_DIRECTORY.length} Leads)</span>
@@ -1154,7 +1160,7 @@ export const MasterAdminDashboard: React.FC = () => {
                 </div>
 
                 {/* Status Filter Toggle */}
-                <div className="flex items-center space-x-1.5 bg-ivory-100 p-1 rounded-2xl border border-ivory-300 flex-shrink-0">
+                <div className="flex items-center space-x-1.5 bg-slate-900/90 p-1 rounded-2xl border border-white/[0.08] flex-shrink-0">
                   <button
                     onClick={() => {
                       setStatusFilter('all');
@@ -1162,8 +1168,8 @@ export const MasterAdminDashboard: React.FC = () => {
                     }}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                       statusFilter === 'all'
-                        ? 'bg-charcoal-900 text-white shadow-sm'
-                        : 'text-charcoal-600 hover:text-charcoal-900'
+                        ? 'bg-slate-800 text-white shadow-sm border border-white/[0.08]'
+                        : 'text-slate-400 hover:text-white'
                     }`}
                   >
                     All ({restaurants.length})
@@ -1175,8 +1181,8 @@ export const MasterAdminDashboard: React.FC = () => {
                     }}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                       statusFilter === 'active'
-                        ? 'bg-emerald-600 text-white shadow-sm'
-                        : 'text-charcoal-600 hover:text-charcoal-900'
+                        ? 'bg-emerald-600/90 text-white shadow-sm'
+                        : 'text-slate-400 hover:text-white'
                     }`}
                   >
                     Active ({activeRestaurants})
@@ -1188,8 +1194,8 @@ export const MasterAdminDashboard: React.FC = () => {
                     }}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                       statusFilter === 'inactive'
-                        ? 'bg-rose-600 text-white shadow-sm'
-                        : 'text-charcoal-600 hover:text-charcoal-900'
+                        ? 'bg-rose-600/90 text-white shadow-sm'
+                        : 'text-slate-400 hover:text-white'
                     }`}
                   >
                     Inactive ({totalRestaurants - activeRestaurants})
@@ -1199,16 +1205,16 @@ export const MasterAdminDashboard: React.FC = () => {
 
               {/* Instant 1-Click Inline Add if searching */}
               {restaurantSearch.trim().length > 1 && (
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-4 py-2.5 bg-gradient-to-r from-saffron-50 via-amber-50 to-orange-50 border border-saffron-200 rounded-2xl text-xs">
-                  <div className="flex items-center space-x-2 text-charcoal-700">
-                    <Sparkles className="w-4 h-4 text-saffron-600 flex-shrink-0" />
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-4 py-2.5 bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 border border-amber-500/30 rounded-2xl text-xs">
+                  <div className="flex items-center space-x-2 text-slate-300">
+                    <Sparkles className="w-4 h-4 text-amber-400 flex-shrink-0" />
                     <span>
-                      Missing a restaurant? Register <strong>"{restaurantSearch.trim()}"</strong> into Pune database now:
+                      Missing a restaurant? Register <strong className="text-white">"{restaurantSearch.trim()}"</strong> into Pune database now:
                     </span>
                   </div>
                   <button
                     onClick={() => handleQuickAddPuneRestaurant(restaurantSearch)}
-                    className="px-3 py-1.5 bg-saffron-600 hover:bg-saffron-700 text-white font-bold rounded-xl shadow-xs flex items-center space-x-1.5 flex-shrink-0 transition-colors"
+                    className="px-3 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold rounded-xl shadow-xs flex items-center space-x-1.5 flex-shrink-0 transition-colors"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     <span>Instant 1-Click Register</span>
@@ -1218,7 +1224,7 @@ export const MasterAdminDashboard: React.FC = () => {
 
               {/* Neighborhood Chips */}
               <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-xs">
-                <span className="text-[11px] font-bold text-charcoal-500 uppercase tracking-wider whitespace-nowrap mr-1">
+                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap mr-1">
                   Hubs:
                 </span>
                 {neighborhoods.map((area) => (
@@ -1230,8 +1236,8 @@ export const MasterAdminDashboard: React.FC = () => {
                     }}
                     className={`px-3 py-1 rounded-full whitespace-nowrap font-medium transition-all ${
                       selectedNeighborhood === area
-                        ? 'bg-saffron-600 text-white shadow-xs'
-                        : 'bg-ivory-100 text-charcoal-600 hover:bg-ivory-200 border border-ivory-200'
+                        ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-xs font-semibold'
+                        : 'bg-slate-900/80 text-slate-300 hover:text-white hover:bg-slate-800 border border-white/[0.06]'
                     }`}
                   >
                     {area === 'all' ? 'All Locations' : area}
@@ -1240,18 +1246,18 @@ export const MasterAdminDashboard: React.FC = () => {
               </div>
 
               {/* Count Banner */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-ivory-200 text-xs text-charcoal-600">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-white/[0.06] text-xs text-slate-400">
                 <span>
                   {partnerFilter === 'directory' ? (
                     <>
-                      Showing <strong>{Math.min(visibleCount, filteredDirectory.length)}</strong> of{' '}
-                      <strong>{filteredDirectory.length}</strong> matching Pune database leads (
-                      <strong>{PUNE_RESTAURANT_DIRECTORY.length}</strong> total venues in city database)
+                      Showing <strong className="text-white">{Math.min(visibleCount, filteredDirectory.length)}</strong> of{' '}
+                      <strong className="text-white">{filteredDirectory.length}</strong> matching Pune database leads (
+                      <strong className="text-white">{PUNE_RESTAURANT_DIRECTORY.length}</strong> total venues in city database)
                     </>
                   ) : (
                     <>
-                      Showing <strong>{Math.min(visibleCount, filteredRestaurants.length)}</strong> of{' '}
-                      <strong>{filteredRestaurants.length}</strong> active demo venues in Menuz
+                      Showing <strong className="text-white">{Math.min(visibleCount, filteredRestaurants.length)}</strong> of{' '}
+                      <strong className="text-white">{filteredRestaurants.length}</strong> active demo venues in Menuz
                     </>
                   )}
                 </span>
@@ -1259,7 +1265,7 @@ export const MasterAdminDashboard: React.FC = () => {
                   {visibleCount < (partnerFilter === 'directory' ? filteredDirectory.length : filteredRestaurants.length) && (
                     <button
                       onClick={() => setVisibleCount((prev) => prev + 24)}
-                      className="text-saffron-700 hover:underline font-bold cursor-pointer"
+                      className="text-amber-400 hover:underline font-bold cursor-pointer"
                     >
                       Load More (+24)
                     </button>
@@ -1267,7 +1273,7 @@ export const MasterAdminDashboard: React.FC = () => {
                   {visibleCount < (partnerFilter === 'directory' ? filteredDirectory.length : filteredRestaurants.length) && (
                     <button
                       onClick={() => setVisibleCount(partnerFilter === 'directory' ? filteredDirectory.length : filteredRestaurants.length)}
-                      className="text-charcoal-800 hover:text-saffron-700 font-bold underline cursor-pointer"
+                      className="text-slate-300 hover:text-white font-bold underline cursor-pointer"
                     >
                       Show All ({partnerFilter === 'directory' ? filteredDirectory.length : filteredRestaurants.length})
                     </button>
@@ -1280,20 +1286,20 @@ export const MasterAdminDashboard: React.FC = () => {
             {partnerFilter === 'directory' ? (
               /* ── 1. Pune City Database Leads Grid ──────────────────────── */
               filteredDirectory.length === 0 ? (
-                <div className="bg-white rounded-3xl border border-ivory-300 p-10 text-center text-charcoal-500 shadow-subtle">
-                  <Building2 className="w-10 h-10 mx-auto text-charcoal-300 mb-2" />
-                  <h4 className="font-serif font-bold text-charcoal-900 text-base">No restaurants match your filters</h4>
-                  <p className="text-xs text-charcoal-500 mt-1 mb-4">
+                <div className="bg-[#0D1526]/90 rounded-3xl border border-white/[0.08] p-10 text-center text-slate-400 shadow-2xl">
+                  <Building2 className="w-10 h-10 mx-auto text-slate-600 mb-2" />
+                  <h4 className="font-serif font-bold text-white text-base">No restaurants match your filters</h4>
+                  <p className="text-xs text-slate-400 mt-1 mb-4">
                     No leads found matching "{restaurantSearch || selectedNeighborhood}".
                   </p>
                   {restaurantSearch.trim() ? (
-                    <div className="max-w-md mx-auto p-4 bg-saffron-50 border border-saffron-200 rounded-2xl mb-4 text-center">
-                      <p className="text-xs text-saffron-900 font-medium mb-3">
+                    <div className="max-w-md mx-auto p-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl mb-4 text-center">
+                      <p className="text-xs text-amber-200 font-medium mb-3">
                         Onboard <strong>"{restaurantSearch.trim()}"</strong> directly into Menuz with 1 click:
                       </p>
                       <button
                         onClick={() => handleQuickAddPuneRestaurant(restaurantSearch)}
-                        className="px-5 py-2.5 bg-saffron-600 hover:bg-saffron-700 text-white font-bold text-xs rounded-xl shadow-subtle flex items-center space-x-2 mx-auto transition-colors cursor-pointer"
+                        className="px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-xs rounded-xl shadow-lg flex items-center space-x-2 mx-auto transition-all cursor-pointer"
                       >
                         <Plus className="w-4 h-4" />
                         <span>Onboard "{restaurantSearch.trim()}"</span>
@@ -1306,7 +1312,7 @@ export const MasterAdminDashboard: React.FC = () => {
                       setSelectedNeighborhood('all');
                       setStatusFilter('all');
                     }}
-                    className="px-4 py-2 bg-charcoal-900 text-white font-bold text-xs rounded-xl shadow-subtle cursor-pointer"
+                    className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl shadow-sm border border-white/[0.08] cursor-pointer"
                   >
                     Reset Filters
                   </button>
@@ -1328,7 +1334,7 @@ export const MasterAdminDashboard: React.FC = () => {
                     return (
                       <div
                         key={`dir-card-${entry.name}`}
-                        className="bg-white rounded-3xl border border-ivory-300 p-6 shadow-subtle hover:shadow-float hover:border-saffron-300 transition-all flex flex-col justify-between group"
+                        className="bg-[#0E172A]/90 rounded-3xl border border-white/[0.08] p-6 shadow-xl hover:shadow-2xl hover:border-amber-500/40 transition-all flex flex-col justify-between group"
                       >
                         <div>
                           {/* Header */}
@@ -1337,42 +1343,42 @@ export const MasterAdminDashboard: React.FC = () => {
                               <img
                                 src={entry.imageUrl}
                                 alt={entry.name}
-                                className="w-12 h-12 rounded-2xl object-cover border border-ivory-300 shadow-sm flex-shrink-0 group-hover:scale-105 transition-transform"
+                                className="w-12 h-12 rounded-2xl object-cover border border-white/[0.08] shadow-sm flex-shrink-0 group-hover:scale-105 transition-transform"
                               />
                               <div className="truncate">
-                                <h3 className="font-bold text-base text-charcoal-900 font-serif leading-tight group-hover:text-saffron-700 transition-colors truncate">
+                                <h3 className="font-bold text-base text-white font-serif leading-tight group-hover:text-amber-400 transition-colors truncate">
                                   {entry.name}
                                 </h3>
-                                <span className="text-xs text-saffron-700 font-medium block truncate">
+                                <span className="text-xs text-amber-400/90 font-medium block truncate">
                                   {entry.cuisine}
                                 </span>
                               </div>
                             </div>
 
-                            <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-50 text-amber-900 border border-amber-300 whitespace-nowrap">
+                            <span className="px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30 whitespace-nowrap">
                               📍 Database Lead
                             </span>
                           </div>
 
                           {/* Location & Details */}
-                          <div className="mt-4 p-3 bg-ivory-50 rounded-2xl border border-ivory-200 text-xs space-y-1.5">
-                            <div className="flex justify-between text-charcoal-700">
-                              <span className="text-charcoal-500">Location:</span>
-                              <span className="font-medium text-right truncate max-w-[200px]">{entry.location}</span>
+                          <div className="mt-4 p-3.5 bg-slate-900/70 rounded-2xl border border-white/[0.06] text-xs space-y-1.5 text-slate-300">
+                            <div className="flex justify-between">
+                              <span className="text-slate-400">Location:</span>
+                              <span className="font-medium text-right text-slate-200 truncate max-w-[200px]">{entry.location}</span>
                             </div>
-                            <div className="flex justify-between text-charcoal-700">
-                              <span className="text-charcoal-500">Avg Cost:</span>
-                              <span className="font-medium text-right">{entry.avgCostForTwo} for two</span>
+                            <div className="flex justify-between">
+                              <span className="text-slate-400">Avg Cost:</span>
+                              <span className="font-medium text-right text-slate-200">{entry.avgCostForTwo} for two</span>
                             </div>
                             {entry.phone && (
-                              <div className="flex justify-between text-charcoal-700">
-                                <span className="text-charcoal-500">Phone:</span>
-                                <span className="font-mono text-[11px]">{entry.phone}</span>
+                              <div className="flex justify-between">
+                                <span className="text-slate-400">Phone:</span>
+                                <span className="font-mono text-[11px] text-slate-200">{entry.phone}</span>
                               </div>
                             )}
-                            <div className="flex justify-between text-charcoal-700">
-                              <span className="text-charcoal-500">Rating:</span>
-                              <span className="font-bold text-amber-600 flex items-center">
+                            <div className="flex justify-between">
+                              <span className="text-slate-400">Rating:</span>
+                              <span className="font-bold text-amber-400 flex items-center">
                                 <Star className="w-3 h-3 fill-amber-500 mr-0.5" />
                                 {entry.rating}
                               </span>
@@ -1381,13 +1387,13 @@ export const MasterAdminDashboard: React.FC = () => {
                         </div>
 
                         {/* Onboard Action */}
-                        <div className="mt-5 pt-4 border-t border-ivory-200">
+                        <div className="mt-5 pt-4 border-t border-white/[0.08]">
                           {isOnboarded && existing ? (
                             <div className="flex gap-2">
                               <Link
                                 to={`/manage/${existing.slug}`}
                                 onClick={() => setCurrentRestaurant(existing.id)}
-                                className="flex-1 bg-charcoal-900 hover:bg-charcoal-800 text-white font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors cursor-pointer"
+                                className="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors border border-white/[0.08] cursor-pointer"
                               >
                                 <span>Open Hub</span>
                                 <ChevronRight className="w-3.5 h-3.5" />
@@ -1395,7 +1401,7 @@ export const MasterAdminDashboard: React.FC = () => {
                               <Link
                                 to={`/r/${existing.slug}/menu?t=${firstToken}`}
                                 onClick={() => setCurrentRestaurant(existing.id)}
-                                className="flex-1 bg-saffron-50 hover:bg-saffron-100 text-saffron-800 font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors border border-saffron-200 cursor-pointer"
+                                className="flex-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors border border-amber-500/30 cursor-pointer"
                               >
                                 <span>Diner Menu</span>
                               </Link>
@@ -1404,7 +1410,7 @@ export const MasterAdminDashboard: React.FC = () => {
                             <button
                               type="button"
                               onClick={() => handleOnboardDirectoryEntry(entry)}
-                              className="w-full bg-gradient-to-r from-saffron-600 to-amber-500 hover:from-saffron-700 hover:to-amber-600 text-white font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-all shadow-subtle hover:scale-[1.01] cursor-pointer"
+                              className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-all shadow-md hover:scale-[1.01] cursor-pointer"
                             >
                               <Plus className="w-4 h-4" />
                               <span>+ Onboard Restaurant to Menuz</span>
@@ -1419,11 +1425,11 @@ export const MasterAdminDashboard: React.FC = () => {
             ) : (
               /* ── 2. Active Demo Venues Grid ─────────────────────────────── */
               filteredRestaurants.length === 0 ? (
-                <div className="bg-white rounded-3xl border border-ivory-300 p-10 text-center text-charcoal-500 shadow-subtle">
-                  <Building2 className="w-10 h-10 mx-auto text-charcoal-300 mb-2" />
-                  <h4 className="font-serif font-bold text-charcoal-900 text-base">No active venues match your filters</h4>
-                  <p className="text-xs text-charcoal-500 mt-1 mb-4">
-                    Try switching to the "Pune City Database" tab to onboard from 269+ venues.
+                <div className="bg-[#0D1526]/90 rounded-3xl border border-white/[0.08] p-10 text-center text-slate-400 shadow-2xl">
+                  <Building2 className="w-10 h-10 mx-auto text-slate-600 mb-2" />
+                  <h4 className="font-serif font-bold text-white text-base">No active venues match your filters</h4>
+                  <p className="text-xs text-slate-400 mt-1 mb-4">
+                    Try switching to the "Pune City Database" tab to onboard from 268+ venues.
                   </p>
                   <button
                     onClick={() => {
@@ -1431,7 +1437,7 @@ export const MasterAdminDashboard: React.FC = () => {
                       setSelectedNeighborhood('all');
                       setStatusFilter('all');
                     }}
-                    className="px-4 py-2 bg-charcoal-900 text-white font-bold text-xs rounded-xl shadow-subtle cursor-pointer"
+                    className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl shadow-sm border border-white/[0.08] cursor-pointer"
                   >
                     Reset Filters
                   </button>
@@ -1449,7 +1455,7 @@ export const MasterAdminDashboard: React.FC = () => {
                     return (
                       <div
                         key={rest.id}
-                        className="bg-white rounded-3xl border border-ivory-300 p-6 shadow-subtle hover:shadow-float hover:border-saffron-300 transition-all flex flex-col justify-between group"
+                        className="bg-[#0E172A]/90 rounded-3xl border border-white/[0.08] p-6 shadow-xl hover:shadow-2xl hover:border-amber-500/40 transition-all flex flex-col justify-between group"
                       >
                         <div>
                           {/* Card Header - Clickable to open Manage Hub */}
@@ -1464,13 +1470,13 @@ export const MasterAdminDashboard: React.FC = () => {
                               <img
                                 src={rest.logo_url}
                                 alt={rest.name}
-                                className="w-12 h-12 rounded-2xl object-cover border border-ivory-300 shadow-sm group-hover:scale-105 transition-transform"
+                                className="w-12 h-12 rounded-2xl object-cover border border-white/[0.08] shadow-sm group-hover:scale-105 transition-transform"
                               />
                               <div>
-                                <h3 className="font-bold text-base text-charcoal-900 font-serif leading-tight group-hover:text-saffron-700 transition-colors">
+                                <h3 className="font-bold text-base text-white font-serif leading-tight group-hover:text-amber-400 transition-colors">
                                   {rest.name}
                                 </h3>
-                                <span className="text-xs text-saffron-700 font-medium block">{rest.cuisine}</span>
+                                <span className="text-xs text-amber-400/90 font-medium block">{rest.cuisine}</span>
                               </div>
                             </div>
 
@@ -1480,40 +1486,40 @@ export const MasterAdminDashboard: React.FC = () => {
                                 title="Click to toggle restaurant active/inactive"
                                 className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center space-x-1 transition-colors ${
                                   rest.status === 'active'
-                                    ? 'bg-green-100 text-green-800 border border-green-300'
-                                    : 'bg-red-100 text-red-800 border border-red-300'
+                                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
+                                    : 'bg-rose-500/10 text-rose-400 border border-rose-500/30'
                                 }`}
                               >
-                                <span className={`w-1.5 h-1.5 rounded-full ${rest.status === 'active' ? 'bg-green-600' : 'bg-red-600'}`} />
+                                <span className={`w-1.5 h-1.5 rounded-full ${rest.status === 'active' ? 'bg-emerald-400' : 'bg-rose-400'}`} />
                                 <span>{rest.status}</span>
                               </button>
-                              <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-100 text-amber-900 border border-amber-300 whitespace-nowrap">
+                              <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30 whitespace-nowrap">
                                 Interactive Demo
                               </span>
                             </div>
                           </div>
 
                           {/* Location & Contact */}
-                          <div className="mt-4 p-3 bg-ivory-50 rounded-2xl border border-ivory-200 text-xs space-y-1">
-                            <div className="flex justify-between text-charcoal-700">
-                              <span className="text-charcoal-500">Location:</span>
-                              <span className="font-medium text-right">{rest.location}</span>
+                          <div className="mt-4 p-3 bg-slate-900/70 rounded-2xl border border-white/[0.06] text-xs space-y-1 text-slate-300">
+                            <div className="flex justify-between">
+                              <span className="text-slate-400">Location:</span>
+                              <span className="font-medium text-right text-slate-200">{rest.location}</span>
                             </div>
                             {rest.owner_name && (
-                              <div className="flex justify-between text-charcoal-700">
-                                <span className="text-charcoal-500">Owner:</span>
-                                <span className="font-medium">{rest.owner_name}</span>
+                              <div className="flex justify-between">
+                                <span className="text-slate-400">Owner:</span>
+                                <span className="font-medium text-slate-200">{rest.owner_name}</span>
                               </div>
                             )}
                             {rest.contact_phone && (
-                              <div className="flex justify-between text-charcoal-700">
-                                <span className="text-charcoal-500">Contact:</span>
-                                <span className="font-mono text-[11px]">{rest.contact_phone}</span>
+                              <div className="flex justify-between">
+                                <span className="text-slate-400">Contact:</span>
+                                <span className="font-mono text-[11px] text-slate-200">{rest.contact_phone}</span>
                               </div>
                             )}
-                            <div className="flex justify-between text-charcoal-700">
-                              <span className="text-charcoal-500">POS Integration:</span>
-                              <span className="font-bold uppercase tracking-wider text-[10px] text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">
+                            <div className="flex justify-between">
+                              <span className="text-slate-400">POS Integration:</span>
+                              <span className="font-bold uppercase tracking-wider text-[10px] text-cyan-300 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800/50">
                                 {rest.pos_provider}
                               </span>
                             </div>
@@ -1521,21 +1527,21 @@ export const MasterAdminDashboard: React.FC = () => {
 
                           {/* Metrics row */}
                           <div className="grid grid-cols-4 gap-2 mt-4 text-center">
-                            <div className="p-2 bg-ivory-100/60 rounded-xl">
-                              <span className="text-[10px] text-charcoal-500 block uppercase font-bold">Tables</span>
-                              <span className="text-sm font-bold font-mono text-charcoal-900">{restTables.length}</span>
+                            <div className="p-2 bg-slate-900/80 border border-white/[0.06] rounded-xl">
+                              <span className="text-[10px] text-slate-400 block uppercase font-bold">Tables</span>
+                              <span className="text-sm font-bold font-mono text-white">{restTables.length}</span>
                             </div>
-                            <div className="p-2 bg-ivory-100/60 rounded-xl">
-                              <span className="text-[10px] text-charcoal-500 block uppercase font-bold">Dishes</span>
-                              <span className="text-sm font-bold font-mono text-charcoal-900">{restItems.length}</span>
+                            <div className="p-2 bg-slate-900/80 border border-white/[0.06] rounded-xl">
+                              <span className="text-[10px] text-slate-400 block uppercase font-bold">Dishes</span>
+                              <span className="text-sm font-bold font-mono text-white">{restItems.length}</span>
                             </div>
-                            <div className="p-2 bg-ivory-100/60 rounded-xl">
-                              <span className="text-[10px] text-charcoal-500 block uppercase font-bold">Orders</span>
-                              <span className="text-sm font-bold font-mono text-charcoal-900">{restOrders.length}</span>
+                            <div className="p-2 bg-slate-900/80 border border-white/[0.06] rounded-xl">
+                              <span className="text-[10px] text-slate-400 block uppercase font-bold">Orders</span>
+                              <span className="text-sm font-bold font-mono text-white">{restOrders.length}</span>
                             </div>
-                            <div className="p-2 bg-ivory-100/60 rounded-xl">
-                              <span className="text-[10px] text-charcoal-500 block uppercase font-bold">Rating</span>
-                              <span className="text-sm font-bold font-mono text-amber-600 flex items-center justify-center">
+                            <div className="p-2 bg-slate-900/80 border border-white/[0.06] rounded-xl">
+                              <span className="text-[10px] text-slate-400 block uppercase font-bold">Rating</span>
+                              <span className="text-sm font-bold font-mono text-amber-400 flex items-center justify-center">
                                 <Star className="w-3 h-3 fill-amber-500 inline mr-0.5" />
                                 {restReviews.length > 0 ? (restReviews.reduce((s, r) => s + r.rating, 0) / restReviews.length).toFixed(1) : '-'}
                               </span>
@@ -1544,22 +1550,22 @@ export const MasterAdminDashboard: React.FC = () => {
                         </div>
 
                         {/* Action Links & Multi-Button Control */}
-                        <div className="mt-5 pt-4 border-t border-ivory-200 flex flex-col space-y-2.5">
+                        <div className="mt-5 pt-4 border-t border-white/[0.08] flex flex-col space-y-2.5">
                           <Link
                             to={`/r/${rest.slug}/menu?t=${firstTableToken}`}
                             onClick={() => setCurrentRestaurant(rest.id)}
-                            className="w-full bg-saffron-50 hover:bg-saffron-100 text-saffron-800 font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors border border-saffron-200 shadow-xs cursor-pointer"
+                            className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-all shadow-md cursor-pointer"
                           >
-                            <UtensilsCrossed className="w-3.5 h-3.5 text-saffron-600" />
+                            <UtensilsCrossed className="w-3.5 h-3.5 text-white" />
                             <span>Launch Diner Menu ({restTables[0]?.label || 'Table 1'})</span>
-                            <ExternalLink className="w-3 h-3 text-saffron-500 ml-0.5" />
+                            <ExternalLink className="w-3 h-3 text-white/80 ml-0.5" />
                           </Link>
 
                           <div className="grid grid-cols-2 gap-2">
                             <Link
                               to={`/manage/${rest.slug}`}
                               onClick={() => setCurrentRestaurant(rest.id)}
-                              className="bg-charcoal-900 hover:bg-charcoal-800 text-white font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 transition-colors text-center cursor-pointer"
+                              className="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 transition-colors text-center cursor-pointer border border-white/[0.08]"
                               title="Manager Hub & Menu Editor"
                             >
                               <span>Manage</span>
@@ -1569,10 +1575,10 @@ export const MasterAdminDashboard: React.FC = () => {
                             <Link
                               to="/kitchen"
                               onClick={() => setCurrentRestaurant(rest.id)}
-                              className="bg-ivory-100 hover:bg-ivory-200 text-charcoal-800 font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 border border-ivory-300 transition-colors text-center cursor-pointer"
+                              className="bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 border border-white/[0.08] transition-colors text-center cursor-pointer"
                               title="Kitchen Display System (KDS)"
                             >
-                              <ChefHat className="w-3.5 h-3.5 text-saffron-600" />
+                              <ChefHat className="w-3.5 h-3.5 text-amber-400" />
                               <span>KDS</span>
                             </Link>
                           </div>
@@ -1584,10 +1590,10 @@ export const MasterAdminDashboard: React.FC = () => {
                                 setLaunchKitRestaurant(rest);
                                 setIsLaunchKitOpen(true);
                               }}
-                              className="bg-charcoal-900 hover:bg-saffron-700 text-white font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-all shadow-xs border border-charcoal-700 cursor-pointer"
+                              className="bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-all border border-white/[0.08] cursor-pointer"
                               title="View & Share Guest Links, WhatsApp Handover Brief, Table QRs, and Domain"
                             >
-                              <Share2 className="w-3.5 h-3.5 text-saffron-400" />
+                              <Share2 className="w-3.5 h-3.5 text-amber-400" />
                               <span>📲 Links & QRs</span>
                             </button>
 
@@ -1597,29 +1603,29 @@ export const MasterAdminDashboard: React.FC = () => {
                                 setTableModalRestaurant(rest);
                                 setIsTableModalOpen(true);
                               }}
-                              className="bg-ivory-100 hover:bg-ivory-200 text-charcoal-800 font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1.5 border border-ivory-300 transition-colors cursor-pointer"
+                              className="bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1.5 border border-white/[0.08] transition-colors cursor-pointer"
                               title="Manage Tables, Floor Plan, Capacity, and Edit Restaurant Details"
                             >
-                              <QrCode className="w-3.5 h-3.5 text-saffron-600" />
+                              <QrCode className="w-3.5 h-3.5 text-amber-400" />
                               <span>🪑 Floor Plan</span>
                             </button>
                           </div>
 
-                          <div className="flex items-center justify-between pt-1 text-[11px] text-charcoal-500">
-                            <span className="truncate max-w-[170px] font-mono text-[10px]">/#/r/{rest.slug}/menu</span>
+                          <div className="flex items-center justify-between pt-1 text-[11px] text-slate-400">
+                            <span className="truncate max-w-[170px] font-mono text-[10px] text-slate-400">/#/r/{rest.slug}/menu</span>
                             <button
                               onClick={() => copyUrl(window.location.origin + dinerUrl, rest.id)}
-                              className="px-2.5 py-1 bg-ivory-100 hover:bg-ivory-200 text-charcoal-700 rounded-lg font-medium border border-ivory-200 flex items-center space-x-1 flex-shrink-0 transition-colors cursor-pointer"
+                              className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg font-medium border border-white/[0.08] flex items-center space-x-1 flex-shrink-0 transition-colors cursor-pointer"
                               title="Copy Table 1 Menu Link"
                             >
                               {copiedLink === rest.id ? (
                                 <>
-                                  <Check className="w-3 h-3 text-green-600" />
-                                  <span className="text-green-700 font-bold">Copied</span>
+                                  <Check className="w-3 h-3 text-emerald-400" />
+                                  <span className="text-emerald-400 font-bold">Copied</span>
                                 </>
                               ) : (
                                 <>
-                                  <Copy className="w-3 h-3" />
+                                  <Copy className="w-3 h-3 text-slate-400" />
                                   <span>Copy Link</span>
                                 </>
                               )}
@@ -1629,7 +1635,7 @@ export const MasterAdminDashboard: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => setOffboardTarget(rest)}
-                            className="w-full mt-2 bg-red-50 hover:bg-red-600 text-red-700 hover:text-white font-bold py-1.5 px-2.5 rounded-xl text-[11px] flex items-center justify-center space-x-1.5 border border-red-200 hover:border-red-600 transition-colors cursor-pointer"
+                            className="w-full mt-2 bg-rose-500/10 hover:bg-rose-600 text-rose-400 hover:text-white font-bold py-1.5 px-2.5 rounded-xl text-[11px] flex items-center justify-center space-x-1.5 border border-rose-500/20 hover:border-rose-600 transition-colors cursor-pointer"
                             title={`Offboard ${rest.name} from active operational hub`}
                           >
                             <UserMinus className="w-3.5 h-3.5" />
@@ -1648,14 +1654,14 @@ export const MasterAdminDashboard: React.FC = () => {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-6 pb-2">
                 <button
                   onClick={() => setVisibleCount((prev) => prev + 24)}
-                  className="px-6 py-3 bg-saffron-600 hover:bg-saffron-700 text-white font-serif text-xs font-bold rounded-2xl shadow-subtle flex items-center space-x-2 transition-all"
+                  className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-serif text-xs font-bold rounded-2xl shadow-lg flex items-center space-x-2 transition-all cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Load 24 More Restaurants ({filteredRestaurants.length - visibleCount} remaining)</span>
                 </button>
                 <button
                   onClick={() => setVisibleCount(filteredRestaurants.length)}
-                  className="px-5 py-3 bg-ivory-100 hover:bg-ivory-200 border border-ivory-300 text-charcoal-800 text-xs font-semibold rounded-2xl transition-colors"
+                  className="px-5 py-3 bg-slate-800 hover:bg-slate-700 border border-white/[0.08] text-white text-xs font-semibold rounded-2xl transition-colors cursor-pointer"
                 >
                   Show All {filteredRestaurants.length} Restaurants
                 </button>

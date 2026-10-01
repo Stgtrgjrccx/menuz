@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantStore';
 import { isWorkingWithMenuz } from '../types';
+import { SEED_RESTAURANTS } from '../data/seedData';
 import { QrScannerModal } from './QrScannerModal';
 
 interface SwitchRestaurantModalProps {
@@ -30,7 +31,12 @@ export const SwitchRestaurantModal: React.FC<SwitchRestaurantModalProps> = ({
   const navigate = useNavigate();
   const rawRestaurants = useRestaurantStore((state) => state.restaurants);
   const restaurants = useMemo(
-    () => rawRestaurants.filter((r) => !isDishNameAsRestaurant(r)),
+    () =>
+      rawRestaurants.filter(
+        (r) =>
+          !isDishNameAsRestaurant(r) &&
+          (SEED_RESTAURANTS.some((s) => s.id === r.id || s.slug === r.slug) || (r.location && r.cuisine))
+      ),
     [rawRestaurants]
   );
   const tables = useRestaurantStore((state) => state.tables);

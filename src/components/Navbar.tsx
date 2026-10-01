@@ -18,8 +18,9 @@ import {
   ArrowRight,
   ExternalLink
 } from 'lucide-react';
-import { useRestaurantStore } from '../store/restaurantStore';
+import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantStore';
 import { isWorkingWithMenuz } from '../types';
+import { SEED_RESTAURANTS } from '../data/seedData';
 import { QrScannerModal } from './QrScannerModal';
 
 export const Navbar: React.FC = () => {
@@ -30,7 +31,16 @@ export const Navbar: React.FC = () => {
   const markNotificationRead = useRestaurantStore((state) => state.markNotificationRead);
   const clearAllNotifications = useRestaurantStore((state) => state.clearAllNotifications);
   const restaurant = useRestaurantStore((state) => state.restaurant);
-  const restaurants = useRestaurantStore((state) => state.restaurants);
+  const rawRestaurants = useRestaurantStore((state) => state.restaurants);
+  const restaurants = useMemo(
+    () =>
+      rawRestaurants.filter(
+        (r) =>
+          !isDishNameAsRestaurant(r) &&
+          (SEED_RESTAURANTS.some((s) => s.id === r.id || s.slug === r.slug) || (r.location && r.cuisine))
+      ),
+    [rawRestaurants]
+  );
   const setCurrentRestaurant = useRestaurantStore((state) => state.setCurrentRestaurant);
   const tables = useRestaurantStore((state) => state.tables);
 

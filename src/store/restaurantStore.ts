@@ -156,15 +156,16 @@ const LEGACY_STORAGE_KEYS = [
   'menuz_storage'
 ];
 
-// Helper to detect if an entity is actually a dish/menu item rather than a restaurant
+// Helper to detect if an entity is actually a dish or menu category rather than a real restaurant
 export const isDishNameAsRestaurant = (r: Partial<Restaurant> | string | null | undefined): boolean => {
-  if (!r) return false;
+  if (!r) return true;
   const name = typeof r === 'string' ? r : r.name || '';
   const lower = name.trim().toLowerCase();
-  
+  if (!name.trim()) return true;
+
   if (typeof r === 'object') {
     const obj = r as any;
-    // Check dish-only properties
+    // 1. Check dish-specific and category-specific properties
     if (
       obj.price !== undefined ||
       obj.category_id !== undefined ||
@@ -175,17 +176,85 @@ export const isDishNameAsRestaurant = (r: Partial<Restaurant> | string | null | 
       obj.allergens !== undefined ||
       obj.chef_notes !== undefined ||
       obj.spice_level !== undefined ||
-      obj.serving_size !== undefined
+      obj.serving_size !== undefined ||
+      obj.sort_order !== undefined ||
+      obj.restaurant_id !== undefined
     ) {
       return true;
     }
-    if (obj.id && (obj.id.startsWith('item-') || obj.id.includes('dish-') || obj.id.includes('menu-item'))) {
+
+    // 2. Check IDs that belong to categories, dishes, or tables
+    if (
+      obj.id &&
+      (obj.id.startsWith('item-') ||
+       obj.id.includes('dish-') ||
+       obj.id.includes('menu-item') ||
+       obj.id.startsWith('cat-') ||
+       obj.id.startsWith('cat_') ||
+       obj.id.includes('category') ||
+       obj.id.startsWith('tbl-') ||
+       obj.id.startsWith('table-'))
+    ) {
+      return true;
+    }
+
+    // 3. Genuine restaurants must have a location and cuisine unless they are a seed restaurant
+    const isSeed = SEED_RESTAURANTS.some((s) => s.id === obj.id || s.slug === obj.slug);
+    const hasLocation = obj.location && typeof obj.location === 'string' && obj.location.trim().length > 0;
+    const hasCuisine = obj.cuisine && typeof obj.cuisine === 'string' && obj.cuisine.trim().length > 0;
+    if (!isSeed && (!hasLocation || !hasCuisine)) {
       return true;
     }
   }
 
-  const dishPatterns = [
+  // 4. Exact names and substring patterns of menu categories and dishes
+  const prohibitedPatterns = [
+    // Menu Categories
+    'clay oven (tandoor)',
+    'clay oven',
+    'tandoor',
+    'breads & rice',
+    'breads and rice',
+    'breads',
+    'beverages & desserts',
+    'beverages and desserts',
+    'beverages',
+    'desserts',
+    'antipasti & crudo',
+    'antipasti and crudo',
+    'antipasti',
+    'crudo',
+    'woodfired pizza',
+    'wood fired pizza',
+    'wood-fired pizza',
+    'pizza',
+    'handmade pasta',
+    'pasta',
+    'dolci & caffe',
+    'dolci and caffe',
+    'dolci',
+    'appetizers',
+    'heritage curries',
+    'curries',
+    'starters',
+    'main course',
+    'mains',
+    'sides',
+    // Common Dishes
     'dal makhani',
+    'butter chicken',
+    'biryani',
+    'kulcha',
+    'naan',
+    'roti',
+    'paratha',
+    'tiramisu',
+    'margherita',
+    'tagliatelle',
+    'potli samosa',
+    'samosa',
+    'kebab',
+    'paneer tikka',
     'crispy signature starter',
     'head chef specialty main',
     'artisanal house dessert',
@@ -201,7 +270,7 @@ export const isDishNameAsRestaurant = (r: Partial<Restaurant> | string | null | 
     'royal dal makhani'
   ];
 
-  for (const pattern of dishPatterns) {
+  for (const pattern of prohibitedPatterns) {
     if (lower === pattern || lower.startsWith(pattern) || lower.includes(pattern)) {
       return true;
     }
@@ -210,7 +279,7 @@ export const isDishNameAsRestaurant = (r: Partial<Restaurant> | string | null | 
   return false;
 };
 
-// Helper to safely recover any past onboarded restaurants from ANY key in localStorage
+// Helper to safely recover only authentic onboarded restaurants from localStorage
 export const getInitialPersistedRestaurants = (): Restaurant[] => {
   if (typeof window === 'undefined' || !window.localStorage) return SEED_RESTAURANTS;
   
@@ -223,7 +292,7 @@ export const getInitialPersistedRestaurants = (): Restaurant[] => {
     }
   }
 
-  // 2. Read from permanent vault & dedicated keys
+  // 2. Read from permanent vault & dedicated keys ONLY
   for (const vKey of [PERMANENT_VAULT_KEY, DEDICATED_REST_KEY]) {
     try {
       const raw = localStorage.getItem(vKey);
@@ -231,7 +300,7 @@ export const getInitialPersistedRestaurants = (): Restaurant[] => {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed)) {
           for (const r of parsed) {
-            if (r && r.id && r.name && !isDishNameAsRestaurant(r)) {
+            if (r && r.id && r.name && !isDishNameAsRestaurant(r) && r.location && r.cuisine) {
               foundMap.set(r.id, { ...r, is_menuz_partner: true, status: r.status || 'active' });
             }
           }
@@ -240,35 +309,9 @@ export const getInitialPersistedRestaurants = (): Restaurant[] => {
     } catch (e) {}
   }
 
-  // 3. Scan ALL keys in localStorage for any restaurant objects
-  try {
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (!key) continue;
-      const lowerKey = key.toLowerCase();
-      if (lowerKey.includes('menuz') || lowerKey.includes('restaurant') || lowerKey.includes('venue')) {
-        try {
-          const raw = localStorage.getItem(key);
-          if (raw) {
-            const parsed = JSON.parse(raw);
-            const list = parsed?.state?.restaurants || (Array.isArray(parsed) ? parsed : null);
-            if (Array.isArray(list)) {
-              for (const r of list) {
-                if (r && r.id && r.name && !isDishNameAsRestaurant(r) && !foundMap.has(r.id)) {
-                  // Make sure it doesn't have dish-like attributes
-                  if (r.price === undefined && r.category_id === undefined) {
-                    foundMap.set(r.id, { ...r, is_menuz_partner: true, status: r.status || 'active' });
-                  }
-                }
-              }
-            }
-          }
-        } catch (err) {}
-      }
-    }
-  } catch (e) {}
-
-  const result = Array.from(foundMap.values()).filter((r) => !isDishNameAsRestaurant(r));
+  const result = Array.from(foundMap.values()).filter(
+    (r) => !isDishNameAsRestaurant(r) && (SEED_RESTAURANTS.some((s) => s.id === r.id) || (r.location && r.cuisine))
+  );
   try {
     localStorage.setItem(DEDICATED_REST_KEY, JSON.stringify(result));
     localStorage.setItem(
@@ -276,17 +319,21 @@ export const getInitialPersistedRestaurants = (): Restaurant[] => {
       JSON.stringify(result.filter((r) => !SEED_RESTAURANTS.some((s) => s.id === r.id)))
     );
 
-    // Deep purge any dish items from existing storage keys in localStorage
+    // Deep purge any dish/category items from all existing storage keys in localStorage
     for (const key of [PERMANENT_VAULT_KEY, DEDICATED_REST_KEY, ...LEGACY_STORAGE_KEYS, STORAGE_KEY]) {
       const raw = localStorage.getItem(key);
       if (raw) {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed)) {
-          const cleaned = parsed.filter((item) => !isDishNameAsRestaurant(item));
+          const cleaned = parsed.filter(
+            (item) => !isDishNameAsRestaurant(item) && (SEED_RESTAURANTS.some((s) => s.id === item.id) || (item.location && item.cuisine))
+          );
           localStorage.setItem(key, JSON.stringify(cleaned));
         } else if (parsed?.state?.restaurants) {
-          parsed.state.restaurants = parsed.state.restaurants.filter((item: any) => !isDishNameAsRestaurant(item));
-          if (isDishNameAsRestaurant(parsed.state.restaurant)) {
+          parsed.state.restaurants = parsed.state.restaurants.filter(
+            (item: any) => !isDishNameAsRestaurant(item) && (SEED_RESTAURANTS.some((s) => s.id === item.id) || (item.location && item.cuisine))
+          );
+          if (isDishNameAsRestaurant(parsed.state.restaurant) || !parsed.state.restaurants.some((r: any) => r.id === parsed.state.restaurant?.id)) {
             parsed.state.restaurant = parsed.state.restaurants[0] || SEED_RESTAURANTS[0];
             parsed.state.currentRestaurantId = parsed.state.restaurant?.id || '';
           }
@@ -298,6 +345,45 @@ export const getInitialPersistedRestaurants = (): Restaurant[] => {
 
   return result;
 };
+
+// Immediate client-side active localStorage sanitation on module import
+if (typeof window !== 'undefined' && window.localStorage) {
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key) continue;
+      const lowerKey = key.toLowerCase();
+      if (lowerKey.includes('menuz') || lowerKey.includes('restaurant')) {
+        const raw = localStorage.getItem(key);
+        if (raw) {
+          try {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) {
+              const cleaned = parsed.filter(
+                (item) => !isDishNameAsRestaurant(item) && (SEED_RESTAURANTS.some((s) => s.id === item?.id) || (item?.location && item?.cuisine))
+              );
+              if (cleaned.length !== parsed.length) {
+                localStorage.setItem(key, JSON.stringify(cleaned));
+              }
+            } else if (parsed?.state?.restaurants) {
+              const prevLen = parsed.state.restaurants.length;
+              parsed.state.restaurants = parsed.state.restaurants.filter(
+                (item: any) => !isDishNameAsRestaurant(item) && (SEED_RESTAURANTS.some((s) => s.id === item?.id) || (item?.location && item?.cuisine))
+              );
+              if (isDishNameAsRestaurant(parsed.state.restaurant) || !parsed.state.restaurants.some((r: any) => r.id === parsed.state.restaurant?.id)) {
+                parsed.state.restaurant = parsed.state.restaurants[0] || SEED_RESTAURANTS[0];
+                parsed.state.currentRestaurantId = parsed.state.restaurant?.id || '';
+              }
+              if (parsed.state.restaurants.length !== prevLen) {
+                localStorage.setItem(key, JSON.stringify(parsed));
+              }
+            }
+          } catch (err) {}
+        }
+      }
+    }
+  } catch (e) {}
+}
 
 const getInitialPersistedTables = (): RestaurantTable[] => {
   if (typeof window === 'undefined' || !window.localStorage) return SEED_TABLES;
@@ -1034,13 +1120,20 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       onRehydrateStorage: () => (state) => {
         if (!state) return;
         // Merge missing seeds AND any custom onboarded restaurants from localStorage, strictly rejecting any dish items
-        const persistedAll = getInitialPersistedRestaurants().filter((r) => !isDishNameAsRestaurant(r));
+        const isRealRestaurant = (r: any) =>
+          r &&
+          r.id &&
+          r.name &&
+          !isDishNameAsRestaurant(r) &&
+          (SEED_RESTAURANTS.some((s) => s.id === r.id || s.slug === r.slug) || (r.location && r.cuisine));
+
+        const persistedAll = getInitialPersistedRestaurants().filter(isRealRestaurant);
         const currentMap = new Map<string, Restaurant>();
         for (const r of state.restaurants || []) {
-          if (r && r.id && !isDishNameAsRestaurant(r)) currentMap.set(r.id, r);
+          if (isRealRestaurant(r)) currentMap.set(r.id, r);
         }
         for (const r of persistedAll) {
-          if (r && r.id && !isDishNameAsRestaurant(r) && !currentMap.has(r.id)) {
+          if (isRealRestaurant(r) && !currentMap.has(r.id)) {
             currentMap.set(r.id, r);
           }
         }
