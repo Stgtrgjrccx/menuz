@@ -80,7 +80,7 @@ export const CustomerHomePage: React.FC = () => {
         !q ||
         v.name.toLowerCase().includes(q) ||
         v.cuisine.toLowerCase().includes(q) ||
-        v.specialty.toLowerCase().includes(q);
+        v.location.toLowerCase().includes(q);
 
       const matchesFilter =
         activeFilter === 'all' ||
@@ -201,7 +201,7 @@ export const CustomerHomePage: React.FC = () => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search menus or dishes..."
+                placeholder="Search Pune restaurants by name, area, or cuisine..."
                 className="w-full py-2 pl-9 pr-8 text-xs bg-white/[0.04] text-white placeholder:text-slate-500 rounded-lg border border-white/[0.1] focus:outline-none focus:border-amber-400/60 transition-colors"
               />
               {searchQuery && (

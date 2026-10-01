@@ -23,7 +23,8 @@ import {
   Globe,
   Sliders,
   Settings,
-  UserMinus
+  UserMinus,
+  ShieldCheck
 } from 'lucide-react';
 import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantStore';
 import { SEED_RESTAURANTS } from '../data/seedData';
@@ -161,20 +162,30 @@ export const ManagerDashboard: React.FC = () => {
   const unreadWaiterCalls = activeNotificationsList.filter((n) => n.type === 'waiter_call' && !n.read);
 
   return (
-    <div className="min-h-screen bg-ivory-50 p-4 md:p-8 max-w-5xl mx-auto space-y-6 pb-20">
-      {/* Top Quick Navigation Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-ivory-300">
+    <div className="min-h-screen bg-[#090D16] text-slate-100 p-4 md:p-8 max-w-5xl mx-auto space-y-6 pb-20">
+      {/* Top Quick Navigation Bar with Admin HQ button */}
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
         <div className="flex items-center space-x-2">
+          {/* Always-Visible Admin Page Top Button */}
+          <Link
+            to="/admin"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-amber-300 hover:text-amber-200 transition-colors bg-amber-500/15 hover:bg-amber-500/25 px-3.5 py-2 rounded-xl border border-amber-500/30 hover:border-amber-400/60 shadow-xs cursor-pointer active:scale-95"
+            title="Open Master Admin Control Hub"
+          >
+            <ShieldCheck className="w-4 h-4 text-amber-400" />
+            <span>Admin HQ</span>
+          </Link>
+
           <Link
             to="/"
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-700 hover:text-amber-700 transition-colors bg-white px-3.5 py-2 rounded-xl border border-ivory-300 shadow-xs hover:border-amber-400 cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-slate-300 hover:text-white transition-colors bg-white/[0.04] hover:bg-white/[0.08] px-3.5 py-2 rounded-xl border border-white/[0.08] shadow-xs cursor-pointer"
           >
-            <ArrowLeft className="w-3.5 h-3.5 text-amber-600" />
+            <ArrowLeft className="w-3.5 h-3.5 text-slate-400" />
             <span>Explore Demos</span>
           </Link>
           <Link
             to="/pitch"
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-cyan-800 hover:text-cyan-900 transition-colors bg-cyan-50/80 hover:bg-cyan-100 px-3 py-2 rounded-xl border border-cyan-200/90 shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-cyan-300 hover:text-cyan-200 transition-colors bg-cyan-500/10 hover:bg-cyan-500/20 px-3 py-2 rounded-xl border border-cyan-500/30 shadow-xs cursor-pointer"
           >
             <span className="text-xs">📊</span>
             <span>Pitch Deck</span>
@@ -183,9 +194,9 @@ export const ManagerDashboard: React.FC = () => {
 
         <div className="flex flex-wrap items-center gap-2">
           {/* Active Venue Switcher */}
-          <div className="flex items-center space-x-1.5 bg-white border border-ivory-300 rounded-xl px-2.5 py-1.5 shadow-xs">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[10px] font-bold text-charcoal-500 uppercase tracking-wider hidden sm:inline">Active Venue:</span>
+          <div className="flex items-center space-x-1.5 bg-[#0D1322] border border-white/[0.08] rounded-xl px-2.5 py-1.5 shadow-xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider hidden sm:inline">Venue:</span>
             <select
               value={restaurant.id}
               onChange={(e) => {
@@ -195,13 +206,13 @@ export const ManagerDashboard: React.FC = () => {
                   navigate(`/manage/${target.slug}`);
                 }
               }}
-              className="bg-transparent text-xs font-bold text-charcoal-900 focus:outline-none cursor-pointer max-w-[170px] truncate"
+              className="bg-transparent text-xs font-bold text-white focus:outline-none cursor-pointer max-w-[170px] truncate"
               title="Switch Active Venue Hub"
             >
               {restaurants
                 .filter((r) => !isDishNameAsRestaurant(r))
                 .map((r) => (
-                  <option key={r.id} value={r.id}>
+                  <option key={r.id} value={r.id} className="bg-[#0D1322] text-white">
                     {r.name}
                   </option>
                 ))}
@@ -211,9 +222,9 @@ export const ManagerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsAiStudioOpen(true)}
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-800 hover:text-amber-800 transition-colors bg-white hover:bg-amber-50/60 px-3.5 py-2 rounded-xl border border-amber-300/80 shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-amber-300 hover:text-amber-200 transition-colors bg-amber-500/10 hover:bg-amber-500/20 px-3.5 py-2 rounded-xl border border-amber-500/20 shadow-xs cursor-pointer"
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span>Chef AI Studio</span>
           </button>
 
@@ -221,29 +232,29 @@ export const ManagerDashboard: React.FC = () => {
             type="button"
             disabled={usbPrintLoading}
             onClick={handleTestUsbPrint}
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-800 hover:text-blue-800 transition-colors bg-white hover:bg-blue-50/60 px-3.5 py-2 rounded-xl border border-blue-300/80 shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-blue-300 hover:text-blue-200 transition-colors bg-blue-500/10 hover:bg-blue-500/20 px-3.5 py-2 rounded-xl border border-blue-500/20 shadow-xs cursor-pointer"
             title="Connect USB Thermal Printer & Test Print ESC/POS Ticket"
           >
-            <Printer className="w-3.5 h-3.5 text-blue-600" />
+            <Printer className="w-3.5 h-3.5 text-blue-400" />
             <span>{usbPrintLoading ? 'Sending...' : 'Test ESC/POS'}</span>
           </button>
 
           <Link
             to="/kitchen"
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-700 hover:text-saffron-700 transition-colors bg-white px-3.5 py-2 rounded-xl border border-ivory-300 shadow-xs hover:border-saffron-300"
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-slate-200 hover:text-white transition-colors bg-white/[0.04] hover:bg-white/[0.08] px-3.5 py-2 rounded-xl border border-white/[0.08] shadow-xs"
           >
-            <ChefHat className="w-3.5 h-3.5 text-saffron-600" />
+            <ChefHat className="w-3.5 h-3.5 text-amber-400" />
             <span>Kitchen KDS</span>
           </Link>
 
           <button
             type="button"
             onClick={() => setIsPosModalOpen(true)}
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-800 hover:text-orange-800 transition-colors bg-white hover:bg-orange-50/60 px-3.5 py-2 rounded-xl border border-orange-300/80 shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-orange-300 hover:text-orange-200 transition-colors bg-orange-500/10 hover:bg-orange-500/20 px-3.5 py-2 rounded-xl border border-orange-500/20 shadow-xs cursor-pointer"
           >
-            <Printer className="w-3.5 h-3.5 text-orange-600" />
+            <Printer className="w-3.5 h-3.5 text-orange-400" />
             <span>POS & KOT</span>
-            <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded-md bg-ivory-100 text-charcoal-700 font-bold border border-ivory-300">
+            <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded-md bg-white/[0.06] text-orange-300 font-bold border border-white/[0.08]">
               {restaurant.pos_provider || 'Petpooja'}
             </span>
           </button>
@@ -251,11 +262,11 @@ export const ManagerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsTableModalOpen(true)}
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-800 hover:text-emerald-800 transition-colors bg-white hover:bg-emerald-50/60 px-3.5 py-2 rounded-xl border border-emerald-300/80 shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-emerald-300 hover:text-emerald-200 transition-colors bg-emerald-500/10 hover:bg-emerald-500/20 px-3.5 py-2 rounded-xl border border-emerald-500/20 shadow-xs cursor-pointer"
           >
             <span className="text-xs">🪑</span>
             <span>Floor Plan</span>
-            <span className="text-[9px] uppercase font-mono px-1.5 py-0.5 rounded-md bg-ivory-100 text-charcoal-700 font-bold border border-ivory-300">
+            <span className="text-[9px] uppercase font-mono px-1.5 py-0.5 rounded-md bg-white/[0.06] text-emerald-300 font-bold border border-white/[0.08]">
               {activeTablesList.length} Tables
             </span>
           </button>
@@ -264,44 +275,44 @@ export const ManagerDashboard: React.FC = () => {
 
       {/* USB Print Notification Banner */}
       {usbPrintStatus && (
-        <div className="bg-blue-50 border border-blue-200 text-blue-900 p-4 rounded-2xl text-xs font-bold flex items-center justify-between shadow-xs animate-in fade-in">
+        <div className="bg-blue-950/40 border border-blue-500/40 text-blue-200 p-4 rounded-2xl text-xs font-bold flex items-center justify-between shadow-xs animate-in fade-in">
           <div className="flex items-center gap-2">
-            <Printer className="w-4 h-4 text-blue-600" />
+            <Printer className="w-4 h-4 text-blue-400" />
             <span>{usbPrintStatus}</span>
           </div>
-          <button onClick={() => setUsbPrintStatus(null)} className="text-blue-500 hover:text-blue-800">
+          <button onClick={() => setUsbPrintStatus(null)} className="text-blue-400 hover:text-blue-200">
             <X className="w-4 h-4" />
           </button>
         </div>
       )}
 
       {/* Top Bar */}
-      <header className="flex flex-wrap justify-between items-center pb-5 border-b border-ivory-300 gap-4">
+      <header className="flex flex-wrap justify-between items-center pb-5 border-b border-white/[0.08] gap-4">
         <div>
           <div className="flex items-center space-x-2">
-            <span className="px-2 py-0.5 rounded-md text-[10px] uppercase font-bold tracking-wider bg-amber-500/15 text-amber-800 border border-amber-500/30">
+            <span className="px-2 py-0.5 rounded-md text-[10px] uppercase font-bold font-mono tracking-wider bg-amber-500/15 text-amber-300 border border-amber-500/30">
               Active Venue Hub
             </span>
-            <span className="text-xs text-charcoal-500 font-medium">Operational Console</span>
+            <span className="text-xs text-slate-400 font-medium">Operational Console</span>
           </div>
-          <h1 className="font-serif text-3xl font-bold text-charcoal-900 mt-1">{restaurant.name}</h1>
+          <h1 className="font-serif text-3xl font-bold text-white mt-1">{restaurant.name}</h1>
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
             onClick={() => setIsLaunchKitOpen(true)}
-            className="flex items-center space-x-1.5 text-xs text-white bg-charcoal-900 hover:bg-saffron-700 border border-charcoal-700 px-3.5 py-2.5 rounded-xl shadow-subtle transition-all font-bold cursor-pointer"
+            className="flex items-center space-x-1.5 text-xs text-slate-950 bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 px-3.5 py-2.5 rounded-xl shadow-sm transition-all font-bold cursor-pointer"
             title="View & Share Guest Links, Table QR Codes, WhatsApp Handover & Custom Domain"
           >
-            <Share2 className="w-3.5 h-3.5 text-saffron-400" />
+            <Share2 className="w-3.5 h-3.5 text-slate-950" />
             <span>📲 Links & Table QRs</span>
           </button>
 
           <button
             type="button"
             onClick={() => setIsTableModalOpen(true)}
-            className="flex items-center space-x-1.5 text-xs text-charcoal-800 bg-ivory-100 hover:bg-ivory-200 border border-ivory-300 px-3.5 py-2.5 rounded-xl shadow-subtle transition-all font-bold cursor-pointer"
+            className="flex items-center space-x-1.5 text-xs text-slate-200 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] px-3.5 py-2.5 rounded-xl shadow-xs transition-all font-semibold cursor-pointer"
             title="Manage Tables, Floor Plan, Capacity, and Edit Restaurant Profile"
           >
             <span className="text-sm">🪑</span>
@@ -311,7 +322,7 @@ export const ManagerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsAiDrawerOpen(true)}
-            className="flex items-center space-x-1.5 text-xs text-purple-900 bg-purple-50 hover:bg-purple-100 border border-purple-200 px-3.5 py-2.5 rounded-xl shadow-subtle transition-colors font-bold cursor-pointer"
+            className="flex items-center space-x-1.5 text-xs text-purple-300 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 px-3.5 py-2.5 rounded-xl shadow-xs transition-colors font-semibold cursor-pointer"
           >
             <span className="text-sm">🧑‍🍳</span>
             <span>Test Chef's AI</span>
@@ -319,16 +330,16 @@ export const ManagerDashboard: React.FC = () => {
 
           <Link
             to={`/r/${restaurant.slug}/menu?t=${activeTablesList[0]?.public_token || 'table-token-01-saffron'}`}
-            className="flex items-center space-x-1.5 text-xs text-charcoal-700 bg-white border border-ivory-200 px-3.5 py-2.5 rounded-xl shadow-subtle hover:bg-ivory-100 transition-colors font-bold"
+            className="flex items-center space-x-1.5 text-xs text-slate-200 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] px-3.5 py-2.5 rounded-xl shadow-xs transition-colors font-semibold"
           >
-            <UtensilsCrossed className="w-3.5 h-3.5 text-saffron-600" />
+            <UtensilsCrossed className="w-3.5 h-3.5 text-amber-400" />
             <span>Launch Diner Menu</span>
           </Link>
 
           <button
             type="button"
             onClick={() => setIsOffboardModalOpen(true)}
-            className="flex items-center space-x-1.5 text-xs text-red-700 hover:text-white bg-red-50 hover:bg-red-600 border border-red-200 hover:border-red-600 px-3.5 py-2.5 rounded-xl shadow-subtle transition-all font-bold cursor-pointer"
+            className="flex items-center space-x-1.5 text-xs text-rose-400 hover:text-white bg-rose-500/10 hover:bg-rose-600 border border-rose-500/20 hover:border-rose-600 px-3.5 py-2.5 rounded-xl shadow-xs transition-all font-semibold cursor-pointer"
             title={`Offboard ${restaurant.name} from Menuz`}
           >
             <UserMinus className="w-3.5 h-3.5" />
@@ -338,31 +349,31 @@ export const ManagerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={resetToDefaults}
-            className="flex items-center space-x-1.5 text-xs text-charcoal-700 bg-white border border-ivory-200 px-3.5 py-2 rounded-xl shadow-subtle hover:bg-ivory-100 transition-colors"
+            className="flex items-center space-x-1.5 text-xs text-slate-400 hover:text-white bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] px-3.5 py-2 rounded-xl transition-colors cursor-pointer"
           >
-            <RefreshCw className="w-3.5 h-3.5 text-saffron-600" />
-            <span>Reset Demo Catalog</span>
+            <RefreshCw className="w-3.5 h-3.5 text-slate-400" />
+            <span>Reset Demo</span>
           </button>
         </div>
       </header>
 
       {/* 🚨 LIVE URGENT SERVICE ALERTS (RATING BELOW 4 STARS) */}
       {unreadServiceAlerts.length > 0 && (
-        <div className="bg-red-500/15 border-2 border-red-500/60 rounded-3xl p-5 shadow-float animate-pulse">
+        <div className="bg-rose-950/30 border border-rose-500/40 rounded-2xl p-5 shadow-lg animate-pulse">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center space-x-2.5">
               <span className="relative flex h-3.5 w-3.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-90"></span>
-                <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-red-600"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-90"></span>
+                <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-rose-500"></span>
               </span>
               <div>
-                <h3 className="font-serif font-bold text-base text-red-950 flex items-center space-x-2">
+                <h3 className="font-serif font-bold text-base text-rose-200 flex items-center space-x-2">
                   <span>🚨 Urgent Guest Assistance Required</span>
-                  <span className="text-xs bg-red-600 text-white px-2 py-0.5 rounded-full font-sans">
+                  <span className="text-xs bg-rose-600 text-white px-2 py-0.5 rounded-full font-sans">
                     {unreadServiceAlerts.length} Table{unreadServiceAlerts.length > 1 ? 's' : ''} (Rating &lt; 4★)
                   </span>
                 </h3>
-                <p className="text-xs text-red-800">
+                <p className="text-xs text-rose-300/80">
                   Guest rated below 4 stars. Manager or team member must attend the table immediately to resolve!
                 </p>
               </div>
@@ -372,26 +383,26 @@ export const ManagerDashboard: React.FC = () => {
             {unreadServiceAlerts.map((notif) => (
               <div
                 key={notif.id}
-                className="bg-white p-4 rounded-2xl border-2 border-red-300 shadow-md flex flex-col justify-between space-y-2.5"
+                className="bg-[#0D1322] p-4 rounded-xl border border-rose-500/40 shadow-md flex flex-col justify-between space-y-2.5"
               >
                 <div>
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] uppercase font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded-full border border-red-200">
+                    <span className="text-[10px] uppercase font-bold text-rose-300 bg-rose-950/60 px-2 py-0.5 rounded-full border border-rose-800/60">
                       Immediate Action
                     </span>
-                    <span className="text-[10px] text-charcoal-400 font-mono">Floor Alert</span>
+                    <span className="text-[10px] text-slate-400 font-mono">Floor Alert</span>
                   </div>
-                  <p className="font-serif font-bold text-base text-charcoal-900 mt-1">
+                  <p className="font-serif font-bold text-base text-white mt-1">
                     {notif.table_label || 'Customer Table'}
                   </p>
-                  <p className="text-xs text-charcoal-700 mt-1 leading-snug font-medium">
+                  <p className="text-xs text-slate-300 mt-1 leading-snug font-medium">
                     {notif.message}
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => markNotificationRead(notif.id)}
-                  className="w-full py-2 bg-red-600 hover:bg-red-700 active:scale-95 text-white text-xs font-bold rounded-xl transition-all shadow-subtle flex items-center justify-center space-x-1.5"
+                  className="w-full py-2 bg-rose-600 hover:bg-rose-500 active:scale-95 text-white text-xs font-bold rounded-xl transition-all shadow-sm flex items-center justify-center space-x-1.5 cursor-pointer"
                 >
                   <span>✓ Attending Table Now</span>
                 </button>
@@ -403,14 +414,14 @@ export const ManagerDashboard: React.FC = () => {
 
       {/* Live Waiter Calls Alert Banner */}
       {unreadWaiterCalls.length > 0 && (
-        <div className="bg-amber-500/10 border border-amber-500/30 rounded-3xl p-5 shadow-subtle">
+        <div className="bg-amber-950/20 border border-amber-500/30 rounded-2xl p-5 shadow-lg">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center space-x-2">
               <span className="relative flex h-3 w-3">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-400"></span>
               </span>
-              <h3 className="font-serif font-bold text-base text-charcoal-900">
+              <h3 className="font-serif font-bold text-base text-white">
                 Active Waiter Assistance Calls ({unreadWaiterCalls.length})
               </h3>
             </div>
@@ -419,19 +430,19 @@ export const ManagerDashboard: React.FC = () => {
             {unreadWaiterCalls.map((notif) => (
               <div
                 key={notif.id}
-                className="bg-white p-3.5 rounded-2xl border border-amber-200 shadow-xs flex items-center justify-between"
+                className="bg-[#0D1322] p-3.5 rounded-xl border border-amber-500/30 shadow-xs flex items-center justify-between"
               >
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-amber-700 block">Table Request</span>
-                  <p className="font-serif font-bold text-sm text-charcoal-900">
+                  <span className="text-[10px] uppercase font-bold text-amber-400 block font-mono">Table Request</span>
+                  <p className="font-serif font-bold text-sm text-white">
                     {notif.table_label || 'Customer Table'}
                   </p>
-                  <p className="text-[10px] text-charcoal-500">Assistance Requested</p>
+                  <p className="text-[10px] text-slate-400">Assistance Requested</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => markNotificationRead(notif.id)}
-                  className="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-xl transition-colors shadow-xs"
+                  className="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-lg transition-colors shadow-xs cursor-pointer"
                 >
                   Attend
                 </button>
@@ -444,65 +455,65 @@ export const ManagerDashboard: React.FC = () => {
       {/* ═══════════════════════════════════════════════════════════ */}
       {/* ⚡ SMART OPERATIONS, DIRECT KOT & GROWTH ENGINE             */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <div className="bg-white rounded-3xl border border-ivory-300 p-6 shadow-subtle space-y-5">
-        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-ivory-200">
+      <div className="bg-[#0D1322] rounded-2xl border border-white/[0.08] p-6 shadow-xl space-y-5">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
           <div>
             <div className="flex items-center space-x-2">
-              <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-saffron-100 text-saffron-800 border border-saffron-200 font-mono">
+              <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-mono">
                 Strategic Controls
               </span>
-              <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200 font-mono">
+              <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-mono">
                 Automation
               </span>
             </div>
-            <h3 className="font-serif font-bold text-lg text-charcoal-900 mt-1">
+            <h3 className="font-serif font-bold text-lg text-white mt-1">
               Smart Operations, Direct KOT &amp; Growth Engine
             </h3>
-            <p className="text-xs text-charcoal-600">
+            <p className="text-xs text-slate-400">
               Configure optional direct kitchen routing, direct restaurant access control, dynamic surge pricing, and viral Instagram story cards.
             </p>
           </div>
           <button
             type="button"
             onClick={() => setSmartSettingsTab('kot')}
-            className="px-4 py-2 bg-charcoal-900 hover:bg-black text-white rounded-xl text-xs font-bold flex items-center space-x-1.5 shadow-sm transition-all cursor-pointer"
+            className="px-4 py-2 bg-white/[0.06] hover:bg-white/[0.1] text-white border border-white/[0.1] rounded-xl text-xs font-bold flex items-center space-x-1.5 shadow-sm transition-all cursor-pointer"
           >
-            <Sliders className="w-3.5 h-3.5 text-saffron-400" />
+            <Sliders className="w-3.5 h-3.5 text-amber-400" />
             <span>⚙️ Configure All Smart Options</span>
           </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5">
           {/* 1. Direct-to-Kitchen KOT Auto-Dispatch */}
-          <div className="bg-ivory-50 border border-ivory-300 rounded-2xl p-3.5 flex flex-col justify-between space-y-3">
+          <div className="bg-white/[0.03] border border-white/[0.08] rounded-2xl p-3.5 flex flex-col justify-between space-y-3">
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-bold text-charcoal-900 flex items-center space-x-1.5">
+                <span className="text-xs font-bold text-white flex items-center space-x-1.5">
                   <span>🔥</span>
                   <span>Direct KOT</span>
                 </span>
                 <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
                   restaurant.direct_kitchen_kot_enabled
-                    ? 'bg-green-100 text-green-800 border border-green-200'
-                    : 'bg-charcoal-200 text-charcoal-700'
+                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono'
+                    : 'bg-white/[0.06] text-slate-400 font-mono'
                 }`}>
                   {restaurant.direct_kitchen_kot_enabled ? 'Auto ON' : 'Manual'}
                 </span>
               </div>
-              <p className="text-[10px] text-charcoal-600 leading-snug line-clamp-2">
+              <p className="text-[10px] text-slate-400 leading-snug line-clamp-2">
                 Fires orders directly to kitchen KDS without waiting for manual manager approval.
               </p>
 
-              <div className="mt-2.5 p-2 bg-white rounded-xl border border-ivory-200 text-[10px] space-y-1">
-                <div className="flex justify-between text-charcoal-700">
-                  <span className="font-semibold">Station:</span>
-                  <span className="truncate max-w-[90px] font-mono text-charcoal-900">
+              <div className="mt-2.5 p-2 bg-white/[0.03] rounded-xl border border-white/[0.06] text-[10px] space-y-1">
+                <div className="flex justify-between text-slate-300">
+                  <span className="font-semibold text-slate-400">Station:</span>
+                  <span className="truncate max-w-[90px] font-mono text-white">
                     {restaurant.direct_kitchen_kot_config?.station_name || 'Main Kitchen'}
                   </span>
                 </div>
-                <div className="flex justify-between text-charcoal-700">
-                  <span className="font-semibold">Buffer:</span>
-                  <span className="font-mono text-charcoal-900">
+                <div className="flex justify-between text-slate-300">
+                  <span className="font-semibold text-slate-400">Buffer:</span>
+                  <span className="font-mono text-amber-400">
                     {restaurant.direct_kitchen_kot_config?.auto_dispatch_delay_seconds ? `${restaurant.direct_kitchen_kot_config.auto_dispatch_delay_seconds}s` : 'Instant 0s'}
                   </span>
                 </div>
@@ -518,8 +529,8 @@ export const ManagerDashboard: React.FC = () => {
                 }}
                 className={`w-full py-1.5 px-2 rounded-xl text-[11px] font-bold transition-all flex items-center justify-center space-x-1 shadow-xs cursor-pointer ${
                   restaurant.direct_kitchen_kot_enabled
-                    ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
-                    : 'bg-charcoal-800 hover:bg-charcoal-900 text-white'
+                    ? 'bg-emerald-600 hover:bg-emerald-500 text-white'
+                    : 'bg-white/[0.08] hover:bg-white/[0.12] text-white'
                 }`}
               >
                 <span>{restaurant.direct_kitchen_kot_enabled ? '✓ Auto-KOT ON' : 'Enable Auto-KOT'}</span>
@@ -528,44 +539,44 @@ export const ManagerDashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setSmartSettingsTab('kot')}
-                className="w-full py-1.5 px-2 rounded-xl text-[10px] font-bold text-charcoal-700 bg-white hover:bg-ivory-100 border border-ivory-300 transition-all flex items-center justify-center space-x-1 cursor-pointer"
+                className="w-full py-1.5 px-2 rounded-xl text-[10px] font-semibold text-slate-300 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-all flex items-center justify-center space-x-1 cursor-pointer"
               >
-                <Settings className="w-3 h-3 text-charcoal-500" />
+                <Settings className="w-3 h-3 text-slate-400" />
                 <span>Edit Parameters</span>
               </button>
             </div>
           </div>
 
           {/* 2. Smart Happy Hour & Dynamic Pricing */}
-          <div className="bg-ivory-50 border border-ivory-300 rounded-2xl p-3.5 flex flex-col justify-between space-y-3">
+          <div className="bg-white/[0.03] border border-white/[0.08] rounded-2xl p-3.5 flex flex-col justify-between space-y-3">
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-bold text-charcoal-900 flex items-center space-x-1.5">
+                <span className="text-xs font-bold text-white flex items-center space-x-1.5">
                   <span>⚡</span>
                   <span>Happy Hour &amp; Surge</span>
                 </span>
                 <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
                   restaurant.happy_hour_config?.enabled
-                    ? 'bg-orange-100 text-orange-900 border border-orange-300'
-                    : 'bg-charcoal-200 text-charcoal-700'
+                    ? 'bg-orange-500/20 text-orange-300 border border-orange-500/30 font-mono'
+                    : 'bg-white/[0.06] text-slate-400 font-mono'
                 }`}>
                   {restaurant.happy_hour_config?.enabled ? `${restaurant.happy_hour_config.discount_percent}% Off` : 'Disabled'}
                 </span>
               </div>
-              <p className="text-[10px] text-charcoal-600 leading-snug line-clamp-2">
+              <p className="text-[10px] text-slate-400 leading-snug line-clamp-2">
                 Off-peak discounts and optional peak Saturday evening surge markups.
               </p>
 
-              <div className="mt-2.5 p-2 bg-white rounded-xl border border-ivory-200 text-[10px] space-y-1">
-                <div className="flex justify-between text-charcoal-700">
-                  <span className="font-semibold">Time:</span>
-                  <span className="font-mono text-charcoal-900">
+              <div className="mt-2.5 p-2 bg-white/[0.03] rounded-xl border border-white/[0.06] text-[10px] space-y-1">
+                <div className="flex justify-between text-slate-300">
+                  <span className="font-semibold text-slate-400">Time:</span>
+                  <span className="font-mono text-white">
                     {restaurant.happy_hour_config?.start_time || '16:00'} - {restaurant.happy_hour_config?.end_time || '19:30'}
                   </span>
                 </div>
-                <div className="flex justify-between text-charcoal-700">
-                  <span className="font-semibold">Surge Mode:</span>
-                  <span className="font-mono text-charcoal-900">
+                <div className="flex justify-between text-slate-300">
+                  <span className="font-semibold text-slate-400">Surge Mode:</span>
+                  <span className="font-mono text-amber-400">
                     {restaurant.happy_hour_config?.surge_pricing_enabled ? `+${restaurant.happy_hour_config.surge_markup_percent || 10}% Surge` : 'Off'}
                   </span>
                 </div>
@@ -589,8 +600,8 @@ export const ManagerDashboard: React.FC = () => {
                 }}
                 className={`w-full py-1.5 px-2 rounded-xl text-[11px] font-bold transition-all flex items-center justify-center space-x-1 shadow-xs cursor-pointer ${
                   restaurant.happy_hour_config?.enabled
-                    ? 'bg-orange-600 hover:bg-orange-700 text-white'
-                    : 'bg-charcoal-800 hover:bg-charcoal-900 text-white'
+                    ? 'bg-orange-600 hover:bg-orange-500 text-white'
+                    : 'bg-white/[0.08] hover:bg-white/[0.12] text-white'
                 }`}
               >
                 <span>{restaurant.happy_hour_config?.enabled ? '✓ Running' : 'Turn On'}</span>
@@ -599,40 +610,40 @@ export const ManagerDashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setSmartSettingsTab('happy_hour')}
-                className="w-full py-1.5 px-2 rounded-xl text-[10px] font-bold text-charcoal-700 bg-white hover:bg-ivory-100 border border-ivory-300 transition-all flex items-center justify-center space-x-1 cursor-pointer"
+                className="w-full py-1.5 px-2 rounded-xl text-[10px] font-semibold text-slate-300 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-all flex items-center justify-center space-x-1 cursor-pointer"
               >
-                <Settings className="w-3 h-3 text-charcoal-500" />
+                <Settings className="w-3 h-3 text-slate-400" />
                 <span>Edit Schedule</span>
               </button>
             </div>
           </div>
 
           {/* 4. Instagram Story Brand Studio */}
-          <div className="bg-ivory-50 border border-ivory-300 rounded-2xl p-3.5 flex flex-col justify-between space-y-3">
+          <div className="bg-white/[0.03] border border-white/[0.08] rounded-2xl p-3.5 flex flex-col justify-between space-y-3">
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-bold text-charcoal-900 flex items-center space-x-1.5">
+                <span className="text-xs font-bold text-white flex items-center space-x-1.5">
                   <span>📸</span>
                   <span>Instagram Story</span>
                 </span>
-                <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-pink-100 text-pink-800 border border-pink-200">
+                <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/30 font-mono">
                   Viral Card
                 </span>
               </div>
-              <p className="text-[10px] text-charcoal-600 leading-snug line-clamp-2">
+              <p className="text-[10px] text-slate-400 leading-snug line-clamp-2">
                 9:16 vertical story generator with dish photos, table stamp, and 1-tap caption copy.
               </p>
 
-              <div className="mt-2.5 p-2 bg-white rounded-xl border border-ivory-200 text-[10px] space-y-1">
-                <div className="flex justify-between text-charcoal-700">
-                  <span className="font-semibold">Handle:</span>
-                  <span className="font-mono text-charcoal-900 truncate max-w-[85px]">
+              <div className="mt-2.5 p-2 bg-white/[0.03] rounded-xl border border-white/[0.06] text-[10px] space-y-1">
+                <div className="flex justify-between text-slate-300">
+                  <span className="font-semibold text-slate-400">Handle:</span>
+                  <span className="font-mono text-white truncate max-w-[85px]">
                     {restaurant.instagram_config?.handle || restaurant.instagram_handle || `@${restaurant.slug.replace(/-/g, '_')}`}
                   </span>
                 </div>
-                <div className="flex justify-between text-charcoal-700">
-                  <span className="font-semibold">Badge:</span>
-                  <span className="truncate max-w-[85px] text-charcoal-900">
+                <div className="flex justify-between text-slate-300">
+                  <span className="font-semibold text-slate-400">Badge:</span>
+                  <span className="truncate max-w-[85px] text-white">
                     {restaurant.instagram_config?.reward_badge_text || '5-Star Night'}
                   </span>
                 </div>
@@ -642,43 +653,43 @@ export const ManagerDashboard: React.FC = () => {
             <button
               type="button"
               onClick={() => setSmartSettingsTab('instagram')}
-              className="w-full py-2 px-2 rounded-xl text-[11px] font-bold text-charcoal-800 bg-white hover:bg-ivory-100 border border-ivory-300 transition-all flex items-center justify-center space-x-1 cursor-pointer"
+              className="w-full py-2 px-2 rounded-xl text-[11px] font-semibold text-slate-200 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-all flex items-center justify-center space-x-1 cursor-pointer"
             >
-              <Settings className="w-3 h-3 text-pink-600" />
+              <Settings className="w-3 h-3 text-pink-400" />
               <span>Customize Story Card</span>
             </button>
           </div>
 
           {/* 5. Smart Upsell Pairings */}
-          <div className="bg-ivory-50 border border-ivory-300 rounded-2xl p-3.5 flex flex-col justify-between space-y-3">
+          <div className="bg-white/[0.03] border border-white/[0.08] rounded-2xl p-3.5 flex flex-col justify-between space-y-3">
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-bold text-charcoal-900 flex items-center space-x-1.5">
+                <span className="text-xs font-bold text-white flex items-center space-x-1.5">
                   <span>🧑‍🍳</span>
                   <span>Chef's Pairings</span>
                 </span>
                 <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
                   restaurant.smart_pairings_config?.enabled !== false
-                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                    : 'bg-charcoal-200 text-charcoal-700'
+                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono'
+                    : 'bg-white/[0.06] text-slate-400 font-mono'
                 }`}>
                   {restaurant.smart_pairings_config?.enabled !== false ? 'Active' : 'Disabled'}
                 </span>
               </div>
-              <p className="text-[10px] text-charcoal-600 leading-snug line-clamp-2">
+              <p className="text-[10px] text-slate-400 leading-snug line-clamp-2">
                 Recommends matching wine, desserts, and sides inside diner's cart before checkout.
               </p>
 
-              <div className="mt-2.5 p-2 bg-white rounded-xl border border-ivory-200 text-[10px] space-y-1">
-                <div className="flex justify-between text-charcoal-700">
-                  <span className="font-semibold">Section:</span>
-                  <span className="truncate max-w-[90px] text-charcoal-900">
+              <div className="mt-2.5 p-2 bg-white/[0.03] rounded-xl border border-white/[0.06] text-[10px] space-y-1">
+                <div className="flex justify-between text-slate-300">
+                  <span className="font-semibold text-slate-400">Section:</span>
+                  <span className="truncate max-w-[90px] text-white">
                     {restaurant.smart_pairings_config?.badge_text || "Chef's Pairings"}
                   </span>
                 </div>
-                <div className="flex justify-between text-charcoal-700">
-                  <span className="font-semibold">Bundle Deal:</span>
-                  <span className="font-mono text-charcoal-900">
+                <div className="flex justify-between text-slate-300">
+                  <span className="font-semibold text-slate-400">Bundle Deal:</span>
+                  <span className="font-mono text-amber-400">
                     {restaurant.smart_pairings_config?.discount_percent ? `${restaurant.smart_pairings_config.discount_percent}% Off` : 'Regular'}
                   </span>
                 </div>
@@ -688,9 +699,9 @@ export const ManagerDashboard: React.FC = () => {
             <button
               type="button"
               onClick={() => setSmartSettingsTab('pairings')}
-              className="w-full py-2 px-2 rounded-xl text-[11px] font-bold text-charcoal-800 bg-white hover:bg-ivory-100 border border-ivory-300 transition-all flex items-center justify-center space-x-1 cursor-pointer"
+              className="w-full py-2 px-2 rounded-xl text-[11px] font-semibold text-slate-200 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-all flex items-center justify-center space-x-1 cursor-pointer"
             >
-              <Settings className="w-3 h-3 text-emerald-600" />
+              <Settings className="w-3 h-3 text-emerald-400" />
               <span>Customize Upsells</span>
             </button>
           </div>
@@ -699,33 +710,33 @@ export const ManagerDashboard: React.FC = () => {
 
       {/* Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white p-5 rounded-3xl border border-ivory-200 shadow-subtle flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-2xl bg-saffron-50 border border-saffron-200/80 flex items-center justify-center text-saffron-600 shadow-xs">
+        <div className="bg-[#0D1322] p-5 rounded-2xl border border-white/[0.08] shadow-lg flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shadow-xs">
             <DollarSign className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs text-charcoal-500 font-medium">Session Revenue</span>
-            <p className="font-serif text-2xl font-bold text-charcoal-900">₹{totalVolume.toFixed(2)}</p>
+            <span className="text-xs text-slate-400 font-medium">Session Revenue</span>
+            <p className="font-serif text-2xl font-bold text-white">₹{totalVolume.toFixed(2)}</p>
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-3xl border border-ivory-200 shadow-subtle flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-600 shadow-xs">
+        <div className="bg-[#0D1322] p-5 rounded-2xl border border-white/[0.08] shadow-lg flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shadow-xs">
             <ShoppingBag className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs text-charcoal-500 font-medium">Orders Placed</span>
-            <p className="font-serif text-2xl font-bold text-charcoal-900">{totalOrdersCount} tickets</p>
+            <span className="text-xs text-slate-400 font-medium">Orders Placed</span>
+            <p className="font-serif text-2xl font-bold text-white">{totalOrdersCount} tickets</p>
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-3xl border border-ivory-200 shadow-subtle flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-center text-emerald-600 shadow-xs">
+        <div className="bg-[#0D1322] p-5 rounded-2xl border border-white/[0.08] shadow-lg flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shadow-xs">
             <CheckCircle2 className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs text-charcoal-500 font-medium">Active QR Tables</span>
-            <p className="font-serif text-2xl font-bold text-charcoal-900">{activeTablesList.length} tables</p>
+            <span className="text-xs text-slate-400 font-medium">Active QR Tables</span>
+            <p className="font-serif text-2xl font-bold text-white">{activeTablesList.length} tables</p>
           </div>
         </div>
       </div>
@@ -875,19 +886,19 @@ export const ManagerDashboard: React.FC = () => {
       {/* MODAL: CONFIRM RESTAURANT OFFBOARDING                        */}
       {/* ═══════════════════════════════════════════════════════════ */}
       {isOffboardModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-float border border-ivory-200 animate-scaleUp text-center space-y-4">
-            <div className="w-14 h-14 mx-auto rounded-2xl bg-red-50 border border-red-200 flex items-center justify-center text-red-600">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="bg-[#0D1322] rounded-3xl max-w-md w-full p-6 shadow-2xl border border-white/[0.1] text-center space-y-4">
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
               <UserMinus className="w-7 h-7" />
             </div>
             <div>
-              <h3 className="font-serif text-xl font-bold text-charcoal-900">
+              <h3 className="font-serif text-xl font-bold text-white">
                 Offboard {restaurant.name}?
               </h3>
-              <p className="text-xs text-charcoal-600 mt-2 leading-relaxed">
+              <p className="text-xs text-slate-300 mt-2 leading-relaxed">
                 This will offboard <strong>{restaurant.name}</strong> from your active operational venues hub.
               </p>
-              <p className="text-[11px] text-charcoal-500 mt-1">
+              <p className="text-[11px] text-slate-500 mt-1">
                 Note: You can re-onboard this restaurant at any time from the Pune Restaurant Directory.
               </p>
             </div>
@@ -895,7 +906,7 @@ export const ManagerDashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsOffboardModalOpen(false)}
-                className="px-4 py-2.5 rounded-xl border border-ivory-300 text-charcoal-700 hover:bg-ivory-100 text-xs font-bold transition-colors cursor-pointer"
+                className="px-4 py-2.5 rounded-xl border border-white/[0.08] text-slate-300 hover:bg-white/[0.06] text-xs font-semibold transition-colors cursor-pointer"
               >
                 Cancel
               </button>
@@ -913,7 +924,7 @@ export const ManagerDashboard: React.FC = () => {
                     navigate('/admin');
                   }
                 }}
-                className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition-colors shadow-xs cursor-pointer flex items-center space-x-1.5"
+                className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition-colors shadow-xs cursor-pointer flex items-center space-x-1.5"
               >
                 <UserMinus className="w-4 h-4" />
                 <span>Confirm Offboard</span>
@@ -925,20 +936,20 @@ export const ManagerDashboard: React.FC = () => {
 
       {/* POS Integration Modal */}
       {isPosModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-6 relative space-y-5">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-[#0D1322] rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-6 relative space-y-5 border border-white/[0.1] text-white">
             <button
               onClick={() => setIsPosModalOpen(false)}
-              className="absolute top-5 right-5 p-2 rounded-full bg-ivory-100 hover:bg-ivory-200 text-charcoal-700 transition-colors z-10 border border-ivory-300"
+              className="absolute top-5 right-5 p-2 rounded-full bg-white/[0.06] hover:bg-white/[0.1] text-slate-300 hover:text-white transition-colors z-10 border border-white/[0.08] cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
 
             {/* Provider Switcher inside modal */}
             <div>
-              <span className="text-[10px] uppercase font-bold tracking-widest text-saffron-700">Kitchen & Billing Sync</span>
-              <h3 className="text-xl font-bold font-serif text-charcoal-900 mt-0.5">Select Your Restaurant's POS System</h3>
-              <p className="text-xs text-charcoal-500 mt-0.5">
+              <span className="text-[10px] uppercase font-mono font-bold tracking-widest text-amber-400">Kitchen & Billing Sync</span>
+              <h3 className="text-xl font-bold font-serif text-white mt-0.5">Select Your Restaurant's POS System</h3>
+              <p className="text-xs text-slate-400 mt-0.5">
                 Switch adapters, configure connection credentials, and simulate live KOT dispatch to your thermal printer.
               </p>
 
@@ -949,17 +960,17 @@ export const ManagerDashboard: React.FC = () => {
                     setSelectedPosTab('petpooja');
                     updateRestaurant(restaurant.id, { pos_provider: 'petpooja' });
                   }}
-                  className={`p-2.5 rounded-xl border text-left transition-all ${
+                  className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
                     selectedPosTab === 'petpooja'
-                      ? 'bg-orange-50 border-orange-400 ring-1 ring-orange-400 shadow-xs'
-                      : 'bg-white border-ivory-200 hover:bg-ivory-50 text-charcoal-700'
+                      ? 'bg-amber-500/15 border-amber-500/40 ring-1 ring-amber-400/40 text-amber-300'
+                      : 'bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.06] text-slate-300'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-0.5">
-                    <span className="text-xs font-bold text-orange-950">Petpooja</span>
-                    <span className="text-[8px] uppercase px-1 py-0.2 rounded bg-orange-100 text-orange-700 font-bold">50k+</span>
+                    <span className="text-xs font-bold text-white">Petpooja</span>
+                    <span className="text-[8px] uppercase px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 font-bold font-mono">50k+</span>
                   </div>
-                  <p className="text-[10px] text-charcoal-500 truncate">REST API Bridge</p>
+                  <p className="text-[10px] text-slate-400 truncate">REST API Bridge</p>
                 </button>
 
                 <button
@@ -968,17 +979,17 @@ export const ManagerDashboard: React.FC = () => {
                     setSelectedPosTab('royalpos');
                     updateRestaurant(restaurant.id, { pos_provider: 'royalpos' });
                   }}
-                  className={`p-2.5 rounded-xl border text-left transition-all ${
+                  className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
                     selectedPosTab === 'royalpos'
-                      ? 'bg-purple-50 border-purple-400 ring-1 ring-purple-400 shadow-xs'
-                      : 'bg-white border-ivory-200 hover:bg-ivory-50 text-charcoal-700'
+                      ? 'bg-purple-500/15 border-purple-500/40 ring-1 ring-purple-400/40 text-purple-300'
+                      : 'bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.06] text-slate-300'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-0.5">
-                    <span className="text-xs font-bold text-purple-950">RoyalPOS</span>
-                    <span className="text-[8px] uppercase px-1 py-0.2 rounded bg-purple-100 text-purple-700 font-bold">Pune Local</span>
+                    <span className="text-xs font-bold text-white">RoyalPOS</span>
+                    <span className="text-[8px] uppercase px-1 py-0.2 rounded bg-purple-500/20 text-purple-300 font-bold font-mono">Pune Local</span>
                   </div>
-                  <p className="text-[10px] text-charcoal-500 truncate">LAN & Tablet POS</p>
+                  <p className="text-[10px] text-slate-400 truncate">LAN & Tablet POS</p>
                 </button>
 
                 <button
@@ -987,17 +998,17 @@ export const ManagerDashboard: React.FC = () => {
                     setSelectedPosTab('recaho');
                     updateRestaurant(restaurant.id, { pos_provider: 'recaho' });
                   }}
-                  className={`p-2.5 rounded-xl border text-left transition-all ${
+                  className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
                     selectedPosTab === 'recaho'
-                      ? 'bg-blue-50 border-blue-400 ring-1 ring-blue-400 shadow-xs'
-                      : 'bg-white border-ivory-200 hover:bg-ivory-50 text-charcoal-700'
+                      ? 'bg-cyan-500/15 border-cyan-500/40 ring-1 ring-cyan-400/40 text-cyan-300'
+                      : 'bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.06] text-slate-300'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-0.5">
-                    <span className="text-xs font-bold text-blue-950">Recaho</span>
-                    <span className="text-[8px] uppercase px-1 py-0.2 rounded bg-blue-100 text-blue-700 font-bold">PCMC</span>
+                    <span className="text-xs font-bold text-white">Recaho</span>
+                    <span className="text-[8px] uppercase px-1 py-0.2 rounded bg-cyan-500/20 text-cyan-300 font-bold font-mono">PCMC</span>
                   </div>
-                  <p className="text-[10px] text-charcoal-500 truncate">Cloud GST & KOT</p>
+                  <p className="text-[10px] text-slate-400 truncate">Cloud GST & KOT</p>
                 </button>
 
                 <button
@@ -1006,17 +1017,17 @@ export const ManagerDashboard: React.FC = () => {
                     setSelectedPosTab('rancelab');
                     updateRestaurant(restaurant.id, { pos_provider: 'rancelab' });
                   }}
-                  className={`p-2.5 rounded-xl border text-left transition-all ${
+                  className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
                     selectedPosTab === 'rancelab'
-                      ? 'bg-emerald-50 border-emerald-400 ring-1 ring-emerald-400 shadow-xs'
-                      : 'bg-white border-ivory-200 hover:bg-ivory-50 text-charcoal-700'
+                      ? 'bg-emerald-500/15 border-emerald-500/40 ring-1 ring-emerald-400/40 text-emerald-300'
+                      : 'bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.06] text-slate-300'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-0.5">
-                    <span className="text-xs font-bold text-emerald-950">RanceLab</span>
-                    <span className="text-[8px] uppercase px-1 py-0.2 rounded bg-emerald-100 text-emerald-700 font-bold">Fusion</span>
+                    <span className="text-xs font-bold text-white">RanceLab</span>
+                    <span className="text-[8px] uppercase px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-bold font-mono">Fusion</span>
                   </div>
-                  <p className="text-[10px] text-charcoal-500 truncate">Multi-Chain / Fine Dining</p>
+                  <p className="text-[10px] text-slate-400 truncate">Multi-Chain / Fine Dining</p>
                 </button>
               </div>
             </div>

@@ -493,19 +493,19 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-ivory-50 text-charcoal-900 pb-24">
+    <div className="min-h-screen bg-[#090D16] text-slate-100 pb-24">
       {/* ── Top Navigation & Restaurant Selector Bar ──────────────────────── */}
-      <header className="bg-charcoal-900 text-white border-b border-charcoal-800 sticky top-0 z-30 shadow-md">
+      <header className="bg-[#0A0E17]/90 backdrop-blur-md text-white border-b border-white/[0.08] sticky top-0 z-30 shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center space-x-3">
             <Link
               to="/"
-              className="inline-flex items-center space-x-1.5 text-xs text-charcoal-300 hover:text-white bg-charcoal-800 hover:bg-charcoal-700 px-3 py-1.5 rounded-xl border border-charcoal-700 transition-colors"
+              className="inline-flex items-center space-x-1.5 text-xs text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] px-3 py-1.5 rounded-xl border border-white/[0.08] transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Explore Demos</span>
             </Link>
-            <div className="h-4 w-px bg-charcoal-700" />
+            <div className="h-4 w-px bg-white/[0.1]" />
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
                 <Sparkles className="w-4 h-4 animate-pulse" />
@@ -517,7 +517,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                     v2.5
                   </span>
                 </h1>
-                <p className="text-[11px] text-charcoal-400">
+                <p className="text-[11px] text-slate-400">
                   Granular Dish Secrets, Chef's Favourites, Daily Freshness &amp; Voice Onboarding
                 </p>
               </div>
@@ -525,9 +525,19 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
+            {/* Always-Visible Admin Page Top Button */}
+            <Link
+              to="/admin"
+              className="inline-flex items-center space-x-1.5 text-xs font-bold text-amber-300 hover:text-amber-200 transition-colors bg-amber-500/15 hover:bg-amber-500/25 px-3.5 py-1.5 rounded-xl border border-amber-500/30 hover:border-amber-400/60 shadow-xs cursor-pointer active:scale-95"
+              title="Open Master Admin Control Hub"
+            >
+              <ShieldCheck className="w-4 h-4 text-amber-400" />
+              <span>Admin HQ</span>
+            </Link>
+
             {/* Restaurant Switcher */}
-            <div className="flex items-center space-x-1.5 bg-charcoal-800 px-3 py-1.5 rounded-xl border border-charcoal-700">
-              <span className="text-xs text-charcoal-400 font-medium">Venue:</span>
+            <div className="flex items-center space-x-1.5 bg-[#0D1322] px-3 py-1.5 rounded-xl border border-white/[0.08]">
+              <span className="text-xs text-slate-400 font-medium">Venue:</span>
               <select
                 value={restaurant.id}
                 onChange={(e) => {
@@ -624,45 +634,45 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
       </section>
 
       {/* ── Status & Share Strip ──────────────────────────────────────────── */}
-      <section className="bg-white border-b border-ivory-200 shadow-xs">
+      <section className="bg-[#0D1322] border-b border-white/[0.08] shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 items-center">
             {/* Stat 1: Total Dishes */}
-            <div className="bg-ivory-100/80 p-3 rounded-2xl border border-ivory-200">
-              <span className="text-[10px] uppercase font-bold text-charcoal-500 tracking-wider block">Total Dishes</span>
-              <span className="text-xl font-black font-mono text-charcoal-900">{totalDishes}</span>
+            <div className="bg-white/[0.03] p-3 rounded-2xl border border-white/[0.08]">
+              <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block font-mono">Total Dishes</span>
+              <span className="text-xl font-black font-mono text-white">{totalDishes}</span>
             </div>
 
             {/* Stat 2: Chef's Favourites */}
-            <div className="bg-amber-50 p-3 rounded-2xl border border-amber-200">
-              <span className="text-[10px] uppercase font-bold text-amber-800 tracking-wider block flex items-center gap-1">
-                <Star className="w-3 h-3 text-amber-600 fill-amber-500" />
+            <div className="bg-amber-500/10 p-3 rounded-2xl border border-amber-500/20">
+              <span className="text-[10px] uppercase font-bold text-amber-300 tracking-wider block flex items-center gap-1 font-mono">
+                <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
                 Chef's Favs
               </span>
-              <span className="text-xl font-black font-mono text-amber-900">{chefFavCount}</span>
+              <span className="text-xl font-black font-mono text-amber-300">{chefFavCount}</span>
             </div>
 
             {/* Stat 3: House Specials */}
-            <div className="bg-orange-50 p-3 rounded-2xl border border-orange-200">
-              <span className="text-[10px] uppercase font-bold text-orange-800 tracking-wider block flex items-center gap-1">
-                <Flame className="w-3 h-3 text-orange-600" />
+            <div className="bg-orange-500/10 p-3 rounded-2xl border border-orange-500/20">
+              <span className="text-[10px] uppercase font-bold text-orange-300 tracking-wider block flex items-center gap-1 font-mono">
+                <Flame className="w-3 h-3 text-orange-400" />
                 Specials
               </span>
-              <span className="text-xl font-black font-mono text-orange-900">{specialCount}</span>
+              <span className="text-xl font-black font-mono text-orange-300">{specialCount}</span>
             </div>
 
             {/* Stat 4: AI Lore Readiness */}
-            <div className="bg-green-50 p-3 rounded-2xl border border-green-200">
-              <span className="text-[10px] uppercase font-bold text-green-800 tracking-wider block flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-green-600" />
+            <div className="bg-emerald-500/10 p-3 rounded-2xl border border-emerald-500/20">
+              <span className="text-[10px] uppercase font-bold text-emerald-300 tracking-wider block flex items-center gap-1 font-mono">
+                <Sparkles className="w-3 h-3 text-emerald-400" />
                 AI Lore Ready
               </span>
-              <span className="text-xl font-black font-mono text-green-900">{aiReadinessPercent}%</span>
+              <span className="text-xl font-black font-mono text-emerald-300">{aiReadinessPercent}%</span>
             </div>
 
             {/* Multi-Platform Sharing Tools */}
-            <div className="col-span-2 lg:col-span-2 flex items-center justify-end gap-2 bg-charcoal-900 text-white p-2.5 rounded-2xl border border-charcoal-800">
-              <span className="text-xs text-charcoal-300 font-medium mr-1 hidden sm:inline">Share Intake:</span>
+            <div className="col-span-2 lg:col-span-2 flex items-center justify-end gap-2 bg-white/[0.04] text-white p-2.5 rounded-2xl border border-white/[0.08]">
+              <span className="text-xs text-slate-300 font-medium mr-1 hidden sm:inline">Share Intake:</span>
               <button
                 type="button"
                 onClick={handleWhatsAppShare}

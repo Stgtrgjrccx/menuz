@@ -17,10 +17,9 @@ import {
   Copy,
   Check,
   ArrowLeftRight,
-  QrCode,
-  Home,
   Instagram,
-  Users
+  Users,
+  ShieldCheck
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { MenuItem, ReviewChallenge } from '../types';
@@ -386,8 +385,19 @@ export const DinerMenu: React.FC = () => {
           <span className="text-[10px] text-charcoal-400 hidden sm:inline">• Home</span>
         </Link>
 
-        {/* Language selector & Switch Restaurant */}
+        {/* Language selector & Switch Restaurant & Admin */}
         <div className="flex items-center space-x-2">
+          {/* Always-visible Admin Page Top Button */}
+          <Link
+            to="/admin"
+            className="py-1 px-2.5 rounded-full bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/40 text-[11px] font-bold flex items-center space-x-1.5 transition-all shadow-sm active:scale-95"
+            title="Open Master Admin Control Hub"
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+            <span className="hidden sm:inline">Admin HQ</span>
+            <span className="sm:hidden">Admin</span>
+          </Link>
+
           <LanguageSelector />
           <button
             type="button"

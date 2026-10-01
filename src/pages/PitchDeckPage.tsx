@@ -288,6 +288,14 @@ export const PitchDeckPage: React.FC = () => {
 
           {/* Action Downloads & Links */}
           <div className="flex items-center space-x-2">
+            <Link
+              to="/admin"
+              className="px-3.5 py-1.5 bg-amber-500/10 hover:bg-amber-500/25 text-amber-300 font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 border border-amber-500/40 shadow-sm"
+              title="Open Master Admin Control Hub"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+              <span>Admin HQ</span>
+            </Link>
             <a
               href="./menuz_executive_pitch_deck.pptx"
               download="Menuz_Executive_Pitch_Deck.pptx"

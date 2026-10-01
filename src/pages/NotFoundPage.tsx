@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Home, ArrowLeft, UtensilsCrossed, Presentation, Compass } from 'lucide-react';
+import { Home, ArrowLeft, UtensilsCrossed, Presentation, Compass, ShieldCheck } from 'lucide-react';
 
 export const NotFoundPage: React.FC = () => {
   return (
@@ -24,16 +24,24 @@ export const NotFoundPage: React.FC = () => {
 
         <div className="grid grid-cols-1 gap-2.5 pt-2">
           <Link
-            to="/"
-            className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 active:scale-95 text-slate-950 font-bold text-sm transition-all shadow-md"
+            to="/admin"
+            className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-black text-sm transition-all shadow-md"
           >
-            <Home className="w-4 h-4" />
-            <span>Return to Menuz Home</span>
+            <ShieldCheck className="w-4 h-4 text-slate-950" />
+            <span>Open Master Admin HQ</span>
+          </Link>
+
+          <Link
+            to="/"
+            className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] active:scale-95 text-white font-medium text-xs transition-all border border-white/[0.08]"
+          >
+            <Home className="w-4 h-4 text-amber-400" />
+            <span>Return to Explore Demos</span>
           </Link>
 
           <Link
             to="/r/saffron-house"
-            className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-white font-medium text-xs transition-all border border-slate-700"
+            className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] active:scale-95 text-white font-medium text-xs transition-all border border-white/[0.08]"
           >
             <UtensilsCrossed className="w-4 h-4 text-cyan-400" />
             <span>View Demo Diner Menu (Saffron House)</span>
@@ -41,7 +49,7 @@ export const NotFoundPage: React.FC = () => {
 
           <Link
             to="/pitch"
-            className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white font-medium text-xs transition-all border border-slate-700"
+            className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] active:scale-95 text-slate-300 hover:text-white font-medium text-xs transition-all border border-white/[0.08]"
           >
             <Presentation className="w-4 h-4 text-purple-400" />
             <span>Executive Pitch &amp; Commercial Deck</span>

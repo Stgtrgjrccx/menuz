@@ -208,6 +208,20 @@ export const Navbar: React.FC = () => {
 
           {/* Right: Actions */}
           <div className="flex items-center space-x-2">
+            {/* Always-Visible Admin Page Top Button */}
+            <Link
+              to="/admin"
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center space-x-1.5 transition-all shadow-sm ${
+                location.pathname === '/admin'
+                  ? 'bg-amber-500 text-slate-950 font-black shadow-amber-500/25 ring-1 ring-amber-400'
+                  : 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:border-amber-400/60'
+              }`}
+              title="Open Master Admin Control Hub"
+            >
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Admin HQ</span>
+            </Link>
+
             {/* Quick Access Portal Hub Button */}
             <button
               type="button"
@@ -318,6 +332,17 @@ export const Navbar: React.FC = () => {
         {/* Mobile Dropdown */}
         {mobileOpen && (
           <div className="lg:hidden bg-[#0C111D] border-t border-white/[0.08] px-4 py-3 space-y-2">
+            <Link
+              to="/admin"
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30"
+            >
+              <div className="flex items-center space-x-2">
+                <ShieldCheck className="w-4 h-4 text-amber-400" />
+                <span>Master Admin HQ</span>
+              </div>
+              <ArrowRight className="w-3.5 h-3.5 text-amber-400" />
+            </Link>
             {navLinks.map((link) => (
               <Link
                 key={link.to}
