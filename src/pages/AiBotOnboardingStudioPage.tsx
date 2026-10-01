@@ -499,11 +499,11 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center space-x-3">
             <Link
-              to="/admin"
+              to="/"
               className="inline-flex items-center space-x-1.5 text-xs text-charcoal-300 hover:text-white bg-charcoal-800 hover:bg-charcoal-700 px-3 py-1.5 rounded-xl border border-charcoal-700 transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Master Admin</span>
+              <span>Explore Demos</span>
             </Link>
             <div className="h-4 w-px bg-charcoal-700" />
             <div className="flex items-center space-x-2">

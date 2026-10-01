@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   QrCode,
@@ -8,775 +8,629 @@ import {
   MapPin,
   Star,
   ArrowRight,
-  ShieldCheck,
-  Check,
-  Copy,
-  ChevronDown,
-  ChevronRight,
   TrendingUp,
   LayoutDashboard,
-  ExternalLink,
+  ChefHat,
+  ShieldCheck,
   Printer,
-  Wifi,
-  Zap,
+  Flame,
+  CheckCircle2,
   Users,
-  Award,
-  Terminal,
-  Clock,
-  RotateCw,
-  Plus,
-  Minus
+  MessageSquareHeart,
+  ChevronRight,
+  Zap
 } from 'lucide-react';
 import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantStore';
 import { isWorkingWithMenuz } from '../types';
-import { PUNE_RESTAURANT_DIRECTORY, PuneRestaurantEntry, matchesPuneQuery } from '../data/puneRestaurantDirectory';
 import { QrScannerModal } from '../components/QrScannerModal';
 
 export const CustomerHomePage: React.FC = () => {
   const navigate = useNavigate();
   const rawRestaurants = useRestaurantStore((state) => state.restaurants);
-  const restaurants = useMemo(
-    () => rawRestaurants.filter((r) => !isDishNameAsRestaurant(r)),
-    [rawRestaurants]
-  );
-  const restaurant = useRestaurantStore((state) => state.restaurant);
   const tables = useRestaurantStore((state) => state.tables);
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [showCustomerSuggestions, setShowCustomerSuggestions] = useState(false);
-  const customerSearchRef = useRef<HTMLDivElement>(null);
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
   const [selectedScannerSlug, setSelectedScannerSlug] = useState<string | undefined>(undefined);
-  const [copiedCli, setCopiedCli] = useState(false);
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
-  // Click outside to close customer suggestions
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (customerSearchRef.current && !customerSearchRef.current.contains(e.target as Node)) {
-        setShowCustomerSuggestions(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  // Active working demo venues
+  const venues = useMemo(() => {
+    const valid = rawRestaurants.filter((r) => !isDishNameAsRestaurant(r) && isWorkingWithMenuz(r));
+    const list = valid.length > 0 ? valid : rawRestaurants.slice(0, 2);
 
-  // Combine store restaurants with the full Pune directory (strictly Menuz partners)
-  const directoryList = useMemo(() => {
-    const map = new Map<string, {
-      id: string;
-      name: string;
-      slug: string;
-      cuisine: string;
-      location: string;
-      rating: number;
-      avgCostForTwo: string;
-      imageUrl: string;
-      isStoreActive: boolean;
-      rewardHighlight: string;
-      tags: string[];
-    }>();
-
-    const buildTags = (cuisine: string, location: string) => {
-      const lowerCuisine = (cuisine || '').toLowerCase();
-      const lowerLoc = (location || '').toLowerCase();
-      const tags: string[] = ['rewards'];
-
-      if (lowerLoc.includes('pcmc') || lowerLoc.includes('pimpri') || lowerLoc.includes('chinchwad')) tags.push('pcmc');
-      if (lowerLoc.includes('koregaon')) tags.push('koregaon park');
-      if (lowerLoc.includes('baner') || lowerLoc.includes('balewadi') || lowerLoc.includes('aundh')) tags.push('baner');
-      if (lowerLoc.includes('hinjewadi') || lowerLoc.includes('wakad')) tags.push('hinjewadi');
-      if (lowerLoc.includes('kothrud')) tags.push('kothrud');
-      if (lowerLoc.includes('viman') || lowerLoc.includes('kharadi') || lowerLoc.includes('kalyani')) tags.push('viman nagar');
-
-      if (lowerCuisine.includes('indian') || lowerCuisine.includes('mughlai') || lowerCuisine.includes('thali') || lowerCuisine.includes('biryani')) tags.push('indian');
-      if (lowerCuisine.includes('italian') || lowerCuisine.includes('pizza') || lowerCuisine.includes('pasta')) tags.push('italian');
-      if (lowerCuisine.includes('asian') || lowerCuisine.includes('thai') || lowerCuisine.includes('japanese') || lowerCuisine.includes('chinese')) tags.push('asian');
-      if (lowerCuisine.includes('veg') || lowerCuisine.includes('vegetarian')) tags.push('veg');
-
-      return tags;
-    };
-
-    // Only show active demo restaurants working with Menuz on the customer site
-    const workingRestaurants = restaurants.filter((r) => isWorkingWithMenuz(r));
-    const activeWorking = workingRestaurants.length > 0 ? workingRestaurants : restaurants.slice(0, 2);
-
-    activeWorking.forEach((r) => {
+    return list.map((r) => {
       const isItalian = r.slug === 'casa-bella';
-      map.set(r.slug, {
+      const restTables = tables.filter((t) => t.restaurant_id === r.id);
+      const token = restTables[0]?.public_token || (isItalian ? 'table-token-03-casa-bella' : 'table-token-01-saffron');
+      const tableNumber = isItalian ? '3' : '1';
+
+      return {
         id: r.id,
         name: r.name,
         slug: r.slug,
         cuisine: r.cuisine,
         location: r.location || 'Koregaon Park, Pune',
         rating: 4.8,
-        avgCostForTwo: isItalian ? '₹1,400' : '₹1,500',
+        costForTwo: isItalian ? '₹1,400 for two' : '₹1,500 for two',
         imageUrl: r.logo_url,
-        isStoreActive: true,
-        rewardHighlight: isItalian ? 'Free Tiramisu or 15% Off' : 'Free Potli Samosa or 20% Off',
-        tags: buildTags(r.cuisine, r.location || '')
-      });
+        reward: isItalian ? 'Free Tiramisu or 15% Off' : 'Free Potli Samosa, Kokum Cooler or 20% Off',
+        specialty: isItalian ? 'Wood-Fired Neapolitan Pizza & Chianti Pairings' : 'Dum Pukht Slow-Cooked Biryanis & Copper Deg Recipes',
+        aiChef: isItalian ? 'Chef Marco & Sommelier AI' : 'Head Chef Sanjeev AI Concierge',
+        token,
+        tableNumber,
+        category: isItalian ? 'italian' : 'mughlai'
+      };
     });
+  }, [rawRestaurants, tables]);
 
-    return Array.from(map.values());
-  }, [restaurants]);
-
-  const customerSuggestions = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-    if (!q) return [];
-    return directoryList
-      .filter((r) => {
-        return (
-          (r.name || '').toLowerCase().includes(q) ||
-          (r.cuisine || '').toLowerCase().includes(q) ||
-          (r.location || '').toLowerCase().includes(q) ||
-          (r.tags || []).some((t) => (t || '').toLowerCase().includes(q))
-        );
-      })
-      .slice(0, 8);
-  }, [directoryList, searchQuery]);
-
-  // Filter chips options for active Menuz demo dining
+  // Filter options
   const filterOptions = [
-    { id: 'all', label: 'All Live Venues' },
+    { id: 'all', label: 'All Demos' },
+    { id: 'mughlai', label: 'Dum Pukht Indian' },
+    { id: 'italian', label: 'Wood-Fired Italian' },
     { id: 'rewards', label: '🎁 Table Rewards' },
-    { id: 'koregaon park', label: 'Koregaon Park' },
-    { id: 'indian', label: 'Indian (Saffron House)' },
-    { id: 'italian', label: 'Italian (Casa Bella)' },
   ];
 
-  // Filtered restaurants
-  const filteredList = useMemo(() => {
-    return directoryList.filter((item) => {
-      const matchesSearch = matchesPuneQuery(item, searchQuery);
+  // Filtered venues
+  const filteredVenues = useMemo(() => {
+    return venues.filter((v) => {
+      const q = searchQuery.toLowerCase().trim();
+      const matchesSearch =
+        !q ||
+        v.name.toLowerCase().includes(q) ||
+        v.cuisine.toLowerCase().includes(q) ||
+        v.specialty.toLowerCase().includes(q);
+
       const matchesFilter =
-        activeFilter === 'all' || (item.tags || []).includes(activeFilter.toLowerCase());
+        activeFilter === 'all' ||
+        (activeFilter === 'rewards' && Boolean(v.reward)) ||
+        v.category === activeFilter;
 
       return matchesSearch && matchesFilter;
     });
-  }, [directoryList, searchQuery, activeFilter]);
+  }, [venues, searchQuery, activeFilter]);
 
-  // Open digital menu for restaurant
-  const handleOpenRestaurantMenu = (item: typeof directoryList[0]) => {
-    const existing = restaurants.find((r) => r.slug === item.slug);
-    const restTables = tables.filter((t) => t.restaurant_id === existing?.id || t.id.includes(item.slug));
-    const token = restTables[0]?.public_token || `token-${item.slug}-01`;
-    navigate(`/r/${item.slug}/menu?t=${token}`);
+  const handleLaunchTable = (venue: typeof venues[0]) => {
+    navigate(`/r/${venue.slug}/menu?t=${venue.token}`);
   };
 
-  const handleOpenScannerForRestaurant = (slug?: string) => {
+  const handleOpenScanner = (slug?: string) => {
     setSelectedScannerSlug(slug);
     setIsQrScannerOpen(true);
   };
 
-  const handleCopyCli = (text: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedCli(true);
-    setTimeout(() => setCopiedCli(false), 3000);
-  };
-
-  // FAQ Items following ClickHouse 2-column accordion pattern
-  const faqs = [
-    {
-      q: 'Do diners or staff need to download an application?',
-      a: 'Zero downloads required. Diners simply point their default phone camera at the QR code on the table. The web menu, multiplayer cart sync, and direct kitchen KOT ordering load instantly in the mobile browser in under 400 milliseconds.'
-    },
-    {
-      q: 'How does the hardware-free thermal KOT printing bridge work?',
-      a: 'When an order is confirmed at the table, Menuz serializes the receipt payload in ESC/POS byte format and routes it directly to your kitchen thermal printer (Epson, TVS, Rugtek, etc.) via local TCP Port 9100 or your POS cloud webhook (Petpooja, Posist, RoyalPOS) in <1 second.'
-    },
-    {
-      q: 'How does the Google 5-Star Review Shield prevent negative ratings?',
-      a: 'After dining, guests are prompted for private floor feedback. If a guest rates 4 or 5 stars, they are seamlessly guided to post directly on Google Maps to spin the reward wheel. If they rate 1–3 stars, a discreet notification instantly fires to the floor manager dashboard so the issue can be resolved before the guest leaves.'
-    },
-    {
-      q: 'What is the pricing model? Is there any food commission?',
-      a: 'Menuz charges 0% food commission forever. You keep 100% of your diner sales. Subscription is a transparent, predictable flat rate: ₹5,000/month for single outlet or ₹10,000/month for multi-outlet groups with complete POS and thermal printer redundancy.'
-    }
-  ];
-
-  const currentRestTables = tables.filter((t) => t.restaurant_id === restaurant?.id);
-  const defaultToken = currentRestTables[0]?.public_token || tables[0]?.public_token || 'table-token-01-saffron';
-  const defaultDinerUrl = `/r/${restaurant?.slug || 'saffron-house'}/menu?t=${defaultToken}`;
-
   return (
-    <div className="min-h-screen bg-[#151515] text-[#e5e7eb] font-sans flex flex-col antialiased selection:bg-[#FFA000] selection:text-[#151515]">
+    <div className="min-h-screen bg-[#090D16] text-slate-100 font-sans selection:bg-amber-500/20 selection:text-amber-200">
+      
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 1. TOP TERMINAL STATUS BAR & GLOBAL CLICKHOUSE NAV          */}
+      {/* 1. HERO SECTION                                             */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <nav className="sticky top-0 z-50 bg-[#151515]/95 backdrop-blur-md border-b border-[#3a3a3a] h-16 px-4 sm:px-8">
-        <div className="max-w-[1200px] mx-auto h-full flex items-center justify-between gap-4">
-          {/* Logo with lone phosphor cursor */}
-          <div className="flex items-center space-x-6">
-            <Link to="/" className="flex items-center group cursor-pointer">
-              <span className="font-sans font-black text-xl tracking-tight text-white group-hover:text-[#FFA000] transition-colors">
-                menuz
-              </span>
-              <span className="inline-block w-2 h-4.5 bg-[#FFA000] ml-1.5 animate-cursor-blink" />
-            </Link>
+      <section className="relative pt-12 pb-16 sm:pt-20 sm:pb-24 overflow-hidden border-b border-white/[0.06]">
+        {/* Subtle Ambient Glow */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-amber-500/10 via-amber-400/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
-            {/* Terminal status pill */}
-            <div className="hidden lg:flex items-center space-x-2 bg-[#1f1f1c] border border-[#3a3a3a] rounded-full px-3 py-1 text-xs">
-              <span className="w-2 h-2 rounded-full bg-[#FFA000] animate-pulse" />
-              <span className="text-[#a0a0a0] font-mono text-[11px]">PUNE // 268+ VENUES ENGINE LIVE</span>
-            </div>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center space-y-6 relative z-10">
+          
+          {/* Eyebrow Badge */}
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.1] text-amber-400 text-xs font-semibold tracking-wide">
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <span>Autonomous Dine-In Operating System</span>
           </div>
 
-          {/* Center Navigation Links (Smoke #a0a0a0) */}
-          <div className="hidden md:flex items-center space-x-6 text-sm font-medium text-[#a0a0a0]">
-            <a href="#features" className="hover:text-white transition-colors">Architecture</a>
-            <a href="#kot-bridge" className="hover:text-white transition-colors">KOT Bridge</a>
-            <a href="#demos" className="hover:text-white transition-colors">Live Demos</a>
-            <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
-            <Link to="/pitch" className="text-[#dfdfdf] hover:text-[#FFA000] transition-colors flex items-center space-x-1">
-              <span>Deck</span>
-              <TrendingUp className="w-3.5 h-3.5 text-[#FFA000]" />
-            </Link>
-          </div>
-
-          {/* Right Action Stack: Ghost + Primary Lime/Saffron CTA */}
-          <div className="flex items-center space-x-3">
-            <Link
-              to="/admin"
-              className="hidden sm:inline-flex items-center space-x-1.5 text-xs font-semibold text-[#e5e7eb] hover:text-white bg-[#1f1f1c] hover:bg-[#282828] border border-[#3a3a3a] px-3.5 py-2 rounded-lg transition-colors cursor-pointer"
-            >
-              <ShieldCheck className="w-3.5 h-3.5 text-[#FFA000]" />
-              <span>Master Admin</span>
-            </Link>
-
-            <button
-              type="button"
-              onClick={() => handleOpenRestaurantMenu(directoryList[0] || { slug: 'saffron-house' } as any)}
-              className="bg-[#FFA000] hover:bg-[#FFB020] text-[#151515] font-semibold text-xs sm:text-sm px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg shadow-phosphor-cta transition-all active:scale-95 flex items-center space-x-1.5 cursor-pointer font-sans"
-            >
-              <span>Launch Demo</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 2. HERO SECTION (Massive 96px display on Void Black)        */}
-      {/* ═══════════════════════════════════════════════════════════ */}
-      <header className="relative w-full pt-16 pb-20 sm:pt-24 sm:pb-32 px-4 sm:px-8 border-b border-[#3a3a3a] bg-[#151515]">
-        <div className="max-w-[1200px] mx-auto text-center space-y-8">
-          {/* Eyebrow Label: 12px Inter weight 600, 0.1em tracking, Electric Saffron */}
-          <div className="inline-flex items-center space-x-2 text-[12px] font-semibold tracking-[0.1em] text-[#FFA000] uppercase font-mono">
-            <span>● USE CASES</span>
-            <span className="text-[#3a3a3a]">//</span>
-            <span>AUTONOMOUS RESTAURANT OPERATING SYSTEM</span>
-          </div>
-
-          {/* Massive Display Headline: 72px / 96px Inter weight 900 */}
-          <h1 className="text-4xl sm:text-7xl lg:text-[88px] font-black tracking-tight leading-[1.05] sm:leading-[1.0] text-white max-w-5xl mx-auto">
-            The Real-Time Engine for Modern Dining.
+          {/* Main Title */}
+          <h1 className="font-serif font-black text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-tight max-w-4xl mx-auto">
+            Interactive Table Menus &amp; Automated Google 5-Star Reviews
           </h1>
 
-          {/* Subtext: 18px in Bone (#dfdfdf) with Inline Highlight Box */}
-          <p className="text-base sm:text-lg text-[#dfdfdf] max-w-3xl mx-auto leading-relaxed font-normal">
-            Zero app downloads. Instant ESC/POS kitchen thermal printing in &lt;1s. Multiplayer table bills with 0% lifetime commission. Connect your restaurant to{' '}
-            <span className="inline-block bg-[#FFA000] text-[#151515] px-2 py-0.5 rounded-[4px] font-bold mx-1">
-              Menuz in seconds.
-            </span>
+          {/* Subtitle */}
+          <p className="text-sm sm:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed font-normal">
+            Zero app downloads. Synchronized multiplayer table carts, instant kitchen thermal KOT printing, and a review engine that multiplies Google 5-star ratings with guaranteed table rewards.
           </p>
 
-          {/* Two-Button Stack (Primary Saffron + Ghost Button with 12px gap) */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-            <Link
-              to={defaultDinerUrl}
-              className="w-full sm:w-auto bg-[#FFA000] hover:bg-[#FFB020] text-[#151515] font-semibold text-base px-6 py-3 rounded-lg shadow-phosphor-cta transition-all active:scale-95 flex items-center justify-center space-x-2 cursor-pointer font-sans"
-            >
-              <UtensilsCrossed className="w-4 h-4 text-[#151515]" />
-              <span>Launch Live Table Demo</span>
-              <ArrowRight className="w-4 h-4 ml-1" />
-            </Link>
-
+          {/* Primary Quick Actions */}
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-3">
             <button
               type="button"
-              onClick={() => handleOpenScannerForRestaurant()}
-              className="w-full sm:w-auto bg-transparent hover:bg-[#282828] text-[#e5e7eb] font-semibold text-base px-6 py-3 rounded-lg border border-[#3a3a3a] hover:border-[#414141] transition-all flex items-center justify-center space-x-2 cursor-pointer font-sans"
+              onClick={() => handleOpenScanner()}
+              className="py-3 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 text-slate-950 font-bold text-xs sm:text-sm shadow-md flex items-center space-x-2 transition-all cursor-pointer"
             >
-              <QrCode className="w-4 h-4 text-[#FFA000]" />
-              <span>Scan Any Table QR</span>
+              <QrCode className="w-4 h-4 text-slate-950" />
+              <span>Scan Table QR</span>
             </button>
-          </div>
 
-          {/* Announcement Banner (Carbon #1f1f1c background, 1px Iron border, 8px radius) */}
-          <div className="max-w-2xl mx-auto bg-[#1f1f1c] border border-[#3a3a3a] rounded-lg p-3 sm:px-4 flex items-center justify-between text-left text-xs gap-3">
-            <div className="flex items-center space-x-3 min-w-0">
-              <span className="px-2 py-0.5 rounded-[4px] bg-[#4d3300] text-[#FFA000] font-mono font-bold text-[10px] tracking-wider uppercase border border-[#FFA000]/40 flex-shrink-0">
-                v2.4 Live
-              </span>
-              <span className="text-[#dfdfdf] truncate">
-                Direct ESC/POS thermal printing active on Android, Windows &amp; Mac hardware without driver setup.
-              </span>
-            </div>
-            <Link to="/pitch" className="text-[#FFA000] hover:underline whitespace-nowrap font-medium flex-shrink-0">
-              Details →
+            <Link
+              to="/r/saffron-house/menu?t=table-token-01-saffron"
+              className="py-3 px-5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-white font-semibold text-xs sm:text-sm border border-white/[0.12] hover:border-amber-400/40 flex items-center space-x-2 transition-all"
+            >
+              <UtensilsCrossed className="w-4 h-4 text-amber-400" />
+              <span>Launch Table 1 (Saffron House)</span>
+            </Link>
+
+            <Link
+              to="/pitch"
+              className="py-3 px-4 rounded-xl text-slate-300 hover:text-white hover:bg-white/[0.05] text-xs sm:text-sm font-medium transition-colors flex items-center space-x-1.5"
+            >
+              <TrendingUp className="w-4 h-4 text-slate-400" />
+              <span>Pitch Deck (19 Slides)</span>
             </Link>
           </div>
-        </div>
-      </header>
 
-      {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 3. TRUST LOGO STRIP (Monochrome Paper #e5e7eb on Void Black)*/}
-      {/* ═══════════════════════════════════════════════════════════ */}
-      <section className="py-10 border-b border-[#3a3a3a] bg-[#151515]">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-8 space-y-4">
-          <p className="text-[12px] font-semibold tracking-[0.1em] text-[#a0a0a0] uppercase font-mono text-center sm:text-left">
-            MENUZ IS TRUSTED BY TOP RESTAURANTS &amp; CAFES IN PUNE
-          </p>
-
-          <div className="flex flex-wrap items-center justify-between gap-6 text-[#bcbcbb] text-sm font-semibold tracking-wider opacity-85">
-            <span className="hover:text-white transition-colors">SAFFRON HOUSE</span>
-            <span className="text-[#3a3a3a] hidden md:inline">/</span>
-            <span className="hover:text-white transition-colors">CASA BELLA TRATTORIA</span>
-            <span className="text-[#3a3a3a] hidden md:inline">/</span>
-            <span className="hover:text-white transition-colors">MALAKA SPICE</span>
-            <span className="text-[#3a3a3a] hidden md:inline">/</span>
-            <span className="hover:text-white transition-colors">PAASHA JW</span>
-            <span className="text-[#3a3a3a] hidden md:inline">/</span>
-            <span className="hover:text-white transition-colors">EFFINGUT BREWERY</span>
-            <span className="text-[#3a3a3a] hidden md:inline">/</span>
-            <span className="hover:text-white transition-colors">SHIZUSAN</span>
-            <span className="text-[#3a3a3a] hidden md:inline">/</span>
-            <span className="hover:text-white transition-colors">TERTTULIA</span>
+          {/* Clean Live Ticker */}
+          <div className="pt-6 max-w-3xl mx-auto">
+            <div className="py-2 px-4 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs text-slate-400 flex items-center justify-center space-x-3 overflow-x-auto whitespace-nowrap scrollbar-none">
+              <span className="flex items-center space-x-1.5 text-amber-400 font-bold">
+                <Flame className="w-3.5 h-3.5" />
+                <span>Live At Tables:</span>
+              </span>
+              <span>Table 1 @ Saffron House unlocked 15% Off Total Bill</span>
+              <span className="text-slate-600">•</span>
+              <span>Table 3 @ Casa Bella won Complimentary Tiramisu</span>
+              <span className="text-slate-600">•</span>
+              <span>Table 2 rated 5★ on Google Maps</span>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 4. TERMINAL CODE BLOCK (Universal Kitchen KOT Bridge)      */}
+      {/* 2. DEMO VENUES SHOWCASE (Immediate 1-Click Access)          */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <section id="kot-bridge" className="py-20 border-b border-[#3a3a3a] bg-[#151515]">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-8 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <div>
-              <span className="text-[12px] font-semibold tracking-[0.1em] text-[#FFA000] uppercase font-mono">
-                DEVELOPER &amp; HARDWARE BRIDGE
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mt-1">
-                Zero-Config KOT Dispatch Pipeline
-              </h2>
-            </div>
-            <p className="text-xs text-[#a0a0a0] max-w-md">
-              Send guest orders directly to kitchen ESC/POS thermal printers via local Wi-Fi or POS cloud API without writing integration code.
+      <section className="py-14 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Section Header with Search & Filter */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-8 pb-6 border-b border-white/[0.08]">
+          <div className="space-y-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
+              Interactive Table Demos
+            </span>
+            <h2 className="font-serif font-bold text-2xl sm:text-3xl text-white">
+              Experience Menuz From the Guest's Phone
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400">
+              Click any demo restaurant below to open its real-time table dining experience.
             </p>
           </div>
 
-          {/* Terminal Code Block (Carbon #1f1f1c, 8px radius, Inconsolata font) */}
-          <div className="bg-[#1f1f1c] border border-[#3a3a3a] rounded-lg p-5 sm:p-6 font-mono text-sm shadow-card-inset relative space-y-3">
-            <div className="flex items-center justify-between border-b border-[#282828] pb-3 text-xs text-[#a0a0a0]">
-              <div className="flex items-center space-x-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#3a3a3a]" />
-                <span className="w-2.5 h-2.5 rounded-full bg-[#3a3a3a]" />
-                <span className="w-2.5 h-2.5 rounded-full bg-[#3a3a3a]" />
-                <span className="ml-2 text-[#bcbcbb]">bash — menuz-printer-daemon</span>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => handleCopyCli('curl -s https://menuz.link/connect | bash -s -- --venue=saffron-house --pos=petpooja')}
-                className="flex items-center space-x-1.5 text-xs text-[#a0a0a0] hover:text-[#FFA000] transition-colors cursor-pointer"
-                title="Copy command"
-              >
-                {copiedCli ? (
-                  <>
-                    <Check className="w-3.5 h-3.5 text-green-400" />
-                    <span className="text-green-400">Copied to clipboard</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-3.5 h-3.5" />
-                    <span>Copy Command</span>
-                  </>
-                )}
-              </button>
-            </div>
-
-            <div className="space-y-1.5 pt-1 text-xs sm:text-sm overflow-x-auto">
-              <div className="flex items-center space-x-2">
-                <span className="text-[#FFA000] font-bold select-none">$</span>
-                <span className="text-[#e5e7eb]">
-                  curl -s https://menuz.link/connect | bash -s -- --venue=saffron-house --pos=petpooja --port=9100
-                </span>
-              </div>
-              <p className="text-[#a0a0a0] text-xs pt-1">
-                [2026-10-01 05:30:12] Detected USB/LAN ESC/POS thermal printer (80mm width) at 192.168.1.140:9100
-              </p>
-              <p className="text-[#FFA000] text-xs">
-                ✔ Universal Kitchen KOT Bridge connected. Latency: 42ms. Direct thermal ticket firing active.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 5. FEATURE CARDS (4-Column Grid, Carbon #1f1f1c Surfaces)    */}
-      {/* ═══════════════════════════════════════════════════════════ */}
-      <section id="features" className="py-20 border-b border-[#3a3a3a] bg-[#151515]">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-8 space-y-10">
-          <div>
-            <span className="text-[12px] font-semibold tracking-[0.1em] text-[#FFA000] uppercase font-mono">
-              SYSTEM CAPABILITIES
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-bold text-white mt-1">
-              Engineered for Speed, Reliability &amp; Revenue
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Feature 1 */}
-            <div className="bg-[#1f1f1c] border border-[#3a3a3a] rounded-lg p-6 sm:p-7 shadow-card-inset flex flex-col justify-between space-y-6">
-              <div className="space-y-4">
-                <div className="w-14 h-14 rounded-lg border border-[#3a3a3a] bg-[#282828] flex items-center justify-center text-[#FFA000]">
-                  <Users className="w-7 h-7 stroke-[2]" />
-                </div>
-                <h3 className="text-lg font-semibold text-white">
-                  Multiplayer Cart Sync
-                </h3>
-                <p className="text-sm text-[#dfdfdf] leading-relaxed">
-                  Every guest at the dining table joins the shared order queue in real time. Items appear simultaneously with zero app download or login.
-                </p>
-              </div>
-              <Link to={defaultDinerUrl} className="text-sm font-medium text-[#FFA000] hover:underline flex items-center space-x-1">
-                <span>Explore cart</span>
-                <span>→</span>
-              </Link>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="bg-[#1f1f1c] border border-[#3a3a3a] rounded-lg p-6 sm:p-7 shadow-card-inset flex flex-col justify-between space-y-6">
-              <div className="space-y-4">
-                <div className="w-14 h-14 rounded-lg border border-[#3a3a3a] bg-[#282828] flex items-center justify-center text-[#FFA000]">
-                  <Printer className="w-7 h-7 stroke-[2]" />
-                </div>
-                <h3 className="text-lg font-semibold text-white">
-                  Hardware-Free KOT Bridge
-                </h3>
-                <p className="text-sm text-[#dfdfdf] leading-relaxed">
-                  Direct sub-second routing to kitchen ESC/POS thermal printers &amp; POS adapters (Petpooja, RoyalPOS, Recaho) with triple-channel backup.
-                </p>
-              </div>
-              <a href="#kot-bridge" className="text-sm font-medium text-[#FFA000] hover:underline flex items-center space-x-1">
-                <span>Explore bridge</span>
-                <span>→</span>
-              </a>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="bg-[#1f1f1c] border border-[#3a3a3a] rounded-lg p-6 sm:p-7 shadow-card-inset flex flex-col justify-between space-y-6">
-              <div className="space-y-4">
-                <div className="w-14 h-14 rounded-lg border border-[#3a3a3a] bg-[#282828] flex items-center justify-center text-[#FFA000]">
-                  <ShieldCheck className="w-7 h-7 stroke-[2]" />
-                </div>
-                <h3 className="text-lg font-semibold text-white">
-                  Google Review Shield
-                </h3>
-                <p className="text-sm text-[#dfdfdf] leading-relaxed">
-                  Protects reputation by handling unhappy diners internally on the floor while converting delighted guests into verified 5-star Google Maps reviews.
-                </p>
-              </div>
-              <Link to="/pitch" className="text-sm font-medium text-[#FFA000] hover:underline flex items-center space-x-1">
-                <span>Explore shield</span>
-                <span>→</span>
-              </Link>
-            </div>
-
-            {/* Feature 4 */}
-            <div className="bg-[#1f1f1c] border border-[#3a3a3a] rounded-lg p-6 sm:p-7 shadow-card-inset flex flex-col justify-between space-y-6">
-              <div className="space-y-4">
-                <div className="w-14 h-14 rounded-lg border border-[#3a3a3a] bg-[#282828] flex items-center justify-center text-[#FFA000]">
-                  <Zap className="w-7 h-7 stroke-[2]" />
-                </div>
-                <h3 className="text-lg font-semibold text-white">
-                  0% Food Commission
-                </h3>
-                <p className="text-sm text-[#dfdfdf] leading-relaxed">
-                  Keep 100% of your food &amp; beverage sales. Replaces predatory 30% aggregator delivery tax with a transparent flat ₹5,000 monthly utility.
-                </p>
-              </div>
-              <Link to="/pitch" className="text-sm font-medium text-[#FFA000] hover:underline flex items-center space-x-1">
-                <span>Explore ROI</span>
-                <span>→</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 6. INTERACTIVE PUNE VENUE EXPLORER (ClickHouse Carbon Cards)*/}
-      {/* ═══════════════════════════════════════════════════════════ */}
-      <section id="demos" className="py-20 border-b border-[#3a3a3a] bg-[#151515]">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-8 space-y-8">
-          <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
-            <div>
-              <span className="text-[12px] font-semibold tracking-[0.1em] text-[#FFA000] uppercase font-mono">
-                LIVE DEMO OUTLETS
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mt-1">
-                Experience Interactive Menus &amp; Table QRs
-              </h2>
-            </div>
-
-            {/* Search Input on Carbon (#1f1f1c) */}
-            <div className="w-full md:w-80 relative" ref={customerSearchRef}>
-              <Search className="w-4 h-4 text-[#a0a0a0] absolute left-3 top-3.5" />
+          {/* Search Bar + Filter Pills */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            {/* Search Input */}
+            <div className="relative min-w-[240px]">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
               <input
                 type="text"
                 value={searchQuery}
-                onFocus={() => setShowCustomerSuggestions(true)}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  setShowCustomerSuggestions(true);
-                }}
-                placeholder="Search venue or cuisine..."
-                className="w-full bg-[#1f1f1c] border border-[#3a3a3a] focus:border-[#FFA000] rounded-lg py-2.5 pl-9 pr-3 text-xs text-white placeholder-[#a0a0a0] outline-none transition-colors"
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search menus or dishes..."
+                className="w-full py-2 pl-9 pr-8 text-xs bg-white/[0.04] text-white placeholder:text-slate-500 rounded-lg border border-white/[0.1] focus:outline-none focus:border-amber-400/60 transition-colors"
               />
-
-              {/* Suggestions Popup */}
-              {showCustomerSuggestions && searchQuery.trim().length > 0 && (
-                <div className="absolute left-0 right-0 top-full mt-2 bg-[#1f1f1c] rounded-lg border border-[#3a3a3a] overflow-hidden z-50 shadow-2xl divide-y divide-[#282828]">
-                  {customerSuggestions.map((item) => (
-                    <div
-                      key={`sugg-${item.slug}`}
-                      onClick={() => {
-                        setSearchQuery(item.name);
-                        setShowCustomerSuggestions(false);
-                        handleOpenRestaurantMenu(item);
-                      }}
-                      className="p-3 hover:bg-[#282828] cursor-pointer flex items-center justify-between text-xs transition-colors"
-                    >
-                      <div>
-                        <div className="font-semibold text-white">{item.name}</div>
-                        <div className="text-[10px] text-[#a0a0a0]">{item.cuisine} • {item.location}</div>
-                      </div>
-                      <span className="text-[#FFA000] font-mono text-[11px]">Launch →</span>
-                    </div>
-                  ))}
-                </div>
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2.5 top-2.5 text-xs text-slate-400 hover:text-white"
+                >
+                  ✕
+                </button>
               )}
             </div>
-          </div>
 
-          {/* Filter Chips (Pill 9999px & Tag 4px styles) */}
-          <div className="flex items-center flex-wrap gap-2">
-            {filterOptions.map((f) => (
-              <button
-                key={f.id}
-                type="button"
-                onClick={() => setActiveFilter(f.id)}
-                className={`text-xs px-3.5 py-1.5 rounded-full transition-colors font-medium cursor-pointer ${
-                  activeFilter === f.id
-                    ? 'bg-[#FFA000] text-[#151515] font-semibold'
-                    : 'bg-[#1f1f1c] hover:bg-[#282828] text-[#e5e7eb] border border-[#3a3a3a]'
-                }`}
-              >
-                {f.label}
-              </button>
-            ))}
-          </div>
-
-          {/* 2 Flagship Demo Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredList.map((item) => (
-              <div
-                key={item.slug}
-                className="bg-[#1f1f1c] border border-[#3a3a3a] rounded-lg overflow-hidden flex flex-col justify-between shadow-card-inset hover:border-[#414141] transition-colors"
-              >
-                <div className="relative aspect-video bg-black overflow-hidden">
-                  <img
-                    src={item.imageUrl}
-                    alt={item.name}
-                    className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity"
-                  />
-                  <div className="absolute top-3 left-3 bg-[#151515]/90 border border-[#3a3a3a] px-2.5 py-1 rounded text-xs font-mono font-bold text-white flex items-center space-x-1">
-                    <Star className="w-3.5 h-3.5 fill-[#FFA000] text-[#FFA000]" />
-                    <span>{item.rating}</span>
-                  </div>
-
-                  <div className="absolute top-3 right-3 bg-[#161200] border border-[#4d3300] text-[#FFA000] px-2.5 py-1 rounded text-[11px] font-mono font-semibold">
-                    Live At Table 1
-                  </div>
-                </div>
-
-                <div className="p-6 space-y-4">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="text-xl font-bold text-white">{item.name}</h3>
-                      <p className="text-xs text-[#a0a0a0] mt-0.5">{item.cuisine} • {item.location}</p>
-                    </div>
-                    <span className="text-xs font-mono text-[#FFA000] font-semibold">{item.avgCostForTwo} for two</span>
-                  </div>
-
-                  <div className="bg-[#151515] border border-[#282828] p-3 rounded text-xs text-[#dfdfdf] flex items-center space-x-2">
-                    <Sparkles className="w-4 h-4 text-[#FFA000] flex-shrink-0" />
-                    <span><strong>Reward:</strong> {item.rewardHighlight}</span>
-                  </div>
-
-                  <div className="flex items-center space-x-2 pt-2 border-t border-[#282828]">
-                    <button
-                      type="button"
-                      onClick={() => handleOpenRestaurantMenu(item)}
-                      className="flex-1 bg-[#FFA000] hover:bg-[#FFB020] text-[#151515] font-semibold text-xs py-2.5 rounded-lg transition-all flex items-center justify-center space-x-1.5 cursor-pointer font-sans"
-                    >
-                      <span>Launch Table 1 Menu</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleOpenScannerForRestaurant(item.slug)}
-                      className="px-3 py-2.5 bg-[#282828] hover:bg-[#343434] text-[#e5e7eb] rounded-lg border border-[#3a3a3a] text-xs transition-colors flex items-center justify-center cursor-pointer"
-                      title="Scan QR Code"
-                    >
-                      <QrCode className="w-4 h-4 text-[#FFA000]" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 7. FAQ ACCORDION SECTION (ClickHouse 2-Column Split)        */}
-      {/* ═══════════════════════════════════════════════════════════ */}
-      <section id="faq" className="py-20 border-b border-[#3a3a3a] bg-[#151515]">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            {/* Left Column: Heading + Intro */}
-            <div className="lg:col-span-4 space-y-4">
-              <span className="text-[12px] font-semibold tracking-[0.1em] text-[#FFA000] uppercase font-mono">
-                DOCUMENTATION &amp; ANSWERS
-              </span>
-              <h2 className="text-3xl font-bold text-white leading-tight">
-                Frequently Asked Questions
-              </h2>
-              <p className="text-sm text-[#a0a0a0] leading-relaxed">
-                Everything you need to know about the Menuz autonomous restaurant operating system, hardware requirements, and deployment timeline.
-              </p>
-              <div className="pt-2">
-                <Link
-                  to="/pitch"
-                  className="inline-flex items-center space-x-1.5 text-xs text-[#FFA000] hover:underline font-mono"
+            {/* Filter Pills */}
+            <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-1">
+              {filterOptions.map((f) => (
+                <button
+                  key={f.id}
+                  onClick={() => setActiveFilter(f.id)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                    activeFilter === f.id
+                      ? 'bg-amber-400/20 text-amber-300 border border-amber-400/40'
+                      : 'bg-white/[0.03] text-slate-400 hover:text-white border border-white/[0.06]'
+                  }`}
                 >
-                  <span>Explore full 19-slide product deck</span>
-                  <span>→</span>
-                </Link>
-              </div>
-            </div>
-
-            {/* Right Column: Accordion List (Transparent, 1px Iron hairline borders) */}
-            <div className="lg:col-span-8 divide-y divide-[#3a3a3a]">
-              {faqs.map((faq, idx) => {
-                const isOpen = openFaqIndex === idx;
-                return (
-                  <div key={faq.q} className="py-5">
-                    <button
-                      type="button"
-                      onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                      className="w-full text-left flex items-center justify-between text-base font-medium text-[#e5e7eb] hover:text-white transition-colors cursor-pointer group"
-                    >
-                      <span className="pr-4">{faq.q}</span>
-                      <span className="w-6 h-6 rounded-full border border-[#3a3a3a] flex items-center justify-center flex-shrink-0 text-[#a0a0a0] group-hover:border-[#FFA000] group-hover:text-[#FFA000] transition-colors">
-                        {isOpen ? <Minus className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
-                      </span>
-                    </button>
-
-                    {isOpen && (
-                      <div className="mt-3 pr-8 text-sm text-[#a0a0a0] leading-relaxed animate-in fade-in duration-200">
-                        {faq.a}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+                  {f.label}
+                </button>
+              ))}
             </div>
           </div>
+        </div>
+
+        {/* Venues Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {filteredVenues.map((venue) => (
+            <div
+              key={venue.slug}
+              className="bg-[#0E1424] border border-white/[0.08] hover:border-amber-500/40 rounded-2xl overflow-hidden shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col group"
+            >
+              {/* Photo Banner */}
+              <div className="relative aspect-[16/8] overflow-hidden bg-slate-900">
+                <img
+                  src={venue.imageUrl}
+                  alt={venue.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0E1424] via-transparent to-black/40" />
+
+                {/* Badges on Top */}
+                <div className="absolute top-3 left-3 flex items-center space-x-2">
+                  <span className="px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white text-xs font-bold flex items-center space-x-1">
+                    <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                    <span>{venue.rating}</span>
+                  </span>
+                  <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 backdrop-blur-md border border-emerald-500/40 text-emerald-300 text-xs font-semibold">
+                    Table {venue.tableNumber} Active
+                  </span>
+                </div>
+
+                <div className="absolute top-3 right-3">
+                  <span className="px-2.5 py-1 rounded-full bg-amber-500/20 backdrop-blur-md border border-amber-500/40 text-amber-300 text-xs font-bold">
+                    Interactive Demo
+                  </span>
+                </div>
+
+                {/* Venue Details on Image */}
+                <div className="absolute bottom-3 left-4 right-4 flex items-end justify-between">
+                  <div>
+                    <h3 className="font-serif font-bold text-xl text-white group-hover:text-amber-400 transition-colors">
+                      {venue.name}
+                    </h3>
+                    <p className="text-xs text-slate-300 flex items-center space-x-1.5 mt-0.5">
+                      <MapPin className="w-3 h-3 text-amber-400 shrink-0" />
+                      <span>{venue.location}</span>
+                      <span className="text-slate-500">•</span>
+                      <span>{venue.costForTwo}</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card Body */}
+              <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                <div className="space-y-3">
+                  <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                    {venue.specialty}
+                  </p>
+
+                  {/* Highlights Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center space-x-2">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                      <span className="text-slate-300 truncate">{venue.aiChef}</span>
+                    </div>
+
+                    <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center space-x-2">
+                      <span className="text-xs">🎁</span>
+                      <span className="text-amber-300 font-semibold truncate">{venue.reward}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="pt-3 border-t border-white/[0.06] flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleLaunchTable(venue)}
+                    className="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 text-slate-950 font-bold text-xs flex items-center justify-center space-x-1.5 transition-all shadow-sm cursor-pointer"
+                  >
+                    <span>Enter Table {venue.tableNumber} Menu</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-slate-950" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleOpenScanner(venue.slug)}
+                    title={`Scan Table QR for ${venue.name}`}
+                    className="p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 hover:text-white transition-colors cursor-pointer"
+                  >
+                    <QrCode className="w-4 h-4 text-amber-400" />
+                  </button>
+
+                  <Link
+                    to={`/manage/${venue.slug}`}
+                    title="View venue manager operations hub"
+                    className="py-2.5 px-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 hover:text-white text-xs font-semibold flex items-center space-x-1 transition-colors"
+                  >
+                    <LayoutDashboard className="w-3.5 h-3.5 text-slate-400" />
+                    <span className="hidden sm:inline">Hub</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 8. FINAL CTA / INSTALL SECTION (ClickHouse Centered Box)    */}
+      {/* 3. UNIVERSAL ACCESS HUBS (All Portals in 1 Clean Grid)      */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <section id="install" className="py-24 bg-[#151515]">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
-          <div className="bg-[#1f1f1c] border border-[#3a3a3a] rounded-lg p-8 sm:p-14 text-center max-w-4xl mx-auto space-y-6 shadow-card-inset">
-            <span className="text-[12px] font-semibold tracking-[0.1em] text-[#FFA000] uppercase font-mono">
-              INSTANT RESTAURANT ONBOARDING
+      <section className="py-14 bg-[#0B0F1A] border-y border-white/[0.06]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
+              Complete System Access
             </span>
-
-            <h2 className="text-3xl sm:text-5xl font-bold text-white tracking-tight">
-              Deploy{' '}
-              <span className="bg-[#FFA000] text-[#151515] px-2.5 py-0.5 rounded-[4px] font-black inline-block">
-                Menuz
-              </span>{' '}
-              in seconds.
+            <h2 className="font-serif font-bold text-2xl sm:text-3xl text-white">
+              Every Perspective of the Restaurant OS
             </h2>
-
-            <p className="text-sm sm:text-base text-[#dfdfdf] max-w-xl mx-auto leading-relaxed">
-              Join the fastest growing autonomous dining network. Plug into your existing kitchen printer or run 100% digital on any tablet.
+            <p className="text-xs sm:text-sm text-slate-400">
+              Menuz connects diners, kitchen staff, floor managers, and restaurant owners in real-time.
             </p>
+          </div>
 
-            {/* Terminal Command Strip */}
-            <div className="bg-[#151515] border border-[#3a3a3a] rounded-lg p-3.5 max-w-lg mx-auto flex items-center justify-between text-xs font-mono text-left">
-              <span className="text-[#a0a0a0] truncate">
-                <span className="text-[#FFA000] font-bold mr-2">$</span>
-                npx menuz-connect --venue=saffron-house
-              </span>
-              <button
-                type="button"
-                onClick={() => handleCopyCli('npx menuz-connect --venue=saffron-house')}
-                className="text-[#FFA000] hover:underline ml-3 flex-shrink-0 cursor-pointer font-sans text-xs font-semibold"
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            {/* 1. Diner Table Experience */}
+            <div className="bg-[#0F1626] border border-white/[0.08] hover:border-amber-400/40 p-5 rounded-2xl flex flex-col justify-between space-y-4 transition-all hover:-translate-y-1">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                  <QrCode className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="font-serif font-bold text-base text-white">1. Diner Table Menu</h4>
+                  <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                    Zero app downloads. Diners scan the table QR sticker to browse, order, and split dishes in real-time.
+                  </p>
+                </div>
+              </div>
+              <Link
+                to="/r/saffron-house/menu?t=table-token-01-saffron"
+                className="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center space-x-1 group"
               >
-                {copiedCli ? 'Copied' : 'Copy'}
-              </button>
+                <span>Launch Table 1</span>
+                <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+            {/* 2. Kitchen Display System (KDS) */}
+            <div className="bg-[#0F1626] border border-white/[0.08] hover:border-purple-400/40 p-5 rounded-2xl flex flex-col justify-between space-y-4 transition-all hover:-translate-y-1">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                  <ChefHat className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="font-serif font-bold text-base text-white">2. Kitchen KDS</h4>
+                  <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                    Hardware-free digital kitchen ticket board with course pacing and direct 1-second thermal KOT printing.
+                  </p>
+                </div>
+              </div>
               <Link
-                to={defaultDinerUrl}
-                className="w-full sm:w-auto bg-[#FFA000] hover:bg-[#FFB020] text-[#151515] font-semibold text-sm px-6 py-3 rounded-lg shadow-phosphor-cta transition-all active:scale-95 flex items-center justify-center space-x-2 cursor-pointer font-sans"
+                to="/kitchen"
+                className="text-xs font-bold text-purple-400 hover:text-purple-300 flex items-center space-x-1 group"
               >
-                <span>Launch Table 1 Menu</span>
-                <ArrowRight className="w-4 h-4" />
+                <span>Open Kitchen Board</span>
+                <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </Link>
+            </div>
 
+            {/* 3. Venue Floor Hub */}
+            <div className="bg-[#0F1626] border border-white/[0.08] hover:border-emerald-400/40 p-5 rounded-2xl flex flex-col justify-between space-y-4 transition-all hover:-translate-y-1">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                  <LayoutDashboard className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="font-serif font-bold text-base text-white">3. Manager Floor Hub</h4>
+                  <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                    Active table sessions, live bill totals, waiter call buzzers, and private floor grievance resolution shields.
+                  </p>
+                </div>
+              </div>
+              <Link
+                to="/manage/saffron-house"
+                className="text-xs font-bold text-emerald-400 hover:text-emerald-300 flex items-center space-x-1 group"
+              >
+                <span>Open Floor Hub</span>
+                <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+
+            {/* 4. Executive Pitch Deck */}
+            <div className="bg-[#0F1626] border border-white/[0.08] hover:border-cyan-400/40 p-5 rounded-2xl flex flex-col justify-between space-y-4 transition-all hover:-translate-y-1">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                  <TrendingUp className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="font-serif font-bold text-base text-white">4. Executive Pitch Deck</h4>
+                  <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                    19-slide boardroom presentation detailing ₹5k/₹10k subscriptions, unit economics, and 0% food commission.
+                  </p>
+                </div>
+              </div>
               <Link
                 to="/pitch"
-                className="w-full sm:w-auto bg-transparent hover:bg-[#282828] text-[#e5e7eb] font-semibold text-sm px-6 py-3 rounded-lg border border-[#3a3a3a] transition-all flex items-center justify-center space-x-2 cursor-pointer font-sans"
+                className="text-xs font-bold text-cyan-400 hover:text-cyan-300 flex items-center space-x-1 group"
               >
-                <TrendingUp className="w-4 h-4 text-[#FFA000]" />
-                <span>Executive Pitch Deck</span>
+                <span>View 19 Slides</span>
+                <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
+
           </div>
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 9. MINIMAL TECHNICAL FOOTER                                 */}
+      {/* 4. CORE ARCHITECTURE BENTO GRID                             */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <footer className="py-8 border-t border-[#3a3a3a] bg-[#151515] text-[#a0a0a0] text-xs">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center space-x-3">
-            <span className="font-bold text-white">MENUZ</span>
-            <span className="text-[#3a3a3a]">/</span>
-            <span>AUTONOMOUS RESTAURANT OPERATING SYSTEM</span>
+      <section className="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div className="text-center max-w-3xl mx-auto space-y-3 mb-12">
+          <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
+            Engineered For High-Volume Dining
+          </span>
+          <h2 className="font-serif font-bold text-3xl sm:text-4xl text-white">
+            Why Leading Restaurateurs Switch to Menuz
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+            Eliminate clunky third-party apps and food commissions while building an unstoppable Google Maps review flywheel.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          {/* Bento 1: Multiplayer Table Sync */}
+          <div className="bg-[#0C1220] border border-white/[0.08] p-6 sm:p-8 rounded-3xl space-y-4 hover:border-white/[0.15] transition-all">
+            <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+              <Users className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-serif font-bold text-xl text-white">
+                Multiplayer Real-Time Table Sync
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
+                When friends sit together, each guest scans the table QR on their own phone. As one person adds garlic naan and another adds butter chicken, everyone’s cart updates in real time with 0 app installs or logins.
+              </p>
+            </div>
+            <div className="pt-2 flex items-center space-x-4 text-xs font-semibold text-slate-300">
+              <span className="flex items-center space-x-1 text-emerald-400">
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Zero App Downloads</span>
+              </span>
+              <span className="flex items-center space-x-1 text-emerald-400">
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Sub-50ms Supabase Sync</span>
+              </span>
+            </div>
           </div>
 
-          <div className="flex items-center space-x-6 text-[11px] font-mono">
-            <span className="text-[#FFA000]">● ALL SYSTEMS OPERATIONAL</span>
-            <Link to="/admin" className="hover:text-white transition-colors">Admin HQ</Link>
-            <Link to="/pitch" className="hover:text-white transition-colors">Pitch Deck</Link>
-            <Link to="/kitchen" className="hover:text-white transition-colors">Kitchen KDS</Link>
+          {/* Bento 2: Chef & Owner Trained AI Concierge */}
+          <div className="bg-[#0C1220] border border-white/[0.08] p-6 sm:p-8 rounded-3xl space-y-4 hover:border-white/[0.15] transition-all">
+            <div className="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+              <Sparkles className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-serif font-bold text-xl text-white">
+                Head Chef &amp; Owner Trained AI Concierge
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
+                Not a generic chatbot. Trained directly by Head Chef Sanjeev on secret spices, exact allergen safety, and calibrated heat levels (1-5) — and by the owner on beverage pairings. 0% hallucinations, 100% kitchen-accurate.
+              </p>
+            </div>
+            <div className="pt-2 flex items-center space-x-4 text-xs font-semibold text-slate-300">
+              <span className="flex items-center space-x-1 text-purple-400">
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Zero Hallucinations</span>
+              </span>
+              <span className="flex items-center space-x-1 text-purple-400">
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Trained on Real Recipes</span>
+              </span>
+            </div>
+          </div>
+
+          {/* Bento 3: Decoupled Google Review Funnel */}
+          <div className="bg-[#0C1220] border border-white/[0.08] p-6 sm:p-8 rounded-3xl space-y-4 hover:border-white/[0.15] transition-all">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+              <MessageSquareHeart className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-serif font-bold text-xl text-white">
+                1-Click Google Reviews &amp; Lucky Reward Wheel
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
+                Happy diners post genuine 5-star Google Maps reviews with 1 tap, automatically unlocking the animated Lucky Dining Wheel for guaranteed table treats. Unhappy diners trigger instant private alerts to the manager’s phone to resolve issues before they leave.
+              </p>
+            </div>
+            <div className="pt-2 flex items-center space-x-4 text-xs font-semibold text-slate-300">
+              <span className="flex items-center space-x-1 text-emerald-400">
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Google Maps Compliant</span>
+              </span>
+              <span className="flex items-center space-x-1 text-emerald-400">
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Instant Floor Grievance Alert</span>
+              </span>
+            </div>
+          </div>
+
+          {/* Bento 4: Triple Redundant POS & Thermal KOT */}
+          <div className="bg-[#0C1220] border border-white/[0.08] p-6 sm:p-8 rounded-3xl space-y-4 hover:border-white/[0.15] transition-all">
+            <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+              <Printer className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-serif font-bold text-xl text-white">
+                Triple-Redundant POS &amp; Thermal KOT Printing
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
+                Never lose an order. Menuz routes tickets simultaneously to leading Indian POS systems (Petpooja, RoyalPOS, Recaho, RanceLab), local Wi-Fi tablets, and direct hardware ESC/POS thermal printers over port 9100.
+              </p>
+            </div>
+            <div className="pt-2 flex items-center space-x-4 text-xs font-semibold text-slate-300">
+              <span className="flex items-center space-x-1 text-cyan-400">
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Petpooja &amp; RoyalPOS</span>
+              </span>
+              <span className="flex items-center space-x-1 text-cyan-400">
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Sub-100ms ESC/POS KOT</span>
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/* 5. CLEAN BOTTOM CTA BANNER                                  */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <section className="py-16 bg-[#0B0F1A] border-t border-white/[0.08] text-center">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-5">
+          <span className="text-xs font-bold uppercase tracking-widest text-amber-400">
+            Transparent Pricing • Zero Commission
+          </span>
+          <h2 className="font-serif font-bold text-3xl sm:text-4xl text-white">
+            Ready to Upgrade Your Dining Room?
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto leading-relaxed">
+            Menuz replaces costly paper menus with interactive digital dining, instant KOT printing, and automated reputation growth for ₹5,000 / month flat.
+          </p>
+
+          <div className="pt-3 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              to="/pitch"
+              className="py-3 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 text-slate-950 font-bold text-xs shadow-md transition-all flex items-center space-x-1.5 cursor-pointer"
+            >
+              <TrendingUp className="w-4 h-4 text-slate-950" />
+              <span>Explore Executive Pitch &amp; ROI</span>
+            </Link>
+
+            <button
+              type="button"
+              onClick={() => handleOpenScanner()}
+              className="py-3 px-5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-white font-semibold text-xs border border-white/[0.1] transition-colors flex items-center space-x-1.5 cursor-pointer"
+            >
+              <QrCode className="w-4 h-4 text-amber-400" />
+              <span>Test Table QR Scan</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/* 6. CLEAN FOOTER                                             */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <footer className="py-8 px-4 sm:px-6 border-t border-white/[0.06] text-xs text-slate-500">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center space-x-2">
+            <span className="font-serif font-bold text-white text-sm">menuz</span>
+            <span>• Autonomous Dine-In Operating System</span>
+          </div>
+
+          <div className="flex items-center space-x-6">
+            <Link to="/" className="hover:text-slate-300 transition-colors">
+              Explore
+            </Link>
+            <Link to="/r/saffron-house/menu?t=table-token-01-saffron" className="hover:text-slate-300 transition-colors">
+              Table 1 Menu
+            </Link>
+            <Link to="/kitchen" className="hover:text-slate-300 transition-colors">
+              Kitchen KDS
+            </Link>
+            <Link to="/pitch" className="text-amber-400 hover:text-amber-300 transition-colors font-medium">
+              Pitch Deck
+            </Link>
           </div>
         </div>
       </footer>
@@ -790,3 +644,5 @@ export const CustomerHomePage: React.FC = () => {
     </div>
   );
 };
+
+export default CustomerHomePage;

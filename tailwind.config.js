@@ -43,36 +43,15 @@ export default {
         dietary: {
           veg: '#16A34A',
           nonveg: '#DC2626',
-        },
-        // ClickHouse Phosphor Terminal Tokens (Adapted to Electric Saffron)
-        void: '#151515',
-        carbon: '#1f1f1c',
-        graphite: '#282828',
-        'slate-dark': '#343434',
-        iron: '#3a3a3a',
-        steel: '#414141',
-        smoke: '#a0a0a0',
-        fog: '#bcbcbb',
-        bone: '#dfdfdf',
-        paper: '#e5e7eb',
-        phosphor: {
-          saffron: '#FFA000',
-          gold: '#FFB800',
-          glow: '#FFC107',
-          ink: '#1A1300',
-          amber: '#4D3800',
         }
       },
       fontFamily: {
         serif: ['"Playfair Display"', 'Georgia', 'serif'],
-        sans: ['Inter', '"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
-        mono: ['Inconsolata', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'monospace'],
+        sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
       },
       boxShadow: {
         'subtle': '0 2px 10px rgba(28, 25, 23, 0.05)',
         'float': '0 8px 30px rgba(28, 25, 23, 0.12)',
-        'phosphor-cta': 'rgba(0, 0, 0, 0.2) 0px 10px 15px -3px, rgba(255, 160, 0, 0.25) 0px 4px 20px -2px',
-        'card-inset': 'rgba(0, 0, 0, 0.06) 0px 4px 4px 0px, rgba(0, 0, 0, 0.2) 0px 4px 25px 0px inset',
       }
     },
   },

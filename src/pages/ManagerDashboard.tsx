@@ -166,11 +166,11 @@ export const ManagerDashboard: React.FC = () => {
       <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-ivory-300">
         <div className="flex items-center space-x-2">
           <Link
-            to="/admin"
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-700 hover:text-saffron-700 transition-colors bg-white px-3.5 py-2 rounded-xl border border-ivory-300 shadow-xs hover:border-saffron-300 cursor-pointer"
+            to="/"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-charcoal-700 hover:text-amber-700 transition-colors bg-white px-3.5 py-2 rounded-xl border border-ivory-300 shadow-xs hover:border-amber-400 cursor-pointer"
           >
-            <ArrowLeft className="w-3.5 h-3.5 text-saffron-600" />
-            <span>Master Admin HQ</span>
+            <ArrowLeft className="w-3.5 h-3.5 text-amber-600" />
+            <span>Explore Demos</span>
           </Link>
           <Link
             to="/pitch"

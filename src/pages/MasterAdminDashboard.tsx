@@ -606,26 +606,26 @@ export const MasterAdminDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-ivory-100/60 pb-24 text-charcoal-900">
-      {/* Top Banner: Master Control Center */}
-      <div className="bg-charcoal-900 text-white border-b border-charcoal-800">
+    <div className="min-h-screen bg-[#090D16] pb-24 text-slate-100 font-sans">
+      {/* Top Banner: Platform Operations Control */}
+      <div className="bg-[#0B0F1A] text-white border-b border-white/[0.08]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <div className="flex items-center space-x-2">
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-saffron-500/20 text-saffron-400 border border-saffron-500/30">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20">
                   Pune Ecosystem Control
                 </span>
-                <span className="flex items-center text-xs text-green-400 font-mono">
-                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse mr-1.5" />
-                  Live Production
+                <span className="flex items-center text-xs text-emerald-400 font-mono">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse mr-1.5" />
+                  Live System Ready
                 </span>
               </div>
-              <h1 className="font-serif text-3xl sm:text-4xl font-bold mt-1 text-white tracking-tight">
-                Menuz Master Admin
+              <h1 className="font-serif text-2xl sm:text-3xl font-bold mt-1 text-white tracking-tight">
+                Platform Operations &amp; Ecosystem Hub
               </h1>
-              <p className="text-xs sm:text-sm text-charcoal-300 mt-1 max-w-2xl">
-                Command centre for Menuz demo operations and Pune restaurant database. Manage live demo venues or onboard any of Pune’s {PUNE_RESTAURANT_DIRECTORY.length}+ restaurants on demand.
+              <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed">
+                Centralized command for Menuz demo operations and Pune restaurant database. Manage live demo venues or onboard any of Pune’s {PUNE_RESTAURANT_DIRECTORY.length}+ restaurants on demand.
               </p>
             </div>
 
@@ -633,16 +633,16 @@ export const MasterAdminDashboard: React.FC = () => {
             <div className="flex flex-wrap items-center gap-2">
               <Link
                 to="/pitch"
-                className="px-3.5 py-2.5 bg-gradient-to-r from-amber-500 to-saffron-600 hover:brightness-110 active:scale-95 text-slate-950 text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-all cursor-pointer"
+                className="px-3.5 py-2 bg-white/[0.06] hover:bg-white/[0.1] active:scale-95 text-white text-xs font-semibold rounded-xl border border-white/[0.12] flex items-center space-x-1.5 transition-all cursor-pointer"
                 title="Open Interactive Pitch Deck (19 Slides)"
               >
-                <TrendingUp className="w-4 h-4 text-slate-950" />
+                <TrendingUp className="w-4 h-4 text-amber-400" />
                 <span>Pitch Deck (19 Slides)</span>
               </Link>
               <a
                 href="./menuz_executive_pitch_deck.pptx"
                 download="Menuz_Executive_Pitch_Deck.pptx"
-                className="px-3 py-2.5 bg-charcoal-800 hover:bg-charcoal-700 active:scale-95 text-amber-300 text-xs font-bold rounded-xl border border-charcoal-600 shadow-subtle flex items-center space-x-1.5 transition-all"
+                className="px-3 py-2 bg-white/[0.04] hover:bg-white/[0.08] active:scale-95 text-amber-300 text-xs font-medium rounded-xl border border-white/[0.08] flex items-center space-x-1.5 transition-all"
                 title="Download 16:9 Widescreen PowerPoint Presentation"
               >
                 <Download className="w-3.5 h-3.5 text-amber-400" />
@@ -653,22 +653,22 @@ export const MasterAdminDashboard: React.FC = () => {
                 download="Menuz_Executive_Pitch_Deck.pdf"
                 target="_blank"
                 rel="noreferrer"
-                className="px-3 py-2.5 bg-charcoal-800 hover:bg-charcoal-700 active:scale-95 text-charcoal-200 text-xs font-bold rounded-xl border border-charcoal-600 shadow-subtle flex items-center space-x-1.5 transition-all"
+                className="px-3 py-2 bg-white/[0.04] hover:bg-white/[0.08] active:scale-95 text-slate-300 text-xs font-medium rounded-xl border border-white/[0.08] flex items-center space-x-1.5 transition-all"
                 title="Download Executive Pitch Deck PDF"
               >
-                <FileText className="w-3.5 h-3.5 text-charcoal-300" />
+                <FileText className="w-3.5 h-3.5 text-slate-400" />
                 <span>PDF</span>
               </a>
               <button
                 onClick={() => setIsAddRestaurantOpen(true)}
-                className="px-4 py-2.5 bg-saffron-600 hover:bg-saffron-700 active:scale-95 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-all cursor-pointer"
+                className="px-3.5 py-2 bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 text-slate-950 text-xs font-bold rounded-xl shadow-sm flex items-center space-x-1.5 transition-all cursor-pointer"
               >
-                <Plus className="w-4 h-4" />
+                <Plus className="w-4 h-4 text-slate-950" />
                 <span>Onboard Restaurant</span>
               </button>
               <button
                 onClick={() => setIsCampaignModalOpen(true)}
-                className="px-4 py-2.5 bg-green-700 hover:bg-green-800 active:scale-95 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-all cursor-pointer"
+                className="px-3.5 py-2 bg-emerald-600/80 hover:bg-emerald-500 active:scale-95 text-white text-xs font-semibold rounded-xl flex items-center space-x-1.5 transition-all cursor-pointer"
               >
                 <Send className="w-4 h-4" />
                 <span>WhatsApp Campaign</span>
@@ -678,67 +678,66 @@ export const MasterAdminDashboard: React.FC = () => {
                   setSafeSession('menuz_admin_session', 'locked');
                   setIsAdminAuthenticated(false);
                 }}
-                className="px-3.5 py-2.5 bg-rose-950/60 hover:bg-rose-900/80 active:scale-95 text-rose-300 text-xs font-bold rounded-xl border border-rose-800/80 shadow-subtle flex items-center space-x-1.5 transition-all cursor-pointer"
-                title="Lock Master Admin Session"
+                className="p-2 bg-white/[0.04] hover:bg-rose-500/20 active:scale-95 text-slate-400 hover:text-rose-400 rounded-xl border border-white/[0.08] transition-all cursor-pointer"
+                title="Lock Session"
               >
-                <Lock className="w-3.5 h-3.5 text-rose-400" />
-                <span>Lock Admin</span>
+                <Lock className="w-4 h-4" />
               </button>
             </div>
           </div>
 
           {/* Metric Overview Tiles */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mt-8">
-            <div className="bg-charcoal-800/80 p-3.5 rounded-2xl border border-charcoal-700">
-              <span className="text-[11px] text-charcoal-400 block font-medium">Active Venues</span>
+            <div className="bg-[#0E1526] p-3.5 rounded-xl border border-white/[0.08]">
+              <span className="text-[11px] text-slate-400 block font-medium">Active Venues</span>
               <div className="flex items-baseline space-x-2 mt-1">
                 <span className="text-2xl font-bold text-white font-mono">{totalRestaurants}</span>
                 <span className="text-[11px] text-amber-400 font-medium">({activeRestaurants} demos)</span>
               </div>
             </div>
 
-            <div className="bg-charcoal-800/80 p-3.5 rounded-2xl border border-charcoal-700">
-              <span className="text-[11px] text-charcoal-400 block font-medium">City Database</span>
+            <div className="bg-[#0E1526] p-3.5 rounded-xl border border-white/[0.08]">
+              <span className="text-[11px] text-slate-400 block font-medium">City Database</span>
               <div className="flex items-baseline space-x-2 mt-1">
                 <span className="text-2xl font-bold text-white font-mono">{PUNE_RESTAURANT_DIRECTORY.length}</span>
-                <span className="text-[11px] text-charcoal-400">leads ready</span>
+                <span className="text-[11px] text-slate-400">leads</span>
               </div>
             </div>
 
-            <div className="bg-charcoal-800/80 p-3.5 rounded-2xl border border-charcoal-700">
-              <span className="text-[11px] text-charcoal-400 block font-medium">Total Orders</span>
+            <div className="bg-[#0E1526] p-3.5 rounded-xl border border-white/[0.08]">
+              <span className="text-[11px] text-slate-400 block font-medium">Total Orders</span>
               <div className="flex items-baseline space-x-2 mt-1">
                 <span className="text-2xl font-bold text-white font-mono">{totalOrders}</span>
-                <span className="text-[11px] text-saffron-400">₹{totalRevenue.toLocaleString()}</span>
+                <span className="text-[11px] text-amber-400">₹{totalRevenue.toLocaleString()}</span>
               </div>
             </div>
 
-            <div className="bg-charcoal-800/80 p-3.5 rounded-2xl border border-charcoal-700">
-              <span className="text-[11px] text-charcoal-400 block font-medium">Average Rating</span>
+            <div className="bg-[#0E1526] p-3.5 rounded-xl border border-white/[0.08]">
+              <span className="text-[11px] text-slate-400 block font-medium">Average Rating</span>
               <div className="flex items-baseline space-x-2 mt-1">
                 <span className="text-2xl font-bold text-amber-400 font-mono flex items-center">
                   <Star className="w-4 h-4 fill-amber-400 inline mr-1" />
                   {avgRating}
                 </span>
-                <span className="text-[11px] text-charcoal-400">({reviews.length} reviews)</span>
+                <span className="text-[11px] text-slate-400">({reviews.length})</span>
               </div>
             </div>
 
-            <div className="bg-charcoal-800/80 p-3.5 rounded-2xl border border-charcoal-700">
-              <span className="text-[11px] text-charcoal-400 block font-medium">WhatsApp Opt-Ins</span>
+            <div className="bg-[#0E1526] p-3.5 rounded-xl border border-white/[0.08]">
+              <span className="text-[11px] text-slate-400 block font-medium">WhatsApp Opt-Ins</span>
               <div className="flex items-baseline space-x-2 mt-1">
-                <span className="text-2xl font-bold text-green-400 font-mono">{whatsappOptInCount}</span>
-                <span className="text-[11px] text-charcoal-400">compliant</span>
+                <span className="text-2xl font-bold text-emerald-400 font-mono">{whatsappOptInCount}</span>
+                <span className="text-[11px] text-slate-400">verified</span>
               </div>
             </div>
 
-            <div className="bg-charcoal-800/80 p-3.5 rounded-2xl border border-charcoal-700">
-              <span className="text-[11px] text-charcoal-400 block font-medium">Connected POS</span>
+            <div className="bg-[#0E1526] p-3.5 rounded-xl border border-white/[0.08]">
+              <span className="text-[11px] text-slate-400 block font-medium">Connected POS</span>
               <div className="flex items-baseline space-x-2 mt-1">
                 <span className="text-2xl font-bold text-blue-400 font-mono">
                   {Object.keys(posConfigs).length}
                 </span>
-                <span className="text-[11px] text-green-400 font-medium">{Object.keys(posConfigs).length > 0 ? '100% online' : 'None yet'}</span>
+                <span className="text-[11px] text-emerald-400 font-medium">{Object.keys(posConfigs).length > 0 ? 'online' : 'ready'}</span>
               </div>
             </div>
           </div>
@@ -746,51 +745,51 @@ export const MasterAdminDashboard: React.FC = () => {
       </div>
 
       {/* Navigation Tabs */}
-      <div className="sticky top-0 z-30 bg-white border-b border-ivory-300 shadow-sm">
+      <div className="sticky top-0 z-30 bg-[#0A0E17]/95 backdrop-blur-md border-b border-white/[0.08]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="flex space-x-2 sm:space-x-4 overflow-x-auto py-3 no-scrollbar">
+          <nav className="flex space-x-1.5 sm:space-x-2 overflow-x-auto py-2.5 scrollbar-none">
             <button
               onClick={() => setActiveTab('restaurants')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center space-x-2 whitespace-nowrap transition-all ${
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer ${
                 activeTab === 'restaurants'
-                  ? 'bg-saffron-600 text-white shadow-subtle'
-                  : 'text-charcoal-700 hover:bg-ivory-200'
+                  ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+                  : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
               }`}
             >
               <Building2 className="w-4 h-4" />
-              <span>Restaurants & Venues ({restaurants.length})</span>
+              <span>Venues ({restaurants.length})</span>
             </button>
 
             <button
               onClick={() => { setActiveTab('reviews'); setSelectedReviewRestaurant(null); }}
-              className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center space-x-2 whitespace-nowrap transition-all ${
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer ${
                 activeTab === 'reviews'
-                  ? 'bg-saffron-600 text-white shadow-subtle'
-                  : 'text-charcoal-700 hover:bg-ivory-200'
+                  ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+                  : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
               }`}
             >
               <MessageSquare className="w-4 h-4" />
-              <span>Reviews & Customer CRM ({reviews.length})</span>
+              <span>Reviews &amp; CRM ({reviews.length})</span>
             </button>
 
             <button
               onClick={() => setActiveTab('challenges')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center space-x-2 whitespace-nowrap transition-all ${
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer ${
                 activeTab === 'challenges'
-                  ? 'bg-saffron-600 text-white shadow-subtle'
-                  : 'text-charcoal-700 hover:bg-ivory-200'
+                  ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+                  : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
               }`}
             >
               <Trophy className="w-4 h-4" />
-              <span>Challenges & Rewards ({challenges.length})</span>
+              <span>Challenges &amp; Rewards ({challenges.length})</span>
             </button>
 
             <button
               onClick={() => setActiveTab('pos')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center space-x-2 whitespace-nowrap transition-all ${
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer ${
                 activeTab === 'pos'
-                  ? 'bg-saffron-600 text-white shadow-subtle'
-                  : 'text-charcoal-700 hover:bg-ivory-200'
+                  ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+                  : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
               }`}
             >
               <RefreshCw className="w-4 h-4" />
@@ -799,37 +798,34 @@ export const MasterAdminDashboard: React.FC = () => {
 
             <button
               onClick={() => setActiveTab('images')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center space-x-2 whitespace-nowrap transition-all ${
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer ${
                 activeTab === 'images'
-                  ? 'bg-saffron-600 text-white shadow-subtle'
-                  : 'text-charcoal-700 hover:bg-ivory-200'
+                  ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+                  : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
               }`}
             >
               <ImageIcon className="w-4 h-4" />
-              <span>Master Image Library</span>
+              <span>Culinary Media</span>
             </button>
 
             <button
               onClick={() => setActiveTab('marketing')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center space-x-2 whitespace-nowrap transition-all ${
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer ${
                 activeTab === 'marketing'
-                  ? 'bg-saffron-600 text-white shadow-subtle'
-                  : 'text-charcoal-700 hover:bg-ivory-200'
+                  ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+                  : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
               }`}
             >
               <Share2 className="w-4 h-4" />
-              <span>Marketing & Campaigns ({campaigns.length})</span>
+              <span>Marketing ({campaigns.length})</span>
             </button>
 
             <Link
               to="/ai-studio"
-              className="px-4 py-2 rounded-xl text-xs font-bold flex items-center space-x-2 whitespace-nowrap transition-all bg-amber-500/15 text-amber-950 border border-amber-300/80 hover:bg-amber-500/25 ml-auto"
+              className="px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all bg-amber-500/10 text-amber-300 border border-amber-500/20 hover:bg-amber-500/20 ml-auto"
             >
-              <Sparkles className="w-4 h-4 text-amber-600 animate-pulse" />
-              <span>Chef & Owner AI Studio</span>
-              <span className="bg-amber-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md uppercase">
-                Dish Secrets & Sharing
-              </span>
+              <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
+              <span>Chef AI Studio</span>
             </Link>
           </nav>
         </div>
@@ -842,10 +838,10 @@ export const MasterAdminDashboard: React.FC = () => {
         {/* ========================================================================= */}
         {activeTab === 'restaurants' && (
           <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-3xl border border-ivory-300 shadow-subtle">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#0E1526] p-5 rounded-2xl border border-white/[0.08]">
               <div>
-                <h2 className="text-lg font-bold font-serif text-charcoal-900">Restaurant Operations &amp; Pune Database</h2>
-                <p className="text-xs text-charcoal-600">
+                <h2 className="text-lg font-bold font-serif text-white">Restaurant Operations &amp; Pune Database</h2>
+                <p className="text-xs text-slate-400 mt-0.5">
                   {restaurants.length > 0
                     ? 'Manage active Menuz demo restaurants or browse the 269+ Pune restaurant database to onboard any restaurant on demand.'
                     : 'Browse Pune restaurant database to onboard your first venue.'}
@@ -854,16 +850,16 @@ export const MasterAdminDashboard: React.FC = () => {
               <div className="flex flex-wrap items-center gap-2">
                 <button
                   onClick={() => setIsIndependentSitesOpen(true)}
-                  className="px-4 py-2.5 bg-charcoal-900 hover:bg-charcoal-800 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-colors self-start sm:self-auto cursor-pointer border border-charcoal-700"
+                  className="px-3.5 py-2 bg-white/[0.04] hover:bg-white/[0.08] text-slate-200 text-xs font-semibold rounded-xl border border-white/[0.08] flex items-center space-x-1.5 transition-colors cursor-pointer"
                 >
-                  <Globe className="w-4 h-4 text-saffron-400" />
+                  <Globe className="w-4 h-4 text-amber-400" />
                   <span>Independent Websites Directory</span>
                 </button>
                 <button
                   onClick={() => setIsAddRestaurantOpen(true)}
-                  className="px-4 py-2.5 bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold rounded-xl shadow-subtle flex items-center space-x-1.5 transition-colors self-start sm:self-auto cursor-pointer"
+                  className="px-3.5 py-2 bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 text-slate-950 text-xs font-bold rounded-xl shadow-sm flex items-center space-x-1.5 transition-all cursor-pointer"
                 >
-                  <Plus className="w-4 h-4" />
+                  <Plus className="w-4 h-4 text-slate-950" />
                   <span>Onboard Restaurant</span>
                 </button>
               </div>

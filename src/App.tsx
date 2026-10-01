@@ -71,7 +71,7 @@ export const App: React.FC = () => {
   return (
     <HashRouter>
       <RouteSEOManager />
-      <div className="min-h-screen flex flex-col bg-ivory-50 text-charcoal-900 font-sans">
+      <div className="min-h-screen flex flex-col bg-[#090D16] text-slate-100 font-sans antialiased selection:bg-amber-500/20 selection:text-amber-200">
         <Navbar />
         <div className="flex-1">
           <ErrorBoundary>
