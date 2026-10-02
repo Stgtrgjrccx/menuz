@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { StatusBar, Style } from '@capacitor/status-bar';
+import { SplashScreen } from '@capacitor/splash-screen';
 import { Navbar } from './components/Navbar';
 import { DinerMenu } from './pages/DinerMenu';
 import { KitchenKDS } from './pages/KitchenKDS';
@@ -9,7 +11,6 @@ import { CustomerHomePage } from './pages/CustomerHomePage';
 import { PitchDeckPage } from './pages/PitchDeckPage';
 import { AiBotOnboardingStudioPage } from './pages/AiBotOnboardingStudioPage';
 import { NotFoundPage } from './pages/NotFoundPage';
-
 import { ErrorBoundary } from './components/ErrorBoundary';
 
 // Yoast-style Dynamic Route SEO Metadata Manager
@@ -68,6 +69,15 @@ const RouteSEOManager: React.FC = () => {
 };
 
 export const App: React.FC = () => {
+  useEffect(() => {
+    // Configure native status bar & splash screen on native devices
+    try {
+      StatusBar.setStyle({ style: Style.Dark }).catch(() => {});
+      StatusBar.setBackgroundColor({ color: '#090D16' }).catch(() => {});
+      SplashScreen.hide().catch(() => {});
+    } catch (e) {}
+  }, []);
+
   return (
     <HashRouter>
       <RouteSEOManager />
