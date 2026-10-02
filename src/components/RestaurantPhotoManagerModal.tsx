@@ -21,18 +21,22 @@ interface RestaurantPhotoManagerModalProps {
 
 export const RestaurantPhotoManagerModal: React.FC<RestaurantPhotoManagerModalProps> = ({
   isOpen,
-  restaurant,
+  restaurant: propRestaurant,
   onClose,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadMessage, setUploadMessage] = useState<string | null>(null);
 
+  const restaurants = useRestaurantStore((state) => state.restaurants);
   const addRestaurantPhotos = useRestaurantStore((state) => state.addRestaurantPhotos);
   const removeRestaurantPhoto = useRestaurantStore((state) => state.removeRestaurantPhoto);
   const setRestaurantCoverPhoto = useRestaurantStore((state) => state.setRestaurantCoverPhoto);
 
-  if (!isOpen || !restaurant) return null;
+  if (!isOpen || !propRestaurant) return null;
+
+  // Retrieve reactive restaurant from store so photo uploads and deletions reflect live immediately
+  const restaurant = restaurants.find((r) => r.id === propRestaurant.id) || propRestaurant;
 
   const photos = restaurant.ambiance_photos || [];
   const coverPhoto = restaurant.cover_image_url || restaurant.logo_url;

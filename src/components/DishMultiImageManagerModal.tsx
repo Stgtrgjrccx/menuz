@@ -35,23 +35,31 @@ const CURATED_SUGGESTIONS = [
 
 export const DishMultiImageManagerModal: React.FC<DishMultiImageManagerModalProps> = ({
   isOpen,
-  dish,
+  dish: propDish,
   onClose,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadMessage, setUploadMessage] = useState<string | null>(null);
 
+  const menuItems = useRestaurantStore((state) => state.menuItems);
   const addDishImages = useRestaurantStore((state) => state.addDishImages);
   const removeDishImage = useRestaurantStore((state) => state.removeDishImage);
   const setPrimaryDishImage = useRestaurantStore((state) => state.setPrimaryDishImage);
 
-  if (!isOpen || !dish) return null;
+  if (!isOpen || !propDish) return null;
+
+  // Retrieve the reactive dish from the store so all additions, deletions, and cover changes update live
+  const dish = menuItems.find((m) => m.id === propDish.id) || propDish;
 
   // Compile all photos associated with this dish
   const allImages: DishGalleryImage[] = [];
   if (dish.gallery_images && dish.gallery_images.length > 0) {
-    dish.gallery_images.forEach((img) => allImages.push(img));
+    dish.gallery_images.forEach((img) => {
+      if (img.src && !allImages.some((a) => a.src.trim() === img.src.trim())) {
+        allImages.push(img);
+      }
+    });
   } else if (dish.image_url) {
     allImages.push({ src: dish.image_url, label: 'Main Presentation', code: '# 01' });
   }

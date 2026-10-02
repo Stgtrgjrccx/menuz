@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import {
   MenuItem,
+  DishGalleryImage,
   MenuCategory,
   RestaurantTable,
   Restaurant,
@@ -784,60 +785,159 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       },
 
       addDishImages: (itemId, newImages) => {
-        set((state) => ({
-          menuItems: state.menuItems.map((item) => {
+        set((state) => {
+          const updatedItems = state.menuItems.map((item) => {
             if (item.id !== itemId) return item;
-            const existing = item.gallery_images ? [...item.gallery_images] : [{ src: item.image_url, label: 'Main View', code: '# 01' }];
-            const formatted = newImages.map((img, idx) => {
-              if (typeof img === 'string') {
-                return {
-                  src: img,
-                  label: `View ${existing.length + idx + 1}`,
-                  code: `# 0${existing.length + idx + 1}`
-                };
-              }
-              return {
-                src: img.src,
-                label: img.label || `View ${existing.length + idx + 1}`,
-                code: img.code || `# 0${existing.length + idx + 1}`
-              };
+
+            const existing = item.gallery_images && item.gallery_images.length > 0
+              ? [...item.gallery_images]
+              : item.image_url
+                ? [{ src: item.image_url, label: 'Main View', code: '# 01' }]
+                : [];
+
+            const formatted: DishGalleryImage[] = newImages.map((img, idx) => {
+              const src = typeof img === 'string' ? img : img.src;
+              const label = typeof img === 'string' ? `Angle View ${existing.length + idx + 1}` : (img.label || `Angle View ${existing.length + idx + 1}`);
+              const code = typeof img === 'string' ? `# 0${existing.length + idx + 1}` : (img.code || `# 0${existing.length + idx + 1}`);
+              return { src, label, code };
             });
 
-            const merged = [...existing, ...formatted.filter((f) => !existing.some((e) => e.src === f.src))];
+            const merged = [...existing];
+            formatted.forEach((f) => {
+              if (f.src && !merged.some((m) => m.src.trim() === f.src.trim())) {
+                merged.push(f);
+              }
+            });
+
+            // Re-index all codes accurately
+            const relabeled = merged.map((g, idx) => ({
+              ...g,
+              code: `# 0${idx + 1}`,
+              label: idx === 0 && (!g.label || g.label.startsWith('Angle') || g.label.startsWith('View')) ? 'Main View' : g.label
+            }));
+
+            const mainImg = item.image_url || relabeled[0]?.src || '';
+
             return {
               ...item,
-              image_url: item.image_url || merged[0]?.src,
-              gallery_images: merged
+              image_url: mainImg,
+              gallery_images: relabeled
             };
-          })
-        }));
+          });
+
+          try {
+            if (typeof window !== 'undefined' && window.localStorage) {
+              window.localStorage.setItem(DEDICATED_ITEMS_KEY, JSON.stringify(updatedItems));
+            }
+          } catch (e) {}
+
+          return { menuItems: updatedItems };
+        });
       },
 
       removeDishImage: (itemId, imageSrc) => {
-        set((state) => ({
-          menuItems: state.menuItems.map((item) => {
+        set((state) => {
+          const updatedItems = state.menuItems.map((item) => {
             if (item.id !== itemId) return item;
-            const filtered = (item.gallery_images || []).filter((g) => g.src !== imageSrc);
-            const newMain = item.image_url === imageSrc ? (filtered[0]?.src || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600') : item.image_url;
+
+            // Collect all existing photos for this dish
+            let existing: DishGalleryImage[] = [];
+            if (item.gallery_images && item.gallery_images.length > 0) {
+              existing = [...item.gallery_images];
+            } else if (item.image_url) {
+              existing = [{ src: item.image_url, label: 'Main View', code: '# 01' }];
+            }
+
+            // Filter out by exact or trimmed src
+            const filtered = existing.filter(
+              (g) => g.src !== imageSrc && g.src.trim() !== imageSrc.trim()
+            );
+
+            // Re-label remaining items with clean serial codes
+            const relabeled = filtered.map((g, idx) => ({
+              ...g,
+              code: `# 0${idx + 1}`,
+              label: idx === 0 && (!g.label || g.label.startsWith('Angle') || g.label.startsWith('View')) ? 'Main View' : g.label
+            }));
+
+            // Determine new primary image_url
+            let newMain = '';
+            if (relabeled.length > 0) {
+              if (item.image_url === imageSrc || !relabeled.some((g) => g.src === item.image_url)) {
+                newMain = relabeled[0].src;
+              } else {
+                newMain = item.image_url;
+              }
+            } else {
+              newMain = '';
+            }
+
             return {
               ...item,
               image_url: newMain,
-              gallery_images: filtered
+              gallery_images: relabeled
             };
-          })
-        }));
+          });
+
+          try {
+            if (typeof window !== 'undefined' && window.localStorage) {
+              window.localStorage.setItem(DEDICATED_ITEMS_KEY, JSON.stringify(updatedItems));
+            }
+          } catch (e) {}
+
+          return { menuItems: updatedItems };
+        });
       },
 
       setPrimaryDishImage: (itemId, imageSrc) => {
-        set((state) => ({
-          menuItems: state.menuItems.map((item) => {
+        set((state) => {
+          const updatedItems = state.menuItems.map((item) => {
             if (item.id !== itemId) return item;
+
+            let existing: DishGalleryImage[] = [];
+            if (item.gallery_images && item.gallery_images.length > 0) {
+              existing = [...item.gallery_images];
+            } else if (item.image_url) {
+              existing = [{ src: item.image_url, label: 'Main View', code: '# 01' }];
+            }
+
+            // Ensure chosen image is in list
+            if (!existing.some((g) => g.src === imageSrc || g.src.trim() === imageSrc.trim())) {
+              existing.unshift({ src: imageSrc, label: 'Main View', code: '# 01' });
+            }
+
+            const chosen = existing.find((g) => g.src === imageSrc || g.src.trim() === imageSrc.trim())!;
+            const others = existing.filter((g) => g.src !== imageSrc && g.src.trim() !== imageSrc.trim());
+
+            // Reorder chosen to position 0 (first) and re-index codes
+            const reordered: DishGalleryImage[] = [
+              {
+                ...chosen,
+                label: chosen.label && !chosen.label.startsWith('Angle') && !chosen.label.startsWith('View') ? chosen.label : 'Main View',
+                code: '# 01'
+              },
+              ...others.map((o, idx) => ({
+                ...o,
+                code: `# 0${idx + 2}`,
+                label: o.label === 'Main View' || !o.label ? `Angle View ${idx + 2}` : o.label
+              }))
+            ];
+
             return {
               ...item,
-              image_url: imageSrc
+              image_url: imageSrc,
+              gallery_images: reordered
             };
-          })
-        }));
+          });
+
+          try {
+            if (typeof window !== 'undefined' && window.localStorage) {
+              window.localStorage.setItem(DEDICATED_ITEMS_KEY, JSON.stringify(updatedItems));
+            }
+          } catch (e) {}
+
+          return { menuItems: updatedItems };
+        });
       },
 
       addRestaurantPhotos: (restaurantId, photos) => {
