@@ -101,7 +101,7 @@ export const CustomerHomePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#090D16] text-slate-100 font-sans selection:bg-amber-500/20 selection:text-amber-200">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#090D16] text-slate-100 font-sans selection:bg-amber-500/20 selection:text-amber-200">
       
       {/* ═══════════════════════════════════════════════════════════ */}
       {/* 1. HERO SECTION                                             */}

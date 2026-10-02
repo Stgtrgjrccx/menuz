@@ -630,7 +630,7 @@ export const MasterAdminDashboard: React.FC = () => {
   }
 
   return (
-    <div className={`min-h-screen bg-[#090D16] pb-24 text-slate-100 font-sans ${deviceViewMode === 'phone' ? 'max-w-md mx-auto border-x border-white/[0.08] shadow-2xl' : ''}`}>
+    <div className={`min-h-screen w-full max-w-full overflow-x-hidden bg-[#090D16] pb-24 text-slate-100 font-sans ${deviceViewMode === 'phone' ? 'max-w-md mx-auto border-x border-white/[0.08] shadow-2xl' : ''}`}>
       {/* Top Banner: Platform Operations Control & Mobile/Desktop Switcher */}
       <div className="bg-[#0B0F1A] text-white border-b border-white/[0.08]">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6">

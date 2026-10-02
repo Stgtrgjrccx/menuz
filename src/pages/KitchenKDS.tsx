@@ -29,7 +29,7 @@ export const KitchenKDS: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#090D16] text-slate-100 p-4 md:p-6">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#090D16] text-slate-100 p-3 sm:p-4 md:p-6">
       {/* Header */}
       <header className="flex flex-wrap justify-between items-center pb-4 mb-6 border-b border-white/[0.08] gap-3">
         <div className="flex items-center space-x-3">

@@ -176,7 +176,7 @@ export const ManagerDashboard: React.FC = () => {
   const unreadWaiterCalls = activeNotificationsList.filter((n) => n.type === 'waiter_call' && !n.read);
 
   return (
-    <div className={`min-h-screen bg-[#090D16] text-slate-100 p-3 sm:p-6 md:p-8 max-w-5xl mx-auto space-y-5 sm:space-y-6 pb-20 ${deviceViewMode === 'phone' ? 'max-w-md border-x border-white/[0.08] shadow-2xl' : ''}`}>
+    <div className={`min-h-screen w-full max-w-full overflow-x-hidden bg-[#090D16] text-slate-100 p-3 sm:p-6 md:p-8 max-w-5xl mx-auto space-y-5 sm:space-y-6 pb-20 ${deviceViewMode === 'phone' ? 'max-w-md border-x border-white/[0.08] shadow-2xl' : ''}`}>
       {/* Top Quick Navigation Bar with Admin HQ button & Minimalist View Switcher */}
       <div className="flex flex-wrap items-center justify-between gap-2.5 pb-3 border-b border-white/[0.08]">
         <div className="flex items-center space-x-2">
