@@ -23,7 +23,7 @@ import {
   Maximize2
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
-import { MenuItem, ReviewChallenge } from '../types';
+import { MenuItem, ReviewChallenge, Restaurant } from '../types';
 import { DishDetailModal } from '../components/DishDetailModal';
 import { ImageLightboxModal } from '../components/ImageLightboxModal';
 import { CartDrawer } from '../components/CartDrawer';
@@ -65,73 +65,108 @@ export const DinerMenu: React.FC = () => {
 
   const [isSwitchModalOpen, setIsSwitchModalOpen] = useState(false);
 
-  // Sync route restaurantSlug with active restaurant in store (auto-creating if from Pune directory)
-  useEffect(() => {
+  // Synchronously resolve target restaurant from route slug or active store restaurant
+  const targetRestaurant = useMemo(() => {
     if (restaurantSlug) {
-      const match = restaurants.find((r) => r.slug === restaurantSlug);
-      if (match) {
-        if (match.id !== restaurant.id) {
-          setCurrentRestaurant(match.id);
-        }
-      } else {
-        const dir = PUNE_RESTAURANT_DIRECTORY.find(
-          (p) => p.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') === restaurantSlug
-        );
-        if (dir) {
-          addRestaurant({
-            id: `rest-${restaurantSlug}`,
-            slug: restaurantSlug,
-            name: dir.name,
-            cuisine: dir.cuisine,
-            location: dir.location,
-            logo_url: dir.imageUrl,
-            brand_colors: {
-              primary: '#E85D04',
-              background: '#FDFBF7',
-              text: '#1C1917',
-              accent: '#C84B00'
-            },
-            currency: 'INR',
-            tax_rate_percent: 5.0,
-            google_place_url: `https://search.google.com/local/writereview?placeid=${restaurantSlug}`
-          });
-        }
+      // 1. Direct match in store restaurants by slug or id
+      const direct = restaurants.find(
+        (r) =>
+          r.slug === restaurantSlug ||
+          r.id === restaurantSlug ||
+          r.id === `rest-${restaurantSlug}` ||
+          r.id === `rest-${restaurantSlug}-01` ||
+          r.id.toLowerCase().includes(restaurantSlug.toLowerCase())
+      );
+      if (direct) return direct;
+
+      // 2. Pune directory fallback
+      const cleanSlug = restaurantSlug.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+      const dir = PUNE_RESTAURANT_DIRECTORY.find((p) => {
+        const pSlug = p.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+        return pSlug === cleanSlug || pSlug.includes(cleanSlug) || cleanSlug.includes(pSlug);
+      });
+      if (dir) {
+        return {
+          id: `rest-${cleanSlug}`,
+          slug: cleanSlug,
+          name: dir.name,
+          cuisine: dir.cuisine,
+          location: dir.location,
+          logo_url: dir.imageUrl,
+          brand_colors: {
+            primary: '#E85D04',
+            background: '#FDFBF7',
+            text: '#1C1917',
+            accent: '#C84B00'
+          },
+          currency: 'INR',
+          tax_rate_percent: 5.0,
+          google_place_url: `https://search.google.com/local/writereview?placeid=${cleanSlug}`
+        } as Restaurant;
       }
     }
-  }, [restaurantSlug, restaurants, restaurant.id, setCurrentRestaurant, addRestaurant]);
+    return restaurant || restaurants[0];
+  }, [restaurantSlug, restaurants, restaurant]);
+
+  // Sync route targetRestaurant with active restaurant in store
+  useEffect(() => {
+    if (targetRestaurant && targetRestaurant.id !== restaurant.id) {
+      const match = restaurants.find((r) => r.id === targetRestaurant.id || r.slug === targetRestaurant.slug);
+      if (match) {
+        setCurrentRestaurant(match.id);
+      } else {
+        addRestaurant(targetRestaurant);
+        setCurrentRestaurant(targetRestaurant.id);
+      }
+    }
+  }, [targetRestaurant, restaurant.id, restaurants, setCurrentRestaurant, addRestaurant]);
 
   // Scoped dishes, categories, and tables for this restaurant
   const currentRestMenuItems = useMemo(() => {
-    const list = menuItems.filter((m) => m.restaurant_id === restaurant.id);
+    const list = menuItems.filter(
+      (m) =>
+        m.restaurant_id === targetRestaurant.id ||
+        (targetRestaurant.slug && (m.restaurant_id.toLowerCase().includes(targetRestaurant.slug.toLowerCase()) || targetRestaurant.id.toLowerCase().includes(m.restaurant_id.toLowerCase())))
+    );
     if (list.length > 0) return list;
     return generateCuisineMenu(
-      restaurant.id,
-      restaurant.slug || 'menu',
-      restaurant.cuisine,
-      restaurant.name
+      targetRestaurant.id,
+      targetRestaurant.slug || 'menu',
+      targetRestaurant.cuisine,
+      targetRestaurant.name
     ).dishes;
-  }, [menuItems, restaurant.id, restaurant.slug, restaurant.cuisine, restaurant.name]);
+  }, [menuItems, targetRestaurant]);
 
   const currentRestCategories = useMemo(() => {
-    const list = categories.filter((c) => c.restaurant_id === restaurant.id);
+    const list = categories.filter(
+      (c) =>
+        c.restaurant_id === targetRestaurant.id ||
+        (targetRestaurant.slug && (c.restaurant_id.toLowerCase().includes(targetRestaurant.slug.toLowerCase()) || targetRestaurant.id.toLowerCase().includes(c.restaurant_id.toLowerCase())))
+    );
     if (list.length > 0) return list;
     return generateCuisineMenu(
-      restaurant.id,
-      restaurant.slug || 'menu',
-      restaurant.cuisine,
-      restaurant.name
+      targetRestaurant.id,
+      targetRestaurant.slug || 'menu',
+      targetRestaurant.cuisine,
+      targetRestaurant.name
     ).categories;
-  }, [categories, restaurant.id, restaurant.slug, restaurant.cuisine, restaurant.name]);
+  }, [categories, targetRestaurant]);
 
   const restaurantChallenges = useMemo(() => {
-    const list = challenges.filter((c) => c.restaurant_id === restaurant.id && c.is_active);
+    const list = challenges.filter(
+      (c) =>
+        (c.restaurant_id === targetRestaurant.id || (targetRestaurant.slug && c.restaurant_id.includes(targetRestaurant.slug))) &&
+        c.is_active
+    );
     return list.length > 0 ? list : challenges.filter((c) => c.is_active);
-  }, [challenges, restaurant.id]);
+  }, [challenges, targetRestaurant]);
 
   const restaurantReviews = useMemo(() => {
-    const list = reviews.filter((r) => r.restaurant_id === restaurant.id);
+    const list = reviews.filter(
+      (r) => r.restaurant_id === targetRestaurant.id || (targetRestaurant.slug && r.restaurant_id.includes(targetRestaurant.slug))
+    );
     return list.length > 0 ? list : reviews;
-  }, [reviews, restaurant.id]);
+  }, [reviews, targetRestaurant]);
 
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -170,14 +205,14 @@ export const DinerMenu: React.FC = () => {
   // Smart Happy Hour & Dynamic Pricing Active Status
   const isHappyHourActive = useMemo(() => {
     if (forceHappyHourDemo) return true;
-    const hh = restaurant.happy_hour_config;
+    const hh = targetRestaurant.happy_hour_config;
     if (!hh || !hh.enabled) return false;
     const now = new Date();
     const currentMin = now.getHours() * 60 + now.getMinutes();
     const [sH, sM] = (hh.start_time || '16:00').split(':').map(Number);
     const [eH, eM] = (hh.end_time || '19:30').split(':').map(Number);
     return currentMin >= (sH * 60 + sM) && currentMin <= (eH * 60 + eM);
-  }, [restaurant.happy_hour_config, forceHappyHourDemo]);
+  }, [targetRestaurant.happy_hour_config, forceHappyHourDemo]);
 
   // Real-time Table Cart Multiplayer Broadcast Listener
   useEffect(() => {
@@ -208,7 +243,11 @@ export const DinerMenu: React.FC = () => {
 
   // Table Token Verification
   useEffect(() => {
-    const restTables = tables.filter((t) => t.restaurant_id === restaurant.id);
+    const restTables = tables.filter(
+      (t) =>
+        t.restaurant_id === targetRestaurant.id ||
+        (targetRestaurant.slug && t.restaurant_id.toLowerCase().includes(targetRestaurant.slug.toLowerCase()))
+    );
     const cleanToken = tableToken.toLowerCase().trim();
     const matchedTable =
       (cleanToken
@@ -234,9 +273,9 @@ export const DinerMenu: React.FC = () => {
       restTables[0] ||
       tables[0] || {
         id: 'tbl-01',
-        restaurant_id: restaurant?.id || 'rest-saffron-house-01',
+        restaurant_id: targetRestaurant?.id || 'rest-saffron-house-01',
         label: 'Table 1',
-        public_token: 'table-token-01-saffron',
+        public_token: `table-token-01-${targetRestaurant?.slug || 'saffron'}`,
         is_active: true
       };
 
@@ -257,14 +296,14 @@ export const DinerMenu: React.FC = () => {
         }
       }
     } catch (e) {}
-  }, [tableToken, tables, setActiveTable, restaurant.id, activeTable?.id, activeTable?.restaurant_id]);
+  }, [tableToken, tables, setActiveTable, targetRestaurant, activeTable?.id, activeTable?.restaurant_id]);
 
   // Reset selected category, search query, and active dish whenever the venue or route slug changes
   useEffect(() => {
     setSelectedCategory('all');
     setSearchQuery('');
     setActiveDish(null);
-  }, [restaurantSlug, restaurant.id]);
+  }, [restaurantSlug, targetRestaurant.id]);
 
   // Track scroll for back-to-top button
   useEffect(() => {

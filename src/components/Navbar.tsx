@@ -210,33 +210,6 @@ export const Navbar: React.FC = () => {
 
           {/* Right: Actions */}
           <div className="flex items-center space-x-2">
-            {/* Minimalist Phone vs Mac Switch */}
-            <div className="flex items-center bg-slate-900/90 p-0.5 rounded-lg border border-white/[0.1] text-[11px] font-bold">
-              <button
-                type="button"
-                onClick={() => setDeviceViewMode('phone')}
-                className={`px-2 py-1 rounded-md transition-all cursor-pointer ${
-                  deviceViewMode === 'phone'
-                    ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-                title="Switch to Phone view layout"
-              >
-                📱 Phone
-              </button>
-              <button
-                type="button"
-                onClick={() => setDeviceViewMode('mac')}
-                className={`px-2 py-1 rounded-md transition-all cursor-pointer ${
-                  deviceViewMode === 'mac'
-                    ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-                title="Switch to Mac view layout"
-              >
-                💻 Mac
-              </button>
-            </div>
 
             {/* Always-Visible Admin Page Top Button */}
             <Link

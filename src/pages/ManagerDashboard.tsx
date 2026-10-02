@@ -176,8 +176,8 @@ export const ManagerDashboard: React.FC = () => {
   const unreadWaiterCalls = activeNotificationsList.filter((n) => n.type === 'waiter_call' && !n.read);
 
   return (
-    <div className={`min-h-screen w-full max-w-full overflow-x-hidden bg-[#090D16] text-slate-100 p-3 sm:p-6 md:p-8 max-w-5xl mx-auto space-y-5 sm:space-y-6 pb-20 ${deviceViewMode === 'phone' ? 'max-w-md border-x border-white/[0.08] shadow-2xl' : ''}`}>
-      {/* Top Quick Navigation Bar with Admin HQ button & Minimalist View Switcher */}
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#090D16] text-slate-100 p-3 sm:p-6 md:p-8 max-w-5xl mx-auto space-y-5 sm:space-y-6 pb-20">
+      {/* Top Quick Navigation Bar with Admin HQ button & Refresh */}
       <div className="flex flex-wrap items-center justify-between gap-2.5 pb-3 border-b border-white/[0.08]">
         <div className="flex items-center space-x-2">
           {/* Always-Visible Admin Page Top Button */}
@@ -206,35 +206,8 @@ export const ManagerDashboard: React.FC = () => {
           </Link>
         </div>
 
-        {/* Minimalist Phone / Mac Switcher & Refresh */}
+        {/* Refresh button */}
         <div className="flex items-center space-x-1.5">
-          <div className="flex items-center bg-slate-900/90 p-0.5 rounded-lg border border-white/[0.1] text-xs font-bold">
-            <button
-              type="button"
-              onClick={() => setDeviceViewMode('phone')}
-              className={`px-2.5 py-1 rounded-md transition-all cursor-pointer flex items-center space-x-1 ${
-                deviceViewMode === 'phone'
-                  ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-              title="Switch to Phone layout"
-            >
-              <span>📱 Phone</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setDeviceViewMode('mac')}
-              className={`px-2.5 py-1 rounded-md transition-all cursor-pointer flex items-center space-x-1 ${
-                deviceViewMode === 'mac'
-                  ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-              title="Switch to Mac layout"
-            >
-              <span>💻 Mac</span>
-            </button>
-          </div>
-
           <button
             type="button"
             onClick={handleForceRefresh}

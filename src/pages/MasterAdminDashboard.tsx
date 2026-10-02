@@ -630,11 +630,11 @@ export const MasterAdminDashboard: React.FC = () => {
   }
 
   return (
-    <div className={`min-h-screen w-full max-w-full overflow-x-hidden bg-[#090D16] pb-24 text-slate-100 font-sans ${deviceViewMode === 'phone' ? 'max-w-md mx-auto border-x border-white/[0.08] shadow-2xl' : ''}`}>
-      {/* Top Banner: Platform Operations Control & Mobile/Desktop Switcher */}
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#090D16] pb-24 text-slate-100 font-sans">
+      {/* Top Banner: Platform Operations Control */}
       <div className="bg-[#0B0F1A] text-white border-b border-white/[0.08]">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
-          {/* Top Quick Utility Bar: Minimalist View Switcher + Status */}
+          {/* Top Quick Utility Bar: Status & Refresh */}
           <div className="flex flex-wrap items-center justify-between gap-2.5 pb-3 mb-3 border-b border-white/[0.06]">
             <div className="flex items-center space-x-2">
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20">
@@ -646,35 +646,7 @@ export const MasterAdminDashboard: React.FC = () => {
               </span>
             </div>
 
-            {/* Minimalist Phone / Mac Switcher */}
             <div className="flex items-center space-x-1.5">
-              <div className="flex items-center bg-slate-900/90 p-0.5 rounded-lg border border-white/[0.1] text-xs font-bold">
-                <button
-                  type="button"
-                  onClick={() => setDeviceViewMode('phone')}
-                  className={`px-2.5 py-1 rounded-md transition-all cursor-pointer flex items-center space-x-1 ${
-                    deviceViewMode === 'phone'
-                      ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                  title="Switch to Phone layout"
-                >
-                  <span>📱 Phone</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setDeviceViewMode('mac')}
-                  className={`px-2.5 py-1 rounded-md transition-all cursor-pointer flex items-center space-x-1 ${
-                    deviceViewMode === 'mac'
-                      ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                  title="Switch to Mac layout"
-                >
-                  <span>💻 Mac</span>
-                </button>
-              </div>
-
               <button
                 type="button"
                 onClick={handleForceRefresh}
