@@ -273,6 +273,15 @@ export const DinerMenu: React.FC = () => {
 
   const totalCartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
+  const cartSubtotal = useMemo(() => {
+    return cart.reduce((sum, item) => {
+      const opts = Array.isArray(item.selected_options) ? item.selected_options : [];
+      const optsSum = opts.reduce((s, o) => s + (Number(o?.price_modifier) || 0), 0);
+      const itemPrice = typeof item.price === 'number' ? item.price : Number(item.price) || 0;
+      return sum + (itemPrice + optsSum) * (item.quantity || 1);
+    }, 0);
+  }, [cart]);
+
   const filteredDishes = useMemo(() => {
     return currentRestMenuItems.filter((dish) => {
       if (!dish) return false;
@@ -374,42 +383,43 @@ export const DinerMenu: React.FC = () => {
       )}
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 0. STREAMLINED DINER TOP BAR                                */}
+      {/* 0. STREAMLINED DINER TOP BAR (MOBILE-FIRST)                 */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <div className="sticky top-0 z-30 bg-[#0A0E17]/95 backdrop-blur-md text-white border-b border-white/[0.08] px-4 py-2.5 flex items-center justify-between shadow-sm">
+      <div className="sticky top-0 z-30 bg-[#0A0E17]/95 backdrop-blur-md text-white border-b border-white/[0.08] px-3 sm:px-4 py-2 sm:py-2.5 flex items-center justify-between shadow-sm">
         {/* Link back to Menuz Home */}
         <Link
           to="/"
-          className="flex items-center space-x-1.5 text-xs text-slate-400 hover:text-white transition-colors group"
+          className="flex items-center space-x-1.5 text-xs text-slate-400 hover:text-white transition-colors group flex-shrink-0"
           title="Back to Menuz Home"
         >
           <span className="w-5 h-5 rounded-lg bg-gradient-to-tr from-amber-500 to-amber-400 flex items-center justify-center font-bold text-[10px] text-slate-950 shadow-sm">
             M
           </span>
-          <span className="font-serif font-black text-white group-hover:text-amber-400 transition-colors">
+          <span className="font-serif font-black text-white group-hover:text-amber-400 transition-colors text-sm sm:text-base">
             menuz
           </span>
-          <span className="text-[10px] text-slate-500 hidden sm:inline">• Home</span>
+          <span className="text-[10px] text-slate-500 hidden md:inline">• Home</span>
         </Link>
 
         {/* Language selector & Switch Restaurant & Admin */}
-        <div className="flex items-center space-x-2">
-          {/* Always-visible Admin Page Top Button */}
+        <div className="flex items-center space-x-1.5 sm:space-x-2">
+          {/* Always-visible Admin Page Top Button (Mandatory Top Pin) */}
           <Link
             to="/admin"
-            className="py-1 px-2.5 rounded-full bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/40 text-[11px] font-bold flex items-center space-x-1.5 transition-all shadow-sm active:scale-95"
+            className="py-1 px-2 sm:px-2.5 rounded-full bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/40 text-[10px] sm:text-[11px] font-bold flex items-center space-x-1 sm:space-x-1.5 transition-all shadow-sm active:scale-95 flex-shrink-0"
             title="Open Master Admin Control Hub"
           >
             <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-            <span className="hidden sm:inline">Admin HQ</span>
-            <span className="sm:hidden">Admin</span>
+            <span className="hidden xs:inline sm:inline">Admin HQ</span>
+            <span className="xs:hidden sm:hidden">Admin</span>
           </Link>
 
           <LanguageSelector />
+
           <button
             type="button"
             onClick={() => setIsSwitchModalOpen(true)}
-            className="py-1 px-3 rounded-full bg-[#090D16]/[0.05] hover:bg-white/[0.1] text-amber-400 hover:text-amber-300 border border-amber-500/30 text-[11px] font-bold flex items-center space-x-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
+            className="py-1 px-2 sm:px-3 rounded-full bg-[#090D16]/[0.05] hover:bg-white/[0.1] text-amber-400 hover:text-amber-300 border border-amber-500/30 text-[10px] sm:text-[11px] font-bold flex items-center space-x-1 sm:space-x-1.5 transition-all shadow-sm active:scale-95 cursor-pointer flex-shrink-0"
             title="Switch Restaurant or Scan a New Table QR Code"
           >
             <ArrowLeftRight className="w-3 h-3 text-amber-400" />
@@ -420,7 +430,8 @@ export const DinerMenu: React.FC = () => {
           {cart.length > 0 && (
             <button
               onClick={() => setIsCartOpen(true)}
-              className="relative p-1.5 rounded-lg text-slate-300 hover:text-white bg-[#090D16]/[0.06] border border-white/[0.08] transition-colors"
+              className="relative p-1.5 rounded-lg text-slate-300 hover:text-white bg-[#090D16]/[0.06] border border-white/[0.08] transition-colors flex-shrink-0"
+              title="Open Table Cart"
             >
               <ShoppingBag className="w-4 h-4 text-amber-400" />
               <span className="absolute -top-1 -right-1 bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold shadow-sm">
@@ -467,53 +478,53 @@ export const DinerMenu: React.FC = () => {
       )}
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* SCROLLYTELLING HERO SECTION                                */}
+      {/* SCROLLYTELLING HERO SECTION (MOBILE-OPTIMIZED)             */}
       {/* ═══════════════════════════════════════════════════════════ */}
       <section
         ref={heroRef}
-        className="relative min-h-[55vh] flex flex-col items-center justify-center text-center px-6 overflow-hidden pt-8 pb-12"
+        className="relative min-h-[36vh] sm:min-h-[48vh] flex flex-col items-center justify-center text-center px-4 sm:px-6 overflow-hidden pt-6 pb-8 sm:pt-8 sm:pb-12"
         style={{
-          background: `linear-gradient(180deg, rgba(13,19,34,0.95) 0%, #090D16 100%)`
+          background: `linear-gradient(180deg, rgba(13,19,34,0.98) 0%, #090D16 100%)`
         }}
       >
         <div
-          className="absolute top-10 right-10 w-48 h-48 rounded-full opacity-20 blur-3xl pointer-events-none"
+          className="absolute top-6 right-6 w-36 h-36 sm:w-48 sm:h-48 rounded-full opacity-20 blur-3xl pointer-events-none"
           style={{ backgroundColor: restaurant?.brand_colors?.primary || '#E85D04' }}
         />
         <div
-          className="absolute bottom-10 left-10 w-40 h-40 rounded-full opacity-15 blur-2xl pointer-events-none"
+          className="absolute bottom-6 left-6 w-32 h-32 sm:w-40 sm:h-40 rounded-full opacity-15 blur-2xl pointer-events-none"
           style={{ backgroundColor: restaurant?.brand_colors?.primary || '#E85D04' }}
         />
 
-        <div className="relative z-10 max-w-lg mx-auto space-y-3.5">
+        <div className="relative z-10 max-w-lg mx-auto space-y-2.5 sm:space-y-3.5">
           {/* Restaurant badge with multiplayer session indicator */}
           <div className="flex flex-wrap items-center justify-center gap-1.5">
-            <span className="inline-block px-3 py-1 rounded-full text-[10px] tracking-widest uppercase font-bold border bg-[#090D16]/[0.05] backdrop-blur-sm shadow-sm text-amber-300 border-amber-500/30">
+            <span className="inline-block px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full text-[9px] sm:text-[10px] tracking-widest uppercase font-bold border bg-[#090D16]/[0.05] backdrop-blur-sm shadow-sm text-amber-300 border-amber-500/30">
               {activeTable?.label ? `${t.table} ${activeTable.label}` : `${t.table} 1`} • {restaurant?.cuisine || 'Contemporary Dining'}
             </span>
-            <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full text-[10px] font-bold border bg-emerald-950/70 text-emerald-300 border-emerald-500/30">
+            <span className="inline-flex items-center space-x-1 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-bold border bg-emerald-950/70 text-emerald-300 border-emerald-500/30">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               <span>Multiplayer Sync ({activeTableGuests} Guests)</span>
             </span>
           </div>
 
           {/* Restaurant name */}
-          <h1 className="font-serif text-3xl sm:text-5xl font-bold text-white leading-tight tracking-tight">
+          <h1 className="font-serif text-2xl sm:text-4xl md:text-5xl font-bold text-white leading-tight tracking-tight">
             {restaurant?.name || 'Saffron House'}
           </h1>
 
-          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-sm mx-auto">
+          <p className="text-[11px] sm:text-sm text-slate-300 leading-relaxed max-w-sm mx-auto line-clamp-2 sm:line-clamp-none">
             {restaurant?.authentic_photography_statement ||
               'Explore our carefully curated menu, crafted with passion and authentic Indian spices.'}
           </p>
 
           {/* Clean Quick Action Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-2.5 pt-2">
+          <div className="flex items-center justify-center gap-1.5 sm:gap-2.5 pt-1 sm:pt-2 overflow-x-auto max-w-full pb-1 scrollbar-none">
             <button
               onClick={() => handleOpenChallenge()}
-              className="px-4 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:brightness-110 active:scale-95 text-slate-950 text-xs font-bold rounded-full shadow-lg transition-all flex items-center space-x-1.5 animate-pulse cursor-pointer"
+              className="px-3 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:brightness-110 active:scale-95 text-slate-950 text-[11px] sm:text-xs font-bold rounded-full shadow-lg transition-all flex items-center space-x-1 sm:space-x-1.5 animate-pulse cursor-pointer flex-shrink-0"
             >
-              <span className="text-sm">🎁</span>
+              <span className="text-xs sm:text-sm">🎁</span>
               <span>Win Reward</span>
             </button>
 
@@ -522,22 +533,22 @@ export const DinerMenu: React.FC = () => {
                 setAiFocusDish(null);
                 setIsAiOpen(true);
               }}
-              className="px-4 py-2.5 bg-[#0D1322] hover:bg-[#151D33] text-white text-xs font-bold rounded-full shadow-lg transition-all flex items-center space-x-1.5 border border-white/[0.1] hover:border-amber-500/40 group cursor-pointer"
+              className="px-3 sm:px-4 py-2 sm:py-2.5 bg-[#0D1322] hover:bg-[#151D33] text-white text-[11px] sm:text-xs font-bold rounded-full shadow-lg transition-all flex items-center space-x-1 sm:space-x-1.5 border border-white/[0.1] hover:border-amber-500/40 group cursor-pointer flex-shrink-0"
             >
-              <span className="text-sm">🧑‍🍳</span>
+              <span className="text-xs sm:text-sm">🧑‍🍳</span>
               <span>{t.aiSommelier}</span>
-              <span className="hidden sm:inline-block text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30">
+              <span className="text-[8px] sm:text-[9px] uppercase font-bold tracking-wider px-1 sm:px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30">
                 Trained
               </span>
             </button>
 
             <button
               onClick={() => setIsInstagramStoryOpen(true)}
-              className="px-4 py-2.5 bg-gradient-to-r from-amber-500 via-pink-600 to-purple-600 hover:opacity-95 text-white text-xs font-bold rounded-full shadow-lg transition-all flex items-center space-x-1.5 cursor-pointer"
+              className="px-3 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-r from-amber-500 via-pink-600 to-purple-600 hover:opacity-95 text-white text-[11px] sm:text-xs font-bold rounded-full shadow-lg transition-all flex items-center space-x-1 sm:space-x-1.5 cursor-pointer flex-shrink-0"
             >
-              <Instagram className="w-3.5 h-3.5" />
+              <Instagram className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
               <span>{t.instagramStory}</span>
-              <span className="text-[9px] bg-[#090D16]/20 px-1.5 py-0.2 rounded-full">Perk</span>
+              <span className="text-[8px] sm:text-[9px] bg-[#090D16]/20 px-1 sm:px-1.5 py-0.2 rounded-full">Perk</span>
             </button>
           </div>
         </div>
@@ -547,41 +558,41 @@ export const DinerMenu: React.FC = () => {
       {/* SLEEK SURPRISE TABLE REWARD TEASER CARD                    */}
       {/* ═══════════════════════════════════════════════════════════ */}
       {!rewardBannerDismissed && (
-        <div className="max-w-xl mx-auto px-4 -mt-3 relative z-20">
+        <div className="max-w-xl mx-auto px-3 sm:px-4 -mt-2 sm:-mt-3 relative z-20">
           <div
-            className="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 p-0.5 rounded-2xl "
+            className="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 p-0.5 rounded-2xl shadow-lg"
           >
-            <div className="bg-[#0D1322]/95 backdrop-blur-md px-4 py-3 rounded-[14px] flex items-center justify-between space-x-3 text-white border border-white/[0.08]">
+            <div className="bg-[#0D1322]/95 backdrop-blur-md px-3 sm:px-4 py-2.5 sm:py-3 rounded-[14px] flex items-center justify-between space-x-2.5 sm:space-x-3 text-white border border-white/[0.08]">
               <div
                 onClick={() => handleOpenChallenge()}
-                className="flex items-center space-x-3 min-w-0 cursor-pointer flex-1"
+                className="flex items-center space-x-2.5 sm:space-x-3 min-w-0 cursor-pointer flex-1"
               >
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-lg flex-shrink-0 shadow-sm animate-bounce text-slate-950">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-base sm:text-lg flex-shrink-0 shadow-sm animate-bounce text-slate-950">
                   🎁
                 </div>
                 <div className="min-w-0">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-amber-400">
+                  <div className="flex items-center space-x-1.5">
+                    <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider text-amber-400">
                       {activeTable?.label || 'Table 1'} Surprise Treat
                     </span>
-                    <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-green-500/20 text-green-300">
+                    <span className="px-1.5 py-0.2 rounded text-[8px] sm:text-[9px] font-bold bg-green-500/20 text-green-300">
                       Guaranteed Win
                     </span>
                   </div>
-                  <h3 className="font-serif font-bold text-sm sm:text-base text-white truncate">
+                  <h3 className="font-serif font-bold text-xs sm:text-base text-white truncate">
                     Win Today's Surprise Table Reward!
                   </h3>
-                  <p className="text-[11px] text-slate-300 truncate">
-                    Complimentary chef treats, drinks, or up to 20% off your bill
+                  <p className="text-[10px] sm:text-[11px] text-slate-300 truncate">
+                    Complimentary chef treats, drinks, or up to 20% off
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-1.5 flex-shrink-0">
+              <div className="flex items-center space-x-1 sm:space-x-1.5 flex-shrink-0">
                 <button
                   type="button"
                   onClick={() => handleOpenChallenge()}
-                  className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:brightness-110 text-slate-950 font-bold text-xs flex items-center space-x-1 shadow-sm transition-all"
+                  className="px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:brightness-110 active:scale-95 text-slate-950 font-bold text-xs flex items-center space-x-1 shadow-sm transition-all"
                 >
                   <span>Win</span>
                   <span>→</span>
@@ -590,7 +601,7 @@ export const DinerMenu: React.FC = () => {
                   type="button"
                   title="Maybe later"
                   onClick={() => setRewardBannerDismissed(true)}
-                  className="p-1.5 rounded-full bg-[#090D16]/[0.06] text-slate-400 hover:text-white hover:bg-white/[0.12] transition-colors"
+                  className="p-1 sm:p-1.5 rounded-full bg-[#090D16]/[0.06] text-slate-400 hover:text-white hover:bg-white/[0.12] transition-colors"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -624,34 +635,34 @@ export const DinerMenu: React.FC = () => {
 
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 🧑‍🍳 CHEF & OWNER AI DINING CONCIERGE                      */}
+      {/* 🧑‍🍳 CHEF & OWNER AI DINING CONCIERGE (MOBILE-OPTIMIZED)     */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <div className="max-w-xl mx-auto px-4 mt-3 mb-1">
-        <div className="bg-gradient-to-br from-[#121824] via-[#0d121c] to-[#121824] text-white p-4 rounded-3xl border border-amber-500/30  relative overflow-hidden">
+      <div className="max-w-xl mx-auto px-3 sm:px-4 mt-2 sm:mt-3 mb-1">
+        <div className="bg-gradient-to-br from-[#121824] via-[#0d121c] to-[#121824] text-white p-3 sm:p-4 rounded-2xl sm:rounded-3xl border border-amber-500/30 relative overflow-hidden shadow-lg">
           {/* Subtle gold glow */}
           <div className="absolute -top-12 -right-12 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
 
-          <div className="flex items-start justify-between gap-3 mb-2.5">
-            <div className="flex items-center space-x-3 min-w-0">
+          <div className="flex items-start justify-between gap-2.5 sm:gap-3 mb-2 sm:mb-2.5">
+            <div className="flex items-center space-x-2.5 sm:space-x-3 min-w-0">
               <div className="relative flex-shrink-0">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center text-2xl shadow-md border-2 border-amber-300/40">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center text-xl sm:text-2xl shadow-md border-2 border-amber-300/40">
                   🧑‍🍳
                 </div>
-                <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-[#121824] flex items-center justify-center">
+                <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-emerald-500 border-2 border-[#121824] flex items-center justify-center">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#090D16] animate-pulse" />
                 </span>
               </div>
               <div className="min-w-0">
                 <div className="flex items-center space-x-1.5">
-                  <h3 className="font-serif font-bold text-sm sm:text-base text-white truncate">
+                  <h3 className="font-serif font-bold text-xs sm:text-base text-white truncate">
                     Ask Chef's AI Concierge
                   </h3>
-                  <span className="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-md bg-amber-400/20 text-amber-300 border border-amber-400/30 flex-shrink-0">
+                  <span className="text-[8px] sm:text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-md bg-amber-400/20 text-amber-300 border border-amber-400/30 flex-shrink-0">
                     Chef Trained
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-300 mt-0.5 line-clamp-1">
-                  Trained by Head Chef &amp; Owner • Secret recipes, spice levels &amp; pairings
+                <p className="text-[10px] sm:text-[11px] text-slate-300 mt-0.5 line-clamp-1">
+                  Secret kitchen recipes, custom pairings &amp; spice check
                 </p>
               </div>
             </div>
@@ -659,7 +670,7 @@ export const DinerMenu: React.FC = () => {
             <button
               type="button"
               onClick={() => handleOpenAi(null, null)}
-              className="px-3.5 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:brightness-110 active:scale-95 text-white text-xs font-bold rounded-xl transition-all shadow-lg flex items-center space-x-1 flex-shrink-0 cursor-pointer"
+              className="px-3 sm:px-3.5 py-1.5 sm:py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:brightness-110 active:scale-95 text-slate-950 text-xs font-bold rounded-xl transition-all shadow-lg flex items-center space-x-1 flex-shrink-0 cursor-pointer"
             >
               <span>Chat</span>
               <span>→</span>
@@ -667,16 +678,16 @@ export const DinerMenu: React.FC = () => {
           </div>
 
           {/* Quick interactive prompt pills */}
-          <div className="space-y-1 pt-1 border-t border-slate-800/80">
-            <div className="text-[10px] text-amber-400/90 font-bold uppercase tracking-wider flex items-center gap-1">
+          <div className="space-y-1 pt-1.5 border-t border-slate-800/80">
+            <div className="text-[9px] sm:text-[10px] text-amber-400/90 font-bold uppercase tracking-wider flex items-center gap-1">
               <Sparkles className="w-3 h-3 text-amber-400 inline" />
               <span>Ask the Kitchen:</span>
             </div>
-            <div className="flex space-x-1.5 overflow-x-auto pb-1 scrollbar-none">
+            <div className="flex space-x-1.5 overflow-x-auto pb-0.5 scrollbar-none">
               {[
                 { label: "🧑‍🍳 Chef's Special Tonight", query: "What does the Chef recommend for first-time diners tonight?" },
                 { label: "🔥 Check 1–5 Spice Heat", query: "How spicy are the curries? Are they suitable for kids?" },
-                { label: "🍷 Owner's Wine & Cooler Pairing", query: "What drink or bread does the owner recommend pairing with curries?" },
+                { label: "🍷 Drink & Bread Pairing", query: "What drink or bread does the owner recommend pairing with curries?" },
                 { label: "🌾 Nut-free & Gluten-free", query: "Which dishes are safely prepared gluten-free and nut-free?" },
                 { label: "👨‍👩‍👧‍👦 Table of 4 Feast", query: "Can you recommend a balanced feast for a family table of 4?" }
               ].map((pill, idx) => (
@@ -684,7 +695,7 @@ export const DinerMenu: React.FC = () => {
                   key={idx}
                   type="button"
                   onClick={() => handleOpenAi(null, pill.query)}
-                  className="whitespace-nowrap px-2.5 py-1 bg-slate-900/90 hover:bg-slate-800 text-amber-200 hover:text-white border border-amber-500/20 hover:border-amber-400/50 text-[11px] rounded-full transition-all flex-shrink-0 cursor-pointer font-medium"
+                  className="whitespace-nowrap px-2.5 py-1 bg-slate-900/90 hover:bg-slate-800 text-amber-200 hover:text-white border border-amber-500/20 hover:border-amber-400/50 text-[10px] sm:text-[11px] rounded-full transition-all flex-shrink-0 cursor-pointer font-medium active:scale-95"
                 >
                   {pill.label}
                 </button>
@@ -695,30 +706,39 @@ export const DinerMenu: React.FC = () => {
       </div>
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* STICKY SEARCH & CATEGORY BAR                                */}
+      {/* STICKY SEARCH & CATEGORY BAR (MOBILE-OPTIMIZED)             */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <div ref={menuSectionRef} className="sticky top-0 z-30 bg-[#090D16]/95 backdrop-blur-md pt-4 pb-2 border-b border-white/[0.07] shadow-sm">
-        <div className="max-w-xl mx-auto px-4 space-y-2.5">
+      <div ref={menuSectionRef} className="sticky top-[45px] sm:top-[51px] z-20 bg-[#090D16]/95 backdrop-blur-md pt-2.5 pb-2 border-b border-white/[0.07] shadow-sm">
+        <div className="max-w-xl mx-auto px-3 sm:px-4 space-y-2">
           {/* Search Bar */}
           <div className="relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-2.5" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={t.searchPlaceholder}
-              className="w-full pl-9 pr-4 py-2 bg-[#0D1322] rounded-xl text-xs border border-white/[0.08] focus:outline-none focus:border-amber-500/60 placeholder-slate-500 text-slate-100 shadow-sm"
+              placeholder={t.searchPlaceholder || "Search dish, starters, drinks..."}
+              className="w-full pl-8.5 pr-4 py-2 bg-[#0D1322] rounded-xl text-xs border border-white/[0.08] focus:outline-none focus:border-amber-500/60 placeholder-slate-500 text-slate-100 shadow-sm"
             />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2.5 top-2.5 text-slate-400 hover:text-white p-0.5"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
 
           {/* Category Chips */}
-          <div className="flex space-x-2 overflow-x-auto pb-0.5 scrollbar-none">
+          <div className="flex space-x-1.5 sm:space-x-2 overflow-x-auto pb-0.5 scrollbar-none">
             <button
               type="button"
               onClick={() => setSelectedCategory('all')}
-              className={`whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
+              className={`whitespace-nowrap px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold transition-all cursor-pointer ${
                 selectedCategory === 'all'
-                  ? 'bg-amber-500 text-white shadow-sm'
+                  ? 'bg-amber-500 text-slate-950 font-bold shadow-sm'
                   : 'bg-[#0D1322] text-slate-300 border border-white/[0.08] hover:border-amber-500/40 hover:text-amber-300'
               }`}
             >
@@ -729,9 +749,9 @@ export const DinerMenu: React.FC = () => {
                 key={cat.id}
                 type="button"
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                className={`whitespace-nowrap px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold transition-all cursor-pointer ${
                   selectedCategory === cat.id
-                    ? 'bg-amber-500 text-white shadow-sm'
+                    ? 'bg-amber-500 text-slate-950 font-bold shadow-sm'
                     : 'bg-[#0D1322] text-slate-300 border border-white/[0.08] hover:border-amber-500/40 hover:text-amber-300'
                 }`}
               >
@@ -745,9 +765,9 @@ export const DinerMenu: React.FC = () => {
       {/* ═══════════════════════════════════════════════════════════ */}
       {/* SCROLLYTELLING MENU SECTIONS — One per category            */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <main className="max-w-xl mx-auto px-4 mt-6 space-y-8 pb-6">
+      <main className="max-w-xl mx-auto px-3 sm:px-4 mt-4 sm:mt-6 space-y-6 sm:space-y-8 pb-32">
         {filteredDishes.length === 0 ? (
-          <div className="text-center py-16 bg-[#0D1322] rounded-3xl p-6 border border-white/[0.08] shadow-lg">
+          <div className="text-center py-12 sm:py-16 bg-[#0D1322] rounded-3xl p-6 border border-white/[0.08] shadow-lg">
             <p className="font-serif font-bold text-slate-100 text-base">No dishes found</p>
             <p className="text-xs text-slate-400 mt-1">Try adjusting your search keywords or filter category.</p>
           </div>
@@ -755,15 +775,15 @@ export const DinerMenu: React.FC = () => {
           dishesByCategory.map(({ category, items }) => {
             if (!category || !category.id) return null;
             return (
-              <section key={category.id} className="space-y-4">
+              <section key={category.id} className="space-y-3 sm:space-y-4">
                 {/* Category Header */}
-                <div className="relative py-3">
+                <div className="relative py-2 sm:py-3">
                   <div className="absolute inset-0 flex items-center" aria-hidden="true">
                     <div className="w-full border-t border-white/[0.08]" />
                   </div>
                   <div className="relative flex justify-center">
-                    <span className="bg-[#090D16] px-4 py-1 rounded-full border border-white/[0.08] shadow-sm">
-                      <h3 className="font-serif text-sm font-bold text-amber-300 tracking-wide">
+                    <span className="bg-[#090D16] px-3.5 sm:px-4 py-0.5 sm:py-1 rounded-full border border-white/[0.08] shadow-sm">
+                      <h3 className="font-serif text-xs sm:text-sm font-bold text-amber-300 tracking-wide">
                         {getCategoryTitle(category.name || 'Menu Selection', selectedLanguage)}
                       </h3>
                     </span>
@@ -771,7 +791,7 @@ export const DinerMenu: React.FC = () => {
                 </div>
 
                 {/* Dish Cards */}
-                <div className="space-y-3">
+                <div className="space-y-2.5 sm:space-y-3">
                   {(items || []).filter(Boolean).map((dish) => {
                     const flags = Array.isArray(dish.dietary_flags) ? dish.dietary_flags : [];
                     const isVeg = flags.some((f) => {
@@ -783,29 +803,29 @@ export const DinerMenu: React.FC = () => {
                       <div
                         key={dish.id}
                         onClick={() => setActiveDish(dish)}
-                        className={`bg-[#0D1322] rounded-2xl p-3.5 border border-white/[0.08] flex items-start space-x-3 cursor-pointer transition-all hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/5 ${
+                        className={`bg-[#0D1322] rounded-2xl p-3 sm:p-3.5 border border-white/[0.08] flex items-start space-x-3 cursor-pointer transition-all hover:border-amber-500/40 active:scale-[0.99] ${
                           !dish.is_available ? 'opacity-50' : ''
                         }`}
                       >
-                        <div className="w-24 h-24 rounded-xl flex-shrink-0 bg-[#090D16] overflow-hidden relative">
+                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl flex-shrink-0 bg-[#090D16] overflow-hidden relative">
                           <img src={dish.image_url || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400'} alt={dish.name || 'Dish'} className="w-full h-full object-cover" />
                           {!dish.is_available && (
                             <div className="absolute inset-0 bg-black/70 flex items-center justify-center p-1 text-center">
-                              <span className="text-[9px] uppercase font-bold text-white tracking-widest px-1.5 py-0.5 rounded bg-red-600/90">
+                              <span className="text-[8px] sm:text-[9px] uppercase font-bold text-white tracking-widest px-1.5 py-0.5 rounded bg-red-600/90">
                                 Sold Out
                               </span>
                             </div>
                           )}
                           {dish.is_bestseller && (
-                            <div className="absolute top-1 left-1 px-1.5 py-0.5 bg-amber-500 rounded text-[8px] font-bold text-white flex items-center space-x-0.5">
-                              <Star className="w-2.5 h-2.5 fill-white" />
+                            <div className="absolute top-1 left-1 px-1.5 py-0.5 bg-amber-500 rounded text-[8px] font-bold text-slate-950 flex items-center space-x-0.5 shadow-sm">
+                              <Star className="w-2.5 h-2.5 fill-slate-950" />
                               <span>Best</span>
                             </div>
                           )}
                         </div>
 
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center space-x-1.5 mb-1">
+                          <div className="flex items-center space-x-1.5 mb-0.5 sm:mb-1">
                             <span
                               className={`w-3 h-3 rounded-xs border flex items-center justify-center ${
                                 isVeg ? 'border-emerald-500' : 'border-red-500'
@@ -820,66 +840,73 @@ export const DinerMenu: React.FC = () => {
                               </div>
                             )}
                             {dish.is_chef_recommended && (
-                              <span className="text-[9px] font-bold text-cyan-300 bg-cyan-500/10 px-1.5 py-0.5 rounded border border-cyan-500/30">
+                              <span className="text-[8px] sm:text-[9px] font-bold text-cyan-300 bg-cyan-500/10 px-1.5 py-0.2 rounded border border-cyan-500/30">
                                 Chef's Pick
                               </span>
                             )}
                           </div>
 
-                          <h3 className="font-serif font-bold text-sm text-slate-100 leading-tight truncate">
+                          <h3 className="font-serif font-bold text-xs sm:text-sm text-slate-100 leading-tight truncate">
                             {dish.name}
                           </h3>
-                          <p className="text-xs text-slate-400 line-clamp-2 mt-0.5 leading-snug">
+                          <p className="text-[11px] sm:text-xs text-slate-400 line-clamp-2 mt-0.5 leading-snug">
                             {dish.short_description || dish.full_description || ''}
                           </p>
 
                           <div className="flex items-center justify-between mt-2 pt-1.5 border-t border-white/[0.06]">
-                            <span className="font-bold text-sm text-amber-400">
+                            <span className="font-bold text-xs sm:text-sm text-amber-400">
                               ₹{typeof dish.price === 'number' ? dish.price.toFixed(2) : (Number(dish.price) || 0).toFixed(2)}
                             </span>
 
-                          <div className="flex items-center space-x-2">
-                            {/* Ask Chef quick button */}
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleOpenAi(dish, `Tell me about ${dish.name} — chef's secret notes, spice level, and pairing.`);
-                              }}
-                              className="px-2.5 py-1 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center space-x-1 text-[11px] font-bold shadow-sm transition-all active:scale-95 cursor-pointer"
-                              title={`Ask Chef about ${dish.name}`}
-                            >
-                              <span className="text-xs">🧑‍🍳</span>
-                              <span>Ask Chef</span>
-                            </button>
+                            <div className="flex items-center space-x-1.5 sm:space-x-2">
+                              {/* Ask Chef quick button */}
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleOpenAi(dish, `Tell me about ${dish.name} — chef's secret notes, spice level, and pairing.`);
+                                }}
+                                className="px-2 sm:px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center space-x-1 text-[10px] sm:text-[11px] font-bold shadow-sm transition-all active:scale-95 cursor-pointer"
+                                title={`Ask Chef about ${dish.name}`}
+                              >
+                                <span className="text-xs">🧑‍🍳</span>
+                                <span className="hidden xs:inline">Ask Chef</span>
+                              </button>
 
-                            {dish.is_available ? (
-                              <span className="text-xs text-cyan-400 font-semibold hover:underline">
-                                Customize +
-                              </span>
-                            ) : (
-                              <span className="text-[11px] text-slate-500 font-semibold">Sold Out</span>
-                            )}
+                              {dish.is_available ? (
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setActiveDish(dish);
+                                  }}
+                                  className="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-bold text-[11px] sm:text-xs transition-all shadow-sm"
+                                >
+                                  + Add
+                                </button>
+                              ) : (
+                                <span className="text-[10px] text-slate-500 font-semibold">Sold Out</span>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-          );
-        })
-      )}
+                    );
+                  })}
+                </div>
+              </section>
+            );
+          })
+        )}
       </main>
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* FLOATING CALL WAITER + CART BAR                            */}
+      {/* UNIFIED ERGONOMIC MOBILE BOTTOM DOCK (ZERO SCREEN OVERLAP)  */}
       {/* ═══════════════════════════════════════════════════════════ */}
 
       {/* Floating Waiter Alert Toast */}
       {waiterToast && (
-        <div className="fixed top-5 left-4 right-4 max-w-md mx-auto z-50 animate-bounce">
+        <div className="fixed top-14 left-4 right-4 max-w-md mx-auto z-50 animate-bounce">
           <div className="bg-[#090D16] text-white px-4 py-3 rounded-2xl shadow-2xl border border-white/[0.08] flex items-center space-x-3 text-xs font-semibold">
             <span className="w-2.5 h-2.5 rounded-full bg-green-400 animate-ping flex-shrink-0" />
             <span className="flex-1">{waiterToast}</span>
@@ -890,59 +917,112 @@ export const DinerMenu: React.FC = () => {
         </div>
       )}
 
-      {/* Floating Win Rewards Button */}
-      <button
-        onClick={() => handleOpenChallenge()}
-        className="fixed bottom-36 right-4 z-40 p-3 rounded-full  bg-gradient-to-r from-amber-500 via-amber-600 to-amber-600 text-white border-2 border-white hover:scale-105 active:scale-95 transition-all flex items-center space-x-1.5 group"
-        title="Win Today's Surprise Reward"
-      >
-        <span className="text-xl group-hover:scale-125 transition-transform duration-300">🎁</span>
-        <span className="text-xs font-bold pr-1 hidden sm:inline">Win Reward</span>
-      </button>
-
-      {/* Call Waiter FAB */}
-      <button
-        onClick={handleCallWaiter}
-        disabled={waiterCalled}
-        className={`fixed bottom-20 right-4 z-40 p-3 rounded-full  transition-all flex items-center space-x-1.5 ${
-          waiterCalled
-            ? 'bg-emerald-600 text-white'
-            : 'bg-[#0D1322] text-slate-300 border border-white/[0.08] hover:border-amber-500/40 hover:text-amber-300'
-        }`}
-        title={waiterCalled ? t.waiterCalled : t.callWaiter}
-      >
-        <Bell className={`w-5 h-5 ${waiterCalled ? 'animate-bounce' : ''}`} />
-        {waiterCalled && <span className="text-xs font-bold pr-1">{t.waiterCalled}</span>}
-      </button>
-
-      {/* Back to top */}
+      {/* Back to Top Quick Trigger */}
       {showScrollTop && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-20 left-4 z-40 p-3 rounded-full  bg-[#0D1322] text-slate-300 border border-white/[0.08] hover:border-amber-500/40 hover:text-amber-300 transition-all"
+          className="fixed bottom-20 left-3 sm:left-4 z-30 p-2.5 rounded-full bg-[#0D1322]/90 backdrop-blur-md text-slate-300 border border-white/[0.08] hover:border-amber-500/40 hover:text-amber-300 transition-all shadow-lg active:scale-95"
           title="Back to top"
         >
-          <ArrowUp className="w-5 h-5" />
+          <ArrowUp className="w-4 h-4" />
         </button>
       )}
 
-      {/* Floating Bottom Cart Bar */}
-      {totalCartCount > 0 && (
-        <div className="fixed bottom-4 left-4 right-4 max-w-xl mx-auto z-40">
+      {/* DOCK VARIANT 1: Active Cart Bar when items are selected */}
+      {totalCartCount > 0 ? (
+        <div className="fixed bottom-3 left-3 right-3 max-w-xl mx-auto z-40">
+          <div className="bg-[#0A0E17]/95 backdrop-blur-xl p-1.5 rounded-2xl border border-amber-500/40 shadow-2xl flex items-center gap-2">
+            {/* Quick Chef AI Mini Button */}
+            <button
+              type="button"
+              onClick={() => handleOpenAi(null)}
+              className="p-2.5 rounded-xl bg-[#121824] hover:bg-[#1a2233] text-amber-300 border border-amber-500/30 flex-shrink-0 active:scale-95 transition-all"
+              title="Ask Chef's AI"
+            >
+              <Sparkles className="w-4 h-4 text-amber-400" />
+            </button>
+
+            {/* Quick Waiter Mini Button */}
+            <button
+              type="button"
+              onClick={handleCallWaiter}
+              disabled={waiterCalled}
+              className={`p-2.5 rounded-xl border flex-shrink-0 active:scale-95 transition-all ${
+                waiterCalled
+                  ? 'bg-emerald-600 text-white border-emerald-500'
+                  : 'bg-[#121824] text-slate-300 border-white/[0.08] hover:text-white'
+              }`}
+              title="Call Waiter"
+            >
+              <Bell className="w-4 h-4" />
+            </button>
+
+            {/* Main Cart CTA Button */}
+            <button
+              type="button"
+              onClick={() => setIsCartOpen(true)}
+              className="flex-1 bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600 hover:brightness-110 active:scale-95 text-slate-950 font-bold py-2.5 px-3.5 rounded-xl flex items-center justify-between shadow-lg transition-all"
+            >
+              <div className="flex items-center space-x-2">
+                <span className="bg-slate-950 text-amber-400 text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
+                  {totalCartCount}
+                </span>
+                <span className="text-xs sm:text-sm font-serif font-bold">View Order</span>
+              </div>
+              <div className="flex items-center space-x-1 text-xs font-bold font-sans">
+                <span>₹{cartSubtotal.toFixed(2)}</span>
+                <span>→</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      ) : (
+        /* DOCK VARIANT 2: Sleek Floating Action Dock when cart is empty */
+        <div className="fixed bottom-3 right-3 sm:right-6 z-40 flex items-center gap-1.5 sm:gap-2">
+          {/* Win Reward Quick Pill */}
           <button
             type="button"
-            onClick={() => setIsCartOpen(true)}
-            className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white font-bold py-3.5 px-5 rounded-2xl  flex items-center justify-between transition-all"
+            onClick={() => handleOpenChallenge()}
+            className="p-2 sm:p-2.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-xl border border-amber-300/40 active:scale-95 transition-all flex items-center space-x-1"
+            title="Win Today's Surprise Reward"
           >
-            <div className="flex items-center space-x-2">
-              <span className="bg-white/20 text-white text-xs w-6 h-6 rounded-full flex items-center justify-center font-bold">
-                {totalCartCount}
+            <span className="text-base sm:text-lg">🎁</span>
+            <span className="text-[11px] font-bold pr-1 hidden xs:inline">Win Perk</span>
+          </button>
+
+          {/* Call Waiter Quick Pill */}
+          <button
+            type="button"
+            onClick={handleCallWaiter}
+            disabled={waiterCalled}
+            className={`p-2.5 rounded-full shadow-xl border active:scale-95 transition-all flex items-center space-x-1 ${
+              waiterCalled
+                ? 'bg-emerald-600 text-white border-emerald-400'
+                : 'bg-[#0D1322]/95 backdrop-blur-md text-slate-300 border-white/[0.1] hover:border-amber-500/40 hover:text-amber-300'
+            }`}
+            title="Call Waiter to Table"
+          >
+            <Bell className={`w-4 h-4 ${waiterCalled ? 'animate-bounce text-white' : 'text-amber-400'}`} />
+            {waiterCalled && <span className="text-[10px] font-bold pr-1 text-white">Alert Sent</span>}
+          </button>
+
+          {/* Ask Chef's AI Live Concierge Floating Pill */}
+          <button
+            type="button"
+            onClick={() => handleOpenAi(null)}
+            className="group flex items-center space-x-2 bg-gradient-to-r from-[#090D16]/95 via-[#0D1322]/95 to-amber-950/95 backdrop-blur-md text-white pl-2.5 sm:pl-3 pr-3 sm:pr-3.5 py-2 rounded-full shadow-2xl border border-amber-500/40 hover:border-amber-400 active:scale-95 transition-all cursor-pointer"
+          >
+            <div className="relative">
+              <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-amber-500 to-amber-400 flex items-center justify-center text-slate-950 shadow-sm text-xs">
+                ✨
+              </div>
+              <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
-              <span className="text-sm font-serif">{t.yourTableCart}</span>
             </div>
-            <div className="flex items-center space-x-1 text-sm font-sans">
-              <span>{t.sendToKitchen}</span>
-              <span>→</span>
+            <div className="text-left">
+              <span className="text-xs font-bold font-serif tracking-tight text-amber-200">Ask Chef</span>
             </div>
           </button>
         </div>
@@ -970,32 +1050,6 @@ export const DinerMenu: React.FC = () => {
         }}
         onOpenCart={() => setIsCartOpen(true)}
       />
-
-      {/* Floating Chef & Owner AI Concierge Trigger */}
-      <div className={`fixed z-40 transition-all duration-300 ${totalCartCount > 0 ? 'bottom-20 right-4' : 'bottom-6 right-4'}`}>
-        <button
-          type="button"
-          onClick={() => handleOpenAi(null)}
-          className="group flex items-center space-x-2.5 bg-gradient-to-r from-[#090D16] via-[#090D16] to-amber-950 text-white pl-3.5 pr-4 py-2.5 rounded-full shadow-2xl border border-amber-500/40 hover:border-amber-400 hover:scale-105 active:scale-95 transition-all cursor-pointer"
-        >
-          <div className="relative">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-amber-500 flex items-center justify-center text-white shadow-sm">
-              <Sparkles className="w-4 h-4 animate-pulse" />
-            </div>
-            <span className="absolute -top-1 -right-1 flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
-            </span>
-          </div>
-          <div className="text-left">
-            <div className="flex items-center space-x-1">
-              <span className="text-xs font-bold font-serif tracking-tight text-amber-200">Ask Chef's AI</span>
-              <span className="text-[9px] bg-amber-500/20 text-amber-300 px-1 rounded uppercase font-mono font-bold">Live Concierge</span>
-            </div>
-            <p className="text-[10px] text-slate-400/80 leading-none">Trained by Chef &amp; Owner</p>
-          </div>
-        </button>
-      </div>
 
       {/* AI Assistant Drawer */}
       <AiAssistantDrawer

@@ -242,7 +242,7 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
               <button
                 type="button"
                 onClick={handleAddToCart}
-                className="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white font-bold py-3 px-4 rounded-xl shadow-lg flex items-center justify-between text-xs transition-all"
+                className="flex-1 bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600 hover:brightness-110 active:scale-95 text-slate-950 font-bold py-3 px-4 rounded-xl shadow-lg flex items-center justify-between text-xs sm:text-sm transition-all"
               >
                 <div className="flex items-center space-x-1.5">
                   <ShoppingBag className="w-4 h-4" />

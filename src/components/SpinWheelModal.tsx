@@ -656,17 +656,17 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
         justifyContent: 'center',
         backgroundColor: 'rgba(28, 25, 23, 0.85)',
         backdropFilter: 'blur(8px)',
-        padding: '16px'
+        padding: '12px'
       }}
       className="animate-fadeIn"
     >
       <div
         style={{
           backgroundColor: '#0D1322',
-          maxHeight: '92vh',
+          maxHeight: '94vh',
           overflowY: 'auto'
         }}
-        className="rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-white/[0.08] relative flex flex-col items-center text-slate-100"
+        className="rounded-2xl sm:rounded-3xl max-w-md w-full p-3.5 sm:p-6 shadow-2xl border border-white/[0.08] relative flex flex-col items-center text-slate-100"
       >
         {/* Confetti canvas */}
         <canvas

@@ -303,13 +303,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   type="button"
                   disabled={submitting}
                   onClick={handlePlaceOrder}
-                  className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 disabled:opacity-50 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg flex items-center justify-between text-xs transition-all"
+                  className="w-full bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600 hover:brightness-110 active:scale-95 disabled:opacity-50 text-slate-950 font-bold py-3.5 px-4 rounded-xl shadow-lg flex items-center justify-between text-xs sm:text-sm transition-all cursor-pointer"
                 >
                   <div className="text-left">
-                    <span className="block leading-tight font-semibold">{t.sendToKitchen} ({tableLabel})</span>
-                    <span className="text-[10px] opacity-80 font-normal">Pay at counter/table</span>
+                    <span className="block leading-tight font-bold text-slate-950">{t.sendToKitchen} ({tableLabel})</span>
+                    <span className="text-[10px] text-slate-900 font-medium">Pay at counter / table</span>
                   </div>
-                  <div className="flex items-center space-x-1.5">
+                  <div className="flex items-center space-x-1.5 font-bold">
                     <span>₹{totalAmount.toFixed(2)}</span>
                     <ArrowRight className="w-4 h-4" />
                   </div>
