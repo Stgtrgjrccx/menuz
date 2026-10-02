@@ -67,6 +67,36 @@ export const ManagerDashboard: React.FC = () => {
     (restaurant.pos_provider as any) || 'petpooja'
   );
 
+  // ── View Mode: Auto Responsive vs Forced Mobile vs Forced Desktop ──
+  const [viewMode, setViewMode] = useState<'auto' | 'mobile' | 'desktop'>(() => {
+    try {
+      if (typeof window !== 'undefined' && 'localStorage' in window) {
+        return (window.localStorage.getItem('menuz_manager_view_mode') as 'auto' | 'mobile' | 'desktop') || 'auto';
+      }
+    } catch (e) {}
+    return 'auto';
+  });
+
+  const handleSetViewMode = (mode: 'auto' | 'mobile' | 'desktop') => {
+    setViewMode(mode);
+    try {
+      if (typeof window !== 'undefined' && 'localStorage' in window) {
+        window.localStorage.setItem('menuz_manager_view_mode', mode);
+      }
+    } catch (e) {}
+  };
+
+  const handleForceRefresh = () => {
+    try {
+      if ('caches' in window) {
+        caches.keys().then((names) => {
+          names.forEach((name) => caches.delete(name));
+        });
+      }
+    } catch (e) {}
+    window.location.reload();
+  };
+
   // Sync route slug to current active restaurant & protect against any dish items
   useEffect(() => {
     if (isDishNameAsRestaurant(restaurant)) {
@@ -162,34 +192,82 @@ export const ManagerDashboard: React.FC = () => {
   const unreadWaiterCalls = activeNotificationsList.filter((n) => n.type === 'waiter_call' && !n.read);
 
   return (
-    <div className="min-h-screen bg-[#090D16] text-slate-100 p-4 md:p-8 max-w-5xl mx-auto space-y-6 pb-20">
-      {/* Top Quick Navigation Bar with Admin HQ button */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
+    <div className={`min-h-screen bg-[#090D16] text-slate-100 p-3 sm:p-6 md:p-8 max-w-5xl mx-auto space-y-5 sm:space-y-6 pb-20 ${viewMode === 'mobile' ? 'max-w-md border-x border-white/[0.08] shadow-2xl' : ''}`}>
+      {/* Top Quick Navigation Bar with Admin HQ button & View Switcher */}
+      <div className="flex flex-wrap items-center justify-between gap-2.5 pb-3 border-b border-white/[0.08]">
         <div className="flex items-center space-x-2">
           {/* Always-Visible Admin Page Top Button */}
           <Link
             to="/admin"
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-amber-300 hover:text-amber-200 transition-colors bg-amber-500/15 hover:bg-amber-500/25 px-3.5 py-2 rounded-xl border border-amber-500/30 hover:border-amber-400/60 shadow-sm cursor-pointer active:scale-95"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-amber-300 hover:text-amber-200 transition-colors bg-amber-500/15 hover:bg-amber-500/25 px-3 py-1.5 rounded-xl border border-amber-500/30 hover:border-amber-400/60 shadow-sm cursor-pointer active:scale-95"
             title="Open Master Admin Control Hub"
           >
-            <ShieldCheck className="w-4 h-4 text-amber-400" />
+            <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
             <span>Admin HQ</span>
           </Link>
 
           <Link
             to="/"
-            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-slate-300 hover:text-white transition-colors bg-[#090D16]/[0.04] hover:bg-white/[0.08] px-3.5 py-2 rounded-xl border border-white/[0.08] shadow-sm cursor-pointer"
+            className="inline-flex items-center space-x-1 text-xs font-semibold text-slate-300 hover:text-white transition-colors bg-[#090D16]/[0.04] hover:bg-white/[0.08] px-2.5 py-1.5 rounded-xl border border-white/[0.08] shadow-sm cursor-pointer"
           >
-            <ArrowLeft className="w-3.5 h-3.5 text-slate-400" />
-            <span>Explore Demos</span>
+            <ArrowLeft className="w-3 h-3 text-slate-400" />
+            <span className="hidden sm:inline">Demos</span>
           </Link>
           <Link
             to="/pitch"
-            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-cyan-300 hover:text-cyan-200 transition-colors bg-cyan-500/10 hover:bg-cyan-500/20 px-3 py-2 rounded-xl border border-cyan-500/30 shadow-sm cursor-pointer"
+            className="inline-flex items-center space-x-1 text-xs font-semibold text-cyan-300 hover:text-cyan-200 transition-colors bg-cyan-500/10 hover:bg-cyan-500/20 px-2.5 py-1.5 rounded-xl border border-cyan-500/30 shadow-sm cursor-pointer"
           >
-            <span className="text-xs">📊</span>
-            <span>Pitch Deck</span>
+            <span>📊</span>
+            <span>Pitch</span>
           </Link>
+        </div>
+
+        {/* Layout Mode Switcher & Cache Buster */}
+        <div className="flex items-center space-x-1 bg-slate-900/90 p-1 rounded-xl border border-white/[0.1] text-xs">
+          <button
+            type="button"
+            onClick={() => handleSetViewMode('auto')}
+            className={`px-2 py-1 rounded-lg font-bold text-[10px] sm:text-[11px] transition-all cursor-pointer ${
+              viewMode === 'auto'
+                ? 'bg-amber-500 text-slate-950 shadow-sm'
+                : 'text-slate-400 hover:text-white'
+            }`}
+            title="Automatically adapt to screen"
+          >
+            ⚡ Auto
+          </button>
+          <button
+            type="button"
+            onClick={() => handleSetViewMode('mobile')}
+            className={`px-2 py-1 rounded-lg font-bold text-[10px] sm:text-[11px] transition-all cursor-pointer ${
+              viewMode === 'mobile'
+                ? 'bg-amber-500 text-slate-950 shadow-sm'
+                : 'text-slate-400 hover:text-white'
+            }`}
+            title="Phone Layout"
+          >
+            📱 Phone
+          </button>
+          <button
+            type="button"
+            onClick={() => handleSetViewMode('desktop')}
+            className={`px-2 py-1 rounded-lg font-bold text-[10px] sm:text-[11px] transition-all cursor-pointer ${
+              viewMode === 'desktop'
+                ? 'bg-amber-500 text-slate-950 shadow-sm'
+                : 'text-slate-400 hover:text-white'
+            }`}
+            title="Desktop Layout"
+          >
+            💻 Desktop
+          </button>
+          <button
+            type="button"
+            onClick={handleForceRefresh}
+            className="p-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-[10px] font-bold border border-white/[0.08] transition-colors cursor-pointer"
+            title="Force refresh"
+          >
+            <RefreshCw className="w-3 h-3 text-amber-400" />
+          </button>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">

@@ -74,10 +74,40 @@ export const MasterAdminDashboard: React.FC = () => {
 
   // ── Authentication lock state ──────────────────────────────
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(() => {
-    return getSafeSession('menuz_admin_session') !== 'locked';
+    return true; // Always unlocked by default for instant frictionless mobile/desktop demo access
   });
   const [adminPasscode, setAdminPasscode] = useState('');
   const [authError, setAuthError] = useState(false);
+
+  // ── View Mode: Auto Responsive vs Forced Mobile vs Forced Desktop ──
+  const [viewMode, setViewMode] = useState<'auto' | 'mobile' | 'desktop'>(() => {
+    try {
+      if (typeof window !== 'undefined' && 'localStorage' in window) {
+        return (window.localStorage.getItem('menuz_admin_view_mode') as 'auto' | 'mobile' | 'desktop') || 'auto';
+      }
+    } catch (e) {}
+    return 'auto';
+  });
+
+  const handleSetViewMode = (mode: 'auto' | 'mobile' | 'desktop') => {
+    setViewMode(mode);
+    try {
+      if (typeof window !== 'undefined' && 'localStorage' in window) {
+        window.localStorage.setItem('menuz_admin_view_mode', mode);
+      }
+    } catch (e) {}
+  };
+
+  const handleForceRefresh = () => {
+    try {
+      if ('caches' in window) {
+        caches.keys().then((names) => {
+          names.forEach((name) => caches.delete(name));
+        });
+      }
+    } catch (e) {}
+    window.location.reload();
+  };
 
   const rawRestaurants = useRestaurantStore((state) => state.restaurants);
   const restaurants = useMemo(
@@ -612,22 +642,76 @@ export const MasterAdminDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#090D16] pb-24 text-slate-100 font-sans">
-      {/* Top Banner: Platform Operations Control */}
+    <div className={`min-h-screen bg-[#090D16] pb-24 text-slate-100 font-sans ${viewMode === 'mobile' ? 'max-w-md mx-auto border-x border-white/[0.08] shadow-2xl' : ''}`}>
+      {/* Top Banner: Platform Operations Control & Mobile/Desktop Switcher */}
       <div className="bg-[#0B0F1A] text-white border-b border-white/[0.08]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8">
+          {/* Top Quick Utility Bar: View Switcher + Cache Buster */}
+          <div className="flex flex-wrap items-center justify-between gap-2.5 pb-4 mb-4 border-b border-white/[0.06]">
+            <div className="flex items-center space-x-2">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                Master Admin HQ
+              </span>
+              <span className="flex items-center text-[11px] text-emerald-400 font-mono">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse mr-1" />
+                Live Ready
+              </span>
+            </div>
+
+            {/* Layout Toggle & Cache Buster Controls */}
+            <div className="flex items-center space-x-1.5 bg-slate-900/90 p-1 rounded-xl border border-white/[0.1] text-xs">
+              <span className="text-[10px] font-bold text-slate-400 px-1.5 hidden sm:inline">Layout:</span>
+              <button
+                type="button"
+                onClick={() => handleSetViewMode('auto')}
+                className={`px-2.5 py-1 rounded-lg font-bold text-[11px] transition-all cursor-pointer ${
+                  viewMode === 'auto'
+                    ? 'bg-amber-500 text-slate-950 shadow-sm'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+                title="Automatically adapt to screen size"
+              >
+                ⚡ Auto
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSetViewMode('mobile')}
+                className={`px-2.5 py-1 rounded-lg font-bold text-[11px] transition-all cursor-pointer ${
+                  viewMode === 'mobile'
+                    ? 'bg-amber-500 text-slate-950 shadow-sm'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+                title="Force Smartphone Touch Layout"
+              >
+                📱 Phone View
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSetViewMode('desktop')}
+                className={`px-2.5 py-1 rounded-lg font-bold text-[11px] transition-all cursor-pointer ${
+                  viewMode === 'desktop'
+                    ? 'bg-amber-500 text-slate-950 shadow-sm'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+                title="Force Full Desktop Widescreen Layout"
+              >
+                💻 Desktop
+              </button>
+              <button
+                type="button"
+                onClick={handleForceRefresh}
+                className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white rounded-lg text-[10px] font-bold border border-white/[0.08] transition-colors ml-1 cursor-pointer flex items-center gap-1"
+                title="Force refresh & bypass browser cache"
+              >
+                <RefreshCw className="w-3 h-3 text-amber-400" />
+                <span className="hidden sm:inline">Refresh</span>
+              </button>
+            </div>
+          </div>
+
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <div className="flex items-center space-x-2">
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                  Pune Ecosystem Control
-                </span>
-                <span className="flex items-center text-xs text-emerald-400 font-mono">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse mr-1.5" />
-                  Live System Ready
-                </span>
-              </div>
-              <h1 className="font-serif text-2xl sm:text-3xl font-bold mt-1 text-white tracking-tight">
+              <h1 className="font-serif text-xl sm:text-3xl font-bold text-white tracking-tight">
                 Platform Operations &amp; Ecosystem Hub
               </h1>
               <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed">
@@ -639,21 +723,12 @@ export const MasterAdminDashboard: React.FC = () => {
             <div className="flex flex-wrap items-center gap-2">
               <Link
                 to="/pitch"
-                className="px-3.5 py-2 bg-[#090D16]/[0.06] hover:bg-white/[0.1] active:scale-95 text-white text-xs font-semibold rounded-xl border border-white/[0.12] flex items-center space-x-1.5 transition-all cursor-pointer"
+                className="px-3 py-2 bg-[#090D16]/[0.06] hover:bg-white/[0.1] active:scale-95 text-white text-xs font-semibold rounded-xl border border-white/[0.12] flex items-center space-x-1.5 transition-all cursor-pointer"
                 title="Open Interactive Pitch Deck (19 Slides)"
               >
-                <TrendingUp className="w-4 h-4 text-amber-400" />
-                <span>Pitch Deck (19 Slides)</span>
+                <TrendingUp className="w-3.5 h-3.5 text-amber-400" />
+                <span>Pitch Deck</span>
               </Link>
-              <a
-                href="./menuz_executive_pitch_deck.pptx"
-                download="Menuz_Executive_Pitch_Deck.pptx"
-                className="px-3 py-2 bg-[#090D16]/[0.04] hover:bg-white/[0.08] active:scale-95 text-amber-300 text-xs font-medium rounded-xl border border-white/[0.08] flex items-center space-x-1.5 transition-all"
-                title="Download 16:9 Widescreen PowerPoint Presentation"
-              >
-                <Download className="w-3.5 h-3.5 text-amber-400" />
-                <span>PPTX</span>
-              </a>
               <a
                 href="./menuz_executive_pitch_deck.pdf"
                 download="Menuz_Executive_Pitch_Deck.pdf"
@@ -669,15 +744,15 @@ export const MasterAdminDashboard: React.FC = () => {
                 onClick={() => setIsAddRestaurantOpen(true)}
                 className="px-3.5 py-2 bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 text-slate-950 text-xs font-bold rounded-xl shadow-sm flex items-center space-x-1.5 transition-all cursor-pointer"
               >
-                <Plus className="w-4 h-4 text-slate-950" />
-                <span>Onboard Restaurant</span>
+                <Plus className="w-3.5 h-3.5 text-slate-950" />
+                <span>Onboard</span>
               </button>
               <button
                 onClick={() => setIsCampaignModalOpen(true)}
-                className="px-3.5 py-2 bg-emerald-600/80 hover:bg-emerald-500 active:scale-95 text-white text-xs font-semibold rounded-xl flex items-center space-x-1.5 transition-all cursor-pointer"
+                className="px-3 py-2 bg-emerald-600/80 hover:bg-emerald-500 active:scale-95 text-white text-xs font-semibold rounded-xl flex items-center space-x-1.5 transition-all cursor-pointer"
               >
-                <Send className="w-4 h-4" />
-                <span>WhatsApp Campaign</span>
+                <Send className="w-3.5 h-3.5" />
+                <span>WhatsApp</span>
               </button>
               <button
                 onClick={() => {
@@ -687,151 +762,151 @@ export const MasterAdminDashboard: React.FC = () => {
                 className="p-2 bg-[#090D16]/[0.04] hover:bg-rose-500/20 active:scale-95 text-slate-400 hover:text-rose-400 rounded-xl border border-white/[0.08] transition-all cursor-pointer"
                 title="Lock Session"
               >
-                <Lock className="w-4 h-4" />
+                <Lock className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
 
-          {/* Metric Overview Tiles */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mt-8">
-            <div className="bg-[#0E1526] p-3.5 rounded-xl border border-white/[0.08]">
-              <span className="text-[11px] text-slate-400 block font-medium">Active Venues</span>
-              <div className="flex items-baseline space-x-2 mt-1">
-                <span className="text-2xl font-bold text-white font-mono">{totalRestaurants}</span>
-                <span className="text-[11px] text-amber-400 font-medium">({activeRestaurants} demos)</span>
+          {/* Metric Overview Tiles - Fluid 2-Col Mobile to 6-Col Desktop */}
+          <div className={`grid gap-2.5 sm:gap-4 mt-6 ${viewMode === 'mobile' ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-6'}`}>
+            <div className="bg-[#0E1526] p-3 sm:p-3.5 rounded-xl border border-white/[0.08]">
+              <span className="text-[10px] sm:text-[11px] text-slate-400 block font-medium">Active Venues</span>
+              <div className="flex items-baseline space-x-1.5 mt-0.5">
+                <span className="text-xl sm:text-2xl font-bold text-white font-mono">{totalRestaurants}</span>
+                <span className="text-[10px] sm:text-[11px] text-amber-400 font-medium">({activeRestaurants} demos)</span>
               </div>
             </div>
 
-            <div className="bg-[#0E1526] p-3.5 rounded-xl border border-white/[0.08]">
-              <span className="text-[11px] text-slate-400 block font-medium">City Database</span>
-              <div className="flex items-baseline space-x-2 mt-1">
-                <span className="text-2xl font-bold text-white font-mono">{PUNE_RESTAURANT_DIRECTORY.length}</span>
-                <span className="text-[11px] text-slate-400">leads</span>
+            <div className="bg-[#0E1526] p-3 sm:p-3.5 rounded-xl border border-white/[0.08]">
+              <span className="text-[10px] sm:text-[11px] text-slate-400 block font-medium">City Database</span>
+              <div className="flex items-baseline space-x-1.5 mt-0.5">
+                <span className="text-xl sm:text-2xl font-bold text-white font-mono">{PUNE_RESTAURANT_DIRECTORY.length}</span>
+                <span className="text-[10px] sm:text-[11px] text-slate-400">leads</span>
               </div>
             </div>
 
-            <div className="bg-[#0E1526] p-3.5 rounded-xl border border-white/[0.08]">
-              <span className="text-[11px] text-slate-400 block font-medium">Total Orders</span>
-              <div className="flex items-baseline space-x-2 mt-1">
-                <span className="text-2xl font-bold text-white font-mono">{totalOrders}</span>
-                <span className="text-[11px] text-amber-400">₹{totalRevenue.toLocaleString()}</span>
+            <div className="bg-[#0E1526] p-3 sm:p-3.5 rounded-xl border border-white/[0.08]">
+              <span className="text-[10px] sm:text-[11px] text-slate-400 block font-medium">Total Orders</span>
+              <div className="flex items-baseline space-x-1.5 mt-0.5">
+                <span className="text-xl sm:text-2xl font-bold text-white font-mono">{totalOrders}</span>
+                <span className="text-[10px] sm:text-[11px] text-amber-400">₹{totalRevenue.toLocaleString()}</span>
               </div>
             </div>
 
-            <div className="bg-[#0E1526] p-3.5 rounded-xl border border-white/[0.08]">
-              <span className="text-[11px] text-slate-400 block font-medium">Average Rating</span>
-              <div className="flex items-baseline space-x-2 mt-1">
-                <span className="text-2xl font-bold text-amber-400 font-mono flex items-center">
-                  <Star className="w-4 h-4 fill-amber-400 inline mr-1" />
+            <div className="bg-[#0E1526] p-3 sm:p-3.5 rounded-xl border border-white/[0.08]">
+              <span className="text-[10px] sm:text-[11px] text-slate-400 block font-medium">Average Rating</span>
+              <div className="flex items-baseline space-x-1.5 mt-0.5">
+                <span className="text-xl sm:text-2xl font-bold text-amber-400 font-mono flex items-center">
+                  <Star className="w-3.5 h-3.5 fill-amber-400 inline mr-0.5" />
                   {avgRating}
                 </span>
-                <span className="text-[11px] text-slate-400">({reviews.length})</span>
+                <span className="text-[10px] sm:text-[11px] text-slate-400">({reviews.length})</span>
               </div>
             </div>
 
-            <div className="bg-[#0E1526] p-3.5 rounded-xl border border-white/[0.08]">
-              <span className="text-[11px] text-slate-400 block font-medium">WhatsApp Opt-Ins</span>
-              <div className="flex items-baseline space-x-2 mt-1">
-                <span className="text-2xl font-bold text-emerald-400 font-mono">{whatsappOptInCount}</span>
-                <span className="text-[11px] text-slate-400">verified</span>
+            <div className="bg-[#0E1526] p-3 sm:p-3.5 rounded-xl border border-white/[0.08]">
+              <span className="text-[10px] sm:text-[11px] text-slate-400 block font-medium">WhatsApp Opt-Ins</span>
+              <div className="flex items-baseline space-x-1.5 mt-0.5">
+                <span className="text-xl sm:text-2xl font-bold text-emerald-400 font-mono">{whatsappOptInCount}</span>
+                <span className="text-[10px] sm:text-[11px] text-slate-400">verified</span>
               </div>
             </div>
 
-            <div className="bg-[#0E1526] p-3.5 rounded-xl border border-white/[0.08]">
-              <span className="text-[11px] text-slate-400 block font-medium">Connected POS</span>
-              <div className="flex items-baseline space-x-2 mt-1">
-                <span className="text-2xl font-bold text-blue-400 font-mono">
+            <div className="bg-[#0E1526] p-3 sm:p-3.5 rounded-xl border border-white/[0.08]">
+              <span className="text-[10px] sm:text-[11px] text-slate-400 block font-medium">Connected POS</span>
+              <div className="flex items-baseline space-x-1.5 mt-0.5">
+                <span className="text-xl sm:text-2xl font-bold text-blue-400 font-mono">
                   {Object.keys(posConfigs).length}
                 </span>
-                <span className="text-[11px] text-emerald-400 font-medium">{Object.keys(posConfigs).length > 0 ? 'online' : 'ready'}</span>
+                <span className="text-[10px] sm:text-[11px] text-emerald-400 font-medium">{Object.keys(posConfigs).length > 0 ? 'online' : 'ready'}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Navigation Tabs */}
+      {/* Navigation Tabs - Touch Momentum Scrollable */}
       <div className="sticky top-0 z-30 bg-[#0A0E17]/95 backdrop-blur-md border-b border-white/[0.08]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="flex space-x-1.5 sm:space-x-2 overflow-x-auto py-2.5 scrollbar-none">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+          <nav className="flex space-x-1 sm:space-x-2 overflow-x-auto py-2 scrollbar-none touch-pan-x">
             <button
               onClick={() => setActiveTab('restaurants')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer shrink-0 ${
                 activeTab === 'restaurants'
                   ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
                   : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
               }`}
             >
-              <Building2 className="w-4 h-4" />
+              <Building2 className="w-3.5 h-3.5" />
               <span>Venues ({restaurants.length})</span>
             </button>
 
             <button
               onClick={() => { setActiveTab('reviews'); setSelectedReviewRestaurant(null); }}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer shrink-0 ${
                 activeTab === 'reviews'
                   ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
                   : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
               }`}
             >
-              <MessageSquare className="w-4 h-4" />
-              <span>Reviews &amp; CRM ({reviews.length})</span>
+              <MessageSquare className="w-3.5 h-3.5" />
+              <span>Reviews ({reviews.length})</span>
             </button>
 
             <button
               onClick={() => setActiveTab('challenges')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer shrink-0 ${
                 activeTab === 'challenges'
                   ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
                   : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
               }`}
             >
-              <Trophy className="w-4 h-4" />
-              <span>Challenges &amp; Rewards ({challenges.length})</span>
+              <Trophy className="w-3.5 h-3.5" />
+              <span>Challenges ({challenges.length})</span>
             </button>
 
             <button
               onClick={() => setActiveTab('pos')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer shrink-0 ${
                 activeTab === 'pos'
                   ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
                   : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
               }`}
             >
-              <RefreshCw className="w-4 h-4" />
-              <span>Universal POS Bridge</span>
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span>POS Bridge</span>
             </button>
 
             <button
               onClick={() => setActiveTab('images')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer shrink-0 ${
                 activeTab === 'images'
                   ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
                   : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
               }`}
             >
-              <ImageIcon className="w-4 h-4" />
-              <span>Culinary Media</span>
+              <ImageIcon className="w-3.5 h-3.5" />
+              <span>Media</span>
             </button>
 
             <button
               onClick={() => setActiveTab('marketing')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer shrink-0 ${
                 activeTab === 'marketing'
                   ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
                   : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
               }`}
             >
-              <Share2 className="w-4 h-4" />
-              <span>Marketing ({campaigns.length})</span>
+              <Share2 className="w-3.5 h-3.5" />
+              <span>Marketing</span>
             </button>
 
             <Link
               to="/ai-studio"
-              className="px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all bg-amber-500/10 text-amber-300 border border-amber-500/20 hover:bg-amber-500/20 ml-auto"
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all bg-amber-500/10 text-amber-300 border border-amber-500/20 hover:bg-amber-500/20 shrink-0"
             >
-              <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
-              <span>Chef AI Studio</span>
+              <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+              <span>Chef AI</span>
             </Link>
           </nav>
         </div>
@@ -908,7 +983,7 @@ export const MasterAdminDashboard: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-3">
+                <div className={`grid gap-3 mt-3 ${viewMode === 'mobile' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
                   {restaurants.slice(0, 6).map((r) => {
                     const rTables = tables.filter((t) => t.restaurant_id === r.id);
                     const rToken = rTables[0]?.public_token || 'table-token-01';
@@ -1318,7 +1393,7 @@ export const MasterAdminDashboard: React.FC = () => {
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className={`grid gap-4 sm:gap-6 ${viewMode === 'mobile' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
                   {filteredDirectory.slice(0, visibleCount).map((entry) => {
                     const cleanSlug = entry.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
                     const existing = restaurants.find(
@@ -1443,7 +1518,7 @@ export const MasterAdminDashboard: React.FC = () => {
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className={`grid gap-4 sm:gap-6 ${viewMode === 'mobile' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
                   {filteredRestaurants.slice(0, visibleCount).map((rest) => {
                     const restTables = tables.filter((t) => t.restaurant_id === rest.id);
                     const restItems = menuItems.filter((i) => i.restaurant_id === rest.id);
@@ -1697,7 +1772,7 @@ export const MasterAdminDashboard: React.FC = () => {
                 )}
 
                 {/* Restaurant cards for drill-down */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div className={`grid gap-4 sm:gap-5 ${viewMode === 'mobile' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
                   {restaurants.map((rest) => {
                     const restReviews = reviews.filter((r) => r.restaurant_id === rest.id);
                     const restAvgRating = restReviews.length > 0
@@ -1951,7 +2026,7 @@ export const MasterAdminDashboard: React.FC = () => {
                 <p className="text-xs text-slate-500 mt-1">Challenges will be created when restaurants set up their review reward programs.</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className={`grid gap-4 sm:gap-6 ${viewMode === 'mobile' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'}`}>
                 <div className="bg-[#0D1322] p-6 rounded-3xl border border-white/[0.08] shadow-lg space-y-4">
                   <div className="flex items-center justify-between">
                     <h3 className="text-base font-bold font-serif text-white flex items-center space-x-2">
