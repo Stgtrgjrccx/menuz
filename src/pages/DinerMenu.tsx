@@ -19,11 +19,13 @@ import {
   ArrowLeftRight,
   Instagram,
   Users,
-  ShieldCheck
+  ShieldCheck,
+  Maximize2
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { MenuItem, ReviewChallenge } from '../types';
 import { DishDetailModal } from '../components/DishDetailModal';
+import { ImageLightboxModal } from '../components/ImageLightboxModal';
 import { CartDrawer } from '../components/CartDrawer';
 import { AiAssistantDrawer } from '../components/AiAssistantDrawer';
 import { OrderTrackerModal } from '../components/OrderTrackerModal';
@@ -134,6 +136,8 @@ export const DinerMenu: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeDish, setActiveDish] = useState<MenuItem | null>(null);
+  const [lightboxDish, setLightboxDish] = useState<MenuItem | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number>(0);
   const [isAiOpen, setIsAiOpen] = useState<boolean>(false);
   const [aiFocusDish, setAiFocusDish] = useState<MenuItem | null>(null);
   const [aiInitialQuery, setAiInitialQuery] = useState<string | null>(null);
@@ -707,8 +711,28 @@ export const DinerMenu: React.FC = () => {
                           !dish.is_available ? 'opacity-50' : ''
                         }`}
                       >
-                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl flex-shrink-0 bg-[#090D16] overflow-hidden relative">
-                          <img src={dish.image_url || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400'} alt={dish.name || 'Dish'} className="w-full h-full object-cover" />
+                        <div
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setLightboxDish(dish);
+                            setLightboxIndex(0);
+                          }}
+                          className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl flex-shrink-0 bg-[#090D16] overflow-hidden relative group/img cursor-zoom-in border border-white/[0.06] hover:border-amber-400/60 transition-all"
+                          title="Click to view & zoom high-resolution photo"
+                        >
+                          <img
+                            src={dish.image_url || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400'}
+                            alt={dish.name || 'Dish'}
+                            className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                          />
+                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                            <Maximize2 className="w-4 h-4 text-white drop-shadow" />
+                          </div>
+                          {dish.gallery_images && dish.gallery_images.length > 0 && (
+                            <div className="absolute bottom-1 right-1 px-1.5 py-0.2 bg-black/80 backdrop-blur-xs rounded text-[8px] font-mono text-amber-300 font-bold border border-amber-400/40 shadow-sm">
+                              +{dish.gallery_images.length} views
+                            </div>
+                          )}
                           {!dish.is_available && (
                             <div className="absolute inset-0 bg-black/70 flex items-center justify-center p-1 text-center">
                               <span className="text-[8px] sm:text-[9px] uppercase font-bold text-white tracking-widest px-1.5 py-0.5 rounded bg-red-600/90">
@@ -1024,6 +1048,15 @@ export const DinerMenu: React.FC = () => {
         restaurant={restaurant}
         items={cart.length > 0 ? cart : currentRestMenuItems.slice(0, 3)}
         tableLabel={activeTable?.label || 'Table 1'}
+      />
+
+      {/* Fullscreen HD Image Lightbox & Zoom Viewer */}
+      <ImageLightboxModal
+        isOpen={!!lightboxDish}
+        dish={lightboxDish}
+        initialImageIndex={lightboxIndex}
+        onClose={() => setLightboxDish(null)}
+        onOpenCart={() => setIsCartOpen(true)}
       />
     </div>
   );

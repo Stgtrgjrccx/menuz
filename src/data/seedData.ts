@@ -148,6 +148,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 1,
     serving_size: '3 pieces',
     image_url: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=800&auto=format&fit=crop', label: 'Golden Crisp Plating & Date Chutney', code: '# 01 Overhead Plating' },
+      { src: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=800&auto=format&fit=crop', label: 'Fresh Truffle & Edamame Filling Core', code: '# 02 Scented Core' },
+      { src: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&auto=format&fit=crop', label: 'Fresh Micro-Herb Garnish & Sauce Spread', code: '# 03 Garnish Detail' },
+      { src: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=800&auto=format&fit=crop', label: 'Hand-Crimped Potli Purse Presentation', code: '# 04 Table Serving' }
+    ],
     is_available: true,
     pairing_item_ids: ['item-bev-1'],
     chef_notes: 'Pairs harmoniously with chilled Alphonso Mango Lassi.',
@@ -223,6 +229,11 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 2,
     serving_size: '5 skewers',
     image_url: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=800&auto=format&fit=crop', label: 'Tandoor Charred Saffron Skewers', code: '# 01 Clay Oven Grill' },
+      { src: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=800&auto=format&fit=crop', label: '12-Hour Pampore Saffron & Curd Marination', code: '# 02 Saffron Glow' },
+      { src: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&auto=format&fit=crop', label: 'Mint Emulsion & Pickled Onion Salad', code: '# 03 Side Salad' }
+    ],
     is_available: true,
     pairing_item_ids: ['item-bev-1'],
     sort_order: 1
@@ -297,6 +308,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 2,
     serving_size: 'Serves 2',
     image_url: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=800&auto=format&fit=crop', label: '1950s Velvet Tomato Gravy Plating', code: '# 01 Signature Deg' },
+      { src: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=800&auto=format&fit=crop', label: 'Tandoor-Charred Shredded Chicken Core', code: '# 02 Charcoal Meat' },
+      { src: 'https://images.unsplash.com/photo-1626074353765-517a681e40be?w=800&auto=format&fit=crop', label: 'Fresh Garlic Naan Dip Pairing', code: '# 03 Naan Pairing' },
+      { src: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&auto=format&fit=crop', label: 'Traditional Copper Deg Table Presentation', code: '# 04 Table Handi' }
+    ],
     is_available: true,
     pairing_item_ids: ['item-bread-3', 'item-bev-1'],
     chef_notes: 'Our signature preparation. Simmered for 8 hours in heirloom copper degs.',
@@ -333,6 +350,11 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 1,
     serving_size: 'Serves 2',
     image_url: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&auto=format&fit=crop', label: '36-Hour Charcoal Simmered Dal Bukhara', code: '# 01 Slow Embers' },
+      { src: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=800&auto=format&fit=crop', label: 'Farm-Churned White Butter Swirl', code: '# 02 Makhan Swirl' },
+      { src: 'https://images.unsplash.com/photo-1626074353765-517a681e40be?w=800&auto=format&fit=crop', label: 'Hot Laccha Paratha Accompaniment', code: '# 03 Bread Dip' }
+    ],
     is_available: true,
     pairing_item_ids: ['item-bread-3', 'item-bread-1'],
     sort_order: 2
@@ -573,6 +595,11 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 0,
     serving_size: '12-inch Pizza',
     image_url: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&auto=format&fit=crop', label: 'Woodfired Neapolitan Leopard-Crust Pizza', code: '# 01 450°C Volcanic Oven' },
+      { src: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800&auto=format&fit=crop', label: 'San Marzano D.O.P & Fior di Latte Stretch', code: '# 02 Cheese Stretch' },
+      { src: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&auto=format&fit=crop', label: 'Fresh Sweet Basil & Ligurian Olive Oil', code: '# 03 Herb Garnish' }
+    ],
     is_available: true,
     pairing_item_ids: [],
     chef_notes: 'Authentic leopard-spotted Neapolitan crust.',
@@ -611,6 +638,11 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 0,
     serving_size: 'Bowl (220g)',
     image_url: 'https://images.unsplash.com/photo-1556760544-74068565f05c?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1556760544-74068565f05c?w=800&auto=format&fit=crop', label: 'Hand-Extruded Bronze-Die Tagliolini Ribbon', code: '# 01 Fresh Pasta Twirl' },
+      { src: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800&auto=format&fit=crop', label: 'Piedmont Shaved Black Truffle Reduction', code: '# 02 Truffle Shavings' },
+      { src: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&auto=format&fit=crop', label: '24-Month Parmigiano Reggiano Snow', code: '# 03 Parmigiano Snow' }
+    ],
     is_available: true,
     pairing_item_ids: [],
     chef_notes: 'Prepared fresh in the pasta lab every morning at 10 AM.',
@@ -630,6 +662,11 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 0,
     serving_size: '1 Portion',
     image_url: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800&auto=format&fit=crop', label: 'Layered Illy Espresso Savoiardi & Mascarpone', code: '# 01 Venetian Glass' },
+      { src: 'https://images.unsplash.com/photo-1556760544-74068565f05c?w=800&auto=format&fit=crop', label: 'Whipped Mascarpone Velvet Texture', code: '# 02 Cream Swirl' },
+      { src: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&auto=format&fit=crop', label: 'Dutch Dark Cocoa Powder Dusting', code: '# 03 Cocoa Dust' }
+    ],
     is_available: true,
     pairing_item_ids: [],
     chef_notes: 'Made from our nonna’s 1958 Treviso family recipe.',

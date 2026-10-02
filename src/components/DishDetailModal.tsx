@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Flame, Sparkles, ShoppingBag, Plus, Minus } from 'lucide-react';
+import { X, Flame, Sparkles, ShoppingBag, Plus, Minus, Maximize2 } from 'lucide-react';
 import { MenuItem, SelectedOptionSnapshot } from '../types';
 import { useRestaurantStore } from '../store/restaurantStore';
+import { DishHoverExpandGallery } from './DishHoverExpandGallery';
+import { ImageLightboxModal } from './ImageLightboxModal';
 
 interface DishDetailModalProps {
   dish: MenuItem | null;
@@ -19,6 +21,8 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
 }) => {
   const [quantity, setQuantity] = useState(1);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, SelectedOptionSnapshot>>({});
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [lightboxImageIndex, setLightboxImageIndex] = useState(0);
   const addItemToCart = useRestaurantStore((state) => state.addItemToCart);
 
   if (!dish) return null;
@@ -66,37 +70,62 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
     onOpenCart();
   };
 
-  return createPortal(
-    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-end justify-center">
-      <div 
-        className="bg-[#0D1322] rounded-t-3xl max-w-xl w-full max-h-[92vh] flex flex-col  overflow-hidden animate-in slide-in-from-bottom duration-200 border border-white/[0.08]"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Drag handle & close */}
-        <div className="relative pt-3 pb-2 px-5 flex items-center justify-between border-b border-white/[0.08]">
-          <div className="w-10 h-1 bg-[#090D16]/20 rounded-full mx-auto absolute left-1/2 -translate-x-1/2 top-2" />
-          <span className="text-xs font-semibold text-amber-400 tracking-wide uppercase">Signature Offering</span>
-          <button
-            onClick={onClose}
-            className="p-1 rounded-full text-slate-400 hover:bg-white/[0.08] hover:text-white transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+  const handleOpenLightbox = (index = 0) => {
+    setLightboxImageIndex(index);
+    setIsLightboxOpen(true);
+  };
 
-        {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-4">
-          {/* Image */}
-          <div className="w-full h-56 rounded-2xl overflow-hidden relative bg-[#090D16]">
-            <img src={dish.image_url} alt={dish.name} className="w-full h-full object-cover" />
-            {!dish.is_available && (
-              <div className="absolute inset-0 bg-black/75 flex items-center justify-center backdrop-blur-xs">
-                <span className="text-xs uppercase font-bold text-white tracking-widest px-3 py-1.5 bg-red-600 rounded-lg shadow-md">
-                  Currently Sold Out
-                </span>
+  return createPortal(
+    <>
+      <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-end justify-center">
+        <div 
+          className="bg-[#0D1322] rounded-t-3xl max-w-xl w-full max-h-[92vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-200 border border-white/[0.08]"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Drag handle & close */}
+          <div className="relative pt-3 pb-2 px-5 flex items-center justify-between border-b border-white/[0.08]">
+            <div className="w-10 h-1 bg-[#090D16]/20 rounded-full mx-auto absolute left-1/2 -translate-x-1/2 top-2" />
+            <span className="text-xs font-semibold text-amber-400 tracking-wide uppercase">Signature Offering</span>
+            <button
+              onClick={onClose}
+              className="p-1 rounded-full text-slate-400 hover:bg-white/[0.08] hover:text-white transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Scrollable Content */}
+          <div className="flex-1 overflow-y-auto p-5 space-y-4">
+            {/* Multi-dish Gallery or Main Hero Image */}
+            {dish.gallery_images && dish.gallery_images.length > 0 ? (
+              <div className="space-y-3">
+                <DishHoverExpandGallery
+                  images={dish.gallery_images}
+                  dishName={dish.name}
+                  onEnlargeImage={(_src, idx) => handleOpenLightbox(idx)}
+                />
+              </div>
+            ) : (
+              <div
+                onClick={() => handleOpenLightbox(0)}
+                className="w-full h-56 rounded-2xl overflow-hidden relative bg-[#090D16] group cursor-pointer border border-white/[0.08] hover:border-amber-500/40 transition-colors"
+              >
+                <img src={dish.image_url} alt={dish.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-3">
+                  <span className="text-[11px] font-bold text-white bg-black/70 backdrop-blur-sm px-2.5 py-1 rounded-full border border-white/20 flex items-center gap-1">
+                    <Maximize2 className="w-3 h-3 text-amber-300" />
+                    <span>Click to Zoom</span>
+                  </span>
+                </div>
+                {!dish.is_available && (
+                  <div className="absolute inset-0 bg-black/75 flex items-center justify-center backdrop-blur-xs">
+                    <span className="text-xs uppercase font-bold text-white tracking-widest px-3 py-1.5 bg-red-600 rounded-lg shadow-md">
+                      Currently Sold Out
+                    </span>
+                  </div>
+                )}
               </div>
             )}
-          </div>
 
           {/* Title & Price */}
           <div>
@@ -271,7 +300,16 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
           </button>
         </div>
       </div>
-    </div>,
-    document.body
-  );
+    </div>
+
+    <ImageLightboxModal
+      isOpen={isLightboxOpen}
+      dish={dish}
+      initialImageIndex={lightboxImageIndex}
+      onClose={() => setIsLightboxOpen(false)}
+      onOpenCart={onOpenCart}
+    />
+  </>,
+  document.body
+);
 };

@@ -304,6 +304,13 @@ export interface MenuItemOptionGroup {
   options: MenuItemOption[];
 }
 
+export interface DishGalleryImage {
+  src: string;
+  alt?: string;
+  label?: string;
+  code?: string;
+}
+
 export interface MenuItem {
   id: string;
   restaurant_id: string;
@@ -320,6 +327,7 @@ export interface MenuItem {
   sweet_level?: number;
   serving_size: string;
   image_url: string;
+  gallery_images?: DishGalleryImage[];
   is_available: boolean;
   is_signature?: boolean;
   is_bestseller?: boolean;
