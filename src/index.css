@@ -10,7 +10,8 @@
   html {
     -webkit-tap-highlight-color: transparent;
     scroll-behavior: smooth;
-    padding-top: max(env(safe-area-inset-top, 0px) + 110px, 135px) !important;
+    /* Brought slightly higher by half a cm (~20px) */
+    padding-top: max(env(safe-area-inset-top, 0px) + 88px, 112px) !important;
     padding-bottom: max(env(safe-area-inset-bottom, 0px), 24px);
     padding-left: max(env(safe-area-inset-left, 0px), 0px);
     padding-right: max(env(safe-area-inset-right, 0px), 0px);
@@ -44,6 +45,25 @@
     min-height: 100vh;
     position: relative;
     background-color: #090D16 !important;
+  }
+
+  /* Force high-contrast visible text inside all inputs and textareas on all browsers and iOS */
+  input, textarea, select {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    background-color: #0F172A;
+    opacity: 1 !important;
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: rgba(148, 163, 184, 0.7) !important;
+    -webkit-text-fill-color: rgba(148, 163, 184, 0.7) !important;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    outline: none;
   }
 
   ::selection {

@@ -100,6 +100,7 @@ export interface Restaurant {
     enabled: boolean;
     badge_text: string;
     discount_percent?: number;
+    rule_description?: string;
   };
   reward_settings?: {
     allow_bill_discounts: boolean;

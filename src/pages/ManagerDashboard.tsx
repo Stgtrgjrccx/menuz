@@ -43,7 +43,9 @@ import {
   Eye,
   CheckCheck,
   ChevronRight,
-  Maximize2
+  Maximize2,
+  Zap,
+  Gift
 } from 'lucide-react';
 import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantStore';
 import { SEED_RESTAURANTS } from '../data/seedData';
@@ -81,7 +83,7 @@ export const ManagerDashboard: React.FC = () => {
   const updateRestaurant = useRestaurantStore((state) => state.updateRestaurant);
   const toggleItemAvailability = useRestaurantStore((state) => state.toggleItemAvailability);
 
-  // ── Popup Windows (Modals) State for All Main Headers ─────────
+  // ── Dedicated Popup Windows (Modals) ───────────────────────────
   const [isFloorModalOpen, setIsFloorModalOpen] = useState(false);
   const [isMenuPhotosModalOpen, setIsMenuPhotosModalOpen] = useState(false);
   const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
@@ -89,7 +91,7 @@ export const ManagerDashboard: React.FC = () => {
   const [isPosModalOpen, setIsPosModalOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
 
-  // Sub-modals & drawers
+  // Sub-modals
   const [isAiStudioOpen, setIsAiStudioOpen] = useState(false);
   const [isAiDrawerOpen, setIsAiDrawerOpen] = useState(false);
   const [isLaunchKitOpen, setIsLaunchKitOpen] = useState(false);
@@ -98,7 +100,7 @@ export const ManagerDashboard: React.FC = () => {
   const [photoStudioDish, setPhotoStudioDish] = useState<MenuItem | null>(null);
   const [isRestaurantPhotoModalOpen, setIsRestaurantPhotoModalOpen] = useState(false);
   const [photoStudioSearch, setPhotoStudioSearch] = useState('');
-  const [smartSettingsTab, setSmartSettingsTab] = useState<'kot' | 'happy_hour' | 'instagram' | 'pairings' | null>(null);
+  const [smartSettingsTab, setSmartSettingsTab] = useState<'happy_hour' | 'pairings' | 'rewards' | null>(null);
   const [selectedPosTab, setSelectedPosTab] = useState<'petpooja' | 'royalpos' | 'recaho' | 'rancelab'>(
     (restaurant.pos_provider as any) || 'petpooja'
   );
@@ -106,7 +108,7 @@ export const ManagerDashboard: React.FC = () => {
   const [usbPrintLoading, setUsbPrintLoading] = useState(false);
   const [usbPrintStatus, setUsbPrintStatus] = useState<string | null>(null);
 
-  // Hash navigation handler for quick popup triggers
+  // Hash router sync
   useEffect(() => {
     const handleHash = () => {
       const hash = window.location.hash.toLowerCase();
@@ -116,7 +118,7 @@ export const ManagerDashboard: React.FC = () => {
         setIsReviewsModalOpen(true);
       } else if (hash.includes('pos') || hash.includes('kot')) {
         setIsPosModalOpen(true);
-      } else if (hash.includes('smart') || hash.includes('automation')) {
+      } else if (hash.includes('smart') || hash.includes('growth') || hash.includes('pair')) {
         setIsSmartHubModalOpen(true);
       } else if (hash.includes('setting') || hash.includes('floor')) {
         setIsFloorModalOpen(true);
@@ -228,12 +230,15 @@ export const ManagerDashboard: React.FC = () => {
   );
   const unreadWaiterCalls = activeNotificationsList.filter((n) => n.type === 'waiter_call' && !n.read);
 
+  // Smart Pairings active status
+  const isPairingsActive = restaurant.smart_pairings_config?.enabled !== false;
+  const pairingsBadgeText = restaurant.smart_pairings_config?.badge_text || "🧑‍🍳 Chef's Recommended Pairings";
+
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#090D16] text-slate-100 p-3 sm:p-6 md:p-8 max-w-6xl mx-auto space-y-6 pb-24">
-      {/* ── Top Navigation & Quick Switcher ─────────────────────── */}
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#090D16] text-slate-100 p-3 sm:p-5 md:p-7 max-w-5xl mx-auto space-y-6 pb-24">
+      {/* ── Top Bar ─────────────────────────────────────────────── */}
       <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
         <div className="flex items-center space-x-2">
-          {/* Always-Visible Admin Page Top Button */}
           <Link
             to="/admin"
             className="inline-flex items-center space-x-1.5 text-xs font-bold text-amber-300 hover:text-amber-200 transition-colors bg-amber-500/15 hover:bg-amber-500/25 px-3 py-1.5 rounded-xl border border-amber-500/30 hover:border-amber-400/60 shadow-sm cursor-pointer active:scale-95"
@@ -259,7 +264,6 @@ export const ManagerDashboard: React.FC = () => {
           </Link>
         </div>
 
-        {/* Refresh & Quick Actions */}
         <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
@@ -270,7 +274,6 @@ export const ManagerDashboard: React.FC = () => {
             <RefreshCw className="w-3.5 h-3.5 text-amber-400" />
           </button>
 
-          {/* Active Venue Switcher */}
           <div className="flex items-center space-x-1.5 bg-[#0D1322] border border-white/[0.08] rounded-xl px-2.5 py-1.5 shadow-sm">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider hidden sm:inline">Venue:</span>
@@ -299,7 +302,7 @@ export const ManagerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsAiStudioOpen(true)}
-            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-amber-300 hover:text-amber-200 transition-colors bg-amber-500/10 hover:bg-amber-500/20 px-3.5 py-2 rounded-xl border border-amber-500/20 shadow-sm cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-amber-300 hover:text-amber-200 transition-colors bg-amber-500/10 hover:bg-amber-500/20 px-3 py-1.5 rounded-xl border border-amber-500/20 shadow-sm cursor-pointer"
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span>Chef AI</span>
@@ -307,17 +310,17 @@ export const ManagerDashboard: React.FC = () => {
 
           <Link
             to="/kitchen"
-            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-slate-200 hover:text-white transition-colors bg-[#090D16]/[0.04] hover:bg-white/[0.08] px-3.5 py-2 rounded-xl border border-white/[0.08] shadow-sm"
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-slate-200 hover:text-white transition-colors bg-[#090D16]/[0.04] hover:bg-white/[0.08] px-3 py-1.5 rounded-xl border border-white/[0.08] shadow-sm"
           >
             <ChefHat className="w-3.5 h-3.5 text-amber-400" />
-            <span>Kitchen KDS</span>
+            <span>Kitchen</span>
           </Link>
         </div>
       </div>
 
-      {/* USB Print Notification Banner */}
+      {/* USB Print Banner */}
       {usbPrintStatus && (
-        <div className="bg-blue-950/40 border border-blue-500/40 text-blue-200 p-4 rounded-2xl text-xs font-bold flex items-center justify-between shadow-sm animate-in fade-in">
+        <div className="bg-blue-950/40 border border-blue-500/40 text-blue-200 p-3.5 rounded-2xl text-xs font-bold flex items-center justify-between shadow-sm animate-in fade-in">
           <div className="flex items-center gap-2">
             <Printer className="w-4 h-4 text-blue-400" />
             <span>{usbPrintStatus}</span>
@@ -328,65 +331,27 @@ export const ManagerDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* ── Top Venue Header ─────────────────────────────────────── */}
-      <header className="flex flex-wrap justify-between items-center pb-2 border-b border-white/[0.08] gap-4">
+      {/* ── Top Venue Title & Menu Launcher ──────────────────────── */}
+      <header className="flex flex-wrap justify-between items-center pb-2 border-b border-white/[0.08] gap-3">
         <div>
           <div className="flex items-center space-x-2">
             <span className="px-2 py-0.5 rounded-md text-[10px] uppercase font-bold font-mono tracking-wider bg-amber-500/15 text-amber-300 border border-amber-500/30">
-              Active Venue Hub
+              Active Management Hub
             </span>
             <span className="text-xs text-slate-400 font-medium">{restaurant.cuisine} • Pune</span>
           </div>
           <h1 className="font-serif text-2xl sm:text-3xl font-bold text-white mt-1">{restaurant.name}</h1>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <Link
-            to={`/r/${restaurant.slug}/menu?t=${activeTablesList[0]?.public_token || 'table-token-01-saffron'}`}
-            className="flex items-center space-x-1.5 text-xs text-slate-950 bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 px-3.5 py-2.5 rounded-xl shadow-sm transition-all font-bold"
-          >
-            <UtensilsCrossed className="w-3.5 h-3.5 text-slate-950" />
-            <span>Launch Diner Menu ({activeTablesList[0]?.label || 'Table 1'})</span>
-            <ExternalLink className="w-3 h-3 ml-0.5" />
-          </Link>
-        </div>
+        <Link
+          to={`/r/${restaurant.slug}/menu?t=${activeTablesList[0]?.public_token || 'table-token-01-saffron'}`}
+          className="flex items-center space-x-1.5 text-xs text-slate-950 bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 px-3.5 py-2 rounded-xl shadow-sm transition-all font-bold"
+        >
+          <UtensilsCrossed className="w-3.5 h-3.5 text-slate-950" />
+          <span>Launch Diner Menu ({activeTablesList[0]?.label || 'Table 1'})</span>
+          <ExternalLink className="w-3 h-3 ml-0.5" />
+        </Link>
       </header>
-
-      {/* ── QUICK POPUP WINDOW OPENERS BAR ───────────────────────── */}
-      <div className="bg-[#0B101D] p-2 rounded-2xl border border-white/[0.08] shadow-md flex items-center gap-2 overflow-x-auto scrollbar-none">
-        <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 font-mono pl-2 hidden sm:inline">
-          Popup Windows:
-        </span>
-        {[
-          { id: 'floor', label: 'Floor & Tables', icon: '🪑', count: activeTablesList.length, open: () => setIsFloorModalOpen(true) },
-          { id: 'menu_photos', label: 'Menu & Photos', icon: '📸', count: activeMenuItemsList.length, open: () => setIsMenuPhotosModalOpen(true) },
-          { id: 'reviews', label: 'Reviews & Shield', icon: '⭐', count: reviews.filter((r) => r.restaurant_id === restaurant.id).length, open: () => setIsReviewsModalOpen(true) },
-          { id: 'smart_hub', label: 'Smart Automation', icon: '⚡', open: () => setIsSmartHubModalOpen(true) },
-          { id: 'pos', label: 'POS & Hardware', icon: '🖨️', badge: restaurant.pos_provider || 'Petpooja', open: () => setIsPosModalOpen(true) },
-          { id: 'settings', label: 'Venue Settings', icon: '⚙️', open: () => setIsSettingsModalOpen(true) }
-        ].map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            onClick={item.open}
-            className="px-3 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white bg-slate-900/90 hover:bg-amber-500/20 hover:border-amber-500/40 border border-white/[0.08] transition-all flex items-center space-x-1.5 whitespace-nowrap cursor-pointer shadow-sm active:scale-95"
-          >
-            <span>{item.icon}</span>
-            <span>{item.label}</span>
-            {item.count !== undefined && (
-              <span className="text-[10px] px-1.5 py-0.2 rounded-full font-mono bg-slate-800 text-amber-300 font-bold">
-                {item.count}
-              </span>
-            )}
-            {item.badge && (
-              <span className="text-[9px] uppercase px-1.5 py-0.2 rounded font-mono bg-slate-800 text-orange-300 font-bold hidden md:inline">
-                {item.badge}
-              </span>
-            )}
-            <Maximize2 className="w-3 h-3 text-slate-500 group-hover:text-amber-400" />
-          </button>
-        ))}
-      </div>
 
       {/* ── Urgent Alerts (if any) ───────────────────────────────── */}
       {unreadServiceAlerts.length > 0 && (
@@ -420,412 +385,320 @@ export const ManagerDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 🌟 ALL-IN-ONE EXECUTIVE LISTERS OVERVIEW (ALL VISIBLE AT ONCE) */}
-      {/* ═══════════════════════════════════════════════════════════ */}
-      <div className="space-y-6">
-        {/* Top Operational Metrics */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div className="bg-[#0D1322] p-4 rounded-2xl border border-white/[0.08] shadow flex items-center space-x-3.5">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
-              <DollarSign className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="text-[11px] text-slate-400 font-medium">Session Revenue</span>
-              <p className="font-serif text-xl font-bold text-white">₹{totalVolume.toFixed(2)}</p>
-            </div>
+      {/* ── Key Metrics Summary Strip ────────────────────────────── */}
+      <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+        <div className="bg-[#0D1322] p-3.5 sm:p-4 rounded-2xl border border-white/[0.08] shadow flex items-center space-x-3">
+          <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+            <DollarSign className="w-4 h-4" />
           </div>
-
-          <div className="bg-[#0D1322] p-4 rounded-2xl border border-white/[0.08] shadow flex items-center space-x-3.5">
-            <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
-              <ShoppingBag className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="text-[11px] text-slate-400 font-medium">Orders Placed</span>
-              <p className="font-serif text-xl font-bold text-white">{totalOrdersCount} tickets</p>
-            </div>
-          </div>
-
-          <div className="bg-[#0D1322] p-4 rounded-2xl border border-white/[0.08] shadow flex items-center space-x-3.5">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-              <CheckCircle2 className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="text-[11px] text-slate-400 font-medium">Active QR Tables</span>
-              <p className="font-serif text-xl font-bold text-white">{activeTablesList.length} tables</p>
-            </div>
+          <div>
+            <span className="text-[10px] text-slate-400 font-medium">Revenue</span>
+            <p className="font-serif text-base sm:text-lg font-bold text-white">₹{totalVolume.toFixed(2)}</p>
           </div>
         </div>
 
-        {/* ── LISTER 1: FLOOR & TABLES OVERVIEW ──────────────────── */}
-        <section className="bg-[#0D1322] p-5 sm:p-6 rounded-3xl border border-white/[0.08] shadow-xl space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
-            <div className="flex items-center space-x-3">
-              <span className="text-2xl">🪑</span>
+        <div className="bg-[#0D1322] p-3.5 sm:p-4 rounded-2xl border border-white/[0.08] shadow flex items-center space-x-3">
+          <div className="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+            <ShoppingBag className="w-4 h-4" />
+          </div>
+          <div>
+            <span className="text-[10px] text-slate-400 font-medium">Orders</span>
+            <p className="font-serif text-base sm:text-lg font-bold text-white">{totalOrdersCount} tickets</p>
+          </div>
+        </div>
+
+        <div className="bg-[#0D1322] p-3.5 sm:p-4 rounded-2xl border border-white/[0.08] shadow flex items-center space-x-3">
+          <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+            <CheckCircle2 className="w-4 h-4" />
+          </div>
+          <div>
+            <span className="text-[10px] text-slate-400 font-medium">Active Tables</span>
+            <p className="font-serif text-base sm:text-lg font-bold text-white">{activeTablesList.length} tables</p>
+          </div>
+        </div>
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/* 📋 UNIFIED VERTICAL FUNCTIONS ROSTER (SEE ALL AT ONCE)      */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <div className="space-y-4">
+        {/* ── 1. 🪑 Floor & Live Tables ──────────────────────────── */}
+        <div className="bg-[#0D1322] p-4 sm:p-5 rounded-3xl border border-white/[0.08] shadow-lg space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2.5">
+              <span className="text-xl">🪑</span>
               <div>
-                <div className="flex items-center space-x-2">
-                  <h3 className="font-serif font-bold text-lg text-white">Floor &amp; Live Tables Lister</h3>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                    {activeTablesList.length} Tables Active
-                  </span>
-                </div>
-                <p className="text-xs text-slate-400">Live seating layout, open bills, and table token launcher</p>
+                <h3 className="font-serif font-bold text-base text-white">1. Floor &amp; Live Tables Operations</h3>
+                <p className="text-[11px] text-slate-400">{activeTablesList.length} tables configured • Live seating &amp; open tickets</p>
               </div>
             </div>
-
             <button
               type="button"
               onClick={() => setIsFloorModalOpen(true)}
-              className="px-3.5 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 text-white font-bold text-xs rounded-xl shadow flex items-center space-x-1.5 transition-all cursor-pointer"
+              className="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 text-white font-bold text-xs rounded-xl shadow flex items-center space-x-1.5 transition-all cursor-pointer"
             >
-              <Maximize2 className="w-3.5 h-3.5" />
-              <span>Open Floor Window</span>
+              <Maximize2 className="w-3 h-3" />
+              <span>Open Window</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {activeTablesList.slice(0, 6).map((table) => {
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+            {activeTablesList.slice(0, 4).map((table) => {
               const tableOrders = activeOrdersList.filter((o) => o.table_id === table.id);
-              const tableTotal = tableOrders.reduce((sum, o) => sum + o.total_amount, 0);
-              const hasOpenOrders = tableOrders.length > 0;
-
+              const hasOpen = tableOrders.length > 0;
               return (
-                <div
-                  key={table.id}
-                  className={`bg-slate-900/90 rounded-2xl p-4 border transition-all flex flex-col justify-between space-y-3 ${
-                    hasOpenOrders ? 'border-amber-500/40 shadow-md ring-1 ring-amber-400/20' : 'border-white/[0.08]'
-                  }`}
-                >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <div className="flex items-center space-x-2">
-                        <h4 className="font-bold text-white text-sm">{table.label}</h4>
-                        <span className="text-[10px] text-slate-400 font-mono">({(table as any).seating_capacity || 4} seats)</span>
-                      </div>
-                      <span className="text-[10px] text-slate-400 mt-0.5 block">
-                        Token: <code className="font-mono text-amber-400">{table.public_token}</code>
-                      </span>
-                    </div>
-
-                    <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold font-mono ${
-                      hasOpenOrders ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 animate-pulse' : 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
-                    }`}>
-                      {hasOpenOrders ? `₹${tableTotal} Open` : 'Ready'}
-                    </span>
+                <div key={table.id} className="bg-slate-900/90 p-2.5 rounded-xl border border-white/[0.06] flex items-center justify-between">
+                  <div>
+                    <span className="font-bold text-xs text-white block">{table.label}</span>
+                    <span className="text-[9px] text-slate-400 font-mono">{table.public_token}</span>
                   </div>
-
-                  <div className="flex items-center gap-1.5 pt-1">
-                    <Link
-                      to={`/r/${restaurant.slug}/menu?t=${table.public_token}`}
-                      className="flex-1 py-1.5 px-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-[11px] rounded-lg text-center transition-all flex items-center justify-center space-x-1"
-                    >
-                      <UtensilsCrossed className="w-3 h-3" />
-                      <span>Launch Menu</span>
-                    </Link>
-
-                    <button
-                      type="button"
-                      onClick={handleTestUsbPrint}
-                      className="py-1.5 px-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-[11px] font-bold border border-white/[0.08] flex items-center space-x-1 cursor-pointer"
-                    >
-                      <Printer className="w-3 h-3 text-amber-400" />
-                      <span>KOT</span>
-                    </button>
-                  </div>
+                  <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold font-mono ${
+                    hasOpen ? 'bg-amber-500/20 text-amber-300' : 'bg-emerald-500/15 text-emerald-300'
+                  }`}>
+                    {hasOpen ? 'Open Bill' : 'Ready'}
+                  </span>
                 </div>
               );
             })}
           </div>
-        </section>
+        </div>
 
-        {/* ── LISTER 2: MENU & PHOTO STUDIO OVERVIEW ─────────────── */}
-        <section className="bg-[#0D1322] p-5 sm:p-6 rounded-3xl border border-white/[0.08] shadow-xl space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
-            <div className="flex items-center space-x-3">
-              <span className="text-2xl">📸</span>
+        {/* ── 2. 📸 Restaurant Menu & Photo Studio ───────────────── */}
+        <div className="bg-[#0D1322] p-4 sm:p-5 rounded-3xl border border-white/[0.08] shadow-lg space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2.5">
+              <span className="text-xl">📸</span>
               <div>
-                <div className="flex items-center space-x-2">
-                  <h3 className="font-serif font-bold text-lg text-white">Restaurant Menu &amp; Photo Studio Lister</h3>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
-                    {activeMenuItemsList.length} Dishes
-                  </span>
-                </div>
-                <p className="text-xs text-slate-400">Multi-angle photos, cover selection, and instant availability toggle</p>
+                <h3 className="font-serif font-bold text-base text-white">2. Restaurant Menu &amp; Photo Studio</h3>
+                <p className="text-[11px] text-slate-400">{activeMenuItemsList.length} menu items • Multi-angle gallery &amp; cover manager</p>
               </div>
             </div>
-
             <div className="flex items-center space-x-2">
               <button
                 type="button"
                 onClick={() => setIsRestaurantPhotoModalOpen(true)}
-                className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl border border-white/[0.08] flex items-center space-x-1 cursor-pointer"
+                className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl border border-white/[0.08] flex items-center space-x-1 cursor-pointer"
               >
-                <Building2 className="w-3.5 h-3.5 text-amber-400" />
-                <span>Ambiance Photos</span>
+                <Building2 className="w-3 h-3 text-amber-400" />
+                <span className="hidden sm:inline">Ambiance</span>
               </button>
-
               <button
                 type="button"
                 onClick={() => setIsMenuPhotosModalOpen(true)}
-                className="px-3.5 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 text-white font-bold text-xs rounded-xl shadow flex items-center space-x-1.5 transition-all cursor-pointer"
+                className="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 text-white font-bold text-xs rounded-xl shadow flex items-center space-x-1.5 transition-all cursor-pointer"
               >
-                <Maximize2 className="w-3.5 h-3.5" />
-                <span>Open Photos Window</span>
+                <Maximize2 className="w-3 h-3" />
+                <span>Open Window</span>
               </button>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-            {activeMenuItemsList.slice(0, 4).map((dish) => {
-              const dishPhotos: string[] = [];
-              if (dish.gallery_images && dish.gallery_images.length > 0) {
-                dish.gallery_images.forEach((g) => {
-                  if (g.src && !dishPhotos.includes(g.src)) dishPhotos.push(g.src);
-                });
-              } else if (dish.image_url) {
-                dishPhotos.push(dish.image_url);
-              }
-              if (dish.image_url && !dishPhotos.includes(dish.image_url)) {
-                dishPhotos.unshift(dish.image_url);
-              }
-
-              return (
-                <div key={dish.id} className="bg-slate-900/90 rounded-2xl border border-white/[0.08] overflow-hidden flex flex-col justify-between group">
-                  <div className="relative aspect-[4/3] overflow-hidden bg-black/40">
-                    <img
-                      src={dish.image_url || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600'}
-                      alt={dish.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute top-2 right-2">
-                      <span className="px-2 py-0.5 rounded-full text-[8px] font-bold bg-black/80 text-amber-300 backdrop-blur-sm border border-amber-500/30">
-                        {dishPhotos.length} Photos
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="p-3 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <h4 className="font-bold text-xs text-white line-clamp-1">{dish.name}</h4>
-                      <span className="text-xs font-bold text-amber-400 font-mono">₹{dish.price}</span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setPhotoStudioDish(dish)}
-                      className="w-full py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-[11px] rounded-lg flex items-center justify-center space-x-1 cursor-pointer"
-                    >
-                      <Upload className="w-3 h-3" />
-                      <span>Manage Photos</span>
-                    </button>
-                  </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+            {activeMenuItemsList.slice(0, 4).map((dish) => (
+              <div key={dish.id} className="bg-slate-900/90 rounded-xl overflow-hidden border border-white/[0.06] flex items-center p-1.5 space-x-2">
+                <img
+                  src={dish.image_url || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=200'}
+                  alt={dish.name}
+                  className="w-9 h-9 rounded-lg object-cover flex-shrink-0"
+                />
+                <div className="truncate flex-1">
+                  <span className="text-xs font-bold text-white block truncate">{dish.name}</span>
+                  <span className="text-[10px] text-amber-400 font-mono">₹{dish.price}</span>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
-        </section>
+        </div>
 
-        {/* ── LISTER 3: GOOGLE REVIEWS & REPUTATION SHIELD ───────── */}
-        <section className="bg-[#0D1322] p-5 sm:p-6 rounded-3xl border border-white/[0.08] shadow-xl space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
-            <div className="flex items-center space-x-3">
-              <span className="text-2xl">⭐</span>
+        {/* ── 3. ⭐ Google Reviews & 5-Star Floor Shield ──────────── */}
+        <div className="bg-[#0D1322] p-4 sm:p-5 rounded-3xl border border-white/[0.08] shadow-lg space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2.5">
+              <span className="text-xl">⭐</span>
               <div>
-                <div className="flex items-center space-x-2">
-                  <h3 className="font-serif font-bold text-lg text-white">Google Reviews &amp; Shield Lister</h3>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                    4.9★ Floor Shield Active
-                  </span>
-                </div>
-                <p className="text-xs text-slate-400">Diner feedback routing &amp; automated 5-star Google review triggers</p>
+                <h3 className="font-serif font-bold text-base text-white">3. Google Reviews &amp; 5-Star Shield</h3>
+                <p className="text-[11px] text-slate-400">4.9★ Average • Private grievance routing &amp; automated reviews</p>
               </div>
             </div>
-
             <button
               type="button"
               onClick={() => setIsReviewsModalOpen(true)}
-              className="px-3.5 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 text-white font-bold text-xs rounded-xl shadow flex items-center space-x-1.5 transition-all cursor-pointer"
+              className="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 text-white font-bold text-xs rounded-xl shadow flex items-center space-x-1.5 transition-all cursor-pointer"
             >
-              <Maximize2 className="w-3.5 h-3.5" />
-              <span>Open Reviews Window</span>
+              <Maximize2 className="w-3 h-3" />
+              <span>Open Window</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
             {reviews.filter((r) => r.restaurant_id === restaurant.id).slice(0, 2).map((rev) => (
-              <div key={rev.id} className="bg-slate-900/90 p-4 rounded-2xl border border-white/[0.08] space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-xs text-white">{rev.customer_name || 'Verified Diner'}</span>
-                  <div className="flex items-center text-amber-400 text-xs">
+              <div key={rev.id} className="bg-slate-900/90 p-2.5 rounded-xl border border-white/[0.06] space-y-1">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-white">{rev.customer_name || 'Verified Diner'}</span>
+                  <div className="flex text-amber-400">
                     {Array.from({ length: rev.rating }).map((_, i) => (
-                      <Star key={i} className="w-3 h-3 fill-amber-400" />
+                      <Star key={i} className="w-2.5 h-2.5 fill-amber-400" />
                     ))}
                   </div>
                 </div>
-                <p className="text-xs text-slate-300 leading-relaxed font-normal">"{rev.review_text}"</p>
+                <p className="text-[11px] text-slate-300 line-clamp-1">"{rev.review_text}"</p>
               </div>
             ))}
           </div>
-        </section>
+        </div>
 
-        {/* ── LISTER 4: SMART AUTOMATION & UPSELL HUB ─────────────── */}
-        <section className="bg-[#0D1322] p-5 sm:p-6 rounded-3xl border border-white/[0.08] shadow-xl space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
-            <div className="flex items-center space-x-3">
-              <span className="text-2xl">⚡</span>
+        {/* ── 4. ⚡ Smart Growth Engine & Upsell Pairings ─────────── */}
+        <div className="bg-[#0D1322] p-4 sm:p-5 rounded-3xl border border-white/[0.08] shadow-lg space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2.5">
+              <span className="text-xl">⚡</span>
               <div>
                 <div className="flex items-center space-x-2">
-                  <h3 className="font-serif font-bold text-lg text-white">Smart Automation &amp; Growth Engine</h3>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
-                    Auto-KOT &amp; Viral Stories
-                  </span>
+                  <h3 className="font-serif font-bold text-base text-white">4. Smart Growth Engine &amp; Upsell Pairings</h3>
+                  {isPairingsActive && (
+                    <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                      ✓ Pairings Active
+                    </span>
+                  )}
                 </div>
-                <p className="text-xs text-slate-400">Dynamic pricing, kitchen automation, and Instagram story studio</p>
+                <p className="text-[11px] text-slate-400">Chef cart pairings, Happy hour schedule, and food rewards</p>
               </div>
             </div>
-
             <button
               type="button"
               onClick={() => setIsSmartHubModalOpen(true)}
-              className="px-3.5 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 text-white font-bold text-xs rounded-xl shadow flex items-center space-x-1.5 transition-all cursor-pointer"
+              className="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 text-white font-bold text-xs rounded-xl shadow flex items-center space-x-1.5 transition-all cursor-pointer"
             >
-              <Maximize2 className="w-3.5 h-3.5" />
-              <span>Open Smart Hub Window</span>
+              <Maximize2 className="w-3 h-3" />
+              <span>Open Window</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="bg-slate-900/90 p-3.5 rounded-2xl border border-white/[0.08] space-y-1.5">
-              <span className="text-xs font-bold text-white">🔥 Direct KOT</span>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+            <div className="bg-slate-900/90 p-2.5 rounded-xl border border-white/[0.06] space-y-0.5">
+              <span className="text-xs font-bold text-emerald-400 block">🧑‍🍳 {pairingsBadgeText}</span>
+              <p className="text-[10px] text-slate-400">Cart recommendation active with signature dishes</p>
+            </div>
+            <div className="bg-slate-900/90 p-2.5 rounded-xl border border-white/[0.06] space-y-0.5">
+              <span className="text-xs font-bold text-amber-400 block">⚡ Twilight Happy Hour</span>
               <p className="text-[10px] text-slate-400">
-                {restaurant.direct_kitchen_kot_enabled ? 'Auto-Fire to KDS' : 'Manual Approval'}
+                {restaurant.happy_hour_config?.enabled ? `${restaurant.happy_hour_config.discount_percent}% Off (${restaurant.happy_hour_config.start_time}-${restaurant.happy_hour_config.end_time})` : 'Configured (Off-peak)'}
               </p>
             </div>
-            <div className="bg-slate-900/90 p-3.5 rounded-2xl border border-white/[0.08] space-y-1.5">
-              <span className="text-xs font-bold text-white">⚡ Happy Hour</span>
-              <p className="text-[10px] text-slate-400">
-                {restaurant.happy_hour_config?.enabled ? `${restaurant.happy_hour_config.discount_percent}% Off` : 'Disabled'}
-              </p>
-            </div>
-            <div className="bg-slate-900/90 p-3.5 rounded-2xl border border-white/[0.08] space-y-1.5">
-              <span className="text-xs font-bold text-white">📸 Instagram Card</span>
-              <p className="text-[10px] text-slate-400">9:16 Viral Generator</p>
-            </div>
-            <div className="bg-slate-900/90 p-3.5 rounded-2xl border border-white/[0.08] space-y-1.5">
-              <span className="text-xs font-bold text-white">🧑‍🍳 Pairings</span>
-              <p className="text-[10px] text-slate-400">Smart Cart Upsell</p>
+            <div className="bg-slate-900/90 p-2.5 rounded-xl border border-white/[0.06] space-y-0.5">
+              <span className="text-xs font-bold text-purple-400 block">🎁 Table Food Rewards</span>
+              <p className="text-[10px] text-slate-400">Chef dessert &amp; mocktail incentives</p>
             </div>
           </div>
-        </section>
+        </div>
 
-        {/* ── LISTER 5: POS & HARDWARE BRIDGES ───────────────────── */}
-        <section className="bg-[#0D1322] p-5 sm:p-6 rounded-3xl border border-white/[0.08] shadow-xl space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
-            <div className="flex items-center space-x-3">
-              <span className="text-2xl">🖨️</span>
+        {/* ── 5. 🖨️ POS & Thermal Hardware Bridge ────────────────── */}
+        <div className="bg-[#0D1322] p-4 sm:p-5 rounded-3xl border border-white/[0.08] shadow-lg space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2.5">
+              <span className="text-xl">🖨️</span>
               <div>
-                <div className="flex items-center space-x-2">
-                  <h3 className="font-serif font-bold text-lg text-white">POS &amp; Thermal Hardware Bridge</h3>
-                  <span className="text-[10px] uppercase font-bold font-mono px-2 py-0.5 rounded-full bg-orange-500/15 text-orange-300 border border-orange-500/30">
-                    {restaurant.pos_provider || 'Petpooja'}
-                  </span>
-                </div>
-                <p className="text-xs text-slate-400">Universal POS sync, ESC/POS thermal printing, and billing integration</p>
+                <h3 className="font-serif font-bold text-base text-white">5. POS &amp; Thermal Hardware Bridge</h3>
+                <p className="text-[11px] text-slate-400">Active adapter: <strong className="text-amber-400 uppercase font-mono">{restaurant.pos_provider || 'Petpooja'}</strong> • ESC/POS WebUSB Sync</p>
               </div>
             </div>
-
             <button
               type="button"
               onClick={() => setIsPosModalOpen(true)}
-              className="px-3.5 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 text-white font-bold text-xs rounded-xl shadow flex items-center space-x-1.5 transition-all cursor-pointer"
+              className="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 text-white font-bold text-xs rounded-xl shadow flex items-center space-x-1.5 transition-all cursor-pointer"
             >
-              <Maximize2 className="w-3.5 h-3.5" />
-              <span>Open POS Window</span>
+              <Maximize2 className="w-3 h-3" />
+              <span>Open Window</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
             {['petpooja', 'royalpos', 'recaho', 'rancelab'].map((p) => (
-              <div
+              <button
                 key={p}
-                className={`p-3 rounded-2xl border text-left capitalize text-xs font-bold ${
+                type="button"
+                onClick={() => {
+                  setSelectedPosTab(p as any);
+                  updateRestaurant(restaurant.id, { pos_provider: p as any });
+                }}
+                className={`p-2 rounded-xl border text-left capitalize text-xs font-bold cursor-pointer transition-all ${
                   (restaurant.pos_provider || 'petpooja') === p
-                    ? 'bg-amber-500/15 border-amber-500/40 text-amber-300'
-                    : 'bg-slate-900/90 border-white/[0.08] text-slate-400'
+                    ? 'bg-amber-500/20 border-amber-500/40 text-amber-300'
+                    : 'bg-slate-900/90 border-white/[0.06] text-slate-400 hover:text-white'
                 }`}
               >
                 <span>{p}</span>
-                <span className="block text-[10px] text-slate-500 font-normal mt-0.5">
-                  {(restaurant.pos_provider || 'petpooja') === p ? '● Active Bridge' : 'Available'}
+                <span className="block text-[9px] text-slate-500 font-normal">
+                  {(restaurant.pos_provider || 'petpooja') === p ? '● Connected' : 'Adapter'}
                 </span>
-              </div>
+              </button>
             ))}
           </div>
-        </section>
+        </div>
 
-        {/* ── LISTER 6: VENUE SETTINGS & FLOOR PLAN ──────────────── */}
-        <section className="bg-[#0D1322] p-5 sm:p-6 rounded-3xl border border-white/[0.08] shadow-xl space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
-            <div className="flex items-center space-x-3">
-              <span className="text-2xl">⚙️</span>
+        {/* ── 6. ⚙️ Venue Settings & Floor Plan ───────────────────── */}
+        <div className="bg-[#0D1322] p-4 sm:p-5 rounded-3xl border border-white/[0.08] shadow-lg space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2.5">
+              <span className="text-xl">⚙️</span>
               <div>
-                <h3 className="font-serif font-bold text-lg text-white">Venue Settings &amp; Floor Plan Lister</h3>
-                <p className="text-xs text-slate-400">QR launch kit, AI training persona, and table customizer</p>
+                <h3 className="font-serif font-bold text-base text-white">6. Venue Settings &amp; Handover Hub</h3>
+                <p className="text-[11px] text-slate-400">QR launch sheets, Chef AI knowledge persona &amp; table customizer</p>
               </div>
             </div>
-
             <button
               type="button"
               onClick={() => setIsSettingsModalOpen(true)}
-              className="px-3.5 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 text-white font-bold text-xs rounded-xl shadow flex items-center space-x-1.5 transition-all cursor-pointer"
+              className="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 text-white font-bold text-xs rounded-xl shadow flex items-center space-x-1.5 transition-all cursor-pointer"
             >
-              <Maximize2 className="w-3.5 h-3.5" />
-              <span>Open Settings Window</span>
+              <Maximize2 className="w-3 h-3" />
+              <span>Open Window</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-2 pt-1">
             <button
               type="button"
               onClick={() => setIsLaunchKitOpen(true)}
-              className="p-3.5 rounded-2xl bg-slate-900/90 border border-white/[0.08] hover:border-amber-500/40 text-left transition-all space-y-1 cursor-pointer"
+              className="p-2.5 rounded-xl bg-slate-900/90 border border-white/[0.06] hover:border-amber-500/40 text-left transition-all cursor-pointer"
             >
-              <h4 className="font-bold text-xs text-white">📲 Guest Links &amp; QRs</h4>
-              <p className="text-[10px] text-slate-400">WhatsApp handover &amp; printable codes</p>
+              <span className="text-xs font-bold text-white block">📲 QR Launch Kit</span>
+              <span className="text-[10px] text-slate-400">Printable sheets</span>
             </button>
 
             <button
               type="button"
               onClick={() => setIsTableModalOpen(true)}
-              className="p-3.5 rounded-2xl bg-slate-900/90 border border-white/[0.08] hover:border-emerald-500/40 text-left transition-all space-y-1 cursor-pointer"
+              className="p-2.5 rounded-xl bg-slate-900/90 border border-white/[0.06] hover:border-emerald-500/40 text-left transition-all cursor-pointer"
             >
-              <h4 className="font-bold text-xs text-white">🪑 Floor Plan Editor</h4>
-              <p className="text-[10px] text-slate-400">Configure capacities &amp; tokens</p>
+              <span className="text-xs font-bold text-white block">🪑 Floor Editor</span>
+              <span className="text-[10px] text-slate-400">Edit table tokens</span>
             </button>
 
             <button
               type="button"
               onClick={() => setIsAiStudioOpen(true)}
-              className="p-3.5 rounded-2xl bg-slate-900/90 border border-white/[0.08] hover:border-purple-500/40 text-left transition-all space-y-1 cursor-pointer"
+              className="p-2.5 rounded-xl bg-slate-900/90 border border-white/[0.06] hover:border-purple-500/40 text-left transition-all cursor-pointer"
             >
-              <h4 className="font-bold text-xs text-white">🧑‍🍳 Chef AI Knowledge</h4>
-              <p className="text-[10px] text-slate-400">Train dining concierge bot</p>
+              <span className="text-xs font-bold text-white block">🧑‍🍳 Chef AI Persona</span>
+              <span className="text-[10px] text-slate-400">Train dining bot</span>
             </button>
           </div>
-        </section>
+        </div>
       </div>
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 🪑 MODAL POPUP WINDOW 1: FLOOR & TABLES                    */}
+      {/* 🪑 POPUP WINDOW 1: FLOOR & TABLES                          */}
       {/* ═══════════════════════════════════════════════════════════ */}
       {isFloorModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-          <div className="bg-[#0D1322] rounded-3xl max-w-5xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-5 sm:p-7 relative space-y-5 border border-white/[0.1] text-white">
+          <div className="bg-[#0D1322] rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-5 sm:p-7 relative space-y-5 border border-white/[0.12] text-white">
             <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">🪑</span>
                 <div>
                   <h3 className="font-serif font-bold text-xl text-white">Floor &amp; Live Tables Manager</h3>
-                  <p className="text-xs text-slate-400">Manage live seating, table tokens, and orders</p>
+                  <p className="text-xs text-slate-400">Manage seating layout, open tabs, and launch diner menus</p>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
@@ -872,7 +745,7 @@ export const ManagerDashboard: React.FC = () => {
                         className="flex-1 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-xs rounded-xl text-center flex items-center justify-center space-x-1"
                       >
                         <UtensilsCrossed className="w-3.5 h-3.5" />
-                        <span>Open Diner Menu</span>
+                        <span>Launch Menu</span>
                       </Link>
                       <button
                         type="button"
@@ -892,17 +765,17 @@ export const ManagerDashboard: React.FC = () => {
       )}
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 📸 MODAL POPUP WINDOW 2: RESTAURANT MENU & PHOTOS STUDIO    */}
+      {/* 📸 POPUP WINDOW 2: RESTAURANT MENU & PHOTOS STUDIO          */}
       {/* ═══════════════════════════════════════════════════════════ */}
       {isMenuPhotosModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-          <div className="bg-[#0D1322] rounded-3xl max-w-5xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-5 sm:p-7 relative space-y-5 border border-white/[0.1] text-white">
+          <div className="bg-[#0D1322] rounded-3xl max-w-5xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-5 sm:p-7 relative space-y-5 border border-white/[0.12] text-white">
             <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">📸</span>
                 <div>
                   <h3 className="font-serif font-bold text-xl text-white">Restaurant Menu &amp; Photo Studio</h3>
-                  <p className="text-xs text-slate-400">Multi-photo management &amp; availability toggles</p>
+                  <p className="text-xs text-slate-400">Multi-photo uploads per dish &amp; ambiance gallery</p>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
@@ -924,7 +797,7 @@ export const ManagerDashboard: React.FC = () => {
               </div>
             </div>
 
-            {/* Search */}
+            {/* Search Input - Cleanly styled for visible typing */}
             <div className="relative w-full sm:w-80">
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
@@ -932,12 +805,11 @@ export const ManagerDashboard: React.FC = () => {
                 value={photoStudioSearch}
                 onChange={(e) => setPhotoStudioSearch(e.target.value)}
                 placeholder="Search dishes to edit photos..."
-                className="w-full pl-9 pr-3 py-2 bg-slate-900 border border-white/[0.08] rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/60"
+                className="w-full pl-9 pr-3 py-2 bg-slate-900 border border-white/[0.15] rounded-xl text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-500/60"
               />
             </div>
 
-            {/* Dishes Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5">
               {activeMenuItemsList
                 .filter((dish) => {
                   if (!photoStudioSearch.trim()) return true;
@@ -1006,17 +878,17 @@ export const ManagerDashboard: React.FC = () => {
       )}
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* ⭐ MODAL POPUP WINDOW 3: GOOGLE REVIEWS & SHIELD            */}
+      {/* ⭐ POPUP WINDOW 3: GOOGLE REVIEWS & SHIELD                  */}
       {/* ═══════════════════════════════════════════════════════════ */}
       {isReviewsModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-          <div className="bg-[#0D1322] rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-5 sm:p-7 relative space-y-5 border border-white/[0.1] text-white">
+          <div className="bg-[#0D1322] rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-5 sm:p-7 relative space-y-5 border border-white/[0.12] text-white">
             <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">⭐</span>
                 <div>
                   <h3 className="font-serif font-bold text-xl text-white">Google 5-Star Reviews &amp; Reputation Shield</h3>
-                  <p className="text-xs text-slate-400">Manage live reviews and floor shield routing</p>
+                  <p className="text-xs text-slate-400">Verified diner feedback and floor grievance routing</p>
                 </div>
               </div>
               <button
@@ -1052,17 +924,17 @@ export const ManagerDashboard: React.FC = () => {
       )}
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* ⚡ MODAL POPUP WINDOW 4: SMART AUTOMATION                   */}
+      {/* ⚡ POPUP WINDOW 4: SMART GROWTH & UPSELL ENGINE             */}
       {/* ═══════════════════════════════════════════════════════════ */}
       {isSmartHubModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-          <div className="bg-[#0D1322] rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-5 sm:p-7 relative space-y-5 border border-white/[0.1] text-white">
+          <div className="bg-[#0D1322] rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-5 sm:p-7 relative space-y-5 border border-white/[0.12] text-white">
             <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">⚡</span>
                 <div>
-                  <h3 className="font-serif font-bold text-xl text-white">Smart Automation &amp; Growth Engine</h3>
-                  <p className="text-xs text-slate-400">Direct KOT, surge pricing, Instagram story generator &amp; upsells</p>
+                  <h3 className="font-serif font-bold text-xl text-white">Smart Growth &amp; Upsell Engine</h3>
+                  <p className="text-xs text-slate-400">Configure AI chef pairings, happy hour schedules, and food reward incentives</p>
                 </div>
               </div>
               <button
@@ -1075,33 +947,45 @@ export const ManagerDashboard: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Smart Pairings */}
               <div className="bg-slate-900/90 p-4 rounded-2xl border border-white/[0.08] space-y-3">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-bold text-sm text-white">🔥 Direct-to-Kitchen KOT</h4>
+                  <h4 className="font-bold text-sm text-white flex items-center space-x-1.5">
+                    <Sparkles className="w-4 h-4 text-emerald-400" />
+                    <span>AI Chef's Cart Pairings</span>
+                  </h4>
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                    restaurant.direct_kitchen_kot_enabled ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-800 text-slate-400'
+                    isPairingsActive ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-800 text-slate-400'
                   }`}>
-                    {restaurant.direct_kitchen_kot_enabled ? 'Auto ON' : 'Manual'}
+                    {isPairingsActive ? 'Active in Cart' : 'Disabled'}
                   </span>
                 </div>
-                <p className="text-xs text-slate-400">Fires orders straight to kitchen display without waiting for approval.</p>
+                <p className="text-xs text-slate-300">
+                  Header: <strong className="text-emerald-300">{pairingsBadgeText}</strong>. Automatically suggests matching drinks &amp; desserts.
+                </p>
                 <button
                   type="button"
-                  onClick={() => updateRestaurant(restaurant.id, { direct_kitchen_kot_enabled: !restaurant.direct_kitchen_kot_enabled })}
+                  onClick={() => setSmartSettingsTab('pairings')}
                   className="w-full py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-xs rounded-xl cursor-pointer"
                 >
-                  {restaurant.direct_kitchen_kot_enabled ? 'Turn OFF Auto-KOT' : 'Enable Auto-KOT'}
+                  Configure Pairings
                 </button>
               </div>
 
+              {/* Happy Hour */}
               <div className="bg-slate-900/90 p-4 rounded-2xl border border-white/[0.08] space-y-3">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-bold text-sm text-white">⚡ Happy Hour &amp; Surge</h4>
+                  <h4 className="font-bold text-sm text-white flex items-center space-x-1.5">
+                    <Zap className="w-4 h-4 text-amber-400" />
+                    <span>Happy Hour &amp; Surge</span>
+                  </h4>
                   <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-300">
-                    {restaurant.happy_hour_config?.enabled ? `${restaurant.happy_hour_config.discount_percent}% Off` : 'Disabled'}
+                    {restaurant.happy_hour_config?.enabled ? `${restaurant.happy_hour_config.discount_percent}% Off` : 'Configured'}
                   </span>
                 </div>
-                <p className="text-xs text-slate-400">Automated off-peak discounts and peak weekend surge pricing.</p>
+                <p className="text-xs text-slate-300">
+                  Off-peak discounts ({restaurant.happy_hour_config?.start_time || '16:00'} - {restaurant.happy_hour_config?.end_time || '19:30'}) and optional surge markup.
+                </p>
                 <button
                   type="button"
                   onClick={() => setSmartSettingsTab('happy_hour')}
@@ -1111,37 +995,26 @@ export const ManagerDashboard: React.FC = () => {
                 </button>
               </div>
 
-              <div className="bg-slate-900/90 p-4 rounded-2xl border border-white/[0.08] space-y-3">
+              {/* Rewards */}
+              <div className="bg-slate-900/90 p-4 rounded-2xl border border-white/[0.08] space-y-3 sm:col-span-2">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-bold text-sm text-white">📸 Instagram Story Card</h4>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-pink-500/20 text-pink-300">
-                    Viral 9:16
+                  <h4 className="font-bold text-sm text-white flex items-center space-x-1.5">
+                    <Gift className="w-4 h-4 text-purple-400" />
+                    <span>Spin Wheel &amp; Dining Food Rewards</span>
+                  </h4>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300">
+                    High Margin Food Items
                   </span>
                 </div>
-                <p className="text-xs text-slate-400">Generate high-converting vertical story cards for social media.</p>
+                <p className="text-xs text-slate-300">
+                  Rewarding diners with artisan mocktails and chef desserts preserves 90%+ margins while driving 5-star Google review completions.
+                </p>
                 <button
                   type="button"
-                  onClick={() => setSmartSettingsTab('instagram')}
+                  onClick={() => setSmartSettingsTab('rewards')}
                   className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl border border-white/[0.08] cursor-pointer"
                 >
-                  Open Story Generator
-                </button>
-              </div>
-
-              <div className="bg-slate-900/90 p-4 rounded-2xl border border-white/[0.08] space-y-3">
-                <div className="flex items-center justify-between">
-                  <h4 className="font-bold text-sm text-white">🧑‍🍳 Smart Pairings</h4>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">
-                    Active
-                  </span>
-                </div>
-                <p className="text-xs text-slate-400">Recommends matching wine, desserts, and sides inside diner cart.</p>
-                <button
-                  type="button"
-                  onClick={() => setSmartSettingsTab('pairings')}
-                  className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl border border-white/[0.08] cursor-pointer"
-                >
-                  Customize Upsells
+                  Edit Rewards Policy
                 </button>
               </div>
             </div>
@@ -1150,11 +1023,11 @@ export const ManagerDashboard: React.FC = () => {
       )}
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 🖨️ MODAL POPUP WINDOW 5: POS & HARDWARE INTEGRATION         */}
+      {/* 🖨️ POPUP WINDOW 5: POS & HARDWARE INTEGRATION              */}
       {/* ═══════════════════════════════════════════════════════════ */}
       {isPosModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-          <div className="bg-[#0D1322] rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-5 sm:p-7 relative space-y-5 border border-white/[0.1] text-white">
+          <div className="bg-[#0D1322] rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-5 sm:p-7 relative space-y-5 border border-white/[0.12] text-white">
             <button
               onClick={() => setIsPosModalOpen(false)}
               className="absolute top-5 right-5 p-2 rounded-full bg-white/[0.06] hover:bg-white/[0.1] text-slate-300 hover:text-white transition-colors z-10 border border-white/[0.08] cursor-pointer"
@@ -1164,9 +1037,9 @@ export const ManagerDashboard: React.FC = () => {
 
             <div>
               <span className="text-[10px] uppercase font-mono font-bold tracking-widest text-amber-400">Kitchen &amp; Billing Sync</span>
-              <h3 className="text-xl font-bold font-serif text-white mt-0.5">Select Your Restaurant's POS System</h3>
+              <h3 className="text-xl font-bold font-serif text-white mt-0.5">Select POS System Adapter</h3>
               <p className="text-xs text-slate-400 mt-0.5">
-                Switch adapters, configure connection credentials, and simulate live KOT dispatch to your thermal printer.
+                Switch adapters, configure connection credentials, and simulate live KOT dispatch.
               </p>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-3">
@@ -1231,17 +1104,17 @@ export const ManagerDashboard: React.FC = () => {
       )}
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* ⚙️ MODAL POPUP WINDOW 6: VENUE SETTINGS                    */}
+      {/* ⚙️ POPUP WINDOW 6: VENUE SETTINGS                          */}
       {/* ═══════════════════════════════════════════════════════════ */}
       {isSettingsModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-          <div className="bg-[#0D1322] rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-5 sm:p-7 relative space-y-5 border border-white/[0.1] text-white">
+          <div className="bg-[#0D1322] rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-5 sm:p-7 relative space-y-5 border border-white/[0.12] text-white">
             <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">⚙️</span>
                 <div>
                   <h3 className="font-serif font-bold text-xl text-white">Venue Settings &amp; Handover Hub</h3>
-                  <p className="text-xs text-slate-400">Manage links, tables, persona, and venue offboarding</p>
+                  <p className="text-xs text-slate-400">Launch kit, table layout, persona, and offboarding</p>
                 </div>
               </div>
               <button
@@ -1314,7 +1187,7 @@ export const ManagerDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* ── Sub-Modals & Customizers ──────────────────────────────── */}
+      {/* ── Sub-Modals ────────────────────────────────────────────── */}
       {isOffboardModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <div className="bg-[#0D1322] rounded-3xl max-w-md w-full p-6 shadow-2xl border border-white/[0.1] text-center space-y-4">
@@ -1401,7 +1274,7 @@ export const ManagerDashboard: React.FC = () => {
         restaurant={restaurant}
         isOpen={!!smartSettingsTab}
         onClose={() => setSmartSettingsTab(null)}
-        initialTab={smartSettingsTab || 'kot'}
+        initialTab={smartSettingsTab || 'pairings'}
         onSave={(updates) => {
           updateRestaurant(restaurant.id, updates);
         }}

@@ -970,17 +970,6 @@ export const MasterAdminDashboard: React.FC = () => {
                         </div>
 
                         <div className="flex items-center space-x-1.5 flex-shrink-0">
-                          <button
-                            onClick={() => {
-                              setCurrentRestaurant(r.id);
-                              setPhotoModalRestaurant(r);
-                              setIsPhotoModalOpen(true);
-                            }}
-                            className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg transition-colors border border-white/[0.08] cursor-pointer flex items-center"
-                            title={`Manage ${r.name} Photos`}
-                          >
-                            <ImageIcon className="w-3.5 h-3.5 text-amber-400" />
-                          </button>
                           <Link
                             to={`/manage/${r.slug}`}
                             onClick={() => setCurrentRestaurant(r.id)}

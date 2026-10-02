@@ -7,7 +7,6 @@ export interface Translations {
   callWaiter: string;
   waiterCalled: string;
   aiSommelier: string;
-  instagramStory: string;
   languageSelect: string;
   
   // Search & Filters
@@ -61,7 +60,6 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     callWaiter: 'Call Captain',
     waiterCalled: 'Captain Notified!',
     aiSommelier: 'AI Sommelier',
-    instagramStory: 'Instagram Story',
     languageSelect: 'Language',
     searchPlaceholder: 'Search truffle pasta, biryani, starters, cocktails...',
     allCategories: 'All Categories',
@@ -105,7 +103,6 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     callWaiter: 'वेटर को बुलाएं',
     waiterCalled: 'कप्तान को सूचित किया गया!',
     aiSommelier: 'एआई शेफ गाइड',
-    instagramStory: 'इंस्टाग्राम स्टोरी',
     languageSelect: 'भाषा',
     searchPlaceholder: 'व्यंजन, बिरयानी, पनीर, पेय पदार्थ खोजें...',
     allCategories: 'सभी श्रेणियां',
@@ -149,7 +146,6 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     callWaiter: 'कॅप्टनला बोलवा',
     waiterCalled: 'कॅप्टनला कळवले आहे!',
     aiSommelier: 'एआय शेफ मार्गदर्शक',
-    instagramStory: 'इन्स्टाग्राम स्टोरी',
     languageSelect: 'भाषा',
     searchPlaceholder: 'व्यंजन, बिर्याणी, स्टार्टर्स, पेये शोधा...',
     allCategories: 'सर्व वर्गवारी',

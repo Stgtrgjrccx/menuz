@@ -17,7 +17,6 @@ import {
   Copy,
   Check,
   ArrowLeftRight,
-  Instagram,
   Users,
   ShieldCheck,
   Maximize2
@@ -31,7 +30,6 @@ import { AiAssistantDrawer } from '../components/AiAssistantDrawer';
 import { OrderTrackerModal } from '../components/OrderTrackerModal';
 import { SpinWheelModal } from '../components/SpinWheelModal';
 import { SwitchRestaurantModal } from '../components/SwitchRestaurantModal';
-import { InstagramStoryModal } from '../components/InstagramStoryModal';
 import { LanguageSelector } from '../components/LanguageSelector';
 import { TRANSLATIONS, getCategoryTitle } from '../utils/i18n';
 import { PUNE_RESTAURANT_DIRECTORY } from '../data/puneRestaurantDirectory';
@@ -195,9 +193,6 @@ export const DinerMenu: React.FC = () => {
 
   // Reward teaser banner dismiss state
   const [rewardBannerDismissed, setRewardBannerDismissed] = useState(false);
-
-  // Instagram Story Foodie Card state
-  const [isInstagramStoryOpen, setIsInstagramStoryOpen] = useState(false);
   const [tableSyncAlert, setTableSyncAlert] = useState<string | null>(null);
   const [activeTableGuests, setActiveTableGuests] = useState<number>(2);
   const [forceHappyHourDemo, setForceHappyHourDemo] = useState<boolean>(true);
@@ -581,14 +576,6 @@ export const DinerMenu: React.FC = () => {
               <span className="text-xs">🧑‍🍳</span>
               <span>Chef AI</span>
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse ml-0.5" />
-            </button>
-
-            <button
-              onClick={() => setIsInstagramStoryOpen(true)}
-              className="px-2.5 py-1 bg-pink-950/30 hover:bg-pink-900/40 text-pink-300 text-[10px] sm:text-[11px] font-semibold rounded-full border border-pink-500/30 transition-all flex items-center space-x-1 cursor-pointer flex-shrink-0"
-            >
-              <Instagram className="w-3 h-3 text-pink-400" />
-              <span>Story Perk</span>
             </button>
           </div>
         </div>
@@ -1143,15 +1130,6 @@ export const DinerMenu: React.FC = () => {
         isOpen={isSwitchModalOpen}
         onClose={() => setIsSwitchModalOpen(false)}
         currentSlug={restaurant?.slug || restaurantSlug || 'saffron-house'}
-      />
-
-      {/* Foodie Instagram Story Generator Modal */}
-      <InstagramStoryModal
-        isOpen={isInstagramStoryOpen}
-        onClose={() => setIsInstagramStoryOpen(false)}
-        restaurant={restaurant}
-        items={cart.length > 0 ? cart : currentRestMenuItems.slice(0, 3)}
-        tableLabel={activeTable?.label || 'Table 1'}
       />
 
       {/* Fullscreen HD Image Lightbox & Zoom Viewer */}

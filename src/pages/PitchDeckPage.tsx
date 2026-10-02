@@ -36,7 +36,6 @@ import {
   Shield,
   Eye,
   MessageSquare,
-  Instagram,
   RefreshCw,
   Play
 } from 'lucide-react';
@@ -144,7 +143,7 @@ export const PitchDeckPage: React.FC = () => {
   const [kotPrinted, setKotPrinted] = useState(true);
   const [isWizardOpen, setIsWizardOpen] = useState(false);
 
-  // Simulator states for Chapter 4 / Slide 5: Instagram UGC Virality
+  // Simulator states for Chapter 4 / Slide 5: Social Sharing Virality
   const [selectedStoryDish, setSelectedStoryDish] = useState<'biryani' | 'curry' | 'cocktail'>('biryani');
   const [storyShared, setStoryShared] = useState(false);
 
@@ -234,9 +233,9 @@ export const PitchDeckPage: React.FC = () => {
   const SLIDES_DATA = [
     { num: 1, tag: 'Brand Vision & Identity', short: 'Cover & Mission' },
     { num: 2, tag: 'Market Crisis', short: 'The Dining Crisis' },
-    { num: 3, tag: 'Reputation Decoupled', short: '3 Reputation Channels' },
+    { num: 3, tag: 'Reputation Decoupled', short: '3 Growth Channels' },
     { num: 4, tag: 'Channel 1: Google SEO', short: 'Google Maps SEO' },
-    { num: 5, tag: 'Channel 2: Instagram UGC', short: 'Instagram Virality' },
+    { num: 5, tag: 'Channel 2: Social Sharing', short: 'Diner Virality' },
     { num: 6, tag: 'Channel 3: Floor Shield', short: 'Private Floor Shield' },
     { num: 7, tag: 'Kitchen Automation', short: 'Hardware-Free KOT' },
     { num: 8, tag: 'Table Sync Protocol', short: 'Multiplayer Cart' },
@@ -439,7 +438,7 @@ export const PitchDeckPage: React.FC = () => {
                     </div>
                     <h3 className="text-lg font-bold text-white">The Silent Guest Exodus</h3>
                     <p className="text-sm text-slate-300 leading-relaxed">
-                      95% of satisfied guests pay their bill and leave silently without writing a Google review or sharing on Instagram.
+                      95% of satisfied guests pay their bill and leave silently without writing a Google review or recommending to others.
                     </p>
                   </div>
 
@@ -474,7 +473,7 @@ export const PitchDeckPage: React.FC = () => {
                   <span>Strategic Decoupling</span>
                 </div>
                 <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-                  Public Reviews vs. Instagram UGC vs. Floor Shield
+                  Public Reviews vs. Social Sharing vs. Floor Shield
                 </h2>
                 <p className="text-base sm:text-lg text-slate-300 max-w-3xl">
                   They are completely different channels with distinct objectives, algorithms, and conversion mechanics.
@@ -502,14 +501,14 @@ export const PitchDeckPage: React.FC = () => {
                       <span className="text-xs font-bold uppercase px-2.5 py-1 rounded bg-rose-500/20 text-rose-300">
                         Channel 2
                       </span>
-                      <Instagram className="w-5 h-5 text-rose-400" />
+                      <Share2 className="w-5 h-5 text-rose-400" />
                     </div>
-                    <h3 className="text-xl font-black text-white">Instagram UGC Stories</h3>
+                    <h3 className="text-xl font-black text-white">Social Word-of-Mouth</h3>
                     <p className="text-sm text-slate-300">
-                      <strong>Goal:</strong> Social proof & peer word-of-mouth. Friends see friends dining, creating instant FOMO & viral footfall.
+                      <strong>Goal:</strong> Peer recommendations & social proof. Diners share food cards directly with friends, creating viral footfall.
                     </p>
                     <div className="text-xs text-rose-400 font-semibold bg-rose-950/40 p-2.5 rounded-lg border border-rose-500/20">
-                      Action: 1-Click Aesthetic Food Story Card
+                      Action: 1-Click Aesthetic Food Presentation Card
                     </div>
                   </div>
 
@@ -590,30 +589,30 @@ export const PitchDeckPage: React.FC = () => {
               </div>
             )}
 
-            {/* SLIDE 5: CHANNEL 2 DEEP DIVE — INSTAGRAM UGC VIRALITY */}
+            {/* SLIDE 5: CHANNEL 2 DEEP DIVE — SOCIAL SHARING VIRALITY */}
             {currentSlide === 4 && (
               <div className="space-y-6 my-auto relative z-10">
                 <div className="flex items-center gap-2 text-rose-400 text-xs font-bold uppercase tracking-wider bg-rose-500/10 border border-rose-500/30 px-3 py-1 rounded-full w-fit">
-                  <Instagram className="w-4 h-4" />
+                  <Share2 className="w-4 h-4" />
                   <span>Channel 2 Breakdown</span>
                 </div>
                 <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-                  Instagram UGC Story Virality Engine
+                  Word-of-Mouth Social Sharing Engine
                 </h2>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-2">
                   <div className="lg:col-span-6 space-y-4">
                     <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
-                      Turn every table into a social media influencer station. Guests generate formatted 9:16 Instagram Stories featuring high-res imagery, custom chef quotes, and mandatory restaurant account tags.
+                      Turn every table into a viral advocate. Guests easily share high-resolution food presentation cards, chef recommendations, and direct table booking links with friends and family.
                     </p>
                     <div className="grid grid-cols-2 gap-3 pt-2">
                       <div className="bg-[#131C2E] p-4 rounded-xl border border-slate-700">
-                        <div className="text-rose-400 font-bold text-xl">450+ Views</div>
-                        <div className="text-xs text-slate-300 mt-1">Average reach per diner story tag</div>
+                        <div className="text-rose-400 font-bold text-xl">450+ Reach</div>
+                        <div className="text-xs text-slate-300 mt-1">Average reach per diner table recommendation</div>
                       </div>
                       <div className="bg-[#131C2E] p-4 rounded-xl border border-slate-700">
                         <div className="text-amber-400 font-bold text-xl">Zero Cost</div>
-                        <div className="text-xs text-slate-300 mt-1">Authentic organic UGC marketing</div>
+                        <div className="text-xs text-slate-300 mt-1">Authentic organic peer-to-peer growth</div>
                       </div>
                     </div>
                   </div>
@@ -621,8 +620,8 @@ export const PitchDeckPage: React.FC = () => {
                   <div className="lg:col-span-6 flex justify-center">
                     <div className="w-72 bg-gradient-to-br from-purple-900/80 to-rose-950/80 border-2 border-rose-500/50 rounded-3xl p-5 shadow-2xl space-y-4">
                       <div className="flex items-center justify-between text-xs text-rose-300 font-bold">
-                        <span>📸 INSTAGRAM STORY CARD</span>
-                        <span>@saffron_house</span>
+                        <span>📸 CULINARY CARD</span>
+                        <span>Saffron House</span>
                       </div>
                       <div className="h-44 rounded-2xl overflow-hidden relative">
                         <img
@@ -648,7 +647,7 @@ export const PitchDeckPage: React.FC = () => {
                         className="w-full py-2.5 bg-gradient-to-r from-rose-500 to-pink-600 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg"
                       >
                         <Share2 className="w-3.5 h-3.5" />
-                        <span>{storyShared ? 'Shared to Instagram Story!' : 'Share Story & Unlock Reward'}</span>
+                        <span>{storyShared ? 'Shared With Friends!' : 'Share Dish & Unlock Reward'}</span>
                       </button>
                     </div>
                   </div>
@@ -913,7 +912,7 @@ export const PitchDeckPage: React.FC = () => {
                     <ul className="space-y-2 text-sm text-slate-300">
                       <li className="flex items-center gap-2">✓ 1-Click global menu item updates across all 15 branches</li>
                       <li className="flex items-center gap-2">✓ Centralized revenue analytics, table turnaround & staff metrics</li>
-                      <li className="flex items-center gap-2">✓ Aggregated Google & Instagram reputation tracker</li>
+                      <li className="flex items-center gap-2">✓ Aggregated Google 5-Star reputation tracker</li>
                     </ul>
                   </div>
 
@@ -948,7 +947,7 @@ export const PitchDeckPage: React.FC = () => {
                     { name: '4. Restobar & Lounge', metric: 'Zero Server Wait in Loud Ambiance' },
                     { name: '5. Fast Casual / QSR', metric: '60% Reduction in Cashier Queues' },
                     { name: '6. Buffet & Live Grill', metric: 'Instant 1-Tap Refill Requests' },
-                    { name: '7. Rooftop Lounge', metric: 'Massive Instagram UGC Social Reach' },
+                    { name: '7. Rooftop Lounge', metric: 'High Organic Diner Social Word-of-Mouth' },
                     { name: '8. Heritage Thali', metric: 'Multilingual Marathi & Hindi Storytelling' },
                     { name: '9. Multi-Outlet Chain', metric: 'Centralized HQ Cloud Menu Sync' },
                     { name: '10. Pizzeria', metric: 'Custom Crust & Topping Multi-Selection' },
