@@ -78,25 +78,9 @@ export const MasterAdminDashboard: React.FC = () => {
   });
   const [adminPasscode, setAdminPasscode] = useState('');
   const [authError, setAuthError] = useState(false);
-
-  // ── View Mode: Auto Responsive vs Forced Mobile vs Forced Desktop ──
-  const [viewMode, setViewMode] = useState<'auto' | 'mobile' | 'desktop'>(() => {
-    try {
-      if (typeof window !== 'undefined' && 'localStorage' in window) {
-        return (window.localStorage.getItem('menuz_admin_view_mode') as 'auto' | 'mobile' | 'desktop') || 'auto';
-      }
-    } catch (e) {}
-    return 'auto';
-  });
-
-  const handleSetViewMode = (mode: 'auto' | 'mobile' | 'desktop') => {
-    setViewMode(mode);
-    try {
-      if (typeof window !== 'undefined' && 'localStorage' in window) {
-        window.localStorage.setItem('menuz_admin_view_mode', mode);
-      }
-    } catch (e) {}
-  };
+  // ── View Mode from global store (Phone vs Mac) ──
+  const deviceViewMode = useRestaurantStore((state) => state.deviceViewMode);
+  const setDeviceViewMode = useRestaurantStore((state) => state.setDeviceViewMode);
 
   const handleForceRefresh = () => {
     try {
@@ -642,12 +626,12 @@ export const MasterAdminDashboard: React.FC = () => {
   }
 
   return (
-    <div className={`min-h-screen bg-[#090D16] pb-24 text-slate-100 font-sans ${viewMode === 'mobile' ? 'max-w-md mx-auto border-x border-white/[0.08] shadow-2xl' : ''}`}>
+    <div className={`min-h-screen bg-[#090D16] pb-24 text-slate-100 font-sans ${deviceViewMode === 'phone' ? 'max-w-md mx-auto border-x border-white/[0.08] shadow-2xl' : ''}`}>
       {/* Top Banner: Platform Operations Control & Mobile/Desktop Switcher */}
       <div className="bg-[#0B0F1A] text-white border-b border-white/[0.08]">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8">
-          {/* Top Quick Utility Bar: View Switcher + Cache Buster */}
-          <div className="flex flex-wrap items-center justify-between gap-2.5 pb-4 mb-4 border-b border-white/[0.06]">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
+          {/* Top Quick Utility Bar: Minimalist View Switcher + Status */}
+          <div className="flex flex-wrap items-center justify-between gap-2.5 pb-3 mb-3 border-b border-white/[0.06]">
             <div className="flex items-center space-x-2">
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20">
                 Master Admin HQ
@@ -658,53 +642,42 @@ export const MasterAdminDashboard: React.FC = () => {
               </span>
             </div>
 
-            {/* Layout Toggle & Cache Buster Controls */}
-            <div className="flex items-center space-x-1.5 bg-slate-900/90 p-1 rounded-xl border border-white/[0.1] text-xs">
-              <span className="text-[10px] font-bold text-slate-400 px-1.5 hidden sm:inline">Layout:</span>
-              <button
-                type="button"
-                onClick={() => handleSetViewMode('auto')}
-                className={`px-2.5 py-1 rounded-lg font-bold text-[11px] transition-all cursor-pointer ${
-                  viewMode === 'auto'
-                    ? 'bg-amber-500 text-slate-950 shadow-sm'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-                title="Automatically adapt to screen size"
-              >
-                ⚡ Auto
-              </button>
-              <button
-                type="button"
-                onClick={() => handleSetViewMode('mobile')}
-                className={`px-2.5 py-1 rounded-lg font-bold text-[11px] transition-all cursor-pointer ${
-                  viewMode === 'mobile'
-                    ? 'bg-amber-500 text-slate-950 shadow-sm'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-                title="Force Smartphone Touch Layout"
-              >
-                📱 Phone View
-              </button>
-              <button
-                type="button"
-                onClick={() => handleSetViewMode('desktop')}
-                className={`px-2.5 py-1 rounded-lg font-bold text-[11px] transition-all cursor-pointer ${
-                  viewMode === 'desktop'
-                    ? 'bg-amber-500 text-slate-950 shadow-sm'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-                title="Force Full Desktop Widescreen Layout"
-              >
-                💻 Desktop
-              </button>
+            {/* Minimalist Phone / Mac Switcher */}
+            <div className="flex items-center space-x-1.5">
+              <div className="flex items-center bg-slate-900/90 p-0.5 rounded-lg border border-white/[0.1] text-xs font-bold">
+                <button
+                  type="button"
+                  onClick={() => setDeviceViewMode('phone')}
+                  className={`px-2.5 py-1 rounded-md transition-all cursor-pointer flex items-center space-x-1 ${
+                    deviceViewMode === 'phone'
+                      ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                  title="Switch to Phone layout"
+                >
+                  <span>📱 Phone</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDeviceViewMode('mac')}
+                  className={`px-2.5 py-1 rounded-md transition-all cursor-pointer flex items-center space-x-1 ${
+                    deviceViewMode === 'mac'
+                      ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                  title="Switch to Mac layout"
+                >
+                  <span>💻 Mac</span>
+                </button>
+              </div>
+
               <button
                 type="button"
                 onClick={handleForceRefresh}
-                className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white rounded-lg text-[10px] font-bold border border-white/[0.08] transition-colors ml-1 cursor-pointer flex items-center gap-1"
-                title="Force refresh & bypass browser cache"
+                className="p-1.5 bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg border border-white/[0.08] transition-colors cursor-pointer"
+                title="Force refresh"
               >
-                <RefreshCw className="w-3 h-3 text-amber-400" />
-                <span className="hidden sm:inline">Refresh</span>
+                <RefreshCw className="w-3.5 h-3.5 text-amber-400" />
               </button>
             </div>
           </div>
@@ -768,7 +741,7 @@ export const MasterAdminDashboard: React.FC = () => {
           </div>
 
           {/* Metric Overview Tiles - Fluid 2-Col Mobile to 6-Col Desktop */}
-          <div className={`grid gap-2.5 sm:gap-4 mt-6 ${viewMode === 'mobile' ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-6'}`}>
+          <div className={`grid gap-2.5 sm:gap-4 mt-6 ${deviceViewMode === 'phone' ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-6'}`}>
             <div className="bg-[#0E1526] p-3 sm:p-3.5 rounded-xl border border-white/[0.08]">
               <span className="text-[10px] sm:text-[11px] text-slate-400 block font-medium">Active Venues</span>
               <div className="flex items-baseline space-x-1.5 mt-0.5">
@@ -825,16 +798,16 @@ export const MasterAdminDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Navigation Tabs - Touch Momentum Scrollable */}
-      <div className="sticky top-0 z-30 bg-[#0A0E17]/95 backdrop-blur-md border-b border-white/[0.08]">
+      {/* Navigation Tabs - Touch Momentum Scrollable with Clean Mobile Stacking */}
+      <div className="sticky top-[102px] lg:top-[64px] z-30 bg-[#0A0E17]/95 backdrop-blur-md border-b border-white/[0.08] shadow-lg">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-          <nav className="flex space-x-1 sm:space-x-2 overflow-x-auto py-2 scrollbar-none touch-pan-x">
+          <nav className="flex space-x-1 sm:space-x-2 overflow-x-auto py-2.5 scrollbar-none touch-pan-x items-center">
             <button
               onClick={() => setActiveTab('restaurants')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer shrink-0 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer shrink-0 ${
                 activeTab === 'restaurants'
-                  ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
-                  : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                  ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                  : 'bg-white/[0.04] text-slate-300 hover:text-white hover:bg-white/[0.08] border border-white/[0.06]'
               }`}
             >
               <Building2 className="w-3.5 h-3.5" />
@@ -843,10 +816,10 @@ export const MasterAdminDashboard: React.FC = () => {
 
             <button
               onClick={() => { setActiveTab('reviews'); setSelectedReviewRestaurant(null); }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer shrink-0 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer shrink-0 ${
                 activeTab === 'reviews'
-                  ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
-                  : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                  ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                  : 'bg-white/[0.04] text-slate-300 hover:text-white hover:bg-white/[0.08] border border-white/[0.06]'
               }`}
             >
               <MessageSquare className="w-3.5 h-3.5" />
@@ -855,10 +828,10 @@ export const MasterAdminDashboard: React.FC = () => {
 
             <button
               onClick={() => setActiveTab('challenges')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer shrink-0 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer shrink-0 ${
                 activeTab === 'challenges'
-                  ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
-                  : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                  ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                  : 'bg-white/[0.04] text-slate-300 hover:text-white hover:bg-white/[0.08] border border-white/[0.06]'
               }`}
             >
               <Trophy className="w-3.5 h-3.5" />
@@ -867,10 +840,10 @@ export const MasterAdminDashboard: React.FC = () => {
 
             <button
               onClick={() => setActiveTab('pos')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer shrink-0 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer shrink-0 ${
                 activeTab === 'pos'
-                  ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
-                  : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                  ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                  : 'bg-white/[0.04] text-slate-300 hover:text-white hover:bg-white/[0.08] border border-white/[0.06]'
               }`}
             >
               <RefreshCw className="w-3.5 h-3.5" />
@@ -879,10 +852,10 @@ export const MasterAdminDashboard: React.FC = () => {
 
             <button
               onClick={() => setActiveTab('images')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer shrink-0 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer shrink-0 ${
                 activeTab === 'images'
-                  ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
-                  : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                  ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                  : 'bg-white/[0.04] text-slate-300 hover:text-white hover:bg-white/[0.08] border border-white/[0.06]'
               }`}
             >
               <ImageIcon className="w-3.5 h-3.5" />
@@ -891,10 +864,10 @@ export const MasterAdminDashboard: React.FC = () => {
 
             <button
               onClick={() => setActiveTab('marketing')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer shrink-0 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer shrink-0 ${
                 activeTab === 'marketing'
-                  ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
-                  : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                  ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                  : 'bg-white/[0.04] text-slate-300 hover:text-white hover:bg-white/[0.08] border border-white/[0.06]'
               }`}
             >
               <Share2 className="w-3.5 h-3.5" />
@@ -903,7 +876,7 @@ export const MasterAdminDashboard: React.FC = () => {
 
             <Link
               to="/ai-studio"
-              className="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 whitespace-nowrap transition-all bg-amber-500/10 text-amber-300 border border-amber-500/20 hover:bg-amber-500/20 shrink-0"
+              className="px-3 py-1.5 rounded-lg text-xs font-bold flex items-center space-x-1.5 whitespace-nowrap transition-all bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 shrink-0"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
               <span>Chef AI</span>
@@ -983,7 +956,7 @@ export const MasterAdminDashboard: React.FC = () => {
                   </div>
                 </div>
 
-                <div className={`grid gap-3 mt-3 ${viewMode === 'mobile' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
+                <div className={`grid gap-3 mt-3 ${deviceViewMode === 'phone' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
                   {restaurants.slice(0, 6).map((r) => {
                     const rTables = tables.filter((t) => t.restaurant_id === r.id);
                     const rToken = rTables[0]?.public_token || 'table-token-01';
@@ -1393,7 +1366,7 @@ export const MasterAdminDashboard: React.FC = () => {
                   </button>
                 </div>
               ) : (
-                <div className={`grid gap-4 sm:gap-6 ${viewMode === 'mobile' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
+                <div className={`grid gap-4 sm:gap-6 ${deviceViewMode === 'phone' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
                   {filteredDirectory.slice(0, visibleCount).map((entry) => {
                     const cleanSlug = entry.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
                     const existing = restaurants.find(
@@ -1518,7 +1491,7 @@ export const MasterAdminDashboard: React.FC = () => {
                   </button>
                 </div>
               ) : (
-                <div className={`grid gap-4 sm:gap-6 ${viewMode === 'mobile' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
+                <div className={`grid gap-4 sm:gap-6 ${deviceViewMode === 'phone' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
                   {filteredRestaurants.slice(0, visibleCount).map((rest) => {
                     const restTables = tables.filter((t) => t.restaurant_id === rest.id);
                     const restItems = menuItems.filter((i) => i.restaurant_id === rest.id);
@@ -1772,7 +1745,7 @@ export const MasterAdminDashboard: React.FC = () => {
                 )}
 
                 {/* Restaurant cards for drill-down */}
-                <div className={`grid gap-4 sm:gap-5 ${viewMode === 'mobile' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
+                <div className={`grid gap-4 sm:gap-5 ${deviceViewMode === 'phone' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
                   {restaurants.map((rest) => {
                     const restReviews = reviews.filter((r) => r.restaurant_id === rest.id);
                     const restAvgRating = restReviews.length > 0
@@ -2026,7 +1999,7 @@ export const MasterAdminDashboard: React.FC = () => {
                 <p className="text-xs text-slate-500 mt-1">Challenges will be created when restaurants set up their review reward programs.</p>
               </div>
             ) : (
-              <div className={`grid gap-4 sm:gap-6 ${viewMode === 'mobile' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'}`}>
+              <div className={`grid gap-4 sm:gap-6 ${deviceViewMode === 'phone' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'}`}>
                 <div className="bg-[#0D1322] p-6 rounded-3xl border border-white/[0.08] shadow-lg space-y-4">
                   <div className="flex items-center justify-between">
                     <h3 className="text-base font-bold font-serif text-white flex items-center space-x-2">

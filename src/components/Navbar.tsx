@@ -45,6 +45,8 @@ export const Navbar: React.FC = () => {
   const tables = useRestaurantStore((state) => state.tables);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
+  const deviceViewMode = useRestaurantStore((state) => state.deviceViewMode);
+  const setDeviceViewMode = useRestaurantStore((state) => state.setDeviceViewMode);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [venueDropdownOpen, setVenueDropdownOpen] = useState(false);
@@ -208,6 +210,34 @@ export const Navbar: React.FC = () => {
 
           {/* Right: Actions */}
           <div className="flex items-center space-x-2">
+            {/* Minimalist Phone vs Mac Switch */}
+            <div className="flex items-center bg-slate-900/90 p-0.5 rounded-lg border border-white/[0.1] text-[11px] font-bold">
+              <button
+                type="button"
+                onClick={() => setDeviceViewMode('phone')}
+                className={`px-2 py-1 rounded-md transition-all cursor-pointer ${
+                  deviceViewMode === 'phone'
+                    ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+                title="Switch to Phone view layout"
+              >
+                📱 Phone
+              </button>
+              <button
+                type="button"
+                onClick={() => setDeviceViewMode('mac')}
+                className={`px-2 py-1 rounded-md transition-all cursor-pointer ${
+                  deviceViewMode === 'mac'
+                    ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+                title="Switch to Mac view layout"
+              >
+                💻 Mac
+              </button>
+            </div>
+
             {/* Always-Visible Admin Page Top Button */}
             <Link
               to="/admin"
@@ -372,6 +402,76 @@ export const Navbar: React.FC = () => {
             </div>
           </div>
         )}
+
+        {/* Mobile Always-Visible Headings & Options Bar */}
+        <div className="lg:hidden bg-[#070B12] border-t border-white/[0.08] px-2.5 py-2 overflow-x-auto flex items-center space-x-1.5 scrollbar-none touch-pan-x text-xs font-bold shadow-inner">
+          <Link
+            to="/admin"
+            className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
+              location.pathname === '/admin'
+                ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                : 'bg-amber-500/10 text-amber-300 border border-amber-500/30'
+            }`}
+          >
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>Admin HQ</span>
+          </Link>
+          <Link
+            to={dinerUrl}
+            className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
+              location.pathname.startsWith('/r/') || location.pathname.startsWith('/menu/')
+                ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                : 'bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]'
+            }`}
+          >
+            <UtensilsCrossed className="w-3.5 h-3.5 text-amber-400" />
+            <span>Table Menu</span>
+          </Link>
+          <Link
+            to={`/manage/${venueSlug}`}
+            className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
+              location.pathname.startsWith('/manage') || location.pathname.startsWith('/dashboard')
+                ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                : 'bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]'
+            }`}
+          >
+            <LayoutDashboard className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Operations</span>
+          </Link>
+          <Link
+            to="/kitchen"
+            className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
+              location.pathname === '/kitchen'
+                ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                : 'bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]'
+            }`}
+          >
+            <ChefHat className="w-3.5 h-3.5 text-amber-400" />
+            <span>Kitchen KDS</span>
+          </Link>
+          <Link
+            to="/pitch"
+            className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
+              location.pathname === '/pitch'
+                ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                : 'bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]'
+            }`}
+          >
+            <TrendingUp className="w-3.5 h-3.5 text-orange-400" />
+            <span>Pitch Deck</span>
+          </Link>
+          <Link
+            to="/"
+            className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
+              location.pathname === '/'
+                ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                : 'bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]'
+            }`}
+          >
+            <Compass className="w-3.5 h-3.5 text-slate-400" />
+            <span>Explore</span>
+          </Link>
+        </div>
       </header>
 
       {/* ═══════════════════════════════════════════════════════════ */}

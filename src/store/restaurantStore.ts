@@ -80,6 +80,8 @@ interface RestaurantStoreState {
   activeOrderId: string | null;
   selectedLanguage: Language;
   setSelectedLanguage: (lang: Language) => void;
+  deviceViewMode: 'phone' | 'mac';
+  setDeviceViewMode: (mode: 'phone' | 'mac') => void;
 
   // Master Admin Actions
   addRestaurant: (restaurant: Restaurant) => void;
@@ -530,6 +532,10 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       customerNotes: '',
       activeTable: null,
       activeOrderId: null,
+      selectedLanguage: 'en',
+      setSelectedLanguage: (lang) => set({ selectedLanguage: lang }),
+      deviceViewMode: (typeof window !== 'undefined' && window.innerWidth < 768) ? 'phone' : 'mac',
+      setDeviceViewMode: (mode) => set({ deviceViewMode: mode }),
 
       // Restaurant Registry Actions
       addRestaurant: (newRestInput) => {
@@ -913,8 +919,6 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       },
 
       // Diner Ordering Actions
-      selectedLanguage: 'en',
-      setSelectedLanguage: (lang) => set({ selectedLanguage: lang }),
       setCustomerNotes: (notes) => set({ customerNotes: notes }),
       setActiveTable: (table) => set({ activeTable: table }),
       setActiveOrderId: (orderId) => set({ activeOrderId: orderId }),

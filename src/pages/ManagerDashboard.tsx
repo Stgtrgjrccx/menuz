@@ -67,24 +67,8 @@ export const ManagerDashboard: React.FC = () => {
     (restaurant.pos_provider as any) || 'petpooja'
   );
 
-  // ── View Mode: Auto Responsive vs Forced Mobile vs Forced Desktop ──
-  const [viewMode, setViewMode] = useState<'auto' | 'mobile' | 'desktop'>(() => {
-    try {
-      if (typeof window !== 'undefined' && 'localStorage' in window) {
-        return (window.localStorage.getItem('menuz_manager_view_mode') as 'auto' | 'mobile' | 'desktop') || 'auto';
-      }
-    } catch (e) {}
-    return 'auto';
-  });
-
-  const handleSetViewMode = (mode: 'auto' | 'mobile' | 'desktop') => {
-    setViewMode(mode);
-    try {
-      if (typeof window !== 'undefined' && 'localStorage' in window) {
-        window.localStorage.setItem('menuz_manager_view_mode', mode);
-      }
-    } catch (e) {}
-  };
+  const deviceViewMode = useRestaurantStore((state) => state.deviceViewMode);
+  const setDeviceViewMode = useRestaurantStore((state) => state.setDeviceViewMode);
 
   const handleForceRefresh = () => {
     try {
@@ -192,8 +176,8 @@ export const ManagerDashboard: React.FC = () => {
   const unreadWaiterCalls = activeNotificationsList.filter((n) => n.type === 'waiter_call' && !n.read);
 
   return (
-    <div className={`min-h-screen bg-[#090D16] text-slate-100 p-3 sm:p-6 md:p-8 max-w-5xl mx-auto space-y-5 sm:space-y-6 pb-20 ${viewMode === 'mobile' ? 'max-w-md border-x border-white/[0.08] shadow-2xl' : ''}`}>
-      {/* Top Quick Navigation Bar with Admin HQ button & View Switcher */}
+    <div className={`min-h-screen bg-[#090D16] text-slate-100 p-3 sm:p-6 md:p-8 max-w-5xl mx-auto space-y-5 sm:space-y-6 pb-20 ${deviceViewMode === 'phone' ? 'max-w-md border-x border-white/[0.08] shadow-2xl' : ''}`}>
+      {/* Top Quick Navigation Bar with Admin HQ button & Minimalist View Switcher */}
       <div className="flex flex-wrap items-center justify-between gap-2.5 pb-3 border-b border-white/[0.08]">
         <div className="flex items-center space-x-2">
           {/* Always-Visible Admin Page Top Button */}
@@ -222,51 +206,42 @@ export const ManagerDashboard: React.FC = () => {
           </Link>
         </div>
 
-        {/* Layout Mode Switcher & Cache Buster */}
-        <div className="flex items-center space-x-1 bg-slate-900/90 p-1 rounded-xl border border-white/[0.1] text-xs">
-          <button
-            type="button"
-            onClick={() => handleSetViewMode('auto')}
-            className={`px-2 py-1 rounded-lg font-bold text-[10px] sm:text-[11px] transition-all cursor-pointer ${
-              viewMode === 'auto'
-                ? 'bg-amber-500 text-slate-950 shadow-sm'
-                : 'text-slate-400 hover:text-white'
-            }`}
-            title="Automatically adapt to screen"
-          >
-            ⚡ Auto
-          </button>
-          <button
-            type="button"
-            onClick={() => handleSetViewMode('mobile')}
-            className={`px-2 py-1 rounded-lg font-bold text-[10px] sm:text-[11px] transition-all cursor-pointer ${
-              viewMode === 'mobile'
-                ? 'bg-amber-500 text-slate-950 shadow-sm'
-                : 'text-slate-400 hover:text-white'
-            }`}
-            title="Phone Layout"
-          >
-            📱 Phone
-          </button>
-          <button
-            type="button"
-            onClick={() => handleSetViewMode('desktop')}
-            className={`px-2 py-1 rounded-lg font-bold text-[10px] sm:text-[11px] transition-all cursor-pointer ${
-              viewMode === 'desktop'
-                ? 'bg-amber-500 text-slate-950 shadow-sm'
-                : 'text-slate-400 hover:text-white'
-            }`}
-            title="Desktop Layout"
-          >
-            💻 Desktop
-          </button>
+        {/* Minimalist Phone / Mac Switcher & Refresh */}
+        <div className="flex items-center space-x-1.5">
+          <div className="flex items-center bg-slate-900/90 p-0.5 rounded-lg border border-white/[0.1] text-xs font-bold">
+            <button
+              type="button"
+              onClick={() => setDeviceViewMode('phone')}
+              className={`px-2.5 py-1 rounded-md transition-all cursor-pointer flex items-center space-x-1 ${
+                deviceViewMode === 'phone'
+                  ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+              title="Switch to Phone layout"
+            >
+              <span>📱 Phone</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setDeviceViewMode('mac')}
+              className={`px-2.5 py-1 rounded-md transition-all cursor-pointer flex items-center space-x-1 ${
+                deviceViewMode === 'mac'
+                  ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+              title="Switch to Mac layout"
+            >
+              <span>💻 Mac</span>
+            </button>
+          </div>
+
           <button
             type="button"
             onClick={handleForceRefresh}
-            className="p-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-[10px] font-bold border border-white/[0.08] transition-colors cursor-pointer"
+            className="p-1.5 bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg border border-white/[0.08] transition-colors cursor-pointer"
             title="Force refresh"
           >
-            <RefreshCw className="w-3 h-3 text-amber-400" />
+            <RefreshCw className="w-3.5 h-3.5 text-amber-400" />
           </button>
         </div>
 
