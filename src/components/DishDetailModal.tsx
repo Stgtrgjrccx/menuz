@@ -22,10 +22,23 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
   const [quantity, setQuantity] = useState(1);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, SelectedOptionSnapshot>>({});
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  const [lightboxImageIndex, setLightboxImageIndex] = useState(0);
+  const [activePhotoIdx, setActivePhotoIdx] = useState(0);
   const addItemToCart = useRestaurantStore((state) => state.addItemToCart);
 
   if (!dish) return null;
+
+  // Extract all photos attached to dish
+  const modalPhotos: { src: string; label?: string }[] = [];
+  if (dish.gallery_images && dish.gallery_images.length > 0) {
+    dish.gallery_images.forEach((g) => modalPhotos.push({ src: g.src, label: g.label || g.alt }));
+  } else if (dish.image_url) {
+    modalPhotos.push({ src: dish.image_url, label: 'Main View' });
+  }
+  if (dish.image_url && !modalPhotos.some((p) => p.src === dish.image_url)) {
+    modalPhotos.unshift({ src: dish.image_url, label: 'Main View' });
+  }
+
+  const currentHeroPhoto = modalPhotos[activePhotoIdx]?.src || dish.image_url;
 
   const flags = Array.isArray(dish.dietary_flags) ? dish.dietary_flags : [];
   const isVeg = flags.some((f) => {
@@ -71,7 +84,7 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
   };
 
   const handleOpenLightbox = (index = 0) => {
-    setLightboxImageIndex(index);
+    setActivePhotoIdx(index);
     setIsLightboxOpen(true);
   };
 
@@ -96,25 +109,25 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
 
           {/* Scrollable Content */}
           <div className="flex-1 overflow-y-auto p-5 space-y-4">
-            {/* Multi-dish Gallery or Main Hero Image */}
-            {dish.gallery_images && dish.gallery_images.length > 0 ? (
-              <div className="space-y-3">
-                <DishHoverExpandGallery
-                  images={dish.gallery_images}
-                  dishName={dish.name}
-                  onEnlargeImage={(_src, idx) => handleOpenLightbox(idx)}
-                />
-              </div>
-            ) : (
+            {/* Primary / Active Hero Image with Zoom */}
+            <div className="space-y-2.5">
               <div
-                onClick={() => handleOpenLightbox(0)}
-                className="w-full h-56 rounded-2xl overflow-hidden relative bg-[#090D16] group cursor-pointer border border-white/[0.08] hover:border-amber-500/40 transition-colors"
+                onClick={() => handleOpenLightbox(activePhotoIdx)}
+                className="w-full h-56 sm:h-64 rounded-2xl overflow-hidden relative bg-[#090D16] group cursor-pointer border border-white/[0.08] hover:border-amber-500/40 transition-colors"
+                title="Click to zoom full-screen"
               >
-                <img src={dish.image_url} alt={dish.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                <img
+                  src={currentHeroPhoto}
+                  alt={dish.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-3">
                   <span className="text-[11px] font-bold text-white bg-black/70 backdrop-blur-sm px-2.5 py-1 rounded-full border border-white/20 flex items-center gap-1">
                     <Maximize2 className="w-3 h-3 text-amber-300" />
-                    <span>Click to Zoom</span>
+                    <span>Click to Zoom HD</span>
+                  </span>
+                  <span className="text-[10px] font-mono bg-black/80 px-2 py-0.5 rounded text-amber-300 border border-amber-500/30">
+                    Photo {activePhotoIdx + 1} of {modalPhotos.length}
                   </span>
                 </div>
                 {!dish.is_available && (
@@ -125,7 +138,41 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
                   </div>
                 )}
               </div>
-            )}
+
+              {/* Side-by-side / Multi-Photo Thumbnails (Visible next to primary photo!) */}
+              {modalPhotos.length > 1 && (
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between text-[11px] text-slate-400 px-0.5">
+                    <span className="font-bold text-amber-400 flex items-center gap-1">
+                      📸 Dish Photos ({modalPhotos.length} Views):
+                    </span>
+                    <span>Click any photo to preview</span>
+                  </div>
+                  <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                    {modalPhotos.map((img, idx) => {
+                      const isActive = activePhotoIdx === idx;
+                      return (
+                        <button
+                          key={`thumb-${idx}`}
+                          type="button"
+                          onClick={() => setActivePhotoIdx(idx)}
+                          className={`relative w-20 h-16 sm:w-24 sm:h-18 rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all cursor-pointer ${
+                            isActive
+                              ? 'border-amber-400 shadow-md ring-2 ring-amber-400/40 scale-105'
+                              : 'border-white/[0.1] opacity-70 hover:opacity-100 hover:border-white/30'
+                          }`}
+                        >
+                          <img src={img.src} alt={`View ${idx + 1}`} className="w-full h-full object-cover" />
+                          <span className="absolute bottom-0.5 right-0.5 px-1 py-0.2 bg-black/80 text-[8px] font-mono text-amber-300 font-bold rounded">
+                            #{idx + 1}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
 
           {/* Title & Price */}
           <div>
@@ -305,7 +352,7 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
     <ImageLightboxModal
       isOpen={isLightboxOpen}
       dish={dish}
-      initialImageIndex={lightboxImageIndex}
+      initialImageIndex={activePhotoIdx}
       onClose={() => setIsLightboxOpen(false)}
       onOpenCart={onOpenCart}
     />

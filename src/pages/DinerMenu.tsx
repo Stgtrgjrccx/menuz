@@ -428,7 +428,7 @@ export const DinerMenu: React.FC = () => {
       {/* ═══════════════════════════════════════════════════════════ */}
       {/* 0. STREAMLINED DINER TOP BAR (MOBILE-FIRST)                 */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <div className="sticky top-0 z-30 bg-[#0A0E17]/95 backdrop-blur-md text-white border-b border-white/[0.08] px-3 sm:px-4 py-2 sm:py-2.5 flex items-center justify-between shadow-sm">
+      <div className="sticky top-0 z-30 bg-[#0A0E17] text-white border-b border-white/[0.08] px-3 sm:px-4 py-2 sm:py-2.5 flex items-center justify-between shadow-sm">
         {/* Link back to Menuz Home */}
         <Link
           to="/"
@@ -651,7 +651,7 @@ export const DinerMenu: React.FC = () => {
       {/* ═══════════════════════════════════════════════════════════ */}
       {/* STICKY SEARCH & CATEGORY BAR (MOBILE-OPTIMIZED)             */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <div ref={menuSectionRef} className="sticky top-[45px] sm:top-[51px] z-20 bg-[#090D16]/95 backdrop-blur-md pt-2.5 pb-2 border-b border-white/[0.07] shadow-sm">
+      <div ref={menuSectionRef} className="sticky top-[45px] sm:top-[51px] z-20 bg-[#090D16] pt-2.5 pb-2 border-b border-white/[0.07] shadow-sm">
         <div className="max-w-xl mx-auto px-3 sm:px-4 space-y-2">
           {/* Search Bar */}
           <div className="relative">
@@ -742,6 +742,19 @@ export const DinerMenu: React.FC = () => {
                       return lf === 'veg' || lf === 'vegetarian' || lf === 'vegan' || lf === 'jain';
                     });
 
+                    // Extract all photos attached to this dish
+                    const dishPhotos: { src: string; label?: string }[] = [];
+                    if (dish.gallery_images && dish.gallery_images.length > 0) {
+                      dish.gallery_images.forEach((g) => dishPhotos.push({ src: g.src, label: g.label || g.alt }));
+                    } else if (dish.image_url) {
+                      dishPhotos.push({ src: dish.image_url, label: 'Main' });
+                    }
+                    if (dish.image_url && !dishPhotos.some((p) => p.src === dish.image_url)) {
+                      dishPhotos.unshift({ src: dish.image_url, label: 'Main' });
+                    }
+
+                    const hasSecondary = dishPhotos.length > 1;
+
                     return (
                       <div
                         key={dish.id}
@@ -750,42 +763,94 @@ export const DinerMenu: React.FC = () => {
                           !dish.is_available ? 'opacity-50' : ''
                         }`}
                       >
-                        <div
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setLightboxDish(dish);
-                            setLightboxIndex(0);
-                          }}
-                          className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl flex-shrink-0 bg-[#090D16] overflow-hidden relative group/img cursor-zoom-in border border-white/[0.06] hover:border-amber-400/60 transition-all"
-                          title="Click to view & zoom high-resolution photo"
-                        >
-                          <img
-                            src={dish.image_url || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400'}
-                            alt={dish.name || 'Dish'}
-                            className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
-                          />
-                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
-                            <Maximize2 className="w-4 h-4 text-white drop-shadow" />
+                        {/* Photo Gallery Container: Dual-view if secondary photo exists */}
+                        {hasSecondary ? (
+                          <div className="flex items-center space-x-1.5 flex-shrink-0">
+                            {/* Primary Photo */}
+                            <div
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setLightboxDish(dish);
+                                setLightboxIndex(0);
+                              }}
+                              className="w-16 h-20 sm:w-20 sm:h-24 rounded-xl bg-[#090D16] overflow-hidden relative group/img cursor-zoom-in border border-amber-500/40 hover:border-amber-400 transition-all shadow-sm"
+                              title="Primary Photo - Click to zoom"
+                            >
+                              <img
+                                src={dishPhotos[0].src}
+                                alt={`${dish.name} - View 1`}
+                                className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                              />
+                              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                                <Maximize2 className="w-3.5 h-3.5 text-white drop-shadow" />
+                              </div>
+                              <div className="absolute top-1 left-1 px-1 py-0.2 bg-amber-500 rounded text-[7px] font-bold text-slate-950 shadow-sm">
+                                1
+                              </div>
+                            </div>
+
+                            {/* Secondary Photo (Visible next to primary photo!) */}
+                            <div
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setLightboxDish(dish);
+                                setLightboxIndex(1);
+                              }}
+                              className="w-16 h-20 sm:w-20 sm:h-24 rounded-xl bg-[#090D16] overflow-hidden relative group/img cursor-zoom-in border border-white/[0.1] hover:border-amber-400 transition-all shadow-sm"
+                              title="Second Photo - Click to zoom"
+                            >
+                              <img
+                                src={dishPhotos[1].src}
+                                alt={`${dish.name} - View 2`}
+                                className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                              />
+                              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                                <Maximize2 className="w-3.5 h-3.5 text-white drop-shadow" />
+                              </div>
+                              <div className="absolute top-1 left-1 px-1 py-0.2 bg-black/70 rounded text-[7px] font-bold text-amber-300 border border-amber-500/30">
+                                2
+                              </div>
+                              {dishPhotos.length > 2 && (
+                                <div className="absolute bottom-1 right-1 px-1.5 py-0.2 bg-black/85 rounded text-[8px] font-mono text-amber-300 font-bold border border-amber-400/40 shadow-sm">
+                                  +{dishPhotos.length - 2}
+                                </div>
+                              )}
+                            </div>
                           </div>
-                          {dish.gallery_images && dish.gallery_images.length > 0 && (
-                            <div className="absolute bottom-1 right-1 px-1.5 py-0.2 bg-black/80 backdrop-blur-xs rounded text-[8px] font-mono text-amber-300 font-bold border border-amber-400/40 shadow-sm">
-                              +{dish.gallery_images.length} views
+                        ) : (
+                          /* Single Photo Container */
+                          <div
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setLightboxDish(dish);
+                              setLightboxIndex(0);
+                            }}
+                            className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl flex-shrink-0 bg-[#090D16] overflow-hidden relative group/img cursor-zoom-in border border-white/[0.06] hover:border-amber-400/60 transition-all"
+                            title="Click to view & zoom high-resolution photo"
+                          >
+                            <img
+                              src={dish.image_url || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400'}
+                              alt={dish.name || 'Dish'}
+                              className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                            />
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                              <Maximize2 className="w-4 h-4 text-white drop-shadow" />
                             </div>
-                          )}
-                          {!dish.is_available && (
-                            <div className="absolute inset-0 bg-black/70 flex items-center justify-center p-1 text-center">
-                              <span className="text-[8px] sm:text-[9px] uppercase font-bold text-white tracking-widest px-1.5 py-0.5 rounded bg-red-600/90">
-                                Sold Out
-                              </span>
-                            </div>
-                          )}
-                          {dish.is_bestseller && (
-                            <div className="absolute top-1 left-1 px-1.5 py-0.5 bg-amber-500 rounded text-[8px] font-bold text-slate-950 flex items-center space-x-0.5 shadow-sm">
-                              <Star className="w-2.5 h-2.5 fill-slate-950" />
-                              <span>Best</span>
-                            </div>
-                          )}
-                        </div>
+                            {!dish.is_available && (
+                              <div className="absolute inset-0 bg-black/70 flex items-center justify-center p-1 text-center">
+                                <span className="text-[8px] sm:text-[9px] uppercase font-bold text-white tracking-widest px-1.5 py-0.5 rounded bg-red-600/90">
+                                  Sold Out
+                                </span>
+                              </div>
+                            )}
+                            {dish.is_bestseller && (
+                              <div className="absolute top-1 left-1 px-1.5 py-0.5 bg-amber-500 rounded text-[8px] font-bold text-slate-950 flex items-center space-x-0.5 shadow-sm">
+                                <Star className="w-2.5 h-2.5 fill-slate-950" />
+                                <span>Best</span>
+                              </div>
+                            )}
+                          </div>
+                        )}
 
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center space-x-1.5 mb-0.5 sm:mb-1">

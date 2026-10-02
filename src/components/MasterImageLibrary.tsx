@@ -381,6 +381,17 @@ export const MasterImageLibrary: React.FC = () => {
                         const isNonVeg = item.dietary_flags?.includes('non-veg');
                         const galleryCount = item.gallery_images?.length || 1;
 
+                        const itemPhotos: string[] = [];
+                        if (item.gallery_images && item.gallery_images.length > 0) {
+                          item.gallery_images.forEach((g) => itemPhotos.push(g.src));
+                        } else if (item.image_url) {
+                          itemPhotos.push(item.image_url);
+                        }
+                        if (item.image_url && !itemPhotos.includes(item.image_url)) {
+                          itemPhotos.unshift(item.image_url);
+                        }
+                        const hasDualPhotos = itemPhotos.length > 1;
+
                         return (
                           <div
                             key={item.id}
@@ -388,12 +399,39 @@ export const MasterImageLibrary: React.FC = () => {
                           >
                             {/* Image Container with Badges */}
                             <div className="relative aspect-[4/3] overflow-hidden bg-black/40">
-                              <img
-                                src={item.image_url}
-                                alt={item.name}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                loading="lazy"
-                              />
+                              {hasDualPhotos ? (
+                                <div className="grid grid-cols-2 h-full w-full gap-0.5">
+                                  <div className="relative h-full overflow-hidden">
+                                    <img
+                                      src={itemPhotos[0]}
+                                      alt={`${item.name} 1`}
+                                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                      loading="lazy"
+                                    />
+                                    <span className="absolute bottom-1 left-1 px-1 py-0.2 bg-amber-500 text-slate-950 font-bold text-[7px] rounded">
+                                      Main
+                                    </span>
+                                  </div>
+                                  <div className="relative h-full overflow-hidden">
+                                    <img
+                                      src={itemPhotos[1]}
+                                      alt={`${item.name} 2`}
+                                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                      loading="lazy"
+                                    />
+                                    <span className="absolute bottom-1 right-1 px-1 py-0.2 bg-black/80 text-amber-300 font-bold text-[7px] rounded border border-amber-500/30">
+                                      Photo 2
+                                    </span>
+                                  </div>
+                                </div>
+                              ) : (
+                                <img
+                                  src={item.image_url}
+                                  alt={item.name}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                  loading="lazy"
+                                />
+                              )}
 
                               {/* Dietary Tags */}
                               <div className="absolute top-2 left-2 flex items-center space-x-1">

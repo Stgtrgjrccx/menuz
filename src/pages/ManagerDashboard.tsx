@@ -309,6 +309,19 @@ export const ManagerDashboard: React.FC = () => {
               {activeTablesList.length} Tables
             </span>
           </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              const el = document.getElementById('manager-photo-studio');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-amber-300 hover:text-amber-200 transition-colors bg-amber-500/10 hover:bg-amber-500/20 px-3.5 py-2 rounded-xl border border-amber-500/30 shadow-sm cursor-pointer"
+            title="Manage Restaurant & Dish Photos"
+          >
+            <ImageIcon className="w-3.5 h-3.5 text-amber-400" />
+            <span>📸 Menu &amp; Photos</span>
+          </button>
         </div>
       </div>
 
@@ -921,7 +934,7 @@ export const ManagerDashboard: React.FC = () => {
       {/* ═══════════════════════════════════════════════════════════ */}
       {/* 📸 RESTAURANT & DISH PHOTO STUDIO (GALLERY UPLOAD & REMOVE)  */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <section className="bg-[#0D1322] border border-white/[0.08] rounded-3xl p-6 shadow-xl space-y-5 text-white">
+      <section id="manager-photo-studio" className="bg-[#0D1322] border border-white/[0.08] rounded-3xl p-6 shadow-xl space-y-5 text-white">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-4">
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
@@ -1007,7 +1020,7 @@ export const ManagerDashboard: React.FC = () => {
           </span>
         </div>
 
-        {/* Dish Cards Roster */}
+        {/* Dish Cards Roster with Dual-Photo Preview */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {activeMenuItemsList
             .filter((dish) => {
@@ -1016,7 +1029,16 @@ export const ManagerDashboard: React.FC = () => {
               return dish.name.toLowerCase().includes(q) || dish.short_description?.toLowerCase().includes(q);
             })
             .map((dish) => {
-              const photoCount = dish.gallery_images?.length || 1;
+              const dishPhotos: string[] = [];
+              if (dish.gallery_images && dish.gallery_images.length > 0) {
+                dish.gallery_images.forEach((g) => dishPhotos.push(g.src));
+              } else if (dish.image_url) {
+                dishPhotos.push(dish.image_url);
+              }
+              if (dish.image_url && !dishPhotos.includes(dish.image_url)) {
+                dishPhotos.unshift(dish.image_url);
+              }
+              const hasDual = dishPhotos.length > 1;
 
               return (
                 <div
@@ -1024,17 +1046,42 @@ export const ManagerDashboard: React.FC = () => {
                   className="bg-slate-900/90 rounded-2xl border border-white/[0.08] overflow-hidden shadow-lg hover:border-amber-500/40 transition-all flex flex-col justify-between group"
                 >
                   <div className="relative aspect-[4/3] overflow-hidden bg-black/40">
-                    <img
-                      src={dish.image_url}
-                      alt={dish.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
+                    {hasDual ? (
+                      <div className="grid grid-cols-2 h-full w-full gap-0.5">
+                        <div className="relative h-full overflow-hidden">
+                          <img
+                            src={dishPhotos[0]}
+                            alt={`${dish.name} 1`}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                          <span className="absolute bottom-1 left-1 px-1 py-0.2 bg-amber-500 text-slate-950 font-bold text-[7px] rounded">
+                            Main
+                          </span>
+                        </div>
+                        <div className="relative h-full overflow-hidden">
+                          <img
+                            src={dishPhotos[1]}
+                            alt={`${dish.name} 2`}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                          <span className="absolute bottom-1 right-1 px-1 py-0.2 bg-black/80 text-amber-300 font-bold text-[7px] rounded border border-amber-500/30">
+                            Photo 2
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <img
+                        src={dish.image_url}
+                        alt={dish.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    )}
 
                     {/* Photo count pill */}
                     <div className="absolute top-2 right-2 flex items-center space-x-1">
                       <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-black/80 text-amber-300 backdrop-blur-sm border border-amber-500/30 flex items-center space-x-1">
                         <Layers className="w-2.5 h-2.5" />
-                        <span>{photoCount} Photos</span>
+                        <span>{dishPhotos.length} Photos</span>
                       </span>
                     </div>
                   </div>

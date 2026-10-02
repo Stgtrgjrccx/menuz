@@ -119,7 +119,7 @@ export const Navbar: React.FC = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-[#0A0E17]/90 backdrop-blur-md border-b border-white/[0.08] text-slate-100 transition-all">
+      <header className="sticky top-0 z-40 bg-[#0A0E17] border-b border-white/[0.08] text-slate-100 transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
           
           {/* Left: Brand + Clean Venue Switcher */}

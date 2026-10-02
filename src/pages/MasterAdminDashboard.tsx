@@ -11,6 +11,7 @@ import { TableManagementModal } from '../components/TableManagementModal';
 import { RestaurantLaunchKitModal } from '../components/RestaurantLaunchKitModal';
 import { MasterImageLibrary } from '../components/MasterImageLibrary';
 import { IndependentWebsitesDirectoryModal } from '../components/IndependentWebsitesDirectoryModal';
+import { RestaurantPhotoManagerModal } from '../components/RestaurantPhotoManagerModal';
 import {
   Building2,
   Users,
@@ -149,6 +150,10 @@ export const MasterAdminDashboard: React.FC = () => {
   // ── Table Management & Floor Plan Modal State ───────────────
   const [tableModalRestaurant, setTableModalRestaurant] = useState<Restaurant | null>(null);
   const [isTableModalOpen, setIsTableModalOpen] = useState(false);
+
+  // ── Restaurant Photo & Ambiance Manager Modal State ──────────
+  const [photoModalRestaurant, setPhotoModalRestaurant] = useState<Restaurant | null>(null);
+  const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
 
   // ── Independent Websites Directory Modal State ──────────────
   const [isIndependentSitesOpen, setIsIndependentSitesOpen] = useState(false);
@@ -784,7 +789,7 @@ export const MasterAdminDashboard: React.FC = () => {
       </div>
 
       {/* Navigation Tabs - Touch Momentum Scrollable with Clean Mobile Stacking */}
-      <div className="sticky top-[102px] lg:top-[64px] z-30 bg-[#0A0E17]/95 backdrop-blur-md border-b border-white/[0.08] shadow-lg">
+      <div className="sticky top-[102px] lg:top-[64px] z-30 bg-[#0A0E17] border-b border-white/[0.08] shadow-lg">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <nav className="flex space-x-1 sm:space-x-2 overflow-x-auto py-2.5 scrollbar-none touch-pan-x items-center">
             <button
@@ -965,6 +970,17 @@ export const MasterAdminDashboard: React.FC = () => {
                         </div>
 
                         <div className="flex items-center space-x-1.5 flex-shrink-0">
+                          <button
+                            onClick={() => {
+                              setCurrentRestaurant(r.id);
+                              setPhotoModalRestaurant(r);
+                              setIsPhotoModalOpen(true);
+                            }}
+                            className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg transition-colors border border-white/[0.08] cursor-pointer flex items-center"
+                            title={`Manage ${r.name} Photos`}
+                          >
+                            <ImageIcon className="w-3.5 h-3.5 text-amber-400" />
+                          </button>
                           <Link
                             to={`/manage/${r.slug}`}
                             onClick={() => setCurrentRestaurant(r.id)}
@@ -1642,6 +1658,32 @@ export const MasterAdminDashboard: React.FC = () => {
                               <QrCode className="w-3.5 h-3.5 text-amber-400" />
                               <span>🪑 Floor Plan</span>
                             </button>
+                          </div>
+
+                          {/* 📸 Dedicated Photo Management & Gallery Tools */}
+                          <div className="grid grid-cols-2 gap-2">
+                            <button
+                              onClick={() => {
+                                setCurrentRestaurant(rest.id);
+                                setPhotoModalRestaurant(rest);
+                                setIsPhotoModalOpen(true);
+                              }}
+                              className="bg-slate-800/90 hover:bg-amber-500/20 hover:border-amber-500/40 text-amber-300 hover:text-white font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1.5 border border-amber-500/20 transition-all cursor-pointer shadow-sm"
+                              title="Upload & Manage Restaurant Ambiance & Cover Photos from Phone Gallery"
+                            >
+                              <ImageIcon className="w-3.5 h-3.5 text-amber-400" />
+                              <span>📸 Venue Photos</span>
+                            </button>
+
+                            <Link
+                              to={`/manage/${rest.slug}#manager-photo-studio`}
+                              onClick={() => setCurrentRestaurant(rest.id)}
+                              className="bg-slate-800/90 hover:bg-amber-500/20 hover:border-amber-500/40 text-amber-300 hover:text-white font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1.5 border border-amber-500/20 transition-all cursor-pointer shadow-sm text-center"
+                              title="Upload & Remove Dish Photos for Each Menu Item from Phone Gallery"
+                            >
+                              <Utensils className="w-3.5 h-3.5 text-amber-400" />
+                              <span>🖼️ Dish Photos</span>
+                            </Link>
                           </div>
 
                           <div className="flex items-center justify-between pt-1 text-[11px] text-slate-400">
@@ -2795,6 +2837,13 @@ export const MasterAdminDashboard: React.FC = () => {
           onClose={() => setIsTableModalOpen(false)}
         />
       )}
+
+      {/* Restaurant Ambiance & Cover Photo Management Modal */}
+      <RestaurantPhotoManagerModal
+        isOpen={isPhotoModalOpen}
+        restaurant={photoModalRestaurant}
+        onClose={() => setIsPhotoModalOpen(false)}
+      />
 
       {/* Independent Websites & Standalone Portals Directory Modal */}
       <IndependentWebsitesDirectoryModal
