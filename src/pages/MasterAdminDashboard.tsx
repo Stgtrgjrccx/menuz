@@ -51,6 +51,7 @@ import {
   UserMinus
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { PwaInstallModal } from '../components/PwaInstallModal';
 
 const getSafeSession = (key: string): string | null => {
   try {
@@ -151,6 +152,9 @@ export const MasterAdminDashboard: React.FC = () => {
 
   // ── Independent Websites Directory Modal State ──────────────
   const [isIndependentSitesOpen, setIsIndependentSitesOpen] = useState(false);
+
+  // ── PWA Install Modal State ────────────────────────────────
+  const [isPwaModalOpen, setIsPwaModalOpen] = useState(false);
 
   // ── Offboard Restaurant Modal State ─────────────────────────
   const [offboardTarget, setOffboardTarget] = useState<Restaurant | null>(null);
@@ -713,6 +717,15 @@ export const MasterAdminDashboard: React.FC = () => {
                 <FileText className="w-3.5 h-3.5 text-slate-400" />
                 <span>PDF</span>
               </a>
+              <button
+                type="button"
+                onClick={() => setIsPwaModalOpen(true)}
+                className="px-3 py-2 bg-amber-500/10 hover:bg-amber-500/20 active:scale-95 text-amber-300 text-xs font-bold rounded-xl border border-amber-500/30 flex items-center space-x-1.5 transition-all cursor-pointer shadow-sm"
+                title="Install Menuz as an App on this iPhone or Android phone"
+              >
+                <Smartphone className="w-3.5 h-3.5 text-amber-400" />
+                <span>Install App</span>
+              </button>
               <button
                 onClick={() => setIsAddRestaurantOpen(true)}
                 className="px-3.5 py-2 bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 text-slate-950 text-xs font-bold rounded-xl shadow-sm flex items-center space-x-1.5 transition-all cursor-pointer"
@@ -2863,6 +2876,13 @@ export const MasterAdminDashboard: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* PWA Direct Installation Modal */}
+      <PwaInstallModal
+        isOpen={isPwaModalOpen}
+        onClose={() => setIsPwaModalOpen(false)}
+        showFloatingPrompt={false}
+      />
     </div>
   );
 };

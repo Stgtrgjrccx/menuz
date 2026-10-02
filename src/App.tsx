@@ -12,6 +12,7 @@ import { PitchDeckPage } from './pages/PitchDeckPage';
 import { AiBotOnboardingStudioPage } from './pages/AiBotOnboardingStudioPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { PwaInstallModal } from './components/PwaInstallModal';
 
 // Yoast-style Dynamic Route SEO Metadata Manager
 const RouteSEOManager: React.FC = () => {
@@ -166,6 +167,7 @@ export const App: React.FC = () => {
             </Routes>
           </ErrorBoundary>
         </div>
+        <PwaInstallModal />
       </div>
     </HashRouter>
   );
