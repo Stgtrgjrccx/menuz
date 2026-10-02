@@ -13,6 +13,9 @@ export interface Restaurant {
   contact_phone?: string;
   status?: 'active' | 'inactive';
   logo_url: string;
+  cover_image_url?: string;
+  gallery_images?: string[];
+  ambiance_photos?: string[];
   brand_colors: {
     primary: string;
     background: string;

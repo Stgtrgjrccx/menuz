@@ -103,6 +103,12 @@ interface RestaurantStoreState {
   deleteMenuItem: (id: string) => void;
   toggleItemAvailability: (itemId: string) => void;
   assignImageToItem: (itemId: string, imageUrl: string) => void;
+  addDishImages: (itemId: string, newImages: Array<{ src: string; label?: string; code?: string } | string>) => void;
+  removeDishImage: (itemId: string, imageSrc: string) => void;
+  setPrimaryDishImage: (itemId: string, imageSrc: string) => void;
+  addRestaurantPhotos: (restaurantId: string, photos: string[]) => void;
+  removeRestaurantPhoto: (restaurantId: string, photoUrl: string) => void;
+  setRestaurantCoverPhoto: (restaurantId: string, photoUrl: string) => void;
 
   // Reviews & Challenges
   addReview: (review: CustomerReview) => void;
@@ -764,8 +770,114 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       assignImageToItem: (itemId, imageUrl) => {
         set((state) => ({
           menuItems: state.menuItems.map((item) =>
-            item.id === itemId ? { ...item, image_url: imageUrl } : item
+            item.id === itemId
+              ? {
+                  ...item,
+                  image_url: imageUrl,
+                  gallery_images: item.gallery_images?.some((g) => g.src === imageUrl)
+                    ? item.gallery_images
+                    : [{ src: imageUrl, label: 'Main Presentation', code: '# 01' }, ...(item.gallery_images || [])]
+                }
+              : item
           )
+        }));
+      },
+
+      addDishImages: (itemId, newImages) => {
+        set((state) => ({
+          menuItems: state.menuItems.map((item) => {
+            if (item.id !== itemId) return item;
+            const existing = item.gallery_images ? [...item.gallery_images] : [{ src: item.image_url, label: 'Main View', code: '# 01' }];
+            const formatted = newImages.map((img, idx) => {
+              if (typeof img === 'string') {
+                return {
+                  src: img,
+                  label: `View ${existing.length + idx + 1}`,
+                  code: `# 0${existing.length + idx + 1}`
+                };
+              }
+              return {
+                src: img.src,
+                label: img.label || `View ${existing.length + idx + 1}`,
+                code: img.code || `# 0${existing.length + idx + 1}`
+              };
+            });
+
+            const merged = [...existing, ...formatted.filter((f) => !existing.some((e) => e.src === f.src))];
+            return {
+              ...item,
+              image_url: item.image_url || merged[0]?.src,
+              gallery_images: merged
+            };
+          })
+        }));
+      },
+
+      removeDishImage: (itemId, imageSrc) => {
+        set((state) => ({
+          menuItems: state.menuItems.map((item) => {
+            if (item.id !== itemId) return item;
+            const filtered = (item.gallery_images || []).filter((g) => g.src !== imageSrc);
+            const newMain = item.image_url === imageSrc ? (filtered[0]?.src || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600') : item.image_url;
+            return {
+              ...item,
+              image_url: newMain,
+              gallery_images: filtered
+            };
+          })
+        }));
+      },
+
+      setPrimaryDishImage: (itemId, imageSrc) => {
+        set((state) => ({
+          menuItems: state.menuItems.map((item) => {
+            if (item.id !== itemId) return item;
+            return {
+              ...item,
+              image_url: imageSrc
+            };
+          })
+        }));
+      },
+
+      addRestaurantPhotos: (restaurantId, photos) => {
+        set((state) => ({
+          restaurants: state.restaurants.map((r) => {
+            if (r.id !== restaurantId) return r;
+            const existing = r.ambiance_photos || [];
+            const merged = [...existing, ...photos.filter((p) => !existing.includes(p))];
+            return {
+              ...r,
+              ambiance_photos: merged,
+              cover_image_url: r.cover_image_url || merged[0] || r.logo_url
+            };
+          })
+        }));
+      },
+
+      removeRestaurantPhoto: (restaurantId, photoUrl) => {
+        set((state) => ({
+          restaurants: state.restaurants.map((r) => {
+            if (r.id !== restaurantId) return r;
+            const filtered = (r.ambiance_photos || []).filter((p) => p !== photoUrl);
+            return {
+              ...r,
+              ambiance_photos: filtered,
+              cover_image_url: r.cover_image_url === photoUrl ? (filtered[0] || r.logo_url) : r.cover_image_url
+            };
+          })
+        }));
+      },
+
+      setRestaurantCoverPhoto: (restaurantId, photoUrl) => {
+        set((state) => ({
+          restaurants: state.restaurants.map((r) => {
+            if (r.id !== restaurantId) return r;
+            return {
+              ...r,
+              cover_image_url: photoUrl
+            };
+          })
         }));
       },
 
