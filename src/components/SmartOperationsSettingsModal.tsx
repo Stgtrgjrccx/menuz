@@ -165,9 +165,9 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#090D16]/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white border border-white/[0.08] w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+      <div className="bg-[#0D1322] border border-white/[0.08] w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] text-slate-100">
         {/* Header */}
-        <div className="p-5 border-b border-white/[0.08] flex items-center justify-between bg-[#090D16]/[0.03]/70">
+        <div className="p-5 border-b border-white/[0.08] flex items-center justify-between bg-[#090D16]/60">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-sm">
               <Sliders className="w-5 h-5" />
@@ -181,20 +181,20 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-[#090D16]/[0.06] hover:bg-white/[0.08] text-slate-400 flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-full bg-[#090D16]/60 hover:bg-white/[0.08] text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex items-center space-x-1 p-2 bg-[#090D16]/[0.04]/70 border-b border-white/[0.08] overflow-x-auto no-scrollbar">
+        <div className="flex items-center space-x-1 p-2 bg-[#090D16]/80 border-b border-white/[0.08] overflow-x-auto no-scrollbar">
           <button
             type="button"
             onClick={() => setActiveTab('kot')}
             className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 flex-shrink-0 cursor-pointer ${
               activeTab === 'kot'
-                ? 'bg-white text-white shadow-sm border border-white/[0.08]'
+                ? 'bg-amber-500/20 text-amber-300 shadow-sm border border-amber-500/30'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -207,7 +207,7 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
             onClick={() => setActiveTab('happy_hour')}
             className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 flex-shrink-0 cursor-pointer ${
               activeTab === 'happy_hour'
-                ? 'bg-white text-white shadow-sm border border-white/[0.08]'
+                ? 'bg-amber-500/20 text-amber-300 shadow-sm border border-amber-500/30'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -220,7 +220,7 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
             onClick={() => setActiveTab('instagram')}
             className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 flex-shrink-0 cursor-pointer ${
               activeTab === 'instagram'
-                ? 'bg-white text-white shadow-sm border border-white/[0.08]'
+                ? 'bg-amber-500/20 text-amber-300 shadow-sm border border-amber-500/30'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -233,7 +233,7 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
             onClick={() => setActiveTab('pairings')}
             className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 flex-shrink-0 cursor-pointer ${
               activeTab === 'pairings'
-                ? 'bg-white text-white shadow-sm border border-white/[0.08]'
+                ? 'bg-amber-500/20 text-amber-300 shadow-sm border border-amber-500/30'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -246,11 +246,11 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
             onClick={() => setActiveTab('rewards')}
             className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 flex-shrink-0 cursor-pointer ${
               activeTab === 'rewards'
-                ? 'bg-white text-white shadow-sm border border-white/[0.08]'
+                ? 'bg-amber-500/20 text-amber-300 shadow-sm border border-amber-500/30'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            <Gift className="w-3.5 h-3.5 text-purple-600" />
+            <Gift className="w-3.5 h-3.5 text-purple-400" />
             <span>Spin Wheel & Rewards</span>
           </button>
         </div>

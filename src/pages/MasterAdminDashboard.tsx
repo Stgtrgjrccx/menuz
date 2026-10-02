@@ -2072,15 +2072,15 @@ export const MasterAdminDashboard: React.FC = () => {
                   onClick={() => setSelectedPosTab('petpooja')}
                   className={`p-3 rounded-2xl border text-left transition-all ${
                     selectedPosTab === 'petpooja'
-                      ? 'bg-orange-50/80 border-orange-400 shadow-sm ring-1 ring-orange-400'
-                      : 'bg-white border-white/[0.08] hover:bg-white/[0.03] text-slate-400'
+                      ? 'bg-orange-500/20 border-orange-500/60 shadow-sm ring-1 ring-orange-500/40 text-orange-300'
+                      : 'bg-[#12192B] border-white/[0.08] hover:bg-white/[0.04] text-slate-400'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-bold text-orange-900">Petpooja</span>
-                    <span className="text-[9px] uppercase px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-700 font-bold">50k+ Outlets</span>
+                    <span className="text-xs font-bold text-orange-400">Petpooja</span>
+                    <span className="text-[9px] uppercase px-1.5 py-0.5 rounded-full bg-orange-500/20 text-orange-300 font-bold">50k+ Outlets</span>
                   </div>
-                  <p className="text-[11px] text-slate-500 line-clamp-1">National & Pune #1 REST API</p>
+                  <p className="text-[11px] text-slate-400 line-clamp-1">National & Pune #1 REST API</p>
                 </button>
 
                 <button
@@ -2088,15 +2088,15 @@ export const MasterAdminDashboard: React.FC = () => {
                   onClick={() => setSelectedPosTab('royalpos')}
                   className={`p-3 rounded-2xl border text-left transition-all ${
                     selectedPosTab === 'royalpos'
-                      ? 'bg-purple-50/80 border-purple-400 shadow-sm ring-1 ring-purple-400'
-                      : 'bg-white border-white/[0.08] hover:bg-white/[0.03] text-slate-400'
+                      ? 'bg-purple-500/20 border-purple-500/60 shadow-sm ring-1 ring-purple-500/40 text-purple-300'
+                      : 'bg-[#12192B] border-white/[0.08] hover:bg-white/[0.04] text-slate-400'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-bold text-purple-900">RoyalPOS</span>
-                    <span className="text-[9px] uppercase px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700 font-bold">Pune Local</span>
+                    <span className="text-xs font-bold text-purple-400">RoyalPOS</span>
+                    <span className="text-[9px] uppercase px-1.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-bold">Pune Local</span>
                   </div>
-                  <p className="text-[11px] text-slate-500 line-clamp-1">FC Road, Hinjewadi & QSRs</p>
+                  <p className="text-[11px] text-slate-400 line-clamp-1">FC Road, Hinjewadi & QSRs</p>
                 </button>
 
                 <button
@@ -2104,15 +2104,15 @@ export const MasterAdminDashboard: React.FC = () => {
                   onClick={() => setSelectedPosTab('recaho')}
                   className={`p-3 rounded-2xl border text-left transition-all ${
                     selectedPosTab === 'recaho'
-                      ? 'bg-blue-50/80 border-blue-400 shadow-sm ring-1 ring-blue-400'
-                      : 'bg-white border-white/[0.08] hover:bg-white/[0.03] text-slate-400'
+                      ? 'bg-blue-500/20 border-blue-500/60 shadow-sm ring-1 ring-blue-500/40 text-blue-300'
+                      : 'bg-[#12192B] border-white/[0.08] hover:bg-white/[0.04] text-slate-400'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-bold text-blue-900">Recaho</span>
-                    <span className="text-[9px] uppercase px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-700 font-bold">PCMC / Chakan</span>
+                    <span className="text-xs font-bold text-blue-400">Recaho</span>
+                    <span className="text-[9px] uppercase px-1.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-bold">PCMC / Chakan</span>
                   </div>
-                  <p className="text-[11px] text-slate-500 line-clamp-1">Suburban & Family Eateries</p>
+                  <p className="text-[11px] text-slate-400 line-clamp-1">Suburban & Family Eateries</p>
                 </button>
 
                 <button
@@ -2120,15 +2120,15 @@ export const MasterAdminDashboard: React.FC = () => {
                   onClick={() => setSelectedPosTab('rancelab')}
                   className={`p-3 rounded-2xl border text-left transition-all ${
                     selectedPosTab === 'rancelab'
-                      ? 'bg-emerald-50/80 border-emerald-400 shadow-sm ring-1 ring-emerald-400'
-                      : 'bg-white border-white/[0.08] hover:bg-white/[0.03] text-slate-400'
+                      ? 'bg-emerald-500/20 border-emerald-500/60 shadow-sm ring-1 ring-emerald-500/40 text-emerald-300'
+                      : 'bg-[#12192B] border-white/[0.08] hover:bg-white/[0.04] text-slate-400'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-bold text-emerald-900">RanceLab</span>
-                    <span className="text-[9px] uppercase px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold">FusionResto</span>
+                    <span className="text-xs font-bold text-emerald-400">RanceLab</span>
+                    <span className="text-[9px] uppercase px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">FusionResto</span>
                   </div>
-                  <p className="text-[11px] text-slate-500 line-clamp-1">Chains & Fine Dining</p>
+                  <p className="text-[11px] text-slate-400 line-clamp-1">Multi-Chain Fine Dining</p>
                 </button>
               </div>
             </div>

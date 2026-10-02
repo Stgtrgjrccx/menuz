@@ -514,7 +514,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
   return (
     <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-end justify-center">
       <div 
-        className="bg-white rounded-t-3xl max-w-xl w-full h-[85vh] flex flex-col p-4  animate-in slide-in-from-bottom duration-200"
+        className="bg-[#0D1322] text-slate-100 rounded-t-3xl max-w-xl w-full h-[85vh] flex flex-col p-4 animate-in slide-in-from-bottom duration-200 border border-white/[0.08] shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -526,11 +526,11 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
             <div>
               <div className="flex items-center space-x-1.5">
                 <h3 className="font-serif font-bold text-base text-white">AI Dining Concierge</h3>
-                <span className="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-200">
+                <span className="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30">
                   🧑‍🍳 Chef &amp; Owner Trained
                 </span>
               </div>
-              <p className="text-[10px] text-slate-400/60">
+              <p className="text-[10px] text-slate-400">
                 {focusDish
                   ? `Focused on: ${focusDish.name}`
                   : `Trained on secret kitchen recipes & authentic spice index`}
@@ -539,7 +539,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-full text-slate-400 hover:bg-white/[0.04] transition-colors"
+            className="p-1.5 rounded-full text-slate-400 hover:bg-white/[0.08] hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -561,8 +561,8 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
         )}
 
         {/* Allergy Policy Guard Banner */}
-        <div className="bg-amber-50/90 border border-amber-200 p-2.5 rounded-xl my-1.5 flex items-start space-x-2 text-[11px] text-amber-900 leading-tight">
-          <ShieldAlert className="w-4 h-4 text-amber-700 flex-shrink-0 mt-0.5" />
+        <div className="bg-amber-500/10 border border-amber-500/25 p-2.5 rounded-xl my-1.5 flex items-start space-x-2 text-[11px] text-amber-200 leading-tight">
+          <ShieldAlert className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
           <p>
             {ALLERGY_DISCLAIMER}
           </p>
@@ -573,31 +573,31 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
           <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 scrollbar-none">
             <button
               onClick={() => handleSendQuery("Which dishes are 100% Jain safe with isolated prep?")}
-              className="px-2.5 py-1 rounded-lg bg-green-50 hover:bg-green-100 text-green-800 text-[11px] font-bold border border-green-200 flex-shrink-0 transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 text-[11px] font-bold border border-emerald-500/30 flex-shrink-0 transition-colors cursor-pointer"
             >
               🌱 100% Jain Safe
             </button>
             <button
               onClick={() => handleSendQuery("Which dishes are strictly Gluten-Free and celiac safe?")}
-              className="px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 text-[11px] font-bold border border-amber-200 flex-shrink-0 transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-[11px] font-bold border border-amber-500/30 flex-shrink-0 transition-colors cursor-pointer"
             >
               🌾 Gluten-Free / Celiac
             </button>
             <button
               onClick={() => handleSendQuery("Which dishes are completely free of peanuts, tree nuts, and nut oils?")}
-              className="px-2.5 py-1 rounded-lg bg-orange-50 hover:bg-orange-100 text-orange-900 text-[11px] font-bold border border-orange-200 flex-shrink-0 transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-lg bg-orange-500/10 hover:bg-orange-500/20 text-orange-300 text-[11px] font-bold border border-orange-500/30 flex-shrink-0 transition-colors cursor-pointer"
             >
               🥜 Nut-Allergy Safe
             </button>
             <button
               onClick={() => handleSendQuery("Which dishes are 100% Plant-Based Vegan with zero dairy or ghee?")}
-              className="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-900 text-[11px] font-bold border border-emerald-200 flex-shrink-0 transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 text-[11px] font-bold border border-emerald-500/30 flex-shrink-0 transition-colors cursor-pointer"
             >
               🥬 Pure Vegan
             </button>
             <button
               onClick={() => handleSendQuery("What are your zero-spice, mild dishes suitable for kids?")}
-              className="px-2.5 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-900 text-[11px] font-bold border border-blue-200 flex-shrink-0 transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 text-[11px] font-bold border border-cyan-500/30 flex-shrink-0 transition-colors cursor-pointer"
             >
               👶 Kid-Friendly Mild
             </button>
@@ -614,8 +614,8 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
               <div
                 className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed whitespace-pre-line ${
                   m.role === 'user'
-                    ? 'bg-amber-500 text-white rounded-tr-none shadow-sm'
-                    : 'bg-white/[0.04] text-white rounded-tl-none border border-white/[0.08]'
+                    ? 'bg-amber-500 text-white rounded-tr-none shadow-sm font-medium'
+                    : 'bg-[#12192B] text-slate-100 rounded-tl-none border border-white/[0.08]'
                 }`}
               >
                 {m.content}
@@ -627,12 +627,12 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                   {m.recommendations.map((rec) => (
                     <div
                       key={rec.item.id}
-                      className="bg-white border border-amber-500/20 rounded-2xl p-3 shadow-lg flex items-center justify-between gap-3"
+                      className="bg-[#12192B] border border-white/[0.08] hover:border-amber-500/40 rounded-2xl p-3 shadow-lg flex items-center justify-between gap-3"
                     >
                       <img
                         src={rec.item.image_url}
                         alt={rec.item.name}
-                        className="w-14 h-14 rounded-xl object-cover flex-shrink-0 bg-[#090D16]/[0.04]"
+                        className="w-14 h-14 rounded-xl object-cover flex-shrink-0 bg-[#090D16]"
                       />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center space-x-1 mb-0.5">
@@ -643,7 +643,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                         <h4 className="font-serif font-bold text-xs text-white truncate">
                           {rec.item.name}
                         </h4>
-                        <p className="text-[10px] text-slate-400/70 line-clamp-1">{rec.reason}</p>
+                        <p className="text-[10px] text-slate-400 line-clamp-1">{rec.reason}</p>
                         <span className="text-xs font-bold text-amber-400 mt-0.5 block">
                           ₹{rec.item.price.toFixed(2)}
                         </span>
@@ -654,7 +654,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                           onConfirmAdd(rec.item);
                           onClose();
                         }}
-                        className="bg-amber-500 hover:bg-amber-700 text-white text-[11px] font-bold px-3 py-2 rounded-xl flex items-center space-x-1 shadow-lg transition-colors flex-shrink-0"
+                        className="bg-amber-500 hover:bg-amber-600 text-white text-[11px] font-bold px-3 py-2 rounded-xl flex items-center space-x-1 shadow-lg transition-colors flex-shrink-0 cursor-pointer"
                       >
                         <Plus className="w-3.5 h-3.5" />
                         <span>Add</span>
@@ -667,7 +667,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
           ))}
 
           {loading && (
-            <div className="flex items-center space-x-2 text-xs text-slate-400/60 py-2">
+            <div className="flex items-center space-x-2 text-xs text-slate-400 py-2">
               <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
               <span>Analyzing menu & kitchen data...</span>
             </div>
@@ -682,7 +682,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
               key={idx}
               type="button"
               onClick={() => handleSendQuery(q.query)}
-              className="whitespace-nowrap bg-[#090D16]/[0.04] hover:bg-amber-100 hover:text-amber-950 border border-white/[0.08] hover:border-amber-400 text-[11px] font-bold px-3 py-1.5 rounded-full text-slate-200 transition-all flex items-center space-x-1 shadow-sm cursor-pointer"
+              className="whitespace-nowrap bg-[#12192B] hover:bg-amber-500/20 hover:text-amber-300 border border-white/[0.08] hover:border-amber-500/40 text-[11px] font-bold px-3 py-1.5 rounded-full text-slate-300 transition-all flex items-center space-x-1 shadow-sm cursor-pointer"
             >
               {q.icon && <span className="mr-0.5">{q.icon}</span>}
               <span>{q.label}</span>
@@ -698,12 +698,12 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSendQuery(input)}
             placeholder={focusDish ? `Ask about ${focusDish.name}...` : "Ask about ingredients, pairings, allergens..."}
-            className="flex-1 bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-600/40 placeholder-slate-600"
+            className="flex-1 bg-[#090D16] border border-white/[0.08] rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-500/60 placeholder-slate-500"
           />
           <button
             type="button"
             onClick={() => handleSendQuery(input)}
-            className="p-2.5 bg-amber-500 hover:bg-amber-700 text-white rounded-xl shadow-lg transition-colors"
+            className="p-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl shadow-lg transition-colors cursor-pointer"
           >
             <Send className="w-4 h-4" />
           </button>

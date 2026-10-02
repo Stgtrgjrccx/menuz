@@ -662,11 +662,11 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
     >
       <div
         style={{
-          backgroundColor: '#FFFFFF',
+          backgroundColor: '#0D1322',
           maxHeight: '92vh',
           overflowY: 'auto'
         }}
-        className="rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-white/[0.08] relative flex flex-col items-center"
+        className="rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-white/[0.08] relative flex flex-col items-center text-slate-100"
       >
         {/* Confetti canvas */}
         <canvas
@@ -677,7 +677,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
         {/* Modal Header */}
         <div className="w-full flex items-center justify-between pb-3 border-b border-white/[0.08]">
           <div className="flex items-center space-x-2">
-            <span className="p-1.5 rounded-xl bg-amber-100 text-amber-700">
+            <span className="p-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30">
               <Gift className="w-4 h-4" />
             </span>
             <div>
@@ -699,7 +699,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-full hover:bg-white/[0.04] text-slate-500 hover:text-slate-200 transition-colors"
+            className="p-1.5 rounded-full hover:bg-white/[0.08] text-slate-400 hover:text-white transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -711,7 +711,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
         {step === 'rate_and_keywords' && (
           <div className="w-full flex flex-col items-center pt-3 space-y-3.5 text-center">
             {/* Header prompt */}
-            <div className="w-full bg-amber-50 border border-amber-200 rounded-2xl p-3 text-center space-y-0.5">
+            <div className="w-full bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3 text-center space-y-0.5">
               <h4 className="font-serif font-bold text-sm text-white">
                 Post on Google Reviews to Spin the Wheel!
               </h4>
@@ -732,18 +732,18 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                     key={star}
                     type="button"
                     onClick={() => handleRatingSelect(star)}
-                    className="p-1 text-3xl transition-transform hover:scale-125 focus:outline-none"
+                    className="p-1 text-3xl transition-transform hover:scale-125 focus:outline-none cursor-pointer"
                     title={`${star} Stars`}
                   >
                     <span
-                      className={star <= starRating ? 'text-amber-400 drop-shadow-sm' : 'text-gray-200'}
+                      className={star <= starRating ? 'text-amber-400 drop-shadow-sm' : 'text-slate-600'}
                     >
                       ★
                     </span>
                   </button>
                 ))}
               </div>
-              <span className="text-[11px] font-semibold text-slate-500">
+              <span className="text-[11px] font-semibold text-slate-400">
                 {starRating === 5 ? 'Exceptional! ⭐⭐⭐⭐⭐' : 'Great! ⭐⭐⭐⭐'}
               </span>
             </div>
@@ -766,10 +766,10 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                           isSel ? prev.filter((t) => t !== tag) : [...prev, tag]
                         );
                       }}
-                      className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all ${
+                      className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer ${
                         isSel
-                          ? 'bg-[#090D16] text-white font-semibold shadow-sm'
-                          : 'bg-white/[0.04] text-slate-400 border border-white/[0.08] hover:bg-white/[0.06]'
+                          ? 'bg-amber-500 text-slate-950 font-bold shadow-sm'
+                          : 'bg-[#12192B] text-slate-400 border border-white/[0.08] hover:bg-white/[0.06] hover:text-white'
                       }`}
                     >
                       {tag}
@@ -783,9 +783,9 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
             <button
               type="button"
               onClick={handleCopyAndPostToGoogle}
-              className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-amber-600 via-amber-500 to-amber-700 hover:brightness-105 active:scale-95 text-white font-serif text-sm font-bold  flex items-center justify-center space-x-2 transition-all mt-1"
+              className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-amber-600 via-amber-500 to-amber-700 hover:brightness-105 active:scale-95 text-slate-950 font-serif text-sm font-bold flex items-center justify-center space-x-2 transition-all mt-1 cursor-pointer shadow-lg"
             >
-              <ExternalLink className="w-4 h-4 text-amber-200" />
+              <ExternalLink className="w-4 h-4 text-slate-950" />
               <span>Post on Google &amp; Unlock Your Reward ↗</span>
             </button>
           </div>
@@ -796,7 +796,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
         {/* ═══════════════════════════════════════════════════════════ */}
         {step === 'verifying_post' && (
           <div className="w-full flex flex-col items-center pt-4 space-y-4 text-center">
-            <div className="w-16 h-16 rounded-full bg-amber-50 border-2 border-amber-300 flex items-center justify-center text-3xl">
+            <div className="w-16 h-16 rounded-full bg-amber-500/15 border-2 border-amber-500/40 text-amber-300 flex items-center justify-center text-3xl">
               ⭐
             </div>
 
@@ -820,16 +820,16 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                     setCopiedReview(true);
                     setTimeout(() => setCopiedReview(false), 2000);
                   }}
-                  className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-colors flex items-center gap-1 ${
+                  className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-colors flex items-center gap-1 cursor-pointer ${
                     copiedReview
-                      ? 'bg-green-50 text-green-700 border-green-200'
-                      : 'bg-white/[0.03] text-slate-400 border-white/[0.08] hover:bg-white/[0.04]'
+                      ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                      : 'bg-[#12192B] text-slate-400 border-white/[0.08] hover:bg-white/[0.06] hover:text-white'
                   }`}
                 >
                   {copiedReview ? <><Check className="w-3 h-3" /> Copied!</> : <><Copy className="w-3 h-3" /> Copy</>}
                 </button>
               </div>
-              <div className="bg-white/[0.03] border border-white/[0.08] rounded-xl p-3 text-[11px] text-slate-200 italic leading-relaxed">
+              <div className="bg-[#12192B] border border-white/[0.08] rounded-xl p-3 text-[11px] text-slate-200 italic leading-relaxed">
                 “{aiDraft}”
               </div>
               <p className="text-[10px] text-slate-500 text-center">Paste this into Google Maps → then confirm below to unlock your spin.</p>
@@ -840,7 +840,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               type="button"
               onClick={handleConfirmReviewPosted}
               disabled={isVerifying}
-              className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:brightness-105 active:scale-95 text-white font-serif text-sm font-bold  flex items-center justify-center space-x-2 transition-all"
+              className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:brightness-105 active:scale-95 text-white font-serif text-sm font-bold flex items-center justify-center space-x-2 transition-all cursor-pointer shadow-lg"
             >
               {isVerifying ? (
                 <>
@@ -863,7 +863,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                   `https://search.google.com/local/writereview?placeid=${restaurant?.slug === 'casa-bella' ? 'ChIJCasaBellaTrattoriaPune' : 'ChIJSaffronHouseKoregaonParkPune'}`;
                 window.open(googleUrl, '_blank', 'noopener,noreferrer');
               }}
-              className="text-xs text-amber-400 font-semibold hover:underline flex items-center space-x-1"
+              className="text-xs text-amber-400 font-semibold hover:underline flex items-center space-x-1 cursor-pointer"
             >
               <span>Didn't open? Re-open Google Maps</span>
               <ExternalLink className="w-3 h-3" />
@@ -877,8 +877,8 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
         {step === 'wheel' && (
           <div className="w-full flex flex-col items-center pt-2 space-y-3.5 text-center">
             {/* Header info */}
-            <div className="flex items-center space-x-1.5 bg-green-50 border border-green-200 px-3 py-1 rounded-full text-[11px] font-bold text-green-800">
-              <Check className="w-3.5 h-3.5 text-green-600" />
+            <div className="flex items-center space-x-1.5 bg-emerald-500/20 border border-emerald-500/40 px-3 py-1 rounded-full text-[11px] font-bold text-emerald-300">
+              <Check className="w-3.5 h-3.5 text-emerald-400" />
               <span>Review Verified! Spin for Guaranteed Reward</span>
             </div>
 
@@ -902,10 +902,10 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               type="button"
               onClick={handleSpin}
               disabled={isSpinning}
-              className={`w-full py-4 px-6 rounded-2xl font-serif text-sm font-bold  flex items-center justify-center space-x-2 transition-all ${
+              className={`w-full py-4 px-6 rounded-2xl font-serif text-sm font-bold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
                 isSpinning
                   ? 'bg-white/[0.06] text-slate-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-amber-500 via-amber-600 to-amber-600 hover:brightness-110 active:scale-95 text-white animate-pulse'
+                  : 'bg-gradient-to-r from-amber-500 via-amber-600 to-amber-600 hover:brightness-110 active:scale-95 text-slate-950 animate-pulse shadow-lg'
               }`}
             >
               <RotateCw className={`w-4 h-4 ${isSpinning ? 'animate-spin' : ''}`} />
@@ -919,7 +919,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
         {/* ═══════════════════════════════════════════════════════════ */}
         {step === 'reward_won' && wonPrize && (
           <div className="w-full flex flex-col items-center pt-2 space-y-3.5 text-center animate-in fade-in zoom-in-95 duration-200">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 flex items-center justify-center text-3xl  text-white animate-bounce">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 flex items-center justify-center text-3xl text-slate-950 animate-bounce shadow-lg">
               {wonPrize.emoji}
             </div>
 
@@ -933,7 +933,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
             </div>
 
             {/* ANTI-CHEAT DYNAMIC LIVE VOUCHER CARD */}
-            <div className="w-full relative overflow-hidden rounded-2xl border-2 border-amber-400  text-left bg-gradient-to-br from-[#090D16] via-[#090D16] to-[#090D16] text-white p-4 space-y-3">
+            <div className="w-full relative overflow-hidden rounded-2xl border-2 border-amber-400 text-left bg-gradient-to-br from-[#090D16] via-[#0D1322] to-[#090D16] text-white p-4 space-y-3">
               {/* Animated Live Security Watermark Banner */}
               <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
                 <div className="flex items-center space-x-2">
@@ -945,7 +945,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                     Live Session: {liveClock || 'Active'}
                   </span>
                 </div>
-                <span className="text-[9px] bg-[#090D16]/10 text-amber-300 font-bold px-2 py-0.5 rounded-full border border-amber-400/30 flex items-center gap-1">
+                <span className="text-[9px] bg-amber-500/20 text-amber-300 font-bold px-2 py-0.5 rounded-full border border-amber-400/30 flex items-center gap-1">
                   <ShieldCheck className="w-3 h-3 text-amber-400" />
                   Anti-Screenshot Guard
                 </span>
@@ -954,7 +954,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               {/* Status Header */}
               <div className="flex items-start justify-between">
                 <div>
-                  <span className="text-[10px] uppercase tracking-wider text-slate-500 block font-semibold">
+                  <span className="text-[10px] uppercase tracking-wider text-slate-400 block font-semibold">
                     Authorized Diner Table
                   </span>
                   <span className="text-sm font-bold text-white font-serif">
@@ -962,7 +962,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                   </span>
                 </div>
                 <div className="text-right">
-                  <span className="text-[9px] uppercase tracking-wider text-slate-500 block">Security Code</span>
+                  <span className="text-[9px] uppercase tracking-wider text-slate-400 block">Security Code</span>
                   <div className="flex items-center space-x-1">
                     <span className="font-mono text-xs font-black text-amber-400 tracking-wider">
                       {voucherCode || 'WIN-4821'}
@@ -974,7 +974,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                         setCopiedVoucher(true);
                         setTimeout(() => setCopiedVoucher(false), 2000);
                       }}
-                      className="p-1 rounded-md hover:bg-white/10 text-slate-500 hover:text-white"
+                      className="p-1 rounded-md hover:bg-white/10 text-slate-400 hover:text-white cursor-pointer"
                       title="Copy Voucher Code"
                     >
                       {copiedVoucher ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
@@ -984,7 +984,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               </div>
 
               {/* Reward Display */}
-              <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-between">
+              <div className="bg-[#12192B] border border-white/10 rounded-xl p-3 flex items-center justify-between">
                 <div className="flex items-center space-x-2.5">
                   <span className="text-2xl">{wonPrize.emoji}</span>
                   <div>
@@ -1012,7 +1012,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                     </div>
 
                     {/* Progress Bar */}
-                    <div className="w-full bg-[#090D16]/10 h-1.5 rounded-full overflow-hidden">
+                    <div className="w-full bg-[#090D16] h-1.5 rounded-full overflow-hidden border border-white/[0.06]">
                       <div
                         className="bg-gradient-to-r from-amber-500 to-emerald-400 h-full transition-all duration-1000"
                         style={{ width: `${(voucherSecondsLeft / 900) * 100}%` }}
@@ -1049,13 +1049,13 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                     <button
                       type="button"
                       onClick={() => setShowStaffPinModal(true)}
-                      className="w-full py-2 bg-[#090D16]/10 hover:bg-white/20 active:scale-95 border border-white/20 rounded-xl text-xs font-bold text-white transition-all flex items-center justify-center space-x-1.5"
+                      className="w-full py-2 bg-white/[0.06] hover:bg-white/[0.12] active:scale-95 border border-white/20 rounded-xl text-xs font-bold text-white transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
                     >
                       <Key className="w-3.5 h-3.5 text-amber-400" />
                       <span>Server: Tap to Void & Apply to POS Bill</span>
                     </button>
                   ) : (
-                    <div className="bg-white/10 p-3 rounded-xl border border-white/20 space-y-2">
+                    <div className="bg-[#12192B] p-3 rounded-xl border border-white/20 space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-white flex items-center gap-1">
                           <Lock className="w-3.5 h-3.5 text-amber-400" /> Enter Staff 4-Digit PIN:
@@ -1066,7 +1066,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                             setShowStaffPinModal(false);
                             setPinErrorMessage('');
                           }}
-                          className="text-[10px] text-slate-500 hover:text-white"
+                          className="text-[10px] text-slate-400 hover:text-white cursor-pointer"
                         >
                           Cancel
                         </button>
@@ -1079,7 +1079,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                           onChange={(e) => setStaffPinInput(e.target.value)}
                           placeholder="e.g. 1234"
                           autoFocus
-                          className="w-24 text-center font-mono text-sm font-bold bg-black/50 border border-white/30 rounded-lg py-1.5 text-white focus:outline-none focus:border-amber-400"
+                          className="w-24 text-center font-mono text-sm font-bold bg-[#090D16] border border-white/30 rounded-lg py-1.5 text-white focus:outline-none focus:border-amber-400"
                         />
                         <button
                           type="button"
@@ -1094,7 +1094,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                               setPinErrorMessage('PIN must be 4 digits (default: 1234)');
                             }
                           }}
-                          className="flex-1 py-1.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-lg transition-colors"
+                          className="flex-1 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-lg transition-colors cursor-pointer"
                         >
                           Confirm Void
                         </button>
@@ -1102,7 +1102,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                       {pinErrorMessage && (
                         <p className="text-[10px] text-red-400 font-semibold">{pinErrorMessage}</p>
                       )}
-                      <p className="text-[9px] text-slate-500">
+                      <p className="text-[9px] text-slate-400">
                         Default Demo Staff PIN is <code className="font-mono text-amber-300">1234</code>
                       </p>
                     </div>
@@ -1111,14 +1111,14 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               )}
             </div>
 
-            <p className="text-[11px] text-slate-500">
+            <p className="text-[11px] text-slate-400">
               Kitchen staff & POS have been alerted for {activeTable?.label || 'Table 1'}.
             </p>
 
             <button
               type="button"
               onClick={onClose}
-              className="w-full py-3 bg-[#090D16] hover:bg-[#0D1322] text-white rounded-xl text-xs font-bold transition-colors shadow-lg flex items-center justify-center space-x-1.5"
+              className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl text-xs font-bold transition-colors shadow-lg flex items-center justify-center space-x-1.5 cursor-pointer"
             >
               <span>Return to Dining Menu</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -1131,13 +1131,13 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
         {/* ═══════════════════════════════════════════════════════════ */}
         {step === 'urgent_service' && (
           <div className="w-full flex flex-col items-center pt-2 space-y-3.5 text-center">
-            <div className="w-full bg-red-50 border-2 border-red-300 rounded-2xl p-3.5 flex items-center space-x-3 text-left">
+            <div className="w-full bg-red-950/40 border-2 border-red-500/40 rounded-2xl p-3.5 flex items-center space-x-3 text-left">
               <span className="text-2xl animate-pulse flex-shrink-0">🚨</span>
               <div>
-                <span className="text-[10px] uppercase font-bold text-red-700 tracking-wider block">
+                <span className="text-[10px] uppercase font-bold text-red-400 tracking-wider block">
                   Urgent Staff Intervention Dispatched
                 </span>
-                <p className="text-xs font-bold text-red-950 mt-0.5">
+                <p className="text-xs font-bold text-red-200 mt-0.5">
                   Floor Manager alerted for {activeTable?.label || 'Table 1'} ({starRating}★ rating)!
                 </p>
               </div>
@@ -1174,10 +1174,10 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                           isSel ? prev.filter((i) => i !== issue) : [...prev, issue]
                         );
                       }}
-                      className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all ${
+                      className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer ${
                         isSel
                           ? 'bg-red-700 text-white font-bold'
-                          : 'bg-white/[0.04] text-slate-200 border border-white/[0.08] hover:bg-white/[0.06]'
+                          : 'bg-[#12192B] text-slate-200 border border-white/[0.08] hover:bg-white/[0.06]'
                       }`}
                     >
                       {issue}
@@ -1195,7 +1195,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                 value={urgentNote}
                 onChange={(e) => setUrgentNote(e.target.value)}
                 placeholder="e.g. Dal Makhani was lukewarm, need warm replacement..."
-                className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500"
+                className="w-full bg-[#090D16] border border-white/[0.08] rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500"
               />
             </div>
 
@@ -1208,7 +1208,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               <span>🚨 Send Manager to Table Now</span>
             </button>
 
-            <div className="w-full flex items-center justify-between gap-2 pt-2 border-t border-red-100 text-xs">
+            <div className="w-full flex items-center justify-between gap-2 pt-2 border-t border-white/[0.08] text-xs">
               <a
                 href={restaurant?.google_place_url || 'https://maps.google.com'}
                 target="_blank"
@@ -1221,7 +1221,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               <button
                 type="button"
                 onClick={() => setStep('wheel')}
-                className="text-[11px] text-amber-700 font-bold hover:underline cursor-pointer"
+                className="text-[11px] text-amber-400 font-bold hover:underline cursor-pointer"
               >
                 Spin Table Wheel →
               </button>
@@ -1232,7 +1232,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
         {/* Urgent Resolved */}
         {step === 'urgent_resolved' && (
           <div className="w-full flex flex-col items-center pt-3 space-y-3.5 text-center">
-            <div className="w-14 h-14 rounded-full bg-green-50 border-2 border-green-300 flex items-center justify-center text-2xl">
+            <div className="w-14 h-14 rounded-full bg-emerald-500/20 border-2 border-emerald-500/40 text-emerald-300 flex items-center justify-center text-2xl">
               ✓
             </div>
             <h4 className="font-serif font-bold text-base text-white">
@@ -1252,7 +1252,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="w-full py-2 bg-[#090D16]/[0.02] text-slate-200 rounded-xl text-xs font-semibold hover:bg-white/[0.04] cursor-pointer"
+                className="w-full py-2 bg-[#090D16] border border-white/[0.08] text-slate-300 rounded-xl text-xs font-semibold hover:bg-white/[0.06] hover:text-white cursor-pointer"
               >
                 Return to Menu
               </button>

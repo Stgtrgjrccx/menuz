@@ -167,28 +167,28 @@ export const SwitchRestaurantModal: React.FC<SwitchRestaurantModalProps> = ({
             {/* Restaurant List - Strictly Active Demos */}
             <div className="p-4 overflow-y-auto flex-1 space-y-2.5">
               {filteredRestaurants.length === 0 ? (
-                <div className="py-8 px-4 text-center text-slate-400 bg-[#090D16]/[0.03]/80 rounded-2xl border border-white/[0.08]">
-                  <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto mb-3 border border-amber-200 shadow-sm">
+                <div className="py-8 px-4 text-center text-slate-400 bg-[#090D16]/60 rounded-2xl border border-white/[0.08]">
+                  <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto mb-3 border border-amber-500/30 shadow-sm">
                     <Sparkles className="w-6 h-6" />
                   </div>
                   <h4 className="font-serif font-bold text-sm text-white">
                     No demo matches "{query}"
                   </h4>
-                  <p className="text-[11px] text-slate-500 mt-1 mb-3 leading-relaxed">
+                  <p className="text-[11px] text-slate-400 mt-1 mb-3 leading-relaxed">
                     Menuz is currently showcasing our two live demo experiences (Saffron House &amp; Casa Bella Trattoria). Point your camera at your table QR code or choose a demo below.
                   </p>
                   <div className="flex gap-2 justify-center">
                     <button
                       type="button"
                       onClick={() => setQuery('')}
-                      className="py-1.5 px-3 bg-[#090D16] border border-white/[0.08] rounded-lg text-xs font-semibold text-slate-400 hover:bg-white/[0.04]"
+                      className="py-1.5 px-3 bg-[#090D16] border border-white/[0.08] rounded-lg text-xs font-semibold text-slate-300 hover:bg-white/[0.08] hover:text-white cursor-pointer"
                     >
                       View All Demos
                     </button>
                     <button
                       type="button"
                       onClick={() => setIsQrScannerOpen(true)}
-                      className="py-1.5 px-3 bg-amber-500 text-white rounded-lg text-xs font-semibold hover:bg-amber-700"
+                      className="py-1.5 px-3 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-lg text-xs font-bold shadow-sm cursor-pointer"
                     >
                       Scan Table QR
                     </button>
