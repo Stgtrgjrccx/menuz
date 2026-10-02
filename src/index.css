@@ -10,8 +10,8 @@
   html {
     -webkit-tap-highlight-color: transparent;
     scroll-behavior: smooth;
-    padding-top: max(env(safe-area-inset-top, 0px), 24px);
-    padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px);
+    padding-top: max(env(safe-area-inset-top, 0px) + 110px, 135px) !important;
+    padding-bottom: max(env(safe-area-inset-bottom, 0px), 24px);
     padding-left: max(env(safe-area-inset-left, 0px), 0px);
     padding-right: max(env(safe-area-inset-right, 0px), 0px);
     overflow-x: hidden !important;
