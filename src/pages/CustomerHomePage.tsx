@@ -146,14 +146,6 @@ export const CustomerHomePage: React.FC = () => {
               <UtensilsCrossed className="w-4 h-4 text-amber-400" />
               <span>Launch Table 1 (Saffron House)</span>
             </Link>
-
-            <Link
-              to="/pitch"
-              className="py-3 px-4 rounded-xl text-slate-300 hover:text-white hover:bg-white/[0.05] text-xs sm:text-sm font-medium transition-colors flex items-center space-x-1.5"
-            >
-              <TrendingUp className="w-4 h-4 text-slate-400" />
-              <span>Pitch Deck (19 Slides)</span>
-            </Link>
           </div>
 
           {/* Clean Live Ticker */}
@@ -424,24 +416,24 @@ export const CustomerHomePage: React.FC = () => {
               </Link>
             </div>
 
-            {/* 4. Executive Pitch Deck */}
+            {/* 4. Headquarters Control */}
             <div className="bg-[#0F1626] border border-white/[0.08] hover:border-cyan-400/40 p-5 rounded-2xl flex flex-col justify-between space-y-4 transition-all hover:-translate-y-1">
               <div className="space-y-3">
                 <div className="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
-                  <TrendingUp className="w-5 h-5" />
+                  <ShieldCheck className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-serif font-bold text-base text-white">4. Executive Pitch Deck</h4>
+                  <h4 className="font-serif font-bold text-base text-white">4. Master Headquarters HQ</h4>
                   <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                    19-slide boardroom presentation detailing ₹5k/₹10k subscriptions, unit economics, and 0% food commission.
+                    Centralized management across all 15 Pune restaurants, kitchen POS adapters, and catalog sync.
                   </p>
                 </div>
               </div>
               <Link
-                to="/pitch"
+                to="/admin"
                 className="text-xs font-bold text-cyan-400 hover:text-cyan-300 flex items-center space-x-1 group"
               >
-                <span>View 19 Slides</span>
+                <span>Access Admin HQ</span>
                 <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
@@ -589,11 +581,11 @@ export const CustomerHomePage: React.FC = () => {
 
           <div className="pt-3 flex flex-wrap items-center justify-center gap-3">
             <Link
-              to="/pitch"
+              to="/admin"
               className="py-3 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 text-slate-950 font-bold text-xs shadow-md transition-all flex items-center space-x-1.5 cursor-pointer"
             >
-              <TrendingUp className="w-4 h-4 text-slate-950" />
-              <span>Explore Executive Pitch &amp; ROI</span>
+              <ShieldCheck className="w-4 h-4 text-slate-950" />
+              <span>Open Master Admin HQ</span>
             </Link>
 
             <button
@@ -628,8 +620,8 @@ export const CustomerHomePage: React.FC = () => {
             <Link to="/kitchen" className="hover:text-slate-300 transition-colors">
               Kitchen KDS
             </Link>
-            <Link to="/pitch" className="text-amber-400 hover:text-amber-300 transition-colors font-medium">
-              Pitch Deck
+            <Link to="/admin" className="text-amber-400 hover:text-amber-300 transition-colors font-medium">
+              Admin HQ
             </Link>
           </div>
         </div>

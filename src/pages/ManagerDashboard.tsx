@@ -9,43 +9,26 @@ import {
   Sparkles,
   CheckCircle2,
   Bell,
-  Award,
   X,
-  Flame,
-  AlertCircle,
-  Check,
+  ShieldCheck,
+  Upload,
+  Building2,
+  Search,
+  Star,
+  QrCode,
+  Printer,
+  Share2,
   UtensilsCrossed,
   ExternalLink,
   ArrowLeft,
   ChefHat,
-  Printer,
-  Share2,
-  Globe,
-  Sliders,
-  Settings,
-  UserMinus,
-  ShieldCheck,
-  Upload,
-  Image as ImageIcon,
-  Layers,
-  Building2,
-  Camera,
-  FolderOpen,
-  Search,
-  Plus,
-  Star,
-  MessageSquare,
-  QrCode,
-  MapPin,
-  TrendingUp,
-  Clock,
-  Smartphone,
-  Eye,
-  CheckCheck,
   ChevronRight,
-  Maximize2,
+  Sliders,
   Zap,
-  Gift
+  Gift,
+  LayoutGrid,
+  Radio,
+  ArrowUpRight
 } from 'lucide-react';
 import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantStore';
 import { SEED_RESTAURANTS } from '../data/seedData';
@@ -76,7 +59,6 @@ export const ManagerDashboard: React.FC = () => {
   const categories = useRestaurantStore((state) => state.categories);
   const orders = useRestaurantStore((state) => state.orders);
   const reviews = useRestaurantStore((state) => state.reviews);
-  const challenges = useRestaurantStore((state) => state.challenges);
   const notifications = useRestaurantStore((state) => state.notifications);
   const markNotificationRead = useRestaurantStore((state) => state.markNotificationRead);
   const resetToDefaults = useRestaurantStore((state) => state.resetToDefaults);
@@ -169,9 +151,6 @@ export const ManagerDashboard: React.FC = () => {
     );
   }, [restaurant.id, restaurant.slug, restaurant.cuisine, restaurant.name]);
 
-  const currentRestCategories = categories.filter((c) => c.restaurant_id === restaurant.id);
-  const activeCategoriesList = currentRestCategories.length > 0 ? currentRestCategories : fallbackCuisineMenu.categories;
-
   const currentRestMenuItems = menuItems.filter((m) => m.restaurant_id === restaurant.id);
   const activeMenuItemsList = currentRestMenuItems.length > 0 ? currentRestMenuItems : fallbackCuisineMenu.dishes;
 
@@ -228,16 +207,67 @@ export const ManagerDashboard: React.FC = () => {
             n.message.includes('Service Concern')))) &&
       !n.read
   );
-  const unreadWaiterCalls = activeNotificationsList.filter((n) => n.type === 'waiter_call' && !n.read);
 
   // Smart Pairings active status
   const isPairingsActive = restaurant.smart_pairings_config?.enabled !== false;
   const pairingsBadgeText = restaurant.smart_pairings_config?.badge_text || "🧑‍🍳 Chef's Recommended Pairings";
 
+  // List of all main operational modules (compact list without details)
+  const MANAGEMENT_MODULES = [
+    {
+      id: 'floor',
+      icon: '🪑',
+      title: 'Floor & Live Tables Operations',
+      badge: `${activeTablesList.length} Tables`,
+      badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+      action: () => setIsFloorModalOpen(true)
+    },
+    {
+      id: 'menu_photos',
+      icon: '📸',
+      title: 'Restaurant Menu & Photo Studio',
+      badge: `${activeMenuItemsList.length} Items`,
+      badgeColor: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+      action: () => setIsMenuPhotosModalOpen(true)
+    },
+    {
+      id: 'reviews',
+      icon: '⭐',
+      title: 'Google Reviews & Reputation Shield',
+      badge: '4.9★ Shield',
+      badgeColor: 'bg-yellow-500/15 text-yellow-300 border-yellow-500/30',
+      action: () => setIsReviewsModalOpen(true)
+    },
+    {
+      id: 'growth',
+      icon: '⚡',
+      title: 'Smart Growth Engine & Upsell Pairings',
+      badge: isPairingsActive ? 'Pairings Active' : 'Configure',
+      badgeColor: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+      action: () => setIsSmartHubModalOpen(true)
+    },
+    {
+      id: 'pos',
+      icon: '🖨️',
+      title: 'POS & Thermal Hardware Bridge',
+      badge: (restaurant.pos_provider || 'Petpooja').toUpperCase(),
+      badgeColor: 'bg-blue-500/15 text-blue-300 border-blue-500/30',
+      action: () => setIsPosModalOpen(true)
+    },
+    {
+      id: 'settings',
+      icon: '⚙️',
+      title: 'Venue Settings & Floor Plan Hub',
+      badge: 'Launch Kit',
+      badgeColor: 'bg-slate-700/60 text-slate-300 border-slate-600/40',
+      action: () => setIsSettingsModalOpen(true)
+    }
+  ];
+
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#090D16] text-slate-100 p-3 sm:p-5 md:p-7 max-w-5xl mx-auto space-y-6 pb-24">
-      {/* ── Top Bar ─────────────────────────────────────────────── */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#090D16] text-slate-100 p-3 sm:p-5 md:p-6 max-w-4xl mx-auto space-y-4 pb-20">
+      {/* ── Compact Navigation Top Bar ────────────────────────────── */}
+      <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-white/[0.08]">
         <div className="flex items-center space-x-2">
           <Link
             to="/admin"
@@ -255,16 +285,9 @@ export const ManagerDashboard: React.FC = () => {
             <ArrowLeft className="w-3 h-3 text-slate-400" />
             <span className="hidden sm:inline">Demos</span>
           </Link>
-          <Link
-            to="/pitch"
-            className="inline-flex items-center space-x-1 text-xs font-semibold text-cyan-300 hover:text-cyan-200 transition-colors bg-cyan-500/10 hover:bg-cyan-500/20 px-2.5 py-1.5 rounded-xl border border-cyan-500/30 shadow-sm cursor-pointer"
-          >
-            <span>📊</span>
-            <span>Pitch</span>
-          </Link>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={handleForceRefresh}
@@ -276,7 +299,6 @@ export const ManagerDashboard: React.FC = () => {
 
           <div className="flex items-center space-x-1.5 bg-[#0D1322] border border-white/[0.08] rounded-xl px-2.5 py-1.5 shadow-sm">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider hidden sm:inline">Venue:</span>
             <select
               value={restaurant.id}
               onChange={(e) => {
@@ -286,7 +308,7 @@ export const ManagerDashboard: React.FC = () => {
                   navigate(`/manage/${target.slug}`);
                 }
               }}
-              className="bg-transparent text-xs font-bold text-white focus:outline-none cursor-pointer max-w-[170px] truncate"
+              className="bg-transparent text-xs font-bold text-white focus:outline-none cursor-pointer max-w-[150px] sm:max-w-[200px] truncate"
               title="Switch Active Venue Hub"
             >
               {restaurants
@@ -299,392 +321,136 @@ export const ManagerDashboard: React.FC = () => {
             </select>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setIsAiStudioOpen(true)}
-            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-amber-300 hover:text-amber-200 transition-colors bg-amber-500/10 hover:bg-amber-500/20 px-3 py-1.5 rounded-xl border border-amber-500/20 shadow-sm cursor-pointer"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>Chef AI</span>
-          </button>
-
           <Link
             to="/kitchen"
-            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-slate-200 hover:text-white transition-colors bg-[#090D16]/[0.04] hover:bg-white/[0.08] px-3 py-1.5 rounded-xl border border-white/[0.08] shadow-sm"
+            className="inline-flex items-center space-x-1 text-xs font-semibold text-slate-200 hover:text-white transition-colors bg-[#090D16]/[0.04] hover:bg-white/[0.08] px-2.5 py-1.5 rounded-xl border border-white/[0.08] shadow-sm"
           >
             <ChefHat className="w-3.5 h-3.5 text-amber-400" />
-            <span>Kitchen</span>
+            <span className="hidden sm:inline">Kitchen</span>
           </Link>
         </div>
       </div>
 
       {/* USB Print Banner */}
       {usbPrintStatus && (
-        <div className="bg-blue-950/40 border border-blue-500/40 text-blue-200 p-3.5 rounded-2xl text-xs font-bold flex items-center justify-between shadow-sm animate-in fade-in">
+        <div className="bg-blue-950/40 border border-blue-500/40 text-blue-200 p-2.5 rounded-xl text-xs font-bold flex items-center justify-between shadow-sm animate-in fade-in">
           <div className="flex items-center gap-2">
-            <Printer className="w-4 h-4 text-blue-400" />
+            <Printer className="w-3.5 h-3.5 text-blue-400" />
             <span>{usbPrintStatus}</span>
           </div>
           <button onClick={() => setUsbPrintStatus(null)} className="text-blue-400 hover:text-blue-200 cursor-pointer">
-            <X className="w-4 h-4" />
+            <X className="w-3.5 h-3.5" />
           </button>
         </div>
       )}
 
-      {/* ── Top Venue Title & Menu Launcher ──────────────────────── */}
-      <header className="flex flex-wrap justify-between items-center pb-2 border-b border-white/[0.08] gap-3">
+      {/* ── Compact Venue Header & Quick Diner Link ───────────────── */}
+      <header className="flex items-center justify-between gap-3 pt-1">
         <div>
-          <div className="flex items-center space-x-2">
-            <span className="px-2 py-0.5 rounded-md text-[10px] uppercase font-bold font-mono tracking-wider bg-amber-500/15 text-amber-300 border border-amber-500/30">
-              Active Management Hub
-            </span>
-            <span className="text-xs text-slate-400 font-medium">{restaurant.cuisine} • Pune</span>
-          </div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-white mt-1">{restaurant.name}</h1>
+          <span className="text-[10px] text-amber-400 font-mono uppercase font-bold tracking-wider">
+            {restaurant.cuisine} • Pune HQ
+          </span>
+          <h1 className="font-serif text-xl sm:text-2xl font-bold text-white leading-tight">
+            {restaurant.name}
+          </h1>
         </div>
 
         <Link
           to={`/r/${restaurant.slug}/menu?t=${activeTablesList[0]?.public_token || 'table-token-01-saffron'}`}
-          className="flex items-center space-x-1.5 text-xs text-slate-950 bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 px-3.5 py-2 rounded-xl shadow-sm transition-all font-bold"
+          className="flex items-center space-x-1.5 text-xs text-slate-950 bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 px-3 py-1.5 rounded-xl shadow font-bold transition-all flex-shrink-0"
         >
           <UtensilsCrossed className="w-3.5 h-3.5 text-slate-950" />
-          <span>Launch Diner Menu ({activeTablesList[0]?.label || 'Table 1'})</span>
+          <span>Launch Menu ({activeTablesList[0]?.label || 'Table 1'})</span>
           <ExternalLink className="w-3 h-3 ml-0.5" />
         </Link>
       </header>
 
       {/* ── Urgent Alerts (if any) ───────────────────────────────── */}
       {unreadServiceAlerts.length > 0 && (
-        <div className="bg-rose-950/30 border border-rose-500/40 rounded-2xl p-4 shadow-lg animate-pulse">
-          <div className="flex items-center space-x-2.5 mb-2">
-            <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-90"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-rose-500"></span>
-            </span>
-            <h3 className="font-serif font-bold text-sm text-rose-200">
-              🚨 Urgent Guest Assistance Required ({unreadServiceAlerts.length} Table{unreadServiceAlerts.length > 1 ? 's' : ''})
-            </h3>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
-            {unreadServiceAlerts.map((notif) => (
-              <div key={notif.id} className="bg-[#0D1322] p-3 rounded-xl border border-rose-500/40 flex flex-col justify-between space-y-2">
-                <div>
-                  <p className="font-serif font-bold text-sm text-white">{notif.table_label || 'Customer Table'}</p>
-                  <p className="text-xs text-slate-300 mt-0.5">{notif.message}</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => markNotificationRead(notif.id)}
-                  className="w-full py-1.5 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold rounded-lg transition-all cursor-pointer"
-                >
-                  ✓ Attending Table Now
-                </button>
-              </div>
-            ))}
+        <div className="bg-rose-950/40 border border-rose-500/40 rounded-2xl p-3 shadow-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping" />
+              <h3 className="font-serif font-bold text-xs text-rose-200">
+                🚨 Urgent Guest Assistance Required ({unreadServiceAlerts.length} Table{unreadServiceAlerts.length > 1 ? 's' : ''})
+              </h3>
+            </div>
+            <button
+              onClick={() => markNotificationRead(unreadServiceAlerts[0].id)}
+              className="text-[10px] font-bold text-rose-300 underline cursor-pointer"
+            >
+              Acknowledge
+            </button>
           </div>
         </div>
       )}
 
-      {/* ── Key Metrics Summary Strip ────────────────────────────── */}
-      <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
-        <div className="bg-[#0D1322] p-3.5 sm:p-4 rounded-2xl border border-white/[0.08] shadow flex items-center space-x-3">
-          <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
-            <DollarSign className="w-4 h-4" />
+      {/* ── Compact Key Stats Strip (Single Row) ─────────────────── */}
+      <div className="grid grid-cols-3 gap-2">
+        <div className="bg-[#0D1322] px-3 py-2 rounded-xl border border-white/[0.08] flex items-center space-x-2.5">
+          <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 flex-shrink-0">
+            <DollarSign className="w-3.5 h-3.5" />
           </div>
-          <div>
-            <span className="text-[10px] text-slate-400 font-medium">Revenue</span>
-            <p className="font-serif text-base sm:text-lg font-bold text-white">₹{totalVolume.toFixed(2)}</p>
-          </div>
-        </div>
-
-        <div className="bg-[#0D1322] p-3.5 sm:p-4 rounded-2xl border border-white/[0.08] shadow flex items-center space-x-3">
-          <div className="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
-            <ShoppingBag className="w-4 h-4" />
-          </div>
-          <div>
-            <span className="text-[10px] text-slate-400 font-medium">Orders</span>
-            <p className="font-serif text-base sm:text-lg font-bold text-white">{totalOrdersCount} tickets</p>
+          <div className="truncate">
+            <span className="text-[9px] text-slate-400 font-medium block">Revenue</span>
+            <span className="font-serif text-sm font-bold text-white truncate block">₹{totalVolume.toFixed(0)}</span>
           </div>
         </div>
 
-        <div className="bg-[#0D1322] p-3.5 sm:p-4 rounded-2xl border border-white/[0.08] shadow flex items-center space-x-3">
-          <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-            <CheckCircle2 className="w-4 h-4" />
+        <div className="bg-[#0D1322] px-3 py-2 rounded-xl border border-white/[0.08] flex items-center space-x-2.5">
+          <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 flex-shrink-0">
+            <ShoppingBag className="w-3.5 h-3.5" />
           </div>
-          <div>
-            <span className="text-[10px] text-slate-400 font-medium">Active Tables</span>
-            <p className="font-serif text-base sm:text-lg font-bold text-white">{activeTablesList.length} tables</p>
+          <div className="truncate">
+            <span className="text-[9px] text-slate-400 font-medium block">Orders</span>
+            <span className="font-serif text-sm font-bold text-white truncate block">{totalOrdersCount} tickets</span>
+          </div>
+        </div>
+
+        <div className="bg-[#0D1322] px-3 py-2 rounded-xl border border-white/[0.08] flex items-center space-x-2.5">
+          <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 flex-shrink-0">
+            <CheckCircle2 className="w-3.5 h-3.5" />
+          </div>
+          <div className="truncate">
+            <span className="text-[9px] text-slate-400 font-medium block">Floor</span>
+            <span className="font-serif text-sm font-bold text-white truncate block">{activeTablesList.length} tables</span>
           </div>
         </div>
       </div>
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 📋 UNIFIED VERTICAL FUNCTIONS ROSTER (SEE ALL AT ONCE)      */}
+      {/* 📋 SLEEK VERTICAL HEADINGS LIST (SEE ALL OPTIONS AT ONCE)   */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <div className="space-y-4">
-        {/* ── 1. 🪑 Floor & Live Tables ──────────────────────────── */}
-        <div className="bg-[#0D1322] p-4 sm:p-5 rounded-3xl border border-white/[0.08] shadow-lg space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2.5">
-              <span className="text-xl">🪑</span>
-              <div>
-                <h3 className="font-serif font-bold text-base text-white">1. Floor &amp; Live Tables Operations</h3>
-                <p className="text-[11px] text-slate-400">{activeTablesList.length} tables configured • Live seating &amp; open tickets</p>
+      <div className="space-y-2 pt-1">
+        {MANAGEMENT_MODULES.map((item, idx) => (
+          <div
+            key={item.id}
+            onClick={item.action}
+            className="w-full bg-[#0D1322] hover:bg-[#121A2E] border border-white/[0.08] hover:border-amber-500/40 rounded-2xl p-3 sm:p-3.5 flex items-center justify-between gap-3 shadow-md transition-all cursor-pointer group active:scale-[0.99]"
+          >
+            {/* Left: Number + Icon + Title */}
+            <div className="flex items-center space-x-3 min-w-0">
+              <div className="w-8 h-8 rounded-xl bg-white/[0.04] group-hover:bg-amber-500/15 border border-white/[0.08] group-hover:border-amber-500/30 flex items-center justify-center text-base flex-shrink-0 transition-colors">
+                <span>{item.icon}</span>
+              </div>
+              <div className="min-w-0">
+                <h3 className="font-serif font-bold text-xs sm:text-sm text-white group-hover:text-amber-300 transition-colors truncate">
+                  {idx + 1}. {item.title}
+                </h3>
               </div>
             </div>
-            <button
-              type="button"
-              onClick={() => setIsFloorModalOpen(true)}
-              className="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 text-white font-bold text-xs rounded-xl shadow flex items-center space-x-1.5 transition-all cursor-pointer"
-            >
-              <Maximize2 className="w-3 h-3" />
-              <span>Open Window</span>
-            </button>
-          </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
-            {activeTablesList.slice(0, 4).map((table) => {
-              const tableOrders = activeOrdersList.filter((o) => o.table_id === table.id);
-              const hasOpen = tableOrders.length > 0;
-              return (
-                <div key={table.id} className="bg-slate-900/90 p-2.5 rounded-xl border border-white/[0.06] flex items-center justify-between">
-                  <div>
-                    <span className="font-bold text-xs text-white block">{table.label}</span>
-                    <span className="text-[9px] text-slate-400 font-mono">{table.public_token}</span>
-                  </div>
-                  <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold font-mono ${
-                    hasOpen ? 'bg-amber-500/20 text-amber-300' : 'bg-emerald-500/15 text-emerald-300'
-                  }`}>
-                    {hasOpen ? 'Open Bill' : 'Ready'}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* ── 2. 📸 Restaurant Menu & Photo Studio ───────────────── */}
-        <div className="bg-[#0D1322] p-4 sm:p-5 rounded-3xl border border-white/[0.08] shadow-lg space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2.5">
-              <span className="text-xl">📸</span>
-              <div>
-                <h3 className="font-serif font-bold text-base text-white">2. Restaurant Menu &amp; Photo Studio</h3>
-                <p className="text-[11px] text-slate-400">{activeMenuItemsList.length} menu items • Multi-angle gallery &amp; cover manager</p>
+            {/* Right: Badge Pill + Clean Chevron */}
+            <div className="flex items-center space-x-2 flex-shrink-0">
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${item.badgeColor}`}>
+                {item.badge}
+              </span>
+              <div className="w-6 h-6 rounded-lg bg-white/[0.03] group-hover:bg-amber-500/20 flex items-center justify-center text-slate-400 group-hover:text-amber-300 transition-colors">
+                <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
               </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <button
-                type="button"
-                onClick={() => setIsRestaurantPhotoModalOpen(true)}
-                className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl border border-white/[0.08] flex items-center space-x-1 cursor-pointer"
-              >
-                <Building2 className="w-3 h-3 text-amber-400" />
-                <span className="hidden sm:inline">Ambiance</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsMenuPhotosModalOpen(true)}
-                className="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 text-white font-bold text-xs rounded-xl shadow flex items-center space-x-1.5 transition-all cursor-pointer"
-              >
-                <Maximize2 className="w-3 h-3" />
-                <span>Open Window</span>
-              </button>
-            </div>
           </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
-            {activeMenuItemsList.slice(0, 4).map((dish) => (
-              <div key={dish.id} className="bg-slate-900/90 rounded-xl overflow-hidden border border-white/[0.06] flex items-center p-1.5 space-x-2">
-                <img
-                  src={dish.image_url || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=200'}
-                  alt={dish.name}
-                  className="w-9 h-9 rounded-lg object-cover flex-shrink-0"
-                />
-                <div className="truncate flex-1">
-                  <span className="text-xs font-bold text-white block truncate">{dish.name}</span>
-                  <span className="text-[10px] text-amber-400 font-mono">₹{dish.price}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ── 3. ⭐ Google Reviews & 5-Star Floor Shield ──────────── */}
-        <div className="bg-[#0D1322] p-4 sm:p-5 rounded-3xl border border-white/[0.08] shadow-lg space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2.5">
-              <span className="text-xl">⭐</span>
-              <div>
-                <h3 className="font-serif font-bold text-base text-white">3. Google Reviews &amp; 5-Star Shield</h3>
-                <p className="text-[11px] text-slate-400">4.9★ Average • Private grievance routing &amp; automated reviews</p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => setIsReviewsModalOpen(true)}
-              className="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 text-white font-bold text-xs rounded-xl shadow flex items-center space-x-1.5 transition-all cursor-pointer"
-            >
-              <Maximize2 className="w-3 h-3" />
-              <span>Open Window</span>
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-            {reviews.filter((r) => r.restaurant_id === restaurant.id).slice(0, 2).map((rev) => (
-              <div key={rev.id} className="bg-slate-900/90 p-2.5 rounded-xl border border-white/[0.06] space-y-1">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-white">{rev.customer_name || 'Verified Diner'}</span>
-                  <div className="flex text-amber-400">
-                    {Array.from({ length: rev.rating }).map((_, i) => (
-                      <Star key={i} className="w-2.5 h-2.5 fill-amber-400" />
-                    ))}
-                  </div>
-                </div>
-                <p className="text-[11px] text-slate-300 line-clamp-1">"{rev.review_text}"</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ── 4. ⚡ Smart Growth Engine & Upsell Pairings ─────────── */}
-        <div className="bg-[#0D1322] p-4 sm:p-5 rounded-3xl border border-white/[0.08] shadow-lg space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2.5">
-              <span className="text-xl">⚡</span>
-              <div>
-                <div className="flex items-center space-x-2">
-                  <h3 className="font-serif font-bold text-base text-white">4. Smart Growth Engine &amp; Upsell Pairings</h3>
-                  {isPairingsActive && (
-                    <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                      ✓ Pairings Active
-                    </span>
-                  )}
-                </div>
-                <p className="text-[11px] text-slate-400">Chef cart pairings, Happy hour schedule, and food rewards</p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => setIsSmartHubModalOpen(true)}
-              className="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 text-white font-bold text-xs rounded-xl shadow flex items-center space-x-1.5 transition-all cursor-pointer"
-            >
-              <Maximize2 className="w-3 h-3" />
-              <span>Open Window</span>
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
-            <div className="bg-slate-900/90 p-2.5 rounded-xl border border-white/[0.06] space-y-0.5">
-              <span className="text-xs font-bold text-emerald-400 block">🧑‍🍳 {pairingsBadgeText}</span>
-              <p className="text-[10px] text-slate-400">Cart recommendation active with signature dishes</p>
-            </div>
-            <div className="bg-slate-900/90 p-2.5 rounded-xl border border-white/[0.06] space-y-0.5">
-              <span className="text-xs font-bold text-amber-400 block">⚡ Twilight Happy Hour</span>
-              <p className="text-[10px] text-slate-400">
-                {restaurant.happy_hour_config?.enabled ? `${restaurant.happy_hour_config.discount_percent}% Off (${restaurant.happy_hour_config.start_time}-${restaurant.happy_hour_config.end_time})` : 'Configured (Off-peak)'}
-              </p>
-            </div>
-            <div className="bg-slate-900/90 p-2.5 rounded-xl border border-white/[0.06] space-y-0.5">
-              <span className="text-xs font-bold text-purple-400 block">🎁 Table Food Rewards</span>
-              <p className="text-[10px] text-slate-400">Chef dessert &amp; mocktail incentives</p>
-            </div>
-          </div>
-        </div>
-
-        {/* ── 5. 🖨️ POS & Thermal Hardware Bridge ────────────────── */}
-        <div className="bg-[#0D1322] p-4 sm:p-5 rounded-3xl border border-white/[0.08] shadow-lg space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2.5">
-              <span className="text-xl">🖨️</span>
-              <div>
-                <h3 className="font-serif font-bold text-base text-white">5. POS &amp; Thermal Hardware Bridge</h3>
-                <p className="text-[11px] text-slate-400">Active adapter: <strong className="text-amber-400 uppercase font-mono">{restaurant.pos_provider || 'Petpooja'}</strong> • ESC/POS WebUSB Sync</p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => setIsPosModalOpen(true)}
-              className="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 text-white font-bold text-xs rounded-xl shadow flex items-center space-x-1.5 transition-all cursor-pointer"
-            >
-              <Maximize2 className="w-3 h-3" />
-              <span>Open Window</span>
-            </button>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
-            {['petpooja', 'royalpos', 'recaho', 'rancelab'].map((p) => (
-              <button
-                key={p}
-                type="button"
-                onClick={() => {
-                  setSelectedPosTab(p as any);
-                  updateRestaurant(restaurant.id, { pos_provider: p as any });
-                }}
-                className={`p-2 rounded-xl border text-left capitalize text-xs font-bold cursor-pointer transition-all ${
-                  (restaurant.pos_provider || 'petpooja') === p
-                    ? 'bg-amber-500/20 border-amber-500/40 text-amber-300'
-                    : 'bg-slate-900/90 border-white/[0.06] text-slate-400 hover:text-white'
-                }`}
-              >
-                <span>{p}</span>
-                <span className="block text-[9px] text-slate-500 font-normal">
-                  {(restaurant.pos_provider || 'petpooja') === p ? '● Connected' : 'Adapter'}
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* ── 6. ⚙️ Venue Settings & Floor Plan ───────────────────── */}
-        <div className="bg-[#0D1322] p-4 sm:p-5 rounded-3xl border border-white/[0.08] shadow-lg space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2.5">
-              <span className="text-xl">⚙️</span>
-              <div>
-                <h3 className="font-serif font-bold text-base text-white">6. Venue Settings &amp; Handover Hub</h3>
-                <p className="text-[11px] text-slate-400">QR launch sheets, Chef AI knowledge persona &amp; table customizer</p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => setIsSettingsModalOpen(true)}
-              className="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 text-white font-bold text-xs rounded-xl shadow flex items-center space-x-1.5 transition-all cursor-pointer"
-            >
-              <Maximize2 className="w-3 h-3" />
-              <span>Open Window</span>
-            </button>
-          </div>
-
-          <div className="grid grid-cols-3 gap-2 pt-1">
-            <button
-              type="button"
-              onClick={() => setIsLaunchKitOpen(true)}
-              className="p-2.5 rounded-xl bg-slate-900/90 border border-white/[0.06] hover:border-amber-500/40 text-left transition-all cursor-pointer"
-            >
-              <span className="text-xs font-bold text-white block">📲 QR Launch Kit</span>
-              <span className="text-[10px] text-slate-400">Printable sheets</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setIsTableModalOpen(true)}
-              className="p-2.5 rounded-xl bg-slate-900/90 border border-white/[0.06] hover:border-emerald-500/40 text-left transition-all cursor-pointer"
-            >
-              <span className="text-xs font-bold text-white block">🪑 Floor Editor</span>
-              <span className="text-[10px] text-slate-400">Edit table tokens</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setIsAiStudioOpen(true)}
-              className="p-2.5 rounded-xl bg-slate-900/90 border border-white/[0.06] hover:border-purple-500/40 text-left transition-all cursor-pointer"
-            >
-              <span className="text-xs font-bold text-white block">🧑‍🍳 Chef AI Persona</span>
-              <span className="text-[10px] text-slate-400">Train dining bot</span>
-            </button>
-          </div>
-        </div>
+        ))}
       </div>
 
       {/* ═══════════════════════════════════════════════════════════ */}
@@ -1179,7 +945,6 @@ export const ManagerDashboard: React.FC = () => {
                 onClick={() => setIsOffboardModalOpen(true)}
                 className="px-4 py-2 bg-rose-500/10 hover:bg-rose-600 text-rose-400 hover:text-white border border-rose-500/20 hover:border-rose-600 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5"
               >
-                <UserMinus className="w-3.5 h-3.5" />
                 <span>Offboard {restaurant.name}</span>
               </button>
             </div>
@@ -1192,7 +957,7 @@ export const ManagerDashboard: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <div className="bg-[#0D1322] rounded-3xl max-w-md w-full p-6 shadow-2xl border border-white/[0.1] text-center space-y-4">
             <div className="w-14 h-14 mx-auto rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
-              <UserMinus className="w-7 h-7" />
+              <Building2 className="w-7 h-7" />
             </div>
             <div>
               <h3 className="font-serif text-xl font-bold text-white">
@@ -1226,7 +991,6 @@ export const ManagerDashboard: React.FC = () => {
                 }}
                 className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition-colors shadow-sm cursor-pointer flex items-center space-x-1.5"
               >
-                <UserMinus className="w-4 h-4" />
                 <span>Confirm Offboard</span>
               </button>
             </div>

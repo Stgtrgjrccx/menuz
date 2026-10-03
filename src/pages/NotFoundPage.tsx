@@ -46,14 +46,6 @@ export const NotFoundPage: React.FC = () => {
             <UtensilsCrossed className="w-4 h-4 text-cyan-400" />
             <span>View Demo Diner Menu (Saffron House)</span>
           </Link>
-
-          <Link
-            to="/pitch"
-            className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-[#090D16]/[0.06] hover:bg-white/[0.1] active:scale-95 text-slate-300 hover:text-white font-medium text-xs transition-all border border-white/[0.08]"
-          >
-            <Presentation className="w-4 h-4 text-purple-400" />
-            <span>Executive Pitch &amp; Commercial Deck</span>
-          </Link>
         </div>
 
         <div className="text-[11px] text-slate-400 font-mono pt-2 border-t border-slate-800/80">

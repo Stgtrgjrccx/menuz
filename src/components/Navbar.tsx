@@ -106,14 +106,12 @@ export const Navbar: React.FC = () => {
     { to: dinerUrl, label: 'Table Menu' },
     { to: `/manage/${venueSlug}`, label: 'Floor Operations' },
     { to: '/kitchen', label: 'Kitchen KDS' },
-    { to: '/pitch', label: 'Pitch Deck' },
   ];
 
   const isLinkActive = (path: string, exact?: boolean) => {
     if (exact) return location.pathname === path;
     if (path.startsWith('/manage') && location.pathname.startsWith('/manage')) return true;
     if (path.startsWith('/kitchen') && location.pathname.startsWith('/kitchen')) return true;
-    if (path.startsWith('/pitch') && location.pathname.startsWith('/pitch')) return true;
     return location.pathname === path;
   };
 
@@ -423,17 +421,6 @@ export const Navbar: React.FC = () => {
             <span>Kitchen KDS</span>
           </Link>
           <Link
-            to="/pitch"
-            className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
-              location.pathname === '/pitch'
-                ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                : 'bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]'
-            }`}
-          >
-            <TrendingUp className="w-3.5 h-3.5 text-orange-400" />
-            <span>Pitch Deck</span>
-          </Link>
-          <Link
             to="/"
             className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
               location.pathname === '/'
@@ -547,22 +534,7 @@ export const Navbar: React.FC = () => {
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                   3. Executive &amp; Management
                 </span>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
-                  <Link
-                    to="/pitch"
-                    onClick={() => setQuickNavOpen(false)}
-                    className="p-3 rounded-xl bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-cyan-500/40 transition-all flex items-center justify-between group"
-                  >
-                    <div className="flex items-center space-x-2.5">
-                      <TrendingUp className="w-4 h-4 text-cyan-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">Executive Pitch Deck</div>
-                        <div className="text-[11px] text-slate-400">19 Slides • Financials &amp; ROI</div>
-                      </div>
-                    </div>
-                    <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-cyan-400 transition-all" />
-                  </Link>
-
+                <div className="grid grid-cols-1 gap-2 mt-2">
                   <Link
                     to="/admin"
                     onClick={() => setQuickNavOpen(false)}
@@ -571,8 +543,8 @@ export const Navbar: React.FC = () => {
                     <div className="flex items-center space-x-2.5">
                       <ShieldCheck className="w-4 h-4 text-emerald-400" />
                       <div>
-                        <div className="text-xs font-bold text-white">Platform Admin Control</div>
-                        <div className="text-[11px] text-slate-400">Pune registry &amp; table config</div>
+                        <div className="text-xs font-bold text-white">Master Headquarters Admin HQ</div>
+                        <div className="text-[11px] text-slate-400">All venues, billing &amp; menu sync</div>
                       </div>
                     </div>
                     <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-emerald-400 transition-all" />
