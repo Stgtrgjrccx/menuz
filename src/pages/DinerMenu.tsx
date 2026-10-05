@@ -45,6 +45,7 @@ import { TRANSLATIONS, translateCategory, getTranslatedDish, translateDishName }
 import { PUNE_RESTAURANT_DIRECTORY } from '../data/puneRestaurantDirectory';
 import { generateCuisineMenu } from '../data/cuisineMenuGenerator';
 import { findAuthenticPuneMenu } from '../data/authenticPuneMenus';
+import { PUNE_LANDMARKS } from './CustomerHomePage';
 
 
 export const DinerMenu: React.FC = () => {
@@ -525,17 +526,39 @@ export const DinerMenu: React.FC = () => {
 
   // Filtered restaurants for Diner Hub (/menu)
   const filteredHubRestaurants = useMemo(() => {
-    const valid = restaurants.filter(
-      (r) =>
+    const map = new Map<string, Restaurant>();
+    for (const r of restaurants) {
+      if (
         r &&
         r.id &&
         r.name &&
         !isDishNameAsRestaurant(r) &&
         (SEED_RESTAURANTS.some((s) => s.id === r.id || s.slug === r.slug) || (r.location && r.cuisine))
-    );
-
+      ) {
+        map.set(r.slug || r.id, r);
+      }
+    }
+    for (const l of PUNE_LANDMARKS) {
+      if (!map.has(l.slug)) {
+        map.set(l.slug, {
+          id: `rest-${l.slug}`,
+          slug: l.slug,
+          name: l.name,
+          cuisine: l.cuisine,
+          location: l.location,
+          logo_url: l.imageUrl,
+          status: 'active',
+          is_menuz_partner: true,
+          pos_provider: 'petpooja',
+          brand_colors: { primary: '#E85D04', background: '#FDFBF7', text: '#1C1917', accent: '#C84B00' },
+          currency: 'INR',
+          tax_rate_percent: 5.0
+        } as Restaurant);
+      }
+    }
+    const all = Array.from(map.values());
     const q = hubSearchQuery.toLowerCase().trim();
-    return valid.filter((r) => {
+    return all.filter((r) => {
       const matchSearch =
         !q ||
         r.name.toLowerCase().includes(q) ||

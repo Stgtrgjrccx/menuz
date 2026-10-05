@@ -39,7 +39,8 @@ import {
 } from 'lucide-react';
 import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantStore';
 import { SEED_RESTAURANTS } from '../data/seedData';
-import { PetpoojaConfig, RoyalPosConfig, RecahoConfig, RancelabConfig, MenuItem } from '../types';
+import { PUNE_LANDMARKS } from './CustomerHomePage';
+import { PetpoojaConfig, RoyalPosConfig, RecahoConfig, RancelabConfig, MenuItem, Restaurant } from '../types';
 import { PetpoojaIntegrationPanel } from '../components/PetpoojaIntegrationPanel';
 import { RoyalPosIntegrationPanel } from '../components/RoyalPosIntegrationPanel';
 import { RecahoIntegrationPanel } from '../components/RecahoIntegrationPanel';
@@ -358,17 +359,33 @@ export const ManagerDashboard: React.FC = () => {
 
   // Filtered partner restaurants for Partner Hub (/manage)
   const partnerRestaurantsList = useMemo(() => {
-    const valid = restaurants.filter(
-      (r) =>
-        r &&
-        r.id &&
-        r.name &&
-        !isDishNameAsRestaurant(r) &&
-        (SEED_RESTAURANTS.some((s) => s.id === r.id || s.slug === r.slug) || (r.location && r.cuisine))
-    );
-
+    const map = new Map<string, Restaurant>();
+    for (const r of restaurants) {
+      if (r && r.id && r.name && !isDishNameAsRestaurant(r)) {
+        map.set(r.slug || r.id, r);
+      }
+    }
+    for (const l of PUNE_LANDMARKS) {
+      if (!map.has(l.slug)) {
+        map.set(l.slug, {
+          id: `rest-${l.slug}`,
+          slug: l.slug,
+          name: l.name,
+          cuisine: l.cuisine,
+          location: l.location,
+          logo_url: l.imageUrl,
+          status: 'active',
+          is_menuz_partner: true,
+          pos_provider: 'petpooja',
+          brand_colors: { primary: '#E85D04', background: '#FDFBF7', text: '#1C1917', accent: '#C84B00' },
+          currency: 'INR',
+          tax_rate_percent: 5.0
+        } as Restaurant);
+      }
+    }
+    const all = Array.from(map.values());
     const q = partnerSearchQuery.toLowerCase().trim();
-    return valid.filter((r) => {
+    return all.filter((r) => {
       const matchSearch =
         !q ||
         r.name.toLowerCase().includes(q) ||
