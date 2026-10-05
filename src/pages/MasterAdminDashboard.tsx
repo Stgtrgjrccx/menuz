@@ -622,31 +622,118 @@ export const MasterAdminDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#090D16] pb-24 text-slate-100 font-sans">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#060913] pb-24 text-slate-100 font-sans">
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/* STANDALONE ENTERPRISE MASTER HQ GLOBAL COMMAND HEADER        */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <header className="sticky top-0 z-50 bg-[#060A17]/95 backdrop-blur-md border-b border-indigo-500/20 shadow-2xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+          {/* Left: Enterprise Brand Identity */}
+          <div className="flex items-center space-x-3 sm:space-x-4">
+            <Link to="/hq" className="flex items-center space-x-2.5 group">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-amber-400 flex items-center justify-center font-black text-slate-950 text-base shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition-transform">
+                <ShieldCheck className="w-5 h-5 text-slate-950 stroke-[2.5]" />
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center space-x-1.5">
+                  <span className="font-serif font-black text-lg tracking-tight text-white group-hover:text-amber-400 transition-colors">
+                    menuz
+                  </span>
+                  <span className="text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-extrabold shadow-inner">
+                    ENTERPRISE HQ
+                  </span>
+                </div>
+                <span className="text-[9px] font-mono text-slate-400 tracking-wider hidden sm:block">
+                  Master Platform Governance • 3,000+ Pune Venues
+                </span>
+              </div>
+            </Link>
+          </div>
+
+          {/* Center/Right: Quick External Portal Switchers */}
+          <div className="flex items-center space-x-1.5 sm:space-x-2">
+            <Link
+              to="/"
+              className="px-2.5 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.2] text-xs font-semibold text-slate-300 hover:text-white transition-all flex items-center space-x-1.5"
+              title="Open Public Customer Discovery Site"
+            >
+              <Globe className="w-3.5 h-3.5 text-cyan-400" />
+              <span className="hidden md:inline">Customer Site</span>
+            </Link>
+
+            <Link
+              to="/menu"
+              className="px-2.5 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.2] text-xs font-semibold text-slate-300 hover:text-white transition-all flex items-center space-x-1.5"
+              title="Open Generic Diner Menus Portal"
+            >
+              <Utensils className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden md:inline">Diner Menus</span>
+            </Link>
+
+            <Link
+              to="/manage"
+              className="px-2.5 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.2] text-xs font-semibold text-slate-300 hover:text-white transition-all flex items-center space-x-1.5"
+              title="Open Restaurant Partner Portal"
+            >
+              <Building2 className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="hidden md:inline">Restaurant Hub</span>
+            </Link>
+
+            <Link
+              to="/kitchen"
+              className="px-2.5 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.2] text-xs font-semibold text-slate-300 hover:text-white transition-all flex items-center space-x-1.5"
+              title="Open Kitchen Display System"
+            >
+              <ChefHat className="w-3.5 h-3.5 text-purple-400" />
+              <span className="hidden lg:inline">Kitchen KDS</span>
+            </Link>
+
+            {/* Force Refresh */}
+            <button
+              type="button"
+              onClick={handleForceRefresh}
+              className="p-1.5 sm:p-2 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 hover:text-white transition-all cursor-pointer"
+              title="Purge Caches & Reload DB"
+            >
+              <RefreshCw className="w-3.5 h-3.5 text-amber-400" />
+            </button>
+
+            {/* Lock Session */}
+            <button
+              type="button"
+              onClick={() => setIsAdminAuthenticated(false)}
+              className="px-2.5 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 hover:text-rose-200 text-xs font-bold transition-all flex items-center space-x-1"
+              title="Lock Admin Authorization"
+            >
+              <Lock className="w-3.5 h-3.5 text-rose-400" />
+              <span className="hidden sm:inline">Lock</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
       {/* Top Banner: Platform Operations Control */}
-      <div className="bg-[#0B0F1A] text-white border-b border-white/[0.08]">
+      <div className="bg-[#080D1A] text-white border-b border-indigo-500/15">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
           {/* Top Quick Utility Bar: Status & Refresh */}
           <div className="flex flex-wrap items-center justify-between gap-2.5 pb-3 mb-3 border-b border-white/[0.06]">
             <div className="flex items-center space-x-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                Master Admin HQ
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
+                MASTER ENTERPRISE HQ
               </span>
               <span className="flex items-center text-[11px] text-emerald-400 font-mono">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse mr-1" />
-                Live Ready
+                Live Production Cluster
+              </span>
+              <span className="text-[11px] font-mono text-slate-400">
+                • DB: 3,000+ Pune Venues
               </span>
             </div>
 
-            <div className="flex items-center space-x-1.5">
-              <button
-                type="button"
-                onClick={handleForceRefresh}
-                className="p-1.5 bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg border border-white/[0.08] transition-colors cursor-pointer"
-                title="Force refresh"
-              >
-                <RefreshCw className="w-3.5 h-3.5 text-amber-400" />
-              </button>
+            <div className="flex items-center space-x-2 text-xs font-mono text-slate-400">
+              <span className="px-2 py-0.5 rounded bg-slate-800/80 border border-white/[0.06]">
+                URL: /hq
+              </span>
             </div>
           </div>
 

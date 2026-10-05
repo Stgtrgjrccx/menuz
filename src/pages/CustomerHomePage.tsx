@@ -1051,11 +1051,11 @@ export const CustomerHomePage: React.FC = () => {
 
           <div className="pt-3 flex flex-wrap items-center justify-center gap-3">
             <Link
-              to="/r/saffron-house/menu"
+              to="/menu"
               className="py-3 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 text-slate-950 font-bold text-xs shadow-md transition-all flex items-center space-x-1.5 cursor-pointer"
             >
               <UtensilsCrossed className="w-4 h-4 text-slate-950" />
-              <span>Explore Live Digital Menu</span>
+              <span>Explore Live Digital Menus</span>
             </Link>
 
             <button
@@ -1080,18 +1080,24 @@ export const CustomerHomePage: React.FC = () => {
             <span>• Autonomous Dine-In Operating System</span>
           </div>
 
-          <div className="flex items-center space-x-6">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
             <Link to="/" className="hover:text-slate-300 transition-colors">
-              Explore
+              Explore Pune
             </Link>
-            <Link to="/r/saffron-house/menu?t=table-token-01-saffron" className="hover:text-slate-300 transition-colors">
-              Table 1 Menu
+            <Link to="/menu" className="hover:text-slate-300 transition-colors">
+              Diner Menus
+            </Link>
+            <Link to="/manage" className="hover:text-slate-300 transition-colors">
+              Restaurant Hub
             </Link>
             <Link to="/kitchen" className="hover:text-slate-300 transition-colors">
               Kitchen KDS
             </Link>
             <Link to="/ai-studio" className="text-amber-400 hover:text-amber-300 transition-colors font-medium">
               Chef Studio
+            </Link>
+            <Link to="/hq" className="text-indigo-400 hover:text-indigo-300 transition-colors font-medium">
+              Enterprise HQ
             </Link>
           </div>
         </div>

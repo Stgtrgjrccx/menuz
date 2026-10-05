@@ -25,10 +25,13 @@ import {
   Layers,
   LayoutGrid,
   Info,
-  Home
+  Home,
+  QrCode,
+  ArrowLeft
 } from 'lucide-react';
-import { useRestaurantStore } from '../store/restaurantStore';
+import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantStore';
 import { MenuItem, ReviewChallenge, Restaurant } from '../types';
+import { SEED_RESTAURANTS } from '../data/seedData';
 import { DishDetailModal } from '../components/DishDetailModal';
 import { ImageLightboxModal } from '../components/ImageLightboxModal';
 import { CartDrawer } from '../components/CartDrawer';
@@ -36,6 +39,7 @@ import { AiAssistantDrawer } from '../components/AiAssistantDrawer';
 import { OrderTrackerModal } from '../components/OrderTrackerModal';
 import { SpinWheelModal } from '../components/SpinWheelModal';
 import { LanguageSelector } from '../components/LanguageSelector';
+import { QrScannerModal } from '../components/QrScannerModal';
 import { MenuFilterModal, MenuFilterState, DietaryOption, SpiceOption } from '../components/MenuFilterModal';
 import { TRANSLATIONS, translateCategory, getTranslatedDish, translateDishName } from '../utils/i18n';
 import { PUNE_RESTAURANT_DIRECTORY } from '../data/puneRestaurantDirectory';
@@ -66,7 +70,21 @@ export const DinerMenu: React.FC = () => {
   const callWaiter = useRestaurantStore((state) => state.callWaiter);
   const completeChallenge = useRestaurantStore((state) => state.completeChallenge);
   const selectedLanguage = useRestaurantStore((state) => state.selectedLanguage);
+  const setSelectedLanguage = useRestaurantStore((state) => state.setSelectedLanguage);
   const t = TRANSLATIONS[selectedLanguage] || TRANSLATIONS.en;
+
+  // Immediate language reset: English is strictly the default language across Menuz and resets on mount and unmount (leaving the page)
+  useEffect(() => {
+    setSelectedLanguage('en');
+    return () => {
+      setSelectedLanguage('en');
+    };
+  }, [setSelectedLanguage]);
+
+  // Diner Menu Hub State (for generic /menu route)
+  const [hubSearchQuery, setHubSearchQuery] = useState('');
+  const [hubCategory, setHubCategory] = useState('all');
+  const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
 
   // Synchronously resolve target restaurant from route slug or active store restaurant
   const targetRestaurant = useMemo(() => {
@@ -505,6 +523,183 @@ export const DinerMenu: React.FC = () => {
     );
   }
 
+  // Filtered restaurants for Diner Hub (/menu)
+  const filteredHubRestaurants = useMemo(() => {
+    const valid = restaurants.filter(
+      (r) =>
+        r &&
+        r.id &&
+        r.name &&
+        !isDishNameAsRestaurant(r) &&
+        (SEED_RESTAURANTS.some((s) => s.id === r.id || s.slug === r.slug) || (r.location && r.cuisine))
+    );
+
+    const q = hubSearchQuery.toLowerCase().trim();
+    return valid.filter((r) => {
+      const matchSearch =
+        !q ||
+        r.name.toLowerCase().includes(q) ||
+        r.cuisine?.toLowerCase().includes(q) ||
+        r.location?.toLowerCase().includes(q);
+
+      const matchCategory =
+        hubCategory === 'all' ||
+        (r.cuisine && r.cuisine.toLowerCase().includes(hubCategory.toLowerCase())) ||
+        (r.location && r.location.toLowerCase().includes(hubCategory.toLowerCase()));
+
+      return matchSearch && matchCategory;
+    });
+  }, [restaurants, hubSearchQuery, hubCategory]);
+
+  if (!restaurantSlug) {
+    return (
+      <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#090D16] text-slate-100 font-sans pb-24">
+        {/* Top Header */}
+        <header className="sticky top-0 z-40 bg-[#0A0E17]/95 backdrop-blur-md border-b border-white/[0.08] px-4 sm:px-6 h-16 flex items-center justify-between">
+          <Link to="/" className="flex items-center space-x-2.5">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-500 to-amber-400 flex items-center justify-center font-black text-slate-950 text-base shadow-sm">
+              M
+            </div>
+            <div className="flex flex-col">
+              <div className="flex items-center space-x-1.5">
+                <span className="font-serif font-black text-lg tracking-tight text-white">
+                  menuz
+                </span>
+                <span className="text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold">
+                  DINER HUB
+                </span>
+              </div>
+            </div>
+          </Link>
+
+          <div className="flex items-center space-x-2">
+            <button
+              type="button"
+              onClick={() => setIsQrScannerOpen(true)}
+              className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 text-slate-950 text-xs font-bold shadow-sm flex items-center space-x-1.5 cursor-pointer"
+            >
+              <QrCode className="w-3.5 h-3.5 text-slate-950" />
+              <span>Scan Table QR</span>
+            </button>
+            <LanguageSelector />
+          </div>
+        </header>
+
+        {/* Hero section */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <span className="px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20">
+              Pune Food &amp; Dining Ecosystem
+            </span>
+            <h1 className="font-serif text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+              Pune Digital Table Menus
+            </h1>
+            <p className="text-sm text-slate-400 leading-relaxed">
+              Scan your table standee QR to join a live multiplayer session, or choose any of Pune's iconic dining landmarks to explore authentic digital menus with instant dietary filters.
+            </p>
+          </div>
+
+          {/* Table Scan Card */}
+          <div className="max-w-2xl mx-auto bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/30 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+            <div className="space-y-1.5 text-center sm:text-left">
+              <div className="inline-flex items-center space-x-1.5 text-xs font-bold text-amber-400">
+                <QrCode className="w-4 h-4" />
+                <span>Seated at a Table Right Now?</span>
+              </div>
+              <h3 className="text-lg sm:text-xl font-bold text-white">Join Your Table's Multiplayer Cart</h3>
+              <p className="text-xs text-slate-400 max-w-md">
+                Point your phone camera at the Menuz table standee to immediately order dishes, call the waiter, and split the bill.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsQrScannerOpen(true)}
+              className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 text-slate-950 font-bold text-sm shadow-lg shadow-amber-500/20 flex items-center space-x-2 shrink-0 cursor-pointer"
+            >
+              <QrCode className="w-5 h-5 text-slate-950" />
+              <span>Launch Camera Scanner</span>
+            </button>
+          </div>
+
+          {/* Search and Filters */}
+          <div className="space-y-4">
+            <div className="relative max-w-xl mx-auto">
+              <Search className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={hubSearchQuery}
+                onChange={(e) => setHubSearchQuery(e.target.value)}
+                placeholder="Search restaurant or dishes (e.g. Vaishali, Goodluck, Dosa, Strudel)..."
+                className="w-full bg-[#0E1424] border border-white/[0.12] rounded-2xl pl-12 pr-4 py-3.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 shadow-inner"
+              />
+            </div>
+
+            {/* Category pills */}
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {['all', 'FC Road', 'Koregaon Park', 'Camp', 'Pure Veg', 'South Indian', 'Irani Cafe', 'Bakery', 'Continental'].map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setHubCategory(cat)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                    hubCategory === cat
+                      ? 'bg-amber-500 text-slate-950 font-bold shadow-md'
+                      : 'bg-white/[0.05] hover:bg-white/[0.1] text-slate-300 border border-white/[0.08]'
+                  }`}
+                >
+                  {cat === 'all' ? 'All Pune Landmarks' : cat}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Grid of Menus */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {filteredHubRestaurants.map((r) => (
+              <div
+                key={r.id}
+                className="bg-[#0D1322] border border-white/[0.08] hover:border-amber-500/40 rounded-2xl overflow-hidden shadow-lg transition-all group flex flex-col justify-between"
+              >
+                <div>
+                  <div className="relative h-44 w-full overflow-hidden bg-slate-900">
+                    <img
+                      src={r.logo_url || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&auto=format&fit=crop'}
+                      alt={r.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0D1322] via-transparent to-transparent" />
+                    <span className="absolute top-3 left-3 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-black/70 backdrop-blur-md text-amber-300 border border-white/[0.1]">
+                      {r.location || 'Pune, India'}
+                    </span>
+                  </div>
+                  <div className="p-4 space-y-1.5">
+                    <h3 className="font-serif text-lg font-bold text-white group-hover:text-amber-400 transition-colors">
+                      {r.name}
+                    </h3>
+                    <p className="text-xs text-slate-400 line-clamp-1">{r.cuisine}</p>
+                  </div>
+                </div>
+                <div className="p-4 pt-0">
+                  <Link
+                    to={`/r/${r.slug}/menu`}
+                    className="w-full py-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold transition-all flex items-center justify-center space-x-1.5 group-hover:bg-amber-500 group-hover:text-slate-950"
+                  >
+                    <BookOpen className="w-3.5 h-3.5" />
+                    <span>Open Live Menu &amp; Order</span>
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <QrScannerModal
+          isOpen={isQrScannerOpen}
+          onClose={() => setIsQrScannerOpen(false)}
+        />
+      </div>
+    );
+  }
+
   return (
     <div ref={mainRef} className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#090D16] text-slate-100 pb-28">
       {/* ═══════════════════════════════════════════════════════════ */}
@@ -528,20 +723,30 @@ export const DinerMenu: React.FC = () => {
       {/* 0. STREAMLINED DINER TOP BAR (MOBILE-FIRST)                 */}
       {/* ═══════════════════════════════════════════════════════════ */}
       <div className="sticky top-0 z-30 h-12 sm:h-14 bg-[#0A0E17] text-white border-b border-white/[0.08] px-3 sm:px-4 flex items-center justify-between shadow-sm">
-        {/* Link back to Menuz Home */}
-        <Link
-          to="/"
-          className="flex items-center space-x-1.5 text-xs text-slate-400 hover:text-white transition-colors group flex-shrink-0"
-          title="Back to Menuz Home"
-        >
-          <span className="w-5 h-5 rounded-lg bg-gradient-to-tr from-amber-500 to-amber-400 flex items-center justify-center font-bold text-[10px] text-slate-950 shadow-sm">
-            M
-          </span>
-          <span className="font-serif font-black text-white group-hover:text-amber-400 transition-colors text-sm sm:text-base">
-            menuz
-          </span>
-          <span className="text-[10px] text-slate-500 hidden md:inline">• Home</span>
-        </Link>
+        {/* Links back to Home & All Menus */}
+        <div className="flex items-center space-x-2">
+          <Link
+            to="/"
+            className="flex items-center space-x-1.5 text-xs text-slate-400 hover:text-white transition-colors group flex-shrink-0"
+            title="Back to Menuz Home"
+          >
+            <span className="w-5 h-5 rounded-lg bg-gradient-to-tr from-amber-500 to-amber-400 flex items-center justify-center font-bold text-[10px] text-slate-950 shadow-sm">
+              M
+            </span>
+            <span className="font-serif font-black text-white group-hover:text-amber-400 transition-colors text-sm sm:text-base">
+              menuz
+            </span>
+          </Link>
+
+          <Link
+            to="/menu"
+            className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-white/[0.06] hover:bg-white/[0.12] text-xs font-semibold text-slate-300 hover:text-white border border-white/[0.08] transition-all"
+            title="Explore other restaurant menus"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 text-amber-400" />
+            <span className="hidden sm:inline">All Menus</span>
+          </Link>
+        </div>
 
         {/* Language selector & Cart */}
         <div className="flex items-center space-x-1.5 sm:space-x-2">

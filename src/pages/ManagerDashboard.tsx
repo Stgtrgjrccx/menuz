@@ -128,6 +128,10 @@ export const ManagerDashboard: React.FC = () => {
   const [usbPrintLoading, setUsbPrintLoading] = useState(false);
   const [usbPrintStatus, setUsbPrintStatus] = useState<string | null>(null);
 
+  // Restaurant Partner Hub State (for generic /manage route)
+  const [partnerSearchQuery, setPartnerSearchQuery] = useState('');
+  const [partnerAreaFilter, setPartnerAreaFilter] = useState('all');
+
   // Table store actions
   const addTable = useRestaurantStore((state) => state.addTable);
   const updateTable = useRestaurantStore((state) => state.updateTable);
@@ -205,7 +209,9 @@ export const ManagerDashboard: React.FC = () => {
     if (isDishNameAsRestaurant(restaurant)) {
       const valid = restaurants.find((r) => !isDishNameAsRestaurant(r)) || SEED_RESTAURANTS[0];
       setCurrentRestaurant(valid.id);
-      navigate(`/manage/${valid.slug}`);
+      if (restaurantSlug) {
+        navigate(`/manage/${valid.slug}`);
+      }
       return;
     }
     if (restaurantSlug) {
@@ -350,23 +356,233 @@ export const ManagerDashboard: React.FC = () => {
     }
   ];
 
+  // Filtered partner restaurants for Partner Hub (/manage)
+  const partnerRestaurantsList = useMemo(() => {
+    const valid = restaurants.filter(
+      (r) =>
+        r &&
+        r.id &&
+        r.name &&
+        !isDishNameAsRestaurant(r) &&
+        (SEED_RESTAURANTS.some((s) => s.id === r.id || s.slug === r.slug) || (r.location && r.cuisine))
+    );
+
+    const q = partnerSearchQuery.toLowerCase().trim();
+    return valid.filter((r) => {
+      const matchSearch =
+        !q ||
+        r.name.toLowerCase().includes(q) ||
+        r.cuisine?.toLowerCase().includes(q) ||
+        r.location?.toLowerCase().includes(q);
+
+      const matchArea =
+        partnerAreaFilter === 'all' ||
+        (r.location && r.location.toLowerCase().includes(partnerAreaFilter.toLowerCase())) ||
+        (r.cuisine && r.cuisine.toLowerCase().includes(partnerAreaFilter.toLowerCase()));
+
+      return matchSearch && matchArea;
+    });
+  }, [restaurants, partnerSearchQuery, partnerAreaFilter]);
+
+  if (!restaurantSlug) {
+    return (
+      <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#0A0F1D] text-slate-100 font-sans pb-24">
+        {/* Top Header */}
+        <header className="sticky top-0 z-40 bg-[#0A0E17]/95 backdrop-blur-md border-b border-white/[0.08] px-4 sm:px-6 h-16 flex items-center justify-between">
+          <Link to="/" className="flex items-center space-x-2.5">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-500 to-amber-400 flex items-center justify-center font-black text-slate-950 text-base shadow-sm">
+              M
+            </div>
+            <div className="flex flex-col">
+              <div className="flex items-center space-x-1.5">
+                <span className="font-serif font-black text-lg tracking-tight text-white">
+                  menuz
+                </span>
+                <span className="text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">
+                  PARTNER HUB
+                </span>
+              </div>
+            </div>
+          </Link>
+
+          <div className="flex items-center space-x-2">
+            <Link
+              to="/ai-studio"
+              className="px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Onboard Outlet</span>
+            </Link>
+            <Link
+              to="/kitchen"
+              className="px-3 py-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] text-slate-300 hover:text-white text-xs font-semibold transition-all flex items-center space-x-1.5"
+            >
+              <ChefHat className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden sm:inline">Kitchen KDS</span>
+            </Link>
+            <Link
+              to="/menu"
+              className="px-3 py-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] text-slate-300 hover:text-white text-xs font-semibold transition-all flex items-center space-x-1.5"
+            >
+              <UtensilsCrossed className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden md:inline">Diner Menus</span>
+            </Link>
+          </div>
+        </header>
+
+        {/* Hero section */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <span className="px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              Pune Hospitality Partner Network
+            </span>
+            <h1 className="font-serif text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+              Restaurant Partner Operations Hub
+            </h1>
+            <p className="text-sm text-slate-400 leading-relaxed">
+              Select your restaurant outlet to enter floor management, active table sessions, 1-second ESC/POS thermal KOT printing, and Google 5-star reputation shields.
+            </p>
+          </div>
+
+          {/* Partner Highlights */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl mx-auto">
+            <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/[0.06] text-center space-y-1">
+              <div className="text-emerald-400 font-bold text-lg">0%</div>
+              <div className="text-[11px] text-slate-400 font-medium">Food Commissions</div>
+            </div>
+            <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/[0.06] text-center space-y-1">
+              <div className="text-amber-400 font-bold text-lg">1-Second</div>
+              <div className="text-[11px] text-slate-400 font-medium">Direct KOT Printing</div>
+            </div>
+            <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/[0.06] text-center space-y-1">
+              <div className="text-blue-400 font-bold text-lg">Multiplayer</div>
+              <div className="text-[11px] text-slate-400 font-medium">Table QR Sync</div>
+            </div>
+            <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/[0.06] text-center space-y-1">
+              <div className="text-purple-400 font-bold text-lg">5-Star Shield</div>
+              <div className="text-[11px] text-slate-400 font-medium">Google Review Engine</div>
+            </div>
+          </div>
+
+          {/* Search and Filters */}
+          <div className="space-y-4">
+            <div className="relative max-w-xl mx-auto">
+              <Search className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={partnerSearchQuery}
+                onChange={(e) => setPartnerSearchQuery(e.target.value)}
+                placeholder="Search restaurant outlet by name, cuisine, or neighborhood..."
+                className="w-full bg-[#0E1526] border border-white/[0.12] rounded-2xl pl-12 pr-4 py-3.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400 shadow-inner"
+              />
+            </div>
+
+            {/* Area filter chips */}
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {['all', 'FC Road', 'Koregaon Park', 'Camp', 'Deccan', 'Baner', 'Kothrud', 'Aundh'].map((area) => (
+                <button
+                  key={area}
+                  onClick={() => setPartnerAreaFilter(area)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                    partnerAreaFilter === area
+                      ? 'bg-emerald-500 text-slate-950 font-bold shadow-md'
+                      : 'bg-white/[0.05] hover:bg-white/[0.1] text-slate-300 border border-white/[0.08]'
+                  }`}
+                >
+                  {area === 'all' ? 'All Partner Outlets' : area}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Grid of Partner Outlets */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {partnerRestaurantsList.map((r) => {
+              const rTables = tables.filter((t) => t.restaurant_id === r.id);
+              const rItems = menuItems.filter((m) => m.restaurant_id === r.id);
+              return (
+                <div
+                  key={r.id}
+                  className="bg-[#0D1424] border border-white/[0.08] hover:border-emerald-500/40 rounded-2xl overflow-hidden shadow-lg transition-all group flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="relative h-44 w-full overflow-hidden bg-slate-900">
+                      <img
+                        src={r.logo_url || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&auto=format&fit=crop'}
+                        alt={r.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0D1424] via-transparent to-transparent" />
+                      <span className="absolute top-3 left-3 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-black/70 backdrop-blur-md text-emerald-300 border border-emerald-500/30">
+                        {r.location || 'Pune, India'}
+                      </span>
+                      <span className="absolute top-3 right-3 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-black/70 backdrop-blur-md text-amber-300 border border-white/[0.1]">
+                        {r.pos_provider ? `${r.pos_provider} POS` : 'Petpooja POS'}
+                      </span>
+                    </div>
+
+                    <div className="p-4 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <h3 className="font-serif text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">
+                          {r.name}
+                        </h3>
+                      </div>
+                      <p className="text-xs text-slate-400 line-clamp-1">{r.cuisine}</p>
+
+                      <div className="flex items-center space-x-3 pt-1 text-[11px] text-slate-400">
+                        <span className="flex items-center space-x-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                          <span>{rTables.length > 0 ? `${rTables.length} Tables` : '10 Tables'}</span>
+                        </span>
+                        <span>•</span>
+                        <span>{rItems.length > 0 ? `${rItems.length} Dishes` : 'Authentic Menu'}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-4 pt-0 space-y-2">
+                    <Link
+                      to={`/manage/${r.slug}`}
+                      className="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-md transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
+                    >
+                      <Building2 className="w-3.5 h-3.5" />
+                      <span>Enter Floor Operations &amp; Tables →</span>
+                    </Link>
+                    <Link
+                      to={`/r/${r.slug}/menu`}
+                      className="w-full py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-white border border-white/[0.08] text-xs font-semibold transition-all flex items-center justify-center space-x-1.5"
+                    >
+                      <UtensilsCrossed className="w-3 h-3 text-amber-400" />
+                      <span>Preview Live Diner Menu</span>
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#090D16] text-slate-100 p-3 sm:p-5 md:p-6 max-w-4xl mx-auto space-y-4 pb-20">
       {/* ── Compact Navigation Top Bar ────────────────────────────── */}
       <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-white/[0.08]">
         <div className="flex items-center space-x-2">
+          <Link
+            to="/manage"
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-slate-300 hover:text-white transition-colors bg-white/[0.06] hover:bg-white/[0.12] px-2.5 py-1.5 rounded-xl border border-white/[0.1] shadow-sm cursor-pointer"
+            title="Back to all partner restaurant outlets"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 text-amber-400" />
+            <span>All Outlets</span>
+          </Link>
+
           <div className="inline-flex items-center space-x-1.5 text-xs font-bold text-emerald-300 bg-emerald-500/10 px-3 py-1.5 rounded-xl border border-emerald-500/20 shadow-sm">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Manager Portal</span>
+            <span>Floor Ops</span>
           </div>
-
-          <Link
-            to="/"
-            className="inline-flex items-center space-x-1 text-xs font-semibold text-slate-300 hover:text-white transition-colors bg-[#090D16]/[0.04] hover:bg-white/[0.08] px-2.5 py-1.5 rounded-xl border border-white/[0.08] shadow-sm cursor-pointer"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Consumer Landing</span>
-          </Link>
         </div>
 
         <div className="flex items-center gap-2">

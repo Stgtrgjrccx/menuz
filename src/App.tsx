@@ -13,12 +13,16 @@ import { AiBotOnboardingStudioPage } from './pages/AiBotOnboardingStudioPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { PwaInstallModal } from './components/PwaInstallModal';
+import { useRestaurantStore } from './store/restaurantStore';
 
 // Yoast-style Dynamic Route SEO Metadata Manager
 const RouteSEOManager: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
+    // English is strictly the default language and resets immediately whenever leaving or changing pages
+    useRestaurantStore.getState().setSelectedLanguage('en');
+
     const path = location.pathname;
     let pageTitle = 'Menuz | Autonomous Restaurant OS, QR Ordering & Google Review Engine';
     let metaDesc = 'Elevate dine-in revenue with Menuz: zero-app multiplayer QR ordering, instant ESC/POS KOT printing, 1-click Google 5-star review builder, and 0% food commission in Pune, India.';
@@ -26,10 +30,16 @@ const RouteSEOManager: React.FC = () => {
     if (path === '/pitch') {
       pageTitle = 'Menuz Pitch Deck | 19-Slide Executive Presentation & Product Strategy';
       metaDesc = 'Explore the Menuz 19-slide executive pitch deck: transparent ₹5,000 & ₹10,000 plans, multiplayer table ordering, thermal KOT printing, and reputation floor shield.';
-    } else if (path === '/admin') {
-      pageTitle = 'Master Admin HQ | Pune Restaurant Ecosystem Control | Menuz';
-      metaDesc = 'Centralized command center for Menuz demo operations, Pune restaurant registry, live table QR management, and multi-outlet governance.';
-    } else if (path.startsWith('/manage') || path.startsWith('/manager') || path.startsWith('/dashboard')) {
+    } else if (path === '/hq' || path === '/admin') {
+      pageTitle = 'Master Admin HQ | Autonomous Platform Command Center | Menuz';
+      metaDesc = 'Centralized command center for Menuz demo operations, Pune restaurant ecosystem registry, live table QR management, and multi-tenant governance.';
+    } else if (path === '/menu') {
+      pageTitle = 'Digital Menu Hub | Scan Table QR or Browse Pune Menus | Menuz';
+      metaDesc = 'App-free digital dining menus across Pune: explore legendary dining spots, scan your table QR, and order with real-time multiplayer cart sync.';
+    } else if (path === '/manage' || path === '/restaurant' || path === '/operations') {
+      pageTitle = 'Restaurant Partner Hub | Floor Operations & Outlet Management | Menuz';
+      metaDesc = 'Centralized portal for Menuz restaurant partners: manage floor operations, live table sessions, kitchen thermal KOT printing, and Google review shield.';
+    } else if (path.startsWith('/manage/') || path.startsWith('/manager/') || path.startsWith('/dashboard/')) {
       pageTitle = 'Active Venue Hub | Floor Operations, KOT & Review Shield | Menuz';
       metaDesc = 'Real-time restaurant manager dashboard: active QR table sessions, kitchen thermal KOT printing, Google review SEO, and POS bridge integration.';
     } else if (path.startsWith('/r/')) {
@@ -92,6 +102,11 @@ export const App: React.FC = () => {
                 path="/"
                 element={<CustomerHomePage />}
               />
+              {/* Generic Customer Dining & Menu Hub */}
+              <Route
+                path="/menu"
+                element={<DinerMenu />}
+              />
               <Route
                 path="/r/:restaurantSlug/menu"
                 element={<DinerMenu />}
@@ -116,8 +131,17 @@ export const App: React.FC = () => {
                 path="/kitchen"
                 element={<KitchenKDS />}
               />
+              {/* Generic Restaurant Partner Portal & Hub */}
               <Route
                 path="/manage"
+                element={<ManagerDashboard />}
+              />
+              <Route
+                path="/restaurant"
+                element={<ManagerDashboard />}
+              />
+              <Route
+                path="/partner"
                 element={<ManagerDashboard />}
               />
               <Route
@@ -141,8 +165,17 @@ export const App: React.FC = () => {
                 element={<ManagerDashboard />}
               />
               <Route
+                path="/restaurant/:restaurantSlug"
+                element={<ManagerDashboard />}
+              />
+              <Route
                 path="/dashboard/:restaurantSlug"
                 element={<ManagerDashboard />}
+              />
+              {/* Dedicated Master Enterprise HQ Platform */}
+              <Route
+                path="/hq"
+                element={<MasterAdminDashboard />}
               />
               <Route
                 path="/admin"
