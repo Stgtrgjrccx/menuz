@@ -1,15 +1,4 @@
 services:
-  # ⚡ REALTIME CLOUD SYNCHRONIZATION API
-  # Seamlessly connects Admin HQ, Customer Site, and Owner Site in real time
-  - type: web
-    name: menuz-api
-    runtime: node
-    buildCommand: npm install
-    startCommand: node server.js
-    envVars:
-      - key: NODE_ENV
-        value: production
-
   # 🏢 SITE 1: MASTER ADMIN HQ BACKEND PLATFORM
   # Exclusive owner command center to control 3,000+ Pune venues, onboard outlets, edit menus & photos
   - type: web
