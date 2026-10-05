@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   X, Sparkles, ChefHat, Heart, Award, FileText, Download,
   Printer, Check, Save, MessageSquare, AlertCircle, RefreshCw,
-  Flame, GlassWater, BookOpen, UserCheck
+  Flame, GlassWater, BookOpen, UserCheck, ArrowLeft
 } from 'lucide-react';
 import { Restaurant, ChefOwnerAiPersona } from '../types';
 
@@ -54,8 +54,8 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6">
-      <div className="bg-[#0D1322] rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-white/[0.08] overflow-hidden">
+    <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl overflow-y-auto pt-[max(env(safe-area-inset-top,20px),24px)] pb-12 px-3 sm:px-6 flex justify-center items-start overscroll-contain">
+      <div className="bg-[#0D1322] rounded-3xl max-w-4xl w-full flex flex-col shadow-2xl border border-white/[0.08] overflow-hidden my-2 sm:my-6">
         
         {/* Modal Header */}
         <div className="bg-gradient-to-r from-amber-700 via-orange-600 to-amber-800 text-white p-6 relative">
@@ -67,6 +67,14 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
           </button>
           
           <div className="flex items-center space-x-3 mb-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-black/20 hover:bg-black/40 text-white font-bold text-xs border border-white/20 transition-all cursor-pointer mr-1"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Back</span>
+            </button>
             <span className="bg-white text-orange-700 text-xs font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
               AI Persona Studio
             </span>

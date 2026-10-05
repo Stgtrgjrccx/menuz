@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, ShoppingBag, Trash2, ArrowRight, AlertCircle, Plus, Minus } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
-import { TRANSLATIONS } from '../utils/i18n';
+import { TRANSLATIONS, translateDishName } from '../utils/i18n';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -132,7 +132,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center space-x-1.5">
                         <h4 className="font-serif font-bold text-sm text-slate-100 leading-snug truncate">
-                          {item.name}
+                          {translateDishName(item.name, selectedLanguage)}
                         </h4>
                       </div>
 
@@ -234,7 +234,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                               className="w-full aspect-[4/3] rounded-lg object-cover mb-1.5"
                             />
                             <p className="font-bold text-[11px] text-slate-200 truncate leading-tight">
-                              {dish.name}
+                              {translateDishName(dish.name, selectedLanguage)}
                             </p>
                             <div className="flex items-center justify-between mt-1">
                               <div>

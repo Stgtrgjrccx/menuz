@@ -5,6 +5,7 @@ import { MenuItem, SelectedOptionSnapshot } from '../types';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { DishHoverExpandGallery } from './DishHoverExpandGallery';
 import { ImageLightboxModal } from './ImageLightboxModal';
+import { TRANSLATIONS, getTranslatedDish } from '../utils/i18n';
 
 interface DishDetailModalProps {
   dish: MenuItem | null;
@@ -19,6 +20,8 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
   onAskAi,
   onOpenCart,
 }) => {
+  const selectedLanguage = useRestaurantStore((state) => state.selectedLanguage);
+  const t = TRANSLATIONS[selectedLanguage] || TRANSLATIONS.en;
   const [quantity, setQuantity] = useState(1);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, SelectedOptionSnapshot>>({});
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
@@ -26,6 +29,8 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
   const addItemToCart = useRestaurantStore((state) => state.addItemToCart);
 
   if (!dish) return null;
+
+  const tDish = getTranslatedDish(dish, selectedLanguage);
 
   // Extract all photos attached to dish
   const modalPhotos: { src: string; label?: string }[] = [];
@@ -198,16 +203,80 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
             </div>
 
             <div className="flex items-baseline justify-between gap-2">
-              <h2 className="font-serif text-2xl font-bold text-slate-100 leading-tight">{dish.name}</h2>
+              <h2 className="font-serif text-2xl font-bold text-slate-100 leading-tight">{tDish.name}</h2>
               <span className="font-bold text-xl text-amber-400 whitespace-nowrap">₹{dish.price.toFixed(2)}</span>
             </div>
-            <p className="text-sm text-slate-400 leading-relaxed mt-2">{dish.full_description}</p>
+            <p className="text-sm text-slate-300 leading-relaxed mt-2">{tDish.full_description || tDish.short_description}</p>
           </div>
 
-          {/* Chef Notes if present */}
-          {dish.chef_notes && (
-            <div className="bg-amber-500/10 border border-amber-500/30 p-3 rounded-xl text-xs text-amber-200 leading-relaxed">
-              <strong className="font-serif font-bold text-amber-300">Master Chef's Note:</strong> {dish.chef_notes}
+          {/* ═══════════════════════════════════════════════════════════ */}
+          {/* CULINARY STUDIO STORYTELLING & TASTING PROFILE               */}
+          {/* ═══════════════════════════════════════════════════════════ */}
+
+          {/* Heritage Lore & Origin Story */}
+          {tDish.chef_story && (
+            <div className="bg-gradient-to-br from-amber-500/15 via-[#131A2D] to-[#0D1322] border border-amber-500/35 p-3.5 rounded-2xl space-y-1.5 shadow-sm">
+              <div className="flex items-center space-x-1.5 text-amber-400 text-xs font-serif font-bold">
+                <span>📜</span>
+                <span>{t.chefStoryTitle || 'Culinary Heritage & Origin Lore'}</span>
+              </div>
+              <p className="text-xs text-amber-100/90 leading-relaxed italic font-serif">
+                "{tDish.chef_story}"
+              </p>
+            </div>
+          )}
+
+          {/* Master Chef's Tasting Note */}
+          {tDish.chef_notes && (
+            <div className="bg-[#0A101D] border border-amber-500/30 p-3.5 rounded-2xl space-y-1 text-xs">
+              <div className="flex items-center space-x-1.5 text-amber-300 font-bold">
+                <span>🧑‍🍳</span>
+                <span>{t.tastingNotesTitle || "Master Chef's Tasting Notes"}</span>
+              </div>
+              <p className="text-slate-300 leading-relaxed">
+                {tDish.chef_notes}
+              </p>
+            </div>
+          )}
+
+          {/* Founder's Table Pitch */}
+          {tDish.owner_pitch && (
+            <div className="bg-[#0A101D] border border-orange-500/30 p-3.5 rounded-2xl space-y-1 text-xs">
+              <div className="flex items-center space-x-1.5 text-orange-300 font-bold">
+                <span>🎙️</span>
+                <span>Founder's Table Recommendation</span>
+              </div>
+              <p className="text-slate-300 leading-relaxed">
+                {tDish.owner_pitch}
+              </p>
+            </div>
+          )}
+
+          {/* Sommelier Beverage Pairing & Serving Technique */}
+          {(dish.pairing_drink_name || dish.temperature_style) && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {dish.pairing_drink_name && (
+                <div className="bg-purple-950/30 border border-purple-500/30 p-3 rounded-xl space-y-1 text-xs">
+                  <div className="flex items-center space-x-1.5 text-purple-300 font-bold">
+                    <span>🍷</span>
+                    <span>Ideal Beverage Pairing</span>
+                  </div>
+                  <p className="font-semibold text-white text-xs">{dish.pairing_drink_name}</p>
+                  {dish.pairing_reason && (
+                    <p className="text-[11px] text-purple-200/80 leading-snug">{dish.pairing_reason}</p>
+                  )}
+                </div>
+              )}
+
+              {dish.temperature_style && (
+                <div className="bg-blue-950/30 border border-blue-500/30 p-3 rounded-xl space-y-1 text-xs">
+                  <div className="flex items-center space-x-1.5 text-blue-300 font-bold">
+                    <span>🌡️</span>
+                    <span>Preparation &amp; Serving Style</span>
+                  </div>
+                  <p className="font-semibold text-white text-xs">{dish.temperature_style}</p>
+                </div>
+              )}
             </div>
           )}
 
@@ -322,7 +391,7 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
               >
                 <div className="flex items-center space-x-1.5">
                   <ShoppingBag className="w-4 h-4" />
-                  <span>Add to Order Tray</span>
+                  <span>+ {t.add}</span>
                 </div>
                 <span>₹{totalPrice.toFixed(2)}</span>
               </button>
@@ -343,7 +412,7 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
             className="w-full bg-[#090D16]/[0.04] hover:bg-white/[0.08] text-slate-300 font-semibold py-2.5 px-4 rounded-xl border border-white/[0.08] hover:border-amber-500/30 flex items-center justify-center space-x-1.5 text-xs transition-all"
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>Ask AI: Flavors, Spices &amp; Pairing Details</span>
+            <span>{t.aiSommelier || 'Ask AI Sommelier'}</span>
           </button>
         </div>
       </div>

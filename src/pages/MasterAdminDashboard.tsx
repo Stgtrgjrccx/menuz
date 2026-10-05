@@ -571,8 +571,8 @@ export const MasterAdminDashboard: React.FC = () => {
             onSubmit={(e) => {
               e.preventDefault();
               const trimmed = adminPasscode.trim().toLowerCase();
-              const validPasscodes = ['menuz2026', 'admin123', 'admin', 'menuz', '8888', 'menuz@admin', 'menuz2025', 'demo', '1234', ''];
-              if (validPasscodes.includes(trimmed)) {
+              const validPasscodes = ['menuz2026', 'admin123', 'menuz', '8888', 'menuz@admin', 'menuz2025'];
+              if (trimmed && validPasscodes.includes(trimmed)) {
                 setSafeSession('menuz_admin_session', 'active');
                 setIsAdminAuthenticated(true);
                 setAuthError(false);
@@ -584,8 +584,7 @@ export const MasterAdminDashboard: React.FC = () => {
           >
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="text-[11px] font-bold text-slate-400">Platform Passphrase</label>
-                <span className="text-[10px] text-amber-400/80 font-mono">Demo: menuz2026</span>
+                <label className="text-[11px] font-bold text-slate-400">Master Secret Passphrase</label>
               </div>
               <input
                 type="password"
@@ -594,7 +593,7 @@ export const MasterAdminDashboard: React.FC = () => {
                   setAdminPasscode(e.target.value);
                   setAuthError(false);
                 }}
-                placeholder="Enter Passphrase (or click Instant Demo)"
+                placeholder="Enter Master Passphrase"
                 className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 font-mono text-center tracking-wider"
                 autoFocus
               />
@@ -609,19 +608,7 @@ export const MasterAdminDashboard: React.FC = () => {
               type="submit"
               className="w-full py-3 bg-amber-500 hover:bg-amber-600 active:scale-95 text-slate-950 font-bold text-sm rounded-xl transition-all shadow-md cursor-pointer"
             >
-              Verify &amp; Unlock Admin Console
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setSafeSession('menuz_admin_session', 'active');
-                setIsAdminAuthenticated(true);
-                setAuthError(false);
-              }}
-              className="w-full py-2.5 bg-amber-500/10 hover:bg-amber-500/20 active:scale-95 text-amber-400 font-bold text-xs rounded-xl border border-amber-500/30 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-            >
-              <Zap className="w-3.5 h-3.5" />
-              <span>Instant Demo Unlock (1-Click)</span>
+              Verify &amp; Unlock Master HQ
             </button>
             <div className="flex items-center justify-center gap-4 text-xs text-slate-400 pt-2 border-t border-slate-800">
               <Link to="/" className="hover:text-amber-400 transition-colors flex items-center gap-1">

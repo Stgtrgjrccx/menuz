@@ -8,7 +8,8 @@ import {
   Building2,
   Star,
   Camera,
-  FolderOpen
+  FolderOpen,
+  ArrowLeft
 } from 'lucide-react';
 import { Restaurant } from '../types';
 import { useRestaurantStore } from '../store/restaurantStore';
@@ -50,6 +51,17 @@ export const RestaurantPhotoManagerModal: React.FC<RestaurantPhotoManagerModalPr
 
     const loadedImages: string[] = [];
     let processedCount = 0;
+    const totalFiles = files.length;
+
+    // Safety fallback: clear upload state within 2s maximum
+    const safetyTimer = setTimeout(() => {
+      if (loadedImages.length > 0) {
+        addRestaurantPhotos(restaurant.id, loadedImages);
+        setUploadMessage(`✓ Added ${loadedImages.length} photo(s)!`);
+      }
+      setUploading(false);
+      setTimeout(() => setUploadMessage(null), 2000);
+    }, 2000);
 
     Array.from(files).forEach((file) => {
       const reader = new FileReader();
@@ -60,11 +72,21 @@ export const RestaurantPhotoManagerModal: React.FC<RestaurantPhotoManagerModalPr
         }
         processedCount++;
 
-        if (processedCount === files.length) {
+        if (processedCount === totalFiles) {
+          clearTimeout(safetyTimer);
           addRestaurantPhotos(restaurant.id, loadedImages);
           setUploading(false);
           setUploadMessage(`✓ Successfully added ${loadedImages.length} restaurant photo${loadedImages.length > 1 ? 's' : ''}!`);
-          setTimeout(() => setUploadMessage(null), 3000);
+          setTimeout(() => setUploadMessage(null), 2500);
+        }
+      };
+      reader.onerror = () => {
+        processedCount++;
+        if (processedCount === totalFiles) {
+          clearTimeout(safetyTimer);
+          if (loadedImages.length > 0) addRestaurantPhotos(restaurant.id, loadedImages);
+          setUploading(false);
+          setTimeout(() => setUploadMessage(null), 2500);
         }
       };
       reader.readAsDataURL(file);
@@ -72,11 +94,19 @@ export const RestaurantPhotoManagerModal: React.FC<RestaurantPhotoManagerModalPr
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
-      <div className="bg-[#0D1322] border border-white/[0.1] rounded-3xl max-w-2xl w-full p-5 sm:p-6 shadow-2xl space-y-5 text-white max-h-[92vh] flex flex-col my-auto">
+    <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl overflow-y-auto pt-[max(env(safe-area-inset-top,20px),24px)] pb-12 px-3 sm:px-5 flex justify-center items-start overscroll-contain">
+      <div className="bg-[#0D1322] border border-white/[0.1] rounded-3xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl space-y-4 sm:space-y-5 text-white my-2 sm:my-6 flex flex-col">
         {/* Header */}
         <div className="flex items-start justify-between pb-4 border-b border-white/[0.08]">
           <div className="flex items-center space-x-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-slate-200 hover:text-white font-bold text-xs border border-white/[0.1] transition-all cursor-pointer mr-1"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Back</span>
+            </button>
             <img
               src={restaurant.logo_url}
               alt={restaurant.name}

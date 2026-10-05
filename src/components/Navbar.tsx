@@ -209,20 +209,6 @@ export const Navbar: React.FC = () => {
           {/* Right: Actions */}
           <div className="flex items-center space-x-2">
 
-            {/* Always-Visible Admin Page Top Button */}
-            <Link
-              to="/admin"
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center space-x-1.5 transition-all shadow-sm ${
-                location.pathname === '/admin'
-                  ? 'bg-amber-500 text-slate-950 font-black shadow-amber-500/25 ring-1 ring-amber-400'
-                  : 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:border-amber-400/60'
-              }`}
-              title="Open Master Admin Control Hub"
-            >
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Admin HQ</span>
-            </Link>
-
             {/* Quick Access Portal Hub Button */}
             <button
               type="button"
@@ -333,17 +319,6 @@ export const Navbar: React.FC = () => {
         {/* Mobile Dropdown */}
         {mobileOpen && (
           <div className="lg:hidden bg-[#0C111D] border-t border-white/[0.08] px-4 py-3 space-y-2">
-            <Link
-              to="/admin"
-              onClick={() => setMobileOpen(false)}
-              className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30"
-            >
-              <div className="flex items-center space-x-2">
-                <ShieldCheck className="w-4 h-4 text-amber-400" />
-                <span>Master Admin HQ</span>
-              </div>
-              <ArrowRight className="w-3.5 h-3.5 text-amber-400" />
-            </Link>
             {navLinks.map((link) => (
               <Link
                 key={link.to}
@@ -376,17 +351,6 @@ export const Navbar: React.FC = () => {
 
         {/* Mobile Always-Visible Headings & Options Bar */}
         <div className="lg:hidden bg-[#070B12] border-t border-white/[0.08] px-2.5 py-2 overflow-x-auto flex items-center space-x-1.5 scrollbar-none touch-pan-x text-xs font-bold shadow-inner">
-          <Link
-            to="/admin"
-            className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
-              location.pathname === '/admin'
-                ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                : 'bg-amber-500/10 text-amber-300 border border-amber-500/30'
-            }`}
-          >
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Admin HQ</span>
-          </Link>
           <Link
             to={dinerUrl}
             className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
@@ -529,25 +493,25 @@ export const Navbar: React.FC = () => {
                 </div>
               </div>
 
-              {/* Category 3: Executive Strategy & Platform Management */}
+              {/* Category 3: Culinary & Menu Studio */}
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                  3. Executive &amp; Management
+                  3. Menu &amp; AI Studio
                 </span>
                 <div className="grid grid-cols-1 gap-2 mt-2">
                   <Link
-                    to="/admin"
+                    to="/ai-studio"
                     onClick={() => setQuickNavOpen(false)}
-                    className="p-3 rounded-xl bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-emerald-500/40 transition-all flex items-center justify-between group"
+                    className="p-3 rounded-xl bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-amber-500/40 transition-all flex items-center justify-between group"
                   >
                     <div className="flex items-center space-x-2.5">
-                      <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                      <Sparkles className="w-4 h-4 text-amber-400" />
                       <div>
-                        <div className="text-xs font-bold text-white">Master Headquarters Admin HQ</div>
-                        <div className="text-[11px] text-slate-400">All venues, billing &amp; menu sync</div>
+                        <div className="text-xs font-bold text-white">Chef &amp; Owner Culinary Studio</div>
+                        <div className="text-[11px] text-slate-400">Tasting notes, heat calibration &amp; pairings</div>
                       </div>
                     </div>
-                    <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-emerald-400 transition-all" />
+                    <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-amber-400 transition-all" />
                   </Link>
                 </div>
               </div>

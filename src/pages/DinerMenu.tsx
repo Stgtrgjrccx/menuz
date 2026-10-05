@@ -16,10 +16,16 @@ import {
   X,
   Copy,
   Check,
-  ArrowLeftRight,
   Users,
   ShieldCheck,
-  Maximize2
+  Maximize2,
+  SlidersHorizontal,
+  BookOpen,
+  Wine,
+  Layers,
+  LayoutGrid,
+  Info,
+  Home
 } from 'lucide-react';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { MenuItem, ReviewChallenge, Restaurant } from '../types';
@@ -29,11 +35,12 @@ import { CartDrawer } from '../components/CartDrawer';
 import { AiAssistantDrawer } from '../components/AiAssistantDrawer';
 import { OrderTrackerModal } from '../components/OrderTrackerModal';
 import { SpinWheelModal } from '../components/SpinWheelModal';
-import { SwitchRestaurantModal } from '../components/SwitchRestaurantModal';
 import { LanguageSelector } from '../components/LanguageSelector';
-import { TRANSLATIONS, getCategoryTitle } from '../utils/i18n';
+import { MenuFilterModal, MenuFilterState, DietaryOption, SpiceOption } from '../components/MenuFilterModal';
+import { TRANSLATIONS, translateCategory, getTranslatedDish, translateDishName } from '../utils/i18n';
 import { PUNE_RESTAURANT_DIRECTORY } from '../data/puneRestaurantDirectory';
 import { generateCuisineMenu } from '../data/cuisineMenuGenerator';
+import { findAuthenticPuneMenu } from '../data/authenticPuneMenus';
 
 
 export const DinerMenu: React.FC = () => {
@@ -60,8 +67,6 @@ export const DinerMenu: React.FC = () => {
   const completeChallenge = useRestaurantStore((state) => state.completeChallenge);
   const selectedLanguage = useRestaurantStore((state) => state.selectedLanguage);
   const t = TRANSLATIONS[selectedLanguage] || TRANSLATIONS.en;
-
-  const [isSwitchModalOpen, setIsSwitchModalOpen] = useState(false);
 
   // Synchronously resolve target restaurant from route slug or active store restaurant
   const targetRestaurant = useMemo(() => {
@@ -121,12 +126,22 @@ export const DinerMenu: React.FC = () => {
 
   // Scoped dishes, categories, and tables for this restaurant
   const currentRestMenuItems = useMemo(() => {
-    const list = menuItems.filter(
-      (m) =>
-        m.restaurant_id === targetRestaurant.id ||
-        (targetRestaurant.slug && (m.restaurant_id.toLowerCase().includes(targetRestaurant.slug.toLowerCase()) || targetRestaurant.id.toLowerCase().includes(m.restaurant_id.toLowerCase())))
-    );
+    // 1. Check if this is an authentic Pune landmark with a scanned real-world menu blueprint
+    const blueprint = findAuthenticPuneMenu(targetRestaurant.name, targetRestaurant.slug);
+    if (blueprint) {
+      return generateCuisineMenu(
+        targetRestaurant.id,
+        targetRestaurant.slug || 'menu',
+        targetRestaurant.cuisine,
+        targetRestaurant.name
+      ).dishes;
+    }
+
+    // 2. Check if custom user-added items exist for this exact restaurant
+    const list = menuItems.filter((m) => m.restaurant_id === targetRestaurant.id);
     if (list.length > 0) return list;
+
+    // 3. Fallback to cuisine-specific generator
     return generateCuisineMenu(
       targetRestaurant.id,
       targetRestaurant.slug || 'menu',
@@ -136,12 +151,22 @@ export const DinerMenu: React.FC = () => {
   }, [menuItems, targetRestaurant]);
 
   const currentRestCategories = useMemo(() => {
-    const list = categories.filter(
-      (c) =>
-        c.restaurant_id === targetRestaurant.id ||
-        (targetRestaurant.slug && (c.restaurant_id.toLowerCase().includes(targetRestaurant.slug.toLowerCase()) || targetRestaurant.id.toLowerCase().includes(c.restaurant_id.toLowerCase())))
-    );
+    // 1. Check if an authentic scanned blueprint exists
+    const blueprint = findAuthenticPuneMenu(targetRestaurant.name, targetRestaurant.slug);
+    if (blueprint) {
+      return generateCuisineMenu(
+        targetRestaurant.id,
+        targetRestaurant.slug || 'menu',
+        targetRestaurant.cuisine,
+        targetRestaurant.name
+      ).categories;
+    }
+
+    // 2. Check if custom categories exist for this exact restaurant
+    const list = categories.filter((c) => c.restaurant_id === targetRestaurant.id);
     if (list.length > 0) return list;
+
+    // 3. Fallback to cuisine-specific generator
     return generateCuisineMenu(
       targetRestaurant.id,
       targetRestaurant.slug || 'menu',
@@ -168,6 +193,16 @@ export const DinerMenu: React.FC = () => {
 
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [menuViewMode, setMenuViewMode] = useState<'magazine' | 'classic'>('magazine');
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
+  const [filters, setFilters] = useState<MenuFilterState>({
+    dietary: 'all',
+    spice: 'all',
+    sort: 'default',
+    highlight: 'all'
+  });
+  const [expandedStories, setExpandedStories] = useState<Record<string, boolean>>({});
+
   const [activeDish, setActiveDish] = useState<MenuItem | null>(null);
   const [lightboxDish, setLightboxDish] = useState<MenuItem | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState<number>(0);
@@ -179,6 +214,10 @@ export const DinerMenu: React.FC = () => {
   const [waiterCalled, setWaiterCalled] = useState(false);
   const [waiterToast, setWaiterToast] = useState<string | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
+
+  const toggleStoryExpand = (dishId: string) => {
+    setExpandedStories((prev) => ({ ...prev, [dishId]: !prev[dishId] }));
+  };
 
   const handleOpenAi = (dish: MenuItem | null = null, query: string | null = null) => {
     setAiFocusDish(dish);
@@ -320,22 +359,87 @@ export const DinerMenu: React.FC = () => {
     }, 0);
   }, [cart]);
 
+  // Active filters count
+  const activeFiltersCount = useMemo(() => {
+    let count = 0;
+    if (filters.dietary !== 'all') count++;
+    if (filters.spice !== 'all') count++;
+    if (filters.sort !== 'default') count++;
+    if (filters.highlight !== 'all') count++;
+    return count;
+  }, [filters]);
+
   const filteredDishes = useMemo(() => {
-    return currentRestMenuItems.filter((dish) => {
+    let list = currentRestMenuItems.filter((dish) => {
       if (!dish) return false;
+
+      // Category filter
       const matchesCat = selectedCategory === 'all' || dish.category_id === selectedCategory;
+      if (!matchesCat) return false;
+
+      // Keyword search (Check both original English and localized translated text)
       const q = searchQuery.toLowerCase().trim();
+      const tDish = getTranslatedDish(dish, selectedLanguage);
       const ingredients = Array.isArray(dish.ingredients) ? dish.ingredients : [];
       const dishName = dish.name || '';
+      const tDishName = tDish.name || '';
       const dishDesc = dish.short_description || dish.full_description || '';
+      const tDishDesc = tDish.short_description || tDish.full_description || '';
       const matchesSearch =
         !q ||
         dishName.toLowerCase().includes(q) ||
+        tDishName.toLowerCase().includes(q) ||
         dishDesc.toLowerCase().includes(q) ||
+        tDishDesc.toLowerCase().includes(q) ||
         ingredients.some((ing) => (ing || '').toLowerCase().includes(q));
-      return matchesCat && matchesSearch;
+      if (!matchesSearch) return false;
+
+      // ── Dietary & Allergen Preferences (#12) ──
+      const flags = Array.isArray(dish.dietary_flags) ? dish.dietary_flags.map((f) => String(f).toLowerCase().replace(/[-_ ]/g, '')) : [];
+      const allergens = Array.isArray(dish.allergens) ? dish.allergens.map((a) => String(a).toLowerCase()) : [];
+      const isVeg =
+        (flags.some((f) => f.includes('veg') || f.includes('vegetarian') || f.includes('vegan') || f.includes('jain'))) &&
+        !flags.some((f) => f.includes('nonveg'));
+
+      if (filters.dietary === 'veg' && !isVeg) return false;
+      if (filters.dietary === 'non_veg' && isVeg) return false;
+      if (filters.dietary === 'jain' && !flags.some((f) => f.includes('jain'))) return false;
+      if (filters.dietary === 'vegan' && !flags.some((f) => f.includes('vegan'))) return false;
+      if (filters.dietary === 'gluten_free' && (allergens.includes('gluten') || allergens.includes('wheat'))) return false;
+      if (filters.dietary === 'halal' && !flags.some((f) => f.includes('halal'))) return false;
+      if (filters.dietary === 'nut_free' && (allergens.includes('nuts') || allergens.includes('peanut') || allergens.includes('peanuts') || allergens.includes('tree nuts'))) return false;
+      if (filters.dietary === 'dairy_free' && (allergens.includes('dairy') || allergens.includes('milk') || allergens.includes('cheese') || allergens.includes('paneer') || allergens.includes('butter') || allergens.includes('ghee'))) return false;
+      if (filters.dietary === 'keto' && !flags.some((f) => f.includes('keto') || f.includes('lowcarb'))) return false;
+
+      // ── Spice Heat Filter (Low to High Options) ──
+      const spice = Number(dish.spice_level) || 0;
+      if (filters.spice === 'mild' && spice > 1) return false;
+      if (filters.spice === 'medium' && (spice < 2 || spice > 3)) return false;
+      if (filters.spice === 'hot' && spice !== 4) return false;
+      if (filters.spice === 'fiery' && spice < 5) return false;
+
+      // ── Culinary Highlights ──
+      if (filters.highlight === 'chef_pick' && !dish.is_chef_recommended && !dish.is_signature) return false;
+      if (filters.highlight === 'bestseller' && !dish.is_bestseller) return false;
+      if (filters.highlight === 'has_pairing' && !dish.pairing_drink_name) return false;
+      if (filters.highlight === 'has_story' && !dish.chef_story && !dish.owner_pitch) return false;
+
+      return true;
     });
-  }, [currentRestMenuItems, selectedCategory, searchQuery]);
+
+    // ── Sorting (Price Low-to-High / High-to-Low, Spice Low-to-High / High-to-Low) ──
+    if (filters.sort === 'price_asc') {
+      list = [...list].sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
+    } else if (filters.sort === 'price_desc') {
+      list = [...list].sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
+    } else if (filters.sort === 'spice_asc') {
+      list = [...list].sort((a, b) => (Number(a.spice_level) || 0) - (Number(b.spice_level) || 0));
+    } else if (filters.sort === 'spice_desc') {
+      list = [...list].sort((a, b) => (Number(b.spice_level) || 0) - (Number(a.spice_level) || 0));
+    }
+
+    return list;
+  }, [currentRestMenuItems, selectedCategory, searchQuery, filters]);
 
   // Group dishes by category for scrollytelling sections with defensive fallback
   const dishesByCategory = useMemo(() => {
@@ -390,11 +494,11 @@ export const DinerMenu: React.FC = () => {
           <h2 className="font-serif text-xl font-bold text-white mb-2">QR Code Issue</h2>
           <p className="text-slate-300 text-sm mb-4 leading-relaxed">{errorMsg}</p>
           <Link
-            to="/admin"
+            to="/"
             className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold hover:bg-amber-500/30 transition-all"
           >
-            <ShieldCheck className="w-4 h-4 text-amber-400" />
-            <span>Go to Admin HQ</span>
+            <Home className="w-4 h-4 text-amber-400" />
+            <span>Return to Home</span>
           </Link>
         </div>
       </div>
@@ -423,7 +527,7 @@ export const DinerMenu: React.FC = () => {
       {/* ═══════════════════════════════════════════════════════════ */}
       {/* 0. STREAMLINED DINER TOP BAR (MOBILE-FIRST)                 */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <div className="sticky top-0 z-30 bg-[#0A0E17] text-white border-b border-white/[0.08] px-3 sm:px-4 py-2 sm:py-2.5 flex items-center justify-between shadow-sm">
+      <div className="sticky top-0 z-30 h-12 sm:h-14 bg-[#0A0E17] text-white border-b border-white/[0.08] px-3 sm:px-4 flex items-center justify-between shadow-sm">
         {/* Link back to Menuz Home */}
         <Link
           to="/"
@@ -439,31 +543,9 @@ export const DinerMenu: React.FC = () => {
           <span className="text-[10px] text-slate-500 hidden md:inline">• Home</span>
         </Link>
 
-        {/* Language selector & Switch Restaurant & Admin */}
+        {/* Language selector & Cart */}
         <div className="flex items-center space-x-1.5 sm:space-x-2">
-          {/* Always-visible Admin Page Top Button (Mandatory Top Pin) */}
-          <Link
-            to="/admin"
-            className="py-1 px-2 sm:px-2.5 rounded-full bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/40 text-[10px] sm:text-[11px] font-bold flex items-center space-x-1 sm:space-x-1.5 transition-all shadow-sm active:scale-95 flex-shrink-0"
-            title="Open Master Admin Control Hub"
-          >
-            <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-            <span className="hidden xs:inline sm:inline">Admin HQ</span>
-            <span className="xs:hidden sm:hidden">Admin</span>
-          </Link>
-
           <LanguageSelector />
-
-          <button
-            type="button"
-            onClick={() => setIsSwitchModalOpen(true)}
-            className="py-1 px-2 sm:px-3 rounded-full bg-[#090D16]/[0.05] hover:bg-white/[0.1] text-amber-400 hover:text-amber-300 border border-amber-500/30 text-[10px] sm:text-[11px] font-bold flex items-center space-x-1 sm:space-x-1.5 transition-all shadow-sm active:scale-95 cursor-pointer flex-shrink-0"
-            title="Switch Restaurant or Scan a New Table QR Code"
-          >
-            <ArrowLeftRight className="w-3 h-3 text-amber-400" />
-            <span className="hidden sm:inline">Switch Restaurant</span>
-            <span className="sm:hidden">Switch</span>
-          </button>
 
           {cart.length > 0 && (
             <button
@@ -636,32 +718,66 @@ export const DinerMenu: React.FC = () => {
 
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* STICKY SEARCH & CATEGORY BAR (MOBILE-OPTIMIZED)             */}
+      {/* STICKY SEARCH, CATEGORY & DIETARY FILTER BAR (#12)           */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <div ref={menuSectionRef} className="sticky top-[45px] sm:top-[51px] z-20 bg-[#090D16] pt-2.5 pb-2 border-b border-white/[0.07] shadow-sm">
+      <div ref={menuSectionRef} className="sticky top-12 sm:top-14 z-20 bg-[#090D16]/98 backdrop-blur-md pt-2.5 pb-2 border-b border-white/[0.08] shadow-md">
         <div className="max-w-xl mx-auto px-3 sm:px-4 space-y-2">
-          {/* Search Bar */}
-          <div className="relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={t.searchPlaceholder || "Search dish, starters, drinks..."}
-              className="w-full pl-8.5 pr-4 py-2 bg-[#0D1322] rounded-xl text-xs border border-white/[0.08] focus:outline-none focus:border-amber-500/60 placeholder-slate-500 text-slate-100 shadow-sm"
-            />
-            {searchQuery && (
+          {/* Row 1: Search Bar + View Mode Toggle (#11 Story Mode) */}
+          <div className="flex items-center gap-2">
+            <div className="relative flex-1 min-w-0">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={t.searchPlaceholder || "Search dish, starters, drinks..."}
+                className="w-full pl-10 pr-10 py-2.5 bg-[#0D1322] rounded-xl text-xs border border-white/[0.08] focus:outline-none focus:border-amber-500/60 placeholder-slate-500 text-slate-100 shadow-sm truncate placeholder:truncate"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-2.5 text-slate-400 hover:text-white p-1 rounded-md transition-colors cursor-pointer"
+                  title="Clear search"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+
+            {/* View Mode Switcher: Magazine Stories vs Classic */}
+            <div className="flex items-center bg-[#0D1322] p-0.5 rounded-xl border border-white/[0.08] flex-shrink-0">
               <button
                 type="button"
-                onClick={() => setSearchQuery('')}
-                className="absolute right-2.5 top-2.5 text-slate-400 hover:text-white p-0.5"
+                onClick={() => setMenuViewMode('magazine')}
+                className={`px-2 py-1.5 rounded-lg text-[10px] sm:text-[11px] font-bold flex items-center space-x-1 transition-all cursor-pointer ${
+                  menuViewMode === 'magazine'
+                    ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+                title="Visual Menu with Dish Stories &amp; Chef Notes"
               >
-                <X className="w-3.5 h-3.5" />
+                <Sparkles className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">{t.storiesView || 'Stories'}</span>
               </button>
-            )}
+
+              <button
+                type="button"
+                onClick={() => setMenuViewMode('classic')}
+                className={`px-2 py-1.5 rounded-lg text-[10px] sm:text-[11px] font-bold flex items-center space-x-1 transition-all cursor-pointer ${
+                  menuViewMode === 'classic'
+                    ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+                title="Compact Classic List View"
+              >
+                <LayoutGrid className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">{t.classicView || 'Classic'}</span>
+              </button>
+            </div>
           </div>
 
-          {/* Category Chips */}
+          {/* Row 2: Category Chips */}
           <div className="flex space-x-1.5 sm:space-x-2 overflow-x-auto pb-0.5 scrollbar-none">
             <button
               type="button"
@@ -685,9 +801,115 @@ export const DinerMenu: React.FC = () => {
                     : 'bg-[#0D1322] text-slate-300 border border-white/[0.08] hover:border-amber-500/40 hover:text-amber-300'
                 }`}
               >
-                {getCategoryTitle(cat.name, selectedLanguage)}
+                {translateCategory(cat.name, selectedLanguage)}
               </button>
             ))}
+          </div>
+
+          {/* Row 3: Quick Filter Pills (#12 Dietary & Spice Options) */}
+          <div className="flex items-center space-x-1.5 overflow-x-auto pb-0.5 scrollbar-none">
+            {/* Filter Modal Trigger with Active Count */}
+            <button
+              type="button"
+              onClick={() => setIsFilterModalOpen(true)}
+              className={`whitespace-nowrap px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold flex items-center space-x-1 border transition-all cursor-pointer flex-shrink-0 ${
+                activeFiltersCount > 0
+                  ? 'bg-amber-500/20 text-amber-300 border-amber-400 ring-1 ring-amber-400/40'
+                  : 'bg-[#0D1322] text-slate-300 border-white/[0.1] hover:border-amber-500/40'
+              }`}
+            >
+              <SlidersHorizontal className="w-3 h-3 text-amber-400" />
+              <span>Filters</span>
+              {activeFiltersCount > 0 && (
+                <span className="w-4 h-4 rounded-full bg-amber-500 text-slate-950 text-[9px] font-black flex items-center justify-center ml-0.5">
+                  {activeFiltersCount}
+                </span>
+              )}
+            </button>
+
+            {/* Quick Veg Filter */}
+            <button
+              type="button"
+              onClick={() => setFilters((prev) => ({ ...prev, dietary: prev.dietary === 'veg' ? 'all' : 'veg' }))}
+              className={`whitespace-nowrap px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-semibold flex items-center space-x-1 border transition-all cursor-pointer flex-shrink-0 ${
+                filters.dietary === 'veg'
+                  ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400 font-bold'
+                  : 'bg-[#0D1322] text-slate-400 border-white/[0.08] hover:text-slate-200'
+              }`}
+            >
+              <span className="w-2 h-2 rounded-full bg-emerald-400" />
+              <span>{t.filterVeg}</span>
+            </button>
+
+            {/* Quick Non-Veg Filter */}
+            <button
+              type="button"
+              onClick={() => setFilters((prev) => ({ ...prev, dietary: prev.dietary === 'non_veg' ? 'all' : 'non_veg' }))}
+              className={`whitespace-nowrap px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-semibold flex items-center space-x-1 border transition-all cursor-pointer flex-shrink-0 ${
+                filters.dietary === 'non_veg'
+                  ? 'bg-red-500/20 text-red-300 border-red-400 font-bold'
+                  : 'bg-[#0D1322] text-slate-400 border-white/[0.08] hover:text-slate-200'
+              }`}
+            >
+              <span className="w-2 h-2 rounded-full bg-red-400" />
+              <span>{t.filterNonVeg}</span>
+            </button>
+
+            {/* Quick Mild Spice Filter */}
+            <button
+              type="button"
+              onClick={() => setFilters((prev) => ({ ...prev, spice: prev.spice === 'mild' ? 'all' : 'mild' }))}
+              className={`whitespace-nowrap px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-semibold flex items-center space-x-1 border transition-all cursor-pointer flex-shrink-0 ${
+                filters.spice === 'mild'
+                  ? 'bg-teal-500/20 text-teal-300 border-teal-400 font-bold'
+                  : 'bg-[#0D1322] text-slate-400 border-white/[0.08] hover:text-slate-200'
+              }`}
+            >
+              <span>🥗</span>
+              <span>{t.mild}</span>
+            </button>
+
+            {/* Quick Fiery Spice Filter */}
+            <button
+              type="button"
+              onClick={() => setFilters((prev) => ({ ...prev, spice: prev.spice === 'hot' ? 'all' : 'hot' }))}
+              className={`whitespace-nowrap px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-semibold flex items-center space-x-1 border transition-all cursor-pointer flex-shrink-0 ${
+                filters.spice === 'hot'
+                  ? 'bg-orange-500/20 text-orange-300 border-orange-400 font-bold'
+                  : 'bg-[#0D1322] text-slate-400 border-white/[0.08] hover:text-slate-200'
+              }`}
+            >
+              <Flame className="w-3 h-3 text-orange-400 fill-orange-400" />
+              <span>{t.fiery || t.hot || 'Fiery'}</span>
+            </button>
+
+            {/* Quick Chef's Picks */}
+            <button
+              type="button"
+              onClick={() => setFilters((prev) => ({ ...prev, highlight: prev.highlight === 'chef_pick' ? 'all' : 'chef_pick' }))}
+              className={`whitespace-nowrap px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-semibold flex items-center space-x-1 border transition-all cursor-pointer flex-shrink-0 ${
+                filters.highlight === 'chef_pick'
+                  ? 'bg-amber-500/20 text-amber-300 border-amber-400 font-bold'
+                  : 'bg-[#0D1322] text-slate-400 border-white/[0.08] hover:text-slate-200'
+              }`}
+            >
+              <span>⭐</span>
+              <span>{t.chefPicksOnly || "Chef's Picks"}</span>
+            </button>
+
+            {/* Quick Drink Pairings */}
+            <button
+              type="button"
+              onClick={() => setFilters((prev) => ({ ...prev, highlight: prev.highlight === 'has_pairing' ? 'all' : 'has_pairing' }))}
+              className={`whitespace-nowrap px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-semibold flex items-center space-x-1 border transition-all cursor-pointer flex-shrink-0 ${
+                filters.highlight === 'has_pairing'
+                  ? 'bg-purple-500/20 text-purple-300 border-purple-400 font-bold'
+                  : 'bg-[#0D1322] text-slate-400 border-white/[0.08] hover:text-slate-200'
+              }`}
+            >
+              <span>🍷</span>
+              <span>{t.pairingsOnly || 'Pairings'}</span>
+            </button>
           </div>
         </div>
       </div>
@@ -697,9 +919,20 @@ export const DinerMenu: React.FC = () => {
       {/* ═══════════════════════════════════════════════════════════ */}
       <main className="max-w-xl mx-auto px-3 sm:px-4 mt-4 sm:mt-6 space-y-6 sm:space-y-8 pb-32">
         {filteredDishes.length === 0 ? (
-          <div className="text-center py-12 sm:py-16 bg-[#0D1322] rounded-3xl p-6 border border-white/[0.08] shadow-lg">
-            <p className="font-serif font-bold text-slate-100 text-base">No dishes found</p>
-            <p className="text-xs text-slate-400 mt-1">Try adjusting your search keywords or filter category.</p>
+          <div className="text-center py-12 sm:py-16 bg-[#0D1322] rounded-3xl p-6 border border-white/[0.08] shadow-lg space-y-3">
+            <p className="font-serif font-bold text-slate-100 text-base">No dishes match your taste filters</p>
+            <p className="text-xs text-slate-400 max-w-xs mx-auto">Try resetting dietary or spice heat preferences to see all culinary selections.</p>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedCategory('all');
+                setSearchQuery('');
+                setFilters({ dietary: 'all', spice: 'all', sort: 'default', highlight: 'all' });
+              }}
+              className="px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs shadow-md transition-all active:scale-95 cursor-pointer inline-flex items-center space-x-1.5"
+            >
+              <span>Reset All Filters</span>
+            </button>
           </div>
         ) : (
           dishesByCategory.map(({ category, items }) => {
@@ -714,178 +947,230 @@ export const DinerMenu: React.FC = () => {
                   <div className="relative flex justify-center">
                     <span className="bg-[#090D16] px-3.5 sm:px-4 py-0.5 sm:py-1 rounded-full border border-white/[0.08] shadow-sm">
                       <h3 className="font-serif text-xs sm:text-sm font-bold text-amber-300 tracking-wide">
-                        {getCategoryTitle(category.name || 'Menu Selection', selectedLanguage)}
+                        {translateCategory(category.name || 'Menu Selection', selectedLanguage)}
                       </h3>
                     </span>
                   </div>
                 </div>
 
-                {/* Dish Cards */}
-                <div className="space-y-2.5 sm:space-y-3">
-                  {(items || []).filter(Boolean).map((dish) => {
-                    const flags = Array.isArray(dish.dietary_flags) ? dish.dietary_flags : [];
-                    const isVeg = flags.some((f) => {
-                      const lf = String(f).toLowerCase();
-                      return lf === 'veg' || lf === 'vegetarian' || lf === 'vegan' || lf === 'jain';
-                    });
+                {/* ═══════════════════════════════════════════════════════════ */}
+                {/* DISH CARDS: MAGAZINE STORY MODE (#11) vs CLASSIC LIST      */}
+                {/* ═══════════════════════════════════════════════════════════ */}
+                {menuViewMode === 'magazine' ? (
+                  /* ─── MAGAZINE STORY VIEW (#11 VISUAL MENU WITH DISH STORIES) ─── */
+                  <div className="space-y-4 sm:space-y-5">
+                    {(items || []).filter(Boolean).map((dish) => {
+                      const flags = Array.isArray(dish.dietary_flags) ? dish.dietary_flags : [];
+                      const isVeg = flags.some((f) => {
+                        const lf = String(f).toLowerCase();
+                        return lf === 'veg' || lf === 'vegetarian' || lf === 'vegan' || lf === 'jain';
+                      });
 
-                    // Extract all photos attached to this dish
-                    const dishPhotos: { src: string; label?: string }[] = [];
-                    if (dish.gallery_images && dish.gallery_images.length > 0) {
-                      dish.gallery_images.forEach((g) => dishPhotos.push({ src: g.src, label: g.label || g.alt }));
-                    } else if (dish.image_url) {
-                      dishPhotos.push({ src: dish.image_url, label: 'Main' });
-                    }
-                    if (dish.image_url && !dishPhotos.some((p) => p.src === dish.image_url)) {
-                      dishPhotos.unshift({ src: dish.image_url, label: 'Main' });
-                    }
+                      const dishPhotos: { src: string; label?: string }[] = [];
+                      if (dish.gallery_images && dish.gallery_images.length > 0) {
+                        dish.gallery_images.forEach((g) => dishPhotos.push({ src: g.src, label: g.label || g.alt }));
+                      } else if (dish.image_url) {
+                        dishPhotos.push({ src: dish.image_url, label: 'Main' });
+                      }
+                      if (dish.image_url && !dishPhotos.some((p) => p.src === dish.image_url)) {
+                        dishPhotos.unshift({ src: dish.image_url, label: 'Main' });
+                      }
 
-                    const hasSecondary = dishPhotos.length > 1;
+                      const tDish = getTranslatedDish(dish, selectedLanguage);
 
-                    return (
-                      <div
-                        key={dish.id}
-                        onClick={() => setActiveDish(dish)}
-                        className={`bg-[#0D1322] rounded-2xl p-3 sm:p-3.5 border border-white/[0.08] flex items-start space-x-3 cursor-pointer transition-all hover:border-amber-500/40 active:scale-[0.99] ${
-                          !dish.is_available ? 'opacity-50' : ''
-                        }`}
-                      >
-                        {/* Photo Gallery Container: Dual-view if secondary photo exists */}
-                        {hasSecondary ? (
-                          <div className="flex items-center space-x-1.5 flex-shrink-0">
-                            {/* Primary Photo */}
-                            <div
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setLightboxDish(dish);
-                                setLightboxIndex(0);
-                              }}
-                              className="w-16 h-20 sm:w-20 sm:h-24 rounded-xl bg-[#090D16] overflow-hidden relative group/img cursor-zoom-in border border-amber-500/40 hover:border-amber-400 transition-all shadow-sm"
-                              title="Primary Photo - Click to zoom"
-                            >
-                              <img
-                                src={dishPhotos[0].src}
-                                alt={`${dish.name} - View 1`}
-                                className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
-                              />
-                              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
-                                <Maximize2 className="w-3.5 h-3.5 text-white drop-shadow" />
-                              </div>
-                              <div className="absolute top-1 left-1 px-1 py-0.2 bg-amber-500 rounded text-[7px] font-bold text-slate-950 shadow-sm">
-                                1
-                              </div>
-                            </div>
-
-                            {/* Secondary Photo (Visible next to primary photo!) */}
-                            <div
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setLightboxDish(dish);
-                                setLightboxIndex(1);
-                              }}
-                              className="w-16 h-20 sm:w-20 sm:h-24 rounded-xl bg-[#090D16] overflow-hidden relative group/img cursor-zoom-in border border-white/[0.1] hover:border-amber-400 transition-all shadow-sm"
-                              title="Second Photo - Click to zoom"
-                            >
-                              <img
-                                src={dishPhotos[1].src}
-                                alt={`${dish.name} - View 2`}
-                                className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
-                              />
-                              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
-                                <Maximize2 className="w-3.5 h-3.5 text-white drop-shadow" />
-                              </div>
-                              <div className="absolute top-1 left-1 px-1 py-0.2 bg-black/70 rounded text-[7px] font-bold text-amber-300 border border-amber-500/30">
-                                2
-                              </div>
-                              {dishPhotos.length > 2 && (
-                                <div className="absolute bottom-1 right-1 px-1.5 py-0.2 bg-black/85 rounded text-[8px] font-mono text-amber-300 font-bold border border-amber-400/40 shadow-sm">
-                                  +{dishPhotos.length - 2}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        ) : (
-                          /* Single Photo Container */
+                      return (
+                        <article
+                          key={dish.id}
+                          onClick={() => setActiveDish(tDish)}
+                          className={`bg-[#0D1322] rounded-3xl overflow-hidden border border-white/[0.08] hover:border-amber-500/40 transition-all shadow-xl cursor-pointer group ${
+                            !dish.is_available ? 'opacity-50' : ''
+                          }`}
+                        >
+                          {/* Top Visual Photography Hero with Ambient Badges */}
                           <div
                             onClick={(e) => {
                               e.stopPropagation();
-                              setLightboxDish(dish);
+                              setLightboxDish(tDish);
                               setLightboxIndex(0);
                             }}
-                            className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl flex-shrink-0 bg-[#090D16] overflow-hidden relative group/img cursor-zoom-in border border-white/[0.06] hover:border-amber-400/60 transition-all"
+                            className="relative w-full h-52 sm:h-64 bg-[#090D16] overflow-hidden group/img cursor-zoom-in"
                             title="Click to view & zoom high-resolution photo"
                           >
                             <img
-                              src={dish.image_url || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400'}
-                              alt={dish.name || 'Dish'}
-                              className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                              src={dishPhotos[0]?.src || dish.image_url || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800'}
+                              alt={tDish.name}
+                              className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-500"
                             />
-                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
-                              <Maximize2 className="w-4 h-4 text-white drop-shadow" />
+                            {/* Ambient Top Gradient */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#0D1322] via-transparent to-black/60" />
+
+                            {/* Floating Badges */}
+                            <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
+                              <div className="flex items-center space-x-1.5">
+                                {/* Veg / Non-Veg Indicator */}
+                                <span
+                                  className={`w-4 h-4 rounded-xs border flex items-center justify-center bg-black/60 backdrop-blur-sm ${
+                                    isVeg ? 'border-emerald-500' : 'border-red-500'
+                                  }`}
+                                >
+                                  <span className={`w-2 h-2 rounded-full ${isVeg ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                                </span>
+
+                                {dish.is_signature && (
+                                  <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-500 text-slate-950 uppercase tracking-wider shadow-md">
+                                    {t.signature || 'Signature'}
+                                  </span>
+                                )}
+
+                                {dish.is_bestseller && (
+                                  <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-400/90 text-slate-950 flex items-center space-x-0.5 shadow-md">
+                                    <Star className="w-2.5 h-2.5 fill-slate-950" />
+                                    <span>{t.bestseller || 'Bestseller'}</span>
+                                  </span>
+                                )}
+
+                                {dish.is_chef_recommended && (
+                                  <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-cyan-950/80 text-cyan-300 border border-cyan-400/40 shadow-md">
+                                    {t.chefSpecial || "Chef's Pick"}
+                                  </span>
+                                )}
+                              </div>
+
+                              {/* Spice & Serving Badge */}
+                              <div className="flex items-center space-x-1.5">
+                                {(dish.spice_level || 0) > 0 && (
+                                  <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-black/80 text-amber-300 border border-amber-500/30 flex items-center space-x-0.5 backdrop-blur-sm">
+                                    <Flame className="w-3 h-3 fill-amber-400" />
+                                    <span>{t.spiceHeat || 'Heat'} {dish.spice_level}/5</span>
+                                  </span>
+                                )}
+
+                                {dishPhotos.length > 1 && (
+                                  <span className="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-black/80 text-amber-300 border border-amber-400/30 backdrop-blur-sm">
+                                    📸 {dishPhotos.length} Views
+                                  </span>
+                                )}
+                              </div>
                             </div>
+
+                            {/* Zoom prompt */}
+                            <div className="absolute bottom-3 right-3 opacity-0 group-hover/img:opacity-100 transition-opacity bg-black/75 backdrop-blur-sm text-white px-2.5 py-1 rounded-full text-[10px] font-bold flex items-center space-x-1 border border-white/20">
+                              <Maximize2 className="w-3 h-3 text-amber-300" />
+                              <span>Zoom HD</span>
+                            </div>
+
                             {!dish.is_available && (
-                              <div className="absolute inset-0 bg-black/70 flex items-center justify-center p-1 text-center">
-                                <span className="text-[8px] sm:text-[9px] uppercase font-bold text-white tracking-widest px-1.5 py-0.5 rounded bg-red-600/90">
+                              <div className="absolute inset-0 bg-black/80 backdrop-blur-xs flex items-center justify-center">
+                                <span className="text-xs uppercase font-bold text-white tracking-widest px-3 py-1.5 bg-red-600 rounded-lg shadow-md">
                                   Sold Out
                                 </span>
                               </div>
                             )}
-                            {dish.is_bestseller && (
-                              <div className="absolute top-1 left-1 px-1.5 py-0.5 bg-amber-500 rounded text-[8px] font-bold text-slate-950 flex items-center space-x-0.5 shadow-sm">
-                                <Star className="w-2.5 h-2.5 fill-slate-950" />
-                                <span>Best</span>
-                              </div>
-                            )}
-                          </div>
-                        )}
-
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center space-x-1.5 mb-0.5 sm:mb-1">
-                            <span
-                              className={`w-3 h-3 rounded-xs border flex items-center justify-center ${
-                                isVeg ? 'border-emerald-500' : 'border-red-500'
-                              }`}
-                            >
-                              <span className={`w-1.5 h-1.5 rounded-full ${isVeg ? 'bg-emerald-500' : 'bg-red-500'}`} />
-                            </span>
-                            {(dish.spice_level || 0) > 0 && (
-                              <div className="flex items-center text-amber-400 pl-1 border-l border-white/[0.08]">
-                                <Flame className="w-3 h-3 fill-amber-400" />
-                                <span className="text-[10px] font-bold ml-0.5">{dish.spice_level}</span>
-                              </div>
-                            )}
-                            {dish.is_chef_recommended && (
-                              <span className="text-[8px] sm:text-[9px] font-bold text-cyan-300 bg-cyan-500/10 px-1.5 py-0.2 rounded border border-cyan-500/30">
-                                Chef's Pick
-                              </span>
-                            )}
                           </div>
 
-                          <h3 className="font-serif font-bold text-xs sm:text-sm text-slate-100 leading-tight truncate">
-                            {dish.name}
-                          </h3>
-                          <p className="text-[11px] sm:text-xs text-slate-400 line-clamp-2 mt-0.5 leading-snug">
-                            {dish.short_description || dish.full_description || ''}
-                          </p>
+                          {/* Magazine Card Content */}
+                          <div className="p-4 sm:p-5 space-y-3 -mt-3 relative z-10">
+                            {/* Dish Header: Title & Price */}
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="min-w-0">
+                                <h3 className="font-serif font-bold text-base sm:text-lg text-white leading-tight">
+                                  {tDish.name}
+                                </h3>
+                                {dish.serving_size && (
+                                  <span className="text-[10px] text-slate-400 font-medium mt-0.5 inline-block">
+                                    {t.serves || 'Portion'}: {dish.serving_size}
+                                  </span>
+                                )}
+                              </div>
+                              <div className="text-right flex-shrink-0">
+                                <span className="font-serif font-bold text-base sm:text-lg text-amber-400">
+                                  ₹{typeof dish.price === 'number' ? dish.price.toFixed(2) : (Number(dish.price) || 0).toFixed(2)}
+                                </span>
+                              </div>
+                            </div>
 
-                          <div className="flex items-center justify-between mt-2 pt-1.5 border-t border-white/[0.06]">
-                            <span className="font-bold text-xs sm:text-sm text-amber-400">
-                              ₹{typeof dish.price === 'number' ? dish.price.toFixed(2) : (Number(dish.price) || 0).toFixed(2)}
-                            </span>
+                            {/* Description */}
+                            <p className="text-xs text-slate-300 leading-relaxed">
+                              {tDish.short_description || tDish.full_description}
+                            </p>
 
-                            <div className="flex items-center space-x-1.5 sm:space-x-2">
-                              {/* Ask Chef quick button */}
+                            {/* ── CULINARY STORYTELLING (#11 DISH STORIES) ── */}
+                            {tDish.chef_story && (
+                              <div className="bg-gradient-to-br from-amber-500/10 via-[#131A2D] to-[#0A0E17] border-l-2 border-amber-500/80 p-3 rounded-r-xl space-y-1">
+                                <div className="flex items-center space-x-1 text-amber-400 text-[10px] font-serif font-bold uppercase tracking-wider">
+                                  <span>📜</span>
+                                  <span>{t.chefStoryTitle || 'Heritage Lore & Origin'}</span>
+                                </div>
+                                <p className="text-xs text-amber-100/90 leading-relaxed italic font-serif">
+                                  "{tDish.chef_story}"
+                                </p>
+                              </div>
+                            )}
+
+                            {/* Master Chef Tasting Note */}
+                            {tDish.chef_notes && (
+                              <div className="bg-[#0A101D] border border-amber-500/20 p-2.5 rounded-xl space-y-0.5 text-xs">
+                                <span className="font-bold text-amber-300 text-[11px] flex items-center space-x-1">
+                                  <span>🧑‍🍳</span>
+                                  <span>{t.tastingNotesTitle || "Chef's Tasting Note:"}</span>
+                                </span>
+                                <p className="text-slate-300 text-[11px] leading-relaxed">
+                                  {tDish.chef_notes}
+                                </p>
+                              </div>
+                            )}
+
+                            {/* Founder's Table Pitch */}
+                            {tDish.owner_pitch && (
+                              <div className="bg-[#0A101D] border border-orange-500/20 p-2.5 rounded-xl space-y-0.5 text-xs">
+                                <span className="font-bold text-orange-300 text-[11px] flex items-center space-x-1">
+                                  <span>🎙️</span>
+                                  <span>Founder's Pitch:</span>
+                                </span>
+                                <p className="text-slate-300 text-[11px] leading-relaxed">
+                                  {tDish.owner_pitch}
+                                </p>
+                              </div>
+                            )}
+
+                            {/* Beverage Pairing & Serving Temp Badges */}
+                            {(dish.pairing_drink_name || dish.temperature_style) && (
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                                {dish.pairing_drink_name && (
+                                  <div className="bg-purple-950/40 border border-purple-500/30 p-2 rounded-xl text-xs flex items-center space-x-2">
+                                    <span className="text-base">🍷</span>
+                                    <div className="min-w-0">
+                                      <p className="text-[10px] text-purple-300 font-bold uppercase tracking-wider">{t.sommelierPairingTitle || 'Sommelier Pairing'}</p>
+                                      <p className="font-semibold text-white text-xs truncate">{dish.pairing_drink_name}</p>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {dish.temperature_style && (
+                                  <div className="bg-blue-950/40 border border-blue-500/30 p-2 rounded-xl text-xs flex items-center space-x-2">
+                                    <span className="text-base">🌡️</span>
+                                    <div className="min-w-0">
+                                      <p className="text-[10px] text-blue-300 font-bold uppercase tracking-wider">{t.servingTempTitle || 'Serving Style'}</p>
+                                      <p className="font-semibold text-white text-xs truncate">{dish.temperature_style}</p>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+
+                            {/* Action Row */}
+                            <div className="flex items-center justify-between pt-2 border-t border-white/[0.08] gap-2">
+                              {/* Ask Chef AI button */}
                               <button
                                 type="button"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  handleOpenAi(dish, `Tell me about ${dish.name} — chef's secret notes, spice level, and pairing.`);
+                                  handleOpenAi(tDish, `Tell me more about ${tDish.name} — origin lore, flavor profile, and beverage pairing.`);
                                 }}
-                                className="px-2 sm:px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center space-x-1 text-[10px] sm:text-[11px] font-bold shadow-sm transition-all active:scale-95 cursor-pointer"
-                                title={`Ask Chef about ${dish.name}`}
+                                className="px-3 py-2 rounded-xl bg-[#090D16] hover:bg-white/[0.08] text-amber-300 border border-amber-500/30 flex items-center space-x-1.5 text-xs font-bold transition-all active:scale-95 cursor-pointer"
                               >
-                                <span className="text-xs">🧑‍🍳</span>
-                                <span className="hidden xs:inline">Ask Chef</span>
+                                <span>🧑‍🍳</span>
+                                <span>{t.aiSommelier || 'Ask AI Sommelier'}</span>
                               </button>
 
                               {dish.is_available ? (
@@ -893,22 +1178,245 @@ export const DinerMenu: React.FC = () => {
                                   type="button"
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    setActiveDish(dish);
+                                    setActiveDish(tDish);
                                   }}
-                                  className="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-bold text-[11px] sm:text-xs transition-all shadow-sm"
+                                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:brightness-110 active:scale-95 text-slate-950 font-bold text-xs shadow-md transition-all flex items-center space-x-1 cursor-pointer"
                                 >
-                                  + Add
+                                  <span>+ {t.add}</span>
                                 </button>
                               ) : (
-                                <span className="text-[10px] text-slate-500 font-semibold">Sold Out</span>
+                                <span className="text-xs text-slate-500 font-semibold">Sold Out</span>
                               )}
                             </div>
                           </div>
+                        </article>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  /* ─── CLASSIC COMPACT VIEW WITH EXPANDABLE STORIES ─── */
+                  <div className="space-y-2.5 sm:space-y-3">
+                    {(items || []).filter(Boolean).map((dish) => {
+                      const flags = Array.isArray(dish.dietary_flags) ? dish.dietary_flags : [];
+                      const isVeg = flags.some((f) => {
+                        const lf = String(f).toLowerCase();
+                        return lf === 'veg' || lf === 'vegetarian' || lf === 'vegan' || lf === 'jain';
+                      });
+
+                      const dishPhotos: { src: string; label?: string }[] = [];
+                      if (dish.gallery_images && dish.gallery_images.length > 0) {
+                        dish.gallery_images.forEach((g) => dishPhotos.push({ src: g.src, label: g.label || g.alt }));
+                      } else if (dish.image_url) {
+                        dishPhotos.push({ src: dish.image_url, label: 'Main' });
+                      }
+                      if (dish.image_url && !dishPhotos.some((p) => p.src === dish.image_url)) {
+                        dishPhotos.unshift({ src: dish.image_url, label: 'Main' });
+                      }
+
+                      const hasSecondary = dishPhotos.length > 1;
+                      const isStoryExpanded = expandedStories[dish.id];
+
+                      const tDish = getTranslatedDish(dish, selectedLanguage);
+
+                      return (
+                        <div
+                          key={dish.id}
+                          onClick={() => setActiveDish(tDish)}
+                          className={`bg-[#0D1322] rounded-2xl p-3 sm:p-3.5 border border-white/[0.08] cursor-pointer transition-all hover:border-amber-500/40 active:scale-[0.99] space-y-2.5 ${
+                            !dish.is_available ? 'opacity-50' : ''
+                          }`}
+                        >
+                          <div className="flex items-start space-x-3">
+                            {/* Photo Gallery Container */}
+                            {hasSecondary ? (
+                              <div className="flex items-center space-x-1.5 flex-shrink-0">
+                                <div
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setLightboxDish(tDish);
+                                    setLightboxIndex(0);
+                                  }}
+                                  className="w-16 h-20 sm:w-20 sm:h-24 rounded-xl bg-[#090D16] overflow-hidden relative group/img cursor-zoom-in border border-amber-500/40 hover:border-amber-400 transition-all shadow-sm"
+                                  title="Primary Photo - Click to zoom"
+                                >
+                                  <img
+                                    src={dishPhotos[0].src}
+                                    alt={`${tDish.name} - View 1`}
+                                    className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                                  />
+                                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                                    <Maximize2 className="w-3.5 h-3.5 text-white drop-shadow" />
+                                  </div>
+                                  <div className="absolute top-1 left-1 px-1 py-0.2 bg-amber-500 rounded text-[7px] font-bold text-slate-950 shadow-sm">
+                                    1
+                                  </div>
+                                </div>
+
+                                <div
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setLightboxDish(tDish);
+                                    setLightboxIndex(1);
+                                  }}
+                                  className="w-16 h-20 sm:w-20 sm:h-24 rounded-xl bg-[#090D16] overflow-hidden relative group/img cursor-zoom-in border border-white/[0.1] hover:border-amber-400 transition-all shadow-sm"
+                                  title="Second Photo - Click to zoom"
+                                >
+                                  <img
+                                    src={dishPhotos[1].src}
+                                    alt={`${tDish.name} - View 2`}
+                                    className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                                  />
+                                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                                    <Maximize2 className="w-3.5 h-3.5 text-white drop-shadow" />
+                                  </div>
+                                  <div className="absolute top-1 left-1 px-1 py-0.2 bg-black/70 rounded text-[7px] font-bold text-amber-300 border border-amber-500/30">
+                                    2
+                                  </div>
+                                  {dishPhotos.length > 2 && (
+                                    <div className="absolute bottom-1 right-1 px-1.5 py-0.2 bg-black/85 rounded text-[8px] font-mono text-amber-300 font-bold border border-amber-400/40 shadow-sm">
+                                      +{dishPhotos.length - 2}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            ) : (
+                              <div
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setLightboxDish(tDish);
+                                  setLightboxIndex(0);
+                                }}
+                                className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl flex-shrink-0 bg-[#090D16] overflow-hidden relative group/img cursor-zoom-in border border-white/[0.06] hover:border-amber-400/60 transition-all"
+                                title="Click to view & zoom photo"
+                              >
+                                <img
+                                  src={dish.image_url || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400'}
+                                  alt={tDish.name || 'Dish'}
+                                  className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                                />
+                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                                  <Maximize2 className="w-4 h-4 text-white drop-shadow" />
+                                </div>
+                                {!dish.is_available && (
+                                  <div className="absolute inset-0 bg-black/70 flex items-center justify-center p-1 text-center">
+                                    <span className="text-[8px] sm:text-[9px] uppercase font-bold text-white tracking-widest px-1.5 py-0.5 rounded bg-red-600/90">
+                                      Sold Out
+                                    </span>
+                                  </div>
+                                )}
+                                {dish.is_bestseller && (
+                                  <div className="absolute top-1 left-1 px-1.5 py-0.5 bg-amber-500 rounded text-[8px] font-bold text-slate-950 flex items-center space-x-0.5 shadow-sm">
+                                    <Star className="w-2.5 h-2.5 fill-slate-950" />
+                                    <span>{t.bestseller || 'Best'}</span>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center space-x-1.5 mb-0.5 sm:mb-1 flex-wrap gap-y-1">
+                                <span
+                                  className={`w-3 h-3 rounded-xs border flex items-center justify-center ${
+                                    isVeg ? 'border-emerald-500' : 'border-red-500'
+                                  }`}
+                                >
+                                  <span className={`w-1.5 h-1.5 rounded-full ${isVeg ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                                </span>
+                                {(dish.spice_level || 0) > 0 && (
+                                  <div className="flex items-center text-amber-400 pl-1 border-l border-white/[0.08]">
+                                    <Flame className="w-3 h-3 fill-amber-400" />
+                                    <span className="text-[10px] font-bold ml-0.5">{dish.spice_level}</span>
+                                  </div>
+                                )}
+                                {dish.is_chef_recommended && (
+                                  <span className="text-[8px] sm:text-[9px] font-bold text-cyan-300 bg-cyan-500/10 px-1.5 py-0.2 rounded border border-cyan-500/30">
+                                    {t.chefSpecial || "Chef's Pick"}
+                                  </span>
+                                )}
+                              </div>
+
+                              <h3 className="font-serif font-bold text-xs sm:text-sm text-slate-100 leading-tight truncate">
+                                {tDish.name}
+                              </h3>
+                              <p className="text-[11px] sm:text-xs text-slate-400 line-clamp-2 mt-0.5 leading-snug">
+                                {tDish.short_description || tDish.full_description || ''}
+                              </p>
+
+                              <div className="flex items-center justify-between mt-2 pt-1.5 border-t border-white/[0.06]">
+                                <span className="font-bold text-xs sm:text-sm text-amber-400">
+                                  ₹{typeof dish.price === 'number' ? dish.price.toFixed(2) : (Number(dish.price) || 0).toFixed(2)}
+                                </span>
+
+                                <div className="flex items-center space-x-1.5 sm:space-x-2">
+                                  {/* Expand Story Button if dish has lore */}
+                                  {(dish.chef_story || dish.pairing_drink_name) && (
+                                    <button
+                                      type="button"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        toggleStoryExpand(dish.id);
+                                      }}
+                                      className="px-2 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] sm:text-[11px] font-bold transition-all"
+                                      title="Toggle Culinary Lore &amp; Pairing"
+                                    >
+                                      <span>{isStoryExpanded ? 'Hide Story' : `📖 ${t.chefStoryTitle || 'Story'}`}</span>
+                                    </button>
+                                  )}
+
+                                  {/* Ask Chef quick button */}
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleOpenAi(tDish, `Tell me about ${tDish.name} — chef's secret notes, spice level, and pairing.`);
+                                    }}
+                                    className="px-2 sm:px-2.5 py-1 rounded-lg bg-[#090D16] hover:bg-white/[0.08] text-amber-300 border border-white/[0.1] flex items-center space-x-1 text-[10px] sm:text-[11px] font-bold shadow-sm transition-all active:scale-95 cursor-pointer"
+                                    title={`Ask Chef about ${tDish.name}`}
+                                  >
+                                    <span className="text-xs">🧑‍🍳</span>
+                                    <span className="hidden sm:inline">Ask</span>
+                                  </button>
+
+                                  {dish.is_available ? (
+                                    <button
+                                      type="button"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setActiveDish(tDish);
+                                      }}
+                                      className="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-bold text-[11px] sm:text-xs transition-all shadow-sm"
+                                    >
+                                      + {t.add}
+                                    </button>
+                                  ) : (
+                                    <span className="text-[10px] text-slate-500 font-semibold">Sold Out</span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Inline Expanded Culinary Lore & Pairing */}
+                          {isStoryExpanded && (
+                            <div className="pt-2 border-t border-white/[0.08] space-y-2 animate-fadeIn text-xs">
+                              {tDish.chef_story && (
+                                <div className="bg-[#090D16] p-2.5 rounded-xl border border-amber-500/20 italic text-amber-100/90 font-serif">
+                                  "{tDish.chef_story}"
+                                </div>
+                              )}
+                              {dish.pairing_drink_name && (
+                                <div className="bg-purple-950/30 p-2 rounded-xl border border-purple-500/30 flex items-center justify-between text-[11px]">
+                                  <span className="text-purple-300 font-bold">🍷 Pairing: {dish.pairing_drink_name}</span>
+                                  {dish.pairing_reason && <span className="text-slate-400">{dish.pairing_reason}</span>}
+                                </div>
+                              )}
+                            </div>
+                          )}
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                      );
+                    })}
+                  </div>
+                )}
               </section>
             );
           })
@@ -1125,11 +1633,13 @@ export const DinerMenu: React.FC = () => {
         />
       )}
 
-      {/* Switch Restaurant or Scan QR Modal */}
-      <SwitchRestaurantModal
-        isOpen={isSwitchModalOpen}
-        onClose={() => setIsSwitchModalOpen(false)}
-        currentSlug={restaurant?.slug || restaurantSlug || 'saffron-house'}
+      {/* Multi-Dimensional Dietary, Allergen & Spice Filter Modal (#12) */}
+      <MenuFilterModal
+        isOpen={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
+        filters={filters}
+        onFiltersChange={setFilters}
+        totalFilteredCount={filteredDishes.length}
       />
 
       {/* Fullscreen HD Image Lightbox & Zoom Viewer */}

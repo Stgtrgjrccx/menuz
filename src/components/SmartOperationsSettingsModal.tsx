@@ -9,7 +9,8 @@ import {
   Clock,
   Tag,
   Gift,
-  Sparkles
+  Sparkles,
+  ArrowLeft
 } from 'lucide-react';
 import { Restaurant } from '../types';
 
@@ -116,11 +117,19 @@ export const SmartOperationsSettingsModal: React.FC<SmartOperationsSettingsModal
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#090D16]/85 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-[#0D1322] border border-white/[0.12] w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] text-slate-100">
+    <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl overflow-y-auto pt-[max(env(safe-area-inset-top,20px),24px)] pb-12 px-3 sm:px-4 flex justify-center items-start overscroll-contain">
+      <div className="bg-[#0D1322] border border-white/[0.12] w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl flex flex-col my-2 sm:my-6 text-slate-100">
         {/* Header */}
         <div className="p-5 border-b border-white/[0.08] flex items-center justify-between bg-[#0B101D]">
           <div className="flex items-center space-x-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-slate-200 hover:text-white font-bold text-xs border border-white/[0.1] transition-all cursor-pointer mr-1"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Back</span>
+            </button>
             <div className="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-sm">
               <Sliders className="w-5 h-5" />
             </div>

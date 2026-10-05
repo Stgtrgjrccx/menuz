@@ -47,6 +47,40 @@
     background-color: #090D16 !important;
   }
 
+  /* Bulletproof modal background scroll lock across iOS, Safari, Chrome, and desktop */
+  html.modal-locked,
+  body.modal-locked {
+    overflow: hidden !important;
+    overscroll-behavior: none !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    touch-action: none !important;
+    padding-top: 0 !important;
+  }
+
+  body.modal-locked #root {
+    overflow: hidden !important;
+    height: 100vh !important;
+    pointer-events: auto !important;
+    padding-top: 0 !important;
+  }
+
+  /* Completely hide fixed navbar when any modal popup is open */
+  body.modal-locked header,
+  body.modal-locked nav,
+  body.modal-locked .sticky {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    z-index: -1 !important;
+  }
+
+  .modal-overlay-wrapper {
+    pointer-events: auto !important;
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
   /* Force high-contrast visible text inside all inputs and textareas on all browsers and iOS */
   input, textarea, select {
     color: #FFFFFF !important;

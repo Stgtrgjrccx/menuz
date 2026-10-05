@@ -397,7 +397,6 @@ if (typeof window !== 'undefined' && window.localStorage) {
 const getInitialPersistedTables = (): RestaurantTable[] => {
   if (typeof window === 'undefined' || !window.localStorage) return SEED_TABLES;
   const map = new Map<string, RestaurantTable>();
-  for (const t of SEED_TABLES) map.set(t.id, t);
   try {
     const raw = localStorage.getItem(DEDICATED_TABLES_KEY);
     if (raw) {
@@ -407,16 +406,9 @@ const getInitialPersistedTables = (): RestaurantTable[] => {
       }
     }
   } catch (e) {}
-  for (const key of LEGACY_STORAGE_KEYS) {
-    try {
-      const raw = localStorage.getItem(key);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed?.state?.tables)) {
-          for (const t of parsed.state.tables) if (t?.id && !map.has(t.id)) map.set(t.id, t);
-        }
-      }
-    } catch (e) {}
+  // Ensure SEED_TABLES take precedence so demo restaurants immediately have their distinct layouts
+  for (const t of SEED_TABLES) {
+    map.set(t.id, { ...(map.get(t.id) || {}), ...t });
   }
   return Array.from(map.values());
 };
@@ -749,9 +741,24 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       },
 
       updateMenuItem: (id, updates) => {
-        set((state) => ({
-          menuItems: state.menuItems.map((item) => (item.id === id ? { ...item, ...updates } : item))
-        }));
+        set((state) => {
+          const exists = state.menuItems.some((item) => item.id === id);
+          if (exists) {
+            return {
+              menuItems: state.menuItems.map((item) => (item.id === id ? { ...item, ...updates } : item))
+            };
+          }
+          const fallbackDishes = generateCuisineMenu(
+            state.restaurant.id,
+            state.restaurant.slug || 'venue',
+            state.restaurant.cuisine,
+            state.restaurant.name
+          ).dishes;
+          const merged = fallbackDishes.map((d) => (d.id === id ? { ...d, ...updates } : d));
+          return {
+            menuItems: [...state.menuItems, ...merged]
+          };
+        });
       },
 
       deleteMenuItem: (id) => {

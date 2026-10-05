@@ -24,19 +24,11 @@ export const NotFoundPage: React.FC = () => {
 
         <div className="grid grid-cols-1 gap-2.5 pt-2">
           <Link
-            to="/admin"
+            to="/"
             className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-black text-sm transition-all shadow-md"
           >
-            <ShieldCheck className="w-4 h-4 text-slate-950" />
-            <span>Open Master Admin HQ</span>
-          </Link>
-
-          <Link
-            to="/"
-            className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-[#090D16]/[0.06] hover:bg-white/[0.1] active:scale-95 text-white font-medium text-xs transition-all border border-white/[0.08]"
-          >
-            <Home className="w-4 h-4 text-amber-400" />
-            <span>Return to Explore Demos</span>
+            <Home className="w-4 h-4 text-slate-950" />
+            <span>Return to Explore Menuz</span>
           </Link>
 
           <Link

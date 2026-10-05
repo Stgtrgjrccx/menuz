@@ -2167,11 +2167,19 @@ export function findAuthenticPuneMenu(
   const normName = normalizeName(restaurantName || '');
   const normSlug = normalizeName(restaurantSlug || '');
 
+  if (!normName && !normSlug) return null;
+
   for (const blueprint of AUTHENTIC_PUNE_RESTAURANT_MENUS) {
     for (const kw of blueprint.matchKeywords) {
       const normKw = normalizeName(kw);
       if (normKw.length >= 3) {
-        if (normName.includes(normKw) || normKw.includes(normName) || normSlug.includes(normKw)) {
+        // Strict match: Restaurant name/slug contains the keyword, or exact equality
+        if (
+          normName === normKw ||
+          normSlug === normKw ||
+          (normName.length >= normKw.length && normName.includes(normKw)) ||
+          (normSlug.length >= normKw.length && normSlug.includes(normKw))
+        ) {
           return blueprint;
         }
       }

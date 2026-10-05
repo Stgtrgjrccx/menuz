@@ -21,7 +21,8 @@ import {
   MapPin,
   Phone,
   Mail,
-  DollarSign
+  DollarSign,
+  ArrowLeft
 } from 'lucide-react';
 
 interface TableManagementModalProps {
@@ -179,8 +180,8 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
-      <div className="bg-[#0D1322] border border-white/[0.08] rounded-3xl max-w-3xl w-full  overflow-hidden flex flex-col my-auto max-h-[92vh]">
+    <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl overflow-y-auto pt-[max(env(safe-area-inset-top,20px),24px)] pb-12 px-3 sm:px-5 flex justify-center items-start overscroll-contain">
+      <div className="bg-[#0D1322] border border-white/[0.08] rounded-3xl max-w-3xl w-full overflow-hidden flex flex-col my-2 sm:my-6 shadow-2xl">
         
         {/* Modal Header */}
         <div className="bg-gradient-to-r from-[#090D16] via-[#0D1322] to-[#090D16] p-5 text-white border-b border-white/[0.08] relative">
@@ -192,7 +193,15 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
           </button>
 
           <div className="flex items-center space-x-3">
-            <div className="w-11 h-11 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 font-serif font-bold text-xl shadow-inner">
+            <button
+              type="button"
+              onClick={onClose}
+              className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-slate-200 hover:text-white font-bold text-xs border border-white/[0.1] transition-all cursor-pointer mr-1"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Back</span>
+            </button>
+            <div className="w-11 h-11 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 font-serif font-bold text-xl shadow-inner flex items-center justify-center">
               🪑
             </div>
             <div>
@@ -215,8 +224,8 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
                   : 'text-slate-400 hover:text-white hover:bg-white/[0.08]'
               }`}
             >
-              <QrCode className="w-3.5 h-3.5" />
-              <span>Tables & QR Cards ({currentTables.length})</span>
+              <Layers className="w-3.5 h-3.5" />
+              <span>Active Floor Tables ({currentTables.length})</span>
             </button>
             <button
               onClick={() => setActiveTab('batch_add')}

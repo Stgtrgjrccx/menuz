@@ -45,21 +45,11 @@ export const KitchenKDS: React.FC = () => {
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5">
-          {/* Always-Visible Top Admin Page Button */}
-          <Link
-            to="/admin"
-            className="px-3.5 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 hover:border-amber-400/60 text-xs font-bold flex items-center space-x-1.5 transition-all shadow-sm active:scale-95"
-            title="Open Master Admin Control Hub"
-          >
-            <ShieldCheck className="w-4 h-4 text-amber-400" />
-            <span>Admin HQ</span>
-          </Link>
-
           <Link
             to={`/manage/${restaurant.slug || 'saffron-house'}`}
-            className="px-3 py-1.5 rounded-lg bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-semibold text-slate-300 hover:text-white transition-all"
+            className="px-3.5 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 hover:border-amber-400/60 text-xs font-bold flex items-center space-x-1.5 transition-all shadow-sm active:scale-95"
           >
-            Floor Ops
+            <span>Floor Ops Hub</span>
           </Link>
 
           <div className="flex items-center space-x-2 text-xs font-mono">

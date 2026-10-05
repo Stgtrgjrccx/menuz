@@ -23,6 +23,154 @@ import {
 import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantStore';
 import { isWorkingWithMenuz } from '../types';
 import { QrScannerModal } from '../components/QrScannerModal';
+import { PUNE_RESTAURANT_DIRECTORY, PuneRestaurantEntry } from '../data/puneRestaurantDirectory';
+import { AUTHENTIC_PUNE_RESTAURANT_MENUS, findAuthenticPuneMenu } from '../data/authenticPuneMenus';
+
+export interface PuneLandmarkItem {
+  name: string;
+  slug: string;
+  cuisine: string;
+  location: string;
+  rating: number;
+  avgCostForTwo: string;
+  imageUrl: string;
+  specialty: string;
+  signatureDishes: string[];
+  badge: string;
+  area: string;
+}
+
+export const PUNE_LANDMARKS: PuneLandmarkItem[] = [
+  {
+    name: 'Vaishali Restaurant',
+    slug: 'vaishali',
+    cuisine: 'Legendary South Indian & Street Chaat',
+    location: 'FC Road, Pune',
+    rating: 4.8,
+    avgCostForTwo: '₹400 for two',
+    imageUrl: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&auto=format&fit=crop',
+    specialty: 'Home of the world-famous SPDP (Sev Potato Dahi Puri), Mysore Masala Dosa, and boiling brass Filter Kaapi.',
+    signatureDishes: ['SPDP (Sev Potato Dahi Puri)', 'Mysore Masala Dosa', 'Filter Kaapi'],
+    badge: '🏛️ FC Road Heritage Legend',
+    area: 'fc-road'
+  },
+  {
+    name: 'Cafe Goodluck',
+    slug: 'cafe-goodluck',
+    cuisine: 'Authentic 1935 Irani Chai & Parsi Specialties',
+    location: 'Deccan Gymkhana, FC Road, Pune',
+    rating: 4.7,
+    avgCostForTwo: '₹550 for two',
+    imageUrl: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&auto=format&fit=crop',
+    specialty: 'Pune’s oldest Irani cafe: Soft crusted Bun Maska soaked in Irani Chai & sizzling Mutton Kheema Ghotala.',
+    signatureDishes: ['Bun Maska & Irani Chai', 'Mutton Kheema Ghotala', 'Caramel Custard'],
+    badge: '🏛️ Est. 1935 Landmark',
+    area: 'fc-road'
+  },
+  {
+    name: 'Kayani Bakery',
+    slug: 'kayani-bakery',
+    cuisine: 'Parsi Bakery & Heritage Confectionery',
+    location: 'East Street, Camp, Pune',
+    rating: 4.9,
+    avgCostForTwo: '₹350 for two',
+    imageUrl: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=600&auto=format&fit=crop',
+    specialty: 'The crown jewel of Camp: World-famous Shrewsbury Butter Biscuits baked fresh since 1955 & Parsi Mawa Cake.',
+    signatureDishes: ['Shrewsbury Biscuits', 'Parsi Mawa Cake', 'Cheese Straws'],
+    badge: '🏛️ World Heritage Baker',
+    area: 'camp'
+  },
+  {
+    name: 'German Bakery',
+    slug: 'german-bakery',
+    cuisine: 'European Cafe, Bakery & Continental',
+    location: 'North Main Road, Koregaon Park, Pune',
+    rating: 4.6,
+    avgCostForTwo: '₹850 for two',
+    imageUrl: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&auto=format&fit=crop',
+    specialty: 'The bohemian heart of Koregaon Park: German Bakery Kheema Pav, Warm Apple Strudel & Chilled Cold Coffee.',
+    signatureDishes: ['German Bakery Kheema Pav', 'Warm Apple Strudel', 'Frozen Cold Coffee'],
+    badge: '🏛️ KP Bohemian Icon',
+    area: 'kp'
+  },
+  {
+    name: 'Malaka Spice',
+    slug: 'malaka-spice',
+    cuisine: 'Pan-Asian, Thai, Vietnamese & Malaysian',
+    location: 'Lane 5, Koregaon Park, Pune',
+    rating: 4.7,
+    avgCostForTwo: '₹1,600 for two',
+    imageUrl: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?w=600&auto=format&fit=crop',
+    specialty: 'Award-winning farm-to-table Asian dining: Handcrafted crispy Top Hats, aromatic Thai Green Curry & flaky Roti Canai.',
+    signatureDishes: ['Top Hat Crispy Cups', 'Malaka Thai Green Curry', 'Roti Canai'],
+    badge: '🏛️ KP Fine Dining Pioneer',
+    area: 'kp'
+  },
+  {
+    name: 'Toit Brewpub',
+    slug: 'toit',
+    cuisine: 'Craft Microbrewery & Woodfired Sourdough Pizza',
+    location: 'Kalyani Nagar, Pune',
+    rating: 4.8,
+    avgCostForTwo: '₹1,800 for two',
+    imageUrl: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop',
+    specialty: 'Legendary microbrewery with freshly brewed Tint-In-Wit & Basmati Blonde paired with blistered Woodfired Pizzas.',
+    signatureDishes: ['Tint-In-Wit Belgian Ale', 'Smoked BBQ Pizza', 'Beer Battered Onion Rings'],
+    badge: '🏛️ Craft Beer Landmark',
+    area: 'kalyani'
+  },
+  {
+    name: 'Le Plaisir',
+    slug: 'le-plaisir',
+    cuisine: 'French Patisserie & European Bistro',
+    location: 'Prabhat Road, Deccan Gymkhana, Pune',
+    rating: 4.9,
+    avgCostForTwo: '₹1,200 for two',
+    imageUrl: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&auto=format&fit=crop',
+    specialty: 'Chef Siddharth Mahadik’s acclaimed bistro: Velvet Espresso Panna Cotta & decadent Three-Cheese Macaroni.',
+    signatureDishes: ['Espresso Panna Cotta', 'Smoked Chicken Ciabatta', 'Mac & Cheese'],
+    badge: '🏛️ European Bistro Masterpiece',
+    area: 'fc-road'
+  },
+  {
+    name: 'Sujata Mastani',
+    slug: 'sujata-mastani',
+    cuisine: 'Pune Heritage Ice Cream & Thick Shakes',
+    location: 'Sadashiv Peth & Pune-wide',
+    rating: 4.8,
+    avgCostForTwo: '₹250 for two',
+    imageUrl: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=600&auto=format&fit=crop',
+    specialty: 'Pune’s exclusive dessert creation: Thick, luscious milk shake topped with authentic fruit ice cream and roasted pistachios.',
+    signatureDishes: ['Signature Mango Mastani', 'Kesar Pista Mastani', 'Special Anjeer Mastani'],
+    badge: '🏛️ Pune’s Signature Dessert',
+    area: 'all'
+  },
+  {
+    name: 'Burger (East Street)',
+    slug: 'burger-east-street',
+    cuisine: 'American Retro Burgers & Steak Fries',
+    location: 'East Street, Camp, Pune',
+    rating: 4.6,
+    avgCostForTwo: '₹400 for two',
+    imageUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop',
+    specialty: 'Pune’s cult burger joint since the 1980s: Colossal King Burgers with melted cheese and seasoned crinkle cut fries.',
+    signatureDishes: ['Chicken King Burger', 'Beef Steak Burger', 'Crinkle Cut Fries'],
+    badge: '🏛️ Camp Cult Burger Icon',
+    area: 'camp'
+  }
+];
+
+export const PUNE_AREAS = [
+  { id: 'all', label: 'All Pune' },
+  { id: 'landmarks', label: '🏛️ Pune Landmarks' },
+  { id: 'fc-road', label: 'FC Road & Deccan' },
+  { id: 'kp', label: 'Koregaon Park' },
+  { id: 'kalyani', label: 'Kalyani Nagar' },
+  { id: 'camp', label: 'Camp & MG Road' },
+  { id: 'baner', label: 'Baner & Balewadi' },
+  { id: 'viman', label: 'Viman Nagar' },
+  { id: 'kothrud', label: 'Kothrud' }
+];
 
 export const CustomerHomePage: React.FC = () => {
   const navigate = useNavigate();
@@ -33,6 +181,11 @@ export const CustomerHomePage: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
   const [selectedScannerSlug, setSelectedScannerSlug] = useState<string | undefined>(undefined);
+
+  // Pune directory live discovery state
+  const [directorySearch, setDirectorySearch] = useState('');
+  const [directoryArea, setDirectoryArea] = useState('all');
+  const [directoryLimit, setDirectoryLimit] = useState(12);
 
   // Active working demo venues
   const venues = useMemo(() => {
@@ -64,7 +217,7 @@ export const CustomerHomePage: React.FC = () => {
     });
   }, [rawRestaurants, tables]);
 
-  // Filter options
+  // Filter options for top demos
   const filterOptions = [
     { id: 'all', label: 'All Demos' },
     { id: 'mughlai', label: 'Dum Pukht Indian' },
@@ -91,6 +244,45 @@ export const CustomerHomePage: React.FC = () => {
     });
   }, [venues, searchQuery, activeFilter]);
 
+  // Filtered Pune Directory & Landmarks
+  const filteredPuneRestaurants = useMemo(() => {
+    const q = directorySearch.toLowerCase().trim();
+
+    if (directoryArea === 'landmarks') {
+      return PUNE_LANDMARKS.filter((l) =>
+        !q ||
+        l.name.toLowerCase().includes(q) ||
+        l.cuisine.toLowerCase().includes(q) ||
+        l.location.toLowerCase().includes(q) ||
+        l.signatureDishes.some((d) => d.toLowerCase().includes(q))
+      );
+    }
+
+    return PUNE_RESTAURANT_DIRECTORY.filter((r) => {
+      const matchesSearch =
+        !q ||
+        r.name.toLowerCase().includes(q) ||
+        r.cuisine.toLowerCase().includes(q) ||
+        r.location.toLowerCase().includes(q) ||
+        r.address.toLowerCase().includes(q);
+
+      if (!matchesSearch) return false;
+
+      if (directoryArea === 'all') return true;
+
+      const loc = (r.location + ' ' + r.address).toLowerCase();
+      if (directoryArea === 'fc-road') return loc.includes('fc road') || loc.includes('deccan') || loc.includes('fergusson') || loc.includes('shivajinagar');
+      if (directoryArea === 'kp') return loc.includes('koregaon') || loc.includes('kp') || loc.includes('north main') || loc.includes('south main');
+      if (directoryArea === 'kalyani') return loc.includes('kalyani nagar') || loc.includes('kalyaninagar');
+      if (directoryArea === 'camp') return loc.includes('camp') || loc.includes('east street') || loc.includes('mg road') || loc.includes('cantonment');
+      if (directoryArea === 'baner') return loc.includes('baner') || loc.includes('balewadi') || loc.includes('pashan');
+      if (directoryArea === 'viman') return loc.includes('viman nagar') || loc.includes('vimannagar');
+      if (directoryArea === 'kothrud') return loc.includes('kothrud') || loc.includes('karve') || loc.includes('paud');
+
+      return true;
+    });
+  }, [directorySearch, directoryArea]);
+
   const handleLaunchTable = (venue: typeof venues[0]) => {
     navigate(`/r/${venue.slug}/menu?t=${venue.token}`);
   };
@@ -115,17 +307,17 @@ export const CustomerHomePage: React.FC = () => {
           {/* Eyebrow Badge */}
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#090D16]/[0.04] border border-white/[0.1] text-amber-400 text-xs font-semibold tracking-wide">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>Autonomous Dine-In Operating System</span>
+            <span>Digital Dining &amp; Guest Experience Operating System</span>
           </div>
 
           {/* Main Title */}
           <h1 className="font-serif font-black text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-tight max-w-4xl mx-auto">
-            Interactive Table Menus &amp; Automated Google 5-Star Reviews
+            Interactive Table Menus &amp; Verified Guest Accolades Engine
           </h1>
 
           {/* Subtitle */}
           <p className="text-sm sm:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed font-normal">
-            Zero app downloads. Synchronized multiplayer table carts, instant kitchen thermal KOT printing, and a review engine that multiplies Google 5-star ratings with guaranteed table rewards.
+            Zero app downloads. Synchronized multiplayer table carts, instant kitchen thermal KOT printing, and a reputation suite that cultivates authentic guest distinction with guaranteed table dining privileges.
           </p>
 
           {/* Primary Quick Actions */}
@@ -331,6 +523,284 @@ export const CustomerHomePage: React.FC = () => {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════ */}
+      {/* 2B. PUNE ICONIC CULINARY LANDMARKS (Verified Scanned Menus) */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <section className="py-14 sm:py-20 bg-[#070A12] border-t border-white/[0.06]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-white/[0.08]">
+            <div className="space-y-1.5">
+              <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-[11px] font-bold tracking-wide">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>Verified Scanned Real-World Menus</span>
+              </div>
+              <h2 className="font-serif font-black text-2xl sm:text-4xl text-white tracking-tight">
+                Pune's Iconic Culinary Landmarks
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-400 max-w-2xl">
+                Experience authentic scanned menus for Pune's most celebrated heritage institutions. Every recipe, secret spice, and pricing tier verified from on-ground records.
+              </p>
+            </div>
+
+            <div className="flex items-center space-x-2 text-xs text-amber-400 font-semibold">
+              <Flame className="w-4 h-4" />
+              <span>Full authentic menu &amp; lore ready</span>
+            </div>
+          </div>
+
+          {/* Landmarks Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {PUNE_LANDMARKS.map((landmark) => (
+              <div
+                key={landmark.slug}
+                className="bg-[#0C1220] border border-white/[0.08] hover:border-amber-500/40 rounded-2xl overflow-hidden shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col group"
+              >
+                {/* Photo Banner */}
+                <div className="relative aspect-[16/9] overflow-hidden bg-slate-900">
+                  <img
+                    src={landmark.imageUrl}
+                    alt={landmark.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0C1220] via-transparent to-black/50" />
+
+                  {/* Badges on Top */}
+                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                    <span className="px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/20 text-white text-xs font-bold flex items-center space-x-1">
+                      <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                      <span>{landmark.rating}</span>
+                    </span>
+
+                    <span className="px-2 py-0.5 rounded-full bg-amber-500/20 backdrop-blur-md border border-amber-500/40 text-amber-300 text-[10px] font-bold">
+                      {landmark.badge}
+                    </span>
+                  </div>
+
+                  {/* Landmark Header on Image */}
+                  <div className="absolute bottom-3 left-4 right-4">
+                    <h3 className="font-serif font-bold text-lg text-white group-hover:text-amber-400 transition-colors leading-tight">
+                      {landmark.name}
+                    </h3>
+                    <p className="text-[11px] text-slate-300 flex items-center space-x-1 mt-0.5">
+                      <MapPin className="w-3 h-3 text-amber-400 shrink-0" />
+                      <span>{landmark.location}</span>
+                      <span className="text-slate-500">•</span>
+                      <span>{landmark.avgCostForTwo}</span>
+                    </p>
+                  </div>
+                </div>
+
+                {/* Card Body */}
+                <div className="p-4 flex-1 flex flex-col justify-between space-y-3.5">
+                  <div className="space-y-2.5">
+                    <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                      {landmark.specialty}
+                    </p>
+
+                    {/* Signature Dish Pills */}
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                        Verified Signature Dishes:
+                      </span>
+                      <div className="flex flex-wrap gap-1">
+                        {landmark.signatureDishes.map((dish, idx) => (
+                          <span
+                            key={idx}
+                            className="px-2 py-0.5 rounded-md bg-white/[0.04] border border-white/[0.08] text-[10px] text-amber-300 font-medium"
+                          >
+                            {dish}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="pt-2.5 border-t border-white/[0.06] flex items-center gap-2">
+                    <Link
+                      to={`/r/${landmark.slug}/menu`}
+                      className="flex-1 py-2 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 text-slate-950 font-bold text-xs flex items-center justify-center space-x-1 transition-all shadow-sm cursor-pointer"
+                    >
+                      <UtensilsCrossed className="w-3.5 h-3.5 text-slate-950" />
+                      <span>Open Verified Menu</span>
+                    </Link>
+
+                    <button
+                      type="button"
+                      onClick={() => handleOpenScanner(landmark.slug)}
+                      title={`Scan Table QR for ${landmark.name}`}
+                      className="p-2 rounded-xl bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 hover:text-white transition-colors cursor-pointer"
+                    >
+                      <QrCode className="w-4 h-4 text-amber-400" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/* 2C. PUNE 3,000+ RESTAURANT DIRECTORY & DISCOVERY            */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <section className="py-14 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        
+        {/* Directory Header with City-Wide Search */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 pb-6 border-b border-white/[0.08]">
+          <div className="space-y-1.5">
+            <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
+              Pune City-Wide Dining Directory
+            </span>
+            <h2 className="font-serif font-black text-2xl sm:text-3xl text-white">
+              Explore 3,000+ Pune Restaurants &amp; Cafes
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400">
+              Search any restaurant, microbrewery, or bakery across Koregaon Park, Baner, FC Road, Kalyani Nagar, Viman Nagar, and Camp.
+            </p>
+          </div>
+
+          {/* Search Box */}
+          <div className="relative w-full md:w-80">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
+            <input
+              type="text"
+              value={directorySearch}
+              onChange={(e) => {
+                setDirectorySearch(e.target.value);
+                setDirectoryLimit(12);
+              }}
+              placeholder="Search by restaurant or cuisine (e.g. Vaishali, Burger, Pizza)..."
+              className="w-full py-2.5 pl-9 pr-8 text-xs bg-[#0C1220] text-white placeholder:text-slate-500 rounded-xl border border-white/[0.1] focus:outline-none focus:border-amber-400/60 transition-colors shadow-sm"
+            />
+            {directorySearch && (
+              <button
+                type="button"
+                onClick={() => setDirectorySearch('')}
+                className="absolute right-2.5 top-2.5 text-xs text-slate-400 hover:text-white p-1"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Neighborhood Area Chips */}
+        <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1">
+          {PUNE_AREAS.map((area) => (
+            <button
+              key={area.id}
+              type="button"
+              onClick={() => {
+                setDirectoryArea(area.id);
+                setDirectoryLimit(12);
+              }}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                directoryArea === area.id
+                  ? 'bg-amber-500 text-slate-950 font-bold shadow-sm'
+                  : 'bg-white/[0.04] text-slate-300 hover:text-white border border-white/[0.08]'
+              }`}
+            >
+              {area.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Results Counter */}
+        <div className="flex items-center justify-between text-xs text-slate-400">
+          <span>
+            Found <strong className="text-white">{filteredPuneRestaurants.length}</strong> matching Pune establishments
+          </span>
+          {directoryArea !== 'all' && (
+            <button
+              type="button"
+              onClick={() => setDirectoryArea('all')}
+              className="text-amber-400 hover:underline"
+            >
+              Reset Area Filter
+            </button>
+          )}
+        </div>
+
+        {/* Restaurant Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {filteredPuneRestaurants.slice(0, directoryLimit).map((item) => {
+            const slug = item.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+            const hasVerifiedBlueprint = Boolean(findAuthenticPuneMenu(item.name, slug));
+            const costForTwo = 'avgCostForTwo' in item ? item.avgCostForTwo : '₹800';
+
+            return (
+              <div
+                key={slug + item.name}
+                className="bg-[#0C1220] border border-white/[0.08] hover:border-amber-500/40 rounded-xl overflow-hidden p-3.5 flex flex-col justify-between space-y-3 transition-all hover:-translate-y-0.5 group"
+              >
+                <div className="space-y-2">
+                  <div className="relative aspect-[16/9] rounded-lg overflow-hidden bg-slate-900">
+                    <img
+                      src={item.imageUrl}
+                      alt={item.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-90"
+                    />
+                    <div className="absolute top-2 right-2">
+                      <span className="px-2 py-0.5 rounded-full bg-black/80 backdrop-blur-xs text-white text-[10px] font-bold flex items-center space-x-0.5 border border-white/10">
+                        <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
+                        <span>{item.rating}</span>
+                      </span>
+                    </div>
+
+                    {hasVerifiedBlueprint && (
+                      <div className="absolute top-2 left-2">
+                        <span className="px-2 py-0.5 rounded-full bg-emerald-500/90 text-slate-950 text-[9px] font-bold shadow-sm">
+                          ✓ Verified Menu
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div>
+                    <h4 className="font-serif font-bold text-sm text-white group-hover:text-amber-400 transition-colors truncate">
+                      {item.name}
+                    </h4>
+                    <p className="text-[11px] text-amber-400 font-medium truncate mt-0.5">
+                      {item.cuisine}
+                    </p>
+                    <p className="text-[10px] text-slate-400 flex items-center space-x-1 mt-1 truncate">
+                      <MapPin className="w-3 h-3 text-slate-500 shrink-0" />
+                      <span className="truncate">{item.location}</span>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between gap-2">
+                  <span className="text-[10px] text-slate-400 font-medium">{costForTwo}</span>
+                  <Link
+                    to={`/r/${slug}/menu`}
+                    className="py-1.5 px-3 rounded-lg bg-amber-500/15 hover:bg-amber-500 text-amber-300 hover:text-slate-950 font-bold text-[11px] transition-all flex items-center space-x-1"
+                  >
+                    <span>View Menu</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Load More Button */}
+        {filteredPuneRestaurants.length > directoryLimit && (
+          <div className="text-center pt-4">
+            <button
+              type="button"
+              onClick={() => setDirectoryLimit((prev) => prev + 12)}
+              className="py-2.5 px-6 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-white font-semibold text-xs border border-white/[0.1] hover:border-amber-400/40 transition-all cursor-pointer"
+            >
+              Load More Pune Restaurants ({filteredPuneRestaurants.length - directoryLimit} remaining)
+            </button>
+          </div>
+        )}
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════ */}
       {/* 3. UNIVERSAL ACCESS HUBS (All Portals in 1 Clean Grid)      */}
       {/* ═══════════════════════════════════════════════════════════ */}
       <section className="py-14 bg-[#0B0F1A] border-y border-white/[0.06]">
@@ -416,24 +886,24 @@ export const CustomerHomePage: React.FC = () => {
               </Link>
             </div>
 
-            {/* 4. Headquarters Control */}
-            <div className="bg-[#0F1626] border border-white/[0.08] hover:border-cyan-400/40 p-5 rounded-2xl flex flex-col justify-between space-y-4 transition-all hover:-translate-y-1">
+            {/* 4. Chef & Owner Culinary Studio */}
+            <div className="bg-[#0F1626] border border-white/[0.08] hover:border-amber-400/40 p-5 rounded-2xl flex flex-col justify-between space-y-4 transition-all hover:-translate-y-1">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
-                  <ShieldCheck className="w-5 h-5" />
+                <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                  <Sparkles className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-serif font-bold text-base text-white">4. Master Headquarters HQ</h4>
+                  <h4 className="font-serif font-bold text-base text-white">4. Chef Culinary Studio</h4>
                   <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                    Centralized management across all 15 Pune restaurants, kitchen POS adapters, and catalog sync.
+                    Digital menu storytelling, heritage lore, master tasting notes, heat calibration, and sommelier pairings.
                   </p>
                 </div>
               </div>
               <Link
-                to="/admin"
-                className="text-xs font-bold text-cyan-400 hover:text-cyan-300 flex items-center space-x-1 group"
+                to="/ai-studio"
+                className="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center space-x-1 group"
               >
-                <span>Access Admin HQ</span>
+                <span>Open Chef Studio</span>
                 <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
@@ -518,20 +988,20 @@ export const CustomerHomePage: React.FC = () => {
             </div>
             <div>
               <h3 className="font-serif font-bold text-xl text-white">
-                1-Click Google Reviews &amp; Lucky Reward Wheel
+                Verified Guest Accolades &amp; Milestone Dining Privileges
               </h3>
               <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
-                Happy diners post genuine 5-star Google Maps reviews with 1 tap, automatically unlocking the animated Lucky Dining Wheel for guaranteed table treats. Unhappy diners trigger instant private alerts to the manager’s phone to resolve issues before they leave.
+                Delighted diners publish authentic reviews with 1 tap, automatically unlocking the animated Milestone Dining Wheel for guaranteed table treats. Private feedback routes directly to floor managers to resolve issues in real time before guests leave.
               </p>
             </div>
             <div className="pt-2 flex items-center space-x-4 text-xs font-semibold text-slate-300">
               <span className="flex items-center space-x-1 text-emerald-400">
                 <CheckCircle2 className="w-4 h-4" />
-                <span>Google Maps Compliant</span>
+                <span>Verified Guest Accolades</span>
               </span>
               <span className="flex items-center space-x-1 text-emerald-400">
                 <CheckCircle2 className="w-4 h-4" />
-                <span>Instant Floor Grievance Alert</span>
+                <span>Instant Floor Grievance Routing</span>
               </span>
             </div>
           </div>
@@ -576,16 +1046,16 @@ export const CustomerHomePage: React.FC = () => {
             Ready to Upgrade Your Dining Room?
           </h2>
           <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto leading-relaxed">
-            Menuz replaces costly paper menus with interactive digital dining, instant KOT printing, and automated reputation growth for ₹5,000 / month flat.
+            Menuz replaces costly paper menus with interactive digital dining, instant KOT printing, and curated guest reputation growth for ₹1,999 / month flat (0% commission).
           </p>
 
           <div className="pt-3 flex flex-wrap items-center justify-center gap-3">
             <Link
-              to="/admin"
+              to="/r/saffron-house/menu"
               className="py-3 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 text-slate-950 font-bold text-xs shadow-md transition-all flex items-center space-x-1.5 cursor-pointer"
             >
-              <ShieldCheck className="w-4 h-4 text-slate-950" />
-              <span>Open Master Admin HQ</span>
+              <UtensilsCrossed className="w-4 h-4 text-slate-950" />
+              <span>Explore Live Digital Menu</span>
             </Link>
 
             <button
@@ -620,8 +1090,8 @@ export const CustomerHomePage: React.FC = () => {
             <Link to="/kitchen" className="hover:text-slate-300 transition-colors">
               Kitchen KDS
             </Link>
-            <Link to="/admin" className="text-amber-400 hover:text-amber-300 transition-colors font-medium">
-              Admin HQ
+            <Link to="/ai-studio" className="text-amber-400 hover:text-amber-300 transition-colors font-medium">
+              Chef Studio
             </Link>
           </div>
         </div>

@@ -74,6 +74,12 @@ export function generateCuisineMenu(
       is_signature: d.is_signature ?? (idx === 0),
       is_bestseller: d.is_bestseller ?? true,
       is_chef_recommended: d.is_chef_recommended ?? (idx < 2),
+      chef_notes: (d as any).chef_notes,
+      chef_story: (d as any).chef_story,
+      owner_pitch: (d as any).owner_pitch,
+      pairing_drink_name: (d as any).pairing_drink_name,
+      pairing_reason: (d as any).pairing_reason,
+      temperature_style: (d as any).temperature_style,
       sort_order: idx + 1
     }));
 

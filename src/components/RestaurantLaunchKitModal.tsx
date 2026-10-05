@@ -24,7 +24,8 @@ import {
   HelpCircle,
   Server,
   Zap,
-  Layers
+  Layers,
+  ArrowLeft
 } from 'lucide-react';
 
 interface RestaurantLaunchKitModalProps {
@@ -45,7 +46,7 @@ export const RestaurantLaunchKitModal: React.FC<RestaurantLaunchKitModalProps> =
   const tables = useRestaurantStore((state) => state.tables);
   const updateRestaurant = useRestaurantStore((state) => state.updateRestaurant);
   
-  const [activeTab, setActiveTab] = useState<'links' | 'share_kit' | 'qr_codes' | 'white_label'>('links');
+  const [activeTab, setActiveTab] = useState<'links' | 'share_kit' | 'white_label'>('links');
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   // White label form state
@@ -137,8 +138,8 @@ For table adjustments or custom domain setup, open your manager console anytime.
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
-      <div className="bg-[#090D16] border border-white/[0.08] rounded-3xl max-w-2xl w-full  overflow-hidden flex flex-col my-auto max-h-[92vh]">
+    <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl overflow-y-auto pt-[max(env(safe-area-inset-top,20px),24px)] pb-12 px-3 sm:px-5 flex justify-center items-start overscroll-contain">
+      <div className="bg-[#090D16] border border-white/[0.08] rounded-3xl max-w-2xl w-full overflow-hidden flex flex-col my-2 sm:my-6 shadow-2xl">
         
         {/* Header Banner */}
         <div className="bg-gradient-to-r from-amber-600 via-amber-600 to-orange-700 p-5 text-white relative">
@@ -150,6 +151,14 @@ For table adjustments or custom domain setup, open your manager console anytime.
           </button>
 
           <div className="flex items-center space-x-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-black/20 hover:bg-black/40 text-white font-bold text-xs border border-white/20 transition-all cursor-pointer mr-1"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Back</span>
+            </button>
             <div className="w-12 h-12 rounded-2xl bg-[#090D16]/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white font-serif font-bold text-xl shadow-inner">
               {restaurant.name.charAt(0)}
             </div>
@@ -196,17 +205,7 @@ For table adjustments or custom domain setup, open your manager console anytime.
               <Share2 className="w-3.5 h-3.5" />
               <span>WhatsApp Handover</span>
             </button>
-            <button
-              onClick={() => setActiveTab('qr_codes')}
-              className={`px-3.5 py-1.5 rounded-xl transition-all flex items-center space-x-1.5 whitespace-nowrap ${
-                activeTab === 'qr_codes'
-                  ? 'bg-white text-white shadow-sm'
-                  : 'text-white/80 hover:text-white hover:bg-white/10'
-              }`}
-            >
-              <QrCode className="w-3.5 h-3.5" />
-              <span>Table QR Cards ({restaurantTables.length})</span>
-            </button>
+
             <button
               onClick={() => setActiveTab('white_label')}
               className={`px-3.5 py-1.5 rounded-xl transition-all flex items-center space-x-1.5 whitespace-nowrap ${
@@ -414,63 +413,7 @@ For table adjustments or custom domain setup, open your manager console anytime.
             </div>
           )}
 
-          {/* TAB 3: TABLE QR CODES */}
-          {activeTab === 'qr_codes' && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h4 className="font-bold text-white text-sm">Table QR Code Generator</h4>
-                  <p className="text-[11px] text-slate-500">
-                    Each table has an encrypted token. Guests scan to place orders directly into the kitchen.
-                  </p>
-                </div>
-                <div className="flex items-center space-x-2">
-                  {onOpenTableManagement && (
-                    <button
-                      onClick={() => {
-                        onClose();
-                        onOpenTableManagement();
-                      }}
-                      className="px-3 py-1.5 rounded-xl bg-[#0D1322] hover:bg-white/[0.06] text-amber-300 font-bold text-xs flex items-center space-x-1.5 border border-white/[0.08] transition-colors"
-                    >
-                      <Layers className="w-3.5 h-3.5" />
-                      <span>Manage Tables</span>
-                    </button>
-                  )}
-                  <button
-                    onClick={() => window.print()}
-                    className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-500 text-white font-bold text-xs flex items-center space-x-1.5"
-                  >
-                    <Printer className="w-3.5 h-3.5" />
-                    <span>Print All Stands</span>
-                  </button>
-                </div>
-              </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {restaurantTables.slice(0, 12).map((tbl, idx) => {
-                  const tableDinerUrl = `${origin}#/r/${restaurant.slug}/menu?t=${tbl.public_token}`;
-                  return (
-                    <div key={tbl.id} className="p-3 bg-[#0D1322] border border-white/[0.08] rounded-2xl text-center space-y-2">
-                      <div className="w-full aspect-square bg-[#0D1322] rounded-xl p-2 flex flex-col items-center justify-center shadow-inner">
-                        <QrCode className="w-16 h-16 text-white" />
-                        <span className="text-[9px] font-bold text-slate-400 font-mono mt-1">
-                          {tbl.label}
-                        </span>
-                      </div>
-                      <div className="text-[11px] font-bold text-white truncate">{tbl.label}</div>
-                      <button
-                        onClick={() => copyToClipboard(tableDinerUrl, `tbl_${idx}`)}
-                        className="w-full py-1 rounded-lg bg-[#090D16] hover:bg-[#090D16] text-[10px] text-amber-400 font-bold border border-white/[0.08] transition-colors"
-                      >
-                        {copiedKey === `tbl_${idx}` ? 'Copied!' : 'Copy URL'}
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
 
           {/* TAB 4: WHITE-LABEL & CUSTOM DOMAIN */}
           {activeTab === 'white_label' && (

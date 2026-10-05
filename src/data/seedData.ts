@@ -108,14 +108,23 @@ export const SEED_RESTAURANTS: Restaurant[] = [
 ];
 
 export const SEED_TABLES: RestaurantTable[] = [
-  { id: 'tbl-01', restaurant_id: 'rest-saffron-house-01', label: 'Table 1', public_token: 'table-token-01-saffron', is_active: true },
-  { id: 'tbl-02', restaurant_id: 'rest-saffron-house-01', label: 'Table 2', public_token: 'table-token-02-saffron', is_active: true },
-  { id: 'tbl-03', restaurant_id: 'rest-saffron-house-01', label: 'Table 3', public_token: 'table-token-03-saffron', is_active: true },
-  { id: 'tbl-04', restaurant_id: 'rest-saffron-house-01', label: 'Table 4', public_token: 'table-token-04-saffron', is_active: true },
-  { id: 'tbl-cb-01', restaurant_id: 'rest-casa-bella-02', label: 'Table 1', public_token: 'table-token-01-casabella', is_active: true },
-  { id: 'tbl-cb-02', restaurant_id: 'rest-casa-bella-02', label: 'Table 2', public_token: 'table-token-02-casabella', is_active: true },
-  { id: 'tbl-cb-03', restaurant_id: 'rest-casa-bella-02', label: 'Table 3', public_token: 'table-token-03-casabella', is_active: true },
-  { id: 'tbl-cb-04', restaurant_id: 'rest-casa-bella-02', label: 'Table 4', public_token: 'table-token-04-casabella', is_active: true }
+  // Saffron House (Fine Dining - 8 tables with Royal Booths and Verandah)
+  { id: 'tbl-01', restaurant_id: 'rest-saffron-house-01', label: 'Table 1', section: 'Indoor Main Dining', capacity: 4, public_token: 'table-token-01-saffron', is_active: true },
+  { id: 'tbl-02', restaurant_id: 'rest-saffron-house-01', label: 'Table 2', section: 'Indoor Main Dining', capacity: 4, public_token: 'table-token-02-saffron', is_active: true },
+  { id: 'tbl-03', restaurant_id: 'rest-saffron-house-01', label: 'Royal Booth A', section: 'Royal Family Booths', capacity: 6, public_token: 'table-token-03-saffron', is_active: true },
+  { id: 'tbl-04', restaurant_id: 'rest-saffron-house-01', label: 'Royal Booth B', section: 'Royal Family Booths', capacity: 8, public_token: 'table-token-04-saffron', is_active: true },
+  { id: 'tbl-05', restaurant_id: 'rest-saffron-house-01', label: 'Verandah 1', section: 'Verandah Courtyard', capacity: 2, public_token: 'table-token-05-saffron', is_active: true },
+  { id: 'tbl-06', restaurant_id: 'rest-saffron-house-01', label: 'Verandah 2', section: 'Verandah Courtyard', capacity: 4, public_token: 'table-token-06-saffron', is_active: true },
+  { id: 'tbl-07', restaurant_id: 'rest-saffron-house-01', label: 'Courtyard 3', section: 'Verandah Courtyard', capacity: 6, public_token: 'table-token-07-saffron', is_active: true },
+  { id: 'tbl-08', restaurant_id: 'rest-saffron-house-01', label: 'Private Suite VIP', section: 'Private Dining Room', capacity: 10, public_token: 'table-token-08-saffron', is_active: true },
+
+  // Casa Bella Trattoria (Italian Trattoria & Pizzeria - 6 distinct tables)
+  { id: 'tbl-cb-01', restaurant_id: 'rest-casa-bella-02', label: 'Piazza 1', section: 'Piazza Main Hall', capacity: 2, public_token: 'table-token-01-casabella', is_active: true },
+  { id: 'tbl-cb-02', restaurant_id: 'rest-casa-bella-02', label: 'Piazza 2', section: 'Piazza Main Hall', capacity: 4, public_token: 'table-token-02-casabella', is_active: true },
+  { id: 'tbl-cb-03', restaurant_id: 'rest-casa-bella-02', label: 'Pizza Bar 1', section: 'Woodfire Pizza Counter', capacity: 2, public_token: 'table-token-03-casabella', is_active: true },
+  { id: 'tbl-cb-04', restaurant_id: 'rest-casa-bella-02', label: 'Pizza Bar 2', section: 'Woodfire Pizza Counter', capacity: 2, public_token: 'table-token-04-casabella', is_active: true },
+  { id: 'tbl-cb-05', restaurant_id: 'rest-casa-bella-02', label: 'Tuscan Terrace 1', section: 'Outdoor Tuscan Terrace', capacity: 6, public_token: 'table-token-05-casabella', is_active: true },
+  { id: 'tbl-cb-06', restaurant_id: 'rest-casa-bella-02', label: 'Tuscan Terrace 2', section: 'Outdoor Tuscan Terrace', capacity: 4, public_token: 'table-token-06-casabella', is_active: true }
 ];
 
 export const SEED_CATEGORIES: MenuCategory[] = [
