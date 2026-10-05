@@ -25,6 +25,7 @@ import { isWorkingWithMenuz } from '../types';
 import { QrScannerModal } from '../components/QrScannerModal';
 import { PUNE_RESTAURANT_DIRECTORY, PuneRestaurantEntry } from '../data/puneRestaurantDirectory';
 import { AUTHENTIC_PUNE_RESTAURANT_MENUS, findAuthenticPuneMenu } from '../data/authenticPuneMenus';
+import { IS_CUSTOMER_SITE } from '../config/siteMode';
 
 export interface PuneLandmarkItem {
   name: string;
@@ -507,14 +508,16 @@ export const CustomerHomePage: React.FC = () => {
                     <QrCode className="w-4 h-4 text-amber-400" />
                   </button>
 
-                  <Link
-                    to={`/manage/${venue.slug}`}
-                    title="View venue manager operations hub"
-                    className="py-2.5 px-3 rounded-xl bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 hover:text-white text-xs font-semibold flex items-center space-x-1 transition-colors"
-                  >
-                    <LayoutDashboard className="w-3.5 h-3.5 text-slate-400" />
-                    <span className="hidden sm:inline">Hub</span>
-                  </Link>
+                  {!IS_CUSTOMER_SITE && (
+                    <Link
+                      to={`/manage/${venue.slug}`}
+                      title="View venue manager operations hub"
+                      className="py-2.5 px-3 rounded-xl bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 hover:text-white text-xs font-semibold flex items-center space-x-1 transition-colors"
+                    >
+                      <LayoutDashboard className="w-3.5 h-3.5 text-slate-400" />
+                      <span className="hidden sm:inline">Hub</span>
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>
@@ -878,10 +881,10 @@ export const CustomerHomePage: React.FC = () => {
                 </div>
               </div>
               <Link
-                to="/manage/saffron-house"
+                to={IS_CUSTOMER_SITE ? "/menu" : "/manage/saffron-house"}
                 className="text-xs font-bold text-emerald-400 hover:text-emerald-300 flex items-center space-x-1 group"
               >
-                <span>Open Floor Hub</span>
+                <span>{IS_CUSTOMER_SITE ? "Browse Digital Menus" : "Open Floor Hub"}</span>
                 <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
@@ -900,10 +903,10 @@ export const CustomerHomePage: React.FC = () => {
                 </div>
               </div>
               <Link
-                to="/ai-studio"
+                to={IS_CUSTOMER_SITE ? "/menu" : "/ai-studio"}
                 className="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center space-x-1 group"
               >
-                <span>Open Chef Studio</span>
+                <span>{IS_CUSTOMER_SITE ? "Explore Dining Stories" : "Open Chef Studio"}</span>
                 <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
@@ -1087,15 +1090,16 @@ export const CustomerHomePage: React.FC = () => {
             <Link to="/menu" className="hover:text-slate-300 transition-colors">
               Diner Menus
             </Link>
-            <Link to="/manage" className="hover:text-slate-300 transition-colors">
-              Restaurant Hub
-            </Link>
-            <Link to="/kitchen" className="hover:text-slate-300 transition-colors">
-              Kitchen KDS
-            </Link>
-            <Link to="/ai-studio" className="text-amber-400 hover:text-amber-300 transition-colors font-medium">
-              Chef Studio
-            </Link>
+            {!IS_CUSTOMER_SITE && (
+              <>
+                <Link to="/manage" className="hover:text-slate-300 transition-colors">
+                  Restaurant Hub
+                </Link>
+                <Link to="/kitchen" className="hover:text-slate-300 transition-colors">
+                  Kitchen KDS
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </footer>

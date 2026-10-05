@@ -22,6 +22,7 @@ import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantS
 import { isWorkingWithMenuz } from '../types';
 import { SEED_RESTAURANTS } from '../data/seedData';
 import { QrScannerModal } from './QrScannerModal';
+import { IS_OWNER_SITE, IS_CUSTOMER_SITE } from '../config/siteMode';
 
 export const Navbar: React.FC = () => {
   const location = useLocation();
@@ -106,12 +107,16 @@ export const Navbar: React.FC = () => {
     return null;
   }
 
-  const navLinks = [
-    { to: '/', label: 'Explore Pune', exact: true },
-    { to: '/menu', label: 'Diner Menus' },
-    { to: '/manage', label: 'Restaurant Hub' },
-    { to: '/kitchen', label: 'Kitchen KDS' },
-  ];
+  const navLinks = IS_OWNER_SITE
+    ? [
+        { to: '/', label: 'All Outlets', exact: true },
+        { to: '/kitchen', label: 'Kitchen KDS' },
+        { to: '/ai-studio', label: 'Chef Studio' },
+      ]
+    : [
+        { to: '/', label: 'Explore Pune', exact: true },
+        { to: '/menu', label: 'Diner Menus' },
+      ];
 
   const isLinkActive = (path: string, exact?: boolean) => {
     if (exact) return location.pathname === path;
@@ -138,7 +143,7 @@ export const Navbar: React.FC = () => {
                     menuz
                   </span>
                   <span className="text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold">
-                    OS
+                    {IS_OWNER_SITE ? 'PARTNER OS' : 'DINE IN'}
                   </span>
                 </div>
               </div>
@@ -358,50 +363,76 @@ export const Navbar: React.FC = () => {
 
         {/* Mobile Always-Visible Headings & Options Bar */}
         <div className="lg:hidden bg-[#070B12] border-t border-white/[0.08] px-2.5 py-2 overflow-x-auto flex items-center space-x-1.5 scrollbar-none touch-pan-x text-xs font-bold shadow-inner">
-          <Link
-            to="/menu"
-            className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
-              location.pathname === '/menu' || location.pathname.startsWith('/r/')
-                ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                : 'bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]'
-            }`}
-          >
-            <UtensilsCrossed className="w-3.5 h-3.5 text-amber-400" />
-            <span>Menus</span>
-          </Link>
-          <Link
-            to="/manage"
-            className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
-              location.pathname.startsWith('/manage') || location.pathname.startsWith('/restaurant')
-                ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                : 'bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]'
-            }`}
-          >
-            <LayoutDashboard className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Partners</span>
-          </Link>
-          <Link
-            to="/kitchen"
-            className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
-              location.pathname === '/kitchen'
-                ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                : 'bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]'
-            }`}
-          >
-            <ChefHat className="w-3.5 h-3.5 text-amber-400" />
-            <span>KDS</span>
-          </Link>
-          <Link
-            to="/"
-            className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
-              location.pathname === '/'
-                ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                : 'bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]'
-            }`}
-          >
-            <Compass className="w-3.5 h-3.5 text-slate-400" />
-            <span>Explore</span>
-          </Link>
+          {IS_OWNER_SITE ? (
+            <>
+              <Link
+                to="/"
+                className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
+                  location.pathname === '/'
+                    ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                    : 'bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]'
+                }`}
+              >
+                <LayoutDashboard className="w-3.5 h-3.5 text-amber-400" />
+                <span>All Outlets</span>
+              </Link>
+              <Link
+                to="/kitchen"
+                className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
+                  location.pathname === '/kitchen'
+                    ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                    : 'bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]'
+                }`}
+              >
+                <ChefHat className="w-3.5 h-3.5 text-amber-400" />
+                <span>Kitchen KDS</span>
+              </Link>
+              <Link
+                to="/ai-studio"
+                className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
+                  location.pathname === '/ai-studio'
+                    ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                    : 'bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]'
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+                <span>Chef Studio</span>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/"
+                className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
+                  location.pathname === '/'
+                    ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                    : 'bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]'
+                }`}
+              >
+                <Compass className="w-3.5 h-3.5 text-amber-400" />
+                <span>Explore</span>
+              </Link>
+              <Link
+                to="/menu"
+                className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
+                  location.pathname === '/menu' || location.pathname.startsWith('/r/')
+                    ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                    : 'bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]'
+                }`}
+              >
+                <UtensilsCrossed className="w-3.5 h-3.5 text-amber-400" />
+                <span>Menus</span>
+              </Link>
+              <button
+                type="button"
+                onClick={() => setIsQrScannerOpen(true)}
+                className="px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]"
+              >
+                <QrCode className="w-3.5 h-3.5 text-amber-400" />
+                <span>Scan QR</span>
+              </button>
+            </>
+          )}
         </div>
       </header>
 
