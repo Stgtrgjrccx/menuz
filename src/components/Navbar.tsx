@@ -215,15 +215,6 @@ export const Navbar: React.FC = () => {
           {/* Right: Actions */}
           <div className="flex items-center space-x-2">
 
-            {/* Enterprise Master HQ (Owner Console) */}
-            <Link
-              to="/hq"
-              className="px-2.5 py-1.5 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 hover:text-indigo-200 text-xs font-bold transition-all flex items-center space-x-1.5 shadow-sm"
-              title="Open Platform Master HQ Console"
-            >
-              <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
-              <span className="hidden sm:inline">Enterprise HQ</span>
-            </Link>
 
             {/* Quick Access Portal Hub Button */}
             <button
@@ -350,14 +341,6 @@ export const Navbar: React.FC = () => {
               </Link>
             ))}
             <div className="pt-2 border-t border-white/[0.08] space-y-2">
-              <Link
-                to="/hq"
-                onClick={() => setMobileOpen(false)}
-                className="w-full py-2 px-3 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold flex items-center justify-center space-x-1.5"
-              >
-                <ShieldCheck className="w-4 h-4 text-indigo-400" />
-                <span>Enterprise HQ (Owner Console)</span>
-              </Link>
               <button
                 type="button"
                 onClick={() => {
@@ -407,13 +390,6 @@ export const Navbar: React.FC = () => {
           >
             <ChefHat className="w-3.5 h-3.5 text-amber-400" />
             <span>KDS</span>
-          </Link>
-          <Link
-            to="/hq"
-            className="px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 bg-indigo-500/10 text-indigo-300 border border-indigo-500/30"
-          >
-            <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
-            <span>HQ</span>
           </Link>
           <Link
             to="/"
@@ -547,28 +523,6 @@ export const Navbar: React.FC = () => {
                 </div>
               </div>
 
-              {/* Category 4: Enterprise Master HQ */}
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-400">
-                  4. Enterprise Master HQ (Owner Console)
-                </span>
-                <div className="grid grid-cols-1 gap-2 mt-2">
-                  <Link
-                    to="/hq"
-                    onClick={() => setQuickNavOpen(false)}
-                    className="p-3 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 transition-all flex items-center justify-between group"
-                  >
-                    <div className="flex items-center space-x-2.5">
-                      <ShieldCheck className="w-4 h-4 text-indigo-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white group-hover:text-indigo-300">Menuz Enterprise HQ Platform</div>
-                        <div className="text-[11px] text-slate-400">Master command for 3,000+ Pune venues, multi-tenant POS engine &amp; platform audit</div>
-                      </div>
-                    </div>
-                    <ArrowRight className="w-4 h-4 text-indigo-400 group-hover:translate-x-0.5 transition-all" />
-                  </Link>
-                </div>
-              </div>
             </div>
           </div>
         </div>

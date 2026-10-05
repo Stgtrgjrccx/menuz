@@ -288,12 +288,12 @@ export const PitchDeckPage: React.FC = () => {
           {/* Action Downloads & Links */}
           <div className="flex items-center space-x-2">
             <Link
-              to="/admin"
+              to="/manage"
               className="px-3.5 py-1.5 bg-amber-500/10 hover:bg-amber-500/25 text-amber-300 font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 border border-amber-500/40 shadow-sm"
-              title="Open Master Admin Control Hub"
+              title="Open Restaurant Partner Hub"
             >
-              <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-              <span>Admin HQ</span>
+              <Building2 className="w-3.5 h-3.5 text-amber-400" />
+              <span>Partner Hub</span>
             </Link>
             <a
               href="./menuz_executive_pitch_deck.pptx"
@@ -1504,7 +1504,7 @@ export const PitchDeckPage: React.FC = () => {
                   </Link>
 
                   <Link
-                    to="/admin"
+                    to="/manage"
                     className="px-8 py-4 bg-[#131C2E] hover:bg-slate-800 text-white font-bold text-base rounded-2xl transition-all border border-slate-700 flex items-center gap-2"
                   >
                     <Building2 className="w-5 h-5 text-amber-400" />

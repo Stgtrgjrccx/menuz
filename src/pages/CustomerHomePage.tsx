@@ -1096,9 +1096,6 @@ export const CustomerHomePage: React.FC = () => {
             <Link to="/ai-studio" className="text-amber-400 hover:text-amber-300 transition-colors font-medium">
               Chef Studio
             </Link>
-            <Link to="/hq" className="text-indigo-400 hover:text-indigo-300 transition-colors font-medium">
-              Enterprise HQ
-            </Link>
           </div>
         </div>
       </footer>

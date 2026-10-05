@@ -647,7 +647,7 @@ export const ManagerDashboard: React.FC = () => {
       <header className="flex items-center justify-between gap-3 pt-1">
         <div>
           <span className="text-[10px] text-amber-400 font-mono uppercase font-bold tracking-wider">
-            {restaurant.cuisine} • Pune HQ
+            {restaurant.cuisine} • {restaurant.location || 'Pune'}
           </span>
           <h1 className="font-serif text-xl sm:text-2xl font-bold text-white leading-tight">
             {restaurant.name}

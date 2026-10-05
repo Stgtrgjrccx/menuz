@@ -76,7 +76,7 @@ export const MasterAdminDashboard: React.FC = () => {
 
   // ── Authentication lock state ──────────────────────────────
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(() => {
-    return true; // Always unlocked by default for instant frictionless mobile/desktop demo access
+    return getSafeSession('menuz_admin_session') === 'active';
   });
   const [adminPasscode, setAdminPasscode] = useState('');
   const [authError, setAuthError] = useState(false);
