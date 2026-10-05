@@ -653,27 +653,36 @@ export const MasterAdminDashboard: React.FC = () => {
           {/* Center/Right: Quick External Portal Switchers */}
           <div className="flex items-center space-x-1.5 sm:space-x-2">
             <Link
-              to="/"
-              className="px-2.5 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.2] text-xs font-semibold text-slate-300 hover:text-white transition-all flex items-center space-x-1.5"
-              title="Open Public Customer Discovery Site"
+              to="/?from=hq"
+              onClick={() => {
+                try { sessionStorage.setItem('menuz_opened_from_hq', 'true'); } catch (e) {}
+              }}
+              className="px-2.5 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.2] text-xs font-semibold text-slate-300 hover:text-white transition-all flex items-center space-x-1.5 cursor-pointer"
+              title="Open Public Customer Discovery Site with Return to HQ banner"
             >
               <Globe className="w-3.5 h-3.5 text-cyan-400" />
               <span className="hidden md:inline">Customer Site</span>
             </Link>
 
             <Link
-              to="/menu"
-              className="px-2.5 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.2] text-xs font-semibold text-slate-300 hover:text-white transition-all flex items-center space-x-1.5"
-              title="Open Generic Diner Menus Portal"
+              to="/menu?from=hq"
+              onClick={() => {
+                try { sessionStorage.setItem('menuz_opened_from_hq', 'true'); } catch (e) {}
+              }}
+              className="px-2.5 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.2] text-xs font-semibold text-slate-300 hover:text-white transition-all flex items-center space-x-1.5 cursor-pointer"
+              title="Open Generic Diner Menus Portal with Return to HQ banner"
             >
               <Utensils className="w-3.5 h-3.5 text-amber-400" />
               <span className="hidden md:inline">Diner Menus</span>
             </Link>
 
             <Link
-              to="/manage"
-              className="px-2.5 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.2] text-xs font-semibold text-slate-300 hover:text-white transition-all flex items-center space-x-1.5"
-              title="Open Restaurant Partner Portal"
+              to="/manage?from=hq"
+              onClick={() => {
+                try { sessionStorage.setItem('menuz_opened_from_hq', 'true'); } catch (e) {}
+              }}
+              className="px-2.5 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.2] text-xs font-semibold text-slate-300 hover:text-white transition-all flex items-center space-x-1.5 cursor-pointer"
+              title="Open Restaurant Partner Portal with Return to HQ banner"
             >
               <Building2 className="w-3.5 h-3.5 text-emerald-400" />
               <span className="hidden md:inline">Restaurant Hub</span>
@@ -1045,8 +1054,11 @@ export const MasterAdminDashboard: React.FC = () => {
 
                         <div className="flex items-center space-x-1.5 flex-shrink-0">
                           <Link
-                            to={`/manage/${r.slug}`}
-                            onClick={() => setCurrentRestaurant(r.id)}
+                            to={`/manage/${r.slug}?from=hq`}
+                            onClick={() => {
+                              try { sessionStorage.setItem('menuz_opened_from_hq', 'true'); } catch (e) {}
+                              setCurrentRestaurant(r.id);
+                            }}
                             className="px-2.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-[11px] font-bold rounded-lg transition-all shadow-sm flex items-center space-x-1"
                             title={`Open ${r.name} Management Hub`}
                           >
@@ -1054,8 +1066,11 @@ export const MasterAdminDashboard: React.FC = () => {
                             <ChevronRight className="w-3 h-3" />
                           </Link>
                           <Link
-                            to={`/r/${r.slug}/menu?t=${rToken}`}
-                            onClick={() => setCurrentRestaurant(r.id)}
+                            to={`/r/${r.slug}/menu?t=${rToken}&from=hq`}
+                            onClick={() => {
+                              try { sessionStorage.setItem('menuz_opened_from_hq', 'true'); } catch (e) {}
+                              setCurrentRestaurant(r.id);
+                            }}
                             className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-[11px] font-bold rounded-lg transition-colors flex items-center space-x-1 border border-white/[0.08]"
                             title={`Open ${r.name} Diner Menu (Table 1)`}
                           >
@@ -1173,8 +1188,9 @@ export const MasterAdminDashboard: React.FC = () => {
                                   {isDemoOrPartner && existingRest ? (
                                     <>
                                       <Link
-                                        to={`/manage/${existingRest.slug}`}
+                                        to={`/manage/${existingRest.slug}?from=hq`}
                                         onClick={() => {
+                                          try { sessionStorage.setItem('menuz_opened_from_hq', 'true'); } catch (e) {}
                                           setCurrentRestaurant(existingRest.id);
                                           setShowAdminSuggestions(false);
                                         }}
@@ -1183,8 +1199,9 @@ export const MasterAdminDashboard: React.FC = () => {
                                         Hub
                                       </Link>
                                       <Link
-                                        to={`/r/${existingRest.slug}/menu?t=${rToken}`}
+                                        to={`/r/${existingRest.slug}/menu?t=${rToken}&from=hq`}
                                         onClick={() => {
+                                          try { sessionStorage.setItem('menuz_opened_from_hq', 'true'); } catch (e) {}
                                           setCurrentRestaurant(existingRest.id);
                                           setShowAdminSuggestions(false);
                                         }}
@@ -1503,16 +1520,22 @@ export const MasterAdminDashboard: React.FC = () => {
                           {isOnboarded && existing ? (
                             <div className="flex gap-2">
                               <Link
-                                to={`/manage/${existing.slug}`}
-                                onClick={() => setCurrentRestaurant(existing.id)}
+                                to={`/manage/${existing.slug}?from=hq`}
+                                onClick={() => {
+                                  try { sessionStorage.setItem('menuz_opened_from_hq', 'true'); } catch (e) {}
+                                  setCurrentRestaurant(existing.id);
+                                }}
                                 className="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors border border-white/[0.08] cursor-pointer"
                               >
                                 <span>Open Hub</span>
                                 <ChevronRight className="w-3.5 h-3.5" />
                               </Link>
                               <Link
-                                to={`/r/${existing.slug}/menu?t=${firstToken}`}
-                                onClick={() => setCurrentRestaurant(existing.id)}
+                                to={`/r/${existing.slug}/menu?t=${firstToken}&from=hq`}
+                                onClick={() => {
+                                  try { sessionStorage.setItem('menuz_opened_from_hq', 'true'); } catch (e) {}
+                                  setCurrentRestaurant(existing.id);
+                                }}
                                 className="flex-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors border border-amber-500/30 cursor-pointer"
                               >
                                 <span>Diner Menu</span>
@@ -1664,8 +1687,11 @@ export const MasterAdminDashboard: React.FC = () => {
                         {/* Action Links & Multi-Button Control */}
                         <div className="mt-5 pt-4 border-t border-white/[0.08] flex flex-col space-y-2.5">
                           <Link
-                            to={`/r/${rest.slug}/menu?t=${firstTableToken}`}
-                            onClick={() => setCurrentRestaurant(rest.id)}
+                            to={`/r/${rest.slug}/menu?t=${firstTableToken}&from=hq`}
+                            onClick={() => {
+                              try { sessionStorage.setItem('menuz_opened_from_hq', 'true'); } catch (e) {}
+                              setCurrentRestaurant(rest.id);
+                            }}
                             className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-all shadow-md cursor-pointer"
                           >
                             <UtensilsCrossed className="w-3.5 h-3.5 text-white" />
@@ -1675,8 +1701,11 @@ export const MasterAdminDashboard: React.FC = () => {
 
                           <div className="grid grid-cols-2 gap-2">
                             <Link
-                              to={`/manage/${rest.slug}`}
-                              onClick={() => setCurrentRestaurant(rest.id)}
+                              to={`/manage/${rest.slug}?from=hq`}
+                              onClick={() => {
+                                try { sessionStorage.setItem('menuz_opened_from_hq', 'true'); } catch (e) {}
+                                setCurrentRestaurant(rest.id);
+                              }}
                               className="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 transition-colors text-center cursor-pointer border border-white/[0.08]"
                               title="Manager Hub & Menu Editor"
                             >

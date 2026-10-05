@@ -16,6 +16,7 @@ import { PwaInstallModal } from './components/PwaInstallModal';
 import { useRestaurantStore } from './store/restaurantStore';
 import { IS_OWNER_SITE, IS_CUSTOMER_SITE, IS_HQ_SITE } from './config/siteMode';
 import { cloudSyncManager } from './lib/cloudSyncManager';
+import { ReturnToHqBanner } from './components/ReturnToHqBanner';
 
 // Yoast-style Dynamic Route SEO Metadata Manager
 const RouteSEOManager: React.FC = () => {
@@ -102,6 +103,7 @@ export const App: React.FC = () => {
     <HashRouter>
       <RouteSEOManager />
       <div className="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col bg-[#090D16] text-slate-100 font-sans antialiased selection:bg-amber-500/20 selection:text-amber-200">
+        <ReturnToHqBanner />
         <Navbar />
         <div className="flex-1">
           <ErrorBoundary>
@@ -112,6 +114,7 @@ export const App: React.FC = () => {
                   <Route path="/" element={<MasterAdminDashboard />} />
                   <Route path="/hq" element={<MasterAdminDashboard />} />
                   <Route path="/admin" element={<MasterAdminDashboard />} />
+                  <Route path="/manage" element={<ManagerDashboard />} />
                   <Route path="/manage/:restaurantSlug" element={<ManagerDashboard />} />
                   <Route path="/r/:restaurantSlug/menu" element={<DinerMenu />} />
                   <Route path="/kitchen" element={<KitchenKDS />} />
@@ -120,7 +123,7 @@ export const App: React.FC = () => {
                 </>
               ) : IS_OWNER_SITE ? (
                 <>
-                  {/* Dedicated Restaurant Owner & Partner Operations Site */}
+                  {/* Dedicated Restaurant Owner & Partner Operations Site (Food Operations Hub is First Page) */}
                   <Route path="/" element={<ManagerDashboard />} />
                   <Route path="/manage" element={<ManagerDashboard />} />
                   <Route path="/manage/:restaurantSlug" element={<ManagerDashboard />} />
@@ -150,10 +153,17 @@ export const App: React.FC = () => {
                   <Route path="/menu/:restaurantSlug/:tableId" element={<DinerMenu />} />
                   <Route path="/r/:restaurantSlug/:tableId" element={<DinerMenu />} />
                   <Route path="/qr" element={<Navigate to="/" replace />} />
-                  {/* Isolated from owner routes on customer site */}
+                  {/* Strictly isolated: Customer site has ZERO access to owner/manager pages */}
                   <Route path="/manage" element={<Navigate to="/" replace />} />
+                  <Route path="/manage/*" element={<Navigate to="/" replace />} />
+                  <Route path="/dashboard" element={<Navigate to="/" replace />} />
+                  <Route path="/dashboard/*" element={<Navigate to="/" replace />} />
+                  <Route path="/restaurant" element={<Navigate to="/" replace />} />
+                  <Route path="/restaurant/*" element={<Navigate to="/" replace />} />
+                  <Route path="/operations" element={<Navigate to="/" replace />} />
                   <Route path="/kitchen" element={<Navigate to="/" replace />} />
                   <Route path="/ai-studio" element={<Navigate to="/" replace />} />
+                  <Route path="/pitch" element={<Navigate to="/" replace />} />
                 </>
               )}
 

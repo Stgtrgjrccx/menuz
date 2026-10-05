@@ -109,13 +109,12 @@ export const Navbar: React.FC = () => {
 
   const navLinks = IS_OWNER_SITE
     ? [
-        { to: '/', label: 'All Outlets', exact: true },
+        { to: '/', label: 'Floor Operations', exact: true },
         { to: '/kitchen', label: 'Kitchen KDS' },
         { to: '/ai-studio', label: 'Chef Studio' },
       ]
     : [
-        { to: '/', label: 'Explore Pune', exact: true },
-        { to: '/menu', label: 'Diner Menus' },
+        { to: '/', label: 'Affiliated Restaurants', exact: true },
       ];
 
   const isLinkActive = (path: string, exact?: boolean) => {
@@ -149,52 +148,54 @@ export const Navbar: React.FC = () => {
               </div>
             </Link>
 
-            {/* Subtle Divider */}
-            <div className="hidden sm:block w-px h-5 bg-[#090D16]/[0.1]" />
+            {/* Clean Venue Dropdown (Owner Only) */}
+            {IS_OWNER_SITE && (
+              <>
+                <div className="hidden sm:block w-px h-5 bg-[#090D16]/[0.1]" />
+                <div className="relative" ref={venueRef}>
+                  <button
+                    type="button"
+                    onClick={() => setVenueDropdownOpen(!venueDropdownOpen)}
+                    className="flex items-center space-x-2 px-2.5 py-1.5 rounded-lg bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.15] text-xs font-semibold text-slate-200 transition-all cursor-pointer"
+                    title="Switch active restaurant venue"
+                  >
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="max-w-[130px] sm:max-w-[160px] truncate">
+                      {restaurant?.name || 'Saffron House'}
+                    </span>
+                    <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${venueDropdownOpen ? 'rotate-180' : ''}`} />
+                  </button>
 
-            {/* Clean Venue Dropdown */}
-            <div className="relative" ref={venueRef}>
-              <button
-                type="button"
-                onClick={() => setVenueDropdownOpen(!venueDropdownOpen)}
-                className="flex items-center space-x-2 px-2.5 py-1.5 rounded-lg bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.15] text-xs font-semibold text-slate-200 transition-all cursor-pointer"
-                title="Switch active restaurant venue"
-              >
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="max-w-[130px] sm:max-w-[160px] truncate">
-                  {restaurant?.name || 'Saffron House'}
-                </span>
-                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${venueDropdownOpen ? 'rotate-180' : ''}`} />
-              </button>
-
-              {venueDropdownOpen && (
-                <div className="absolute left-0 mt-2 w-64 bg-[#0F1523] border border-white/[0.12] rounded-xl shadow-2xl p-1.5 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
-                  <div className="px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-white/[0.06] mb-1">
-                    Demo Venues (Pune)
-                  </div>
-                  {activeWorkingRestaurants.map((r) => {
-                    const isSelected = r.id === restaurant?.id;
-                    return (
-                      <button
-                        key={r.id}
-                        onClick={() => handleSelectRestaurant(r.id)}
-                        className={`w-full text-left px-2.5 py-2 rounded-lg text-xs font-medium flex items-center justify-between transition-colors ${
-                          isSelected
-                            ? 'bg-amber-500/15 text-amber-300 font-bold'
-                            : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
-                        }`}
-                      >
-                        <div>
-                          <div className="truncate">{r.name}</div>
-                          <div className="text-[10px] text-slate-500 font-normal">{r.cuisine}</div>
-                        </div>
-                        {isSelected && <Check className="w-3.5 h-3.5 text-amber-400" />}
-                      </button>
-                    );
-                  })}
+                  {venueDropdownOpen && (
+                    <div className="absolute left-0 mt-2 w-64 bg-[#0F1523] border border-white/[0.12] rounded-xl shadow-2xl p-1.5 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                      <div className="px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-white/[0.06] mb-1">
+                        Active Partner Outlets
+                      </div>
+                      {activeWorkingRestaurants.map((r) => {
+                        const isSelected = r.id === restaurant?.id;
+                        return (
+                          <button
+                            key={r.id}
+                            onClick={() => handleSelectRestaurant(r.id)}
+                            className={`w-full text-left px-2.5 py-2 rounded-lg text-xs font-medium flex items-center justify-between transition-colors ${
+                              isSelected
+                                ? 'bg-amber-500/15 text-amber-300 font-bold'
+                                : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
+                            }`}
+                          >
+                            <div>
+                              <div className="truncate">{r.name}</div>
+                              <div className="text-[10px] text-slate-500 font-normal">{r.cuisine}</div>
+                            </div>
+                            {isSelected && <Check className="w-3.5 h-3.5 text-amber-400" />}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
+              </>
+            )}
           </div>
 
           {/* Center: Clean Desktop Navigation Links */}
@@ -220,17 +221,18 @@ export const Navbar: React.FC = () => {
           {/* Right: Actions */}
           <div className="flex items-center space-x-2">
 
-
-            {/* Quick Access Portal Hub Button */}
-            <button
-              type="button"
-              onClick={() => setQuickNavOpen(true)}
-              className="p-2 rounded-lg bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 hover:text-white transition-all cursor-pointer flex items-center space-x-1.5 text-xs font-medium"
-              title="Open Quick Access Launcher"
-            >
-              <Compass className="w-4 h-4 text-amber-400" />
-              <span className="hidden sm:inline">Portals</span>
-            </button>
+            {/* Quick Access Portal Hub Button (Owner Only) */}
+            {IS_OWNER_SITE && (
+              <button
+                type="button"
+                onClick={() => setQuickNavOpen(true)}
+                className="p-2 rounded-lg bg-[#090D16]/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 hover:text-white transition-all cursor-pointer flex items-center space-x-1.5 text-xs font-medium"
+                title="Open Quick Access Launcher"
+              >
+                <Compass className="w-4 h-4 text-amber-400" />
+                <span className="hidden sm:inline">Portals</span>
+              </button>
+            )}
 
             {/* Scan Table QR Button */}
             <button
@@ -368,13 +370,13 @@ export const Navbar: React.FC = () => {
               <Link
                 to="/"
                 className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
-                  location.pathname === '/'
+                  location.pathname === '/' || location.pathname.startsWith('/manage')
                     ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
                     : 'bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]'
                 }`}
               >
                 <LayoutDashboard className="w-3.5 h-3.5 text-amber-400" />
-                <span>All Outlets</span>
+                <span>Floor Ops</span>
               </Link>
               <Link
                 to="/kitchen"
@@ -410,18 +412,7 @@ export const Navbar: React.FC = () => {
                 }`}
               >
                 <Compass className="w-3.5 h-3.5 text-amber-400" />
-                <span>Explore</span>
-              </Link>
-              <Link
-                to="/menu"
-                className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
-                  location.pathname === '/menu' || location.pathname.startsWith('/r/')
-                    ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                    : 'bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]'
-                }`}
-              >
-                <UtensilsCrossed className="w-3.5 h-3.5 text-amber-400" />
-                <span>Menus</span>
+                <span>Affiliated Partners</span>
               </Link>
               <button
                 type="button"
@@ -437,9 +428,9 @@ export const Navbar: React.FC = () => {
       </header>
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* QUICK ACCESS LAUNCHER MODAL (Easy, Neat, Clean Navigation) */}
+      {/* QUICK ACCESS LAUNCHER MODAL (Owner Only)                    */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      {quickNavOpen && (
+      {quickNavOpen && IS_OWNER_SITE && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-150">
           <div className="w-full max-w-xl bg-[#0D1321] border border-white/[0.12] rounded-2xl shadow-2xl p-6 text-slate-100 space-y-5">
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
