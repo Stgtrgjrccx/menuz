@@ -12,6 +12,8 @@ dist
 dist-ssr
 dist-customer
 dist-owner
+dist-hq
+sync_state.json
 *.local
 
 # Editor directories and files

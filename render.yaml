@@ -1,13 +1,26 @@
 services:
-  # 🍽️ SITE 1: CUSTOMER DINING & MENU PORTAL
-  # Public discovery, Pune landmark menus, table QR multiplayer cart
-  # Completely independent, not locked to any specific restaurant
+  # ⚡ REALTIME CLOUD SYNCHRONIZATION API
+  # Seamlessly connects Admin HQ, Customer Site, and Owner Site in real time
   - type: web
-    name: menuz-customer
+    name: menuz-api
+    runtime: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+  # 🏢 SITE 1: MASTER ADMIN HQ BACKEND PLATFORM
+  # Exclusive owner command center to control 3,000+ Pune venues, onboard outlets, edit menus & photos
+  - type: web
+    name: menuz-hq
     runtime: static
-    buildCommand: npm install && npm run build:customer
-    staticPublishPath: ./dist-customer
+    buildCommand: npm install && npm run build:hq
+    staticPublishPath: ./dist-hq
     pullRequestPreviewsEnabled: true
+    envVars:
+      - key: VITE_SYNC_API_URL
+        value: https://menuz-api.onrender.com
     routes:
       - type: rewrite
         source: /*
@@ -20,15 +33,42 @@ services:
         name: X-Content-Type-Options
         value: nosniff
 
-  # 🧑‍🍳 SITE 2: RESTAURANT OWNER & PARTNER OPERATIONS PORTAL
+  # 🍽️ SITE 2: CUSTOMER DINING & MENU PORTAL
+  # Public discovery, Pune landmark menus, table QR multiplayer cart
+  # Completely independent, not locked to any specific restaurant, zero owner/HQ links
+  - type: web
+    name: menuz-customer
+    runtime: static
+    buildCommand: npm install && npm run build:customer
+    staticPublishPath: ./dist-customer
+    pullRequestPreviewsEnabled: true
+    envVars:
+      - key: VITE_SYNC_API_URL
+        value: https://menuz-api.onrender.com
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+
+  # 🧑‍🍳 SITE 3: RESTAURANT OWNER & PARTNER OPERATIONS PORTAL
   # Generic partner hub for all restaurant owners, live floor ops, KDS, review shield
-  # Completely independent, not locked to any specific restaurant
+  # Completely independent, not locked to any specific restaurant, zero consumer/HQ links
   - type: web
     name: menuz-owner
     runtime: static
     buildCommand: npm install && npm run build:owner
     staticPublishPath: ./dist-owner
     pullRequestPreviewsEnabled: true
+    envVars:
+      - key: VITE_SYNC_API_URL
+        value: https://menuz-api.onrender.com
     routes:
       - type: rewrite
         source: /*

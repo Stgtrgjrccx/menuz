@@ -14,7 +14,8 @@ import { NotFoundPage } from './pages/NotFoundPage';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { PwaInstallModal } from './components/PwaInstallModal';
 import { useRestaurantStore } from './store/restaurantStore';
-import { IS_OWNER_SITE, IS_CUSTOMER_SITE } from './config/siteMode';
+import { IS_OWNER_SITE, IS_CUSTOMER_SITE, IS_HQ_SITE } from './config/siteMode';
+import { cloudSyncManager } from './lib/cloudSyncManager';
 
 // Yoast-style Dynamic Route SEO Metadata Manager
 const RouteSEOManager: React.FC = () => {
@@ -86,6 +87,9 @@ const RouteSEOManager: React.FC = () => {
 
 export const App: React.FC = () => {
   useEffect(() => {
+    // ⚡ Initialize Realtime Cloud Synchronization across all sites
+    cloudSyncManager.init();
+
     // Configure native status bar & splash screen on native devices
     try {
       StatusBar.setStyle({ style: Style.Dark }).catch(() => {});
@@ -102,7 +106,19 @@ export const App: React.FC = () => {
         <div className="flex-1">
           <ErrorBoundary>
             <Routes>
-              {IS_OWNER_SITE ? (
+              {IS_HQ_SITE ? (
+                <>
+                  {/* Master Admin HQ Platform Site */}
+                  <Route path="/" element={<MasterAdminDashboard />} />
+                  <Route path="/hq" element={<MasterAdminDashboard />} />
+                  <Route path="/admin" element={<MasterAdminDashboard />} />
+                  <Route path="/manage/:restaurantSlug" element={<ManagerDashboard />} />
+                  <Route path="/r/:restaurantSlug/menu" element={<DinerMenu />} />
+                  <Route path="/kitchen" element={<KitchenKDS />} />
+                  <Route path="/ai-studio" element={<AiBotOnboardingStudioPage />} />
+                  <Route path="/pitch" element={<PitchDeckPage />} />
+                </>
+              ) : IS_OWNER_SITE ? (
                 <>
                   {/* Dedicated Restaurant Owner & Partner Operations Site */}
                   <Route path="/" element={<ManagerDashboard />} />

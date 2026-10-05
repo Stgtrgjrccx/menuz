@@ -33,6 +33,7 @@ import {
   SEED_CAMPAIGNS
 } from '../data/seedData';
 import { generateCuisineMenu } from '../data/cuisineMenuGenerator';
+import { cloudSyncManager } from '../lib/cloudSyncManager';
 
 
 export interface CartItem {
@@ -279,8 +280,14 @@ export const isDishNameAsRestaurant = (r: Partial<Restaurant> | string | null | 
     'royal dal makhani'
   ];
 
+  const restaurantKeywords = ['palace', 'kitchen', 'bistro', 'house', 'dhaba', 'cafe', 'café', 'restaurant', 'trattoria', 'corner', 'express', 'hub', 'darbar', 'punjab', 'pune', 'diner', 'lounge', 'bar', 'grill', 'bakery', 'brewpub', 'rooftop', 'resort', 'hotel'];
+  const hasRestaurantKeyword = restaurantKeywords.some((kw) => lower.includes(kw));
+
   for (const pattern of prohibitedPatterns) {
-    if (lower === pattern || lower.startsWith(pattern) || lower.includes(pattern)) {
+    if (lower === pattern) {
+      return true;
+    }
+    if (!hasRestaurantKeyword && (lower === pattern || (lower.includes(pattern) && typeof r === 'object' && (!r.location || !r.cuisine)))) {
       return true;
     }
   }
@@ -1401,3 +1408,12 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
     }
   )
 );
+
+// Automatically broadcast all state mutations to the cloud and other open sites
+useRestaurantStore.subscribe((state) => {
+  try {
+    cloudSyncManager.publishState(state);
+  } catch (e) {
+    // ignore
+  }
+});
