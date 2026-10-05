@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "Menuz",
+    "slug": "menuz",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "scheme": "menuz",
+    "owner": "smw-team",
+    "splash": {
+      "image": "./assets/icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#090D16"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.smwteam.menuz",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Menuz requires camera access to scan restaurant table QR codes for instant ordering."
+      }
+    },
+    "android": {
+      "package": "com.smwteam.menuz",
+      "adaptiveIcon": {
+        "backgroundColor": "#090D16",
+        "foregroundImage": "./assets/icon.png"
+      },
+      "permissions": [
+        "CAMERA",
+        "INTERNET"
+      ],
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Menuz requires camera access to scan restaurant table QR codes."
+        }
+      ]
+    ],
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
