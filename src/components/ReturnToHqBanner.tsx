@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft, ShieldCheck, ExternalLink } from 'lucide-react';
 import { getHqSiteUrl, IS_HQ_SITE } from '../config/siteMode';
 
@@ -8,35 +8,47 @@ export const ReturnToHqBanner: React.FC = () => {
   const [fromHq, setFromHq] = useState<boolean>(false);
 
   useEffect(() => {
-    // Only show if the current URL query string explicitly specifies 'from=hq'
+    // Show if query string specifies 'from=hq' or if session was initiated from HQ
     const winSearch = typeof window !== 'undefined' ? window.location.search.toLowerCase() : '';
     const winHash = typeof window !== 'undefined' ? window.location.hash.toLowerCase() : '';
     const locSearch = location.search.toLowerCase();
+    const hasSessionHq = typeof window !== 'undefined' && sessionStorage.getItem('menuz_from_hq') === 'true';
 
     const searchHasHq =
       winSearch.includes('from=hq') ||
       winHash.includes('from=hq') ||
-      locSearch.includes('from=hq');
+      locSearch.includes('from=hq') ||
+      hasSessionHq;
 
     setFromHq(searchHasHq);
   }, [location]);
 
-  // Don't show if already inside Master Admin HQ site or on admin routes
-  if (
-    !fromHq ||
-    IS_HQ_SITE ||
-    location.pathname === '/admin' ||
-    location.pathname === '/hq' ||
-    window.location.hash.startsWith('#/admin') ||
-    window.location.hash.startsWith('#/hq')
-  ) {
+  const navigate = useNavigate();
+
+  // Determine if we're on the HQ Dashboard home screen
+  const isAtHqHome =
+    (IS_HQ_SITE && (location.pathname === '/' || location.pathname === '/hq' || location.pathname === '/admin')) ||
+    (typeof window !== 'undefined' && IS_HQ_SITE && (window.location.hash === '#/' || window.location.hash === '#/hq' || window.location.hash === '#/admin'));
+
+  if (isAtHqHome) {
+    return null;
+  }
+
+  // Don't show if not from HQ and not on HQ site
+  if (!fromHq && !IS_HQ_SITE) {
     return null;
   }
 
   const handleReturnToHq = () => {
+    try {
+      sessionStorage.removeItem('menuz_from_hq');
+    } catch (e) {}
     setFromHq(false);
-    // Explicitly navigate to the dedicated HQ Admin command center URL
-    window.location.href = getHqSiteUrl('');
+    if (IS_HQ_SITE) {
+      navigate('/');
+    } else {
+      window.location.href = getHqSiteUrl('');
+    }
   };
 
   return (

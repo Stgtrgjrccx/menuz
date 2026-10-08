@@ -3,7 +3,7 @@ export type SiteMode = 'customer' | 'owner' | 'hq';
 
 export function getSiteMode(): SiteMode {
   // 1. Explicit environment variable set at build time (e.g. vite build --mode customer / owner / hq)
-  const envMode = import.meta.env.VITE_SITE_MODE;
+  const envMode = (import.meta.env.VITE_SITE_MODE || import.meta.env.MODE) as SiteMode;
   if (envMode === 'customer' || envMode === 'owner' || envMode === 'hq') {
     return envMode;
   }

@@ -16,13 +16,16 @@ import {
   Trash2,
   ShieldCheck,
   ArrowRight,
-  ExternalLink
+  ExternalLink,
+  Gamepad2,
+  Star,
+  Building2
 } from 'lucide-react';
 import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantStore';
 import { isWorkingWithMenuz } from '../types';
 import { SEED_RESTAURANTS } from '../data/seedData';
 import { QrScannerModal } from './QrScannerModal';
-import { IS_OWNER_SITE, IS_CUSTOMER_SITE } from '../config/siteMode';
+import { IS_OWNER_SITE, IS_CUSTOMER_SITE, getHqSiteUrl, getOwnerSiteUrl } from '../config/siteMode';
 
 export const Navbar: React.FC = () => {
   const location = useLocation();
@@ -113,9 +116,7 @@ export const Navbar: React.FC = () => {
         { to: '/kitchen', label: 'Kitchen KDS' },
         { to: '/ai-studio', label: 'Chef Studio' },
       ]
-    : [
-        { to: '/', label: 'Affiliated Restaurants', exact: true },
-      ];
+    : [];
 
   const isLinkActive = (path: string, exact?: boolean) => {
     if (exact) return location.pathname === path;
@@ -321,114 +322,130 @@ export const Navbar: React.FC = () => {
               </div>
             )}
 
-            {/* Mobile Menu Toggle */}
+            {/* Main Three-Lines Menu Button (Top Right) */}
             <button
               type="button"
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden p-2 text-slate-400 hover:text-white rounded-lg hover:bg-white/[0.05]"
+              className="p-2 text-slate-300 hover:text-white rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-colors cursor-pointer"
+              title="Open Navigation Menu"
             >
-              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileOpen ? <X className="w-5 h-5 text-amber-400" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Dropdown */}
+        {/* Full Navigation Drawer from the Three Lines Menu Button */}
         {mobileOpen && (
-          <div className="lg:hidden bg-[#0C111D] border-t border-white/[0.08] px-4 py-3 space-y-2">
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                onClick={() => setMobileOpen(false)}
-                className={`block px-3 py-2 rounded-lg text-xs font-medium ${
-                  isLinkActive(link.to, link.exact)
-                    ? 'bg-amber-500/15 text-amber-300 font-bold'
-                    : 'text-slate-300 hover:bg-white/[0.05]'
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-            {IS_OWNER_SITE && (
-              <div className="pt-2 border-t border-white/[0.08] space-y-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileOpen(false);
-                    setQuickNavOpen(true);
-                  }}
-                  className="w-full py-2 px-3 rounded-lg bg-[#090D16]/[0.05] text-slate-200 text-xs font-semibold flex items-center justify-center space-x-1.5"
-                >
-                  <Compass className="w-4 h-4 text-amber-400" />
-                  <span>Open All Portals Launcher</span>
-                </button>
-              </div>
-            )}
-          </div>
-        )}
+          <div className="bg-[#0A0E18] border-t border-white/[0.08] px-4 py-4 space-y-3 shadow-2xl animate-in fade-in slide-in-from-top-2">
+            <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 px-2">
+              Menu &amp; Main Headings
+            </div>
 
-        {/* Mobile Always-Visible Headings & Options Bar */}
-        <div className="lg:hidden bg-[#070B12] border-t border-white/[0.08] px-2.5 py-2 overflow-x-auto flex items-center space-x-1.5 scrollbar-none touch-pan-x text-xs font-bold shadow-inner">
-          {IS_OWNER_SITE ? (
-            <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {/* 1. Explore Pune Restaurants */}
               <Link
                 to="/"
-                className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
-                  location.pathname === '/' || location.pathname.startsWith('/manage')
-                    ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                    : 'bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]'
-                }`}
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-200 hover:text-white transition-all border border-white/[0.06]"
               >
-                <LayoutDashboard className="w-3.5 h-3.5 text-amber-400" />
-                <span>Floor Ops</span>
+                <div className="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                  <UtensilsCrossed className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-white">Explore Pune Restaurants</div>
+                  <div className="text-[10px] text-slate-400">Browse verified menus &amp; dining venues</div>
+                </div>
               </Link>
-              <Link
-                to="/kitchen"
-                className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
-                  location.pathname === '/kitchen'
-                    ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                    : 'bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]'
-                }`}
-              >
-                <ChefHat className="w-3.5 h-3.5 text-amber-400" />
-                <span>Kitchen KDS</span>
-              </Link>
-              <Link
-                to="/ai-studio"
-                className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
-                  location.pathname === '/ai-studio'
-                    ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                    : 'bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]'
-                }`}
-              >
-                <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-                <span>Chef Studio</span>
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link
-                to="/"
-                className={`px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 transition-colors ${
-                  location.pathname === '/'
-                    ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                    : 'bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]'
-                }`}
-              >
-                <Compass className="w-3.5 h-3.5 text-amber-400" />
-                <span>Affiliated Partners</span>
-              </Link>
+
+              {/* 2. Play Table Arcade Games */}
               <button
                 type="button"
-                onClick={() => setIsQrScannerOpen(true)}
-                className="px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shrink-0 bg-white/[0.05] text-slate-300 hover:text-white border border-white/[0.08]"
+                onClick={() => {
+                  setMobileOpen(false);
+                  window.dispatchEvent(new CustomEvent('open-table-arcade'));
+                }}
+                className="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-purple-900/20 hover:bg-purple-900/30 text-slate-200 hover:text-white transition-all border border-purple-500/30 cursor-pointer text-left"
               >
-                <QrCode className="w-3.5 h-3.5 text-amber-400" />
-                <span>Scan QR</span>
+                <div className="w-8 h-8 rounded-lg bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300">
+                  <Gamepad2 className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-purple-200 flex items-center space-x-1.5">
+                    <span>Play Table Games</span>
+                    <span className="text-[9px] bg-purple-500/30 text-purple-300 px-1.5 py-0.2 rounded font-mono font-black">ARCADE</span>
+                  </div>
+                  <div className="text-[10px] text-slate-400">Crossword, Solitaire, Trivia &amp; Bill Roulette</div>
+                </div>
               </button>
-            </>
-          )}
-        </div>
+
+              {/* 3. 5-Star Google Reviews */}
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileOpen(false);
+                  window.dispatchEvent(new CustomEvent('open-google-review'));
+                }}
+                className="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-amber-900/20 hover:bg-amber-900/30 text-slate-200 hover:text-white transition-all border border-amber-500/30 cursor-pointer text-left"
+              >
+                <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300">
+                  <Star className="w-4 h-4 fill-amber-400" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-amber-200 flex items-center space-x-1.5">
+                    <span>Google 5-Star Reviews</span>
+                    <span className="text-[9px] bg-amber-500/30 text-amber-300 px-1.5 py-0.2 rounded font-mono font-black">REWARDS</span>
+                  </div>
+                  <div className="text-[10px] text-slate-400">Generate 1-tap review &amp; unlock table treats</div>
+                </div>
+              </button>
+
+              {/* 4. Scan Table QR Code */}
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileOpen(false);
+                  setIsQrScannerOpen(true);
+                }}
+                className="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-emerald-950/30 hover:bg-emerald-950/50 text-slate-200 hover:text-white transition-all border border-emerald-500/30 cursor-pointer text-left"
+              >
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                  <QrCode className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-white">Scan Table QR Code</div>
+                  <div className="text-[10px] text-slate-400">Instant app-free dining ordering</div>
+                </div>
+              </button>
+            </div>
+
+            {/* Separator: Partner Portals */}
+            <div className="pt-2.5 border-t border-white/[0.08] space-y-1.5">
+              <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 px-2">
+                Merchant &amp; HQ Systems
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <a
+                  href={getOwnerSiteUrl('')}
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center space-x-2 px-3 py-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white border border-white/[0.06] text-xs font-semibold"
+                >
+                  <Building2 className="w-3.5 h-3.5 text-amber-400" />
+                  <span className="truncate">Partner Portal</span>
+                </a>
+
+                <a
+                  href={getHqSiteUrl('')}
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center space-x-2 px-3 py-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white border border-white/[0.06] text-xs font-semibold"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
+                  <span className="truncate">Master Admin HQ</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* ═══════════════════════════════════════════════════════════ */}

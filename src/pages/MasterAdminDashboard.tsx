@@ -1049,8 +1049,11 @@ export const MasterAdminDashboard: React.FC = () => {
                       >
                         <div
                           onClick={() => {
+                            try {
+                              sessionStorage.setItem('menuz_from_hq', 'true');
+                            } catch (e) {}
                             setCurrentRestaurant(r.id);
-                            navigate(`/manage/${r.slug}`);
+                            navigate(`/manage/${r.slug}?from=hq`);
                           }}
                           className="flex items-center space-x-3 cursor-pointer min-w-0 flex-1 group"
                         >
@@ -1062,19 +1065,6 @@ export const MasterAdminDashboard: React.FC = () => {
                         </div>
 
                         <div className="flex items-center space-x-1.5 flex-shrink-0">
-                          <a
-                            href={getOwnerSiteUrl(`#/manage/${r.slug}?from=hq`)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => {
-                              setCurrentRestaurant(r.id);
-                            }}
-                            className="px-2.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-[11px] font-bold rounded-lg transition-all shadow-sm flex items-center space-x-1 cursor-pointer"
-                            title={`Open ${r.name} Management Hub in dedicated portal`}
-                          >
-                            <span>Hub</span>
-                            <ChevronRight className="w-3 h-3" />
-                          </a>
                           <a
                             href={getCustomerSiteUrl(`#/r/${r.slug}/menu?t=${rToken}&from=hq`)}
                             target="_blank"
@@ -1197,19 +1187,6 @@ export const MasterAdminDashboard: React.FC = () => {
 
                                 <div className="flex items-center space-x-1.5 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
                                   {isDemoOrPartner && existingRest ? (
-                                    <>
-                                      <a
-                                        href={getOwnerSiteUrl(`#/manage/${existingRest.slug}?from=hq`)}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        onClick={() => {
-                                          setCurrentRestaurant(existingRest.id);
-                                          setShowAdminSuggestions(false);
-                                        }}
-                                        className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-white text-[10px] font-bold rounded-lg transition-colors border border-white/[0.08] cursor-pointer"
-                                      >
-                                        Hub
-                                      </a>
                                       <a
                                         href={getCustomerSiteUrl(`#/r/${existingRest.slug}/menu?t=${rToken}&from=hq`)}
                                         target="_blank"
@@ -1222,7 +1199,6 @@ export const MasterAdminDashboard: React.FC = () => {
                                       >
                                         Menu
                                       </a>
-                                    </>
                                   ) : (
                                     <button
                                       onClick={() => {
@@ -1531,31 +1507,18 @@ export const MasterAdminDashboard: React.FC = () => {
                         {/* Onboard Action */}
                         <div className="mt-5 pt-4 border-t border-white/[0.08]">
                           {isOnboarded && existing ? (
-                            <div className="flex gap-2">
-                              <a
-                                href={getOwnerSiteUrl(`#/manage/${existing.slug}?from=hq`)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={() => {
-                                  setCurrentRestaurant(existing.id);
-                                }}
-                                className="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors border border-white/[0.08] cursor-pointer"
-                              >
-                                <span>Open Hub</span>
-                                <ChevronRight className="w-3.5 h-3.5" />
-                              </a>
-                              <a
-                                href={getCustomerSiteUrl(`#/r/${existing.slug}/menu?t=${firstToken}&from=hq`)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={() => {
-                                  setCurrentRestaurant(existing.id);
-                                }}
-                                className="flex-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors border border-amber-500/30 cursor-pointer"
-                              >
-                                <span>Diner Menu</span>
-                              </a>
-                            </div>
+                            <a
+                              href={getCustomerSiteUrl(`#/r/${existing.slug}/menu?t=${firstToken}&from=hq`)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => {
+                                setCurrentRestaurant(existing.id);
+                              }}
+                              className="w-full bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors border border-amber-500/30 cursor-pointer"
+                            >
+                              <UtensilsCrossed className="w-3.5 h-3.5 text-amber-400" />
+                              <span>Diner Menu</span>
+                            </a>
                           ) : (
                             <button
                               type="button"
@@ -1612,8 +1575,11 @@ export const MasterAdminDashboard: React.FC = () => {
                           <div className="flex items-start justify-between">
                             <div
                               onClick={() => {
+                                try {
+                                  sessionStorage.setItem('menuz_from_hq', 'true');
+                                } catch (e) {}
                                 setCurrentRestaurant(rest.id);
-                                navigate(`/manage/${rest.slug}`);
+                                navigate(`/manage/${rest.slug}?from=hq`);
                               }}
                               className="flex items-center space-x-3 cursor-pointer flex-1 mr-2"
                             >
@@ -1716,20 +1682,6 @@ export const MasterAdminDashboard: React.FC = () => {
                           </a>
 
                           <div className="grid grid-cols-2 gap-2">
-                            <a
-                              href={getOwnerSiteUrl(`#/manage/${rest.slug}?from=hq`)}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={() => {
-                                setCurrentRestaurant(rest.id);
-                              }}
-                              className="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 transition-colors text-center cursor-pointer border border-white/[0.08]"
-                              title="Manager Hub & Menu Editor"
-                            >
-                              <span>Manage</span>
-                              <ChevronRight className="w-3 h-3" />
-                            </a>
-
                             <Link
                               to="/kitchen"
                               onClick={() => setCurrentRestaurant(rest.id)}
@@ -1739,9 +1691,7 @@ export const MasterAdminDashboard: React.FC = () => {
                               <ChefHat className="w-3.5 h-3.5 text-amber-400" />
                               <span>KDS</span>
                             </Link>
-                          </div>
 
-                          <div className="grid grid-cols-2 gap-2">
                             <button
                               onClick={() => {
                                 setCurrentRestaurant(rest.id);
@@ -1752,9 +1702,11 @@ export const MasterAdminDashboard: React.FC = () => {
                               title="View & Share Guest Links, WhatsApp Handover Brief, Table QRs, and Domain"
                             >
                               <Share2 className="w-3.5 h-3.5 text-amber-400" />
-                              <span>📲 Links & QRs</span>
+                              <span>📲 Links &amp; QRs</span>
                             </button>
+                          </div>
 
+                          <div className="grid grid-cols-2 gap-2">
                             <button
                               onClick={() => {
                                 setCurrentRestaurant(rest.id);
@@ -1767,10 +1719,7 @@ export const MasterAdminDashboard: React.FC = () => {
                               <QrCode className="w-3.5 h-3.5 text-amber-400" />
                               <span>🪑 Floor Plan</span>
                             </button>
-                          </div>
 
-                          {/* 📸 Dedicated Photo Management & Gallery Tools */}
-                          <div className="grid grid-cols-2 gap-2">
                             <button
                               onClick={() => {
                                 setCurrentRestaurant(rest.id);
@@ -1783,19 +1732,19 @@ export const MasterAdminDashboard: React.FC = () => {
                               <ImageIcon className="w-3.5 h-3.5 text-amber-400" />
                               <span>📸 Venue Photos</span>
                             </button>
-
-                            <a
-                              href={getOwnerSiteUrl(`#/manage/${rest.slug}#manager-photo-studio`)}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={() => setCurrentRestaurant(rest.id)}
-                              className="bg-slate-800/90 hover:bg-amber-500/20 hover:border-amber-500/40 text-amber-300 hover:text-white font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1.5 border border-amber-500/20 transition-all cursor-pointer shadow-sm text-center"
-                              title="Upload & Remove Dish Photos for Each Menu Item from Phone Gallery"
-                            >
-                              <Utensils className="w-3.5 h-3.5 text-amber-400" />
-                              <span>🖼️ Dish Photos</span>
-                            </a>
                           </div>
+
+                          <a
+                            href={getOwnerSiteUrl(`#/manage/${rest.slug}#manager-photo-studio`)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => setCurrentRestaurant(rest.id)}
+                            className="w-full bg-slate-800/90 hover:bg-amber-500/20 hover:border-amber-500/40 text-amber-300 hover:text-white font-bold py-2 px-2.5 rounded-xl text-xs flex items-center justify-center space-x-1.5 border border-amber-500/20 transition-all cursor-pointer shadow-sm text-center"
+                            title="Upload & Remove Dish Photos for Each Menu Item from Phone Gallery"
+                          >
+                            <Utensils className="w-3.5 h-3.5 text-amber-400" />
+                            <span>🖼️ Dish Photos Studio</span>
+                          </a>
 
                           <div className="flex items-center justify-between pt-1 text-[11px] text-slate-400">
                             <span className="truncate max-w-[170px] font-mono text-[10px] text-slate-400">/#/r/{rest.slug}/menu</span>

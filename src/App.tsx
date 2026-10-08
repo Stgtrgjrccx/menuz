@@ -185,7 +185,8 @@ export const App: React.FC = () => {
                   <Route path="/restaurant" element={<ExternalOwnerRedirect />} />
                   <Route path="/restaurant/*" element={<ExternalOwnerRedirect />} />
                   <Route path="/operations" element={<ExternalOwnerRedirect />} />
-                  <Route path="/kitchen" element={<ExternalOwnerRedirect />} />
+                  <Route path="/kitchen" element={<Navigate to="/" replace />} />
+                  <Route path="/kitchen/*" element={<Navigate to="/" replace />} />
                   <Route path="/ai-studio" element={<ExternalOwnerRedirect />} />
                   <Route path="/pitch" element={<PitchDeckPage />} />
                 </>

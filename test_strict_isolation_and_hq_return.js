@@ -47,7 +47,7 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, async () => {
   console.log(`Test server running at http://localhost:${PORT}`);
 
-  const chromePath = '/Users/siddhantwarde/.gemini/antigravity-ide/scratch/menuz/chrome/mac_arm-154.0.8037.92/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing';
+  const chromePath = '/Users/siddhantwarde/.cache/puppeteer/chrome/mac_arm-151.0.7922.47/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing';
 
   const browser = await puppeteer.launch({
     executablePath: chromePath,
@@ -59,7 +59,8 @@ server.listen(PORT, async () => {
   await page.setViewport({ width: 1280, height: 800 });
 
   console.log('\n--- 1. Testing Customer Site (Root /) ---');
-  await page.goto(`http://localhost:${PORT}/`, { waitUntil: 'networkidle0' });
+  await page.goto(`http://localhost:${PORT}/`, { waitUntil: 'domcontentloaded' });
+  await new Promise((r) => setTimeout(r, 1200));
   const customerContent = await page.content();
 
   // Check affiliated restaurants exist
@@ -89,7 +90,8 @@ server.listen(PORT, async () => {
   console.log(`✓ HQ return banner hidden on direct visit: ${!hasHqBannerDirect}`);
 
   console.log('\n--- 2. Testing Customer Diner Menu & Table Arcade Games ---');
-  await page.goto(`http://localhost:${PORT}/#/r/saffron-house/menu`, { waitUntil: 'networkidle0' });
+  await page.goto(`http://localhost:${PORT}/#/r/saffron-house/menu`, { waitUntil: 'domcontentloaded' });
+  await new Promise((r) => setTimeout(r, 1200));
   const dinerMenuContent = await page.content();
 
   // Verify notification option is NOT present on Diner Menu
@@ -118,7 +120,8 @@ server.listen(PORT, async () => {
   console.log(`✓ "Who Pays The Bill?" Table Roulette present in Table Arcade: ${hasBillRoulette}`);
 
   console.log('\n--- 3. Testing Owner Site (/owner/) ---');
-  await page.goto(`http://localhost:${PORT}/owner/`, { waitUntil: 'networkidle0' });
+  await page.goto(`http://localhost:${PORT}/owner/`, { waitUntil: 'domcontentloaded' });
+  await new Promise((r) => setTimeout(r, 1200));
   const ownerContent = await page.content();
 
   // Check Food Operations Hub is FIRST page
@@ -134,7 +137,8 @@ server.listen(PORT, async () => {
   console.log(`✓ Has Switch Outlet control: ${hasSwitchOutlet}`);
 
   console.log('\n--- 4. Testing HQ Site & Customer/Diner Navigation (/hq/) ---');
-  await page.goto(`http://localhost:${PORT}/hq/`, { waitUntil: 'networkidle0' });
+  await page.goto(`http://localhost:${PORT}/hq/`, { waitUntil: 'domcontentloaded' });
+  await new Promise((r) => setTimeout(r, 1200));
   // Enter admin passphrase to unlock HQ dashboard
   const passInput = await page.$('input[type="password"]');
   if (passInput) {
@@ -149,12 +153,14 @@ server.listen(PORT, async () => {
   console.log(`✓ HQ Site has Diner Menus access link: ${hasDinerMenusLinkInHq}`);
 
   console.log('\n--- 5. Testing HQ Return Banner when accessed from HQ (?from=hq) ---');
-  await page.goto(`http://localhost:${PORT}/?from=hq`, { waitUntil: 'networkidle0' });
+  await page.goto(`http://localhost:${PORT}/?from=hq`, { waitUntil: 'domcontentloaded' });
+  await new Promise((r) => setTimeout(r, 1200));
   const hqAccessContent = await page.content();
   const hasHqBannerWhenFromHq = hqAccessContent.includes('Return to Master HQ');
   console.log(`✓ HQ Return banner displays when ?from=hq is present: ${hasHqBannerWhenFromHq}`);
 
-  await page.goto(`http://localhost:${PORT}/#/r/saffron-house/menu?from=hq`, { waitUntil: 'networkidle0' });
+  await page.goto(`http://localhost:${PORT}/#/r/saffron-house/menu?from=hq`, { waitUntil: 'domcontentloaded' });
+  await new Promise((r) => setTimeout(r, 1200));
   const dinerMenuHqContent = await page.content();
   const hasHqBannerOnDinerMenu = dinerMenuHqContent.includes('Return to Master HQ');
   console.log(`✓ HQ Return banner displays on Diner Menu when from=hq: ${hasHqBannerOnDinerMenu}`);

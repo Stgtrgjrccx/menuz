@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   QrCode,
@@ -20,6 +20,7 @@ import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantS
 import { isWorkingWithMenuz } from '../types';
 import { QrScannerModal } from '../components/QrScannerModal';
 import { TableArcadeModal } from '../components/TableArcadeModal';
+import { SpinWheelModal } from '../components/SpinWheelModal';
 import { getOwnerSiteUrl, getHqSiteUrl } from '../config/siteMode';
 
 export const CustomerHomePage: React.FC = () => {
@@ -32,6 +33,18 @@ export const CustomerHomePage: React.FC = () => {
   const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
   const [selectedScannerSlug, setSelectedScannerSlug] = useState<string | undefined>(undefined);
   const [isArcadeOpen, setIsArcadeOpen] = useState(false);
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
+
+  useEffect(() => {
+    const handleArcade = () => setIsArcadeOpen(true);
+    const handleReview = () => setIsReviewOpen(true);
+    window.addEventListener('open-table-arcade', handleArcade);
+    window.addEventListener('open-google-review', handleReview);
+    return () => {
+      window.removeEventListener('open-table-arcade', handleArcade);
+      window.removeEventListener('open-google-review', handleReview);
+    };
+  }, []);
 
   // Strictly ONLY restaurants affiliated with Menuz (verified partners)
   const affiliatedVenues = useMemo(() => {
@@ -547,6 +560,23 @@ export const CustomerHomePage: React.FC = () => {
         tableLabel="Diner Table"
         restaurantName="Menuz Dining Experience"
       />
+
+      {/* Google Review & Spin Wheel Modal */}
+      {isReviewOpen && (
+        <SpinWheelModal
+          isOpen={isReviewOpen}
+          onClose={() => setIsReviewOpen(false)}
+          activeTable={
+            tables[0] || {
+              id: 'preview-table',
+              restaurant_id: affiliatedVenues[0]?.id || 'casa-bella',
+              label: 'Table 1',
+              public_token: affiliatedVenues[0]?.token || 'table-preview',
+              is_active: true
+            } as any
+          }
+        />
+      )}
     </div>
   );
 };

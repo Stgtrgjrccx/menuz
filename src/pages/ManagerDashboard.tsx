@@ -38,6 +38,7 @@ import {
   Trash2
 } from 'lucide-react';
 import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantStore';
+import { getHqSiteUrl, IS_HQ_SITE } from '../config/siteMode';
 import { SEED_RESTAURANTS } from '../data/seedData';
 import { PetpoojaConfig, RoyalPosConfig, RecahoConfig, RancelabConfig, MenuItem, Restaurant } from '../types';
 import { PetpoojaIntegrationPanel } from '../components/PetpoojaIntegrationPanel';
@@ -376,6 +377,25 @@ export const ManagerDashboard: React.FC = () => {
       {/* ── Compact Navigation Top Bar ────────────────────────────── */}
       <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-white/[0.08]">
         <div className="flex items-center space-x-2">
+          {(IS_HQ_SITE || location.search.includes('from=hq') || (typeof window !== 'undefined' && sessionStorage.getItem('menuz_from_hq') === 'true')) && (
+            <button
+              type="button"
+              onClick={() => {
+                try { sessionStorage.removeItem('menuz_from_hq'); } catch(e) {}
+                if (IS_HQ_SITE) {
+                  navigate('/');
+                } else {
+                  window.location.href = getHqSiteUrl('');
+                }
+              }}
+              className="inline-flex items-center space-x-1.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 border border-indigo-400/50 px-3 py-1.5 rounded-xl shadow-md transition-all cursor-pointer"
+              title="Return to Master Platform Command Center"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 text-indigo-200" />
+              <span>Return to HQ</span>
+            </button>
+          )}
+
           <button
             type="button"
             onClick={() => setIsOutletSwitchModalOpen(true)}

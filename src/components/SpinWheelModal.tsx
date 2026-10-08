@@ -165,6 +165,8 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
   const [aiDraft, setAiDraft] = useState('');
   const [copiedReview, setCopiedReview] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [reviewTone, setReviewTone] = useState<'enthusiastic' | 'detailed' | 'concise'>('enthusiastic');
+  const [variationIndex, setVariationIndex] = useState<number>(0);
 
   // Wheel state
   const [isSpinning, setIsSpinning] = useState(false);
@@ -247,6 +249,8 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
       setStep('rate_and_keywords');
       setStarRating(5);
       setSelectedTags(quickTags.slice(0, 3));
+      setReviewTone('enthusiastic');
+      setVariationIndex(0);
       setWonPrize(null);
       setIsSpinning(false);
       setCopiedReview(false);
@@ -257,7 +261,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
     }
   }, [isOpen, restaurant?.cuisine]);
 
-  // Update AI draft review in real time as keywords or ratings change
+  // Update AI draft review in real time as keywords, ratings, tone, or variations change
   useEffect(() => {
     if (starRating >= 4) {
       const draft = generateConsumerReviewDraft({
@@ -265,11 +269,12 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
         cuisine: restaurant?.cuisine || 'Contemporary Dining',
         rating: starRating,
         selectedTags,
-        tone: 'enthusiastic'
+        tone: reviewTone,
+        variationIndex
       });
       setAiDraft(draft);
     }
-  }, [restaurant?.name, restaurant?.cuisine, starRating, selectedTags]);
+  }, [restaurant?.name, restaurant?.cuisine, starRating, selectedTags, reviewTone, variationIndex]);
 
   // ── DRAW WHEEL ON CANVAS ─────────────────────────────────────
   const drawWheel = (angle: number) => {
@@ -708,54 +713,71 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
         {/* ═══════════════════════════════════════════════════════════ */}
         {/* STEP 1: RATE & SELECT KEYWORDS (GENERATE READY REVIEW)      */}
         {/* ═══════════════════════════════════════════════════════════ */}
+        {/* STEP 1: ULTRA-CLEAN 5-STAR REVIEW GENERATOR & PREVIEW       */}
+        {/* ═══════════════════════════════════════════════════════════ */}
         {step === 'rate_and_keywords' && (
-          <div className="w-full flex flex-col items-center pt-3 space-y-3.5 text-center">
-            {/* Header prompt */}
-            <div className="w-full bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3 text-center space-y-0.5">
-              <h4 className="font-serif font-bold text-sm text-white">
-                Post on Google Reviews to Spin the Wheel!
-              </h4>
-              <p className="text-[11px] text-slate-400 leading-relaxed">
-                Rate your meal and select your favorites. We'll generate a ready-made review to post on Google and unlock your spin!
-              </p>
+          <div className="w-full flex flex-col pt-1 space-y-3.5 text-left">
+            {/* Header banner */}
+            <div className="w-full bg-gradient-to-r from-amber-500/15 via-amber-500/5 to-transparent border border-amber-500/30 rounded-2xl p-3.5 flex items-start space-x-3 shadow-lg">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+                <Sparkles className="w-5 h-5 text-amber-400 animate-pulse" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center space-x-2">
+                  <h4 className="font-serif font-black text-sm sm:text-base text-white tracking-wide">
+                    1-Tap Google Review Generator
+                  </h4>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                    Reward Unlocked
+                  </span>
+                </div>
+                <p className="text-xs text-slate-300 mt-0.5 leading-relaxed">
+                  Rate your meal &amp; tap your highlights. We generate an authentic 5-star Google review below ready for you to copy, edit, and post!
+                </p>
+              </div>
             </div>
 
-            {/* 1. Star Rating */}
-            <div className="w-full space-y-1">
-              <label className="block text-xs font-bold text-slate-200">
-                1. How is your dining experience today?
-              </label>
+            {/* 1. Interactive Star Rating */}
+            <div className="p-3 bg-slate-900/80 rounded-2xl border border-white/[0.08] space-y-1.5 text-center shadow-md">
+              <div className="flex items-center justify-between px-1">
+                <span className="text-xs font-bold text-slate-200">Rate your experience:</span>
+                <span className="text-[11px] font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
+                  {starRating === 5 ? '⭐⭐⭐⭐⭐ Exceptional (5/5)' : starRating === 4 ? '⭐⭐⭐⭐ Very Good (4/5)' : `⭐ ${starRating} Stars (Private Feedback)`}
+                </span>
+              </div>
 
-              <div className="flex items-center justify-center space-x-2 my-1">
+              <div className="flex items-center justify-center space-x-2 py-1">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
                     key={star}
                     type="button"
                     onClick={() => handleRatingSelect(star)}
-                    className="p-1 text-3xl transition-transform hover:scale-125 focus:outline-none cursor-pointer"
+                    className="p-1 text-3xl sm:text-4xl transition-all hover:scale-125 active:scale-95 focus:outline-none cursor-pointer"
                     title={`${star} Stars`}
                   >
                     <span
-                      className={star <= starRating ? 'text-amber-400 drop-shadow-sm' : 'text-slate-600'}
+                      className={
+                        star <= starRating
+                          ? 'text-amber-400 drop-shadow-[0_0_8px_rgba(245,158,11,0.6)]'
+                          : 'text-slate-700 hover:text-slate-500'
+                      }
                     >
                       ★
                     </span>
                   </button>
                 ))}
               </div>
-              <span className="text-[11px] font-semibold text-slate-400">
-                {starRating === 5 ? 'Exceptional! ⭐⭐⭐⭐⭐' : 'Great! ⭐⭐⭐⭐'}
-              </span>
             </div>
 
-            {/* 2. Keyword Highlights */}
-            <div className="w-full space-y-1.5 text-left">
-              <label className="block text-xs font-bold text-slate-200">
-                2. Tap your favorites to include in review:
-              </label>
+            {/* 2. Highlight Tag Chips */}
+            <div className="p-3 bg-slate-900/80 rounded-2xl border border-white/[0.08] space-y-2 shadow-md">
+              <div className="flex items-center justify-between px-1">
+                <span className="text-xs font-bold text-slate-200">Tap highlights to include in your review:</span>
+                <span className="text-[11px] font-mono text-amber-400 font-bold">{selectedTags.length} selected</span>
+              </div>
 
-              <div className="flex flex-wrap gap-1.5">
-                {quickTags.slice(0, 6).map((tag) => {
+              <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto scrollbar-none">
+                {quickTags.map((tag) => {
                   const isSel = selectedTags.includes(tag);
                   return (
                     <button
@@ -766,28 +788,133 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                           isSel ? prev.filter((t) => t !== tag) : [...prev, tag]
                         );
                       }}
-                      className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer ${
+                      className={`px-2.5 py-1 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center space-x-1 ${
                         isSel
-                          ? 'bg-amber-500 text-slate-950 font-bold shadow-sm'
-                          : 'bg-[#12192B] text-slate-400 border border-white/[0.08] hover:bg-white/[0.06] hover:text-white'
+                          ? 'bg-amber-500 text-slate-950 font-black shadow-md scale-105'
+                          : 'bg-[#12192B] text-slate-300 border border-white/[0.08] hover:bg-white/[0.08] hover:text-white'
                       }`}
                     >
-                      {tag}
+                      {isSel && <Check className="w-3 h-3 text-slate-950" />}
+                      <span>{tag}</span>
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            {/* Primary Action: Post on Google to Unlock Reward */}
-            <button
-              type="button"
-              onClick={handleCopyAndPostToGoogle}
-              className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-amber-600 via-amber-500 to-amber-700 hover:brightness-105 active:scale-95 text-slate-950 font-serif text-sm font-bold flex items-center justify-center space-x-2 transition-all mt-1 cursor-pointer shadow-lg"
-            >
-              <ExternalLink className="w-4 h-4 text-slate-950" />
-              <span>Post on Google &amp; Unlock Your Reward ↗</span>
-            </button>
+            {/* 3. LIVE AI GENERATED REVIEW BOX (Visible, Editable, Real-Time) */}
+            <div className="p-3.5 bg-[#0A0F1D] rounded-2xl border-2 border-amber-500/40 shadow-xl space-y-2.5 relative overflow-hidden">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center space-x-2">
+                  <span className="flex h-2 w-2 relative">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                  </span>
+                  <label className="text-xs font-black uppercase tracking-wider text-amber-300 font-mono">
+                    Live Generated Review Draft
+                  </label>
+                </div>
+
+                {/* Tone Controls & Shuffle */}
+                <div className="flex items-center space-x-1">
+                  <button
+                    type="button"
+                    onClick={() => setReviewTone('enthusiastic')}
+                    className={`px-2 py-0.5 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
+                      reviewTone === 'enthusiastic' ? 'bg-amber-500/30 text-amber-300 border border-amber-500/50' : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    Enthusiastic
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setReviewTone('detailed')}
+                    className={`px-2 py-0.5 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
+                      reviewTone === 'detailed' ? 'bg-amber-500/30 text-amber-300 border border-amber-500/50' : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    Foodie
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setReviewTone('concise')}
+                    className={`px-2 py-0.5 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
+                      reviewTone === 'concise' ? 'bg-amber-500/30 text-amber-300 border border-amber-500/50' : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    Crisp
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setVariationIndex((prev) => prev + 1)}
+                    className="p-1 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-amber-400 hover:text-amber-300 transition-colors cursor-pointer ml-1"
+                    title="Shuffle AI draft variation"
+                  >
+                    <RotateCw className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Editable Live Textarea with in-place copy button */}
+              <div className="relative">
+                <textarea
+                  value={aiDraft}
+                  onChange={(e) => setAiDraft(e.target.value)}
+                  rows={4}
+                  className="w-full bg-slate-950 border border-white/[0.12] rounded-xl p-3 text-xs text-slate-100 font-sans leading-relaxed focus:outline-none focus:border-amber-400 resize-none shadow-inner"
+                  placeholder="Generating review draft..."
+                />
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (aiDraft) {
+                      navigator.clipboard.writeText(aiDraft);
+                      setCopiedReview(true);
+                      setTimeout(() => setCopiedReview(false), 2000);
+                    }
+                  }}
+                  className={`absolute bottom-3 right-3 text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all flex items-center space-x-1 cursor-pointer ${
+                    copiedReview
+                      ? 'bg-emerald-500 text-slate-950 border-emerald-400 font-black shadow-md'
+                      : 'bg-slate-900/90 text-slate-300 border-white/20 hover:text-white hover:bg-slate-800'
+                  }`}
+                >
+                  {copiedReview ? (
+                    <>
+                      <Check className="w-3 h-3 text-slate-950" />
+                      <span>Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3 h-3 text-amber-400" />
+                      <span>Copy Draft</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              <div className="flex items-center justify-between text-[11px] text-slate-400 px-1">
+                <span className="italic text-slate-400">Feel free to customize or edit the text above</span>
+                <span className="font-mono text-slate-400">{aiDraft.length} characters</span>
+              </div>
+            </div>
+
+            {/* Primary Action Button */}
+            <div className="space-y-1 pt-1">
+              <button
+                type="button"
+                onClick={handleCopyAndPostToGoogle}
+                className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:brightness-110 active:scale-98 text-slate-950 font-serif font-black text-sm flex items-center justify-center space-x-2 transition-all shadow-xl shadow-amber-500/25 cursor-pointer"
+              >
+                <ExternalLink className="w-4 h-4 text-slate-950" />
+                <span>Copy Draft &amp; Post on Google Reviews ↗</span>
+              </button>
+              <p className="text-[11px] text-center text-slate-400 leading-tight">
+                Review draft copies automatically to clipboard. Simply paste it on Google Maps and confirm to spin the wheel!
+              </p>
+            </div>
           </div>
         )}
 
@@ -1042,71 +1169,30 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                 </div>
               )}
 
-              {/* WAITER ONE-TAP PIN REDEMPTION */}
+              {/* INSTANT ZERO-PASSWORD 1-TAP REDEMPTION */}
               {!isVoucherRedeemed && voucherSecondsLeft > 0 && (
-                <div className="pt-1">
-                  {!showStaffPinModal ? (
-                    <button
-                      type="button"
-                      onClick={() => setShowStaffPinModal(true)}
-                      className="w-full py-2 bg-white/[0.06] hover:bg-white/[0.12] active:scale-95 border border-white/20 rounded-xl text-xs font-bold text-white transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
-                    >
-                      <Key className="w-3.5 h-3.5 text-amber-400" />
-                      <span>Server: Tap to Void & Apply to POS Bill</span>
-                    </button>
-                  ) : (
-                    <div className="bg-[#12192B] p-3 rounded-xl border border-white/20 space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white flex items-center gap-1">
-                          <Lock className="w-3.5 h-3.5 text-amber-400" /> Enter Staff 4-Digit PIN:
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setShowStaffPinModal(false);
-                            setPinErrorMessage('');
-                          }}
-                          className="text-[10px] text-slate-400 hover:text-white cursor-pointer"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="password"
-                          maxLength={4}
-                          value={staffPinInput}
-                          onChange={(e) => setStaffPinInput(e.target.value)}
-                          placeholder="e.g. 1234"
-                          autoFocus
-                          className="w-24 text-center font-mono text-sm font-bold bg-[#090D16] border border-white/30 rounded-lg py-1.5 text-white focus:outline-none focus:border-amber-400"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (staffPinInput === '1234' || staffPinInput.length === 4) {
-                              setIsVoucherRedeemed(true);
-                              setRedeemedTimestamp(new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }));
-                              setShowStaffPinModal(false);
-                              setPinErrorMessage('');
-                              playWinFanfare();
-                            } else {
-                              setPinErrorMessage('PIN must be 4 digits (default: 1234)');
-                            }
-                          }}
-                          className="flex-1 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-lg transition-colors cursor-pointer"
-                        >
-                          Confirm Void
-                        </button>
-                      </div>
-                      {pinErrorMessage && (
-                        <p className="text-[10px] text-red-400 font-semibold">{pinErrorMessage}</p>
-                      )}
-                      <p className="text-[9px] text-slate-400">
-                        Default Demo Staff PIN is <code className="font-mono text-amber-300">1234</code>
-                      </p>
-                    </div>
-                  )}
+                <div className="pt-2 space-y-2">
+                  <div className="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-xl text-center space-y-1">
+                    <p className="text-xs font-bold text-amber-300">
+                      Show this voucher code to your waiter or server
+                    </p>
+                    <p className="text-[11px] text-slate-400">
+                      Zero password required. Your reward is automatically honored on your table bill.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsVoucherRedeemed(true);
+                      setRedeemedTimestamp(new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }));
+                      playWinFanfare();
+                    }}
+                    className="w-full py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 active:scale-95 text-white font-bold text-xs rounded-xl shadow-lg transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
+                  >
+                    <Check className="w-4 h-4 text-white" />
+                    <span>Redeem Voucher at Table (1-Tap)</span>
+                  </button>
                 </div>
               )}
             </div>
