@@ -1,0 +1,40 @@
+# Menuz: Comprehensive Technical & Architectural System Overview
+
+## 1. System Identity & Mission
+Menuz is an autonomous restaurant operating system and digital dining platform created for fine dining and casual eateries in Pune, Maharashtra, India.
+The system is designed with zero-app-download architecture: guests scan table QR codes on native iOS/Android camera apps, opening a lightweight PWA that enables real-time collaborative ordering, dietary customization, kitchen ticket printing, and Google review generation.
+
+## 2. Architectural Architecture & Subsystems
+1. Customer Dining Application (Root: `/` and `/#/r/:restaurantSlug/menu`)
+   - Interactive high-definition food presentation
+   - Dietary filtering (Veg, Non-Veg, Vegan, Gluten-Free, Jain, Chef Specials)
+   - Real-time multiplayer synchronized table cart
+   - Interactive Table Arcade (Solitaire, Crossword, Table Trivia, Who Pays The Bill)
+   - Direct kitchen ordering with order status tracking
+   - 1-click Google review recommendation builder
+
+2. Restaurant Partner Operations Hub (`/owner/` and `/#/manage`)
+   - Food Operations Hub with live table grid
+   - Kitchen Display System (KDS) for course pacing and ticket completion
+   - 1-click ESC/POS 80mm thermal receipt and KOT printing
+   - Menu engineering studio and pricing controls
+   - Google Review floor grievance alert shield
+
+3. Master Admin HQ Command Center (`/hq/` and `/#/hq`)
+   - Multi-tenant restaurant ecosystem directory (3,000+ Pune venues)
+   - Live table QR token generator and floor layout configurator
+   - Real-time bidirectional POS synchronizers (Petpooja, RoyalPOS, Recaho, RanceLab)
+   - Realtime multi-client SSE state broadcaster
+
+## 3. URLs and Key Endpoints
+- Customer Discovery: https://stgtrgjrccx.github.io/menuz/
+- Master Admin HQ: https://stgtrgjrccx.github.io/menuz/hq/
+- Restaurant Owner Hub: https://stgtrgjrccx.github.io/menuz/owner/
+- Executive Presentation: https://stgtrgjrccx.github.io/menuz/pitch
+- XML Sitemap: https://stgtrgjrccx.github.io/menuz/sitemap.xml
+- Machine LLM Directory: https://stgtrgjrccx.github.io/menuz/llms.txt
+
+## 4. Hardware & Integration Specifications
+- Printer Protocol: Standard ESC/POS raster and text mode commands (80mm width, 576 dots/line)
+- Port: TCP Port 9100 for network thermal printers; WebUSB for direct USB connection
+- POS Sync: RESTful JSON polling and webhook ingestion for order status mapping
