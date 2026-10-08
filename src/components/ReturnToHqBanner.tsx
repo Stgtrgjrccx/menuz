@@ -1,45 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { ArrowLeft, ShieldCheck, ExternalLink } from 'lucide-react';
+import { getHqSiteUrl, IS_HQ_SITE } from '../config/siteMode';
 
 export const ReturnToHqBanner: React.FC = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const [fromHq, setFromHq] = useState<boolean>(false);
 
   useEffect(() => {
-    // Check URL query param or hash for 'from=hq' across both window.location and React Router location
+    // Only show if the current URL query string explicitly specifies 'from=hq'
     const winSearch = typeof window !== 'undefined' ? window.location.search.toLowerCase() : '';
     const winHash = typeof window !== 'undefined' ? window.location.hash.toLowerCase() : '';
-    const winHref = typeof window !== 'undefined' ? window.location.href.toLowerCase() : '';
+    const locSearch = location.search.toLowerCase();
 
     const searchHasHq =
       winSearch.includes('from=hq') ||
       winHash.includes('from=hq') ||
-      winHref.includes('from=hq') ||
-      location.search.toLowerCase().includes('from=hq');
+      locSearch.includes('from=hq');
 
-    if (searchHasHq) {
-      try {
-        sessionStorage.setItem('menuz_opened_from_hq', 'true');
-      } catch (e) {}
-      setFromHq(true);
-      return;
-    }
-
-    try {
-      if (sessionStorage.getItem('menuz_opened_from_hq') === 'true') {
-        setFromHq(true);
-        return;
-      }
-    } catch (e) {}
-
-    setFromHq(false);
+    setFromHq(searchHasHq);
   }, [location]);
 
-  // Don't show if already inside Master Admin HQ
+  // Don't show if already inside Master Admin HQ site or on admin routes
   if (
     !fromHq ||
+    IS_HQ_SITE ||
     location.pathname === '/admin' ||
     location.pathname === '/hq' ||
     window.location.hash.startsWith('#/admin') ||
@@ -49,17 +34,9 @@ export const ReturnToHqBanner: React.FC = () => {
   }
 
   const handleReturnToHq = () => {
-    try {
-      sessionStorage.removeItem('menuz_opened_from_hq');
-    } catch (e) {}
     setFromHq(false);
-
-    // If there is an explicit HQ URL or return path
-    if (window.location.pathname.includes('/hq')) {
-      navigate('/hq');
-    } else {
-      navigate('/admin');
-    }
+    // Explicitly navigate to the dedicated HQ Admin command center URL
+    window.location.href = getHqSiteUrl('#/admin');
   };
 
   return (

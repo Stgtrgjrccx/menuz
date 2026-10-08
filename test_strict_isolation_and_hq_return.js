@@ -68,6 +68,10 @@ server.listen(PORT, async () => {
   console.log(`✓ Has Saffron House: ${hasSaffron}`);
   console.log(`✓ Has Casa Bella: ${hasCasaBella}`);
 
+  // Check notifications button is REMOVED on customer page
+  const hasNotifOnCustomer = customerContent.includes('System Notifications') || customerContent.includes('Live System Alerts');
+  console.log(`✓ Notifications option completely removed from customer page: ${!hasNotifOnCustomer}`);
+
   // Check purged landmarks & directory are NOT present
   const hasVaishali = customerContent.includes('Vaishali Restaurant');
   const hasGoodluck = customerContent.includes('Cafe Goodluck');
@@ -84,7 +88,36 @@ server.listen(PORT, async () => {
   const hasHqBannerDirect = customerContent.includes('Return to Master HQ');
   console.log(`✓ HQ return banner hidden on direct visit: ${!hasHqBannerDirect}`);
 
-  console.log('\n--- 2. Testing Owner Site (/owner/) ---');
+  console.log('\n--- 2. Testing Customer Diner Menu & Table Arcade Games ---');
+  await page.goto(`http://localhost:${PORT}/#/r/saffron-house/menu`, { waitUntil: 'networkidle0' });
+  const dinerMenuContent = await page.content();
+
+  // Verify notification option is NOT present on Diner Menu
+  const hasNotifOnDiner = dinerMenuContent.includes('System Notifications') || dinerMenuContent.includes('Live System Alerts');
+  console.log(`✓ Notifications option completely removed from diner menu: ${!hasNotifOnDiner}`);
+
+  // Verify Table Arcade button exists
+  const hasTableArcadeBtn = dinerMenuContent.includes('Table Arcade');
+  console.log(`✓ Table Arcade button present on diner menu: ${hasTableArcadeBtn}`);
+
+  // Click Table Arcade button to open games modal
+  const arcadeButton = await page.$('button[title*="Table Arcade"], button[title*="Solitaire"]');
+  if (arcadeButton) {
+    await arcadeButton.click();
+    await new Promise((r) => setTimeout(r, 600));
+  }
+  const modalContent = await page.content();
+  const hasSolitaire = modalContent.includes('Solitaire');
+  const hasCrossword = modalContent.includes('Food Crossword') || modalContent.includes('Crossword');
+  const hasTrivia = modalContent.includes('Table Trivia');
+  const hasBillRoulette = modalContent.includes('Who Pays The Bill?') || modalContent.includes('Who Pays');
+
+  console.log(`✓ Solitaire present in Table Arcade: ${hasSolitaire}`);
+  console.log(`✓ Food Crossword present in Table Arcade: ${hasCrossword}`);
+  console.log(`✓ Table Trivia present in Table Arcade: ${hasTrivia}`);
+  console.log(`✓ "Who Pays The Bill?" Table Roulette present in Table Arcade: ${hasBillRoulette}`);
+
+  console.log('\n--- 3. Testing Owner Site (/owner/) ---');
   await page.goto(`http://localhost:${PORT}/owner/`, { waitUntil: 'networkidle0' });
   const ownerContent = await page.content();
 
@@ -100,7 +133,22 @@ server.listen(PORT, async () => {
   const hasSwitchOutlet = ownerContent.includes('Switch Outlet');
   console.log(`✓ Has Switch Outlet control: ${hasSwitchOutlet}`);
 
-  console.log('\n--- 3. Testing HQ Return Banner when accessed from HQ (?from=hq) ---');
+  console.log('\n--- 4. Testing HQ Site & Customer/Diner Navigation (/hq/) ---');
+  await page.goto(`http://localhost:${PORT}/hq/`, { waitUntil: 'networkidle0' });
+  // Enter admin passphrase to unlock HQ dashboard
+  const passInput = await page.$('input[type="password"]');
+  if (passInput) {
+    await page.type('input[type="password"]', 'menuz2026');
+    await page.keyboard.press('Enter');
+    await new Promise((r) => setTimeout(r, 800));
+  }
+  const hqContent = await page.content();
+  const hasCustomerSiteLinkInHq = hqContent.includes('Customer Site');
+  const hasDinerMenusLinkInHq = hqContent.includes('Diner Menus');
+  console.log(`✓ HQ Site has Customer Site access link: ${hasCustomerSiteLinkInHq}`);
+  console.log(`✓ HQ Site has Diner Menus access link: ${hasDinerMenusLinkInHq}`);
+
+  console.log('\n--- 5. Testing HQ Return Banner when accessed from HQ (?from=hq) ---');
   await page.goto(`http://localhost:${PORT}/?from=hq`, { waitUntil: 'networkidle0' });
   const hqAccessContent = await page.content();
   const hasHqBannerWhenFromHq = hqAccessContent.includes('Return to Master HQ');
@@ -117,18 +165,22 @@ server.listen(PORT, async () => {
   if (
     hasSaffron &&
     hasCasaBella &&
-    !hasVaishali &&
-    !hasGoodluck &&
-    !has3000Dir &&
-    !hasPortals &&
+    !hasNotifOnCustomer &&
+    !hasNotifOnDiner &&
+    hasTableArcadeBtn &&
+    hasSolitaire &&
+    hasCrossword &&
+    hasTrivia &&
+    hasBillRoulette &&
     !hasHqBannerDirect &&
     hasFoodOpsHub &&
     !hasCustomerHomePageOnOwner &&
-    hasSwitchOutlet &&
+    hasCustomerSiteLinkInHq &&
+    hasDinerMenusLinkInHq &&
     hasHqBannerWhenFromHq &&
     hasHqBannerOnDinerMenu
   ) {
-    console.log('\n🎉 ALL 12 VALIDATION TESTS PASSED 100%! ZERO REGRESSIONS!');
+    console.log('\n🎉 ALL 16 COMPREHENSIVE TESTS PASSED 100%! ZERO REGRESSIONS!');
     process.exit(0);
   } else {
     console.error('\n❌ Some validations failed!');

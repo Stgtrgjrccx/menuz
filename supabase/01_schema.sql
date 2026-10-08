@@ -154,3 +154,17 @@ CREATE POLICY "Public read menu items" ON menu_items FOR SELECT USING (true);
 CREATE POLICY "Public read option groups" ON menu_item_option_groups FOR SELECT USING (true);
 CREATE POLICY "Public read options" ON menu_item_options FOR SELECT USING (true);
 CREATE POLICY "Public read active tables by token" ON restaurant_tables FOR SELECT USING (is_active = true);
+
+-- Performance Indexes (Prevents Full Table Scans & N+1 Latency)
+CREATE INDEX IF NOT EXISTS idx_orders_restaurant_created ON orders (restaurant_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_orders_table_id ON orders (table_id);
+CREATE INDEX IF NOT EXISTS idx_orders_status ON orders (status);
+CREATE INDEX IF NOT EXISTS idx_order_items_order_id ON order_items (order_id);
+CREATE INDEX IF NOT EXISTS idx_order_items_menu_item ON order_items (menu_item_id);
+CREATE INDEX IF NOT EXISTS idx_menu_categories_restaurant ON menu_categories (restaurant_id, sort_order);
+CREATE INDEX IF NOT EXISTS idx_menu_items_restaurant_cat ON menu_items (restaurant_id, category_id, sort_order);
+CREATE INDEX IF NOT EXISTS idx_menu_items_available ON menu_items (is_available);
+CREATE INDEX IF NOT EXISTS idx_option_groups_item ON menu_item_option_groups (menu_item_id, sort_order);
+CREATE INDEX IF NOT EXISTS idx_options_group ON menu_item_options (option_group_id, sort_order);
+CREATE INDEX IF NOT EXISTS idx_restaurant_members_user ON restaurant_members (user_id);
+CREATE INDEX IF NOT EXISTS idx_restaurant_tables_token ON restaurant_tables (public_token);

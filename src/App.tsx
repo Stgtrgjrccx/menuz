@@ -114,9 +114,14 @@ export const App: React.FC = () => {
                   <Route path="/" element={<MasterAdminDashboard />} />
                   <Route path="/hq" element={<MasterAdminDashboard />} />
                   <Route path="/admin" element={<MasterAdminDashboard />} />
+                  {/* HQ In-app inspection for customer site and menus */}
+                  <Route path="/customer" element={<CustomerHomePage />} />
+                  <Route path="/menu" element={<DinerMenu />} />
+                  <Route path="/r/:restaurantSlug" element={<DinerMenu />} />
+                  <Route path="/r/:restaurantSlug/menu" element={<DinerMenu />} />
+                  <Route path="/menu/:restaurantSlug" element={<DinerMenu />} />
                   <Route path="/manage" element={<ManagerDashboard />} />
                   <Route path="/manage/:restaurantSlug" element={<ManagerDashboard />} />
-                  <Route path="/r/:restaurantSlug/menu" element={<DinerMenu />} />
                   <Route path="/kitchen" element={<KitchenKDS />} />
                   <Route path="/ai-studio" element={<AiBotOnboardingStudioPage />} />
                   <Route path="/pitch" element={<PitchDeckPage />} />
@@ -153,7 +158,11 @@ export const App: React.FC = () => {
                   <Route path="/menu/:restaurantSlug/:tableId" element={<DinerMenu />} />
                   <Route path="/r/:restaurantSlug/:tableId" element={<DinerMenu />} />
                   <Route path="/qr" element={<Navigate to="/" replace />} />
-                  {/* Strictly isolated: Customer site has ZERO access to owner/manager pages */}
+                  {/* Strictly isolated: Customer site has ZERO access to owner/manager or HQ admin pages */}
+                  <Route path="/admin" element={<Navigate to="/" replace />} />
+                  <Route path="/admin/*" element={<Navigate to="/" replace />} />
+                  <Route path="/hq" element={<Navigate to="/" replace />} />
+                  <Route path="/hq/*" element={<Navigate to="/" replace />} />
                   <Route path="/manage" element={<Navigate to="/" replace />} />
                   <Route path="/manage/*" element={<Navigate to="/" replace />} />
                   <Route path="/dashboard" element={<Navigate to="/" replace />} />
@@ -166,10 +175,6 @@ export const App: React.FC = () => {
                   <Route path="/pitch" element={<Navigate to="/" replace />} />
                 </>
               )}
-
-              {/* Secret Master Admin HQ (Only accessible via direct secret URL + Passphrase) */}
-              <Route path="/hq" element={<MasterAdminDashboard />} />
-              <Route path="/admin" element={<MasterAdminDashboard />} />
 
               {/* 404 Catcher */}
               <Route path="*" element={<NotFoundPage />} />

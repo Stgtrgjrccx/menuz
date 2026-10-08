@@ -27,7 +27,8 @@ import {
   Info,
   Home,
   QrCode,
-  ArrowLeft
+  ArrowLeft,
+  Gamepad2
 } from 'lucide-react';
 import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantStore';
 import { MenuItem, ReviewChallenge, Restaurant } from '../types';
@@ -41,6 +42,8 @@ import { SpinWheelModal } from '../components/SpinWheelModal';
 import { LanguageSelector } from '../components/LanguageSelector';
 import { QrScannerModal } from '../components/QrScannerModal';
 import { MenuFilterModal, MenuFilterState, DietaryOption, SpiceOption } from '../components/MenuFilterModal';
+import { TableArcadeModal } from '../components/TableArcadeModal';
+import { IS_HQ_SITE } from '../config/siteMode';
 import { TRANSLATIONS, translateCategory, getTranslatedDish, translateDishName } from '../utils/i18n';
 import { PUNE_RESTAURANT_DIRECTORY } from '../data/puneRestaurantDirectory';
 import { generateCuisineMenu } from '../data/cuisineMenuGenerator';
@@ -245,6 +248,7 @@ export const DinerMenu: React.FC = () => {
 
   // Challenge & Wheel modal state
   const [isChallengeModalOpen, setIsChallengeModalOpen] = useState(false);
+  const [isTableArcadeOpen, setIsTableArcadeOpen] = useState(false);
   const [challengeModalMode, setChallengeModalMode] = useState<'review' | 'wheel'>('review');
   const [selectedChallenge, setSelectedChallenge] = useState<ReviewChallenge | null>(null);
 
@@ -512,7 +516,7 @@ export const DinerMenu: React.FC = () => {
           <h2 className="font-serif text-xl font-bold text-white mb-2">QR Code Issue</h2>
           <p className="text-slate-300 text-sm mb-4 leading-relaxed">{errorMsg}</p>
           <Link
-            to="/"
+            to={IS_HQ_SITE ? "/customer" : "/"}
             className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold hover:bg-amber-500/30 transition-all"
           >
             <Home className="w-4 h-4 text-amber-400" />
@@ -730,7 +734,7 @@ export const DinerMenu: React.FC = () => {
         {/* Links back to Home & All Menus */}
         <div className="flex items-center space-x-2">
           <Link
-            to="/"
+            to={IS_HQ_SITE ? "/customer" : "/"}
             className="flex items-center space-x-1.5 text-xs text-slate-400 hover:text-white transition-colors group flex-shrink-0"
             title="Back to Menuz Home"
           >
@@ -752,8 +756,20 @@ export const DinerMenu: React.FC = () => {
           </Link>
         </div>
 
-        {/* Language selector & Cart */}
+        {/* Table Arcade, Language selector & Cart */}
         <div className="flex items-center space-x-1.5 sm:space-x-2">
+          {/* Table Arcade Pill */}
+          <button
+            type="button"
+            onClick={() => setIsTableArcadeOpen(true)}
+            className="px-2.5 py-1 rounded-full bg-gradient-to-r from-amber-500/20 via-orange-500/15 to-indigo-500/20 hover:brightness-125 border border-amber-500/40 text-amber-300 text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer shadow-sm animate-pulse"
+            title="Play Solitaire, Crossword & Multiplayer Games for this table"
+          >
+            <Gamepad2 className="w-3.5 h-3.5 text-amber-400" />
+            <span className="hidden sm:inline">Table Arcade</span>
+            <span className="sm:hidden text-[10px]">Games</span>
+          </button>
+
           <LanguageSelector />
 
           {cart.length > 0 && (
@@ -1725,6 +1741,16 @@ export const DinerMenu: React.FC = () => {
               <Sparkles className="w-4 h-4 text-amber-400" />
             </button>
 
+            {/* Quick Table Arcade Mini Button */}
+            <button
+              type="button"
+              onClick={() => setIsTableArcadeOpen(true)}
+              className="p-2.5 rounded-xl border flex-shrink-0 bg-[#121824] hover:bg-amber-500/15 text-amber-400 border-white/[0.08] hover:border-amber-500/30 active:scale-95 transition-all cursor-pointer"
+              title="Open Table Arcade (Solitaire, Crossword & Games)"
+            >
+              <Gamepad2 className="w-4 h-4" />
+            </button>
+
             {/* Quick Waiter Mini Button */}
             <button
               type="button"
@@ -1760,8 +1786,21 @@ export const DinerMenu: React.FC = () => {
           </div>
         </div>
       ) : (
-        /* DOCK VARIANT 2: Sleek Floating Waiter Call when cart is empty */
+        /* DOCK VARIANT 2: Sleek Floating Waiter Call & Table Arcade when cart is empty */
         <div className="fixed bottom-3 right-3 sm:right-6 z-40 flex items-center gap-1.5 sm:gap-2">
+          {/* Table Arcade Floating Button */}
+          <button
+            type="button"
+            onClick={() => setIsTableArcadeOpen(true)}
+            className="px-3 py-2 rounded-full shadow-xl border bg-gradient-to-r from-amber-500/20 via-orange-500/15 to-indigo-500/20 backdrop-blur-md text-amber-300 border-amber-500/40 hover:brightness-125 active:scale-95 transition-all flex items-center space-x-1.5 cursor-pointer"
+            title="Play Solitaire, Crossword & Table Games while waiting"
+          >
+            <Gamepad2 className="w-4 h-4 text-amber-400" />
+            <span className="text-[11px] font-bold text-white">
+              Table Arcade
+            </span>
+          </button>
+
           {/* Call Waiter Quick Pill */}
           <button
             type="button"
@@ -1791,6 +1830,14 @@ export const DinerMenu: React.FC = () => {
         activeTable={activeTable}
         challenge={selectedChallenge}
         initialMode={challengeModalMode}
+      />
+
+      {/* Table Arcade Modal (Solitaire, Crossword, Table Trivia & Who Pays The Bill) */}
+      <TableArcadeModal
+        isOpen={isTableArcadeOpen}
+        onClose={() => setIsTableArcadeOpen(false)}
+        tableLabel={activeTable?.label || 'Table 1'}
+        restaurantName={targetRestaurant.name || 'Menuz Diner'}
       />
 
       {/* Dish Detail Modal */}

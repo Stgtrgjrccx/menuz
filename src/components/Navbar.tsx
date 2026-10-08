@@ -244,80 +244,82 @@ export const Navbar: React.FC = () => {
               <span>Scan QR</span>
             </button>
 
-            {/* Notifications Button */}
-            <div className="relative" ref={notifRef}>
-              <button
-                type="button"
-                onClick={() => setNotifOpen(!notifOpen)}
-                className={`p-2 rounded-lg transition-colors relative ${
-                  notifOpen ? 'bg-white/[0.1] text-amber-400' : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
-                }`}
-                title="System Notifications"
-              >
-                <Bell className="w-4 h-4" />
-                {unreadCount > 0 && (
-                  <span className="absolute 1 top-1 right-1 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-[#0A0E17]" />
-                )}
-              </button>
+            {/* Notifications Button (Owner & HQ Ops Only - Never visible on Customer Pages) */}
+            {!IS_CUSTOMER_SITE && (
+              <div className="relative" ref={notifRef}>
+                <button
+                  type="button"
+                  onClick={() => setNotifOpen(!notifOpen)}
+                  className={`p-2 rounded-lg transition-colors relative ${
+                    notifOpen ? 'bg-white/[0.1] text-amber-400' : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
+                  }`}
+                  title="System Notifications"
+                >
+                  <Bell className="w-4 h-4" />
+                  {unreadCount > 0 && (
+                    <span className="absolute 1 top-1 right-1 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-[#0A0E17]" />
+                  )}
+                </button>
 
-              {/* Notification Panel */}
-              {notifOpen && (
-                <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-[#0F1523] border border-white/[0.12] rounded-2xl shadow-2xl z-50 overflow-hidden text-left animate-in fade-in slide-in-from-top-1 duration-150">
-                  <div className="p-3.5 border-b border-white/[0.08] flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <Bell className="w-4 h-4 text-amber-400" />
-                      <h4 className="text-xs font-bold text-white">Live System Alerts</h4>
-                      {unreadCount > 0 && (
-                        <span className="text-[10px] bg-rose-500/20 text-rose-300 px-1.5 py-0.2 rounded-full font-bold">
-                          {unreadCount}
-                        </span>
+                {/* Notification Panel */}
+                {notifOpen && (
+                  <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-[#0F1523] border border-white/[0.12] rounded-2xl shadow-2xl z-50 overflow-hidden text-left animate-in fade-in slide-in-from-top-1 duration-150">
+                    <div className="p-3.5 border-b border-white/[0.08] flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Bell className="w-4 h-4 text-amber-400" />
+                        <h4 className="text-xs font-bold text-white">Live System Alerts</h4>
+                        {unreadCount > 0 && (
+                          <span className="text-[10px] bg-rose-500/20 text-rose-300 px-1.5 py-0.2 rounded-full font-bold">
+                            {unreadCount}
+                          </span>
+                        )}
+                      </div>
+                      {notifications.length > 0 && (
+                        <button
+                          onClick={clearAllNotifications}
+                          className="text-[11px] text-slate-400 hover:text-rose-400 flex items-center space-x-1 transition-colors"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                          <span>Clear</span>
+                        </button>
                       )}
                     </div>
-                    {notifications.length > 0 && (
-                      <button
-                        onClick={clearAllNotifications}
-                        className="text-[11px] text-slate-400 hover:text-rose-400 flex items-center space-x-1 transition-colors"
-                      >
-                        <Trash2 className="w-3 h-3" />
-                        <span>Clear</span>
-                      </button>
-                    )}
-                  </div>
 
-                  <div className="max-h-72 overflow-y-auto divide-y divide-white/[0.04]">
-                    {notifications.length === 0 ? (
-                      <div className="p-6 text-center text-slate-400 text-xs">
-                        No alerts right now. Table orders and waiter calls appear here.
-                      </div>
-                    ) : (
-                      notifications.map((notif) => (
-                        <div
-                          key={notif.id}
-                          className={`p-3 text-xs transition-colors flex items-start space-x-2.5 ${
-                            notif.read ? 'opacity-60' : 'bg-white/[0.03]'
-                          }`}
-                        >
-                          <div className="flex-1 min-w-0">
-                            <p className="text-slate-200 font-medium leading-snug">{notif.message}</p>
-                            <span className="text-[10px] text-slate-500 mt-1 block">
-                              {new Date(notif.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </span>
-                          </div>
-                          {!notif.read && (
-                            <button
-                              onClick={() => markNotificationRead(notif.id)}
-                              className="text-[11px] text-amber-400 hover:text-amber-300 font-bold shrink-0"
-                            >
-                              Done
-                            </button>
-                          )}
+                    <div className="max-h-72 overflow-y-auto divide-y divide-white/[0.04]">
+                      {notifications.length === 0 ? (
+                        <div className="p-6 text-center text-slate-400 text-xs">
+                          No alerts right now. Table orders and waiter calls appear here.
                         </div>
-                      ))
-                    )}
+                      ) : (
+                        notifications.map((notif) => (
+                          <div
+                            key={notif.id}
+                            className={`p-3 text-xs transition-colors flex items-start space-x-2.5 ${
+                              notif.read ? 'opacity-60' : 'bg-white/[0.03]'
+                            }`}
+                          >
+                            <div className="flex-1 min-w-0">
+                              <p className="text-slate-200 font-medium leading-snug">{notif.message}</p>
+                              <span className="text-[10px] text-slate-500 mt-1 block">
+                                {new Date(notif.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                              </span>
+                            </div>
+                            {!notif.read && (
+                              <button
+                                onClick={() => markNotificationRead(notif.id)}
+                                className="text-[11px] text-amber-400 hover:text-amber-300 font-bold shrink-0"
+                              >
+                                Done
+                              </button>
+                            )}
+                          </div>
+                        ))
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
 
             {/* Mobile Menu Toggle */}
             <button
@@ -347,19 +349,21 @@ export const Navbar: React.FC = () => {
                 {link.label}
               </Link>
             ))}
-            <div className="pt-2 border-t border-white/[0.08] space-y-2">
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileOpen(false);
-                  setQuickNavOpen(true);
-                }}
-                className="w-full py-2 px-3 rounded-lg bg-[#090D16]/[0.05] text-slate-200 text-xs font-semibold flex items-center justify-center space-x-1.5"
-              >
-                <Compass className="w-4 h-4 text-amber-400" />
-                <span>Open All Portals Launcher</span>
-              </button>
-            </div>
+            {IS_OWNER_SITE && (
+              <div className="pt-2 border-t border-white/[0.08] space-y-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileOpen(false);
+                    setQuickNavOpen(true);
+                  }}
+                  className="w-full py-2 px-3 rounded-lg bg-[#090D16]/[0.05] text-slate-200 text-xs font-semibold flex items-center justify-center space-x-1.5"
+                >
+                  <Compass className="w-4 h-4 text-amber-400" />
+                  <span>Open All Portals Launcher</span>
+                </button>
+              </div>
+            )}
           </div>
         )}
 

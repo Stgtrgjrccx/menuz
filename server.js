@@ -42,11 +42,52 @@ function broadcastSync(payload) {
   }
 }
 
+// In-memory rate limiting map: IP -> { count, resetTime }
+const rateLimitMap = new Map();
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
+const MAX_REQUESTS_PER_WINDOW = 120; // 120 requests/minute per IP
+
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+  if (!entry || now > entry.resetTime) {
+    rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    return true;
+  }
+  if (entry.count >= MAX_REQUESTS_PER_WINDOW) {
+    return false;
+  }
+  entry.count++;
+  return true;
+}
+
+// Clean up stale rate limit entries every 5 minutes
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, entry] of rateLimitMap.entries()) {
+    if (now > entry.resetTime) rateLimitMap.delete(ip);
+  }
+}, 5 * 60 * 1000);
+
 const server = http.createServer((req, res) => {
-  // CORS Headers for multi-site access
+  const clientIp = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket.remoteAddress || 'unknown';
+
+  // Enforce Rate Limiting (Protects from runaway loops / billing spikes)
+  if (!checkRateLimit(clientIp)) {
+    res.writeHead(429, { 
+      'Content-Type': 'application/json',
+      'Retry-After': '60'
+    });
+    res.end(JSON.stringify({ error: 'Too many requests, please slow down.' }));
+    return;
+  }
+
+  // CORS & Security Headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
 
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
