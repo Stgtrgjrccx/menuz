@@ -1,0 +1,24 @@
+# Menuz
+
+> Autonomous Restaurant Operating System & Digital Dining Platform
+
+Menuz is an all-in-one dine-in operating system and digital dining platform for modern restaurants in Pune, India. It provides zero-app multiplayer QR table ordering, instant ESC/POS kitchen order ticket (KOT) thermal printing, 1-click Google review reputation management, and centralized Master Admin HQ governance.
+
+## Key Products & Portals
+- [Customer Discovery & Table QR Ordering](https://stgtrgjrccx.github.io/menuz/): Interactive dining menus across Pune with multiplayer table sync, dietary filters, and live table arcade games.
+- [Master Admin HQ Platform Command Center](https://stgtrgjrccx.github.io/menuz/hq/): Centralized governance dashboard for platform admins, Pune restaurant registry, live table QR management, and POS integrations.
+- [Restaurant Partner Operations Hub](https://stgtrgjrccx.github.io/menuz/owner/): Food operations hub for restaurant managers, active table sessions, thermal KOT printing, and Google review floor shield.
+- [Executive Product Pitch Deck](https://stgtrgjrccx.github.io/menuz/pitch): 19-slide executive strategy, pricing model (₹5,000 / ₹10,000 plans), and unit economics.
+
+## Core Features
+- Zero App Downloads: Diners scan table QR code with standard camera app (iOS or Android).
+- Multiplayer Table Cart: Friends seated at the same table add items to a shared synchronized cart in real time.
+- Instant Kitchen Printing: Routes orders directly to 80mm ESC/POS network and USB thermal printers.
+- Table Arcade: Entertainment while waiting for food — Klondike Solitaire, Culinary Crossword, Table Trivia Battle, and Who Pays The Bill? roulette.
+- POS Bridges: Pre-configured connectors for Petpooja, RoyalPOS, Recaho, and RanceLab.
+
+## Machine-Readable Resources
+- [Sitemap](https://stgtrgjrccx.github.io/menuz/sitemap.xml): Full URL hierarchy
+- [Full LLM Context](https://stgtrgjrccx.github.io/menuz/llms-full.txt): Comprehensive system documentation
+- API Sync Endpoint: `/api/state`
+- API Event Stream: `/api/events`

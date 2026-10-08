@@ -1,0 +1,18 @@
+{
+  "short_name": "Menuz HQ",
+  "name": "Menuz Platform Control Hub",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "./#/admin",
+  "background_color": "#090D16",
+  "theme_color": "#090D16",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "./"
+}
