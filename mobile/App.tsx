@@ -55,12 +55,40 @@ export default function App() {
     return () => subscription.remove();
   }, [canGoBack]);
 
+  // Safety timeout for loading indicator so it never hangs
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleReload = () => {
     setHasError(false);
     setIsLoading(true);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    webViewRef.current?.reload();
+    if (Platform.OS === 'web') {
+      setIsLoading(false);
+    } else {
+      webViewRef.current?.reload();
+    }
   };
+
+  if (Platform.OS === 'web') {
+    return (
+      <SafeAreaView style={styles.rootContainer}>
+        <StatusBar style="light" />
+        <View style={styles.webviewWrapper}>
+          <iframe
+            src={currentUrl}
+            style={{ width: '100%', height: '100%', border: 'none' }}
+            title="Menuz App"
+            allow="camera; microphone; geolocation"
+          />
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -83,7 +111,7 @@ export default function App() {
               <Text style={styles.urlText}>{currentUrl}</Text>
             </Text>
             <Text style={styles.errorHint}>
-              Ensure your computer and mobile phone are on the same Wi-Fi network, and that Vite is running.
+              Ensure your mobile device has internet access to connect to the Menuz cloud.
             </Text>
 
             <TouchableOpacity style={styles.retryButton} onPress={handleReload} activeOpacity={0.85}>
@@ -97,6 +125,7 @@ export default function App() {
             ref={webViewRef}
             source={{ uri: currentUrl }}
             style={styles.webview}
+            originWhitelist={['*']}
             javaScriptEnabled={true}
             domStorageEnabled={true}
             allowsInlineMediaPlayback={true}
