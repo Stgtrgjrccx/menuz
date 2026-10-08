@@ -17,9 +17,8 @@ import * as Haptics from 'expo-haptics';
 import { Camera } from 'expo-camera';
 
 // Default Menuz app endpoint:
-// For live local development over Wi-Fi: http://192.168.1.129:5173
-// For production standalone build: Replace with your live deployed domain
-const DEFAULT_URL = 'http://192.168.1.129:5173';
+// Points to the live Menuz deployment on GitHub Pages
+const DEFAULT_URL = 'https://stgtrgjrccx.github.io/menuz';
 
 export default function App() {
   const [currentUrl, setCurrentUrl] = useState(DEFAULT_URL);

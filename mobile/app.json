@@ -7,7 +7,7 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
     "scheme": "menuz",
-    "owner": "smw-team",
+    "owner": "smw12345",
     "splash": {
       "image": "./assets/icon.png",
       "resizeMode": "contain",
@@ -15,13 +15,13 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.smwteam.menuz",
+      "bundleIdentifier": "com.smw12345.menuz",
       "infoPlist": {
         "NSCameraUsageDescription": "Menuz requires camera access to scan restaurant table QR codes for instant ordering."
       }
     },
     "android": {
-      "package": "com.smwteam.menuz",
+      "package": "com.smw12345.menuz",
       "adaptiveIcon": {
         "backgroundColor": "#090D16",
         "foregroundImage": "./assets/icon.png"

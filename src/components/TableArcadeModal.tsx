@@ -798,59 +798,45 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
         </div>
 
         {/* ═══════════════════════════════════════════════════════════ */}
-        {/* UNIVERSAL DIFFICULTY / AGE BRACKET SELECTOR                */}
+        {/* UNIVERSAL DIFFICULTY SELECTOR                             */}
         {/* ═══════════════════════════════════════════════════════════ */}
-        <div className="px-4 sm:px-6 py-2.5 bg-[#0C1222] border-b border-white/[0.08] flex items-center justify-between gap-3 flex-wrap">
-          <div className="flex items-center space-x-2">
-            <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 font-mono">
-              Age &amp; Difficulty:
-            </span>
-            <div className="flex items-center space-x-1 bg-black/40 p-1 rounded-xl border border-white/[0.08]">
-              <button
-                type="button"
-                onClick={() => setDifficulty('easy')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
-                  difficulty === 'easy'
-                    ? 'bg-emerald-500 text-slate-950 font-black shadow-sm'
-                    : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
-                }`}
-              >
-                <span>🟢 Easy</span>
-                <span className="text-[10px] opacity-80 font-normal hidden sm:inline">(Kids 6-12)</span>
-              </button>
+        <div className="px-4 sm:px-6 py-2.5 bg-[#0C1222] border-b border-white/[0.08] flex items-center justify-center">
+          <div className="flex items-center space-x-1.5 bg-black/40 p-1 rounded-xl border border-white/[0.08]">
+            <button
+              type="button"
+              onClick={() => setDifficulty('easy')}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                difficulty === 'easy'
+                  ? 'bg-emerald-500 text-slate-950 font-black shadow-sm'
+                  : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
+              }`}
+            >
+              Easy
+            </button>
 
-              <button
-                type="button"
-                onClick={() => setDifficulty('medium')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
-                  difficulty === 'medium'
-                    ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                    : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
-                }`}
-              >
-                <span>🟡 Medium</span>
-                <span className="text-[10px] opacity-80 font-normal hidden sm:inline">(Family &amp; Teens)</span>
-              </button>
+            <button
+              type="button"
+              onClick={() => setDifficulty('medium')}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                difficulty === 'medium'
+                  ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                  : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
+              }`}
+            >
+              Medium
+            </button>
 
-              <button
-                type="button"
-                onClick={() => setDifficulty('hard')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
-                  difficulty === 'hard'
-                    ? 'bg-rose-500 text-white font-black shadow-sm'
-                    : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
-                }`}
-              >
-                <span>🔴 Hard</span>
-                <span className="text-[10px] opacity-80 font-normal hidden sm:inline">(Adults 18+)</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="text-[11px] font-mono text-slate-400 hidden sm:flex items-center space-x-1.5">
-            {difficulty === 'easy' && <span className="text-emerald-400">Junior Friendly • 5x5 Crossword • Draw 1 Cards • Silly Dares</span>}
-            {difficulty === 'medium' && <span className="text-amber-400">Family &amp; Social • 7x7 Crossword • Draw 3 Cards • Social Dares</span>}
-            {difficulty === 'hard' && <span className="text-rose-400">Adult Master • 8x8 Crossword • 3-Pass Limit • Real Bill Stakes</span>}
+            <button
+              type="button"
+              onClick={() => setDifficulty('hard')}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                difficulty === 'hard'
+                  ? 'bg-rose-500 text-white font-black shadow-sm'
+                  : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
+              }`}
+            >
+              Hard
+            </button>
           </div>
         </div>
 
