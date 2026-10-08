@@ -6,7 +6,8 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const DB_FILE = path.join(__dirname, 'menuz_data.sqlite');
+const DB_FILE = process.env.DATA_PATH || 
+  (fs.existsSync('/data') ? '/data/menuz_data.sqlite' : path.join(__dirname, 'menuz_data.sqlite'));
 
 let db;
 

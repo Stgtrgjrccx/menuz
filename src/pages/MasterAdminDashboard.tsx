@@ -577,6 +577,17 @@ export const MasterAdminDashboard: React.FC = () => {
                 setSafeSession('menuz_admin_session', 'active');
                 setIsAdminAuthenticated(true);
                 setAuthError(false);
+                try {
+                  fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ role: 'admin', passcode: trimmed })
+                  }).then(res => res.json()).then(data => {
+                    if (data?.token) {
+                      setSafeSession('menuz_auth_token', data.token);
+                    }
+                  }).catch(() => {});
+                } catch (err) {}
               } else {
                 setAuthError(true);
               }
