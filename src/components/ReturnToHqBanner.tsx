@@ -36,7 +36,7 @@ export const ReturnToHqBanner: React.FC = () => {
   const handleReturnToHq = () => {
     setFromHq(false);
     // Explicitly navigate to the dedicated HQ Admin command center URL
-    window.location.href = getHqSiteUrl('#/admin');
+    window.location.href = getHqSiteUrl('');
   };
 
   return (

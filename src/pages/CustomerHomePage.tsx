@@ -11,11 +11,16 @@ import {
   ShieldCheck,
   CheckCircle2,
   Clock,
-  ExternalLink
+  ExternalLink,
+  Gamepad2,
+  Dice5,
+  Trophy
 } from 'lucide-react';
 import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantStore';
 import { isWorkingWithMenuz } from '../types';
 import { QrScannerModal } from '../components/QrScannerModal';
+import { TableArcadeModal } from '../components/TableArcadeModal';
+import { getOwnerSiteUrl, getHqSiteUrl } from '../config/siteMode';
 
 export const CustomerHomePage: React.FC = () => {
   const navigate = useNavigate();
@@ -26,6 +31,7 @@ export const CustomerHomePage: React.FC = () => {
   const [activeCuisineFilter, setActiveCuisineFilter] = useState<string>('all');
   const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
   const [selectedScannerSlug, setSelectedScannerSlug] = useState<string | undefined>(undefined);
+  const [isArcadeOpen, setIsArcadeOpen] = useState(false);
 
   // Strictly ONLY restaurants affiliated with Menuz (verified partners)
   const affiliatedVenues = useMemo(() => {
@@ -142,6 +148,15 @@ export const CustomerHomePage: React.FC = () => {
               <span>Scan Table QR Code</span>
             </button>
 
+            <button
+              type="button"
+              onClick={() => setIsArcadeOpen(true)}
+              className="py-3 px-5 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 text-purple-200 font-bold text-xs sm:text-sm border border-purple-500/30 hover:border-purple-400/60 flex items-center space-x-2 transition-all cursor-pointer shadow-lg shadow-purple-950/40"
+            >
+              <Gamepad2 className="w-4 h-4 text-purple-400 animate-pulse" />
+              <span>Play Table Games (Arcade)</span>
+            </button>
+
             {affiliatedVenues[0] && (
               <button
                 type="button"
@@ -152,6 +167,131 @@ export const CustomerHomePage: React.FC = () => {
                 <span>Browse {affiliatedVenues[0].name} Menu</span>
               </button>
             )}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/* 2. TABLE ARCADE & WAITING GAMES (CUSTOMER ONLY)              */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <section className="py-8 sm:py-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-gradient-to-br from-[#12132a] via-[#0d1326] to-[#171630] border border-purple-500/25 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+          {/* Subtle Ambient Glow */}
+          <div className="absolute top-0 right-0 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-white/[0.08]">
+            <div className="space-y-1.5">
+              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-purple-500/15 border border-purple-500/30 text-purple-300 text-xs font-semibold">
+                <Gamepad2 className="w-3.5 h-3.5 text-purple-400" />
+                <span>Exclusively for Table Diners</span>
+              </div>
+              <h2 className="font-serif font-black text-2xl sm:text-3xl text-white">
+                Play Games While Waiting For Your Food
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
+                App-free dining games designed for your table. Play classic Klondike Solitaire, solve culinary crosswords, battle companions in multiplayer trivia, or spin the roulette wheel to decide who pays the check.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setIsArcadeOpen(true)}
+              className="py-3 px-6 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:brightness-110 active:scale-95 text-white font-bold text-xs sm:text-sm shadow-xl flex items-center justify-center space-x-2 transition-all cursor-pointer shrink-0"
+            >
+              <Gamepad2 className="w-4 h-4 text-white" />
+              <span>Launch Table Arcade</span>
+            </button>
+          </div>
+
+          {/* 4 Interactive Game Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-6">
+            {/* Game 1: Solitaire */}
+            <div
+              onClick={() => setIsArcadeOpen(true)}
+              className="p-4 rounded-2xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.08] hover:border-amber-400/50 transition-all cursor-pointer group flex flex-col justify-between"
+            >
+              <div className="space-y-2">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-xl">
+                  🃏
+                </div>
+                <h3 className="font-bold text-sm text-white group-hover:text-amber-300 transition-colors">
+                  Klondike Solitaire
+                </h3>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  Classic single-player cards. Move tableau columns, stack aces into foundations, and relax while appetizers are prepped.
+                </p>
+              </div>
+              <div className="mt-4 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-[11px] text-amber-400 font-semibold">
+                <span>Play Solo</span>
+                <span className="group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+            </div>
+
+            {/* Game 2: Crossword */}
+            <div
+              onClick={() => setIsArcadeOpen(true)}
+              className="p-4 rounded-2xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.08] hover:border-emerald-400/50 transition-all cursor-pointer group flex flex-col justify-between"
+            >
+              <div className="space-y-2">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-xl">
+                  ✏️
+                </div>
+                <h3 className="font-bold text-sm text-white group-hover:text-emerald-300 transition-colors">
+                  Culinary Crossword
+                </h3>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  Foodie puzzle grid! Solve clues spanning gourmet gastronomy, spices, Italian pasta cuts, and chef secrets.
+                </p>
+              </div>
+              <div className="mt-4 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-[11px] text-emerald-400 font-semibold">
+                <span>Solve Clues</span>
+                <span className="group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+            </div>
+
+            {/* Game 3: Table Trivia */}
+            <div
+              onClick={() => setIsArcadeOpen(true)}
+              className="p-4 rounded-2xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.08] hover:border-purple-400/50 transition-all cursor-pointer group flex flex-col justify-between"
+            >
+              <div className="space-y-2">
+                <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-300 flex items-center justify-center text-xl">
+                  ⚡
+                </div>
+                <h3 className="font-bold text-sm text-white group-hover:text-purple-300 transition-colors">
+                  Table Trivia Battle
+                </h3>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  Multiplayer trivia buzzer for everyone at your table. Test your food, culture, and cinema knowledge with live scores.
+                </p>
+              </div>
+              <div className="mt-4 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-[11px] text-purple-400 font-semibold">
+                <span>Multiplayer</span>
+                <span className="group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+            </div>
+
+            {/* Game 4: Who Pays The Bill */}
+            <div
+              onClick={() => setIsArcadeOpen(true)}
+              className="p-4 rounded-2xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.08] hover:border-rose-400/50 transition-all cursor-pointer group flex flex-col justify-between"
+            >
+              <div className="space-y-2">
+                <div className="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-300 flex items-center justify-center text-xl">
+                  🎲
+                </div>
+                <h3 className="font-bold text-sm text-white group-hover:text-rose-300 transition-colors">
+                  Who Pays The Bill?
+                </h3>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  Enter names of table companions, spin the spinning roulette or roll the dice to settle the dining tab fairly and fun.
+                </p>
+              </div>
+              <div className="mt-4 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-[11px] text-rose-400 font-semibold">
+                <span>Spin Roulette</span>
+                <span className="group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -327,9 +467,9 @@ export const CustomerHomePage: React.FC = () => {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 3. SIMPLE FOOTER                                            */}
+      {/* 3. SIMPLE FOOTER & PORTAL LINKS                             */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <footer className="mt-16 py-8 border-t border-white/[0.06] text-center text-xs text-slate-500 space-y-2">
+      <footer className="mt-16 py-10 border-t border-white/[0.06] text-center text-xs text-slate-500 space-y-4">
         <div className="flex items-center justify-center space-x-2">
           <div className="w-5 h-5 rounded-md bg-gradient-to-tr from-amber-500 to-amber-400 flex items-center justify-center font-black text-slate-950 text-xs">
             M
@@ -339,13 +479,53 @@ export const CustomerHomePage: React.FC = () => {
         <p className="text-[11px] text-slate-400">
           Autonomous Dining &amp; Multiplayer QR Ordering • Only Menuz Partner Venues
         </p>
+
+        {/* Clear Cross-Portal Direct Links */}
+        <div className="flex flex-wrap items-center justify-center gap-4 pt-2 text-[11px]">
+          <span className="text-amber-400 font-bold">🍽️ Customer Dining</span>
+          <span className="text-slate-700">•</span>
+          <a
+            href={getOwnerSiteUrl('')}
+            className="text-slate-400 hover:text-white transition-colors flex items-center space-x-1"
+          >
+            <span>🏢 Restaurant Partner Hub</span>
+            <ExternalLink className="w-3 h-3 text-slate-500" />
+          </a>
+          <span className="text-slate-700">•</span>
+          <a
+            href={getHqSiteUrl('')}
+            className="text-slate-400 hover:text-white transition-colors flex items-center space-x-1"
+          >
+            <span>🛡️ Master Admin HQ</span>
+            <ExternalLink className="w-3 h-3 text-slate-500" />
+          </a>
+        </div>
       </footer>
+
+      {/* Floating Table Arcade Launcher (Exclusively Customer Page) */}
+      <button
+        type="button"
+        onClick={() => setIsArcadeOpen(true)}
+        className="fixed bottom-6 right-6 z-40 py-2.5 px-4 rounded-full bg-gradient-to-r from-purple-600 via-indigo-600 to-amber-500 hover:brightness-110 active:scale-95 text-white font-bold text-xs shadow-2xl flex items-center space-x-2 border border-white/20 transition-all cursor-pointer"
+        title="Open Table Arcade Games"
+      >
+        <Gamepad2 className="w-4 h-4 text-white" />
+        <span>Play Games</span>
+      </button>
 
       {/* QR Scanner Modal */}
       <QrScannerModal
         isOpen={isQrScannerOpen}
         onClose={() => setIsQrScannerOpen(false)}
         defaultRestaurantSlug={selectedScannerSlug}
+      />
+
+      {/* Table Arcade Modal (Exclusive to Customer Site) */}
+      <TableArcadeModal
+        isOpen={isArcadeOpen}
+        onClose={() => setIsArcadeOpen(false)}
+        tableLabel="Diner Table"
+        restaurantName="Menuz Dining Experience"
       />
     </div>
   );

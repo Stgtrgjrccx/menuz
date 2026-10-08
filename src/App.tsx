@@ -14,9 +14,24 @@ import { NotFoundPage } from './pages/NotFoundPage';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { PwaInstallModal } from './components/PwaInstallModal';
 import { useRestaurantStore } from './store/restaurantStore';
-import { IS_OWNER_SITE, IS_CUSTOMER_SITE, IS_HQ_SITE } from './config/siteMode';
+import { IS_OWNER_SITE, IS_CUSTOMER_SITE, IS_HQ_SITE, getHqSiteUrl, getOwnerSiteUrl } from './config/siteMode';
 import { cloudSyncManager } from './lib/cloudSyncManager';
 import { ReturnToHqBanner } from './components/ReturnToHqBanner';
+
+// External portal navigators to prevent in-app SPA capture
+const ExternalHqRedirect: React.FC = () => {
+  useEffect(() => {
+    window.location.href = getHqSiteUrl('');
+  }, []);
+  return null;
+};
+
+const ExternalOwnerRedirect: React.FC = () => {
+  useEffect(() => {
+    window.location.href = getOwnerSiteUrl('');
+  }, []);
+  return null;
+};
 
 // Yoast-style Dynamic Route SEO Metadata Manager
 const RouteSEOManager: React.FC = () => {
@@ -158,21 +173,21 @@ export const App: React.FC = () => {
                   <Route path="/menu/:restaurantSlug/:tableId" element={<DinerMenu />} />
                   <Route path="/r/:restaurantSlug/:tableId" element={<DinerMenu />} />
                   <Route path="/qr" element={<Navigate to="/" replace />} />
-                  {/* Strictly isolated: Customer site has ZERO access to owner/manager or HQ admin pages */}
-                  <Route path="/admin" element={<Navigate to="/" replace />} />
-                  <Route path="/admin/*" element={<Navigate to="/" replace />} />
-                  <Route path="/hq" element={<Navigate to="/" replace />} />
-                  <Route path="/hq/*" element={<Navigate to="/" replace />} />
-                  <Route path="/manage" element={<Navigate to="/" replace />} />
-                  <Route path="/manage/*" element={<Navigate to="/" replace />} />
-                  <Route path="/dashboard" element={<Navigate to="/" replace />} />
-                  <Route path="/dashboard/*" element={<Navigate to="/" replace />} />
-                  <Route path="/restaurant" element={<Navigate to="/" replace />} />
-                  <Route path="/restaurant/*" element={<Navigate to="/" replace />} />
-                  <Route path="/operations" element={<Navigate to="/" replace />} />
-                  <Route path="/kitchen" element={<Navigate to="/" replace />} />
-                  <Route path="/ai-studio" element={<Navigate to="/" replace />} />
-                  <Route path="/pitch" element={<Navigate to="/" replace />} />
+                  {/* Seamless cross-portal redirection: When visiting /hq or /restaurant from customer site, navigate to real dedicated portal */}
+                  <Route path="/admin" element={<ExternalHqRedirect />} />
+                  <Route path="/admin/*" element={<ExternalHqRedirect />} />
+                  <Route path="/hq" element={<ExternalHqRedirect />} />
+                  <Route path="/hq/*" element={<ExternalHqRedirect />} />
+                  <Route path="/manage" element={<ExternalOwnerRedirect />} />
+                  <Route path="/manage/*" element={<ExternalOwnerRedirect />} />
+                  <Route path="/dashboard" element={<ExternalOwnerRedirect />} />
+                  <Route path="/dashboard/*" element={<ExternalOwnerRedirect />} />
+                  <Route path="/restaurant" element={<ExternalOwnerRedirect />} />
+                  <Route path="/restaurant/*" element={<ExternalOwnerRedirect />} />
+                  <Route path="/operations" element={<ExternalOwnerRedirect />} />
+                  <Route path="/kitchen" element={<ExternalOwnerRedirect />} />
+                  <Route path="/ai-studio" element={<ExternalOwnerRedirect />} />
+                  <Route path="/pitch" element={<PitchDeckPage />} />
                 </>
               )}
 

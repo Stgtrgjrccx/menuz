@@ -464,8 +464,8 @@ Menuz Master Admin HQ provides platform administrators with real-time control ac
 
   // Zone 1: Master HQ (/hq, /hq/*, /admin, /admin/*)
   if (url.pathname === '/hq' || url.pathname.startsWith('/hq/') || url.pathname === '/admin' || url.pathname.startsWith('/admin/')) {
-    // If client requested JSON or an API route, enforce server-side admin role:
-    if (req.headers['accept']?.includes('application/json') || url.pathname.includes('/api/')) {
+    const isJsonOrApi = req.headers['accept']?.includes('application/json') || url.pathname.includes('/api/');
+    if (isJsonOrApi) {
       if (!session || session.role !== 'admin') {
         res.writeHead(401, { 'Content-Type': 'application/json', 'Vary': 'Accept' });
         res.end(JSON.stringify({
@@ -475,6 +475,9 @@ Menuz Master Admin HQ provides platform administrators with real-time control ac
         }));
         return;
       }
+      res.writeHead(200, { 'Content-Type': 'application/json', 'Vary': 'Accept' });
+      res.end(JSON.stringify({ success: true, message: 'Master Admin authorized access.', role: 'admin' }));
+      return;
     }
 
     // For HTML browser requests, serve HQ application bundle
@@ -493,8 +496,8 @@ Menuz Master Admin HQ provides platform administrators with real-time control ac
     url.pathname === '/owner' ||
     url.pathname.startsWith('/owner/')
   ) {
-    // If client requested JSON API, enforce role:
-    if (req.headers['accept']?.includes('application/json') && url.pathname.includes('/api/')) {
+    const isJsonOrApi = req.headers['accept']?.includes('application/json') || url.pathname.includes('/api/');
+    if (isJsonOrApi) {
       if (!session || (session.role !== 'owner' && session.role !== 'manager' && session.role !== 'admin')) {
         res.writeHead(401, { 'Content-Type': 'application/json', 'Vary': 'Accept' });
         res.end(JSON.stringify({
@@ -504,6 +507,9 @@ Menuz Master Admin HQ provides platform administrators with real-time control ac
         }));
         return;
       }
+      res.writeHead(200, { 'Content-Type': 'application/json', 'Vary': 'Accept' });
+      res.end(JSON.stringify({ success: true, message: 'Restaurant Partner authorized access.', role: session.role }));
+      return;
     }
 
     // Serve Restaurant Hub application bundle
