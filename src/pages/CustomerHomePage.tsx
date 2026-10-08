@@ -161,6 +161,16 @@ export const CustomerHomePage: React.FC = () => {
               <span>Scan Table QR Code</span>
             </button>
 
+            {/* Google Review Generator Action */}
+            <button
+              type="button"
+              onClick={() => navigate('/review')}
+              className="py-3 px-5 rounded-xl bg-gradient-to-r from-amber-500/20 to-amber-400/20 hover:from-amber-500/30 hover:to-amber-400/30 text-amber-200 font-bold text-xs sm:text-sm border border-amber-500/40 hover:border-amber-400 flex items-center space-x-2 transition-all cursor-pointer shadow-lg shadow-amber-950/40"
+            >
+              <Star className="w-4 h-4 text-amber-400 fill-amber-400 animate-pulse" />
+              <span>⭐ Google Review Generator (Win Treats)</span>
+            </button>
+
             <button
               type="button"
               onClick={() => setIsArcadeOpen(true)}
@@ -330,7 +340,63 @@ export const CustomerHomePage: React.FC = () => {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 2. AFFILIATED RESTAURANTS ONLY DIRECTORY                    */}
+      {/* 2.5. GOOGLE REVIEW GENERATOR & REWARD WHEEL SHOWCASE        */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <section className="py-6 sm:py-8 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-gradient-to-br from-[#1c1810] via-[#121321] to-[#1a1226] border border-amber-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+            <div className="space-y-3 max-w-2xl">
+              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-semibold">
+                <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                <span>Google 5-Star Review Generator System</span>
+              </div>
+              <h2 className="font-serif font-black text-2xl sm:text-3xl text-white tracking-tight">
+                Turn Every Meal Into 5-Star Reviews &amp; Table Treats
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                Diners generate authentic, SEO-optimized Google review drafts tailored to their favorite dishes in seconds. Copy, post on Google Maps, and unlock the lucky reward wheel for instant table treats!
+              </p>
+              <div className="flex flex-wrap items-center gap-3 pt-1 text-[11px] text-slate-300">
+                <span className="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08]">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>1-Tap AI Drafts &amp; Tone Switcher</span>
+                </span>
+                <span className="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08]">
+                  <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>Private Feedback Shield (&lt;4 Stars)</span>
+                </span>
+                <span className="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08]">
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Lucky Spin Wheel Table Treats</span>
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
+              <button
+                type="button"
+                onClick={() => navigate('/review')}
+                className="py-3.5 px-6 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 text-slate-950 font-black text-xs sm:text-sm shadow-xl flex items-center justify-center space-x-2 transition-all cursor-pointer"
+              >
+                <Star className="w-4 h-4 text-slate-950 fill-slate-950" />
+                <span>Open Review Generator ↗</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsReviewOpen(true)}
+                className="py-3 px-5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] text-slate-200 hover:text-white border border-white/[0.12] font-semibold text-xs flex items-center justify-center space-x-2 transition-all cursor-pointer"
+              >
+                <span>Preview Lucky Spin Modal</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/* 3. AFFILIATED RESTAURANTS ONLY DIRECTORY                    */}
       {/* ═══════════════════════════════════════════════════════════ */}
       <section className="py-12 sm:py-16 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         

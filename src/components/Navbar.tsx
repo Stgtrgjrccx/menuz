@@ -235,6 +235,17 @@ export const Navbar: React.FC = () => {
               </button>
             )}
 
+            {/* Google Reviews Button */}
+            <button
+              type="button"
+              onClick={() => navigate('/review')}
+              className="hidden sm:flex px-3 py-2 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-semibold items-center space-x-1.5 transition-all cursor-pointer"
+              title="Google Reviews Generator & Table Rewards"
+            >
+              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+              <span>Reviews</span>
+            </button>
+
             {/* Scan Table QR Button */}
             <button
               type="button"
@@ -383,7 +394,7 @@ export const Navbar: React.FC = () => {
                 type="button"
                 onClick={() => {
                   setMobileOpen(false);
-                  window.dispatchEvent(new CustomEvent('open-google-review'));
+                  navigate('/review');
                 }}
                 className="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-amber-900/20 hover:bg-amber-900/30 text-slate-200 hover:text-white transition-all border border-amber-500/30 cursor-pointer text-left"
               >

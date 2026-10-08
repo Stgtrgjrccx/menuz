@@ -10,6 +10,7 @@ import { MasterAdminDashboard } from './pages/MasterAdminDashboard';
 import { CustomerHomePage } from './pages/CustomerHomePage';
 import { PitchDeckPage } from './pages/PitchDeckPage';
 import { AiBotOnboardingStudioPage } from './pages/AiBotOnboardingStudioPage';
+import { GoogleReviewGeneratorPage } from './pages/GoogleReviewGeneratorPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { PwaInstallModal } from './components/PwaInstallModal';
@@ -73,6 +74,9 @@ const RouteSEOManager: React.FC = () => {
     } else if (path === '/ai-studio') {
       pageTitle = 'Chef & Owner AI Studio | 5-Minute Menu Onboarding | Menuz';
       metaDesc = 'Instant AI menu digitizer, dietary tagging, wine pairing assistant, and culinary knowledge base for restaurant owners.';
+    } else if (path === '/review' || path === '/reviews' || path === '/google-review' || path.startsWith('/review/')) {
+      pageTitle = 'Google 5-Star Review Generator | 1-Tap AI Drafts & Table Rewards | Menuz';
+      metaDesc = 'Generate authentic 5-star Google review drafts in 1 tap, private floor escalation, and spin the lucky reward wheel for instant table treats.';
     }
 
     document.title = pageTitle;
@@ -140,6 +144,11 @@ export const App: React.FC = () => {
                   <Route path="/kitchen" element={<KitchenKDS />} />
                   <Route path="/ai-studio" element={<AiBotOnboardingStudioPage />} />
                   <Route path="/pitch" element={<PitchDeckPage />} />
+                  {/* Google Review Generator System */}
+                  <Route path="/review" element={<GoogleReviewGeneratorPage />} />
+                  <Route path="/review/:restaurantSlug" element={<GoogleReviewGeneratorPage />} />
+                  <Route path="/reviews" element={<GoogleReviewGeneratorPage />} />
+                  <Route path="/google-review" element={<GoogleReviewGeneratorPage />} />
                 </>
               ) : IS_OWNER_SITE ? (
                 <>
@@ -161,6 +170,11 @@ export const App: React.FC = () => {
                   <Route path="/r/:restaurantSlug/menu" element={<DinerMenu />} />
                   <Route path="/r/:restaurantSlug" element={<DinerMenu />} />
                   <Route path="/menu" element={<Navigate to="/" replace />} />
+                  {/* Google Review Generator System */}
+                  <Route path="/review" element={<GoogleReviewGeneratorPage />} />
+                  <Route path="/review/:restaurantSlug" element={<GoogleReviewGeneratorPage />} />
+                  <Route path="/reviews" element={<GoogleReviewGeneratorPage />} />
+                  <Route path="/google-review" element={<GoogleReviewGeneratorPage />} />
                 </>
               ) : (
                 <>
@@ -173,6 +187,11 @@ export const App: React.FC = () => {
                   <Route path="/menu/:restaurantSlug/:tableId" element={<DinerMenu />} />
                   <Route path="/r/:restaurantSlug/:tableId" element={<DinerMenu />} />
                   <Route path="/qr" element={<Navigate to="/" replace />} />
+                  {/* Google Review Generator System */}
+                  <Route path="/review" element={<GoogleReviewGeneratorPage />} />
+                  <Route path="/review/:restaurantSlug" element={<GoogleReviewGeneratorPage />} />
+                  <Route path="/reviews" element={<GoogleReviewGeneratorPage />} />
+                  <Route path="/google-review" element={<GoogleReviewGeneratorPage />} />
                   {/* Seamless cross-portal redirection: When visiting /hq or /restaurant from customer site, navigate to real dedicated portal */}
                   <Route path="/admin" element={<ExternalHqRedirect />} />
                   <Route path="/admin/*" element={<ExternalHqRedirect />} />

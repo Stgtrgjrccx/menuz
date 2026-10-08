@@ -869,8 +869,8 @@ export const DinerMenu: React.FC = () => {
               onClick={() => handleOpenChallenge()}
               className="px-2.5 py-1 bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:bg-amber-500/30 active:scale-95 text-amber-300 text-[10px] sm:text-[11px] font-semibold rounded-full border border-amber-500/40 transition-all flex items-center space-x-1 cursor-pointer flex-shrink-0"
             >
-              <span className="text-xs">🎁</span>
-              <span>Win Perk</span>
+              <span className="text-xs">⭐</span>
+              <span>Review &amp; Win</span>
             </button>
 
             <button
@@ -899,20 +899,20 @@ export const DinerMenu: React.FC = () => {
                 onClick={() => handleOpenChallenge()}
                 className="flex items-center space-x-2 min-w-0 cursor-pointer flex-1"
               >
-                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-sm sm:text-base flex-shrink-0 shadow-sm text-slate-950">
-                  🎁
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-sm sm:text-base flex-shrink-0 shadow-sm text-slate-950 font-bold">
+                  ⭐
                 </div>
                 <div className="min-w-0">
                   <div className="flex items-center space-x-1.5">
                     <span className="text-[8.5px] sm:text-[9.5px] uppercase font-bold tracking-wider text-amber-400 truncate">
-                      Table Reward
+                      Google Review &amp; Treats
                     </span>
                     <span className="px-1 py-0.2 rounded text-[7.5px] sm:text-[8.5px] font-bold bg-green-500/20 text-green-300">
                       Guaranteed
                     </span>
                   </div>
                   <p className="text-[10px] sm:text-[11px] text-slate-200 truncate font-medium">
-                    Win complimentary treats or up to 20% off
+                    1-Tap 5-Star Draft + Win Complimentary Treats
                   </p>
                 </div>
               </div>
@@ -923,7 +923,7 @@ export const DinerMenu: React.FC = () => {
                   onClick={() => handleOpenChallenge()}
                   className="px-2 sm:px-2.5 py-1 rounded-lg bg-gradient-to-r from-amber-400 to-amber-500 hover:brightness-110 active:scale-95 text-slate-950 font-bold text-[10px] sm:text-xs flex items-center space-x-0.5 shadow-sm transition-all"
                 >
-                  <span>Win</span>
+                  <span>Review &amp; Win</span>
                   <span>→</span>
                 </button>
                 <button
@@ -1698,7 +1698,7 @@ export const DinerMenu: React.FC = () => {
             🎁
           </div>
           <span className="mt-0.5 text-[8.5px] sm:text-[9.5px] font-bold text-amber-300 bg-[#090D16]/95 border border-amber-400/40 px-1.5 py-0.2 rounded-full shadow-md whitespace-nowrap opacity-90 group-hover:opacity-100 transition-opacity">
-            Win Perk
+            Review &amp; Win
           </span>
         </button>
 

@@ -686,6 +686,15 @@ export const MasterAdminDashboard: React.FC = () => {
               <span className="hidden md:inline">Diner Menus</span>
             </a>
 
+            <Link
+              to="/review"
+              className="px-2.5 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-xs font-semibold text-amber-300 hover:text-amber-200 transition-all flex items-center space-x-1.5 cursor-pointer"
+              title="Open Google Review Generator & Lucky Wheel System"
+            >
+              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+              <span className="hidden md:inline">Review Gen</span>
+            </Link>
+
             <a
               href={getOwnerSiteUrl('?from=hq')}
               target="_blank"
