@@ -1,17 +1,64 @@
-# Robots.txt for Menuz - Autonomous Restaurant OS & Reputation Engine
-# https://stgtrgjrccx.github.io/menuz/
+# Robots.txt for Menuz - Autonomous Restaurant OS & Digital Dining Platform
+# Domain: https://stgtrgjrccx.github.io/menuz/
 
+# Allow all AI Agents and Crawlers
 User-agent: *
 Allow: /
+Allow: /hq
+Allow: /hq/
+Allow: /owner
+Allow: /owner/
+Allow: /menu
 Allow: /pitch
 Allow: /presentation.html
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /sitemap.xml
 
-# Prevent search engine indexing of internal operations and admin portals
-Disallow: /admin
-Disallow: /manage/
-Disallow: /dashboard
-Disallow: /scratch/
-Disallow: /api/private/
+# Explicit Permissions for Major AI Agent User-Agents
+User-agent: GPTBot
+Allow: /
 
-# Sitemap Location
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: OraBot
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+# Sitemap & Machine-Readable LLM Context
 Sitemap: https://stgtrgjrccx.github.io/menuz/sitemap.xml
+Sitemap: https://stgtrgjrccx.github.io/menuz/hq/sitemap.xml
+Link: <https://stgtrgjrccx.github.io/menuz/llms.txt>; rel="help"
