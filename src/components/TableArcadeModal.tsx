@@ -1,28 +1,19 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   X,
   Trophy,
   RotateCcw,
   Sparkles,
-  HelpCircle,
-  Play,
   CheckCircle2,
-  AlertCircle,
-  ChevronRight,
-  Flame,
   Users,
   Gamepad2,
   Clock,
-  Award,
   Zap,
-  Volume2,
-  VolumeX,
-  Dice5,
   Dices,
-  RefreshCw,
-  Plus,
-  Trash2
+  Plus
 } from 'lucide-react';
+
+export type ArcadeDifficulty = 'easy' | 'medium' | 'hard';
 
 export interface TableArcadeModalProps {
   isOpen: boolean;
@@ -70,7 +61,6 @@ function createShuffledDeck(): Card[] {
       });
     }
   }
-  // Fisher-Yates shuffle
   for (let i = deck.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [deck[i], deck[j]] = [deck[j], deck[i]];
@@ -79,10 +69,10 @@ function createShuffledDeck(): Card[] {
 }
 
 interface SolitaireState {
-  stock: Card[]; // Draw pile (face down)
-  waste: Card[]; // Discard pile (face up)
-  foundations: Card[][]; // 4 suit piles (Ace -> King)
-  tableau: Card[][]; // 7 columns
+  stock: Card[];
+  waste: Card[];
+  foundations: Card[][];
+  tableau: Card[][];
   moves: number;
   score: number;
   won: boolean;
@@ -92,7 +82,6 @@ function initSolitaire(): SolitaireState {
   const deck = createShuffledDeck();
   const tableau: Card[][] = [[], [], [], [], [], [], []];
 
-  // Deal 1 to 7 cards into tableau
   for (let col = 0; col < 7; col++) {
     for (let row = 0; row <= col; row++) {
       const card = deck.pop()!;
@@ -115,7 +104,7 @@ function initSolitaire(): SolitaireState {
 }
 
 // ─────────────────────────────────────────────────────────────
-// 2. CROSSWORD PUZZLES & DATA
+// 2. GENERIC CROSSWORD PUZZLES (KIDS TO ADULTS)
 // ─────────────────────────────────────────────────────────────
 interface CrosswordClue {
   num: number;
@@ -130,44 +119,81 @@ interface CrosswordPuzzle {
   id: string;
   title: string;
   theme: string;
-  size: number; // e.g. 7 for 7x7
+  difficulty: ArcadeDifficulty;
+  ageLabel: string;
+  size: number;
   clues: CrosswordClue[];
 }
 
-const CROSSWORD_PUZZLES: CrosswordPuzzle[] = [
-  {
-    id: 'pune-spices',
-    title: 'Pune Foodie & Spices',
-    theme: 'Legendary Local Tastes & Masalas',
-    size: 7,
-    clues: [
-      { num: 1, dir: 'across', clue: 'Golden turmeric spice widely used in curries', answer: 'HALDI', row: 0, col: 0 },
-      { num: 3, dir: 'across', clue: 'Pune’s fiery sprout curry served with pav', answer: 'MISAL', row: 2, col: 0 },
-      { num: 5, dir: 'across', clue: 'Traditional clay oven for naan & kebabs', answer: 'TANDOOR', row: 4, col: 0 },
-      { num: 6, dir: 'across', clue: 'Refreshing yogurt drink, sweet or salted', answer: 'LASSI', row: 6, col: 2 },
-      { num: 1, dir: 'down', clue: 'Maharashtrian sweet flatbread filled with jaggery & lentils', answer: 'PURAN', row: 0, col: 0 },
-      { num: 2, dir: 'down', clue: 'Spiced aromatic layered rice delight', answer: 'DUM', row: 0, col: 3 },
-      { num: 4, dir: 'down', clue: 'Crispy fried snack, famous with Pune chai', answer: 'SAMOSA', row: 1, col: 2 }
-    ]
-  },
-  {
-    id: 'italian-delight',
-    title: 'Italian & Bistro Classics',
-    theme: 'Artisanal Pizzas, Pasta & Dolce',
-    size: 7,
-    clues: [
-      { num: 1, dir: 'across', clue: 'Creamy slow-cooked Arborio rice', answer: 'RISOTTO', row: 0, col: 0 },
-      { num: 3, dir: 'across', clue: 'Silky frozen Italian treat', answer: 'GELATO', row: 2, col: 1 },
-      { num: 5, dir: 'across', clue: 'Italian coffee dessert layered with mascarpone', answer: 'TIRAMISU', row: 4, col: 0 },
-      { num: 1, dir: 'down', clue: 'Folded pizza pocket stuffed with cheese', answer: 'ROAST', row: 0, col: 0 },
-      { num: 2, dir: 'down', clue: 'Vibrant green sauce of basil & pine nuts', answer: 'PESTO', row: 0, col: 4 },
-      { num: 4, dir: 'down', clue: 'Morning brew with steamed milk foam', answer: 'LATTE', row: 2, col: 3 }
-    ]
-  }
-];
+const CROSSWORD_PUZZLES_BY_DIFFICULTY: Record<ArcadeDifficulty, CrosswordPuzzle[]> = {
+  // 🟢 EASY: Kids & Junior (Ages 6-12) - 5x5 Grid
+  easy: [
+    {
+      id: 'kids-animals-easy',
+      title: 'Kids Fun & Animals',
+      theme: 'Everyday Words & Friendly Animals',
+      difficulty: 'easy',
+      ageLabel: 'Kids (Ages 6-12)',
+      size: 5,
+      clues: [
+        { num: 1, dir: 'across', clue: 'Furry friendly pet that purrs and catches mice', answer: 'CAT', row: 0, col: 0 },
+        { num: 2, dir: 'across', clue: 'Water drops that fall from grey rainy clouds', answer: 'RAIN', row: 2, col: 0 },
+        { num: 3, dir: 'across', clue: 'Glowing night object that twinkles in the dark sky', answer: 'STAR', row: 4, col: 0 },
+        { num: 1, dir: 'down', clue: 'Four-wheeled vehicle driven on roads', answer: 'CAR', row: 0, col: 0 },
+        { num: 4, dir: 'down', clue: 'A happy dog wags this back and forth', answer: 'TAIL', row: 0, col: 2 },
+        { num: 5, dir: 'down', clue: 'Tiny hardworking insect living in an ant hill', answer: 'ANT', row: 2, col: 1 },
+      ],
+    },
+  ],
+
+  // 🟡 MEDIUM: Teens & Family (Ages 12-18) - 7x7 Grid
+  medium: [
+    {
+      id: 'family-general-medium',
+      title: 'General Knowledge & Nature',
+      theme: 'Everyday Science, World & Living Wonders',
+      difficulty: 'medium',
+      ageLabel: 'Teens & Family (Ages 12-18)',
+      size: 7,
+      clues: [
+        { num: 1, dir: 'across', clue: 'Related to the Sun or clean renewable power', answer: 'SOLAR', row: 0, col: 0 },
+        { num: 1, dir: 'down', clue: 'A glowing fiery flash that can ignite a flame', answer: 'SPARK', row: 0, col: 0 },
+        { num: 2, dir: 'down', clue: 'To legally possess something as your own property', answer: 'OWN', row: 0, col: 1 },
+        { num: 3, dir: 'down', clue: 'A secret operative or authorized representative', answer: 'AGENT', row: 0, col: 3 },
+        { num: 4, dir: 'across', clue: 'A heavenly winged protector depicted in art', answer: 'ANGEL', row: 2, col: 0 },
+        { num: 5, dir: 'down', clue: 'Sour yellow citrus fruit famous in cool lemonade', answer: 'LEMON', row: 2, col: 4 },
+        { num: 6, dir: 'across', clue: 'Fastening formed by looping and tying rope', answer: 'KNOT', row: 4, col: 0 },
+        { num: 7, dir: 'down', clue: 'The first positive counting number', answer: 'ONE', row: 4, col: 2 },
+        { num: 8, dir: 'across', clue: 'Vast body of salt water covering most of Earth', answer: 'OCEAN', row: 6, col: 0 },
+      ],
+    },
+  ],
+
+  // 🔴 HARD: Adults & Word Masters (Ages 18+) - 8x8 Grid
+  hard: [
+    {
+      id: 'adults-master-hard',
+      title: 'Classic World & Vocabulary',
+      theme: 'Challenging Language, Literature & Science',
+      difficulty: 'hard',
+      ageLabel: 'Adults (Ages 18+)',
+      size: 8,
+      clues: [
+        { num: 1, dir: 'across', clue: 'The distant line where earth seems to meet the sky', answer: 'HORIZON', row: 0, col: 0 },
+        { num: 1, dir: 'down', clue: 'The celestial realm above or ultimate paradise', answer: 'HEAVEN', row: 0, col: 0 },
+        { num: 2, dir: 'down', clue: 'System detecting aircraft or ships via radio pulses', answer: 'RADAR', row: 0, col: 2 },
+        { num: 3, dir: 'down', clue: 'Curved astronomical path of a planet around a star', answer: 'ORBIT', row: 0, col: 5 },
+        { num: 4, dir: 'across', clue: 'Official methodical examination of books or accounts', answer: 'AUDIT', row: 2, col: 0 },
+        { num: 5, dir: 'down', clue: 'Procedure intended to establish quality or performance', answer: 'TEST', row: 2, col: 4 },
+        { num: 6, dir: 'across', clue: 'A period of relaxation, tranquility or sleep', answer: 'REST', row: 4, col: 2 },
+        { num: 7, dir: 'across', clue: 'A mysterious person, thing or riddle hard to understand', answer: 'ENIGMA', row: 6, col: 0 },
+      ],
+    },
+  ],
+};
 
 // ─────────────────────────────────────────────────────────────
-// 3. MULTIPLAYER TABLE TRIVIA QUESTIONS
+// 3. TABLE TRIVIA QUESTIONS BY DIFFICULTY (KIDS TO ADULTS)
 // ─────────────────────────────────────────────────────────────
 interface TriviaQuestion {
   question: string;
@@ -176,68 +202,205 @@ interface TriviaQuestion {
   fact: string;
 }
 
-const TABLE_TRIVIA_QUESTIONS: TriviaQuestion[] = [
-  {
-    question: 'Which legendary Pune bakery made Shrewsbury Biscuits world-famous?',
-    options: ['Kayani Bakery', 'Hindustan Bakery', 'German Bakery', 'Marz-O-Rin'],
-    correct: 0,
-    fact: 'Kayani Bakery on East Street, Camp has been baking iconic butter Shrewsbury biscuits since 1955!'
-  },
-  {
-    question: 'What is the key ingredient that gives Saffron rice its brilliant golden-yellow hue and royal aroma?',
-    options: ['Turmeric', 'Saffron (Kesar)', 'Cardamom', 'Cumin'],
-    correct: 1,
-    fact: 'True saffron stigma threads are the most prized spice in the world, harvested by hand from crocus flowers!'
-  },
-  {
-    question: 'Misal Pav is traditionally topped with which crispy savory topping?',
-    options: ['Farsan / Sev', 'Boiled Peanuts', 'Fried Cashews', 'Chana Dal'],
-    correct: 0,
-    fact: 'Crisp farsan, spicy tarri (kat), fresh chopped onions and lemon make Puneri misal an unmatched delicacy.'
-  },
-  {
-    question: 'In traditional Italian dining, what does "Al Dente" literally translate to?',
-    options: ['To the tooth', 'Cooked well', 'With cheese', 'Boiled tender'],
-    correct: 0,
-    fact: '"Al dente" means "to the tooth" — describing pasta cooked firm to the bite, not mushy!'
-  },
-  {
-    question: 'Which city is credited as the birthplace of modern pizza (Pizza Margherita)?',
-    options: ['Rome', 'Naples', 'Milan', 'Florence'],
-    correct: 1,
-    fact: 'Naples, Italy created the Neapolitan Pizza Margherita in 1889 to represent the colors of the Italian flag!'
-  },
-  {
-    question: 'Which refreshing herb is the soul of authentic Biryani Dum and Moroccan mint tea?',
-    options: ['Cilantro', 'Pudina (Mint)', 'Rosemary', 'Thyme'],
-    correct: 1,
-    fact: 'Fresh mint leaves release essential aromatic oils during dum cooking, creating biryani’s signature fragrance.'
-  },
-  {
-    question: 'What sweet seasonal dessert made with Alphonso mango pulp is a summertime pride of Pune?',
-    options: ['Aamras / Amrakhand', 'Gulab Jamun', 'Rasgulla', 'Kaju Katli'],
-    correct: 0,
-    fact: 'Devgad and Ratnagiri Alphonso mangoes make Maharashtra’s Aamras and Amrakhand legendary.'
-  },
-  {
-    question: 'Which country drinks the most tea per capita in the entire world?',
-    options: ['India', 'Turkey', 'United Kingdom', 'China'],
-    correct: 1,
-    fact: 'Turkey consumes the most tea per capita, with locals drinking an average of 3 to 5 glasses of çay daily!'
-  }
-];
+const TABLE_TRIVIA_BY_DIFFICULTY: Record<ArcadeDifficulty, TriviaQuestion[]> = {
+  // 🟢 EASY (Kids 6-12)
+  easy: [
+    {
+      question: 'Which magnificent animal is popularly known as the "King of the Jungle"?',
+      options: ['Lion', 'Elephant', 'Tiger', 'Gorilla'],
+      correct: 0,
+      fact: 'Lions live in family groups called prides and their loud roar can be heard 8 kilometers away!'
+    },
+    {
+      question: 'How many bright colors are there in a standard rainbow?',
+      options: ['5 Colors', '6 Colors', '7 Colors', '8 Colors'],
+      correct: 2,
+      fact: 'The colors in order are Red, Orange, Yellow, Green, Blue, Indigo, and Violet (ROYGBIV)!'
+    },
+    {
+      question: 'Which helpful flying insect makes sweet golden honey?',
+      options: ['Butterfly', 'Honeybee', 'Ladybug', 'Dragonfly'],
+      correct: 1,
+      fact: 'Honeybees visit thousands of flowers to gather nectar and communicate by doing a waggle dance!'
+    },
+    {
+      question: 'Which famous comic superhero wears a red cape and is known as the "Man of Steel"?',
+      options: ['Batman', 'Superman', 'Spider-Man', 'Iron Man'],
+      correct: 1,
+      fact: 'Superman was born on the planet Krypton and was named Kal-El by his parents!'
+    },
+    {
+      question: 'What is the fastest animal on land, capable of sprinting up to 100 km/h?',
+      options: ['Kangaroo', 'Cheetah', 'Horse', 'Greyhound'],
+      correct: 1,
+      fact: 'Cheetahs can accelerate faster than a sports car, reaching top speed in just 3 seconds!'
+    },
+    {
+      question: 'What is the third planet from the Sun and the only home to humans?',
+      options: ['Mars', 'Venus', 'Earth', 'Jupiter'],
+      correct: 2,
+      fact: 'Over 70% of Earth is covered in oceans, which is why it looks like a blue marble from space.'
+    },
+    {
+      question: 'What does a little caterpillar transform into after resting inside a chrysalis?',
+      options: ['Beetle', 'Moth', 'Butterfly', 'Grasshopper'],
+      correct: 2,
+      fact: 'This magical transformation is called metamorphosis!'
+    },
+    {
+      question: 'Which fairy tale character has a wooden nose that grows whenever he tells a lie?',
+      options: ['Pinocchio', 'Peter Pan', 'Aladdin', 'Robin Hood'],
+      correct: 0,
+      fact: 'Pinocchio was carved from wood by the gentle carpenter Geppetto in the classic Italian tale.'
+    }
+  ],
+
+  // 🟡 MEDIUM (Teens & Family 12-18)
+  medium: [
+    {
+      question: 'What is the capital city of Australia?',
+      options: ['Sydney', 'Melbourne', 'Canberra', 'Brisbane'],
+      correct: 2,
+      fact: 'Canberra was purpose-built as a compromise capital between rivals Sydney and Melbourne in 1913!'
+    },
+    {
+      question: 'Which gas do living green plants absorb from the air to perform photosynthesis?',
+      options: ['Oxygen', 'Carbon Dioxide', 'Nitrogen', 'Helium'],
+      correct: 1,
+      fact: 'Plants absorb carbon dioxide and release fresh oxygen that humans and animals breathe!'
+    },
+    {
+      question: 'How many players are on the field for one team in a standard regulation soccer match?',
+      options: ['9 Players', '10 Players', '11 Players', '12 Players'],
+      correct: 2,
+      fact: 'Each side plays with 10 outfield players and 1 goalkeeper on the pitch.'
+    },
+    {
+      question: 'Which British author wrote the bestselling fantasy series about Harry Potter?',
+      options: ['J.R.R. Tolkien', 'J.K. Rowling', 'C.S. Lewis', 'Roald Dahl'],
+      correct: 1,
+      fact: 'The seven Harry Potter books have sold over 600 million copies and been translated into 85 languages!'
+    },
+    {
+      question: 'Which planet orbits closest to the Sun in our Solar System?',
+      options: ['Venus', 'Mercury', 'Mars', 'Earth'],
+      correct: 1,
+      fact: 'Mercury takes just 88 Earth days to orbit the Sun, though its surface can reach over 430°C!'
+    },
+    {
+      question: 'Which European country gifted the iconic Statue of Liberty to the United States?',
+      options: ['United Kingdom', 'France', 'Spain', 'Italy'],
+      correct: 1,
+      fact: 'Designed by sculptor Frédéric-Auguste Bartholdi, France gifted the monument in 1886.'
+    },
+    {
+      question: 'What is the primary official language spoken in Brazil?',
+      options: ['Spanish', 'Portuguese', 'French', 'English'],
+      correct: 1,
+      fact: 'Brazil is the only Portuguese-speaking nation in the Americas, colonized by Portugal in 1500.'
+    },
+    {
+      question: 'Which muscular organ in the human body pumps blood through the circulatory system?',
+      options: ['Lungs', 'Liver', 'Heart', 'Kidneys'],
+      correct: 2,
+      fact: 'An adult human heart beats around 100,000 times every day, pumping 7,500 liters of blood!'
+    }
+  ],
+
+  // 🔴 HARD (Adults 18+)
+  hard: [
+    {
+      question: 'What is the chemical symbol for the precious transition metal Gold on the Periodic Table?',
+      options: ['Ag', 'Au', 'Fe', 'Pt'],
+      correct: 1,
+      fact: 'The symbol "Au" originates from the Latin word "Aurum", which means "shining dawn"!'
+    },
+    {
+      question: 'In which year did the British passenger liner RMS Titanic sink in the North Atlantic?',
+      options: ['1908', '1912', '1916', '1920'],
+      correct: 1,
+      fact: 'The Titanic struck an iceberg on the night of April 14 and sank in the early hours of April 15, 1912.'
+    },
+    {
+      question: 'Which river is internationally recognized as the longest river in the world?',
+      options: ['Amazon River', 'Nile River', 'Yangtze River', 'Mississippi River'],
+      correct: 1,
+      fact: 'Flowing north for approximately 6,650 km, the Nile traverses 11 African nations.'
+    },
+    {
+      question: 'What is the hardest naturally occurring substance known to science on the Mohs scale?',
+      options: ['Titanium', 'Quartz', 'Diamond', 'Tungsten'],
+      correct: 2,
+      fact: 'Diamond achieves the maximum score of 10 on the Mohs scale, formed under extreme mantle pressure.'
+    },
+    {
+      question: 'Who wrote the first computer algorithm in history for Babbage’s Analytical Engine?',
+      options: ['Alan Turing', 'Ada Lovelace', 'Grace Hopper', 'Charles Babbage'],
+      correct: 1,
+      fact: 'Ada Lovelace published the first machine algorithm in 1843, foreseeing computer music and graphics!'
+    },
+    {
+      question: 'What is the official currency denomination of Japan?',
+      options: ['Won', 'Yuan', 'Yen', 'Baht'],
+      correct: 2,
+      fact: 'The Japanese Yen was officially adopted during the Meiji government’s New Currency Act of 1871.'
+    },
+    {
+      question: 'How many total bones make up the skeletal system of a healthy adult human?',
+      options: ['198', '206', '214', '222'],
+      correct: 1,
+      fact: 'Infants are born with roughly 270 bones, which gradually fuse together into 206 by adulthood.'
+    },
+    {
+      question: 'Which theoretical physicist formulated the revolutionary General Theory of Relativity in 1915?',
+      options: ['Isaac Newton', 'Niels Bohr', 'Albert Einstein', 'Max Planck'],
+      correct: 2,
+      fact: 'Einstein demonstrated that gravity is the geometric warping of spacetime caused by mass and energy.'
+    }
+  ]
+};
 
 // ─────────────────────────────────────────────────────────────
-// 4. "WHO PAYS THE BILL?" ROULETTE OUTCOMES
+// 4. "WHO PAYS THE BILL?" ROULETTE OUTCOMES BY DIFFICULTY
 // ─────────────────────────────────────────────────────────────
-const BILL_CONSEQUENCES = [
-  { text: '💳 Pays the Entire Food Bill!', color: '#EF4444', icon: '💳', tag: 'Hero of the Table' },
-  { text: '🍰 Treats the Table to Desserts!', color: '#F59E0B', icon: '🍰', tag: 'Sweet Tooth Sponsor' },
-  { text: '☕ Buys the Post-Dinner Drinks / Coffee!', color: '#3B82F6', icon: '☕', tag: 'Beverage Host' },
-  { text: '🛡️ 100% Free Pass (Immune & Pampered)!', color: '#10B981', icon: '🛡️', tag: 'Lucky Diner' },
-  { text: '🌶️ Must take a bite of the spiciest dip!', color: '#EC4899', icon: '🌶️', tag: 'Spice Champion' },
-  { text: '📸 Must snap & post the group table selfie!', color: '#8B5CF6', icon: '📸', tag: 'Official Photographer' },
-];
+interface BillConsequence {
+  text: string;
+  color: string;
+  icon: string;
+  tag: string;
+}
+
+const BILL_CONSEQUENCES_BY_DIFFICULTY: Record<ArcadeDifficulty, BillConsequence[]> = {
+  // 🟢 EASY (Kids & Family Mode - Fun Table Dares)
+  easy: [
+    { text: '🦁 Must roar like a lion for 5 full seconds!', color: '#F59E0B', icon: '🦁', tag: 'Silly Roar' },
+    { text: '🎤 Must sing the chorus of a cartoon or Disney song!', color: '#3B82F6', icon: '🎤', tag: 'Star Performer' },
+    { text: '🤸 Must do 5 silly jumping jacks beside the table!', color: '#10B981', icon: '🤸', tag: 'Table Fitness' },
+    { text: '💖 Must give everyone at the table a sweet compliment!', color: '#EC4899', icon: '💖', tag: 'Kind Heart' },
+    { text: '🎭 Must make the funniest face for a group photo!', color: '#8B5CF6', icon: '🎭', tag: 'Face of the Day' },
+    { text: '🍦 Lucky Winner! Gets an extra scoop of dessert or fries!', color: '#10B981', icon: '🍦', tag: 'Pampered Star' },
+  ],
+
+  // 🟡 MEDIUM (Teens & Family - Social Fun & Casual Treats)
+  medium: [
+    { text: '📸 Must snap and post the official table group selfie!', color: '#8B5CF6', icon: '📸', tag: 'Official Photographer' },
+    { text: '🥤 Treats the table to the next round of soft drinks or mocktails!', color: '#3B82F6', icon: '🥤', tag: 'Beverage Sponsor' },
+    { text: '🕺 Must do a 10-second funny table dance in their seat!', color: '#EC4899', icon: '🕺', tag: 'Groove Master' },
+    { text: '🗣️ Must speak in a fancy accent until the food arrives!', color: '#F59E0B', icon: '🗣️', tag: 'Voice Actor' },
+    { text: '🍟 Must share half of their fries or appetizer with the table!', color: '#EF4444', icon: '🍟', tag: 'Generous Friend' },
+    { text: '🛡️ 100% Free Pass (Immune from all table forfeits today)!', color: '#10B981', icon: '🛡️', tag: 'Immunity Shield' },
+  ],
+
+  // 🔴 HARD (Adults - Real Dining Bill & Bar Stakes)
+  hard: [
+    { text: '💳 Pays the ENTIRE dining bill for the table!', color: '#EF4444', icon: '💳', tag: 'Hero of the Table' },
+    { text: '🍰 Sponsors all desserts and post-dinner coffees!', color: '#F59E0B', icon: '🍰', tag: 'Sweet Tooth Sponsor' },
+    { text: '🍺 Covers the craft beers, wine, and bar beverage tab!', color: '#3B82F6', icon: '🍺', tag: 'Bar Host' },
+    { text: '💵 Covers the 20% server gratuity & table service charge!', color: '#10B981', icon: '💵', tag: 'Tipping Champion' },
+    { text: '🍽️ Must host/treat everyone to next weekend’s dinner outing!', color: '#8B5CF6', icon: '🍽️', tag: 'Future Host' },
+    { text: '🛡️ VIP Free Pass (Sits back and gets treated 100% free)!', color: '#10B981', icon: '🛡️', tag: 'Pampered VIP' },
+  ]
+};
 
 export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
   isOpen,
@@ -246,12 +409,13 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
   restaurantName = 'Menuz Diner'
 }) => {
   const [activeTab, setActiveTab] = useState<'solitaire' | 'crossword' | 'trivia' | 'billRoulette'>('solitaire');
+  const [difficulty, setDifficulty] = useState<ArcadeDifficulty>('medium');
 
   // ── 1. Solitaire State ──
   const [solitaire, setSolitaire] = useState<SolitaireState>(initSolitaire);
-  const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [solitaireTimer, setSolitaireTimer] = useState(0);
   const [solitaireRunning, setSolitaireRunning] = useState(false);
+  const [solitaireDeckPasses, setSolitaireDeckPasses] = useState(0);
 
   useEffect(() => {
     let interval: any = null;
@@ -263,24 +427,30 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
 
   const resetSolitaireGame = () => {
     setSolitaire(initSolitaire());
-    setSelectedCardId(null);
     setSolitaireTimer(0);
     setSolitaireRunning(true);
+    setSolitaireDeckPasses(0);
   };
 
-  // Draw card from stock to waste
+  // Draw card from stock to waste based on difficulty
   const handleStockClick = () => {
     if (!solitaireRunning) setSolitaireRunning(true);
     if (solitaire.stock.length > 0) {
-      const nextCard = { ...solitaire.stock[solitaire.stock.length - 1], faceUp: true };
+      const drawCount = difficulty === 'easy' ? 1 : 3;
+      const actualDraw = Math.min(drawCount, solitaire.stock.length);
+      const drawnCards = solitaire.stock.slice(-actualDraw).reverse().map((c) => ({ ...c, faceUp: true }));
+
       setSolitaire((prev) => ({
         ...prev,
-        stock: prev.stock.slice(0, -1),
-        waste: [...prev.waste, nextCard],
+        stock: prev.stock.slice(0, -actualDraw),
+        waste: [...prev.waste, ...drawnCards],
         moves: prev.moves + 1,
       }));
     } else if (solitaire.waste.length > 0) {
-      // Recycle waste back into stock
+      if (difficulty === 'hard' && solitaireDeckPasses >= 3) {
+        return; // Hard mode: strictly maximum 3 deck passes
+      }
+      setSolitaireDeckPasses((p) => p + 1);
       const recycled = [...solitaire.waste].reverse().map((c) => ({ ...c, faceUp: false }));
       setSolitaire((prev) => ({
         ...prev,
@@ -289,25 +459,6 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
         moves: prev.moves + 1,
       }));
     }
-  };
-
-  // Check if card can move to a foundation pile
-  const tryMoveToFoundation = (card: Card): boolean => {
-    for (let f = 0; f < 4; f++) {
-      const pile = solitaire.foundations[f];
-      if (pile.length === 0) {
-        if (card.rank === 1) {
-          // Ace to empty foundation
-          return true;
-        }
-      } else {
-        const top = pile[pile.length - 1];
-        if (top.suit === card.suit && top.rank + 1 === card.rank) {
-          return true;
-        }
-      }
-    }
-    return false;
   };
 
   // Auto move card from waste or tableau
@@ -372,7 +523,7 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
 
       let canPutTableau = false;
       if (destCol.length === 0) {
-        canPutTableau = cardToMove.rank === 13; // Only Kings on empty columns
+        canPutTableau = cardToMove.rank === 13;
       } else {
         const topDest = destCol[destCol.length - 1];
         canPutTableau = topDest.faceUp && topDest.color !== cardToMove.color && topDest.rank === cardToMove.rank + 1;
@@ -406,15 +557,21 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
   };
 
   // ── 2. Crossword State ──
-  const [selectedPuzzleIdx, setSelectedPuzzleIdx] = useState(0);
-  const curPuzzle = CROSSWORD_PUZZLES[selectedPuzzleIdx];
+  const activePuzzleList = CROSSWORD_PUZZLES_BY_DIFFICULTY[difficulty];
+  const curPuzzle = activePuzzleList[0];
   const [gridAnswers, setGridAnswers] = useState<string[][]>(() =>
-    Array(7).fill(null).map(() => Array(7).fill(''))
+    Array(curPuzzle.size).fill(null).map(() => Array(curPuzzle.size).fill(''))
   );
   const [selectedCell, setSelectedCell] = useState<{ r: number; c: number } | null>({ r: 0, c: 0 });
   const [selectedDirection, setSelectedDirection] = useState<'across' | 'down'>('across');
   const [crosswordSuccess, setCrosswordSuccess] = useState(false);
-  const [crosswordScore, setCrosswordScore] = useState(0);
+
+  // Sync grid when difficulty changes
+  useEffect(() => {
+    setGridAnswers(Array(curPuzzle.size).fill(null).map(() => Array(curPuzzle.size).fill('')));
+    setSelectedCell({ r: 0, c: 0 });
+    setCrosswordSuccess(false);
+  }, [difficulty, curPuzzle.size]);
 
   // Active clue
   const activeClue = useMemo(() => {
@@ -469,14 +626,12 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
     newGrid[r][c] = upper;
     setGridAnswers(newGrid);
 
-    // Auto advance to next cell
     if (selectedDirection === 'across' && c + 1 < curPuzzle.size && validCells.has(`${r}-${c + 1}`)) {
       setSelectedCell({ r, c: c + 1 });
     } else if (selectedDirection === 'down' && r + 1 < curPuzzle.size && validCells.has(`${r + 1}-${c}`)) {
       setSelectedCell({ r: r + 1, c });
     }
 
-    // Check full puzzle
     checkPuzzleCompletion(newGrid);
   };
 
@@ -509,7 +664,6 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
     }
     if (allCorrect) {
       setCrosswordSuccess(true);
-      setCrosswordScore((s) => s + 100);
     }
   };
 
@@ -526,7 +680,8 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
   };
 
   // ── 3. Table Trivia Battle State ──
-  const [triviaPlayers, setTriviaPlayers] = useState<string[]>(['You (Guest 1)', 'Guest 2', 'Guest 3']);
+  const activeTriviaList = TABLE_TRIVIA_BY_DIFFICULTY[difficulty];
+  const [triviaPlayers] = useState<string[]>(['You (Guest 1)', 'Guest 2', 'Guest 3']);
   const [curTriviaIdx, setCurTriviaIdx] = useState(0);
   const [playerScores, setPlayerScores] = useState<number[]>([0, 0, 0]);
   const [activePlayerTurn, setActivePlayerTurn] = useState(0);
@@ -534,7 +689,7 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
   const [triviaAnswered, setTriviaAnswered] = useState(false);
   const [triviaStreak, setTriviaStreak] = useState(0);
 
-  const curQ = TABLE_TRIVIA_QUESTIONS[curTriviaIdx % TABLE_TRIVIA_QUESTIONS.length];
+  const curQ = activeTriviaList[curTriviaIdx % activeTriviaList.length];
 
   const handleTriviaAnswer = (optIdx: number) => {
     if (triviaAnswered) return;
@@ -557,16 +712,17 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
   const handleNextTriviaQuestion = () => {
     setSelectedOption(null);
     setTriviaAnswered(false);
-    setCurTriviaIdx((i) => (i + 1) % TABLE_TRIVIA_QUESTIONS.length);
+    setCurTriviaIdx((i) => (i + 1) % activeTriviaList.length);
     setActivePlayerTurn((p) => (p + 1) % triviaPlayers.length);
   };
 
   // ── 4. "Who Pays the Bill?" Roulette State ──
+  const activeConsequences = BILL_CONSEQUENCES_BY_DIFFICULTY[difficulty];
   const [rouletteGuests, setRouletteGuests] = useState<string[]>(['Siddhant', 'Rahul', 'Priya', 'Arjun']);
   const [newGuestInput, setNewGuestInput] = useState('');
   const [isSpinning, setIsSpinning] = useState(false);
   const [wheelRotation, setWheelRotation] = useState(0);
-  const [rouletteWinner, setRouletteWinner] = useState<{ guest: string; consequence: typeof BILL_CONSEQUENCES[0] } | null>(null);
+  const [rouletteWinner, setRouletteWinner] = useState<{ guest: string; consequence: BillConsequence } | null>(null);
   const [spinHistory, setSpinHistory] = useState<Array<{ guest: string; consequence: string; time: string }>>([]);
 
   const spinTheWheel = () => {
@@ -574,7 +730,6 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
     setIsSpinning(true);
     setRouletteWinner(null);
 
-    // Random turns: between 5 and 9 full rotations + random angle
     const extraTurns = Math.floor(Math.random() * 4) + 6;
     const randomAngle = Math.floor(Math.random() * 360);
     const newTotal = wheelRotation + extraTurns * 360 + randomAngle;
@@ -582,9 +737,8 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
 
     setTimeout(() => {
       setIsSpinning(false);
-      // Pick random guest & random consequence
       const chosenGuest = rouletteGuests[Math.floor(Math.random() * rouletteGuests.length)];
-      const chosenConsequence = BILL_CONSEQUENCES[Math.floor(Math.random() * BILL_CONSEQUENCES.length)];
+      const chosenConsequence = activeConsequences[Math.floor(Math.random() * activeConsequences.length)];
       setRouletteWinner({ guest: chosenGuest, consequence: chosenConsequence });
 
       setSpinHistory((prev) => [
@@ -615,6 +769,7 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
       <div className="w-full max-w-4xl max-h-[94vh] bg-[#0A0F1D] border border-white/[0.12] rounded-3xl shadow-2xl flex flex-col overflow-hidden text-slate-100">
+        
         {/* Header Bar */}
         <div className="px-4 sm:px-6 py-3.5 bg-[#0D1527] border-b border-white/[0.08] flex items-center justify-between">
           <div className="flex items-center space-x-2.5">
@@ -628,7 +783,7 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                   {tableLabel}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400">Play while waiting for your fresh order • {restaurantName}</p>
+              <p className="text-[11px] text-slate-400">Play while waiting for your order • {restaurantName}</p>
             </div>
           </div>
 
@@ -640,6 +795,63 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
           >
             <X className="w-5 h-5" />
           </button>
+        </div>
+
+        {/* ═══════════════════════════════════════════════════════════ */}
+        {/* UNIVERSAL DIFFICULTY / AGE BRACKET SELECTOR                */}
+        {/* ═══════════════════════════════════════════════════════════ */}
+        <div className="px-4 sm:px-6 py-2.5 bg-[#0C1222] border-b border-white/[0.08] flex items-center justify-between gap-3 flex-wrap">
+          <div className="flex items-center space-x-2">
+            <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 font-mono">
+              Age &amp; Difficulty:
+            </span>
+            <div className="flex items-center space-x-1 bg-black/40 p-1 rounded-xl border border-white/[0.08]">
+              <button
+                type="button"
+                onClick={() => setDifficulty('easy')}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
+                  difficulty === 'easy'
+                    ? 'bg-emerald-500 text-slate-950 font-black shadow-sm'
+                    : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
+                }`}
+              >
+                <span>🟢 Easy</span>
+                <span className="text-[10px] opacity-80 font-normal hidden sm:inline">(Kids 6-12)</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setDifficulty('medium')}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
+                  difficulty === 'medium'
+                    ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                    : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
+                }`}
+              >
+                <span>🟡 Medium</span>
+                <span className="text-[10px] opacity-80 font-normal hidden sm:inline">(Family &amp; Teens)</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setDifficulty('hard')}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
+                  difficulty === 'hard'
+                    ? 'bg-rose-500 text-white font-black shadow-sm'
+                    : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
+                }`}
+              >
+                <span>🔴 Hard</span>
+                <span className="text-[10px] opacity-80 font-normal hidden sm:inline">(Adults 18+)</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="text-[11px] font-mono text-slate-400 hidden sm:flex items-center space-x-1.5">
+            {difficulty === 'easy' && <span className="text-emerald-400">Junior Friendly • 5x5 Crossword • Draw 1 Cards • Silly Dares</span>}
+            {difficulty === 'medium' && <span className="text-amber-400">Family &amp; Social • 7x7 Crossword • Draw 3 Cards • Social Dares</span>}
+            {difficulty === 'hard' && <span className="text-rose-400">Adult Master • 8x8 Crossword • 3-Pass Limit • Real Bill Stakes</span>}
+          </div>
         </div>
 
         {/* Tab Navigation */}
@@ -654,7 +866,7 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
             }`}
           >
             <span>♠️</span>
-            <span>Solitaire</span>
+            <span>Klondike Solitaire</span>
           </button>
 
           <button
@@ -667,7 +879,7 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
             }`}
           >
             <span>✍️</span>
-            <span>Food Crossword</span>
+            <span>Classic Crossword</span>
           </button>
 
           <button
@@ -680,7 +892,7 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
             }`}
           >
             <Users className="w-3.5 h-3.5" />
-            <span>Table Trivia</span>
+            <span>Table Trivia Battle</span>
           </button>
 
           <button
@@ -698,204 +910,173 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
         </div>
 
         {/* Tab Body */}
-        <div className="flex-1 overflow-y-auto p-3 sm:p-6 bg-[#070B14]">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+          
           {/* ═══════════════════════════════════════════════════════════ */}
-          {/* TAB 1: SOLITAIRE (KLONDIKE)                                  */}
+          {/* TAB 1: KLONDIKE SOLITAIRE                                   */}
           {/* ═══════════════════════════════════════════════════════════ */}
           {activeTab === 'solitaire' && (
             <div className="space-y-4">
-              {/* Solitaire Top Bar */}
+              {/* Solitaire Control Bar */}
               <div className="flex flex-wrap items-center justify-between gap-2 p-3 bg-slate-900/80 rounded-2xl border border-white/[0.06]">
-                <div className="flex items-center space-x-3 text-xs">
-                  <div className="flex items-center space-x-1.5 font-mono text-amber-400">
-                    <Clock className="w-4 h-4" />
+                <div className="flex items-center space-x-4 text-xs font-mono">
+                  <div className="flex items-center space-x-1.5">
+                    <Clock className="w-3.5 h-3.5 text-amber-400" />
                     <span>{Math.floor(solitaireTimer / 60)}:{String(solitaireTimer % 60).padStart(2, '0')}</span>
                   </div>
-                  <div className="text-slate-400">
-                    Moves: <span className="font-bold text-white font-mono">{solitaire.moves}</span>
-                  </div>
-                  <div className="text-slate-400">
-                    Score: <span className="font-bold text-emerald-400 font-mono">{solitaire.score}</span>
+                  <div>Moves: <span className="text-white font-bold">{solitaire.moves}</span></div>
+                  <div>Score: <span className="text-amber-400 font-bold">{solitaire.score}</span></div>
+                  <div className="hidden sm:inline text-slate-400">
+                    Mode: <span className="text-emerald-300 font-bold">{difficulty === 'easy' ? 'Draw 1' : 'Draw 3'}</span>
+                    {difficulty === 'hard' && <span className="text-rose-400 ml-1">({3 - solitaireDeckPasses} passes left)</span>}
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-2">
-                  <button
-                    type="button"
-                    onClick={resetSolitaireGame}
-                    className="px-3 py-1.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-xs font-bold text-white flex items-center space-x-1 transition-all cursor-pointer"
-                  >
-                    <RotateCcw className="w-3.5 h-3.5" />
-                    <span>New Game</span>
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={resetSolitaireGame}
+                  className="px-3 py-1.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/[0.1] text-xs font-bold text-slate-200 hover:text-white flex items-center space-x-1.5 transition-all cursor-pointer"
+                >
+                  <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
+                  <span>New Deal</span>
+                </button>
               </div>
 
-              {/* Felt Green Solitaire Board */}
-              <div className="p-3 sm:p-5 rounded-2xl bg-gradient-to-b from-[#113824] to-[#0A2616] border border-emerald-600/30 shadow-inner min-h-[360px]">
-                {/* Upper Area: Stock, Waste, and 4 Foundations */}
-                <div className="flex items-start justify-between mb-5">
-                  {/* Stock & Waste */}
-                  <div className="flex items-center space-x-2 sm:space-x-3">
-                    {/* Stock Pile */}
+              {/* Upper Section: Stock + Waste + 4 Foundations */}
+              <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
+                {/* Stock Pile */}
+                <div
+                  onClick={handleStockClick}
+                  className={`aspect-[2/3] rounded-xl border-2 flex items-center justify-center cursor-pointer transition-transform active:scale-95 select-none ${
+                    solitaire.stock.length > 0
+                      ? 'bg-gradient-to-br from-indigo-900 to-slate-950 border-indigo-500 shadow-md'
+                      : 'bg-black/30 border-dashed border-slate-700 hover:border-slate-500'
+                  }`}
+                  title="Click to deal cards"
+                >
+                  {solitaire.stock.length > 0 ? (
+                    <div className="text-center">
+                      <span className="text-xs sm:text-sm font-bold text-indigo-300">🂠</span>
+                      <span className="text-[10px] block text-indigo-300 font-mono">{solitaire.stock.length}</span>
+                    </div>
+                  ) : (
+                    <RotateCcw className="w-4 h-4 text-slate-500" />
+                  )}
+                </div>
+
+                {/* Waste Pile */}
+                <div
+                  onClick={() => handleCardTap('waste')}
+                  className={`aspect-[2/3] rounded-xl border flex items-center justify-center transition-all select-none ${
+                    solitaire.waste.length > 0
+                      ? 'bg-white text-slate-950 border-slate-300 shadow-md cursor-pointer hover:ring-2 hover:ring-amber-400'
+                      : 'bg-black/20 border-dashed border-slate-800'
+                  }`}
+                >
+                  {solitaire.waste.length > 0 && (
+                    <div className="text-center">
+                      <div className={`text-xs sm:text-base font-black ${solitaire.waste[solitaire.waste.length - 1].color === 'red' ? 'text-rose-600' : 'text-slate-950'}`}>
+                        {getRankLabel(solitaire.waste[solitaire.waste.length - 1].rank)}
+                      </div>
+                      <div className="text-xs sm:text-sm">{solitaire.waste[solitaire.waste.length - 1].suit}</div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Gap */}
+                <div />
+
+                {/* 4 Foundation Piles (Ace -> King) */}
+                {solitaire.foundations.map((pile, fIdx) => {
+                  const targetSuit = SUITS[fIdx];
+                  const top = pile.length > 0 ? pile[pile.length - 1] : null;
+
+                  return (
                     <div
-                      onClick={handleStockClick}
-                      className="w-11 sm:w-16 h-16 sm:h-24 rounded-lg sm:rounded-xl border-2 border-emerald-500/40 bg-gradient-to-br from-indigo-950 to-slate-900 flex items-center justify-center cursor-pointer shadow-md active:scale-95 transition-transform"
-                      title="Draw Card"
+                      key={`foundation-${fIdx}`}
+                      className={`aspect-[2/3] rounded-xl border flex items-center justify-center select-none ${
+                        top
+                          ? 'bg-white text-slate-950 border-slate-300 shadow-md'
+                          : 'bg-black/30 border-dashed border-slate-700'
+                      }`}
                     >
-                      {solitaire.stock.length > 0 ? (
-                        <div className="w-full h-full rounded-lg bg-indigo-900/60 border border-indigo-400/30 flex items-center justify-center font-bold text-xs text-indigo-300">
-                          🂠 {solitaire.stock.length}
+                      {top ? (
+                        <div className="text-center">
+                          <div className={`text-xs sm:text-base font-black ${top.color === 'red' ? 'text-rose-600' : 'text-slate-950'}`}>
+                            {getRankLabel(top.rank)}
+                          </div>
+                          <div className="text-xs sm:text-sm">{top.suit}</div>
                         </div>
                       ) : (
-                        <RotateCcw className="w-5 h-5 text-emerald-400" />
+                        <span className="text-sm opacity-30 font-bold">{targetSuit}</span>
                       )}
                     </div>
+                  );
+                })}
+              </div>
 
-                    {/* Waste Pile */}
-                    <div
-                      onClick={() => handleCardTap('waste')}
-                      className={`w-11 sm:w-16 h-16 sm:h-24 rounded-lg sm:rounded-xl border-2 border-emerald-500/30 flex items-center justify-center transition-all ${
-                        solitaire.waste.length > 0
-                          ? 'bg-white cursor-pointer shadow-md hover:ring-2 hover:ring-amber-400'
-                          : 'bg-emerald-950/40 border-dashed'
-                      }`}
-                      title={solitaire.waste.length > 0 ? 'Tap to move card' : 'Waste pile'}
-                    >
-                      {solitaire.waste.length > 0 && (() => {
-                        const top = solitaire.waste[solitaire.waste.length - 1];
+              {/* Lower Section: 7 Tableau Columns */}
+              <div className="grid grid-cols-7 gap-1.5 sm:gap-2 min-h-[280px] pt-2">
+                {solitaire.tableau.map((col, colIdx) => (
+                  <div key={`col-${colIdx}`} className="relative min-h-[180px] flex flex-col items-center">
+                    {col.length === 0 ? (
+                      <div className="w-full aspect-[2/3] rounded-xl border border-dashed border-slate-800 bg-black/20" />
+                    ) : (
+                      col.map((card, cardIdx) => {
+                        const isTop = cardIdx === col.length - 1;
                         return (
-                          <div className={`text-center select-none font-bold ${top.color === 'red' ? 'text-red-600' : 'text-slate-900'}`}>
-                            <div className="text-xs sm:text-base font-black leading-none">{getRankLabel(top.rank)}</div>
-                            <div className="text-sm sm:text-xl leading-none mt-0.5">{top.suit}</div>
+                          <div
+                            key={card.id}
+                            onClick={() => isTop && card.faceUp && handleCardTap('tableau', colIdx, cardIdx)}
+                            style={{ marginTop: cardIdx === 0 ? 0 : -28 }}
+                            className={`w-full aspect-[2/3] rounded-xl border transition-all select-none ${
+                              card.faceUp
+                                ? 'bg-white text-slate-950 border-slate-300 shadow-sm cursor-pointer hover:ring-2 hover:ring-amber-400'
+                                : 'bg-gradient-to-br from-indigo-900 to-slate-950 border-indigo-700/60'
+                            }`}
+                          >
+                            {card.faceUp ? (
+                              <div className="p-1">
+                                <div className={`text-[10px] sm:text-xs font-black leading-none ${card.color === 'red' ? 'text-rose-600' : 'text-slate-950'}`}>
+                                  {getRankLabel(card.rank)} {card.suit}
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center opacity-40 text-[10px]">🂠</div>
+                            )}
                           </div>
                         );
-                      })()}
-                    </div>
+                      })
+                    )}
                   </div>
-
-                  {/* 4 Foundations (Ace to King) */}
-                  <div className="flex items-center space-x-1.5 sm:space-x-2">
-                    {SUITS.map((suit, fIdx) => {
-                      const pile = solitaire.foundations[fIdx];
-                      const top = pile.length > 0 ? pile[pile.length - 1] : null;
-
-                      return (
-                        <div
-                          key={suit}
-                          className={`w-11 sm:w-16 h-16 sm:h-24 rounded-lg sm:rounded-xl border-2 flex items-center justify-center transition-all ${
-                            top
-                              ? 'bg-white border-emerald-400 shadow-md'
-                              : 'bg-emerald-950/40 border-dashed border-emerald-500/30 text-emerald-500/40'
-                          }`}
-                        >
-                          {top ? (
-                            <div className={`text-center select-none font-bold ${top.color === 'red' ? 'text-red-600' : 'text-slate-900'}`}>
-                              <div className="text-xs sm:text-base font-black leading-none">{getRankLabel(top.rank)}</div>
-                              <div className="text-sm sm:text-xl leading-none mt-0.5">{top.suit}</div>
-                            </div>
-                          ) : (
-                            <span className="text-sm sm:text-lg">{suit}</span>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Lower Area: 7 Tableau Columns */}
-                <div className="grid grid-cols-7 gap-1 sm:gap-2 pt-2">
-                  {solitaire.tableau.map((col, colIdx) => (
-                    <div
-                      key={`col-${colIdx}`}
-                      className="min-h-[160px] sm:min-h-[200px] flex flex-col items-center"
-                    >
-                      {col.length === 0 ? (
-                        <div className="w-full h-16 sm:h-24 rounded-lg sm:rounded-xl border-2 border-dashed border-emerald-500/20 bg-emerald-950/20 flex items-center justify-center text-[10px] text-emerald-400/40 font-mono">
-                          K
-                        </div>
-                      ) : (
-                        col.map((card, cardIdx) => {
-                          const isTop = cardIdx === col.length - 1;
-                          return (
-                            <div
-                              key={card.id}
-                              onClick={() => isTop && handleCardTap('tableau', colIdx, cardIdx)}
-                              style={{ marginTop: cardIdx === 0 ? 0 : -32 }}
-                              className={`w-full h-16 sm:h-24 rounded-lg sm:rounded-xl border transition-all select-none ${
-                                card.faceUp
-                                  ? 'bg-white shadow-md ' + (card.color === 'red' ? 'text-red-600 border-slate-200' : 'text-slate-950 border-slate-200') + (isTop ? ' cursor-pointer hover:ring-2 hover:ring-amber-400 hover:scale-[1.02]' : '')
-                                  : 'bg-gradient-to-br from-indigo-900 to-slate-900 border-indigo-500/30 text-indigo-400'
-                              } flex flex-col justify-between p-1 sm:p-1.5`}
-                            >
-                              {card.faceUp ? (
-                                <>
-                                  <div className="text-[10px] sm:text-xs font-black leading-none flex items-center justify-between">
-                                    <span>{getRankLabel(card.rank)}</span>
-                                    <span>{card.suit}</span>
-                                  </div>
-                                  <div className="text-xs sm:text-lg font-black text-center my-auto leading-none">
-                                    {card.suit}
-                                  </div>
-                                  <div className="text-[10px] sm:text-xs font-black leading-none rotate-180 flex items-center justify-between">
-                                    <span>{getRankLabel(card.rank)}</span>
-                                    <span>{card.suit}</span>
-                                  </div>
-                                </>
-                              ) : (
-                                <div className="w-full h-full rounded border border-indigo-400/20 flex items-center justify-center text-[10px] text-indigo-300">
-                                  🂠
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })
-                      )}
-                    </div>
-                  ))}
-                </div>
-
-                {solitaire.won && (
-                  <div className="mt-4 p-4 rounded-2xl bg-amber-500/20 border border-amber-500 text-center space-y-2 animate-bounce">
-                    <Trophy className="w-10 h-10 text-amber-400 mx-auto" />
-                    <h4 className="text-base font-black text-amber-300">VICTORY! YOU SOLVED SOLITAIRE!</h4>
-                    <p className="text-xs text-slate-200">Table {tableLabel} champions! Your order is being freshly cooked right now.</p>
-                  </div>
-                )}
+                ))}
               </div>
 
-              <div className="text-[11px] text-slate-400 text-center">
-                💡 <span className="font-semibold text-slate-300">Quick Play Tip:</span> Tap any uncovered card to automatically move it to a foundation or valid column!
-              </div>
+              {solitaire.won && (
+                <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-500/20 to-amber-500/20 border border-emerald-500 text-center space-y-2 animate-bounce">
+                  <Trophy className="w-10 h-10 text-amber-400 mx-auto" />
+                  <h4 className="text-lg font-black text-white">SOLITAIRE VICTORY!</h4>
+                  <p className="text-xs text-slate-200">You cleared the table in {solitaire.moves} moves!</p>
+                </div>
+              )}
             </div>
           )}
 
           {/* ═══════════════════════════════════════════════════════════ */}
-          {/* TAB 2: FOOD & CULINARY CROSSWORD                            */}
+          {/* TAB 2: CLASSIC GENERIC CROSSWORD (KIDS TO ADULTS)           */}
           {/* ═══════════════════════════════════════════════════════════ */}
           {activeTab === 'crossword' && (
             <div className="space-y-4">
-              {/* Puzzle Selector & Controls */}
+              {/* Puzzle Header & Controls */}
               <div className="flex flex-wrap items-center justify-between gap-2 p-3 bg-slate-900/80 rounded-2xl border border-white/[0.06]">
-                <div className="flex items-center space-x-2">
-                  {CROSSWORD_PUZZLES.map((pz, idx) => (
-                    <button
-                      key={pz.id}
-                      type="button"
-                      onClick={() => {
-                        setSelectedPuzzleIdx(idx);
-                        setGridAnswers(Array(7).fill(null).map(() => Array(7).fill('')));
-                        setCrosswordSuccess(false);
-                      }}
-                      className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                        selectedPuzzleIdx === idx
-                          ? 'bg-amber-500 text-slate-950 font-black'
-                          : 'bg-white/[0.05] text-slate-300 hover:text-white'
-                      }`}
-                    >
-                      {pz.title}
-                    </button>
-                  ))}
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <h4 className="font-bold text-sm text-white">{curPuzzle.title}</h4>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                      {curPuzzle.ageLabel}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 mt-0.5">{curPuzzle.theme}</p>
                 </div>
 
                 <div className="flex items-center space-x-2">
@@ -910,7 +1091,7 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                   <button
                     type="button"
                     onClick={() => {
-                      setGridAnswers(Array(7).fill(null).map(() => Array(7).fill('')));
+                      setGridAnswers(Array(curPuzzle.size).fill(null).map(() => Array(curPuzzle.size).fill('')));
                       setCrosswordSuccess(false);
                     }}
                     className="p-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-slate-400 hover:text-white transition-all cursor-pointer"
@@ -938,16 +1119,18 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
 
               {/* Crossword Grid + Clues Side by Side */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* 7x7 Grid */}
+                {/* Dynamic Sized Grid */}
                 <div className="bg-[#0B1120] p-3 sm:p-4 rounded-2xl border border-white/[0.08] flex items-center justify-center">
-                  <div className="grid grid-cols-7 gap-1 w-full max-w-[320px]">
-                    {Array(7).fill(null).map((_, r) =>
-                      Array(7).fill(null).map((__, c) => {
+                  <div
+                    style={{ gridTemplateColumns: `repeat(${curPuzzle.size}, minmax(0, 1fr))` }}
+                    className="grid gap-1 w-full max-w-[320px]"
+                  >
+                    {Array(curPuzzle.size).fill(null).map((_, r) =>
+                      Array(curPuzzle.size).fill(null).map((__, c) => {
                         const isPlayable = validCells.has(`${r}-${c}`);
                         const isSelected = selectedCell?.r === r && selectedCell?.c === c;
-                        const cellVal = gridAnswers[r][c];
+                        const cellVal = gridAnswers[r]?.[c] || '';
 
-                        // Find if cell starts a clue
                         const startClue = curPuzzle.clues.find((cl) => cl.row === r && cl.col === c);
 
                         return (
@@ -976,21 +1159,23 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                 </div>
 
                 {/* Clues List */}
-                <div className="space-y-3 bg-[#0B1120] p-3 sm:p-4 rounded-2xl border border-white/[0.08] max-h-[340px] overflow-y-auto text-xs">
+                <div className="bg-[#0B1120] p-4 rounded-2xl border border-white/[0.08] space-y-4 max-h-[340px] overflow-y-auto">
                   <div>
-                    <h5 className="font-bold text-amber-400 uppercase tracking-wider text-[10px] mb-2">Across Clues</h5>
+                    <h5 className="text-[10px] font-black uppercase tracking-wider text-amber-400 border-b border-white/[0.06] pb-1 mb-2 font-mono">
+                      Across Clues
+                    </h5>
                     <div className="space-y-1.5">
                       {curPuzzle.clues.filter((c) => c.dir === 'across').map((clue) => (
                         <div
                           key={`across-${clue.num}`}
                           onClick={() => {
-                            setSelectedCell({ r: clue.row, c: clue.col });
                             setSelectedDirection('across');
+                            setSelectedCell({ r: clue.row, c: clue.col });
                           }}
-                          className={`p-2 rounded-xl transition-all cursor-pointer ${
+                          className={`p-1.5 rounded-lg text-xs transition-colors cursor-pointer ${
                             activeClue?.num === clue.num && activeClue?.dir === 'across'
-                              ? 'bg-amber-500/15 border border-amber-500/40 text-white font-bold'
-                              : 'bg-white/[0.02] text-slate-300 hover:bg-white/[0.06]'
+                              ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30'
+                              : 'text-slate-300 hover:text-white hover:bg-white/[0.03]'
                           }`}
                         >
                           <span className="font-bold text-amber-400 mr-1.5">{clue.num}.</span>
@@ -1001,20 +1186,22 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-white/[0.06]">
-                    <h5 className="font-bold text-amber-400 uppercase tracking-wider text-[10px] mb-2">Down Clues</h5>
+                  <div>
+                    <h5 className="text-[10px] font-black uppercase tracking-wider text-amber-400 border-b border-white/[0.06] pb-1 mb-2 font-mono">
+                      Down Clues
+                    </h5>
                     <div className="space-y-1.5">
                       {curPuzzle.clues.filter((c) => c.dir === 'down').map((clue) => (
                         <div
                           key={`down-${clue.num}`}
                           onClick={() => {
-                            setSelectedCell({ r: clue.row, c: clue.col });
                             setSelectedDirection('down');
+                            setSelectedCell({ r: clue.row, c: clue.col });
                           }}
-                          className={`p-2 rounded-xl transition-all cursor-pointer ${
+                          className={`p-1.5 rounded-lg text-xs transition-colors cursor-pointer ${
                             activeClue?.num === clue.num && activeClue?.dir === 'down'
-                              ? 'bg-amber-500/15 border border-amber-500/40 text-white font-bold'
-                              : 'bg-white/[0.02] text-slate-300 hover:bg-white/[0.06]'
+                              ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30'
+                              : 'text-slate-300 hover:text-white hover:bg-white/[0.03]'
                           }`}
                         >
                           <span className="font-bold text-amber-400 mr-1.5">{clue.num}.</span>
@@ -1066,15 +1253,15 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
               {crosswordSuccess && (
                 <div className="p-4 rounded-2xl bg-emerald-500/20 border border-emerald-500 text-center space-y-2 animate-bounce">
                   <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
-                  <h4 className="text-base font-black text-emerald-300">CULINARY CROSSWORD COMPLETE!</h4>
-                  <p className="text-xs text-slate-200">You earned 100 Foodie Points for {tableLabel}!</p>
+                  <h4 className="text-base font-black text-emerald-300">CROSSWORD PUZZLE COMPLETE!</h4>
+                  <p className="text-xs text-slate-200">You solved the {curPuzzle.ageLabel} puzzle for {tableLabel}!</p>
                 </div>
               )}
             </div>
           )}
 
           {/* ═══════════════════════════════════════════════════════════ */}
-          {/* TAB 3: TABLE TRIVIA BATTLE                                  */}
+          {/* TAB 3: TABLE TRIVIA BATTLE (KIDS TO ADULTS)                 */}
           {/* ═══════════════════════════════════════════════════════════ */}
           {activeTab === 'trivia' && (
             <div className="space-y-4">
@@ -1100,70 +1287,74 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                 ))}
               </div>
 
-              {/* Trivia Question Card */}
-              <div className="p-5 sm:p-6 bg-[#0E1528] rounded-3xl border border-white/[0.08] shadow-xl space-y-5">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 font-mono font-bold border border-amber-500/20">
-                    Question {curTriviaIdx + 1} of {TABLE_TRIVIA_QUESTIONS.length}
+              {/* Question Card */}
+              <div className="p-6 bg-[#0E1527] border border-white/[0.1] rounded-3xl shadow-xl space-y-5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/20">
+                    Round {curTriviaIdx + 1} of {activeTriviaList.length} • {difficulty.toUpperCase()}
                   </span>
                   {triviaStreak > 1 && (
-                    <span className="px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-300 font-bold flex items-center space-x-1 animate-pulse">
-                      <Flame className="w-3.5 h-3.5 text-rose-400" />
-                      <span>{triviaStreak}x Streak Bonus!</span>
+                    <span className="text-xs font-bold text-emerald-400 flex items-center space-x-1 animate-pulse">
+                      <Zap className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{triviaStreak}x Streak (+{triviaStreak * 2} bonus)</span>
                     </span>
                   )}
                 </div>
 
-                <h4 className="font-serif font-black text-base sm:text-xl text-white leading-snug">
+                <h3 className="font-serif font-black text-base sm:text-xl text-white leading-snug">
                   {curQ.question}
-                </h4>
+                </h3>
 
-                {/* 4 Options */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {curQ.options.map((option, optIdx) => {
+                {/* Options 2x2 Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                  {curQ.options.map((opt, optIdx) => {
                     const isSelected = selectedOption === optIdx;
                     const isCorrect = optIdx === curQ.correct;
+                    const showFeedback = triviaAnswered;
 
-                    let btnStyle = 'bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 border-white/[0.08]';
-                    if (triviaAnswered) {
+                    let btnStyle = 'bg-white/[0.04] border-white/[0.1] hover:bg-white/[0.08] hover:border-amber-400 text-white';
+                    if (showFeedback) {
                       if (isCorrect) {
-                        btnStyle = 'bg-emerald-500/30 border-emerald-400 text-emerald-200 font-bold';
+                        btnStyle = 'bg-emerald-500/20 border-emerald-500 text-emerald-300 font-bold';
                       } else if (isSelected) {
-                        btnStyle = 'bg-rose-500/30 border-rose-400 text-rose-200 font-bold';
+                        btnStyle = 'bg-rose-500/20 border-rose-500 text-rose-300';
                       } else {
-                        btnStyle = 'bg-slate-900/40 text-slate-500 border-transparent';
+                        btnStyle = 'bg-white/[0.02] border-white/[0.04] opacity-50';
                       }
                     }
 
                     return (
                       <button
-                        key={option}
+                        key={opt}
                         type="button"
-                        disabled={triviaAnswered}
                         onClick={() => handleTriviaAnswer(optIdx)}
-                        className={`p-3.5 rounded-2xl border text-left text-xs sm:text-sm font-semibold transition-all flex items-center justify-between cursor-pointer ${btnStyle}`}
+                        disabled={triviaAnswered}
+                        className={`p-3.5 rounded-2xl border text-left text-xs sm:text-sm font-medium transition-all flex items-center space-x-3 cursor-pointer ${btnStyle}`}
                       >
-                        <span>{option}</span>
-                        {triviaAnswered && isCorrect && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
-                        {triviaAnswered && isSelected && !isCorrect && <AlertCircle className="w-4 h-4 text-rose-400" />}
+                        <span className="w-6 h-6 rounded-lg bg-black/40 border border-white/10 flex items-center justify-center font-mono text-xs font-bold text-slate-300">
+                          {String.fromCharCode(65 + optIdx)}
+                        </span>
+                        <span className="flex-1">{opt}</span>
                       </button>
                     );
                   })}
                 </div>
 
-                {/* Fun Fact Reveal */}
+                {/* Did You Know / Fact Popup */}
                 {triviaAnswered && (
-                  <div className="p-4 rounded-2xl bg-indigo-950/60 border border-indigo-500/30 text-xs space-y-1.5 animate-fadeIn">
-                    <span className="font-bold text-indigo-300 block">Chef’s Tasting Fact:</span>
-                    <p className="text-slate-300 leading-relaxed">{curQ.fact}</p>
+                  <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl space-y-2 animate-in fade-in duration-200">
+                    <div className="flex items-center space-x-2 text-amber-400 text-xs font-bold">
+                      <Sparkles className="w-4 h-4" />
+                      <span>{selectedOption === curQ.correct ? 'Spot On! High Five!' : 'Good Try! Here is the Fun Fact:'}</span>
+                    </div>
+                    <p className="text-xs text-slate-300 leading-relaxed font-sans">{curQ.fact}</p>
                     <div className="pt-2 flex justify-end">
                       <button
                         type="button"
                         onClick={handleNextTriviaQuestion}
-                        className="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 text-slate-950 font-bold text-xs rounded-xl transition-all shadow-md flex items-center space-x-1.5 cursor-pointer"
+                        className="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 text-slate-950 font-bold text-xs rounded-xl shadow-md cursor-pointer transition-all"
                       >
-                        <span>Next Question (Pass Phone)</span>
-                        <ChevronRight className="w-4 h-4" />
+                        Next Player Turn →
                       </button>
                     </div>
                   </div>
@@ -1173,16 +1364,20 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
           )}
 
           {/* ═══════════════════════════════════════════════════════════ */}
-          {/* TAB 4: WHO PAYS THE BILL? ROULETTE                          */}
+          {/* TAB 4: WHO PAYS THE BILL? (KIDS TO ADULTS)                  */}
           {/* ═══════════════════════════════════════════════════════════ */}
           {activeTab === 'billRoulette' && (
             <div className="space-y-5">
               <div className="text-center space-y-1">
                 <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
-                  {tableLabel} High-Stakes Wheel
+                  {tableLabel} • {difficulty.toUpperCase()} MODE
                 </span>
                 <h4 className="font-serif font-black text-xl text-white">Who Pays The Bill?</h4>
-                <p className="text-xs text-slate-400">Add everyone sitting at your table &amp; spin the wheel to seal your destiny!</p>
+                <p className="text-xs text-slate-400">
+                  {difficulty === 'easy' && 'Fun dares & sweet treat rewards for kids and junior diners!'}
+                  {difficulty === 'medium' && 'Social fun dares & friendly mocktail/snack treats for teens!'}
+                  {difficulty === 'hard' && 'High stakes! Spin to see who settles the real dining check or bar tab!'}
+                </p>
               </div>
 
               {/* Guest Manager */}
@@ -1238,10 +1433,8 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
               {/* Animated Roulette Wheel Container */}
               <div className="flex flex-col items-center justify-center py-4 space-y-5">
                 <div className="relative w-64 h-64 sm:w-72 sm:h-72 flex items-center justify-center">
-                  {/* Pointer Needle */}
                   <div className="absolute -top-3 z-20 w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[20px] border-t-amber-400 filter drop-shadow-md" />
 
-                  {/* Spinning Disc */}
                   <div
                     style={{
                       transform: `rotate(${wheelRotation}deg)`,
@@ -1249,12 +1442,8 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                     }}
                     className="w-full h-full rounded-full border-4 border-amber-400/80 shadow-2xl relative overflow-hidden bg-gradient-to-tr from-indigo-950 via-slate-900 to-indigo-900"
                   >
-                    {/* Slices representation */}
                     {rouletteGuests.map((guest, idx) => {
                       const angle = (360 / rouletteGuests.length) * idx;
-                      const sliceColors = ['#E11D48', '#D97706', '#2563EB', '#059669', '#7C3AED', '#DB2777'];
-                      const col = sliceColors[idx % sliceColors.length];
-
                       return (
                         <div
                           key={`slice-${guest}`}
@@ -1270,66 +1459,58 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                         </div>
                       );
                     })}
-
-                    {/* Wheel Center Button */}
-                    <div className="absolute inset-0 m-auto w-16 h-16 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 border-2 border-slate-950 flex items-center justify-center font-black text-slate-950 text-xs shadow-xl z-10">
-                      MENUZ
-                    </div>
                   </div>
+
+                  <button
+                    type="button"
+                    onClick={spinTheWheel}
+                    disabled={isSpinning || rouletteGuests.length < 2}
+                    className="absolute z-10 w-20 h-20 rounded-full bg-gradient-to-tr from-amber-500 to-amber-400 text-slate-950 font-black text-xs uppercase shadow-2xl hover:scale-105 active:scale-95 transition-all flex flex-col items-center justify-center border-4 border-slate-950 cursor-pointer disabled:opacity-50"
+                  >
+                    <Dices className="w-5 h-5 mb-0.5" />
+                    <span>{isSpinning ? 'Spinning' : 'SPIN'}</span>
+                  </button>
                 </div>
 
-                {/* Spin Button */}
-                <button
-                  type="button"
-                  disabled={isSpinning}
-                  onClick={spinTheWheel}
-                  className={`px-8 py-3.5 rounded-2xl font-black text-sm uppercase tracking-wider transition-all shadow-xl flex items-center space-x-2 cursor-pointer ${
-                    isSpinning
-                      ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:brightness-110 active:scale-95 text-white hover:shadow-orange-500/25'
-                  }`}
-                >
-                  <Dices className="w-5 h-5" />
-                  <span>{isSpinning ? 'SPINNING WHEEL...' : 'SPIN THE TABLE WHEEL!'}</span>
-                </button>
-              </div>
+                {/* Result Card */}
+                {rouletteWinner && (
+                  <div className="w-full max-w-md p-5 rounded-3xl bg-gradient-to-r from-purple-950/80 via-slate-900 to-indigo-950/80 border-2 border-amber-400/80 text-center space-y-2 shadow-2xl animate-in fade-in duration-300">
+                    <span className="text-3xl block">{rouletteWinner.consequence.icon}</span>
+                    <h3 className="font-serif font-black text-xl text-amber-300">
+                      DESTINY CHOOSES: {rouletteWinner.guest.toUpperCase()}!
+                    </h3>
+                    <p className="text-sm font-bold text-white">
+                      {rouletteWinner.consequence.text}
+                    </p>
+                    <span className="inline-block px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-white/10 text-slate-300 border border-white/20">
+                      {rouletteWinner.consequence.tag}
+                    </span>
+                  </div>
+                )}
 
-              {/* Winner Result Card */}
-              {rouletteWinner && (
-                <div className="p-5 rounded-3xl bg-gradient-to-r from-amber-500/20 via-orange-500/15 to-transparent border-2 border-amber-400 text-center space-y-2 animate-bounce">
-                  <span className="text-3xl">{rouletteWinner.consequence.icon}</span>
-                  <h4 className="font-serif font-black text-xl text-white">
-                    🎯 <span className="text-amber-300 uppercase underline">{rouletteWinner.guest}</span>
-                  </h4>
-                  <p className="text-sm font-bold text-amber-200">
-                    {rouletteWinner.consequence.text}
-                  </p>
-                  <span className="inline-block px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-amber-500 text-slate-950">
-                    {rouletteWinner.consequence.tag}
-                  </span>
-                </div>
-              )}
-
-              {/* History */}
-              {spinHistory.length > 0 && (
-                <div className="p-3 bg-slate-900/60 rounded-2xl border border-white/[0.04] space-y-2 text-xs">
-                  <span className="font-bold text-slate-400 uppercase text-[10px] block">Table Spin History</span>
-                  <div className="space-y-1">
-                    {spinHistory.map((h, i) => (
-                      <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-white/[0.02]">
+                {/* History */}
+                {spinHistory.length > 0 && (
+                  <div className="w-full max-w-md space-y-1.5 pt-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono block">
+                      Previous Spins at This Table:
+                    </span>
+                    {spinHistory.map((h, idx) => (
+                      <div key={idx} className="p-2 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs flex items-center justify-between">
                         <span className="font-bold text-white">{h.guest}</span>
-                        <span className="text-slate-300 text-[11px] truncate max-w-[200px]">{h.consequence}</span>
+                        <span className="text-slate-400 truncate max-w-[200px]">{h.consequence}</span>
                         <span className="text-[10px] text-slate-500 font-mono">{h.time}</span>
                       </div>
                     ))}
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           )}
+
         </div>
       </div>
     </div>
   );
 };
+
 export default TableArcadeModal;

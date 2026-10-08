@@ -211,18 +211,23 @@ export const CustomerHomePage: React.FC = () => {
               className="p-4 rounded-2xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.08] hover:border-amber-400/50 transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-2">
-                <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-xl">
-                  🃏
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-xl">
+                    🃏
+                  </div>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                    Kids → Adults
+                  </span>
                 </div>
                 <h3 className="font-bold text-sm text-white group-hover:text-amber-300 transition-colors">
                   Klondike Solitaire
                 </h3>
                 <p className="text-[11px] text-slate-400 leading-relaxed">
-                  Classic single-player cards. Move tableau columns, stack aces into foundations, and relax while appetizers are prepped.
+                  Classic patience cards. Easy (Draw 1 for kids), Medium (Draw 3), and Hard (3-pass limit challenge for adults).
                 </p>
               </div>
               <div className="mt-4 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-[11px] text-amber-400 font-semibold">
-                <span>Play Solo</span>
+                <span>Play Solitaire</span>
                 <span className="group-hover:translate-x-1 transition-transform">→</span>
               </div>
             </div>
@@ -233,14 +238,19 @@ export const CustomerHomePage: React.FC = () => {
               className="p-4 rounded-2xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.08] hover:border-emerald-400/50 transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-2">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-xl">
-                  ✏️
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-xl">
+                    ✏️
+                  </div>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                    Kids → Adults
+                  </span>
                 </div>
                 <h3 className="font-bold text-sm text-white group-hover:text-emerald-300 transition-colors">
-                  Culinary Crossword
+                  Classic Crossword
                 </h3>
                 <p className="text-[11px] text-slate-400 leading-relaxed">
-                  Foodie puzzle grid! Solve clues spanning gourmet gastronomy, spices, Italian pasta cuts, and chef secrets.
+                  Everyday words &amp; trivia. 5x5 junior grid for kids, 7x7 family puzzle, and 8x8 mastermind grid for adults.
                 </p>
               </div>
               <div className="mt-4 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-[11px] text-emerald-400 font-semibold">
@@ -255,14 +265,19 @@ export const CustomerHomePage: React.FC = () => {
               className="p-4 rounded-2xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.08] hover:border-purple-400/50 transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-2">
-                <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-300 flex items-center justify-center text-xl">
-                  ⚡
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-300 flex items-center justify-center text-xl">
+                    ⚡
+                  </div>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                    Kids → Adults
+                  </span>
                 </div>
                 <h3 className="font-bold text-sm text-white group-hover:text-purple-300 transition-colors">
                   Table Trivia Battle
                 </h3>
                 <p className="text-[11px] text-slate-400 leading-relaxed">
-                  Multiplayer trivia buzzer for everyone at your table. Test your food, culture, and cinema knowledge with live scores.
+                  Multiplayer buzzer quiz. Easy cartoon &amp; animal trivia for kids, pop culture for teens, and high-IQ trivia for adults.
                 </p>
               </div>
               <div className="mt-4 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-[11px] text-purple-400 font-semibold">
@@ -277,14 +292,19 @@ export const CustomerHomePage: React.FC = () => {
               className="p-4 rounded-2xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.08] hover:border-rose-400/50 transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-2">
-                <div className="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-300 flex items-center justify-center text-xl">
-                  🎲
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-300 flex items-center justify-center text-xl">
+                    🎲
+                  </div>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                    Kids → Adults
+                  </span>
                 </div>
                 <h3 className="font-bold text-sm text-white group-hover:text-rose-300 transition-colors">
                   Who Pays The Bill?
                 </h3>
                 <p className="text-[11px] text-slate-400 leading-relaxed">
-                  Enter names of table companions, spin the spinning roulette or roll the dice to settle the dining tab fairly and fun.
+                  Interactive spinning wheel. Silly dares &amp; treats for kids, friendly social forfeits for teens, or real dining check for adults.
                 </p>
               </div>
               <div className="mt-4 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-[11px] text-rose-400 font-semibold">
