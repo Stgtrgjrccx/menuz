@@ -21,13 +21,16 @@ export function getSiteMode(): SiteMode {
       return 'customer';
     }
 
-    // 3. Pathname detection (e.g. /owner/, /owner, /hq/, /hq)
+    // 3. Pathname detection (e.g. /restaurant, /owner, /hq, /admin, /customer)
     const path = window.location.pathname.toLowerCase();
-    if (path.includes('/owner') || path.includes('/partner')) {
+    if (path.includes('/restaurant') || path.includes('/owner') || path.includes('/partner')) {
       return 'owner';
     }
     if (path.includes('/hq') || path.includes('/admin')) {
       return 'hq';
+    }
+    if (path.includes('/customer') || path.includes('/diner')) {
+      return 'customer';
     }
 
     // 4. Domain / Hostname auto-detection (e.g. menuz-hq.onrender.com vs menuz-owner.onrender.com vs menuz-customer.onrender.com)
@@ -83,7 +86,7 @@ export function getCustomerSiteUrl(subpath: string = ''): string {
 }
 
 export function getOwnerSiteUrl(subpath: string = ''): string {
-  if (typeof window === 'undefined') return subpath || '/owner/';
+  if (typeof window === 'undefined') return subpath || '/restaurant/';
   const cleanSubpath = subpath.startsWith('/') ? subpath.slice(1) : subpath;
   const host = window.location.hostname.toLowerCase();
 
@@ -99,7 +102,7 @@ export function getOwnerSiteUrl(subpath: string = ''): string {
 
   // 3. Localhost / Single server
   const custBase = getCustomerSiteUrl('');
-  return `${custBase.replace(/\/+$/, '')}/owner/${cleanSubpath}`;
+  return `${custBase.replace(/\/+$/, '')}/restaurant/${cleanSubpath}`;
 }
 
 export function getHqSiteUrl(subpath: string = ''): string {

@@ -208,13 +208,8 @@ export const isDishNameAsRestaurant = (r: Partial<Restaurant> | string | null | 
       return true;
     }
 
-    // 3. Genuine restaurants must have a location and cuisine unless they are a seed restaurant
-    const isSeed = SEED_RESTAURANTS.some((s) => s.id === obj.id || s.slug === obj.slug);
-    const hasLocation = obj.location && typeof obj.location === 'string' && obj.location.trim().length > 0;
-    const hasCuisine = obj.cuisine && typeof obj.cuisine === 'string' && obj.cuisine.trim().length > 0;
-    if (!isSeed && (!hasLocation || !hasCuisine)) {
-      return true;
-    }
+    // 3. Genuine restaurants must not be discarded if location/cuisine is being updated
+    // Only discard if price, category_id, or dish markers were present (handled above)
   }
 
   // 4. Exact names and substring patterns of menu categories and dishes
@@ -316,7 +311,7 @@ export const getInitialPersistedRestaurants = (): Restaurant[] => {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed)) {
           for (const r of parsed) {
-            if (r && r.id && r.name && !isDishNameAsRestaurant(r) && r.location && r.cuisine) {
+            if (r && r.id && r.name && !isDishNameAsRestaurant(r)) {
               foundMap.set(r.id, { ...r, is_menuz_partner: true, status: r.status || 'active' });
             }
           }
@@ -326,7 +321,7 @@ export const getInitialPersistedRestaurants = (): Restaurant[] => {
   }
 
   const result = Array.from(foundMap.values()).filter(
-    (r) => !isDishNameAsRestaurant(r) && (SEED_RESTAURANTS.some((s) => s.id === r.id) || (r.location && r.cuisine))
+    (r) => !isDishNameAsRestaurant(r)
   );
   try {
     localStorage.setItem(DEDICATED_REST_KEY, JSON.stringify(result));
