@@ -1,5 +1,5 @@
-// Menuz Progressive Web App Service Worker
-const CACHE_NAME = 'menuz-v1';
+// Menuz Progressive Web App Service Worker (v5 cache-bust)
+const CACHE_NAME = 'menuz-v5-cache-bust';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

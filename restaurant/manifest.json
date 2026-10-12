@@ -1,6 +1,6 @@
 {
-  "short_name": "Menuz HQ",
-  "name": "Menuz Platform Control Hub",
+  "short_name": "Menuz Partner",
+  "name": "Menuz Partner OS - Floor Operations",
   "icons": [
     {
       "src": "favicon.svg",
@@ -9,7 +9,7 @@
       "purpose": "any maskable"
     }
   ],
-  "start_url": "./#/admin",
+  "start_url": "./#/manage/saffron-house",
   "background_color": "#090D16",
   "theme_color": "#090D16",
   "display": "standalone",
