@@ -11,6 +11,10 @@ export function getSiteMode(): SiteMode {
   if (typeof window !== 'undefined') {
     // 2. URL Query parameter explicit overrides (e.g. ?mode=owner, ?mode=hq, ?mode=customer)
     const search = window.location.search.toLowerCase();
+    const hash = window.location.hash.toLowerCase();
+    const path = window.location.pathname.toLowerCase();
+    const full = `${path} ${hash} ${search}`;
+
     if (search.includes('mode=owner') || search.includes('mode=partner') || search.includes('mode=manage')) {
       return 'owner';
     }
@@ -21,15 +25,22 @@ export function getSiteMode(): SiteMode {
       return 'customer';
     }
 
-    // 3. Pathname detection (e.g. /restaurant, /owner, /hq, /admin, /customer)
-    const path = window.location.pathname.toLowerCase();
-    if (path.includes('/restaurant') || path.includes('/owner') || path.includes('/partner')) {
+    // 3. Path & Hash detection (supports both standard pathnames and HashRouter fragments)
+    if (
+      full.includes('/restaurant') ||
+      full.includes('/owner') ||
+      full.includes('/partner') ||
+      full.includes('/manage') ||
+      full.includes('#/manage') ||
+      full.includes('/dashboard') ||
+      full.includes('#/dashboard')
+    ) {
       return 'owner';
     }
-    if (path.includes('/hq') || path.includes('/admin')) {
+    if (full.includes('/hq') || full.includes('#/hq') || full.includes('/admin') || full.includes('#/admin')) {
       return 'hq';
     }
-    if (path.includes('/customer') || path.includes('/diner')) {
+    if (full.includes('/customer') || full.includes('#/customer') || full.includes('/diner') || full.includes('#/diner')) {
       return 'customer';
     }
 
@@ -58,13 +69,16 @@ export const IS_CUSTOMER_SITE = CURRENT_SITE_MODE === 'customer';
  * across GitHub Pages, Render, and Local Dev environments.
  */
 export function getCustomerSiteUrl(subpath: string = ''): string {
-  if (typeof window === 'undefined') return subpath || '/';
+  if (typeof window === 'undefined') return subpath || '/customer/';
   const cleanSubpath = subpath.startsWith('/') ? subpath.slice(1) : subpath;
   const host = window.location.hostname.toLowerCase();
 
   // 1. GitHub Pages
   if (host.includes('github.io')) {
-    return `https://${window.location.hostname}/menuz/${cleanSubpath}`;
+    if (cleanSubpath.startsWith('?') || cleanSubpath.startsWith('#')) {
+      return `https://${window.location.hostname}/menuz/customer/${cleanSubpath}`;
+    }
+    return `https://${window.location.hostname}/menuz/customer/${cleanSubpath ? cleanSubpath : ''}`;
   }
 
   // 2. Render deployments
@@ -79,10 +93,18 @@ export function getCustomerSiteUrl(subpath: string = ''): string {
     basePath = pathname.substring(0, pathname.indexOf('/hq')) + '/';
   } else if (pathname.includes('/owner')) {
     basePath = pathname.substring(0, pathname.indexOf('/owner')) + '/';
+  } else if (pathname.includes('/restaurant')) {
+    basePath = pathname.substring(0, pathname.indexOf('/restaurant')) + '/';
+  } else if (pathname.includes('/customer')) {
+    basePath = pathname.substring(0, pathname.indexOf('/customer')) + '/';
   } else {
     basePath = pathname.endsWith('/') ? pathname : pathname + '/';
   }
-  return `${window.location.origin}${basePath}${cleanSubpath}`;
+
+  if (cleanSubpath.startsWith('?') || cleanSubpath.startsWith('#')) {
+    return `${window.location.origin}${basePath}customer/${cleanSubpath}`;
+  }
+  return `${window.location.origin}${basePath}${cleanSubpath ? cleanSubpath : 'customer/'}`;
 }
 
 export function getOwnerSiteUrl(subpath: string = ''): string {
@@ -92,7 +114,10 @@ export function getOwnerSiteUrl(subpath: string = ''): string {
 
   // 1. GitHub Pages
   if (host.includes('github.io')) {
-    return `https://${window.location.hostname}/menuz/owner/${cleanSubpath}`;
+    if (cleanSubpath.startsWith('?') || cleanSubpath.startsWith('#')) {
+      return `https://${window.location.hostname}/menuz/restaurant/${cleanSubpath}`;
+    }
+    return `https://${window.location.hostname}/menuz/restaurant/${cleanSubpath ? cleanSubpath : ''}`;
   }
 
   // 2. Render deployments
@@ -101,8 +126,24 @@ export function getOwnerSiteUrl(subpath: string = ''): string {
   }
 
   // 3. Localhost / Single server
-  const custBase = getCustomerSiteUrl('');
-  return `${custBase.replace(/\/+$/, '')}/restaurant/${cleanSubpath}`;
+  const pathname = window.location.pathname;
+  let basePath = '/';
+  if (pathname.includes('/hq')) {
+    basePath = pathname.substring(0, pathname.indexOf('/hq')) + '/';
+  } else if (pathname.includes('/owner')) {
+    basePath = pathname.substring(0, pathname.indexOf('/owner')) + '/';
+  } else if (pathname.includes('/restaurant')) {
+    basePath = pathname.substring(0, pathname.indexOf('/restaurant')) + '/';
+  } else if (pathname.includes('/customer')) {
+    basePath = pathname.substring(0, pathname.indexOf('/customer')) + '/';
+  } else {
+    basePath = pathname.endsWith('/') ? pathname : pathname + '/';
+  }
+
+  if (cleanSubpath.startsWith('?') || cleanSubpath.startsWith('#')) {
+    return `${window.location.origin}${basePath}restaurant/${cleanSubpath}`;
+  }
+  return `${window.location.origin}${basePath}restaurant/${cleanSubpath}`;
 }
 
 export function getHqSiteUrl(subpath: string = ''): string {
@@ -112,7 +153,10 @@ export function getHqSiteUrl(subpath: string = ''): string {
 
   // 1. GitHub Pages
   if (host.includes('github.io')) {
-    return `https://${window.location.hostname}/menuz/hq/${cleanSubpath}`;
+    if (cleanSubpath.startsWith('?') || cleanSubpath.startsWith('#')) {
+      return `https://${window.location.hostname}/menuz/hq/${cleanSubpath}`;
+    }
+    return `https://${window.location.hostname}/menuz/hq/${cleanSubpath ? cleanSubpath : ''}`;
   }
 
   // 2. Render deployments
@@ -121,7 +165,23 @@ export function getHqSiteUrl(subpath: string = ''): string {
   }
 
   // 3. Localhost / Single server
-  const custBase = getCustomerSiteUrl('');
-  return `${custBase.replace(/\/+$/, '')}/hq/${cleanSubpath}`;
+  const pathname = window.location.pathname;
+  let basePath = '/';
+  if (pathname.includes('/hq')) {
+    basePath = pathname.substring(0, pathname.indexOf('/hq')) + '/';
+  } else if (pathname.includes('/owner')) {
+    basePath = pathname.substring(0, pathname.indexOf('/owner')) + '/';
+  } else if (pathname.includes('/restaurant')) {
+    basePath = pathname.substring(0, pathname.indexOf('/restaurant')) + '/';
+  } else if (pathname.includes('/customer')) {
+    basePath = pathname.substring(0, pathname.indexOf('/customer')) + '/';
+  } else {
+    basePath = pathname.endsWith('/') ? pathname : pathname + '/';
+  }
+
+  if (cleanSubpath.startsWith('?') || cleanSubpath.startsWith('#')) {
+    return `${window.location.origin}${basePath}hq/${cleanSubpath}`;
+  }
+  return `${window.location.origin}${basePath}hq/${cleanSubpath}`;
 }
 

@@ -530,7 +530,8 @@ Menuz Master Admin HQ provides platform administrators with real-time control ac
     url.pathname.startsWith('/r/') ||
     url.pathname.startsWith('/menu')
   ) {
-    const custFile = path.join(__dirname, 'dist-combined', 'index.html');
+    const custSubDir = path.join(__dirname, 'dist-combined', 'customer', 'index.html');
+    const custFile = fs.existsSync(custSubDir) ? custSubDir : path.join(__dirname, 'dist-combined', 'index.html');
     if (fs.existsSync(custFile)) {
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Vary': 'Accept' });
       fs.createReadStream(custFile).pipe(res);

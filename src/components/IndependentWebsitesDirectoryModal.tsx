@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { Restaurant, isWorkingWithMenuz } from '../types';
 import { useRestaurantStore } from '../store/restaurantStore';
+import { getCustomerSiteUrl, getOwnerSiteUrl } from '../config/siteMode';
 
 interface IndependentWebsitesDirectoryModalProps {
   isOpen: boolean;
@@ -125,9 +126,9 @@ export const IndependentWebsitesDirectoryModal: React.FC<IndependentWebsitesDire
           {filteredRestaurants.map((rest) => {
             const restTables = tables.filter((t) => t.restaurant_id === rest.id);
             const defaultToken = restTables[0]?.public_token || `table-token-01-${rest.slug}`;
-            const customerFullUrl = `${baseUrl}#/r/${rest.slug}/menu?t=${defaultToken}`;
-            const managerFullUrl = `${baseUrl}#/manage/${rest.slug}`;
-            const kitchenFullUrl = `${baseUrl}#/kitchen`;
+            const customerFullUrl = getCustomerSiteUrl(`#/r/${rest.slug}/menu?t=${defaultToken}`);
+            const managerFullUrl = getOwnerSiteUrl(`#/r/${rest.slug}`);
+            const kitchenFullUrl = getOwnerSiteUrl('#/kitchen');
             const customDomain = rest.white_label?.custom_domain || `menu.${rest.slug}.com`;
 
             return (
@@ -194,7 +195,7 @@ export const IndependentWebsitesDirectoryModal: React.FC<IndependentWebsitesDire
 
                     <div className="flex items-center space-x-2 pt-1">
                       <a
-                        href={`#/r/${rest.slug}/menu?t=${defaultToken}`}
+                        href={customerFullUrl}
                         target="_blank"
                         rel="noreferrer"
                         className="flex-1 px-3 py-1.5 bg-amber-500 hover:bg-amber-700 text-white text-xs font-bold rounded-lg transition-colors flex items-center justify-center space-x-1 shadow-sm"
@@ -244,7 +245,7 @@ export const IndependentWebsitesDirectoryModal: React.FC<IndependentWebsitesDire
 
                     <div className="flex items-center space-x-2 pt-1">
                       <a
-                        href={`#/manage/${rest.slug}`}
+                        href={managerFullUrl}
                         target="_blank"
                         rel="noreferrer"
                         className="flex-1 px-3 py-1.5 bg-[#090D16] hover:bg-[#0D1322] text-white text-xs font-bold rounded-lg transition-colors flex items-center justify-center space-x-1 shadow-sm"

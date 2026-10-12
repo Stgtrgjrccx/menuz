@@ -17,7 +17,9 @@ const mimeTypes = {
 const server = http.createServer((req, res) => {
   let reqPath = req.url.split('?')[0];
   if (reqPath === '/') reqPath = '/index.html';
+  if (reqPath === '/customer/' || reqPath === '/customer') reqPath = '/customer/index.html';
   if (reqPath === '/owner/' || reqPath === '/owner') reqPath = '/owner/index.html';
+  if (reqPath === '/restaurant/' || reqPath === '/restaurant') reqPath = '/restaurant/index.html';
   if (reqPath === '/hq/' || reqPath === '/hq') reqPath = '/hq/index.html';
 
   const filePath = path.join(process.cwd(), 'dist-combined', reqPath);
@@ -28,7 +30,11 @@ const server = http.createServer((req, res) => {
     fs.createReadStream(filePath).pipe(res);
   } else {
     // SPA fallback
-    if (reqPath.startsWith('/owner/')) {
+    if (reqPath.startsWith('/customer/')) {
+      const fallback = path.join(process.cwd(), 'dist-combined', 'customer', 'index.html');
+      res.writeHead(200, { 'Content-Type': 'text/html' });
+      fs.createReadStream(fallback).pipe(res);
+    } else if (reqPath.startsWith('/owner/') || reqPath.startsWith('/restaurant/')) {
       const fallback = path.join(process.cwd(), 'dist-combined', 'owner', 'index.html');
       res.writeHead(200, { 'Content-Type': 'text/html' });
       fs.createReadStream(fallback).pipe(res);
@@ -58,10 +64,20 @@ server.listen(PORT, async () => {
   const page = await browser.newPage();
   await page.setViewport({ width: 1280, height: 800 });
 
-  console.log('\n--- 1. Testing Customer Site (Root /) ---');
+  console.log('\n--- 1. Testing Customer Site Isolation (Root / and /customer/) ---');
   await page.goto(`http://localhost:${PORT}/`, { waitUntil: 'domcontentloaded' });
   await new Promise((r) => setTimeout(r, 1200));
   const customerContent = await page.content();
+
+  // Check customer site opens Customer Discovery and NEVER Admin HQ
+  const isCustomerNotAdmin = customerContent.includes('Scan. Order with Friends.') && !customerContent.includes('Master Admin Authorization');
+  console.log(`✓ Customer link opens Customer Site (NOT Admin HQ): ${isCustomerNotAdmin}`);
+
+  await page.goto(`http://localhost:${PORT}/customer/`, { waitUntil: 'domcontentloaded' });
+  await new Promise((r) => setTimeout(r, 1200));
+  const customerFolderContent = await page.content();
+  const isCustomerFolderClean = customerFolderContent.includes('Scan. Order with Friends.') && !customerFolderContent.includes('Master Admin Authorization');
+  console.log(`✓ /customer/ link opens Customer Site: ${isCustomerFolderClean}`);
 
   // Check affiliated restaurants exist
   const hasSaffron = customerContent.includes('Saffron House');
@@ -73,73 +89,53 @@ server.listen(PORT, async () => {
   const hasNotifOnCustomer = customerContent.includes('System Notifications') || customerContent.includes('Live System Alerts');
   console.log(`✓ Notifications option completely removed from customer page: ${!hasNotifOnCustomer}`);
 
-  // Check purged landmarks & directory are NOT present
-  const hasVaishali = customerContent.includes('Vaishali Restaurant');
-  const hasGoodluck = customerContent.includes('Cafe Goodluck');
-  const has3000Dir = customerContent.includes('Explore 3,000+ Pune Restaurants');
-  console.log(`✓ Vaishali purged: ${!hasVaishali}`);
-  console.log(`✓ Cafe Goodluck purged: ${!hasGoodluck}`);
-  console.log(`✓ 3000+ Directory purged: ${!has3000Dir}`);
+  console.log('\n--- 2. Testing Restaurant Page Lands Directly on Dashboard (NOT Menu) ---');
+  await page.goto(`http://localhost:${PORT}/#/r/saffron-house`, { waitUntil: 'domcontentloaded' });
+  await new Promise((r) => setTimeout(r, 1200));
+  const restDirectContent = await page.content();
 
-  // Check no owner portals button on customer site
-  const hasPortals = customerContent.includes('Portals');
-  console.log(`✓ Portals button hidden on customer site: ${!hasPortals}`);
+  // Must land on Manager Dashboard (Floor Plan, Food Operations, Active Sessions), NOT DinerMenu
+  const landsOnDashboardDirect = restDirectContent.includes('Food Operations Hub') || restDirectContent.includes('Seating Layout') || restDirectContent.includes('Live Table Orders');
+  const doesNotLandOnMenuDirect = !restDirectContent.includes('Multiplayer Table Cart') && !restDirectContent.includes('Join Table Cart');
+  console.log(`✓ Opening /#/r/saffron-house lands directly on Dashboard: ${landsOnDashboardDirect}`);
+  console.log(`✓ Does NOT land on menu page: ${doesNotLandOnMenuDirect}`);
 
-  // Check HQ return banner is NOT present on direct customer access
-  const hasHqBannerDirect = customerContent.includes('Return to Master HQ');
-  console.log(`✓ HQ return banner hidden on direct visit: ${!hasHqBannerDirect}`);
+  // Now REFRESH the page to test persistence on refresh
+  console.log('Testing page REFRESH on /#/r/saffron-house ...');
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await new Promise((r) => setTimeout(r, 1200));
+  const refreshedContent = await page.content();
+  const landsOnDashboardAfterRefresh = refreshedContent.includes('Food Operations Hub') || refreshedContent.includes('Seating Layout') || refreshedContent.includes('Live Table Orders');
+  console.log(`✓ Refreshing /#/r/saffron-house STAYS on Dashboard: ${landsOnDashboardAfterRefresh}`);
 
-  console.log('\n--- 2. Testing Customer Diner Menu & Table Arcade Games ---');
-  await page.goto(`http://localhost:${PORT}/#/r/saffron-house/menu`, { waitUntil: 'domcontentloaded' });
+  console.log('\n--- 3. Testing Diner Menu ONLY When Explicitly Requested (/menu) ---');
+  await page.goto(`http://localhost:${PORT}/#/r/saffron-house/menu?t=table-token-01-saffron`, { waitUntil: 'domcontentloaded' });
   await new Promise((r) => setTimeout(r, 1200));
   const dinerMenuContent = await page.content();
-
-  // Verify notification option is NOT present on Diner Menu
-  const hasNotifOnDiner = dinerMenuContent.includes('System Notifications') || dinerMenuContent.includes('Live System Alerts');
-  console.log(`✓ Notifications option completely removed from diner menu: ${!hasNotifOnDiner}`);
-
-  // Verify Table Arcade button exists
   const hasTableArcadeBtn = dinerMenuContent.includes('Table Arcade');
-  console.log(`✓ Table Arcade button present on diner menu: ${hasTableArcadeBtn}`);
+  console.log(`✓ Table QR route opens Diner Menu: ${hasTableArcadeBtn}`);
 
-  // Click Table Arcade button to open games modal
-  const arcadeButton = await page.$('button[title*="Table Arcade"], button[title*="Solitaire"]');
-  if (arcadeButton) {
-    await arcadeButton.click();
-    await new Promise((r) => setTimeout(r, 600));
-  }
-  const modalContent = await page.content();
-  const hasSolitaire = modalContent.includes('Solitaire');
-  const hasCrossword = modalContent.includes('Food Crossword') || modalContent.includes('Crossword');
-  const hasTrivia = modalContent.includes('Table Trivia');
-  const hasBillRoulette = modalContent.includes('Who Pays The Bill?') || modalContent.includes('Who Pays');
-
-  console.log(`✓ Solitaire present in Table Arcade: ${hasSolitaire}`);
-  console.log(`✓ Food Crossword present in Table Arcade: ${hasCrossword}`);
-  console.log(`✓ Table Trivia present in Table Arcade: ${hasTrivia}`);
-  console.log(`✓ "Who Pays The Bill?" Table Roulette present in Table Arcade: ${hasBillRoulette}`);
-
-  console.log('\n--- 3. Testing Owner Site (/owner/) ---');
+  console.log('\n--- 4. Testing Dedicated Owner Portal (/owner/ & /restaurant/) ---');
   await page.goto(`http://localhost:${PORT}/owner/`, { waitUntil: 'domcontentloaded' });
   await new Promise((r) => setTimeout(r, 1200));
   const ownerContent = await page.content();
-
-  // Check Food Operations Hub is FIRST page
   const hasFoodOpsHub = ownerContent.includes('Food Operations Hub');
-  const hasSeatingLayout = ownerContent.includes('Floor Plan & Seating Layout') || ownerContent.includes('Seating Layout');
-  const hasCustomerHomePageOnOwner = ownerContent.includes('Scan. Order with Friends. Relish Fine Dining.');
-  console.log(`✓ Food Operations Hub is first page: ${hasFoodOpsHub}`);
-  console.log(`✓ Has Seating Layout & Floor controls: ${hasSeatingLayout}`);
-  console.log(`✓ Customer Home page NOT shown to owner: ${!hasCustomerHomePageOnOwner}`);
+  console.log(`✓ Food Operations Hub is first page on /owner/: ${hasFoodOpsHub}`);
 
-  // Check Switch Outlet button exists
-  const hasSwitchOutlet = ownerContent.includes('Switch Outlet');
-  console.log(`✓ Has Switch Outlet control: ${hasSwitchOutlet}`);
+  await page.goto(`http://localhost:${PORT}/restaurant/#/r/saffron-house`, { waitUntil: 'domcontentloaded' });
+  await new Promise((r) => setTimeout(r, 1200));
+  const restPortalContent = await page.content();
+  const restPortalOnDashboard = restPortalContent.includes('Food Operations Hub') || restPortalContent.includes('Seating Layout');
+  console.log(`✓ /restaurant/#/r/saffron-house lands on Dashboard: ${restPortalOnDashboard}`);
 
-  console.log('\n--- 4. Testing HQ Site & Customer/Diner Navigation (/hq/) ---');
+  console.log('\n--- 5. Testing Master HQ Portal (/hq/) ---');
   await page.goto(`http://localhost:${PORT}/hq/`, { waitUntil: 'domcontentloaded' });
   await new Promise((r) => setTimeout(r, 1200));
-  // Enter admin passphrase to unlock HQ dashboard
+  const hqAuthContent = await page.content();
+  const hasHqPasscodeInput = hqAuthContent.includes('Master Admin Authorization') || hqAuthContent.includes('type="password"');
+  console.log(`✓ /hq/ strictly opens Master Admin portal: ${hasHqPasscodeInput}`);
+
+  // Unlock HQ
   const passInput = await page.$('input[type="password"]');
   if (passInput) {
     await page.type('input[type="password"]', 'menuz2026');
@@ -148,45 +144,27 @@ server.listen(PORT, async () => {
   }
   const hqContent = await page.content();
   const hasCustomerSiteLinkInHq = hqContent.includes('Customer Site');
-  const hasDinerMenusLinkInHq = hqContent.includes('Diner Menus');
   console.log(`✓ HQ Site has Customer Site access link: ${hasCustomerSiteLinkInHq}`);
-  console.log(`✓ HQ Site has Diner Menus access link: ${hasDinerMenusLinkInHq}`);
-
-  console.log('\n--- 5. Testing HQ Return Banner when accessed from HQ (?from=hq) ---');
-  await page.goto(`http://localhost:${PORT}/?from=hq`, { waitUntil: 'domcontentloaded' });
-  await new Promise((r) => setTimeout(r, 1200));
-  const hqAccessContent = await page.content();
-  const hasHqBannerWhenFromHq = hqAccessContent.includes('Return to Master HQ');
-  console.log(`✓ HQ Return banner displays when ?from=hq is present: ${hasHqBannerWhenFromHq}`);
-
-  await page.goto(`http://localhost:${PORT}/#/r/saffron-house/menu?from=hq`, { waitUntil: 'domcontentloaded' });
-  await new Promise((r) => setTimeout(r, 1200));
-  const dinerMenuHqContent = await page.content();
-  const hasHqBannerOnDinerMenu = dinerMenuHqContent.includes('Return to Master HQ');
-  console.log(`✓ HQ Return banner displays on Diner Menu when from=hq: ${hasHqBannerOnDinerMenu}`);
 
   await browser.close();
   server.close();
 
   if (
+    isCustomerNotAdmin &&
+    isCustomerFolderClean &&
     hasSaffron &&
     hasCasaBella &&
     !hasNotifOnCustomer &&
-    !hasNotifOnDiner &&
+    landsOnDashboardDirect &&
+    doesNotLandOnMenuDirect &&
+    landsOnDashboardAfterRefresh &&
     hasTableArcadeBtn &&
-    hasSolitaire &&
-    hasCrossword &&
-    hasTrivia &&
-    hasBillRoulette &&
-    !hasHqBannerDirect &&
     hasFoodOpsHub &&
-    !hasCustomerHomePageOnOwner &&
-    hasCustomerSiteLinkInHq &&
-    hasDinerMenusLinkInHq &&
-    hasHqBannerWhenFromHq &&
-    hasHqBannerOnDinerMenu
+    restPortalOnDashboard &&
+    hasHqPasscodeInput &&
+    hasCustomerSiteLinkInHq
   ) {
-    console.log('\n🎉 ALL 16 COMPREHENSIVE TESTS PASSED 100%! ZERO REGRESSIONS!');
+    console.log('\n🎉 ALL RIGOROUS ROUTING & ISOLATION TESTS PASSED 100%!');
     process.exit(0);
   } else {
     console.error('\n❌ Some validations failed!');

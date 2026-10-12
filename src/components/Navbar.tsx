@@ -91,19 +91,28 @@ export const Navbar: React.FC = () => {
     const target = restaurants.find((r) => r.id === restaurantId);
     if (!target) return;
 
-    if (location.pathname.startsWith('/r/')) {
+    if (location.pathname.startsWith('/r/') && location.pathname.includes('/menu')) {
       const restTables = tables.filter((t) => t.restaurant_id === target.id);
       const token = restTables[0]?.public_token || `table-token-01-${target.slug}`;
       navigate(`/r/${target.slug}/menu?t=${token}`);
-    } else if (location.pathname.startsWith('/manage') || location.pathname.startsWith('/dashboard')) {
-      navigate(`/manage/${target.slug}`);
+    } else if (
+      location.pathname.startsWith('/r/') ||
+      location.pathname.startsWith('/restaurant') ||
+      location.pathname.startsWith('/manage') ||
+      location.pathname.startsWith('/dashboard')
+    ) {
+      navigate(`/r/${target.slug}`);
     }
   };
 
   // Hide on diner table view for immersion, and on Master HQ for dedicated standalone enterprise experience
-  if (
-    location.pathname.startsWith('/r/') ||
+  const isDinerMenuPage =
+    (location.pathname.startsWith('/r/') && (location.pathname.includes('/menu') || location.pathname.split('/').length > 3)) ||
     location.pathname.startsWith('/menu/') ||
+    location.pathname === '/menu';
+
+  if (
+    isDinerMenuPage ||
     location.pathname === '/admin' ||
     location.pathname === '/hq'
   ) {
@@ -120,8 +129,15 @@ export const Navbar: React.FC = () => {
 
   const isLinkActive = (path: string, exact?: boolean) => {
     if (exact) return location.pathname === path;
-    if (path === '/menu' && (location.pathname === '/menu' || location.pathname.startsWith('/r/'))) return true;
-    if (path === '/manage' && (location.pathname === '/manage' || location.pathname.startsWith('/manage/') || location.pathname.startsWith('/restaurant'))) return true;
+    if (path === '/menu' && (location.pathname === '/menu' || (location.pathname.startsWith('/r/') && location.pathname.includes('/menu')))) return true;
+    if (
+      path === '/manage' &&
+      (location.pathname === '/manage' ||
+        location.pathname.startsWith('/manage/') ||
+        location.pathname.startsWith('/restaurant') ||
+        (location.pathname.startsWith('/r/') && !location.pathname.includes('/menu')))
+    )
+      return true;
     if (path.startsWith('/kitchen') && location.pathname.startsWith('/kitchen')) return true;
     return location.pathname === path;
   };

@@ -9,7 +9,7 @@
     "build:customer": "tsc -b && vite build --mode customer --outDir dist-customer",
     "build:owner": "tsc -b && vite build --mode owner --outDir dist-owner",
     "build:hq": "tsc -b && vite build --mode hq --outDir dist-hq",
-    "build:all": "npm run build:customer && npm run build:owner && npm run build:hq",
+    "build:all": "npm run build:customer && npm run build:owner && npm run build:hq && node scripts/assemble-dist-combined.js",
     "start": "node server.js",
     "preview": "vite preview",
     "mobile:start": "cd mobile && npx expo start",
