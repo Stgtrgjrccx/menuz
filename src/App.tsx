@@ -59,13 +59,19 @@ const RouteSEOManager: React.FC = () => {
     } else if (path === '/menu') {
       pageTitle = 'Digital Menu Hub | Scan Table QR or Browse Pune Menus | Menuz';
       metaDesc = 'App-free digital dining menus across Pune: explore legendary dining spots, scan your table QR, and order with real-time multiplayer cart sync.';
-    } else if (path === '/manage' || path === '/restaurant' || path === '/operations' || (IS_OWNER_SITE && path === '/')) {
-      pageTitle = 'Restaurant Partner Hub | Floor Operations & Outlet Management | Menuz';
-      metaDesc = 'Centralized portal for Menuz restaurant partners: manage floor operations, live table sessions, kitchen thermal KOT printing, and Google review shield.';
-    } else if (path.startsWith('/manage/') || path.startsWith('/manager/') || path.startsWith('/dashboard/')) {
-      pageTitle = 'Active Venue Hub | Floor Operations, KOT & Review Shield | Menuz';
-      metaDesc = 'Real-time restaurant manager dashboard: active QR table sessions, kitchen thermal KOT printing, Google review SEO, and POS bridge integration.';
-    } else if (path.startsWith('/r/')) {
+    } else if (
+      path === '/manage' ||
+      path === '/restaurant' ||
+      path === '/operations' ||
+      (IS_OWNER_SITE && path === '/') ||
+      (path.startsWith('/r/') && !path.includes('/menu')) ||
+      path.startsWith('/manage/') ||
+      path.startsWith('/manager/') ||
+      path.startsWith('/dashboard/')
+    ) {
+      pageTitle = 'Menuz Partner OS | Restaurant Owner Operations & Floor Control';
+      metaDesc = 'Centralized operations hub for restaurant owners: live table sessions, kitchen thermal KOT printing, Google review shield, and floor control.';
+    } else if (path.startsWith('/r/') || path.startsWith('/menu')) {
       pageTitle = 'Digital Table Menu & Multiplayer Cart | Menuz';
       metaDesc = 'Interactive, app-free dining menu with real-time multiplayer table sync, dietary filters, and direct kitchen KOT ordering.';
     } else if (path === '/kitchen') {
