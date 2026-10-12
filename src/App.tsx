@@ -221,11 +221,11 @@ export const App: React.FC = () => {
                   <Route path="/review/:restaurantSlug" element={<GoogleReviewGeneratorPage />} />
                   <Route path="/reviews" element={<GoogleReviewGeneratorPage />} />
                   <Route path="/google-review" element={<GoogleReviewGeneratorPage />} />
-                  {/* Seamless cross-portal redirection: When visiting /hq or /admin from customer site, navigate to real dedicated portal */}
-                  <Route path="/admin" element={<ExternalHqRedirect />} />
-                  <Route path="/admin/*" element={<ExternalHqRedirect />} />
-                  <Route path="/hq" element={<ExternalHqRedirect />} />
-                  <Route path="/hq/*" element={<ExternalHqRedirect />} />
+                  {/* Cross-portal isolation: When visiting /hq or /admin from customer site, stay strictly on Customer portal */}
+                  <Route path="/admin" element={<Navigate to="/" replace />} />
+                  <Route path="/admin/*" element={<Navigate to="/" replace />} />
+                  <Route path="/hq" element={<Navigate to="/" replace />} />
+                  <Route path="/hq/*" element={<Navigate to="/" replace />} />
                   <Route path="/kitchen" element={<Navigate to="/" replace />} />
                   <Route path="/kitchen/*" element={<Navigate to="/" replace />} />
                   <Route path="/ai-studio" element={<ExternalOwnerRedirect />} />

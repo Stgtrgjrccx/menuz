@@ -38,7 +38,8 @@ export function getSiteMode(): SiteMode {
     ) {
       return 'owner';
     }
-    if (full.includes('/hq') || full.includes('#/hq') || full.includes('/admin') || full.includes('#/admin')) {
+    // HQ mode is strictly restricted to /hq/ or /admin/ in the actual pathname, or explicit query param
+    if (path.includes('/hq') || path.includes('/admin') || search.includes('mode=hq') || search.includes('mode=admin')) {
       return 'hq';
     }
     if (full.includes('/customer') || full.includes('#/customer') || full.includes('/diner') || full.includes('#/diner')) {
