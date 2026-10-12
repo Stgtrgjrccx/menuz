@@ -12,6 +12,7 @@ import {
   CustomerReview,
   ReviewChallenge,
   ChallengeRedemption,
+  ReviewRewardsPortalConfig,
   PosIntegrationConfig,
   RestaurantAiQuestionnaire,
   OrderSource,
@@ -118,6 +119,7 @@ interface RestaurantStoreState {
   toggleChallengeStatus: (id: string) => void;
   redeemVoucher: (voucherCode: string) => boolean;
   completeChallenge: (challengeId: string, customerName?: string, customerPhone?: string) => ChallengeRedemption | null;
+  updateReviewRewardsConfig: (restaurantId: string, config: Partial<ReviewRewardsPortalConfig>) => void;
 
   // Marketing & WhatsApp
   sendWhatsAppCampaign: (campaign: Omit<WhatsAppCampaign, 'id' | 'sent_at'>) => void;
@@ -1063,6 +1065,57 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
         }));
 
         return newRedemption;
+      },
+
+      updateReviewRewardsConfig: (restaurantId, configUpdate) => {
+        set((state) => {
+          const updatedRestaurants = state.restaurants.map((r) => {
+            if (r.id !== restaurantId) return r;
+            const currentConfig = r.review_rewards_config || {
+              enabled: true,
+              google_place_url: r.google_place_url || '',
+              min_rating_for_google: 4,
+              private_escalation_enabled: true,
+              reward_type: 'percent_discount' as const,
+              discount_percentage: 15,
+              flat_discount_amount: 100,
+              free_item_name: 'Chef Treat',
+              minimum_bill_amount: 500,
+              validity_hours: 24,
+              promo_code_prefix: `WIN-${r.slug?.toUpperCase() || 'TREAT'}`,
+              active_game: 'spin_wheel' as const,
+              allow_player_choice: true,
+              games: {
+                spin_wheel: { enabled: true, slices: [] },
+                scratch_card: { enabled: true, hidden_prize: '15% Off Total Bill', card_title: 'Lucky Scratch Card', scratch_percent_required: 40 },
+                mystery_box: { enabled: true, boxes: [] },
+                lucky_dice: { enabled: true, target_sum: 7, grand_prize: '20% Off', runner_up_prize: 'Free Drink' }
+              }
+            };
+            return {
+              ...r,
+              review_rewards_config: {
+                ...currentConfig,
+                ...configUpdate,
+                games: {
+                  ...currentConfig.games,
+                  ...(configUpdate.games || {})
+                }
+              }
+            };
+          });
+
+          const currentActive = state.restaurant;
+          const updatedActive =
+            currentActive.id === restaurantId
+              ? updatedRestaurants.find((r) => r.id === restaurantId) || currentActive
+              : currentActive;
+
+          return {
+            restaurants: updatedRestaurants,
+            restaurant: updatedActive
+          };
+        });
       },
 
       sendWhatsAppCampaign: (campaign) => {

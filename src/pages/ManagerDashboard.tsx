@@ -53,6 +53,7 @@ import { SmartOperationsSettingsModal } from '../components/SmartOperationsSetti
 import { DishMultiImageManagerModal } from '../components/DishMultiImageManagerModal';
 import { RestaurantPhotoManagerModal } from '../components/RestaurantPhotoManagerModal';
 import { Interactive3dFloorPlan } from '../components/Interactive3dFloorPlan';
+import { ReviewRewardsManagementModal } from '../components/ReviewRewardsManagementModal';
 import { run100PhotoBenchmark, processBatchImagesParallel, BatchProcessingStats } from '../services/turboImagePipeline';
 import { printDirectWebUsb } from '../services/webUsbPrinterService';
 import { Order } from '../types';
@@ -1177,66 +1178,13 @@ export const ManagerDashboard: React.FC = () => {
       )}
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* ⭐ POPUP WINDOW 3: GOOGLE REVIEWS & SHIELD                  */}
+      {/* ⭐ POPUP WINDOW 3: GOOGLE REVIEWS, REWARDS & GAME PORTAL   */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      {isReviewsModalOpen && (
-        <div
-          className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl overflow-y-auto pt-[max(env(safe-area-inset-top,20px),24px)] pb-12 px-3 sm:px-6 flex justify-center items-start overscroll-contain"
-        >
-          <div className="bg-[#0D1322] rounded-3xl max-w-4xl w-full shadow-2xl p-4 sm:p-7 relative space-y-4 sm:space-y-5 border border-white/[0.12] text-white my-2 sm:my-6">
-            <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-white/[0.08] gap-2">
-              <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
-                <button
-                  type="button"
-                  onClick={() => setIsReviewsModalOpen(false)}
-                  className="inline-flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-slate-200 hover:text-white font-bold text-xs border border-white/[0.1] transition-all cursor-pointer flex-shrink-0"
-                >
-                  <ArrowLeft className="w-3.5 h-3.5" />
-                  <span>Back</span>
-                </button>
-                <div className="min-w-0">
-                  <div className="flex items-center space-x-1.5">
-                    <span className="text-lg sm:text-2xl">⭐</span>
-                    <h3 className="font-serif font-bold text-base sm:text-xl text-white truncate">
-                      Google Reviews &amp; Shield
-                    </h3>
-                  </div>
-                  <p className="text-[10px] sm:text-xs text-slate-400 truncate hidden xs:block sm:block">
-                    Verified diner feedback &amp; floor grievance routing
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsReviewsModalOpen(false)}
-                className="p-1.5 sm:p-2 rounded-full bg-white/[0.06] hover:bg-white/[0.15] text-slate-300 hover:text-white transition-colors cursor-pointer flex-shrink-0"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-              {reviews.filter((r) => r.restaurant_id === restaurant.id).map((rev) => (
-                <div key={rev.id} className="bg-slate-900/90 p-4 rounded-2xl border border-white/[0.08] space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-xs text-white">{rev.customer_name || 'Verified Diner'}</span>
-                    <div className="flex items-center text-amber-400 text-xs">
-                      {Array.from({ length: rev.rating }).map((_, i) => (
-                        <Star key={i} className="w-3 h-3 fill-amber-400" />
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-300 leading-relaxed">"{rev.review_text}"</p>
-                  <div className="flex items-center justify-between pt-1 text-[10px] text-slate-500 font-mono">
-                    <span>{new Date(rev.created_at).toLocaleDateString()}</span>
-                    <span className="text-emerald-400">✓ Verified Dine-In</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+      <ReviewRewardsManagementModal
+        isOpen={isReviewsModalOpen}
+        onClose={() => setIsReviewsModalOpen(false)}
+        restaurant={restaurant}
+      />
 
       {/* ═══════════════════════════════════════════════════════════ */}
       {/* ⚡ POPUP WINDOW 4: SMART GROWTH & UPSELL ENGINE             */}

@@ -33,7 +33,8 @@ export function getSiteMode(): SiteMode {
       full.includes('/manage') ||
       full.includes('#/manage') ||
       full.includes('/dashboard') ||
-      full.includes('#/dashboard')
+      full.includes('#/dashboard') ||
+      ((full.includes('/r/') || full.includes('#/r/')) && !full.includes('/menu'))
     ) {
       return 'owner';
     }

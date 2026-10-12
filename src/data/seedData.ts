@@ -54,6 +54,54 @@ export const SEED_RESTAURANT: Restaurant = {
     ],
     spice_guidance: 'Our spice level 1 is gentle and aromatic; level 3 is authentic North Indian warmth; level 5 is fiery for true spice lovers.',
     dietary_rules: 'We maintain 100% separate dedicated cookware, grills, and oil fryers for vegetarian and non-vegetarian dishes.'
+  },
+  review_rewards_config: {
+    enabled: true,
+    google_place_url: 'https://search.google.com/local/writereview?placeid=ChIJSaffronHouseKoregaonParkPune',
+    min_rating_for_google: 4,
+    private_escalation_enabled: true,
+    reward_type: 'percent_discount',
+    discount_percentage: 15,
+    flat_discount_amount: 100,
+    free_item_name: 'Royal Saffron Kulfi & Rabri',
+    minimum_bill_amount: 500,
+    validity_hours: 24,
+    promo_code_prefix: 'WIN-SAFFRON',
+    active_game: 'spin_wheel',
+    allow_player_choice: true,
+    games: {
+      spin_wheel: {
+        enabled: true,
+        slices: [
+          { id: 'sw-1', label: '15% Off Bill', reward: '15% Off Food & Beverages', emoji: '🎉', color: '#F59E0B', textColor: '#000', probabilityWeight: 25 },
+          { id: 'sw-2', label: 'Free Dessert', reward: 'Complimentary Chef Saffron Kulfi', emoji: '🍨', color: '#EC4899', textColor: '#fff', probabilityWeight: 25 },
+          { id: 'sw-3', label: '10% Off Bill', reward: '10% Instant Bill Discount', emoji: '✨', color: '#10B981', textColor: '#fff', probabilityWeight: 25 },
+          { id: 'sw-4', label: 'Free Beverage', reward: 'Complimentary Craft Beverage', emoji: '🥤', color: '#3B82F6', textColor: '#fff', probabilityWeight: 15 },
+          { id: 'sw-5', label: '₹100 Off', reward: 'Flat ₹100 Off on Bill', emoji: '💰', color: '#8B5CF6', textColor: '#fff', probabilityWeight: 8 },
+          { id: 'sw-6', label: 'Chef Starter', reward: 'Complimentary Tandoori Appetizer', emoji: '👑', color: '#EF4444', textColor: '#fff', probabilityWeight: 2 }
+        ]
+      },
+      scratch_card: {
+        enabled: true,
+        card_title: 'Lucky Saffron Scratch & Win',
+        hidden_prize: '15% Off Your Entire Bill Today!',
+        scratch_percent_required: 40
+      },
+      mystery_box: {
+        enabled: true,
+        boxes: [
+          { id: 1, title: 'Golden Spice Vault', prize: '15% Off Total Bill', emoji: '🏺' },
+          { id: 2, title: 'Royal Chef Treasure', prize: 'Free Saffron Dessert', emoji: '🎁' },
+          { id: 3, title: 'Emerald Diner Cask', prize: 'Flat ₹150 Bill Discount', emoji: '💎' }
+        ]
+      },
+      lucky_dice: {
+        enabled: true,
+        target_sum: 7,
+        grand_prize: '20% VIP Dining Discount',
+        runner_up_prize: 'Free Artisanal Beverage'
+      }
+    }
   }
 };
 
@@ -99,6 +147,54 @@ export const SEED_CASA_BELLA: Restaurant = {
     ],
     spice_guidance: 'Italian cuisine relies on fresh herbs, cracked black pepper, and chili-infused olive oil rather than harsh chilies. All dishes are kid and family friendly.',
     dietary_rules: 'We offer gluten-free crust options and dedicated vegetarian pasta stations.'
+  },
+  review_rewards_config: {
+    enabled: true,
+    google_place_url: 'https://search.google.com/local/writereview?placeid=ChIJCasaBellaTrattoriaPune',
+    min_rating_for_google: 4,
+    private_escalation_enabled: true,
+    reward_type: 'free_dessert',
+    discount_percentage: 15,
+    flat_discount_amount: 150,
+    free_item_name: 'Artisanal Venetian Tiramisu',
+    minimum_bill_amount: 600,
+    validity_hours: 24,
+    promo_code_prefix: 'WIN-BELLA',
+    active_game: 'spin_wheel',
+    allow_player_choice: true,
+    games: {
+      spin_wheel: {
+        enabled: true,
+        slices: [
+          { id: 'cb-1', label: 'Free Tiramisu', reward: 'Complimentary Venetian Tiramisu', emoji: '🍰', color: '#0D9488', textColor: '#fff', probabilityWeight: 30 },
+          { id: 'cb-2', label: '15% Off Bill', reward: '15% Off Artisanal Pasta & Pizza', emoji: '🍕', color: '#F59E0B', textColor: '#000', probabilityWeight: 25 },
+          { id: 'cb-3', label: 'Free Mocktail', reward: 'Complimentary Italian Soda / Mocktail', emoji: '🍹', color: '#3B82F6', textColor: '#fff', probabilityWeight: 20 },
+          { id: 'cb-4', label: '10% Off Bill', reward: '10% Instant Bill Discount', emoji: '✨', color: '#10B981', textColor: '#fff', probabilityWeight: 15 },
+          { id: 'cb-5', label: '₹150 Credit', reward: 'Flat ₹150 Bill Credit', emoji: '💶', color: '#8B5CF6', textColor: '#fff', probabilityWeight: 8 },
+          { id: 'cb-6', label: 'Chef Bruschetta', reward: 'Complimentary Truffle Bruschetta', emoji: '🥖', color: '#EF4444', textColor: '#fff', probabilityWeight: 2 }
+        ]
+      },
+      scratch_card: {
+        enabled: true,
+        card_title: 'Casa Bella Secret Scratch Card',
+        hidden_prize: 'Free Classic Venetian Tiramisu Today!',
+        scratch_percent_required: 40
+      },
+      mystery_box: {
+        enabled: true,
+        boxes: [
+          { id: 1, title: 'Tuscan Wine Cask', prize: '15% Off Total Bill', emoji: '🍷' },
+          { id: 2, title: 'Florentine Treat Box', prize: 'Free Venetian Tiramisu', emoji: '🎁' },
+          { id: 3, title: 'Neapolitan Gold Casket', prize: 'Flat ₹150 Bill Discount', emoji: '⭐' }
+        ]
+      },
+      lucky_dice: {
+        enabled: true,
+        target_sum: 7,
+        grand_prize: '20% Off Italian Feast',
+        runner_up_prize: 'Free San Pellegrino Beverage'
+      }
+    }
   }
 };
 

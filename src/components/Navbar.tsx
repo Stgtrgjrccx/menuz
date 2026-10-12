@@ -251,16 +251,6 @@ export const Navbar: React.FC = () => {
               </button>
             )}
 
-            {/* Google Reviews Button */}
-            <button
-              type="button"
-              onClick={() => navigate('/review')}
-              className="hidden sm:flex px-3 py-2 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-semibold items-center space-x-1.5 transition-all cursor-pointer"
-              title="Google Reviews Generator & Table Rewards"
-            >
-              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              <span>Reviews</span>
-            </button>
 
             {/* Scan Table QR Button */}
             <button
@@ -384,49 +374,7 @@ export const Navbar: React.FC = () => {
                 </div>
               </Link>
 
-              {/* 2. Play Table Arcade Games */}
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileOpen(false);
-                  window.dispatchEvent(new CustomEvent('open-table-arcade'));
-                }}
-                className="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-purple-900/20 hover:bg-purple-900/30 text-slate-200 hover:text-white transition-all border border-purple-500/30 cursor-pointer text-left"
-              >
-                <div className="w-8 h-8 rounded-lg bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300">
-                  <Gamepad2 className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-purple-200 flex items-center space-x-1.5">
-                    <span>Play Table Games</span>
-                    <span className="text-[9px] bg-purple-500/30 text-purple-300 px-1.5 py-0.2 rounded font-mono font-black">ARCADE</span>
-                  </div>
-                  <div className="text-[10px] text-slate-400">Crossword, Solitaire, Trivia &amp; Bill Roulette</div>
-                </div>
-              </button>
-
-              {/* 3. 5-Star Google Reviews */}
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileOpen(false);
-                  navigate('/review');
-                }}
-                className="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-amber-900/20 hover:bg-amber-900/30 text-slate-200 hover:text-white transition-all border border-amber-500/30 cursor-pointer text-left"
-              >
-                <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300">
-                  <Star className="w-4 h-4 fill-amber-400" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-amber-200 flex items-center space-x-1.5">
-                    <span>Google 5-Star Reviews</span>
-                    <span className="text-[9px] bg-amber-500/30 text-amber-300 px-1.5 py-0.2 rounded font-mono font-black">REWARDS</span>
-                  </div>
-                  <div className="text-[10px] text-slate-400">Generate 1-tap review &amp; unlock table treats</div>
-                </div>
-              </button>
-
-              {/* 4. Scan Table QR Code */}
+              {/* 2. Scan Table QR Code */}
               <button
                 type="button"
                 onClick={() => {
@@ -441,6 +389,27 @@ export const Navbar: React.FC = () => {
                 <div>
                   <div className="text-xs font-bold text-white">Scan Table QR Code</div>
                   <div className="text-[10px] text-slate-400">Instant app-free dining ordering</div>
+                </div>
+              </button>
+
+              {/* 3. Play Table Arcade Games (Moved to bottom last) */}
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileOpen(false);
+                  window.dispatchEvent(new CustomEvent('open-table-arcade'));
+                }}
+                className="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-purple-900/20 hover:bg-purple-900/30 text-slate-200 hover:text-white transition-all border border-purple-500/30 cursor-pointer text-left sm:col-span-2"
+              >
+                <div className="w-8 h-8 rounded-lg bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300">
+                  <Gamepad2 className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-purple-200 flex items-center space-x-1.5">
+                    <span>Play Table Games</span>
+                    <span className="text-[9px] bg-purple-500/30 text-purple-300 px-1.5 py-0.2 rounded font-mono font-black">ARCADE</span>
+                  </div>
+                  <div className="text-[10px] text-slate-400">Crossword, Solitaire, Trivia &amp; Bill Roulette</div>
                 </div>
               </button>
             </div>

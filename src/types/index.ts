@@ -108,6 +108,7 @@ export interface Restaurant {
     reward_mode: 'hospitality_food_only' | 'owner_custom_discount' | 'hybrid';
     custom_discount_label?: string;
   };
+  review_rewards_config?: ReviewRewardsPortalConfig;
 }
 
 export interface WhiteLabelConfig {
@@ -436,6 +437,56 @@ export interface ChallengeRedemption {
   status: 'unclaimed' | 'redeemed';
   created_at: string;
   redeemed_at?: string;
+}
+
+export type RewardGameType = 'spin_wheel' | 'scratch_card' | 'mystery_box' | 'lucky_dice';
+
+export interface GameSliceConfig {
+  id: string;
+  label: string;
+  reward: string;
+  emoji: string;
+  color: string;
+  textColor?: string;
+  probabilityWeight: number;
+}
+
+export interface ReviewRewardsPortalConfig {
+  enabled: boolean;
+  google_place_url: string;
+  min_rating_for_google: number;
+  private_escalation_enabled: boolean;
+  reward_type: 'percent_discount' | 'flat_discount' | 'free_dessert' | 'free_beverage' | 'chef_special';
+  discount_percentage: number;
+  flat_discount_amount: number;
+  free_item_name: string;
+  minimum_bill_amount: number;
+  validity_hours: number;
+  promo_code_prefix: string;
+  active_game: RewardGameType;
+  allow_player_choice: boolean;
+  games: {
+    spin_wheel: {
+      enabled: boolean;
+      slices: GameSliceConfig[];
+    };
+    scratch_card: {
+      enabled: boolean;
+      hidden_prize: string;
+      card_title: string;
+      scratch_percent_required: number;
+    };
+    mystery_box: {
+      enabled: boolean;
+      boxes: { id: number; title: string; prize: string; emoji: string }[];
+    };
+    lucky_dice: {
+      enabled: boolean;
+      target_sum: number;
+      grand_prize: string;
+      runner_up_prize: string;
+    };
+  };
 }
 
 export interface PosSyncEvent {

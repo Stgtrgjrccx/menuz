@@ -18,7 +18,10 @@ if (!fs.existsSync(distCustomer) || !fs.existsSync(distOwner) || !fs.existsSync(
   process.exit(1);
 }
 
-// 1. Ensure target directory structure exists
+// 1. Ensure target directory structure exists cleanly
+if (fs.existsSync(distCombined)) {
+  fs.rmSync(distCombined, { recursive: true, force: true });
+}
 fs.mkdirSync(distCombined, { recursive: true });
 fs.mkdirSync(path.join(distCombined, 'customer'), { recursive: true });
 fs.mkdirSync(path.join(distCombined, 'owner'), { recursive: true });
@@ -54,14 +57,33 @@ copyDirSync(distOwner, path.join(distCombined, 'restaurant'));
 console.log('Copying dist-hq to /hq/ ...');
 copyDirSync(distHq, path.join(distCombined, 'hq'));
 
-// 5. Ensure GitHub Pages SPA fallback 404.html
+// 5. Ensure dedicated manifests are in place for each portal
+const publicDir = path.join(rootDir, 'public');
+const manifestCustomer = path.join(publicDir, 'manifest-customer.json');
+const manifestOwner = path.join(publicDir, 'manifest-owner.json');
+const manifestHq = path.join(publicDir, 'manifest-hq.json');
+
+if (fs.existsSync(manifestCustomer)) {
+  fs.copyFileSync(manifestCustomer, path.join(distCombined, 'manifest.json'));
+  fs.copyFileSync(manifestCustomer, path.join(distCombined, 'customer', 'manifest.json'));
+}
+if (fs.existsSync(manifestOwner)) {
+  fs.copyFileSync(manifestOwner, path.join(distCombined, 'owner', 'manifest.json'));
+  fs.copyFileSync(manifestOwner, path.join(distCombined, 'restaurant', 'manifest.json'));
+}
+if (fs.existsSync(manifestHq)) {
+  fs.copyFileSync(manifestHq, path.join(distCombined, 'hq', 'manifest.json'));
+}
+
+// 6. Ensure GitHub Pages SPA fallback 404.html
 const indexHtml = path.join(distCombined, 'index.html');
 const fourOhFour = path.join(distCombined, '404.html');
 if (fs.existsSync(indexHtml)) {
   fs.copyFileSync(indexHtml, fourOhFour);
 }
 
-// 6. Ensure .nojekyll is present
+// 7. Ensure .nojekyll is present
 fs.writeFileSync(path.join(distCombined, '.nojekyll'), '');
 
-console.log('✅ Successfully assembled dist-combined with isolated customer, restaurant, and hq portals!');
+console.log('✅ Successfully assembled dist-combined with isolated customer, restaurant, and hq portals and manifests!');
+

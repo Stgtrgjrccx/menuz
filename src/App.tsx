@@ -139,7 +139,13 @@ export const App: React.FC = () => {
                   <Route path="/" element={<MasterAdminDashboard />} />
                   <Route path="/hq" element={<MasterAdminDashboard />} />
                   <Route path="/admin" element={<MasterAdminDashboard />} />
+                  {/* Dedicated Table QR Menu Routes (Strictly with /menu) */}
+                  <Route path="/r/:restaurantSlug/menu" element={<DinerMenu />} />
+                  <Route path="/menu/:restaurantSlug/:tableId" element={<DinerMenu />} />
+                  <Route path="/menu/:restaurantSlug" element={<DinerMenu />} />
+                  <Route path="/menu" element={<DinerMenu />} />
                   {/* Restaurant Dashboard: Lands directly on the Dashboard on open/refresh */}
+                  <Route path="/r/:restaurantSlug/*" element={<ManagerDashboard />} />
                   <Route path="/r/:restaurantSlug" element={<ManagerDashboard />} />
                   <Route path="/restaurant" element={<ManagerDashboard />} />
                   <Route path="/restaurant/:restaurantSlug" element={<ManagerDashboard />} />
@@ -148,12 +154,6 @@ export const App: React.FC = () => {
                   <Route path="/dashboard" element={<ManagerDashboard />} />
                   <Route path="/dashboard/:restaurantSlug" element={<ManagerDashboard />} />
                   <Route path="/operations" element={<ManagerDashboard />} />
-                  {/* Dedicated Table QR Menu Routes */}
-                  <Route path="/r/:restaurantSlug/menu" element={<DinerMenu />} />
-                  <Route path="/menu/:restaurantSlug" element={<DinerMenu />} />
-                  <Route path="/menu/:restaurantSlug/:tableId" element={<DinerMenu />} />
-                  <Route path="/r/:restaurantSlug/:tableId" element={<DinerMenu />} />
-                  <Route path="/menu" element={<DinerMenu />} />
                   {/* HQ In-app inspection for customer discovery site */}
                   <Route path="/customer" element={<CustomerHomePage />} />
                   <Route path="/kitchen" element={<KitchenKDS />} />
@@ -169,6 +169,13 @@ export const App: React.FC = () => {
                 <>
                   {/* Dedicated Restaurant Owner & Partner Operations Site (Food Operations Hub is First Page) */}
                   <Route path="/" element={<ManagerDashboard />} />
+                  {/* Dedicated Table QR Menu routes (Strictly with /menu) */}
+                  <Route path="/r/:restaurantSlug/menu" element={<DinerMenu />} />
+                  <Route path="/menu/:restaurantSlug/:tableId" element={<DinerMenu />} />
+                  <Route path="/menu/:restaurantSlug" element={<DinerMenu />} />
+                  <Route path="/menu" element={<Navigate to="/" replace />} />
+                  {/* Restaurant Dashboard routes */}
+                  <Route path="/r/:restaurantSlug/*" element={<ManagerDashboard />} />
                   <Route path="/r/:restaurantSlug" element={<ManagerDashboard />} />
                   <Route path="/restaurant" element={<ManagerDashboard />} />
                   <Route path="/restaurant/:restaurantSlug" element={<ManagerDashboard />} />
@@ -182,12 +189,6 @@ export const App: React.FC = () => {
                   <Route path="/kitchen" element={<KitchenKDS />} />
                   <Route path="/ai-studio" element={<AiBotOnboardingStudioPage />} />
                   <Route path="/pitch" element={<PitchDeckPage />} />
-                  {/* Table QR Menu routes */}
-                  <Route path="/r/:restaurantSlug/menu" element={<DinerMenu />} />
-                  <Route path="/menu/:restaurantSlug" element={<DinerMenu />} />
-                  <Route path="/menu/:restaurantSlug/:tableId" element={<DinerMenu />} />
-                  <Route path="/r/:restaurantSlug/:tableId" element={<DinerMenu />} />
-                  <Route path="/menu" element={<Navigate to="/" replace />} />
                   {/* Google Review Generator System */}
                   <Route path="/review" element={<GoogleReviewGeneratorPage />} />
                   <Route path="/review/:restaurantSlug" element={<GoogleReviewGeneratorPage />} />
@@ -199,7 +200,13 @@ export const App: React.FC = () => {
                   {/* Dedicated Customer Dining & Table QR Ordering Site */}
                   <Route path="/" element={<CustomerHomePage />} />
                   <Route path="/customer" element={<CustomerHomePage />} />
+                  {/* Dedicated Table QR Menu routes (Strictly with /menu) */}
+                  <Route path="/r/:restaurantSlug/menu" element={<DinerMenu />} />
+                  <Route path="/menu/:restaurantSlug/:tableId" element={<DinerMenu />} />
+                  <Route path="/menu/:restaurantSlug" element={<DinerMenu />} />
+                  <Route path="/menu" element={<DinerMenu />} />
                   {/* Restaurant Page lands directly on the Dashboard, NOT the menu page */}
+                  <Route path="/r/:restaurantSlug/*" element={<ManagerDashboard />} />
                   <Route path="/r/:restaurantSlug" element={<ManagerDashboard />} />
                   <Route path="/restaurant" element={<ManagerDashboard />} />
                   <Route path="/restaurant/:restaurantSlug" element={<ManagerDashboard />} />
@@ -208,12 +215,6 @@ export const App: React.FC = () => {
                   <Route path="/dashboard" element={<ManagerDashboard />} />
                   <Route path="/dashboard/:restaurantSlug" element={<ManagerDashboard />} />
                   <Route path="/operations" element={<ManagerDashboard />} />
-                  {/* Dedicated Table QR Menu routes */}
-                  <Route path="/menu" element={<DinerMenu />} />
-                  <Route path="/r/:restaurantSlug/menu" element={<DinerMenu />} />
-                  <Route path="/menu/:restaurantSlug" element={<DinerMenu />} />
-                  <Route path="/menu/:restaurantSlug/:tableId" element={<DinerMenu />} />
-                  <Route path="/r/:restaurantSlug/:tableId" element={<DinerMenu />} />
                   <Route path="/qr" element={<Navigate to="/" replace />} />
                   {/* Google Review Generator System */}
                   <Route path="/review" element={<GoogleReviewGeneratorPage />} />
