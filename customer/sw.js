@@ -1,10 +1,12 @@
-// Menuz Progressive Web App Service Worker (v5 cache-bust)
-const CACHE_NAME = 'menuz-v5-cache-bust';
+// Menuz Progressive Web App Service Worker (v6 safari-cache-bust)
+const CACHE_NAME = 'menuz-v6-safari-cache-bust';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
-  './favicon.svg'
+  './favicon.svg',
+  './apple-touch-icon.png',
+  './icon-192.png'
 ];
 
 self.addEventListener('install', (event) => {
