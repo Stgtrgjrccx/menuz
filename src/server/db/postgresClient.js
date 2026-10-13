@@ -9,6 +9,7 @@ const __dirname = path.dirname(__filename);
 
 let pool = null;
 let isInitialized = false;
+let sslDisabled = false;
 
 /**
  * Cleanly sanitize connection string for safe log outputs without leaking credentials
@@ -33,8 +34,12 @@ export function getDatabaseUrl() {
 /**
  * Initialize and return the pg connection pool
  */
-export function getPool() {
-  if (pool) return pool;
+export function getPool(forceNoSsl = false) {
+  if (pool && !forceNoSsl) return pool;
+  if (pool && forceNoSsl) {
+    try { pool.end(); } catch (e) {}
+    pool = null;
+  }
 
   const connectionString = getDatabaseUrl();
   if (!connectionString) {
@@ -42,7 +47,12 @@ export function getPool() {
   }
 
   const isNeon = connectionString.includes('neon.tech');
-  const requiresSsl = isNeon || connectionString.includes('sslmode=require') || process.env.NODE_ENV === 'production';
+  const isRenderInternal = connectionString.includes('dpg-') && !connectionString.includes('.render.com');
+  const requiresSsl = !sslDisabled && !forceNoSsl && !isRenderInternal && (
+    isNeon ||
+    connectionString.includes('sslmode=require') ||
+    connectionString.includes('.render.com')
+  );
 
   pool = new Pool({
     connectionString,
@@ -84,6 +94,13 @@ export async function testConnection() {
       client.release();
     }
   } catch (err) {
+    // If SSL handshake failed because server does not support SSL (Render internal network)
+    if (!sslDisabled && (err.message.includes('does not support SSL') || err.message.includes('SSL'))) {
+      console.log('[PostgreSQL] Server does not require/support SSL. Reconnecting over private network without SSL...');
+      sslDisabled = true;
+      getPool(true);
+      return testConnection();
+    }
     return {
       connected: false,
       error: err.message,
