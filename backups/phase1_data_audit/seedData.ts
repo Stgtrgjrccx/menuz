@@ -1,0 +1,1056 @@
+import {
+  Restaurant,
+  RestaurantTable,
+  MenuCategory,
+  MenuItem,
+  RestaurantAiQuestionnaire,
+  CustomerReview,
+  ReviewChallenge,
+  ChallengeRedemption,
+  PosIntegrationConfig,
+  Order
+} from '../types';
+import { PUNE_RESTAURANT_DIRECTORY } from './puneRestaurantDirectory';
+
+export const SEED_RESTAURANT: Restaurant = {
+  id: 'rest-saffron-house-01',
+  slug: 'saffron-house',
+  name: 'Saffron House',
+  cuisine: 'Contemporary Indian Dining',
+  location: 'Koregaon Park, Pune',
+  owner_name: 'Vikramaditya Singhania',
+  contact_email: 'management@saffronhouse.in',
+  contact_phone: '+91 20 2615 0001',
+  status: 'active',
+  logo_url: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&auto=format&fit=crop',
+  brand_colors: {
+    primary: '#E85D04',
+    background: '#FDFBF7',
+    text: '#1C1917',
+    accent: '#C84B00'
+  },
+  currency: 'INR',
+  tax_rate_percent: 5.00,
+  google_place_url: 'https://search.google.com/local/writereview?placeid=ChIJSaffronHouseKoregaonParkPune',
+  ordering_enabled: true,
+  pos_provider: 'universal_api',
+  is_menuz_partner: true,
+  ai_persona: {
+    chef_name: 'Chef Sanjay Rawat',
+    chef_title: 'Executive Head Chef & Culinary Director',
+    chef_bio: 'Master of Dum Pukht slow-cooking and Kashmiri copper deg techniques with 22 years of royal kitchen expertise.',
+    chef_philosophy: 'Pure organic spices slow-roasted over charcoal. We never use artificial gravies, food colors, or shortcuts.',
+    owner_name: 'Vikramaditya Singhania',
+    owner_hospitality_note: 'At Saffron House, our guests are treated as royal patrons. We strive to bring the forgotten heritage flavors of Awadh and Kashmir to your table.',
+    greeting_tone: 'warm_traditional',
+    signature_pairings: [
+      { dish_name: 'Old Delhi Butter Chicken', pairing_drink: 'Smoked Saffron & Cardamom Lassi', why: 'The cooling organic saffron yogurt cuts through the velvety richness of the single-origin dairy butter.' },
+      { dish_name: 'Slow-Cooked Dal Makhani', pairing_drink: 'Amritsari Garlic Kulcha & Mint Chaas', why: 'The 36-hour slow simmered black lentils pair harmoniously with woodfired crisp bread.' },
+      { dish_name: 'Mughlai Galouti Kebab', pairing_drink: 'Spiced Pomegranate Mint Cooler', why: 'Melts on your tongue with 32 secret Lucknowi potli spices balanced by tart fresh pomegranate.' }
+    ],
+    secret_stories: [
+      { dish_name: 'Old Delhi Butter Chicken', story: 'Our tomato gravy is slow-simmered for 8 hours with Kashmiri whole chilies and cold-churned white makkhan, based on Chef Sanjay grandfather 1952 recipe.' },
+      { dish_name: 'Slow-Cooked Dal Makhani', story: 'Simmered continuously over glowing tandoor charcoal embers for 36 hours with churned dairy butter and crushed fenugreek leaves.' }
+    ],
+    spice_guidance: 'Our spice level 1 is gentle and aromatic; level 3 is authentic North Indian warmth; level 5 is fiery for true spice lovers.',
+    dietary_rules: 'We maintain 100% separate dedicated cookware, grills, and oil fryers for vegetarian and non-vegetarian dishes.'
+  },
+  review_rewards_config: {
+    enabled: true,
+    google_place_url: 'https://search.google.com/local/writereview?placeid=ChIJSaffronHouseKoregaonParkPune',
+    min_rating_for_google: 4,
+    private_escalation_enabled: true,
+    reward_type: 'percent_discount',
+    discount_percentage: 15,
+    flat_discount_amount: 100,
+    free_item_name: 'Royal Saffron Kulfi & Rabri',
+    minimum_bill_amount: 500,
+    validity_hours: 24,
+    promo_code_prefix: 'WIN-SAFFRON',
+    active_game: 'spin_wheel',
+    allow_player_choice: true,
+    games: {
+      spin_wheel: {
+        enabled: true,
+        slices: [
+          { id: 'sw-1', label: '15% Off Bill', reward: '15% Off Food & Beverages', emoji: '🎉', color: '#F59E0B', textColor: '#000', probabilityWeight: 25 },
+          { id: 'sw-2', label: 'Free Dessert', reward: 'Complimentary Chef Saffron Kulfi', emoji: '🍨', color: '#EC4899', textColor: '#fff', probabilityWeight: 25 },
+          { id: 'sw-3', label: '10% Off Bill', reward: '10% Instant Bill Discount', emoji: '✨', color: '#10B981', textColor: '#fff', probabilityWeight: 25 },
+          { id: 'sw-4', label: 'Free Beverage', reward: 'Complimentary Craft Beverage', emoji: '🥤', color: '#3B82F6', textColor: '#fff', probabilityWeight: 15 },
+          { id: 'sw-5', label: '₹100 Off', reward: 'Flat ₹100 Off on Bill', emoji: '💰', color: '#8B5CF6', textColor: '#fff', probabilityWeight: 8 },
+          { id: 'sw-6', label: 'Chef Starter', reward: 'Complimentary Tandoori Appetizer', emoji: '👑', color: '#EF4444', textColor: '#fff', probabilityWeight: 2 }
+        ]
+      },
+      scratch_card: {
+        enabled: true,
+        card_title: 'Lucky Saffron Scratch & Win',
+        hidden_prize: '15% Off Your Entire Bill Today!',
+        scratch_percent_required: 40
+      },
+      mystery_box: {
+        enabled: true,
+        boxes: [
+          { id: 1, title: 'Golden Spice Vault', prize: '15% Off Total Bill', emoji: '🏺' },
+          { id: 2, title: 'Royal Chef Treasure', prize: 'Free Saffron Dessert', emoji: '🎁' },
+          { id: 3, title: 'Emerald Diner Cask', prize: 'Flat ₹150 Bill Discount', emoji: '💎' }
+        ]
+      },
+      lucky_dice: {
+        enabled: true,
+        target_sum: 7,
+        grand_prize: '20% VIP Dining Discount',
+        runner_up_prize: 'Free Artisanal Beverage'
+      }
+    }
+  }
+};
+
+export const SEED_CASA_BELLA: Restaurant = {
+  id: 'rest-casa-bella-02',
+  slug: 'casa-bella',
+  name: 'Casa Bella Trattoria',
+  cuisine: 'Artisanal Italian Trattoria',
+  location: 'Koregaon Park, Pune',
+  owner_name: 'Chef Marco Rossi & Team',
+  contact_email: 'management@casabella.in',
+  contact_phone: '+91 20 2615 4422',
+  status: 'active',
+  logo_url: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&auto=format&fit=crop',
+  brand_colors: {
+    primary: '#0D9488',
+    background: '#FDFBF7',
+    text: '#1C1917',
+    accent: '#0F766E'
+  },
+  currency: 'INR',
+  tax_rate_percent: 5.00,
+  google_place_url: 'https://search.google.com/local/writereview?placeid=ChIJCasaBellaTrattoriaPune',
+  ordering_enabled: true,
+  pos_provider: 'toast',
+  is_menuz_partner: true,
+  ai_persona: {
+    chef_name: 'Chef Marco Rossi',
+    chef_title: 'Head Pizzaiolo & Culinary Master',
+    chef_bio: 'Born in Naples, trained in Bologna. Crafts 72-hour cold-fermented sourdough pizza and hand-extruded bronze-die tagliatelle daily.',
+    chef_philosophy: 'Respect the flour, San Marzano tomatoes, and aged Parmigiano Reggiano. Simplicity is perfection.',
+    owner_name: 'Isabella Conti & Marco Rossi',
+    owner_hospitality_note: 'Benvenuti a Casa Bella! We treat you like family sitting around our grandmother Sunday table in Tuscany.',
+    greeting_tone: 'bistro_cozy',
+    signature_pairings: [
+      { dish_name: 'Wood-Fired Margherita Pizza', pairing_drink: 'San Pellegrino Aranciata or Chianti Classico', why: 'The crisp blistered crust and sweet San Marzano acidity require bright, effervescent notes.' },
+      { dish_name: 'Truffle & Porcini Tagliatelle', pairing_drink: 'Aged Pinot Grigio or Sparkling Botanical Tonic', why: 'Earthy Piedmont black truffle shavings are heightened by crisp mineral undertones.' },
+      { dish_name: 'Classic Venetian Tiramisu', pairing_drink: 'Double Shot Espresso Romano', why: 'Artisanal Savoiardi biscuits soaked in Illy dark roast perfectly contrast creamy mascarpone.' }
+    ],
+    secret_stories: [
+      { dish_name: 'Wood-Fired Margherita Pizza', story: 'Our dough undergoes 72 hours of cold fermentation using imported Italian Caputo Tipo 00 flour and baked in a 480°C volcanic stone oven.' },
+      { dish_name: 'Truffle & Porcini Tagliatelle', story: 'Fresh bronze-die egg pasta made fresh every morning at 7:00 AM with imported Emilia-Romagna organic eggs.' }
+    ],
+    spice_guidance: 'Italian cuisine relies on fresh herbs, cracked black pepper, and chili-infused olive oil rather than harsh chilies. All dishes are kid and family friendly.',
+    dietary_rules: 'We offer gluten-free crust options and dedicated vegetarian pasta stations.'
+  },
+  review_rewards_config: {
+    enabled: true,
+    google_place_url: 'https://search.google.com/local/writereview?placeid=ChIJCasaBellaTrattoriaPune',
+    min_rating_for_google: 4,
+    private_escalation_enabled: true,
+    reward_type: 'free_dessert',
+    discount_percentage: 15,
+    flat_discount_amount: 150,
+    free_item_name: 'Artisanal Venetian Tiramisu',
+    minimum_bill_amount: 600,
+    validity_hours: 24,
+    promo_code_prefix: 'WIN-BELLA',
+    active_game: 'spin_wheel',
+    allow_player_choice: true,
+    games: {
+      spin_wheel: {
+        enabled: true,
+        slices: [
+          { id: 'cb-1', label: 'Free Tiramisu', reward: 'Complimentary Venetian Tiramisu', emoji: '🍰', color: '#0D9488', textColor: '#fff', probabilityWeight: 30 },
+          { id: 'cb-2', label: '15% Off Bill', reward: '15% Off Artisanal Pasta & Pizza', emoji: '🍕', color: '#F59E0B', textColor: '#000', probabilityWeight: 25 },
+          { id: 'cb-3', label: 'Free Mocktail', reward: 'Complimentary Italian Soda / Mocktail', emoji: '🍹', color: '#3B82F6', textColor: '#fff', probabilityWeight: 20 },
+          { id: 'cb-4', label: '10% Off Bill', reward: '10% Instant Bill Discount', emoji: '✨', color: '#10B981', textColor: '#fff', probabilityWeight: 15 },
+          { id: 'cb-5', label: '₹150 Credit', reward: 'Flat ₹150 Bill Credit', emoji: '💶', color: '#8B5CF6', textColor: '#fff', probabilityWeight: 8 },
+          { id: 'cb-6', label: 'Chef Bruschetta', reward: 'Complimentary Truffle Bruschetta', emoji: '🥖', color: '#EF4444', textColor: '#fff', probabilityWeight: 2 }
+        ]
+      },
+      scratch_card: {
+        enabled: true,
+        card_title: 'Casa Bella Secret Scratch Card',
+        hidden_prize: 'Free Classic Venetian Tiramisu Today!',
+        scratch_percent_required: 40
+      },
+      mystery_box: {
+        enabled: true,
+        boxes: [
+          { id: 1, title: 'Tuscan Wine Cask', prize: '15% Off Total Bill', emoji: '🍷' },
+          { id: 2, title: 'Florentine Treat Box', prize: 'Free Venetian Tiramisu', emoji: '🎁' },
+          { id: 3, title: 'Neapolitan Gold Casket', prize: 'Flat ₹150 Bill Discount', emoji: '⭐' }
+        ]
+      },
+      lucky_dice: {
+        enabled: true,
+        target_sum: 7,
+        grand_prize: '20% Off Italian Feast',
+        runner_up_prize: 'Free San Pellegrino Beverage'
+      }
+    }
+  }
+};
+
+export const SEED_RESTAURANTS: Restaurant[] = [
+  SEED_RESTAURANT,
+  SEED_CASA_BELLA
+];
+
+export const SEED_TABLES: RestaurantTable[] = [
+  // Saffron House (Fine Dining - 8 tables with Royal Booths and Verandah)
+  { id: 'tbl-01', restaurant_id: 'rest-saffron-house-01', label: 'Table 1', section: 'Indoor Main Dining', capacity: 4, public_token: 'table-token-01-saffron', is_active: true },
+  { id: 'tbl-02', restaurant_id: 'rest-saffron-house-01', label: 'Table 2', section: 'Indoor Main Dining', capacity: 4, public_token: 'table-token-02-saffron', is_active: true },
+  { id: 'tbl-03', restaurant_id: 'rest-saffron-house-01', label: 'Royal Booth A', section: 'Royal Family Booths', capacity: 6, public_token: 'table-token-03-saffron', is_active: true },
+  { id: 'tbl-04', restaurant_id: 'rest-saffron-house-01', label: 'Royal Booth B', section: 'Royal Family Booths', capacity: 8, public_token: 'table-token-04-saffron', is_active: true },
+  { id: 'tbl-05', restaurant_id: 'rest-saffron-house-01', label: 'Verandah 1', section: 'Verandah Courtyard', capacity: 2, public_token: 'table-token-05-saffron', is_active: true },
+  { id: 'tbl-06', restaurant_id: 'rest-saffron-house-01', label: 'Verandah 2', section: 'Verandah Courtyard', capacity: 4, public_token: 'table-token-06-saffron', is_active: true },
+  { id: 'tbl-07', restaurant_id: 'rest-saffron-house-01', label: 'Courtyard 3', section: 'Verandah Courtyard', capacity: 6, public_token: 'table-token-07-saffron', is_active: true },
+  { id: 'tbl-08', restaurant_id: 'rest-saffron-house-01', label: 'Private Suite VIP', section: 'Private Dining Room', capacity: 10, public_token: 'table-token-08-saffron', is_active: true },
+
+  // Casa Bella Trattoria (Italian Trattoria & Pizzeria - 6 distinct tables)
+  { id: 'tbl-cb-01', restaurant_id: 'rest-casa-bella-02', label: 'Piazza 1', section: 'Piazza Main Hall', capacity: 2, public_token: 'table-token-01-casabella', is_active: true },
+  { id: 'tbl-cb-02', restaurant_id: 'rest-casa-bella-02', label: 'Piazza 2', section: 'Piazza Main Hall', capacity: 4, public_token: 'table-token-02-casabella', is_active: true },
+  { id: 'tbl-cb-03', restaurant_id: 'rest-casa-bella-02', label: 'Pizza Bar 1', section: 'Woodfire Pizza Counter', capacity: 2, public_token: 'table-token-03-casabella', is_active: true },
+  { id: 'tbl-cb-04', restaurant_id: 'rest-casa-bella-02', label: 'Pizza Bar 2', section: 'Woodfire Pizza Counter', capacity: 2, public_token: 'table-token-04-casabella', is_active: true },
+  { id: 'tbl-cb-05', restaurant_id: 'rest-casa-bella-02', label: 'Tuscan Terrace 1', section: 'Outdoor Tuscan Terrace', capacity: 6, public_token: 'table-token-05-casabella', is_active: true },
+  { id: 'tbl-cb-06', restaurant_id: 'rest-casa-bella-02', label: 'Tuscan Terrace 2', section: 'Outdoor Tuscan Terrace', capacity: 4, public_token: 'table-token-06-casabella', is_active: true }
+];
+
+export const SEED_CATEGORIES: MenuCategory[] = [
+  // Saffron House
+  { id: 'cat-app', restaurant_id: 'rest-saffron-house-01', name: 'Appetizers', sort_order: 1, is_active: true },
+  { id: 'cat-clay', restaurant_id: 'rest-saffron-house-01', name: 'Clay Oven (Tandoor)', sort_order: 2, is_active: true },
+  { id: 'cat-curry', restaurant_id: 'rest-saffron-house-01', name: 'Heritage Curries', sort_order: 3, is_active: true },
+  { id: 'cat-bread', restaurant_id: 'rest-saffron-house-01', name: 'Breads & Rice', sort_order: 4, is_active: true },
+  { id: 'cat-bev', restaurant_id: 'rest-saffron-house-01', name: 'Beverages & Desserts', sort_order: 5, is_active: true },
+  // Casa Bella Trattoria
+  { id: 'cat-cb-anti', restaurant_id: 'rest-casa-bella-02', name: 'Antipasti & Crudo', sort_order: 1, is_active: true },
+  { id: 'cat-cb-pizza', restaurant_id: 'rest-casa-bella-02', name: 'Woodfired Pizza', sort_order: 2, is_active: true },
+  { id: 'cat-cb-pasta', restaurant_id: 'rest-casa-bella-02', name: 'Handmade Pasta', sort_order: 3, is_active: true },
+  { id: 'cat-cb-dolci', restaurant_id: 'rest-casa-bella-02', name: 'Dolci & Caffe', sort_order: 4, is_active: true },
+];
+
+export const SEED_MENU_ITEMS: MenuItem[] = [
+  // Appetizers
+  {
+    id: 'item-app-1',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-app',
+    name: 'Truffle & Edamame Potli Samosa',
+    price: 380.00,
+    short_description: 'Crispy handmade pastry parcels infused with winter truffle essence.',
+    full_description: 'Delicate hand-crimped pastry purses packed with crushed edamame, young green peas, and scented with black truffle ghee. Served with date-tamarind chutney.',
+    ingredients: ['Edamame', 'Green Peas', 'Wheat Flour', 'Truffle Oil', 'Ghee'],
+    allergens: ['Gluten', 'Dairy'],
+    dietary_flags: ['Vegetarian'],
+    spice_level: 1,
+    serving_size: '3 pieces',
+    image_url: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=800&auto=format&fit=crop', label: 'Golden Crisp Plating & Date Chutney', code: '# 01 Overhead Plating' },
+      { src: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=800&auto=format&fit=crop', label: 'Fresh Truffle & Edamame Filling Core', code: '# 02 Scented Core' },
+      { src: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&auto=format&fit=crop', label: 'Fresh Micro-Herb Garnish & Sauce Spread', code: '# 03 Garnish Detail' },
+      { src: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=800&auto=format&fit=crop', label: 'Hand-Crimped Potli Purse Presentation', code: '# 04 Table Serving' }
+    ],
+    is_available: true,
+    pairing_item_ids: ['item-bev-1'],
+    chef_notes: 'Pairs harmoniously with chilled Alphonso Mango Lassi.',
+    sort_order: 1
+  },
+  {
+    id: 'item-app-2',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-app',
+    name: 'Beetroot & Goat Cheese Tikki',
+    price: 360.00,
+    short_description: 'Roasted organic golden beet cutlets centered with spiced Chevre cheese.',
+    full_description: 'Crispy slow-roasted beetroot medallions stuffed with spiced local goat curd and raw mango powder. Finished with amaranth crispies.',
+    ingredients: ['Beetroot', 'Goat Cheese', 'Potatoes', 'Amaranth', 'Ginger'],
+    allergens: ['Dairy'],
+    dietary_flags: ['Vegetarian', 'Gluten-Free'],
+    spice_level: 1,
+    serving_size: '4 pieces',
+    image_url: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&auto=format&fit=crop',
+    is_available: true,
+    pairing_item_ids: [],
+    sort_order: 2
+  },
+  {
+    id: 'item-app-3',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-app',
+    name: 'Amritsari Soft Shell Crab',
+    price: 550.00,
+    short_description: 'Crispy carom seed-battered coastal soft shell crab with radish mooli salad.',
+    full_description: 'Wild-caught soft shell crab dusted in coarse gram flour, crushed ajwain, and Kashmiri red chili. Fried to an airy crisp.',
+    ingredients: ['Soft Shell Crab', 'Gram Flour', 'Carom Seeds', 'Chili', 'Mustard Oil'],
+    allergens: ['Crustacean'],
+    dietary_flags: ['Non-Vegetarian', 'Gluten-Free'],
+    spice_level: 3,
+    serving_size: '2 clusters',
+    image_url: 'https://images.unsplash.com/photo-1559742811-822873691df8?w=600&auto=format&fit=crop',
+    is_available: true,
+    pairing_item_ids: [],
+    sort_order: 3
+  },
+  {
+    id: 'item-app-4',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-app',
+    name: 'Avocado & Pomelo Bhel',
+    price: 340.00,
+    short_description: 'Puffed grain salad with Hass avocado, ruby pomelo, and tangy mint emulsion.',
+    full_description: 'A vibrant refresh of Bombay street bhel featuring crisp wild red rice, diced Haas avocado, mint emulsion, and pink Himalayan sea salt.',
+    ingredients: ['Avocado', 'Puffed Red Rice', 'Pomelo', 'Mint', 'Tamarind'],
+    allergens: [],
+    dietary_flags: ['Vegetarian', 'Vegan', 'Jain'],
+    spice_level: 1,
+    serving_size: '1 bowl (Serves 1-2)',
+    image_url: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop',
+    is_available: true,
+    pairing_item_ids: [],
+    sort_order: 4
+  },
+
+  // Clay Oven (Tandoor)
+  {
+    id: 'item-clay-1',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-clay',
+    name: 'Kashmiri Saffron Paneer Tikka',
+    price: 460.00,
+    short_description: 'Charred cottage cheese cubes marinated in Pampore saffron and Greek yogurt.',
+    full_description: 'Fresh malai paneer infused for 12 hours in Grade-A Kashmiri saffron, crushed green cardamom, and hung yogurt. Charred over silver oak charcoal.',
+    ingredients: ['Paneer', 'Saffron', 'Yogurt', 'Cardamom', 'Mustard Oil'],
+    allergens: ['Dairy', 'Mustard'],
+    dietary_flags: ['Vegetarian', 'Gluten-Free'],
+    spice_level: 2,
+    serving_size: '5 skewers',
+    image_url: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=800&auto=format&fit=crop', label: 'Tandoor Charred Saffron Skewers', code: '# 01 Clay Oven Grill' },
+      { src: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=800&auto=format&fit=crop', label: '12-Hour Pampore Saffron & Curd Marination', code: '# 02 Saffron Glow' },
+      { src: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&auto=format&fit=crop', label: 'Mint Emulsion & Pickled Onion Salad', code: '# 03 Side Salad' }
+    ],
+    is_available: true,
+    pairing_item_ids: ['item-bev-1'],
+    sort_order: 1
+  },
+  {
+    id: 'item-clay-2',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-clay',
+    name: 'Bhatia Peshawari Murgh Tikka',
+    price: 540.00,
+    short_description: 'Boneless chicken thighs cured in charred garlic, ginger, and yellow chili powder.',
+    full_description: 'Succulent boneless chicken marinated in charred garlic cream, yellow chilli pepper from Rohtak, and rock moss spice. Smoky and tender.',
+    ingredients: ['Chicken', 'Garlic', 'Yogurt', 'Yellow Chili', 'Coriander Root'],
+    allergens: ['Dairy'],
+    dietary_flags: ['Non-Vegetarian', 'Gluten-Free'],
+    spice_level: 3,
+    serving_size: '6 pieces',
+    image_url: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=600&auto=format&fit=crop',
+    is_available: true,
+    pairing_item_ids: ['item-bread-3'],
+    sort_order: 2
+  },
+  {
+    id: 'item-clay-3',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-clay',
+    name: 'Tandoori Jheenga (Jumbo Prawns)',
+    price: 780.00,
+    short_description: 'Bay of Bengal tiger prawns roasted in roasted coriander seed marinade.',
+    full_description: 'Jumbo tiger prawns glazed in stone-ground coriander, kasundi mustard, and carom seed butter. Roasted to juicy perfection.',
+    ingredients: ['Tiger Prawns', 'Mustard Paste', 'Lemon', 'Ghee', 'Fenugreek'],
+    allergens: ['Crustacean', 'Mustard', 'Dairy'],
+    dietary_flags: ['Non-Vegetarian', 'Gluten-Free'],
+    spice_level: 3,
+    serving_size: '4 jumbo prawns',
+    image_url: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&auto=format&fit=crop',
+    is_available: true,
+    pairing_item_ids: [],
+    sort_order: 3
+  },
+  {
+    id: 'item-clay-4',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-clay',
+    name: 'Galouti Kebab on Sheermal',
+    price: 590.00,
+    short_description: 'Melt-in-mouth smoked lamb patties atop saffron-glazed mini flatbreads.',
+    full_description: 'Finely ground lamb tenderloin perfumed with 32 potli spices, smoked with clove and ghee, served on crisp saffron milk bread.',
+    ingredients: ['Lamb Mutton', 'Raw Papaya', 'Ghee', 'Saffron', 'Flour'],
+    allergens: ['Dairy', 'Gluten'],
+    dietary_flags: ['Non-Vegetarian'],
+    spice_level: 2,
+    serving_size: '4 kebabs',
+    image_url: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=600&auto=format&fit=crop',
+    is_available: false, // SOLD OUT DISH 1
+    pairing_item_ids: [],
+    sort_order: 4
+  },
+
+  // Heritage Curries
+  {
+    id: 'item-curry-1',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-curry',
+    name: 'Old Delhi Style Butter Chicken',
+    price: 580.00,
+    short_description: 'Pulled tandoori chicken simmered in velvet San Marzano tomato butter gravy.',
+    full_description: 'Prepared strictly to the 1950s Daryaganj recipe. Charcoal-roasted chicken steeped in vine-ripened tomato coulis, cold-pressed white butter, and hand-rubbed kasoori methi.',
+    ingredients: ['Chicken', 'Tomatoes', 'White Butter', 'Cream', 'Fenugreek'],
+    allergens: ['Dairy'],
+    dietary_flags: ['Non-Vegetarian', 'Gluten-Free'],
+    spice_level: 2,
+    serving_size: 'Serves 2',
+    image_url: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=800&auto=format&fit=crop', label: '1950s Velvet Tomato Gravy Plating', code: '# 01 Signature Deg' },
+      { src: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=800&auto=format&fit=crop', label: 'Tandoor-Charred Shredded Chicken Core', code: '# 02 Charcoal Meat' },
+      { src: 'https://images.unsplash.com/photo-1626074353765-517a681e40be?w=800&auto=format&fit=crop', label: 'Fresh Garlic Naan Dip Pairing', code: '# 03 Naan Pairing' },
+      { src: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&auto=format&fit=crop', label: 'Traditional Copper Deg Table Presentation', code: '# 04 Table Handi' }
+    ],
+    is_available: true,
+    pairing_item_ids: ['item-bread-3', 'item-bev-1'],
+    chef_notes: 'Our signature preparation. Simmered for 8 hours in heirloom copper degs.',
+    sort_order: 1,
+    option_groups: [
+      {
+        id: 'optgrp-spice-1',
+        restaurant_id: 'rest-saffron-house-01',
+        menu_item_id: 'item-curry-1',
+        name: 'Spice Customization',
+        min_selections: 1,
+        max_selections: 1,
+        is_required: true,
+        sort_order: 1,
+        options: [
+          { id: 'opt-sp-mild', restaurant_id: 'rest-saffron-house-01', option_group_id: 'optgrp-spice-1', name: 'Mild & Creamy', price_modifier: 0, is_available: true, sort_order: 1 },
+          { id: 'opt-sp-med', restaurant_id: 'rest-saffron-house-01', option_group_id: 'optgrp-spice-1', name: 'Authentic Medium', price_modifier: 0, is_available: true, sort_order: 2 },
+          { id: 'opt-sp-hot', restaurant_id: 'rest-saffron-house-01', option_group_id: 'optgrp-spice-1', name: 'Extra Spicy (Kolhapuri Chili)', price_modifier: 20, is_available: true, sort_order: 3 },
+        ]
+      }
+    ]
+  },
+  {
+    id: 'item-curry-2',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-curry',
+    name: 'Dal Makhani Bukhara (Slow 36-Hr)',
+    price: 440.00,
+    short_description: 'Black urad lentils slow-simmered over low charcoal embers with churned butter.',
+    full_description: 'Organic black lentils and red kidney beans simmered continuously for 36 hours with plum tomatoes and churned mountain butter. Rich, creamy, and gently smoky.',
+    ingredients: ['Black Lentils', 'Kidney Beans', 'Butter', 'Cream', 'Ginger'],
+    allergens: ['Dairy'],
+    dietary_flags: ['Vegetarian', 'Gluten-Free'],
+    spice_level: 1,
+    serving_size: 'Serves 2',
+    image_url: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&auto=format&fit=crop', label: '36-Hour Charcoal Simmered Dal Bukhara', code: '# 01 Slow Embers' },
+      { src: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=800&auto=format&fit=crop', label: 'Farm-Churned White Butter Swirl', code: '# 02 Makhan Swirl' },
+      { src: 'https://images.unsplash.com/photo-1626074353765-517a681e40be?w=800&auto=format&fit=crop', label: 'Hot Laccha Paratha Accompaniment', code: '# 03 Bread Dip' }
+    ],
+    is_available: true,
+    pairing_item_ids: ['item-bread-3', 'item-bread-1'],
+    sort_order: 2
+  },
+  {
+    id: 'item-curry-3',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-curry',
+    name: 'Raan-e-Awadh (Pulled Lamb Shank)',
+    price: 720.00,
+    short_description: 'Slow braised baby lamb leg in brown onion and roasted almond jus.',
+    full_description: 'Braised for 8 hours in aromatic saffron-mutton broth, roasted caramelized onions, and stone-ground Mamra almond paste.',
+    ingredients: ['Lamb Shank', 'Almonds', 'Yogurt', 'Onion', 'Saffron'],
+    allergens: ['Tree Nuts', 'Dairy'],
+    dietary_flags: ['Non-Vegetarian', 'Gluten-Free'],
+    spice_level: 3,
+    serving_size: 'Serves 2',
+    image_url: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=600&auto=format&fit=crop',
+    is_available: true,
+    pairing_item_ids: ['item-bread-3'],
+    sort_order: 3
+  },
+  {
+    id: 'item-curry-4',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-curry',
+    name: 'Paneer Lababdar',
+    price: 480.00,
+    short_description: 'Charred cottage cheese tossed with bell peppers and roasted onion-cashew reduction.',
+    full_description: 'Fresh dairy paneer batons simmered with diced bell peppers in a fragrant cashew-onion gravy seasoned with green cardamom.',
+    ingredients: ['Paneer', 'Cashews', 'Bell Peppers', 'Tomatoes', 'Butter'],
+    allergens: ['Dairy', 'Tree Nuts'],
+    dietary_flags: ['Vegetarian', 'Gluten-Free'],
+    spice_level: 2,
+    serving_size: 'Serves 2',
+    image_url: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&auto=format&fit=crop',
+    is_available: true,
+    pairing_item_ids: ['item-bread-3'],
+    sort_order: 4
+  },
+  {
+    id: 'item-curry-5',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-curry',
+    name: 'Alleppey Raw Mango Fish Curry',
+    price: 640.00,
+    short_description: 'Catch of the day simmered in coconut milk, green mango, and shallot oil.',
+    full_description: 'Fresh seer fish steaks cooked in first-press coconut milk with raw sour mangoes, curry leaves, and tempered mustard.',
+    ingredients: ['Seer Fish', 'Coconut Milk', 'Raw Mango', 'Curry Leaves', 'Shallots'],
+    allergens: ['Fish', 'Mustard'],
+    dietary_flags: ['Non-Vegetarian', 'Gluten-Free'],
+    spice_level: 3,
+    serving_size: 'Serves 2',
+    image_url: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=600&auto=format&fit=crop',
+    is_available: false, // SOLD OUT DISH 2
+    pairing_item_ids: ['item-bread-2'],
+    sort_order: 5
+  },
+
+  // Breads & Rice
+  {
+    id: 'item-bread-1',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-bread',
+    name: 'Nizami Dum Mutton Biryani',
+    price: 640.00,
+    short_description: 'Aged basmati rice sealed under dough with spiced lamb and saffron steam.',
+    full_description: 'Layers of 2-year aged long-grain basmati rice and marinated goat meat cooked in heavy copper handis sealed with wheat dough.',
+    ingredients: ['Basmati Rice', 'Goat Meat', 'Saffron', 'Mint', 'Ghee'],
+    allergens: ['Dairy', 'Gluten'],
+    dietary_flags: ['Non-Vegetarian'],
+    spice_level: 3,
+    serving_size: '1 clay handi (Serves 2)',
+    image_url: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600&auto=format&fit=crop',
+    is_available: true,
+    pairing_item_ids: ['item-bev-1'],
+    sort_order: 1
+  },
+  {
+    id: 'item-bread-2',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-bread',
+    name: 'Smoked Wild Morel Pulao',
+    price: 520.00,
+    short_description: 'Himalayan Gucchi morels cooked with aged Dehradun basmati and royal cumin.',
+    full_description: 'Rare wild Himalayan Gucchi morels stuffed with herbed cottage cheese, layered with aromatic basmati and shahi jeera ghee.',
+    ingredients: ['Basmati Rice', 'Morel Mushrooms', 'Ghee', 'Cumin', 'Cardamom'],
+    allergens: ['Dairy'],
+    dietary_flags: ['Vegetarian', 'Gluten-Free'],
+    spice_level: 1,
+    serving_size: 'Serves 2',
+    image_url: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600&auto=format&fit=crop',
+    is_available: true,
+    pairing_item_ids: ['item-curry-2'],
+    sort_order: 2
+  },
+  {
+    id: 'item-bread-3',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-bread',
+    name: 'Artisanal Tandoori Naan',
+    price: 120.00,
+    short_description: 'Hand-stretched sourdough flatbread baked against clay tandoor walls.',
+    full_description: 'Traditional fermented wheat dough baked blistered and hot. Brushed with rich farm churned butter or roasted garlic.',
+    ingredients: ['Refined Flour', 'Yeast', 'Milk', 'Butter'],
+    allergens: ['Gluten', 'Dairy'],
+    dietary_flags: ['Vegetarian'],
+    spice_level: 0,
+    serving_size: '2 pieces',
+    image_url: 'https://images.unsplash.com/photo-1626074353765-517a681e40be?w=600&auto=format&fit=crop',
+    is_available: true,
+    pairing_item_ids: ['item-curry-1', 'item-curry-2'],
+    sort_order: 3,
+    option_groups: [
+      {
+        id: 'optgrp-naan-1',
+        restaurant_id: 'rest-saffron-house-01',
+        menu_item_id: 'item-bread-3',
+        name: 'Butter & Garlic Glaze',
+        min_selections: 0,
+        max_selections: 1,
+        is_required: false,
+        sort_order: 1,
+        options: [
+          { id: 'opt-naan-plain', restaurant_id: 'rest-saffron-house-01', option_group_id: 'optgrp-naan-1', name: 'Plain Roasted', price_modifier: 0, is_available: true, sort_order: 1 },
+          { id: 'opt-naan-butter', restaurant_id: 'rest-saffron-house-01', option_group_id: 'optgrp-naan-1', name: 'Churned Makhan (Butter)', price_modifier: 15, is_available: true, sort_order: 2 },
+          { id: 'opt-naan-garlic', restaurant_id: 'rest-saffron-house-01', option_group_id: 'optgrp-naan-1', name: 'Roasted Garlic & Coriander', price_modifier: 30, is_available: true, sort_order: 3 },
+        ]
+      }
+    ]
+  },
+  {
+    id: 'item-bread-4',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-bread',
+    name: 'Layered Laccha Paratha',
+    price: 110.00,
+    short_description: 'Multi-layered flaky whole wheat bread crisped with clarified butter.',
+    full_description: 'Whole-wheat dough rolled thin, pleated with ghee, and baked in the tandoor until crisp outside and pillowy inside.',
+    ingredients: ['Whole Wheat Flour', 'Ghee', 'Sea Salt'],
+    allergens: ['Gluten', 'Dairy'],
+    dietary_flags: ['Vegetarian'],
+    spice_level: 0,
+    serving_size: '1 piece',
+    image_url: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&auto=format&fit=crop',
+    is_available: true,
+    pairing_item_ids: ['item-curry-1'],
+    sort_order: 4
+  },
+
+  // Beverages & Desserts
+  {
+    id: 'item-bev-1',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-bev',
+    name: 'Alphonso Mango & Cardamom Lassi',
+    price: 220.00,
+    short_description: 'Thick chilled organic yogurt whipped with Ratnagiri Alphonso mango pulp.',
+    full_description: 'Freshly churned set yogurt blended with Ratnagiri Alphonso mango nectar, ground green cardamom, and toasted Iranian pistachio slivers.',
+    ingredients: ['Yogurt', 'Mango Puree', 'Cardamom', 'Pistachios', 'Sugar'],
+    allergens: ['Dairy', 'Tree Nuts'],
+    dietary_flags: ['Vegetarian', 'Gluten-Free'],
+    spice_level: 0,
+    serving_size: '350 ml',
+    image_url: 'https://images.unsplash.com/photo-1525385133512-2f3bdd039054?w=600&auto=format&fit=crop',
+    is_available: true,
+    pairing_item_ids: ['item-curry-1', 'item-bread-1'],
+    sort_order: 1
+  },
+  {
+    id: 'item-bev-2',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-bev',
+    name: 'Paan & Rose Petal Kulfi Pop',
+    price: 260.00,
+    short_description: 'Creamy frozen rabri on a stick scented with Banarasi betel leaf and gulkand.',
+    full_description: 'Slowly condensed whole buffalo milk steeped with fresh betel leaves, rose petal preserve, and fennel crunch.',
+    ingredients: ['Condensed Milk', 'Betel Leaf', 'Rose Petals', 'Fennel', 'Almonds'],
+    allergens: ['Dairy', 'Tree Nuts'],
+    dietary_flags: ['Vegetarian', 'Gluten-Free'],
+    spice_level: 0,
+    serving_size: '1 bar',
+    image_url: 'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=600&auto=format&fit=crop',
+    is_available: true,
+    pairing_item_ids: [],
+    sort_order: 2
+  },
+  {
+    id: 'item-bev-3',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-bev',
+    name: 'Smoked Kashmiri Kahwa',
+    price: 180.00,
+    short_description: 'Green tea infusion brewed with whole saffron threads, cinnamon, and slivered almonds.',
+    full_description: 'Traditional high-altitude green tea brewed in a brass samovar with cinnamon bark, green cardamom pods, and Kashmiri saffron.',
+    ingredients: ['Green Tea', 'Saffron', 'Cardamom', 'Cinnamon', 'Almonds'],
+    allergens: ['Tree Nuts'],
+    dietary_flags: ['Vegetarian', 'Vegan', 'Gluten-Free'],
+    spice_level: 0,
+    serving_size: '250 ml',
+    image_url: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=600&auto=format&fit=crop',
+    is_available: true,
+    pairing_item_ids: [],
+    sort_order: 3
+  },
+
+  // CASA BELLA TRATTORIA (Italian Dishes)
+  {
+    id: 'item-cb-1',
+    restaurant_id: 'rest-casa-bella-02',
+    category_id: 'cat-cb-anti',
+    name: 'Burrata Pugliese con Pomodorini',
+    price: 520.00,
+    short_description: 'Creamy artisanal burrata with heirloom blistered tomatoes, basil oil, and focaccia crisps.',
+    full_description: 'Handcrafted Pugliese burrata filled with stracciatella, surrounded by flame-roasted vine cherry tomatoes, cold-pressed Ligurian olive oil, and aged balsamico.',
+    ingredients: ['Burrata', 'Cherry Tomatoes', 'Fresh Basil', 'Extra Virgin Olive Oil', 'Balsamic Glaze'],
+    allergens: ['Dairy', 'Gluten'],
+    dietary_flags: ['Vegetarian'],
+    spice_level: 0,
+    serving_size: '1 Portion',
+    image_url: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop',
+    is_available: true,
+    pairing_item_ids: ['item-cb-3'],
+    chef_notes: 'Our burrata is flown in fresh weekly from artisanal cheesemakers in Puglia.',
+    sort_order: 1
+  },
+  {
+    id: 'item-cb-2',
+    restaurant_id: 'rest-casa-bella-02',
+    category_id: 'cat-cb-pizza',
+    name: 'Pizza Margherita Verace D.O.P.',
+    price: 490.00,
+    short_description: 'Woodfired 48-hr fermented sourdough pizza with San Marzano tomatoes and fior di latte.',
+    full_description: 'Cooked in our 450°C Italian oven for 90 seconds. Topped with crushed San Marzano D.O.P. tomatoes, fresh fior di latte mozzarella, and sweet basil leaves.',
+    ingredients: ['Caputo 00 Flour', 'San Marzano Tomatoes', 'Fior di Latte Mozzarella', 'Fresh Basil', 'Olive Oil'],
+    allergens: ['Dairy', 'Gluten'],
+    dietary_flags: ['Vegetarian'],
+    spice_level: 0,
+    serving_size: '12-inch Pizza',
+    image_url: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&auto=format&fit=crop', label: 'Woodfired Neapolitan Leopard-Crust Pizza', code: '# 01 450°C Volcanic Oven' },
+      { src: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800&auto=format&fit=crop', label: 'San Marzano D.O.P & Fior di Latte Stretch', code: '# 02 Cheese Stretch' },
+      { src: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&auto=format&fit=crop', label: 'Fresh Sweet Basil & Ligurian Olive Oil', code: '# 03 Herb Garnish' }
+    ],
+    is_available: true,
+    pairing_item_ids: [],
+    chef_notes: 'Authentic leopard-spotted Neapolitan crust.',
+    sort_order: 1
+  },
+  {
+    id: 'item-cb-3',
+    restaurant_id: 'rest-casa-bella-02',
+    category_id: 'cat-cb-pizza',
+    name: 'Tartufo Nero & Wild Mushroom Pizza',
+    price: 640.00,
+    short_description: 'White woodfired pizza with Umbrian black truffle paste, porcini mushrooms, and fontina cheese.',
+    full_description: 'Bianca pizza layered with creamy fontina, roasted cremini and porcini mushrooms, finished with pure black truffle reduction and fresh thyme.',
+    ingredients: ['Caputo 00 Flour', 'Fontina Cheese', 'Porcini Mushrooms', 'Black Truffle Paste', 'Thyme'],
+    allergens: ['Dairy', 'Gluten'],
+    dietary_flags: ['Vegetarian'],
+    spice_level: 0,
+    serving_size: '12-inch Pizza',
+    image_url: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=600&auto=format&fit=crop',
+    is_available: true,
+    pairing_item_ids: [],
+    chef_notes: 'Chef Alessandro’s signature Umbrian specialty.',
+    sort_order: 2
+  },
+  {
+    id: 'item-cb-4',
+    restaurant_id: 'rest-casa-bella-02',
+    category_id: 'cat-cb-pasta',
+    name: 'Tagliolini al Tartufo Handmade',
+    price: 580.00,
+    short_description: 'Egg tagliolini ribbon pasta rolled fresh daily, tossed in cultured butter and shaved truffles.',
+    full_description: '30-yolk fresh tagliolini spun in French cultured butter, 24-month aged Parmigiano Reggiano, cracked Kampot pepper, and aromatic truffle emulsion.',
+    ingredients: ['Semolina Flour', 'Farm Egg Yolks', 'Parmigiano Reggiano', 'Cultured Butter', 'Truffle'],
+    allergens: ['Dairy', 'Gluten', 'Eggs'],
+    dietary_flags: ['Vegetarian'],
+    spice_level: 0,
+    serving_size: 'Bowl (220g)',
+    image_url: 'https://images.unsplash.com/photo-1556760544-74068565f05c?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1556760544-74068565f05c?w=800&auto=format&fit=crop', label: 'Hand-Extruded Bronze-Die Tagliolini Ribbon', code: '# 01 Fresh Pasta Twirl' },
+      { src: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800&auto=format&fit=crop', label: 'Piedmont Shaved Black Truffle Reduction', code: '# 02 Truffle Shavings' },
+      { src: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&auto=format&fit=crop', label: '24-Month Parmigiano Reggiano Snow', code: '# 03 Parmigiano Snow' }
+    ],
+    is_available: true,
+    pairing_item_ids: [],
+    chef_notes: 'Prepared fresh in the pasta lab every morning at 10 AM.',
+    sort_order: 1
+  },
+  {
+    id: 'item-cb-5',
+    restaurant_id: 'rest-casa-bella-02',
+    category_id: 'cat-cb-dolci',
+    name: 'Tiramisu Tradizionale',
+    price: 340.00,
+    short_description: 'Savoiardi ladyfingers soaked in dark Illy espresso, layered with whipped mascarpone cream.',
+    full_description: 'The definitive Venetian dessert: airy savoiardi biscuits dipped in rich espresso, crowned with velvety egg-yolk mascarpone and dusted with Dutch cocoa powder.',
+    ingredients: ['Savoiardi Biscuits', 'Mascarpone', 'Illy Espresso', 'Cocoa Powder', 'Eggs'],
+    allergens: ['Dairy', 'Gluten', 'Eggs'],
+    dietary_flags: ['Vegetarian'],
+    spice_level: 0,
+    serving_size: '1 Portion',
+    image_url: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800&auto=format&fit=crop', label: 'Layered Illy Espresso Savoiardi & Mascarpone', code: '# 01 Venetian Glass' },
+      { src: 'https://images.unsplash.com/photo-1556760544-74068565f05c?w=800&auto=format&fit=crop', label: 'Whipped Mascarpone Velvet Texture', code: '# 02 Cream Swirl' },
+      { src: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&auto=format&fit=crop', label: 'Dutch Dark Cocoa Powder Dusting', code: '# 03 Cocoa Dust' }
+    ],
+    is_available: true,
+    pairing_item_ids: [],
+    chef_notes: 'Made from our nonna’s 1958 Treviso family recipe.',
+    sort_order: 1
+  }
+];
+
+// SEED_RESTAURANTS and SEED_TABLES are defined with the 2 active interactive demo restaurants
+
+export const SEED_QUESTIONNAIRES: Record<string, RestaurantAiQuestionnaire> = {};
+
+export const SEED_REVIEWS: CustomerReview[] = [
+  {
+    id: 'rev-sh-01',
+    restaurant_id: 'rest-saffron-house-01',
+    customer_name: 'Ananya Deshmukh',
+    customer_phone: '+91 98220 11234',
+    customer_email: 'ananya.d@example.com',
+    rating: 5,
+    selected_keywords: ['Authentic Flavor', 'Quick Service', 'Royal Ambience', 'Dal Makhani'],
+    review_text: 'The 24-hour slow-cooked Dal Makhani paired with Laccha Paratha was pure perfection! The AI menu ordering was seamless right from our table.',
+    whatsapp_opt_in: true,
+    google_review_clicked: true,
+    created_at: new Date(Date.now() - 3600000 * 2).toISOString()
+  },
+  {
+    id: 'rev-sh-02',
+    restaurant_id: 'rest-saffron-house-01',
+    customer_name: 'Rohit Kulkarni',
+    customer_phone: '+91 98221 44556',
+    customer_email: 'rohit.k@example.com',
+    rating: 5,
+    selected_keywords: ['Butter Chicken', 'Tandoori Truffle Kulcha', 'Alphonso Lassi'],
+    review_text: 'Outstanding culinary experience in Pune. The pairings suggested by the digital sommelier were spot-on.',
+    whatsapp_opt_in: true,
+    google_review_clicked: true,
+    created_at: new Date(Date.now() - 3600000 * 8).toISOString()
+  },
+  {
+    id: 'rev-cb-01',
+    restaurant_id: 'rest-casa-bella-02',
+    customer_name: 'Vikram Joshi',
+    customer_phone: '+91 98222 77889',
+    customer_email: 'vikram.j@example.com',
+    rating: 5,
+    selected_keywords: ['Wood-Fired Pizza', 'Crispy Crust', 'Tiramisu'],
+    review_text: 'Best Neapolitan pizza in Koregaon Park! The San Marzano pomodoro and creamy burrata transported us straight to Naples.',
+    whatsapp_opt_in: true,
+    google_review_clicked: true,
+    created_at: new Date(Date.now() - 3600000 * 12).toISOString()
+  },
+  {
+    id: 'rev-cb-02',
+    restaurant_id: 'rest-casa-bella-02',
+    customer_name: 'Pooja Mehta',
+    customer_phone: '+91 98223 99001',
+    customer_email: 'pooja.m@example.com',
+    rating: 4,
+    selected_keywords: ['Fresh Pasta', 'Cozy Vibe', 'Espresso'],
+    review_text: 'Handcrafted pasta was al dente and packed with rich flavors. Great digital ordering workflow.',
+    whatsapp_opt_in: true,
+    google_review_clicked: false,
+    created_at: new Date(Date.now() - 3600000 * 24).toISOString()
+  }
+];
+
+export const SEED_CHALLENGES: ReviewChallenge[] = [
+  {
+    id: 'chal-sh-01',
+    restaurant_id: 'rest-saffron-house-01',
+    title: '⭐ Google Review & Win Challenge',
+    description: 'Leave a verified customer review, unlock the mystery wheel, and spin to win a complimentary culinary treat!',
+    reward_type: 'free_dessert',
+    reward_item_name: 'Complimentary Alphonso Mango Lassi',
+    win_probability_percent: 100,
+    is_active: true,
+    terms: 'Valid on today’s dining bill for Table orders. One redemption per table.',
+    redemption_code_prefix: 'SAFFRON-WIN-'
+  },
+  {
+    id: 'chal-cb-01',
+    restaurant_id: 'rest-casa-bella-02',
+    title: '🍕 Taste of Italy Review Challenge',
+    description: 'Post your dining review & photos on Google to unlock a complimentary Italian Dolce!',
+    reward_type: 'free_dessert',
+    reward_item_name: 'Complimentary Tiramisu Tradizionale',
+    win_probability_percent: 100,
+    is_active: true,
+    terms: 'Valid on today’s dining bill for Table orders. One redemption per table.',
+    redemption_code_prefix: 'BELLAVITA-'
+  }
+];
+
+export const SEED_REDEMPTIONS: ChallengeRedemption[] = [
+  {
+    id: 'red-01',
+    restaurant_id: 'rest-saffron-house-01',
+    review_id: 'rev-sh-01',
+    customer_name: 'Ananya Deshmukh',
+    voucher_code: 'SAFFRON-WIN-9821',
+    reward_item_name: 'Complimentary Alphonso Mango Lassi',
+    status: 'unclaimed',
+    created_at: new Date(Date.now() - 3600000 * 2).toISOString()
+  },
+  {
+    id: 'red-02',
+    restaurant_id: 'rest-casa-bella-02',
+    review_id: 'rev-cb-01',
+    customer_name: 'Vikram Joshi',
+    voucher_code: 'BELLAVITA-4412',
+    reward_item_name: 'Complimentary Tiramisu Tradizionale',
+    status: 'redeemed',
+    created_at: new Date(Date.now() - 3600000 * 12).toISOString(),
+    redeemed_at: new Date(Date.now() - 3600000 * 11).toISOString()
+  }
+];
+
+export const SEED_POS_CONFIGS: Record<string, PosIntegrationConfig> = {
+  'rest-saffron-house-01': {
+    restaurant_id: 'rest-saffron-house-01',
+    provider: 'universal_api',
+    connection_status: 'connected',
+    last_sync_time: new Date().toISOString(),
+    auto_sync_orders: true,
+    sync_latency_ms: 180,
+    sync_log: [
+      {
+        id: 'sync-sh-1',
+        timestamp: new Date().toLocaleTimeString(),
+        event: 'Catalog Sync',
+        details: '14 menu items verified with Kitchen KDS printer',
+        status: 'success'
+      },
+      {
+        id: 'sync-sh-2',
+        timestamp: new Date(Date.now() - 300000).toLocaleTimeString(),
+        event: 'Order Webhook',
+        details: 'Order #ORD-1001 dispatched to Tandoor section',
+        status: 'success'
+      }
+    ]
+  },
+  'rest-casa-bella-02': {
+    restaurant_id: 'rest-casa-bella-02',
+    provider: 'toast',
+    connection_status: 'connected',
+    last_sync_time: new Date().toISOString(),
+    auto_sync_orders: true,
+    sync_latency_ms: 210,
+    sync_log: [
+      {
+        id: 'sync-cb-1',
+        timestamp: new Date().toLocaleTimeString(),
+        event: 'Toast POS Handshake',
+        details: 'Token validated, wood-fired oven queue operational',
+        status: 'success'
+      }
+    ]
+  }
+};
+
+export const SEED_ORDERS: Order[] = [
+  {
+    id: 'ord-sh-101',
+    restaurant_id: 'rest-saffron-house-01',
+    table_id: 'tbl-01',
+    table_label: 'Table 1',
+    anonymous_session_id: 'sess-sh-01',
+    order_number: 'ORD-1001',
+    source: 'menuz',
+    status: 'preparing',
+    currency: 'INR',
+    subtotal_amount: 1450.00,
+    tax_amount: 72.50,
+    total_amount: 1522.50,
+    customer_notes: 'Extra crispy laccha paratha please',
+    created_at: new Date(Date.now() - 15 * 60000).toISOString(),
+    updated_at: new Date(Date.now() - 5 * 60000).toISOString(),
+    items: [
+      {
+        id: 'item-ord-1',
+        order_id: 'ord-sh-101',
+        menu_item_id: 'item-curry-1',
+        item_name_snapshot: 'Old Delhi Smoked Butter Chicken',
+        unit_price_snapshot: 620.00,
+        quantity: 1,
+        selected_options_snapshot: [],
+        line_total_amount: 620.00
+      },
+      {
+        id: 'item-ord-2',
+        order_id: 'ord-sh-101',
+        menu_item_id: 'item-curry-2',
+        item_name_snapshot: 'Royal Dal Makhani Bukhara',
+        unit_price_snapshot: 480.00,
+        quantity: 1,
+        selected_options_snapshot: [],
+        line_total_amount: 480.00
+      },
+      {
+        id: 'item-ord-3',
+        order_id: 'ord-sh-101',
+        menu_item_id: 'item-bread-1',
+        item_name_snapshot: 'Tandoori Truffle Garlic Naan',
+        unit_price_snapshot: 140.00,
+        quantity: 2,
+        selected_options_snapshot: [],
+        line_total_amount: 280.00
+      },
+      {
+        id: 'item-ord-4',
+        order_id: 'ord-sh-101',
+        menu_item_id: 'item-bread-4',
+        item_name_snapshot: 'Layered Laccha Paratha',
+        unit_price_snapshot: 110.00,
+        quantity: 1,
+        selected_options_snapshot: [],
+        line_total_amount: 110.00
+      }
+    ]
+  },
+  {
+    id: 'ord-cb-201',
+    restaurant_id: 'rest-casa-bella-02',
+    table_id: 'tbl-cb-01',
+    table_label: 'Table 1',
+    anonymous_session_id: 'sess-cb-01',
+    order_number: 'ORD-2001',
+    source: 'menuz',
+    status: 'served',
+    currency: 'INR',
+    subtotal_amount: 920.00,
+    tax_amount: 46.00,
+    total_amount: 966.00,
+    customer_notes: 'Chili oil on the side',
+    created_at: new Date(Date.now() - 45 * 60000).toISOString(),
+    updated_at: new Date(Date.now() - 10 * 60000).toISOString(),
+    items: [
+      {
+        id: 'item-ord-cb-1',
+        order_id: 'ord-cb-201',
+        menu_item_id: 'item-cb-piz-1',
+        item_name_snapshot: 'Margherita Verace D.O.P.',
+        unit_price_snapshot: 580.00,
+        quantity: 1,
+        selected_options_snapshot: [],
+        line_total_amount: 580.00
+      },
+      {
+        id: 'item-ord-cb-2',
+        order_id: 'ord-cb-201',
+        menu_item_id: 'item-cb-dol-1',
+        item_name_snapshot: 'Tiramisu Tradizionale',
+        unit_price_snapshot: 340.00,
+        quantity: 1,
+        selected_options_snapshot: [],
+        line_total_amount: 340.00
+      }
+    ]
+  }
+];
+
+export const SEED_CAMPAIGNS = [
+  {
+    id: 'camp-sh-01',
+    campaign_name: 'Pune Foodies Weekend Treat',
+    message_template: 'Namaste {{name}}! Craving our royal 24-hr Dal Bukhara? Dine at Saffron House this weekend and enjoy a complimentary Alphonso Mango Lassi on us. Show this message at your table!',
+    target_restaurant_id: 'rest-saffron-house-01',
+    recipients_count: 85,
+    sent_at: new Date(Date.now() - 86400000).toISOString(),
+    status: 'sent' as const
+  },
+  {
+    id: 'camp-cb-01',
+    campaign_name: 'Casa Bella Truffle Pizza Fest',
+    message_template: 'Ciao {{name}}! Our imported Italian Black Summer Truffles have arrived. Book your table at Casa Bella Trattoria this week for an authentic wood-fired indulgence.',
+    target_restaurant_id: 'rest-casa-bella-02',
+    recipients_count: 62,
+    sent_at: new Date(Date.now() - 172800000).toISOString(),
+    status: 'sent' as const
+  }
+];

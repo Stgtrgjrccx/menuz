@@ -1,6 +1,6 @@
 {
-  "short_name": "Menuz Dine In",
-  "name": "Menuz - Dine In & Table QR",
+  "short_name": "Menuz HQ",
+  "name": "Menuz Master Admin Command Center",
   "icons": [
     {
       "src": "favicon.svg",
@@ -21,7 +21,7 @@
       "purpose": "any maskable"
     }
   ],
-  "start_url": "./",
+  "start_url": "./#/admin",
   "background_color": "#090D16",
   "theme_color": "#090D16",
   "display": "standalone",

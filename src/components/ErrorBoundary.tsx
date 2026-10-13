@@ -39,10 +39,12 @@ export class ErrorBoundary extends Component<Props, State> {
     window.location.reload();
   };
 
-  private handleClearCache = () => {
+  private handleSafeRecovery = () => {
     try {
-      localStorage.clear();
-      sessionStorage.clear();
+      // Safely clear ONLY transient error/navigation flags.
+      // NEVER touch localStorage, restaurant vault, tables, menus, or orders.
+      sessionStorage.removeItem('menuz_session_error');
+      sessionStorage.removeItem('menuz_last_view');
     } catch (e) {}
     this.setState({ hasError: false, error: null, errorInfo: null });
     window.location.hash = '#/';
@@ -64,10 +66,10 @@ export class ErrorBoundary extends Component<Props, State> {
 
             <div className="space-y-2">
               <h2 className="font-serif text-xl sm:text-2xl font-bold text-white">
-                Menu View Recovered
+                Application Interruption Recovered
               </h2>
               <p className="text-xs sm:text-sm text-slate-400/80 leading-relaxed">
-                We encountered a temporary rendering interruption while switching windows or menus. Your order and table session remain completely safe.
+                We encountered a temporary rendering interruption. All your restaurants, menus, orders, and table sessions remain completely safe and preserved.
               </p>
             </div>
 
@@ -92,10 +94,10 @@ export class ErrorBoundary extends Component<Props, State> {
 
             <button
               type="button"
-              onClick={this.handleClearCache}
-              className="text-[11px] text-slate-500 hover:text-red-500 transition-colors underline cursor-pointer"
+              onClick={this.handleSafeRecovery}
+              className="text-[11px] text-slate-400 hover:text-amber-400 transition-colors underline cursor-pointer"
             >
-              Reset local storage cache &amp; restore default catalog
+              Safe restart to Home (preserves all restaurant data &amp; orders)
             </button>
 
             {(typeof import.meta !== 'undefined' && import.meta.env?.DEV) && this.state.error && (

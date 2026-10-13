@@ -23,7 +23,6 @@ import { isWorkingWithMenuz, Restaurant } from '../types';
 import { QrScannerModal } from '../components/QrScannerModal';
 import { TableArcadeModal } from '../components/TableArcadeModal';
 import { WinChallengeModal } from '../components/WinChallengeModal';
-import { getOwnerSiteUrl, getHqSiteUrl } from '../config/siteMode';
 
 export const CustomerHomePage: React.FC = () => {
   const navigate = useNavigate();
@@ -570,25 +569,13 @@ export const CustomerHomePage: React.FC = () => {
           Autonomous Dining &amp; Multiplayer QR Ordering • Only Menuz Partner Venues
         </p>
 
-        {/* Clear Cross-Portal Direct Links */}
-        <div className="flex flex-wrap items-center justify-center gap-4 pt-2 text-[11px]">
-          <span className="text-amber-400 font-bold">🍽️ Customer Dining</span>
-          <span className="text-slate-700">•</span>
-          <a
-            href={getOwnerSiteUrl('')}
-            className="text-slate-400 hover:text-white transition-colors flex items-center space-x-1"
-          >
-            <span>🏢 Restaurant Partner Hub</span>
-            <ExternalLink className="w-3 h-3 text-slate-500" />
-          </a>
-          <span className="text-slate-700">•</span>
-          <a
-            href={getHqSiteUrl('')}
-            className="text-slate-400 hover:text-white transition-colors flex items-center space-x-1"
-          >
-            <span>🛡️ Master Admin HQ</span>
-            <ExternalLink className="w-3 h-3 text-slate-500" />
-          </a>
+        {/* Customer Dining Footer Details */}
+        <div className="flex flex-wrap items-center justify-center gap-3 pt-2 text-[11px] text-slate-500">
+          <span className="text-amber-400 font-bold">🍽️ Instant QR Table Ordering</span>
+          <span>•</span>
+          <span>Live Kitchen KOT Printing</span>
+          <span>•</span>
+          <span>Google 5-Star Reputation Engine</span>
         </div>
       </footer>
 

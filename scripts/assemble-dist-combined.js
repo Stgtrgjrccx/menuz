@@ -13,8 +13,8 @@ const distHq = path.join(rootDir, 'dist-hq');
 
 console.log('--- Assembling dist-combined for Production & GitHub Pages ---');
 
-if (!fs.existsSync(distCustomer) || !fs.existsSync(distOwner) || !fs.existsSync(distHq)) {
-  console.error('Error: Please build customer, owner, and hq first (run npm run build:all)');
+if (!fs.existsSync(distCustomer) || !fs.existsSync(distHq)) {
+  console.error('Error: Please build customer and hq first (run npm run build:all)');
   process.exit(1);
 }
 
@@ -24,9 +24,11 @@ if (fs.existsSync(distCombined)) {
 }
 fs.mkdirSync(distCombined, { recursive: true });
 fs.mkdirSync(path.join(distCombined, 'customer'), { recursive: true });
-fs.mkdirSync(path.join(distCombined, 'owner'), { recursive: true });
-fs.mkdirSync(path.join(distCombined, 'restaurant'), { recursive: true });
 fs.mkdirSync(path.join(distCombined, 'hq'), { recursive: true });
+if (fs.existsSync(distOwner)) {
+  fs.mkdirSync(path.join(distCombined, 'owner'), { recursive: true });
+  fs.mkdirSync(path.join(distCombined, 'restaurant'), { recursive: true });
+}
 
 // Helper to recursively copy directories
 function copyDirSync(src, dest) {
@@ -43,47 +45,75 @@ function copyDirSync(src, dest) {
   }
 }
 
-// 2. Copy Customer distribution to root AND /customer/
-console.log('Copying dist-customer to root and /customer/ ...');
-copyDirSync(distCustomer, distCombined);
-copyDirSync(distCustomer, path.join(distCombined, 'customer'));
-
-// 3. Copy Owner distribution to /owner/ AND /restaurant/
-console.log('Copying dist-owner to /owner/ and /restaurant/ ...');
-copyDirSync(distOwner, path.join(distCombined, 'owner'));
-copyDirSync(distOwner, path.join(distCombined, 'restaurant'));
-
-// 4. Copy HQ distribution to /hq/
-console.log('Copying dist-hq to /hq/ ...');
+// 2. Application 1: Copy Master Admin HQ to root (https://stgtrgjrccx.github.io/menuz/#/admin)
+console.log('Deploying Master Admin HQ to root and /hq/ ...');
+copyDirSync(distHq, distCombined);
 copyDirSync(distHq, path.join(distCombined, 'hq'));
 
-// 5. Ensure dedicated manifests are in place for each portal
+// 3. Application 2: Copy Customer application to /customer/ (https://stgtrgjrccx.github.io/menuz/customer/)
+console.log('Deploying Customer application to /customer/ ...');
+copyDirSync(distCustomer, path.join(distCombined, 'customer'));
+
+// Ensure customer entry point is index.html inside /customer/
+const customerSubHtml = path.join(distCombined, 'customer', 'customer.html');
+const customerSubIndex = path.join(distCombined, 'customer', 'index.html');
+if (fs.existsSync(customerSubHtml)) {
+  fs.copyFileSync(customerSubHtml, customerSubIndex);
+}
+
+// 4. Copy Owner distribution if present
+if (fs.existsSync(distOwner)) {
+  console.log('Deploying Owner distribution to /owner/ and /restaurant/ ...');
+  copyDirSync(distOwner, path.join(distCombined, 'owner'));
+  copyDirSync(distOwner, path.join(distCombined, 'restaurant'));
+}
+
+// 5. Ensure dedicated PWA manifests and Service Workers are correctly placed
 const publicDir = path.join(rootDir, 'public');
 const manifestCustomer = path.join(publicDir, 'manifest-customer.json');
 const manifestOwner = path.join(publicDir, 'manifest-owner.json');
 const manifestHq = path.join(publicDir, 'manifest-hq.json');
 
+if (fs.existsSync(manifestHq)) {
+  fs.copyFileSync(manifestHq, path.join(distCombined, 'manifest.json'));
+  fs.copyFileSync(manifestHq, path.join(distCombined, 'hq', 'manifest.json'));
+}
 if (fs.existsSync(manifestCustomer)) {
-  fs.copyFileSync(manifestCustomer, path.join(distCombined, 'manifest.json'));
   fs.copyFileSync(manifestCustomer, path.join(distCombined, 'customer', 'manifest.json'));
 }
-if (fs.existsSync(manifestOwner)) {
+if (fs.existsSync(manifestOwner) && fs.existsSync(path.join(distCombined, 'owner'))) {
   fs.copyFileSync(manifestOwner, path.join(distCombined, 'owner', 'manifest.json'));
   fs.copyFileSync(manifestOwner, path.join(distCombined, 'restaurant', 'manifest.json'));
 }
-if (fs.existsSync(manifestHq)) {
-  fs.copyFileSync(manifestHq, path.join(distCombined, 'hq', 'manifest.json'));
+
+const swCustomer = path.join(publicDir, 'sw-customer.js');
+if (fs.existsSync(swCustomer)) {
+  fs.copyFileSync(swCustomer, path.join(distCombined, 'customer', 'sw.js'));
+}
+if (fs.existsSync(path.join(distCombined, 'sw-customer.js'))) {
+  fs.unlinkSync(path.join(distCombined, 'sw-customer.js'));
+}
+if (fs.existsSync(path.join(distCombined, 'hq', 'sw-customer.js'))) {
+  fs.unlinkSync(path.join(distCombined, 'hq', 'sw-customer.js'));
+}
+if (fs.existsSync(path.join(distCombined, 'customer', 'sw-customer.js'))) {
+  fs.unlinkSync(path.join(distCombined, 'customer', 'sw-customer.js'));
 }
 
-// 6. Ensure GitHub Pages SPA fallback 404.html
-const indexHtml = path.join(distCombined, 'index.html');
-const fourOhFour = path.join(distCombined, '404.html');
-if (fs.existsSync(indexHtml)) {
-  fs.copyFileSync(indexHtml, fourOhFour);
+// 6. Dedicated GitHub Pages SPA 404 fallbacks for both applications
+const rootIndexHtml = path.join(distCombined, 'index.html');
+const rootFourOhFour = path.join(distCombined, '404.html');
+if (fs.existsSync(rootIndexHtml)) {
+  fs.copyFileSync(rootIndexHtml, rootFourOhFour);
 }
 
-// 7. Ensure .nojekyll is present
+const customerIndexHtml = path.join(distCombined, 'customer', 'index.html');
+const customerFourOhFour = path.join(distCombined, 'customer', '404.html');
+if (fs.existsSync(customerIndexHtml)) {
+  fs.copyFileSync(customerIndexHtml, customerFourOhFour);
+}
+
+// 7. Ensure .nojekyll is present at root
 fs.writeFileSync(path.join(distCombined, '.nojekyll'), '');
 
-console.log('✅ Successfully assembled dist-combined with isolated customer, restaurant, and hq portals and manifests!');
-
+console.log('✅ Successfully assembled dist-combined with completely isolated HQ and Customer applications!');

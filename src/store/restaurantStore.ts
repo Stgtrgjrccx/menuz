@@ -281,15 +281,35 @@ export const isDishNameAsRestaurant = (r: Partial<Restaurant> | string | null | 
   const hasRestaurantKeyword = restaurantKeywords.some((kw) => lower.includes(kw));
 
   for (const pattern of prohibitedPatterns) {
-    if (lower === pattern) {
-      return true;
-    }
-    if (!hasRestaurantKeyword && (lower === pattern || (lower.includes(pattern) && typeof r === 'object' && (!r.location || !r.cuisine)))) {
+    if (lower === pattern && !hasRestaurantKeyword) {
       return true;
     }
   }
 
   return false;
+};
+
+// Safe restaurant validator: ensures genuine restaurants are never discarded just because optional fields (like location or cuisine) are empty
+export const isValidRestaurantRecord = (r: any): boolean => {
+  if (!r || typeof r !== 'object') return false;
+  if (!r.id || typeof r.id !== 'string' || !r.id.trim()) return false;
+  if (!r.name || typeof r.name !== 'string' || !r.name.trim()) return false;
+  if (isDishNameAsRestaurant(r)) return false;
+  return true;
+};
+
+// Normalizer: provides safe non-null defaults for optional metadata fields without deleting anything
+export const normalizeRestaurantRecord = (r: any): Restaurant => {
+  return {
+    ...r,
+    id: String(r.id),
+    name: String(r.name),
+    slug: r.slug || r.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+    location: r.location || '',
+    cuisine: r.cuisine || '',
+    status: r.status || 'active',
+    is_menuz_partner: r.is_menuz_partner !== undefined ? r.is_menuz_partner : true
+  };
 };
 
 // Helper to safely recover only authentic onboarded restaurants from localStorage
@@ -300,8 +320,8 @@ export const getInitialPersistedRestaurants = (): Restaurant[] => {
 
   // 1. Seed base
   for (const r of SEED_RESTAURANTS) {
-    if (!isDishNameAsRestaurant(r)) {
-      foundMap.set(r.id, r);
+    if (isValidRestaurantRecord(r)) {
+      foundMap.set(r.id, normalizeRestaurantRecord(r));
     }
   }
 
@@ -313,8 +333,8 @@ export const getInitialPersistedRestaurants = (): Restaurant[] => {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed)) {
           for (const r of parsed) {
-            if (r && r.id && r.name && !isDishNameAsRestaurant(r)) {
-              foundMap.set(r.id, { ...r, is_menuz_partner: true, status: r.status || 'active' });
+            if (isValidRestaurantRecord(r)) {
+              foundMap.set(r.id, normalizeRestaurantRecord(r));
             }
           }
         }
@@ -322,9 +342,7 @@ export const getInitialPersistedRestaurants = (): Restaurant[] => {
     } catch (e) {}
   }
 
-  const result = Array.from(foundMap.values()).filter(
-    (r) => !isDishNameAsRestaurant(r)
-  );
+  const result = Array.from(foundMap.values());
   try {
     localStorage.setItem(DEDICATED_REST_KEY, JSON.stringify(result));
     localStorage.setItem(
@@ -332,20 +350,18 @@ export const getInitialPersistedRestaurants = (): Restaurant[] => {
       JSON.stringify(result.filter((r) => !SEED_RESTAURANTS.some((s) => s.id === r.id)))
     );
 
-    // Deep purge any dish/category items from all existing storage keys in localStorage
+    // Deep purge any dish/category items from all existing restaurant storage keys
     for (const key of [PERMANENT_VAULT_KEY, DEDICATED_REST_KEY, ...LEGACY_STORAGE_KEYS, STORAGE_KEY]) {
       const raw = localStorage.getItem(key);
       if (raw) {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed)) {
-          const cleaned = parsed.filter(
-            (item) => !isDishNameAsRestaurant(item) && (SEED_RESTAURANTS.some((s) => s.id === item.id) || (item.location && item.cuisine))
-          );
+          const cleaned = parsed.filter(isValidRestaurantRecord).map(normalizeRestaurantRecord);
           localStorage.setItem(key, JSON.stringify(cleaned));
         } else if (parsed?.state?.restaurants) {
-          parsed.state.restaurants = parsed.state.restaurants.filter(
-            (item: any) => !isDishNameAsRestaurant(item) && (SEED_RESTAURANTS.some((s) => s.id === item.id) || (item.location && item.cuisine))
-          );
+          parsed.state.restaurants = parsed.state.restaurants
+            .filter(isValidRestaurantRecord)
+            .map(normalizeRestaurantRecord);
           if (isDishNameAsRestaurant(parsed.state.restaurant) || !parsed.state.restaurants.some((r: any) => r.id === parsed.state.restaurant?.id)) {
             parsed.state.restaurant = parsed.state.restaurants[0] || SEED_RESTAURANTS[0];
             parsed.state.currentRestaurantId = parsed.state.restaurant?.id || '';
@@ -359,40 +375,34 @@ export const getInitialPersistedRestaurants = (): Restaurant[] => {
   return result;
 };
 
-// Immediate client-side active localStorage sanitation on module import
+// Safe client-side active localStorage sanitation targeting ONLY restaurant-dedicated keys
 if (typeof window !== 'undefined' && window.localStorage) {
   try {
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (!key) continue;
-      const lowerKey = key.toLowerCase();
-      if (lowerKey.includes('menuz') || lowerKey.includes('restaurant')) {
-        const raw = localStorage.getItem(key);
-        if (raw) {
-          try {
-            const parsed = JSON.parse(raw);
-            if (Array.isArray(parsed)) {
-              const cleaned = parsed.filter(
-                (item) => !isDishNameAsRestaurant(item) && (SEED_RESTAURANTS.some((s) => s.id === item?.id) || (item?.location && item?.cuisine))
-              );
-              if (cleaned.length !== parsed.length) {
-                localStorage.setItem(key, JSON.stringify(cleaned));
-              }
-            } else if (parsed?.state?.restaurants) {
-              const prevLen = parsed.state.restaurants.length;
-              parsed.state.restaurants = parsed.state.restaurants.filter(
-                (item: any) => !isDishNameAsRestaurant(item) && (SEED_RESTAURANTS.some((s) => s.id === item?.id) || (item?.location && item?.cuisine))
-              );
-              if (isDishNameAsRestaurant(parsed.state.restaurant) || !parsed.state.restaurants.some((r: any) => r.id === parsed.state.restaurant?.id)) {
-                parsed.state.restaurant = parsed.state.restaurants[0] || SEED_RESTAURANTS[0];
-                parsed.state.currentRestaurantId = parsed.state.restaurant?.id || '';
-              }
-              if (parsed.state.restaurants.length !== prevLen) {
-                localStorage.setItem(key, JSON.stringify(parsed));
-              }
+    const targetRestaurantKeys = [PERMANENT_VAULT_KEY, DEDICATED_REST_KEY, STORAGE_KEY];
+    for (const key of targetRestaurantKeys) {
+      const raw = localStorage.getItem(key);
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            const cleaned = parsed.filter(isValidRestaurantRecord).map(normalizeRestaurantRecord);
+            if (cleaned.length !== parsed.length) {
+              localStorage.setItem(key, JSON.stringify(cleaned));
             }
-          } catch (err) {}
-        }
+          } else if (parsed?.state?.restaurants) {
+            const prevLen = parsed.state.restaurants.length;
+            parsed.state.restaurants = parsed.state.restaurants
+              .filter(isValidRestaurantRecord)
+              .map(normalizeRestaurantRecord);
+            if (isDishNameAsRestaurant(parsed.state.restaurant) || !parsed.state.restaurants.some((r: any) => r.id === parsed.state.restaurant?.id)) {
+              parsed.state.restaurant = parsed.state.restaurants[0] || SEED_RESTAURANTS[0];
+              parsed.state.currentRestaurantId = parsed.state.restaurant?.id || '';
+            }
+            if (parsed.state.restaurants.length !== prevLen) {
+              localStorage.setItem(key, JSON.stringify(parsed));
+            }
+          }
+        } catch (err) {}
       }
     }
   } catch (e) {}
@@ -1355,19 +1365,25 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       resetToDefaults: () => {
         // Recover any custom user-added venues from vault so they are never destroyed by a demo catalog reset!
         const customVaultRests = getInitialPersistedRestaurants().filter(
-          (r) => !SEED_RESTAURANTS.some((s) => s.id === r.id) && !isDishNameAsRestaurant(r)
+          (r) => !SEED_RESTAURANTS.some((s) => s.id === r.id) && isValidRestaurantRecord(r)
         );
-        const resetRestaurants = [...SEED_RESTAURANTS.filter((r) => !isDishNameAsRestaurant(r)), ...customVaultRests];
+        const resetRestaurants = [...SEED_RESTAURANTS.filter(isValidRestaurantRecord), ...customVaultRests];
         const primaryRest = resetRestaurants[0] || SEED_RESTAURANTS[0];
+
+        // Also recover any custom user-added tables, categories, and items
+        const currentTables = getInitialPersistedTables();
+        const currentCategories = getInitialPersistedCategories();
+        const currentItems = getInitialPersistedMenuItems(resetRestaurants);
+
         set({
           restaurants: resetRestaurants,
           restaurant: primaryRest,
           currentRestaurantId: primaryRest?.id || SEED_RESTAURANTS[0].id,
-          tables: SEED_TABLES,
-          categories: SEED_CATEGORIES,
-          menuItems: SEED_MENU_ITEMS,
-          orders: SEED_ORDERS,
-          reviews: SEED_REVIEWS,
+          tables: currentTables,
+          categories: currentCategories,
+          menuItems: currentItems,
+          orders: get().orders.length > 0 ? get().orders : SEED_ORDERS,
+          reviews: get().reviews.length > 0 ? get().reviews : SEED_REVIEWS,
           challenges: SEED_CHALLENGES,
           redemptions: SEED_REDEMPTIONS,
           posConfigs: SEED_POS_CONFIGS,
@@ -1398,21 +1414,16 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
       onRehydrateStorage: () => (state) => {
         if (!state) return;
         // Merge missing seeds AND any custom onboarded restaurants from localStorage, strictly rejecting any dish items
-        const isRealRestaurant = (r: any) =>
-          r &&
-          r.id &&
-          r.name &&
-          !isDishNameAsRestaurant(r) &&
-          (SEED_RESTAURANTS.some((s) => s.id === r.id || s.slug === r.slug) || (r.location && r.cuisine));
+        const isRealRestaurant = (r: any) => isValidRestaurantRecord(r);
 
         const persistedAll = getInitialPersistedRestaurants().filter(isRealRestaurant);
         const currentMap = new Map<string, Restaurant>();
         for (const r of state.restaurants || []) {
-          if (isRealRestaurant(r)) currentMap.set(r.id, r);
+          if (isRealRestaurant(r)) currentMap.set(r.id, normalizeRestaurantRecord(r));
         }
         for (const r of persistedAll) {
           if (isRealRestaurant(r) && !currentMap.has(r.id)) {
-            currentMap.set(r.id, r);
+            currentMap.set(r.id, normalizeRestaurantRecord(r));
           }
         }
         state.restaurants = Array.from(currentMap.values());
@@ -1441,14 +1452,14 @@ export const useRestaurantStore = create<RestaurantStoreState>()(
           isDishNameAsRestaurant(state.restaurant) ||
           !state.restaurants.some((r: Restaurant) => r.id === state.restaurant.id)
         ) {
-          state.restaurant = state.restaurants.find((r) => !isDishNameAsRestaurant(r)) || SEED_RESTAURANTS[0];
+          state.restaurant = state.restaurants.find((r) => isValidRestaurantRecord(r)) || SEED_RESTAURANTS[0];
           state.currentRestaurantId = state.restaurant?.id || '';
         }
 
         try {
           localStorage.setItem(DEDICATED_REST_KEY, JSON.stringify(state.restaurants));
           const onlyCustom = state.restaurants.filter(
-            (r) => !SEED_RESTAURANTS.some((s) => s.id === r.id) && !isDishNameAsRestaurant(r)
+            (r) => !SEED_RESTAURANTS.some((s) => s.id === r.id) && isValidRestaurantRecord(r)
           );
           localStorage.setItem(PERMANENT_VAULT_KEY, JSON.stringify(onlyCustom));
         } catch (e) {}
