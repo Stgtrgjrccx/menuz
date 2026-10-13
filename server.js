@@ -2,14 +2,14 @@ import http from 'http';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import * as db from './database.js';
+import * as db from './src/server/db/dataAdapter.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const PORT = process.env.PORT || 4000;
 
-// Initialize persistent SQLite database
-db.initDatabase();
+// Initialize database engine (PostgreSQL/Neon if DATABASE_URL is set, else SQLite)
+await db.initDatabaseEngine();
 
 // SSE Connected Clients Set
 const sseClients = new Set();
@@ -77,19 +77,19 @@ setInterval(() => {
 }, 5 * 60 * 1000);
 
 // Helper to extract session from request
-function getSessionFromRequest(req, url) {
+async function getSessionFromRequest(req, url) {
   // 1. Authorization header: Bearer <token>
   const authHeader = req.headers['authorization'];
   if (authHeader && authHeader.startsWith('Bearer ')) {
     const token = authHeader.slice(7).trim();
-    const session = db.getSession(token);
+    const session = await db.getSession(token);
     if (session) return session;
   }
 
   // 2. Custom headers: X-Menuz-Token
   const xToken = req.headers['x-menuz-token'];
   if (xToken) {
-    const session = db.getSession(xToken);
+    const session = await db.getSession(xToken);
     if (session) return session;
   }
 
@@ -98,20 +98,22 @@ function getSessionFromRequest(req, url) {
   const match = cookieHeader.match(/menuz_session=([^;]+)/);
   if (match) {
     const token = match[1].trim();
-    const session = db.getSession(token);
+    const session = await db.getSession(token);
     if (session) return session;
   }
 
   // 4. Query parameter: ?token=... or ?auth_token=...
   const qToken = url.searchParams.get('token') || url.searchParams.get('auth_token');
   if (qToken) {
-    const session = db.getSession(qToken);
+    const session = await db.getSession(qToken);
     if (session) return session;
   }
 
-  // 5. Header role assertion (used in test suites or local proxies)
+  // 5. Explicit test-environment authentication ONLY (never trusted in production)
+  const isTest = process.env.NODE_ENV === 'test';
+  const testSecret = req.headers['x-menuz-test-auth'];
   const xRole = req.headers['x-menuz-role'];
-  if (xRole) {
+  if (isTest && testSecret === 'menuz-test-secret-2026' && xRole) {
     return { token: 'mock-header-session', role: xRole, user_id: `user-${xRole}`, expires_at: Date.now() + 3600000 };
   }
 
@@ -135,7 +137,7 @@ const MIME_TYPES = {
   '.ico': 'image/x-icon'
 };
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
   const clientIp = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket.remoteAddress || 'unknown';
   const userAgent = req.headers['user-agent'] || '';
 
@@ -152,7 +154,7 @@ const server = http.createServer((req, res) => {
   // CORS & Security Headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, X-Menuz-Role, X-Menuz-Token');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, X-Menuz-Role, X-Menuz-Token, X-Menuz-Test-Auth');
   res.setHeader('X-Content-Type-Options', 'nosniff');
 
   if (req.method === 'OPTIONS') {
@@ -164,7 +166,7 @@ const server = http.createServer((req, res) => {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   const acceptHeader = (req.headers['accept'] || '').toLowerCase();
   const wantsMarkdown = acceptHeader.includes('text/markdown');
-  const session = getSessionFromRequest(req, url);
+  const session = await getSessionFromRequest(req, url);
 
   // ─────────────────────────────────────────────────────────────
   // 1. AUTHENTICATION & ROLE-BASED ACCESS API
@@ -174,18 +176,19 @@ const server = http.createServer((req, res) => {
   if (url.pathname === '/api/auth/login' && req.method === 'POST') {
     let body = '';
     req.on('data', chunk => body += chunk);
-    req.on('end', () => {
+    req.on('end', async () => {
       try {
         const { role, passcode, restaurantId } = JSON.parse(body || '{}');
 
         if (role === 'admin') {
-          const validPasscodes = ['menuz2026', 'admin123', 'menuz', '8888', 'menuz@admin', 'menuz2025'];
+          const envPasscode = process.env.HQ_ADMIN_PASSPHRASE;
+          const validPasscodes = envPasscode ? [envPasscode.trim().toLowerCase()] : ['menuz2026', 'admin123', 'menuz', '8888', 'menuz@admin', 'menuz2025'];
           if (!passcode || !validPasscodes.includes(passcode.trim().toLowerCase())) {
             res.writeHead(401, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ success: false, error: 'Invalid Master Admin passphrase. Access denied.' }));
             return;
           }
-          const session = db.createSession('admin');
+          const session = await db.createSession('admin');
           res.writeHead(200, {
             'Content-Type': 'application/json',
             'Set-Cookie': `menuz_session=${session.token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=43200`
@@ -195,13 +198,14 @@ const server = http.createServer((req, res) => {
         }
 
         if (role === 'owner' || role === 'manager') {
-          const validPins = ['owner123', 'menuz', 'manager', 'partner', '8888'];
+          const envPin = process.env.RESTAURANT_PARTNER_PIN;
+          const validPins = envPin ? [envPin.trim().toLowerCase()] : ['owner123', 'menuz', 'manager', 'partner', '8888'];
           if (passcode && !validPins.includes(passcode.trim().toLowerCase())) {
             res.writeHead(401, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ success: false, error: 'Invalid Restaurant Partner credentials.' }));
             return;
           }
-          const session = db.createSession('owner', restaurantId || null);
+          const session = await db.createSession('owner', restaurantId || null);
           res.writeHead(200, {
             'Content-Type': 'application/json',
             'Set-Cookie': `menuz_session=${session.token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=43200`
@@ -211,7 +215,7 @@ const server = http.createServer((req, res) => {
         }
 
         if (role === 'customer' || !role) {
-          const session = db.createSession('customer');
+          const session = await db.createSession('customer');
           res.writeHead(200, {
             'Content-Type': 'application/json',
             'Set-Cookie': `menuz_session=${session.token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=86400`
@@ -250,7 +254,7 @@ const server = http.createServer((req, res) => {
   // POST /api/auth/logout: Terminate current session
   if (url.pathname === '/api/auth/logout' && req.method === 'POST') {
     if (session?.token) {
-      db.deleteSession(session.token);
+      await db.deleteSession(session.token);
     }
     res.writeHead(200, {
       'Content-Type': 'application/json',
@@ -265,26 +269,30 @@ const server = http.createServer((req, res) => {
   // ─────────────────────────────────────────────────────────────
 
   if (url.pathname === '/health') {
+    const health = await db.getHealthInfo();
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({
-      status: 'ok',
+      status: health.status,
       service: 'menuz-sync-api',
       activeClients: sseClients.size,
-      dbEngine: 'sqlite3-wal',
-      restaurantsCount: db.getAllRestaurants().length
+      dbEngine: health.dbEngine,
+      connected: health.connected,
+      latencyMs: health.latencyMs,
+      database: health.database,
+      restaurantsCount: health.restaurantsCount
     }));
     return;
   }
 
-  // GET /api/restaurants: Return all persistent restaurants from SQLite database
+  // GET /api/restaurants: Return all persistent restaurants from database
   if (url.pathname === '/api/restaurants' && req.method === 'GET') {
-    const restaurants = db.getAllRestaurants();
+    const restaurants = await db.getAllRestaurants();
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(restaurants));
     return;
   }
 
-  // POST /api/restaurants: Protected restaurant upsert into SQLite
+  // POST /api/restaurants: Protected restaurant upsert into database
   if (url.pathname === '/api/restaurants' && req.method === 'POST') {
     if (!session || (session.role !== 'admin' && session.role !== 'owner')) {
       res.writeHead(401, { 'Content-Type': 'application/json' });
@@ -294,10 +302,10 @@ const server = http.createServer((req, res) => {
 
     let body = '';
     req.on('data', chunk => body += chunk);
-    req.on('end', () => {
+    req.on('end', async () => {
       try {
         const payload = JSON.parse(body || '{}');
-        const saved = db.upsertRestaurant(payload);
+        const saved = await db.upsertRestaurant(payload);
         broadcastSync({
           type: 'RESTAURANT_UPDATED',
           restaurant: saved,
@@ -315,7 +323,7 @@ const server = http.createServer((req, res) => {
 
   // GET /api/state: Return unified persistent database state
   if (url.pathname === '/api/state' && req.method === 'GET') {
-    const fullState = db.getFullSyncState();
+    const fullState = await db.getFullSyncState();
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(fullState));
     return;
@@ -329,10 +337,10 @@ const server = http.createServer((req, res) => {
       if (body.length > 20 * 1024 * 1024) req.destroy();
     });
 
-    req.on('end', () => {
+    req.on('end', async () => {
       try {
         const update = JSON.parse(body || '{}');
-        const mergedState = db.mergeIncomingSyncState(update);
+        const mergedState = await db.mergeIncomingSyncState(update);
 
         broadcastSync({
           type: 'SYNC_UPDATE',
@@ -341,7 +349,7 @@ const server = http.createServer((req, res) => {
         });
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ success: true, timestamp: mergedState.timestamp, message: 'State synchronized with SQLite database.' }));
+        res.end(JSON.stringify({ success: true, timestamp: mergedState.timestamp, message: 'State synchronized with database.' }));
       } catch (err) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ success: false, error: 'Invalid JSON payload' }));
