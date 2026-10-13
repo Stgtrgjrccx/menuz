@@ -45,12 +45,21 @@ function copyDirSync(src, dest) {
   }
 }
 
-// 2. Application 1: Copy Master Admin HQ to root (https://stgtrgjrccx.github.io/menuz/#/admin)
+// 2. Application 1: Copy Master Admin HQ to root and /hq/
 console.log('Deploying Master Admin HQ to root and /hq/ ...');
 copyDirSync(distHq, distCombined);
 copyDirSync(distHq, path.join(distCombined, 'hq'));
 
-// 3. Application 2: Copy Customer application to /customer/ (https://stgtrgjrccx.github.io/menuz/customer/)
+// Set static title for HQ
+for (const hqHtmlPath of [path.join(distCombined, 'index.html'), path.join(distCombined, 'hq', 'index.html')]) {
+  if (fs.existsSync(hqHtmlPath)) {
+    let content = fs.readFileSync(hqHtmlPath, 'utf8');
+    content = content.replace(/<title>.*?<\/title>/, '<title>Menuz HQ</title>');
+    fs.writeFileSync(hqHtmlPath, content);
+  }
+}
+
+// 3. Application 2: Copy Customer application to /customer/
 console.log('Deploying Customer application to /customer/ ...');
 copyDirSync(distCustomer, path.join(distCombined, 'customer'));
 
@@ -60,12 +69,26 @@ const customerSubIndex = path.join(distCombined, 'customer', 'index.html');
 if (fs.existsSync(customerSubHtml)) {
   fs.copyFileSync(customerSubHtml, customerSubIndex);
 }
+for (const custHtmlPath of [customerSubHtml, customerSubIndex]) {
+  if (fs.existsSync(custHtmlPath)) {
+    let content = fs.readFileSync(custHtmlPath, 'utf8');
+    content = content.replace(/<title>.*?<\/title>/, '<title>Menuz Customer</title>');
+    fs.writeFileSync(custHtmlPath, content);
+  }
+}
 
 // 4. Copy Owner distribution if present
 if (fs.existsSync(distOwner)) {
   console.log('Deploying Owner distribution to /owner/ and /restaurant/ ...');
   copyDirSync(distOwner, path.join(distCombined, 'owner'));
   copyDirSync(distOwner, path.join(distCombined, 'restaurant'));
+  for (const restHtmlPath of [path.join(distCombined, 'owner', 'index.html'), path.join(distCombined, 'restaurant', 'index.html')]) {
+    if (fs.existsSync(restHtmlPath)) {
+      let content = fs.readFileSync(restHtmlPath, 'utf8');
+      content = content.replace(/<title>.*?<\/title>/, '<title>Menuz Restaurant</title>');
+      fs.writeFileSync(restHtmlPath, content);
+    }
+  }
 }
 
 // 5. Ensure dedicated PWA manifests and Service Workers are correctly placed
