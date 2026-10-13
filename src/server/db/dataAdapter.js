@@ -19,6 +19,23 @@ export async function initDatabaseEngine() {
         activeEngine = 'postgres';
         postgresReady = true;
         console.log(`[Database] Active datastore: PostgreSQL / Neon (${pgClient.sanitizeConnectionString(dbUrl)}), Latency: ${connTest.latencyMs}ms`);
+
+        // Auto-populate from verified backups if database has no restaurants yet
+        try {
+          const checkRows = await pgClient.query('SELECT COUNT(*) as count FROM restaurants');
+          const rowCount = Number(checkRows.rows[0]?.count || 0);
+          if (rowCount === 0) {
+            console.log('[Database] PostgreSQL database is empty. Running initial idempotent migration from verified backups...');
+            const { runMigration } = await import('../../../scripts/migrate-to-postgres.js');
+            await runMigration();
+            console.log('[Database] Initial migration completed successfully.');
+          } else {
+            console.log(`[Database] PostgreSQL ready with ${rowCount} existing restaurants.`);
+          }
+        } catch (migErr) {
+          console.warn(`[Database] Initial auto-migration notice: ${migErr.message}`);
+        }
+
         return 'postgres';
       } else {
         console.warn(`[Database] PostgreSQL connection failed: ${connTest.error}. Falling back to SQLite.`);

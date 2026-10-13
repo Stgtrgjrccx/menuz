@@ -71,7 +71,7 @@ services:
         value: nosniff
 
   # ⚙️ SERVICE 4: MENUZ FULL-STACK BACKEND SYNC API & PERSISTENT DATABASE
-  # Real-time state synchronization, SSE stream, and ACID SQLite persistence
+  # Real-time state synchronization, SSE stream, and PostgreSQL persistence with SQLite fallback
   - type: web
     name: menuz-api
     runtime: node
@@ -84,12 +84,10 @@ services:
         value: production
       - key: PORT
         value: 10000
+      - key: DATABASE_URL
+        value: postgresql://menuz_db_user:98yERmtCSCCxyrg6lJGLuFbwrWe1MJcH@dpg-db71227f3r2c73cre7g0-a/menuz_db
     disk:
       name: menuz-sqlite-disk
       mountPath: /data
       sizeGB: 1
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
 
