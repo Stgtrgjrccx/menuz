@@ -1,5 +1,5 @@
-// Menuz Progressive Web App Service Worker (v6 safari-cache-bust)
-const CACHE_NAME = 'menuz-v6-safari-cache-bust';
+// Menuz Customer Progressive Web App Service Worker (Dedicated Customer Cache)
+const CACHE_NAME = 'menuz-customer-v1';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -22,7 +22,7 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((keys) => {
       return Promise.all(
         keys.map((key) => {
-          if (key !== CACHE_NAME) {
+          if (key.startsWith('menuz-customer-') && key !== CACHE_NAME) {
             return caches.delete(key);
           }
         })
@@ -32,9 +32,7 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Pass-through network requests with cache fallback
   if (event.request.method !== 'GET') return;
-  
   event.respondWith(
     fetch(event.request).catch(() => {
       return caches.match(event.request);
