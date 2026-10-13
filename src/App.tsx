@@ -44,8 +44,8 @@ const RouteSEOManager: React.FC = () => {
 
     const path = location.pathname;
     let pageTitle = IS_OWNER_SITE
-      ? 'Menuz Partner OS | Restaurant Owner Operations & Floor Control'
-      : 'Menuz | Autonomous Dine-In Experience, Digital Menus & Reviews';
+      ? 'Menuz Restaurant | Partner Operations Hub'
+      : 'Menuz Customer | Digital Dining & QR Menus';
     let metaDesc = IS_OWNER_SITE
       ? 'Centralized operations hub for restaurant owners: live table sessions, kitchen thermal KOT printing, Google review shield, and floor control.'
       : 'Elevate dine-in revenue with Menuz: zero-app multiplayer QR ordering, instant ESC/POS KOT printing, 1-click Google 5-star review builder, and 0% food commission in Pune, India.';

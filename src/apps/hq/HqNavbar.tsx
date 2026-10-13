@@ -89,7 +89,7 @@ export const HqNavbar: React.FC = () => {
               <div className="flex items-center space-x-1.5">
                 <span className="font-black tracking-tight text-white text-base">MENUZ</span>
                 <span className="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                  HQ Central
+                  HQ
                 </span>
               </div>
               <p className="text-[10px] text-slate-400 font-medium hidden sm:block">

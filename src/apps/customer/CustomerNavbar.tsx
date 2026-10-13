@@ -54,7 +54,7 @@ export const CustomerNavbar: React.FC = () => {
               <div className="flex items-center space-x-1.5">
                 <span className="font-black tracking-tight text-white text-base">MENUZ</span>
                 <span className="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                  Dine-In
+                  CUSTOMER
                 </span>
               </div>
               <p className="text-[10px] text-slate-400 font-medium hidden sm:block">

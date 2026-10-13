@@ -13,7 +13,7 @@ const HqRouteSEOManager: React.FC = () => {
 
   useEffect(() => {
     const path = location.pathname;
-    let pageTitle = 'Master Admin HQ | Autonomous Platform Command Center | Menuz';
+    let pageTitle = 'Menuz HQ | Master Platform Command Center';
     let metaDesc = 'Centralized command center for Menuz platform operations, Pune restaurant ecosystem registry, live table QR management, and multi-tenant governance.';
 
     if (path === '/pitch') {

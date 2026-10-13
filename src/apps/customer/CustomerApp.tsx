@@ -13,7 +13,7 @@ const CustomerRouteSEOManager: React.FC = () => {
 
   useEffect(() => {
     const path = location.pathname;
-    let pageTitle = 'Menuz | Autonomous Dine-In Experience, Digital Menus & Reviews';
+    let pageTitle = 'Menuz Customer | Digital Dining & QR Menus';
     let metaDesc = 'Elevate dine-in revenue with Menuz: zero-app multiplayer QR ordering, instant ESC/POS KOT printing, 1-click Google 5-star review builder, and 0% food commission in Pune, India.';
 
     if (path.includes('/menu')) {

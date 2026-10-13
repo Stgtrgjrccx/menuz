@@ -159,7 +159,7 @@ export const Navbar: React.FC = () => {
                     menuz
                   </span>
                   <span className="text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold">
-                    {IS_OWNER_SITE ? 'PARTNER OS' : 'DINE IN'}
+                    {IS_OWNER_SITE ? 'RESTAURANT' : 'CUSTOMER'}
                   </span>
                 </div>
               </div>
