@@ -439,7 +439,7 @@ export interface ChallengeRedemption {
   redeemed_at?: string;
 }
 
-export type RewardGameType = 'spin_wheel' | 'scratch_card' | 'mystery_box' | 'lucky_dice';
+export type RewardGameType = 'turntable_roulette' | 'spin_wheel' | 'scratch_card' | 'mystery_box' | 'lucky_dice';
 
 export interface GameSliceConfig {
   id: string;

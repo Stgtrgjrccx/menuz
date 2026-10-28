@@ -23,6 +23,7 @@ import {
 import { useRestaurantStore } from '../store/restaurantStore';
 import { Restaurant, RewardGameType } from '../types';
 import { getQuickTagsForRestaurant, generateConsumerReviewDraft } from '../lib/reviewGenerator';
+import { Turntable } from '@lucasmarkes/hairline/react';
 
 interface WinChallengeModalProps {
   isOpen: boolean;
@@ -57,13 +58,16 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
   const [copiedReview, setCopiedReview] = useState<boolean>(false);
 
   // Active game choice
-  const initialGame: RewardGameType = forceGame || config?.active_game || 'spin_wheel';
+  const initialGame: RewardGameType = forceGame || config?.active_game || 'turntable_roulette';
   const [selectedGame, setSelectedGame] = useState<RewardGameType>(initialGame);
 
   // Won reward state
   const [wonReward, setWonReward] = useState<string>('');
   const [voucherCode, setVoucherCode] = useState<string>('');
   const [copiedCode, setCopiedCode] = useState<boolean>(false);
+
+  // Turntable Game State
+  const [isSpinningTurntable, setIsSpinningTurntable] = useState<boolean>(false);
 
   // Wheel Game State
   const [isSpinning, setIsSpinning] = useState<boolean>(false);
@@ -186,6 +190,23 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
       type: 'challenge_complete',
       message: `🎉 ${customerName || 'Diner'} unlocked Win Challenge reward: "${rewardText}" (Code: ${code})`
     });
+  };
+
+  const TURNTABLE_REWARDS = [
+    { id: '1', name: 'Free Chef Dessert Treat', subtitle: 'Artisanal Panna Cotta or Tiramisu', emoji: '🍨' },
+    { id: '2', name: 'Signature Table Mocktail', subtitle: 'Crafted seasonal fruit cooler', emoji: '🍹' },
+    { id: '3', name: 'Free Chef Appetizer', subtitle: 'Artisanal starter plate on the house', emoji: '🍟' },
+    { id: '4', name: '20% Total Bill Discount', subtitle: 'Instant table bill deduction', emoji: '🏷️' }
+  ];
+
+  const handleSpinTurntable = () => {
+    if (isSpinningTurntable) return;
+    setIsSpinningTurntable(true);
+    setTimeout(() => {
+      const chosen = TURNTABLE_REWARDS[Math.floor(Math.random() * TURNTABLE_REWARDS.length)];
+      generateVoucher(chosen.name);
+      setIsSpinningTurntable(false);
+    }, 2400);
   };
 
   // 1. Spin Wheel Logic
@@ -441,7 +462,16 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
               
               {/* Game Selector Tab Pills (if allowed) */}
               {(config?.allow_player_choice !== false) && (
-                <div className="grid grid-cols-4 gap-1 p-1 bg-white/[0.04] rounded-xl border border-white/[0.08] text-[11px] font-bold text-center">
+                <div className="grid grid-cols-5 gap-1 p-1 bg-white/[0.04] rounded-xl border border-white/[0.08] text-[10px] font-bold text-center">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedGame('turntable_roulette')}
+                    className={`py-1.5 rounded-lg transition-all cursor-pointer ${
+                      selectedGame === 'turntable_roulette' ? 'bg-amber-500 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    🎯 Turntable
+                  </button>
                   <button
                     type="button"
                     onClick={() => setSelectedGame('spin_wheel')}
@@ -477,6 +507,53 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
                     }`}
                   >
                     🎲 Dice
+                  </button>
+                </div>
+              )}
+
+              {/* GAME 0: ISOMETRIC TURNTABLE ROULETTE */}
+              {selectedGame === 'turntable_roulette' && (
+                <div className="flex flex-col items-center justify-center space-y-4 py-2 font-mono">
+                  <div className="text-center space-y-1">
+                    <div className="text-xs text-amber-400 font-bold uppercase tracking-wider">
+                      [ISOMETRIC 3D ROULETTE PLINTH]
+                    </div>
+                    <p className="text-[11px] text-slate-400 font-sans">
+                      Flick with your finger or cursor to spin the turntable plinth. It settles on one of 4 tableside treats.
+                    </p>
+                  </div>
+
+                  {/* The Live Turntable Figure */}
+                  <div className="w-full max-w-[240px] py-1 relative">
+                    <Turntable
+                      intensity={0.8}
+                      theme="dark"
+                      label="Tableside reward roulette turntable"
+                      className="w-full filter drop-shadow-[0_10px_25px_rgba(245,158,11,0.2)]"
+                    />
+                  </div>
+
+                  {/* 4 Quarter Cards */}
+                  <div className="grid grid-cols-2 gap-2 w-full text-left">
+                    {TURNTABLE_REWARDS.map((rew) => (
+                      <div key={rew.id} className="p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center space-x-2">
+                        <span className="text-xl shrink-0">{rew.emoji}</span>
+                        <div className="min-w-0">
+                          <div className="text-[11px] font-bold text-white truncate">{rew.name}</div>
+                          <div className="text-[10px] text-slate-400 truncate font-sans">{rew.subtitle}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <button
+                    type="button"
+                    disabled={isSpinningTurntable}
+                    onClick={handleSpinTurntable}
+                    className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 disabled:opacity-50 text-slate-950 font-black text-xs sm:text-sm flex items-center justify-center space-x-2 shadow-xl cursor-pointer"
+                  >
+                    <RotateCw className={`w-4 h-4 ${isSpinningTurntable ? 'animate-spin' : ''}`} />
+                    <span>{isSpinningTurntable ? 'TURNTABLE IN MOTION...' : 'FLICK & CLAIM REWARD'}</span>
                   </button>
                 </div>
               )}
