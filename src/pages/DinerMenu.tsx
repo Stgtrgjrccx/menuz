@@ -510,16 +510,16 @@ export const DinerMenu: React.FC = () => {
 
   if (errorMsg) {
     return (
-      <div className="min-h-screen bg-[#090D16] text-slate-100 flex items-center justify-center p-6">
-        <div className="max-w-md w-full bg-[#0D1322] rounded-3xl p-6 shadow-2xl text-center border border-red-500/30">
-          <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-3" />
-          <h2 className="font-serif text-xl font-bold text-white mb-2">QR Code Issue</h2>
-          <p className="text-slate-300 text-sm mb-4 leading-relaxed">{errorMsg}</p>
+      <div className="min-h-screen bg-[#FFF7E6] text-[#924E00] flex items-center justify-center p-6">
+        <div className="max-w-md w-full bg-white/90 rounded-3xl p-6 shadow-xl text-center border border-red-500/30 text-[#924E00]">
+          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-3" />
+          <h2 className="font-serif text-xl font-bold text-[#924E00] mb-2">QR Code Issue</h2>
+          <p className="text-[#924E00]/80 text-sm mb-4 leading-relaxed">{errorMsg}</p>
           <Link
             to={IS_HQ_SITE ? "/customer" : "/"}
-            className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold hover:bg-amber-500/30 transition-all"
+            className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-[#F9A620] hover:bg-[#e89512] text-white text-xs font-bold transition-all shadow-xs"
           >
-            <Home className="w-4 h-4 text-amber-400" />
+            <Home className="w-4 h-4 text-white" />
             <span>Return to Home</span>
           </Link>
         </div>
@@ -561,7 +561,7 @@ export const DinerMenu: React.FC = () => {
 
   if (!restaurantSlug) {
     return (
-      <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#090D16] text-slate-100 font-sans pb-24">
+      <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#FFF7E6] text-[#924E00] font-sans pb-24">
         {/* Top Header */}
         <header className="sticky top-0 z-40 bg-[#0A0E17]/95 backdrop-blur-md border-b border-white/[0.08] px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2.5">
@@ -709,7 +709,7 @@ export const DinerMenu: React.FC = () => {
   }
 
   return (
-    <div ref={mainRef} className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#090D16] text-slate-100 pb-28">
+    <div ref={mainRef} className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#FFF7E6] text-[#924E00] pb-28">
       {/* ═══════════════════════════════════════════════════════════ */}
       {/* LIVE TOAST: WAITER CALLED NOTIFICATION                     */}
       {/* ═══════════════════════════════════════════════════════════ */}

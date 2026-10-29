@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Building2,
   Bell,
@@ -7,10 +7,12 @@ import {
   ChevronDown,
   Check,
   Trash2,
-  LogOut
+  LogOut,
+  UtensilsCrossed,
+  ChefHat
 } from 'lucide-react';
 import { useRestaurantStore, isValidRestaurantRecord } from '../../store/restaurantStore';
-import { getCustomerSiteUrl } from '../../config/siteMode';
+import { getCustomerSiteUrl, IS_OWNER_SITE } from '../../config/siteMode';
 
 export const HqNavbar: React.FC = () => {
   const navigate = useNavigate();
@@ -66,12 +68,12 @@ export const HqNavbar: React.FC = () => {
   return (
     <nav className="sticky top-0 z-40 bg-[#FFF7E6]/90 backdrop-blur-md border-b border-[#924E00]/10 px-3 sm:px-6 py-2.5 transition-all">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
-        {/* Left: HQ Brand & Badges */}
+        {/* Left: Brand & Mode Badge */}
         <div className="flex items-center space-x-3">
           <Link
-            to="/admin"
+            to={IS_OWNER_SITE ? "/" : "/admin"}
             className="flex items-center space-x-2.5 group focus:outline-none"
-            title="Menuz Master Admin HQ"
+            title={IS_OWNER_SITE ? "Menuz Restaurant Operations Hub" : "Menuz Master Admin HQ"}
           >
             <div className="w-8 h-8 rounded-full bg-[#F9A620] flex items-center justify-center text-white shadow-xs">
               <span className="font-serif font-bold text-sm tracking-tight">M</span>
@@ -80,11 +82,13 @@ export const HqNavbar: React.FC = () => {
               <div className="flex items-center space-x-1.5">
                 <span className="font-serif font-black tracking-tight text-[#924E00] text-lg">menuz</span>
                 <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-[#F9A620]/15 text-[#924E00] border border-[#F9A620]/30">
-                  HQ
+                  {IS_OWNER_SITE ? 'RESTAURANT' : 'HQ'}
                 </span>
               </div>
               <p className="text-[10px] text-[#924E00]/70 font-medium hidden sm:block">
-                Master Platform Governance &amp; Partner Network
+                {IS_OWNER_SITE
+                  ? 'Food Operations Hub & Seating Management'
+                  : 'Master Platform Governance & Partner Network'}
               </p>
             </div>
           </Link>
@@ -133,6 +137,26 @@ export const HqNavbar: React.FC = () => {
 
         {/* Right: Actions */}
         <div className="flex items-center space-x-2">
+          {/* Direct Menu Launch Button for Restaurant Managers */}
+          <Link
+            to={`/r/${restaurant?.slug || 'saffron-house'}/menu`}
+            className="hidden sm:inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-[#F9A620] hover:bg-[#e89512] active:scale-95 text-white text-xs font-semibold transition-all shadow-xs"
+            title="Open Live Table QR Menu"
+          >
+            <UtensilsCrossed className="w-3 h-3 text-white" />
+            <span>Table Menu</span>
+          </Link>
+
+          {/* Kitchen Display Link */}
+          <Link
+            to="/kitchen"
+            className="hidden sm:inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-full bg-white/80 hover:bg-white border border-[#924E00]/15 text-xs font-semibold text-[#924E00] transition-all shadow-xs"
+            title="Open Kitchen Display System"
+          >
+            <ChefHat className="w-3 h-3 text-[#F9A620]" />
+            <span>Kitchen</span>
+          </Link>
+
           {/* External Link to Customer Site */}
           <a
             href={getCustomerSiteUrl('')}
@@ -205,7 +229,7 @@ export const HqNavbar: React.FC = () => {
             type="button"
             onClick={handleLogout}
             className="w-9 h-9 rounded-full bg-white/80 border border-[#924E00]/15 hover:bg-rose-50 text-[#924E00] hover:text-rose-600 flex items-center justify-center transition-all cursor-pointer shadow-xs"
-            title="Lock HQ Session"
+            title="Lock Session"
           >
             <LogOut className="w-4 h-4" />
           </button>

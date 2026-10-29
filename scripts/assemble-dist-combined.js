@@ -136,6 +136,18 @@ if (fs.existsSync(customerIndexHtml)) {
   fs.copyFileSync(customerIndexHtml, customerFourOhFour);
 }
 
+const restIndexHtml = path.join(distCombined, 'restaurant', 'index.html');
+const restFourOhFour = path.join(distCombined, 'restaurant', '404.html');
+if (fs.existsSync(restIndexHtml)) {
+  fs.copyFileSync(restIndexHtml, restFourOhFour);
+}
+
+const ownerIndexHtml = path.join(distCombined, 'owner', 'index.html');
+const ownerFourOhFour = path.join(distCombined, 'owner', '404.html');
+if (fs.existsSync(ownerIndexHtml)) {
+  fs.copyFileSync(ownerIndexHtml, ownerFourOhFour);
+}
+
 // 7. Ensure .nojekyll is present at root
 fs.writeFileSync(path.join(distCombined, '.nojekyll'), '');
 
