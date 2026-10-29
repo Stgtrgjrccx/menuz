@@ -19,13 +19,16 @@ import {
   Sunset,
   Check,
   Gift,
-  Gamepad2
+  Gamepad2,
+  Bot,
+  MessageSquare
 } from 'lucide-react';
 import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantStore';
 import { isWorkingWithMenuz, Restaurant } from '../types';
 import { QrScannerModal } from '../components/QrScannerModal';
 import { TableArcadeModal } from '../components/TableArcadeModal';
 import { WinChallengeModal } from '../components/WinChallengeModal';
+import { AiAssistantDrawer } from '../components/AiAssistantDrawer';
 
 /* ─────────────────────────────────────────────────────────────────────────────
  * SHELVED SECTION: CURATED COLLECTIONS
@@ -115,18 +118,39 @@ export const CustomerHomePage: React.FC = () => {
   const [isArcadeOpen, setIsArcadeOpen] = useState(false);
   const [isWinChallengeOpen, setIsWinChallengeOpen] = useState(false);
   const [winChallengeVenue, setWinChallengeVenue] = useState<Restaurant | null>(null);
+  const [isAiOpen, setIsAiOpen] = useState(false);
+  const [aiInitialQuery, setAiInitialQuery] = useState<string | null>(null);
+  const [conciergeSearch, setConciergeSearch] = useState('');
   const [shareToastOpen, setShareToastOpen] = useState(false);
+
+  const handleOpenAi = (queryText?: string) => {
+    if (queryText) {
+      setAiInitialQuery(queryText);
+    } else {
+      setAiInitialQuery(null);
+    }
+    setIsAiOpen(true);
+  };
 
   useEffect(() => {
     const handleArcade = () => setIsArcadeOpen(true);
     const handleWin = () => setIsWinChallengeOpen(true);
+    const handleAi = (e?: Event) => {
+      const customEvt = e as CustomEvent<{ query?: string }>;
+      if (customEvt?.detail?.query) {
+        setAiInitialQuery(customEvt.detail.query);
+      }
+      setIsAiOpen(true);
+    };
     window.addEventListener('open-table-arcade', handleArcade);
     window.addEventListener('open-google-review', handleWin);
     window.addEventListener('open-win-challenge', handleWin);
+    window.addEventListener('open-ai-assistant', handleAi);
     return () => {
       window.removeEventListener('open-table-arcade', handleArcade);
       window.removeEventListener('open-google-review', handleWin);
       window.removeEventListener('open-win-challenge', handleWin);
+      window.removeEventListener('open-ai-assistant', handleAi);
     };
   }, []);
 
@@ -277,6 +301,16 @@ export const CustomerHomePage: React.FC = () => {
 
               <button
                 type="button"
+                onClick={() => setIsAiOpen(true)}
+                className="h-12 px-6 rounded-full bg-white/95 hover:bg-white active:scale-[0.98] text-[#924E00] border-2 border-[#F9A620] font-medium text-sm sm:text-base flex items-center space-x-2 transition-all shadow-xs cursor-pointer"
+              >
+                <span className="text-base">✨</span>
+                <span>Ask Chef AI</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              </button>
+
+              <button
+                type="button"
                 onClick={() => handleOpenWinChallenge()}
                 className="h-12 px-6 rounded-full bg-white/90 hover:bg-white active:scale-[0.98] text-[#924E00] border border-[#F9A620]/60 font-medium text-sm sm:text-base flex items-center space-x-2 transition-all shadow-xs cursor-pointer"
               >
@@ -375,6 +409,140 @@ export const CustomerHomePage: React.FC = () => {
             <span>Play Win Challenge</span>
             <ArrowRight className="w-4 h-4 text-white" />
           </button>
+        </div>
+      </section>
+
+      {/* ───────────────────────────────────────────────────────────── */}
+      {/* 2.7 CHEF AI DINING CONCIERGE: INTERACTIVE CHATBOT SECTION     */}
+      {/* ───────────────────────────────────────────────────────────── */}
+      <section id="concierge" className="py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="bg-gradient-to-br from-white via-[#FFF7E6] to-[#FFF2D6]/60 border-2 border-[#F9A620]/40 rounded-3xl p-6 sm:p-10 shadow-[0_12px_40px_rgba(249,166,32,0.1)] relative overflow-hidden">
+          {/* Subtle Golden Glow Accent */}
+          <div className="absolute top-0 right-0 w-72 h-72 bg-gradient-to-br from-[#F9A620]/25 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+            {/* Left Column: Heading, Direct Ask Input, and Quick Chips */}
+            <div className="max-w-2xl space-y-3.5">
+              <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-[#F9A620]/15 text-[#924E00] text-xs font-bold border border-[#F9A620]/30 shadow-2xs">
+                <Sparkles className="w-3.5 h-3.5 text-[#F9A620] animate-pulse" />
+                <span>Chef AI • 24/7 Dining Concierge</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping ml-1" />
+              </div>
+
+              <h3 className="font-serif font-black text-2xl sm:text-4xl text-[#924E00] tracking-tight leading-tight">
+                Ask Chef AI Anything About Dining &amp; Dishes
+              </h3>
+
+              <p className="text-xs sm:text-sm text-[#924E00]/80 leading-relaxed font-sans">
+                Trained directly on authentic kitchen recipes, exact spice calibrations (1–5), sommelier pairings, and allergen isolation across Pune's partner restaurants.
+              </p>
+
+              {/* Direct Ask Input Bar */}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (conciergeSearch.trim()) {
+                    handleOpenAi(conciergeSearch.trim());
+                    setConciergeSearch('');
+                  } else {
+                    handleOpenAi();
+                  }
+                }}
+                className="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 max-w-xl"
+              >
+                <div className="relative flex-1">
+                  <Bot className="w-4 h-4 text-[#F9A620] absolute left-3.5 top-3.5" />
+                  <input
+                    type="text"
+                    value={conciergeSearch}
+                    onChange={(e) => setConciergeSearch(e.target.value)}
+                    placeholder="Ask Chef AI (e.g. 'Best Butter Chicken?', 'Romantic Rooftop', 'Vegan & Mild picks')..."
+                    className="w-full h-11 pl-10 pr-4 text-xs sm:text-sm bg-white text-[#924E00] placeholder:text-[#924E00]/45 rounded-full border border-[#924E00]/20 focus:outline-none focus:border-[#F9A620] shadow-inner transition-colors"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="h-11 px-6 rounded-full bg-[#F9A620] hover:bg-[#e89512] active:scale-[0.98] text-white font-bold text-xs sm:text-sm shadow-md flex items-center justify-center space-x-2 transition-all cursor-pointer shrink-0"
+                >
+                  <Sparkles className="w-4 h-4 text-white" />
+                  <span>Ask Chef AI</span>
+                </button>
+              </form>
+
+              {/* Popular Fast-Access Prompt Pills */}
+              <div className="pt-2">
+                <span className="text-[11px] font-bold text-[#924E00]/60 block mb-1.5 uppercase tracking-wider">
+                  Popular Concierge Inquiries:
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {[
+                    { label: "🍛 Best Butter Chicken in town?", query: "Which restaurant has the absolute best, most authentic Butter Chicken?" },
+                    { label: "🍷 Romantic Rooftop & Cocktails", query: "Recommend a romantic rooftop dining experience with artisan cocktails" },
+                    { label: "🛡️ 100% Jain & Vegan Safe", query: "Show 100% Jain and pure Vegan safe dining picks with isolated cookware" },
+                    { label: "🌶️ Mild & Kid-Friendly Feasts", query: "What are your mildest, kid-friendly dishes for family dining?" },
+                    { label: "🍕 Woodfired Truffle Pizzas", query: "Where can I get authentic woodfired sourdough pizzas and handmade pastas?" },
+                    { label: "🍮 Chef's Signature Desserts", query: "What are the most famous signature desserts and sweet endings?" }
+                  ].map((chip) => (
+                    <button
+                      key={chip.label}
+                      type="button"
+                      onClick={() => handleOpenAi(chip.query)}
+                      className="px-3 py-1 rounded-full bg-white hover:bg-[#FFF2D6] active:scale-95 text-[#924E00] border border-[#924E00]/15 text-xs font-medium transition-all shadow-2xs cursor-pointer flex items-center space-x-1"
+                    >
+                      <span>{chip.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Mini Feature Showcase Card */}
+            <div className="w-full lg:w-80 bg-white/95 backdrop-blur-sm border border-[#924E00]/10 rounded-2xl p-5 shadow-xs flex flex-col space-y-3.5 shrink-0">
+              <div className="flex items-center space-x-2.5 border-b border-[#924E00]/10 pb-3">
+                <div className="w-9 h-9 rounded-full bg-[#F9A620]/20 flex items-center justify-center text-[#924E00] shrink-0">
+                  <MessageSquare className="w-4 h-4 text-[#F9A620]" />
+                </div>
+                <div>
+                  <h4 className="font-serif font-bold text-sm text-[#924E00]">Live Chef Concierge</h4>
+                  <span className="text-[10px] text-emerald-600 font-bold flex items-center space-x-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>Always online for tables</span>
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-2.5 text-xs text-[#924E00]/80">
+                <div className="flex items-start space-x-2">
+                  <span className="text-base shrink-0">🧑‍🍳</span>
+                  <div>
+                    <strong className="text-[#924E00] font-semibold">Kitchen Secrets &amp; Lore:</strong> Dish backstory, ingredients &amp; cooking technique.
+                  </div>
+                </div>
+                <div className="flex items-start space-x-2">
+                  <span className="text-base shrink-0">🌶️</span>
+                  <div>
+                    <strong className="text-[#924E00] font-semibold">True Heat Calibration:</strong> 1 to 5 flame scale verified with head chefs.
+                  </div>
+                </div>
+                <div className="flex items-start space-x-2">
+                  <span className="text-base shrink-0">🍷</span>
+                  <div>
+                    <strong className="text-[#924E00] font-semibold">Curated Pairings:</strong> Sommelier-selected wines, artisan brews &amp; coolers.
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => handleOpenAi()}
+                className="w-full py-2.5 rounded-xl bg-[#FFF7E6] hover:bg-[#FFF2D6] text-[#924E00] border border-[#F9A620]/30 font-bold text-xs flex items-center justify-center space-x-1.5 transition-colors cursor-pointer mt-1"
+              >
+                <span>Launch Full Concierge Chat</span>
+                <ArrowRight className="w-3.5 h-3.5 text-[#F9A620]" />
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -837,12 +1005,30 @@ export const CustomerHomePage: React.FC = () => {
         </p>
       </footer>
 
-      {/* Floating QR Action Button for Instant Table Scanning */}
-      <div className="fixed bottom-6 right-6 z-40">
+      {/* Floating Action Buttons */}
+      <div className="fixed bottom-6 left-4 sm:left-6 z-40">
+        <button
+          type="button"
+          onClick={() => handleOpenAi()}
+          className="h-12 px-4 sm:px-5 rounded-full bg-white hover:bg-[#FFF7E6] active:scale-[0.98] text-[#924E00] border-2 border-[#F9A620] font-bold text-xs sm:text-sm flex items-center space-x-2.5 shadow-[0_8px_25px_rgba(249,166,32,0.3)] transition-all cursor-pointer backdrop-blur-md ring-4 ring-[#F9A620]/15"
+          aria-label="Ask AI Dining Concierge"
+        >
+          <span className="text-base">✨</span>
+          <div className="flex flex-col text-left">
+            <span className="flex items-center space-x-1.5 leading-tight">
+              <span>Ask Chef AI</span>
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            </span>
+            <span className="text-[10px] text-[#924E00]/65 font-normal hidden sm:inline">24/7 Table &amp; Menu Assistant</span>
+          </div>
+        </button>
+      </div>
+
+      <div className="fixed bottom-6 right-4 sm:right-6 z-40">
         <button
           type="button"
           onClick={() => handleOpenScanner()}
-          className="h-12 px-5 rounded-full bg-[#F9A620] hover:bg-[#e89512] active:scale-[0.98] text-white font-medium text-xs sm:text-sm flex items-center space-x-2 shadow-lg transition-all cursor-pointer"
+          className="h-12 px-4 sm:px-5 rounded-full bg-[#F9A620] hover:bg-[#e89512] active:scale-[0.98] text-white font-medium text-xs sm:text-sm flex items-center space-x-2 shadow-lg transition-all cursor-pointer"
           aria-label="Scan Table QR Code"
         >
           <QrCode className="w-4 h-4 text-white" />
@@ -878,6 +1064,22 @@ export const CustomerHomePage: React.FC = () => {
         isOpen={isWinChallengeOpen}
         onClose={() => setIsWinChallengeOpen(false)}
         targetRestaurant={winChallengeVenue || affiliatedVenues[0]?.rawRest}
+      />
+
+      {/* AI Dining Concierge Chatbot Drawer */}
+      <AiAssistantDrawer
+        isOpen={isAiOpen}
+        onClose={() => {
+          setIsAiOpen(false);
+          setAiInitialQuery(null);
+        }}
+        initialQuery={aiInitialQuery}
+        focusDish={null}
+        onConfirmAdd={() => {
+          if (affiliatedVenues[0]) {
+            handleLaunchTable(affiliatedVenues[0]);
+          }
+        }}
       />
     </div>
   );

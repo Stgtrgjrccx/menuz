@@ -659,7 +659,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(28, 25, 23, 0.85)',
+        backgroundColor: 'rgba(146, 78, 0, 0.45)',
         backdropFilter: 'blur(8px)',
         padding: '12px'
       }}
@@ -667,11 +667,11 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
     >
       <div
         style={{
-          backgroundColor: '#0D1322',
+          backgroundColor: '#FFF7E6',
           maxHeight: '94vh',
           overflowY: 'auto'
         }}
-        className="rounded-2xl sm:rounded-3xl max-w-md w-full p-3.5 sm:p-6 shadow-2xl border border-white/[0.08] relative flex flex-col items-center text-slate-100"
+        className="rounded-2xl sm:rounded-3xl max-w-md w-full p-3.5 sm:p-6 shadow-2xl border border-[#924E00]/15 relative flex flex-col items-center text-[#924E00]"
       >
         {/* Confetti canvas */}
         <canvas
@@ -680,13 +680,13 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
         />
 
         {/* Modal Header */}
-        <div className="w-full flex items-center justify-between pb-3 border-b border-white/[0.08]">
+        <div className="w-full flex items-center justify-between pb-3 border-b border-[#924E00]/10">
           <div className="flex items-center space-x-2">
-            <span className="p-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30">
-              <Gift className="w-4 h-4" />
+            <span className="p-1.5 rounded-xl bg-[#F9A620]/20 text-[#924E00] border border-[#F9A620]/30">
+              <Gift className="w-4 h-4 text-[#F9A620]" />
             </span>
             <div>
-              <h3 className="font-serif font-bold text-base text-white leading-tight">
+              <h3 className="font-serif font-bold text-base text-[#924E00] leading-tight">
                 {step === 'urgent_service' || step === 'urgent_resolved'
                   ? 'Immediate Floor Assistance'
                   : step === 'wheel'
@@ -695,7 +695,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                   ? 'Reward Claim Screen'
                   : 'Google Review Reward'}
               </h3>
-              <span className="text-[10px] uppercase font-bold tracking-wider text-amber-400">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-[#924E00]/80">
                 {activeTable?.label || 'Table 1'} • 100% Guaranteed Reward
               </span>
             </div>
@@ -704,7 +704,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-full hover:bg-white/[0.08] text-slate-400 hover:text-white transition-colors cursor-pointer"
+            className="p-1.5 rounded-full hover:bg-white text-[#924E00]/60 hover:text-[#924E00] transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -718,30 +718,30 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
         {step === 'rate_and_keywords' && (
           <div className="w-full flex flex-col pt-1 space-y-3.5 text-left">
             {/* Header banner */}
-            <div className="w-full bg-gradient-to-r from-amber-500/15 via-amber-500/5 to-transparent border border-amber-500/30 rounded-2xl p-3.5 flex items-start space-x-3 shadow-lg">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
-                <Sparkles className="w-5 h-5 text-amber-400 animate-pulse" />
+            <div className="w-full bg-white border border-[#F9A620]/30 rounded-2xl p-3.5 flex items-start space-x-3 shadow-sm">
+              <div className="w-10 h-10 rounded-xl bg-[#F9A620]/15 border border-[#F9A620]/30 text-[#924E00] flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
+                <Sparkles className="w-5 h-5 text-[#F9A620] animate-pulse" />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center space-x-2">
-                  <h4 className="font-serif font-black text-sm sm:text-base text-white tracking-wide">
+                  <h4 className="font-serif font-black text-sm sm:text-base text-[#924E00] tracking-wide">
                     1-Tap Google Review Generator
                   </h4>
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#F9A620]/20 text-[#924E00] border border-[#F9A620]/30">
                     Reward Unlocked
                   </span>
                 </div>
-                <p className="text-xs text-slate-300 mt-0.5 leading-relaxed">
+                <p className="text-xs text-[#924E00]/75 mt-0.5 leading-relaxed">
                   Rate your meal &amp; tap your highlights. We generate an authentic 5-star Google review below ready for you to copy, edit, and post!
                 </p>
               </div>
             </div>
 
             {/* 1. Interactive Star Rating */}
-            <div className="p-3 bg-slate-900/80 rounded-2xl border border-white/[0.08] space-y-1.5 text-center shadow-md">
+            <div className="p-3.5 bg-white rounded-2xl border border-[#924E00]/10 space-y-1.5 text-center shadow-xs">
               <div className="flex items-center justify-between px-1">
-                <span className="text-xs font-bold text-slate-200">Rate your experience:</span>
-                <span className="text-[11px] font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
+                <span className="text-xs font-bold text-[#924E00]">Rate your experience:</span>
+                <span className="text-[11px] font-mono font-bold text-[#924E00] bg-[#FFF2D6] px-2 py-0.5 rounded-md border border-[#F9A620]/30">
                   {starRating === 5 ? '⭐⭐⭐⭐⭐ Exceptional (5/5)' : starRating === 4 ? '⭐⭐⭐⭐ Very Good (4/5)' : `⭐ ${starRating} Stars (Private Feedback)`}
                 </span>
               </div>
@@ -758,8 +758,8 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                     <span
                       className={
                         star <= starRating
-                          ? 'text-amber-400 drop-shadow-[0_0_8px_rgba(245,158,11,0.6)]'
-                          : 'text-slate-700 hover:text-slate-500'
+                          ? 'text-[#F9A620] drop-shadow-[0_0_8px_rgba(249,166,32,0.4)]'
+                          : 'text-[#924E00]/20 hover:text-[#F9A620]'
                       }
                     >
                       ★
@@ -770,10 +770,10 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
             </div>
 
             {/* 2. Highlight Tag Chips */}
-            <div className="p-3 bg-slate-900/80 rounded-2xl border border-white/[0.08] space-y-2 shadow-md">
+            <div className="p-3.5 bg-white rounded-2xl border border-[#924E00]/10 space-y-2 shadow-xs">
               <div className="flex items-center justify-between px-1">
-                <span className="text-xs font-bold text-slate-200">Tap highlights to include in your review:</span>
-                <span className="text-[11px] font-mono text-amber-400 font-bold">{selectedTags.length} selected</span>
+                <span className="text-xs font-bold text-[#924E00]">Tap highlights to include in your review:</span>
+                <span className="text-[11px] font-mono text-[#F9A620] font-bold">{selectedTags.length} selected</span>
               </div>
 
               <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto scrollbar-none">
@@ -790,11 +790,11 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                       }}
                       className={`px-2.5 py-1 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center space-x-1 ${
                         isSel
-                          ? 'bg-amber-500 text-slate-950 font-black shadow-md scale-105'
-                          : 'bg-[#12192B] text-slate-300 border border-white/[0.08] hover:bg-white/[0.08] hover:text-white'
+                          ? 'bg-[#F9A620] text-white font-bold shadow-xs scale-105'
+                          : 'bg-[#FFF7E6] text-[#924E00] border border-[#924E00]/15 hover:bg-white'
                       }`}
                     >
-                      {isSel && <Check className="w-3 h-3 text-slate-950" />}
+                      {isSel && <Check className="w-3 h-3 text-white" />}
                       <span>{tag}</span>
                     </button>
                   );
@@ -803,14 +803,14 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
             </div>
 
             {/* 3. LIVE AI GENERATED REVIEW BOX (Visible, Editable, Real-Time) */}
-            <div className="p-3.5 bg-[#0A0F1D] rounded-2xl border-2 border-amber-500/40 shadow-xl space-y-2.5 relative overflow-hidden">
+            <div className="p-3.5 bg-white rounded-2xl border-2 border-[#F9A620]/40 shadow-sm space-y-2.5 relative overflow-hidden">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center space-x-2">
                   <span className="flex h-2 w-2 relative">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
                   </span>
-                  <label className="text-xs font-black uppercase tracking-wider text-amber-300 font-mono">
+                  <label className="text-xs font-black uppercase tracking-wider text-[#924E00] font-mono">
                     Live Generated Review Draft
                   </label>
                 </div>
@@ -821,7 +821,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                     type="button"
                     onClick={() => setReviewTone('enthusiastic')}
                     className={`px-2 py-0.5 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
-                      reviewTone === 'enthusiastic' ? 'bg-amber-500/30 text-amber-300 border border-amber-500/50' : 'text-slate-400 hover:text-white'
+                      reviewTone === 'enthusiastic' ? 'bg-[#F9A620] text-white' : 'text-[#924E00]/70 hover:bg-[#FFF7E6]'
                     }`}
                   >
                     Enthusiastic
@@ -830,7 +830,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                     type="button"
                     onClick={() => setReviewTone('detailed')}
                     className={`px-2 py-0.5 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
-                      reviewTone === 'detailed' ? 'bg-amber-500/30 text-amber-300 border border-amber-500/50' : 'text-slate-400 hover:text-white'
+                      reviewTone === 'detailed' ? 'bg-[#F9A620] text-white' : 'text-[#924E00]/70 hover:bg-[#FFF7E6]'
                     }`}
                   >
                     Foodie
@@ -839,7 +839,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                     type="button"
                     onClick={() => setReviewTone('concise')}
                     className={`px-2 py-0.5 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
-                      reviewTone === 'concise' ? 'bg-amber-500/30 text-amber-300 border border-amber-500/50' : 'text-slate-400 hover:text-white'
+                      reviewTone === 'concise' ? 'bg-[#F9A620] text-white' : 'text-[#924E00]/70 hover:bg-[#FFF7E6]'
                     }`}
                   >
                     Crisp
@@ -848,7 +848,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setVariationIndex((prev) => prev + 1)}
-                    className="p-1 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-amber-400 hover:text-amber-300 transition-colors cursor-pointer ml-1"
+                    className="p-1 rounded-lg bg-[#FFF7E6] hover:bg-white text-[#924E00] transition-colors cursor-pointer ml-1 border border-[#924E00]/10"
                     title="Shuffle AI draft variation"
                   >
                     <RotateCw className="w-3.5 h-3.5" />
@@ -862,7 +862,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                   value={aiDraft}
                   onChange={(e) => setAiDraft(e.target.value)}
                   rows={4}
-                  className="w-full bg-slate-950 border border-white/[0.12] rounded-xl p-3 text-xs text-slate-100 font-sans leading-relaxed focus:outline-none focus:border-amber-400 resize-none shadow-inner"
+                  className="w-full bg-[#FFF7E6] border border-[#924E00]/15 rounded-xl p-3 text-xs text-[#924E00] font-sans leading-relaxed focus:outline-none focus:border-[#F9A620] resize-none"
                   placeholder="Generating review draft..."
                 />
 
@@ -877,27 +877,27 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                   }}
                   className={`absolute bottom-3 right-3 text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all flex items-center space-x-1 cursor-pointer ${
                     copiedReview
-                      ? 'bg-emerald-500 text-slate-950 border-emerald-400 font-black shadow-md'
-                      : 'bg-slate-900/90 text-slate-300 border-white/20 hover:text-white hover:bg-slate-800'
+                      ? 'bg-emerald-500 text-white border-emerald-500 font-bold shadow-xs'
+                      : 'bg-white text-[#924E00] border-[#924E00]/20 hover:bg-[#FFF7E6]'
                   }`}
                 >
                   {copiedReview ? (
                     <>
-                      <Check className="w-3 h-3 text-slate-950" />
+                      <Check className="w-3 h-3 text-white" />
                       <span>Copied!</span>
                     </>
                   ) : (
                     <>
-                      <Copy className="w-3 h-3 text-amber-400" />
+                      <Copy className="w-3 h-3 text-[#F9A620]" />
                       <span>Copy Draft</span>
                     </>
                   )}
                 </button>
               </div>
 
-              <div className="flex items-center justify-between text-[11px] text-slate-400 px-1">
-                <span className="italic text-slate-400">Feel free to customize or edit the text above</span>
-                <span className="font-mono text-slate-400">{aiDraft.length} characters</span>
+              <div className="flex items-center justify-between text-[11px] text-[#924E00]/60 px-1">
+                <span className="italic">Feel free to customize or edit the text above</span>
+                <span className="font-mono">{aiDraft.length} characters</span>
               </div>
             </div>
 
@@ -906,12 +906,12 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               <button
                 type="button"
                 onClick={handleCopyAndPostToGoogle}
-                className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:brightness-110 active:scale-98 text-slate-950 font-serif font-black text-sm flex items-center justify-center space-x-2 transition-all shadow-xl shadow-amber-500/25 cursor-pointer"
+                className="w-full py-3.5 px-6 rounded-2xl bg-[#F9A620] hover:bg-[#e89512] active:scale-98 text-white font-serif font-bold text-sm flex items-center justify-center space-x-2 transition-all shadow-md cursor-pointer"
               >
-                <ExternalLink className="w-4 h-4 text-slate-950" />
+                <ExternalLink className="w-4 h-4 text-white" />
                 <span>Copy Draft &amp; Post on Google Reviews ↗</span>
               </button>
-              <p className="text-[11px] text-center text-slate-400 leading-tight">
+              <p className="text-[11px] text-center text-[#924E00]/70 leading-tight">
                 Review draft copies automatically to clipboard. Simply paste it on Google Maps and confirm to spin the wheel!
               </p>
             </div>
@@ -923,15 +923,15 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
         {/* ═══════════════════════════════════════════════════════════ */}
         {step === 'verifying_post' && (
           <div className="w-full flex flex-col items-center pt-4 space-y-4 text-center">
-            <div className="w-16 h-16 rounded-full bg-amber-500/15 border-2 border-amber-500/40 text-amber-300 flex items-center justify-center text-3xl">
+            <div className="w-16 h-16 rounded-full bg-[#F9A620]/15 border-2 border-[#F9A620]/40 text-[#F9A620] flex items-center justify-center text-3xl">
               ⭐
             </div>
 
             <div className="space-y-1">
-              <h4 className="font-serif font-bold text-base text-white">
+              <h4 className="font-serif font-bold text-base text-[#924E00]">
                 Did You Post Your Review on Google Maps?
               </h4>
-              <p className="text-xs text-slate-400 max-w-xs mx-auto leading-relaxed">
+              <p className="text-xs text-[#924E00]/70 max-w-xs mx-auto leading-relaxed">
                 Google Maps opened in a new tab with your review copied. Paste and publish it, then confirm below to spin the wheel!
               </p>
             </div>
@@ -939,7 +939,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
             {/* Full AI-generated review — shown only after user decides to participate */}
             <div className="w-full text-left space-y-1">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-bold text-slate-200">Your ready-made review:</label>
+                <label className="text-xs font-bold text-[#924E00]">Your ready-made review:</label>
                 <button
                   type="button"
                   onClick={() => {
@@ -949,17 +949,17 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                   }}
                   className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-colors flex items-center gap-1 cursor-pointer ${
                     copiedReview
-                      ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                      : 'bg-[#12192B] text-slate-400 border-white/[0.08] hover:bg-white/[0.06] hover:text-white'
+                      ? 'bg-emerald-500 text-white border-emerald-500 font-bold'
+                      : 'bg-white text-[#924E00] border-[#924E00]/15 hover:bg-[#FFF7E6]'
                   }`}
                 >
-                  {copiedReview ? <><Check className="w-3 h-3" /> Copied!</> : <><Copy className="w-3 h-3" /> Copy</>}
+                  {copiedReview ? <><Check className="w-3 h-3 text-white" /> Copied!</> : <><Copy className="w-3 h-3 text-[#F9A620]" /> Copy</>}
                 </button>
               </div>
-              <div className="bg-[#12192B] border border-white/[0.08] rounded-xl p-3 text-[11px] text-slate-200 italic leading-relaxed">
+              <div className="bg-white border border-[#924E00]/15 rounded-xl p-3 text-[11px] text-[#924E00] italic leading-relaxed shadow-xs">
                 “{aiDraft}”
               </div>
-              <p className="text-[10px] text-slate-500 text-center">Paste this into Google Maps → then confirm below to unlock your spin.</p>
+              <p className="text-[10px] text-[#924E00]/60 text-center">Paste this into Google Maps → then confirm below to unlock your spin.</p>
             </div>
 
             {/* Confirm & Unlock Wheel Button */}
@@ -967,7 +967,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               type="button"
               onClick={handleConfirmReviewPosted}
               disabled={isVerifying}
-              className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:brightness-105 active:scale-95 text-white font-serif text-sm font-bold flex items-center justify-center space-x-2 transition-all cursor-pointer shadow-lg"
+              className="w-full py-3.5 px-6 rounded-2xl bg-[#F9A620] hover:bg-[#e89512] active:scale-95 text-white font-serif text-sm font-bold flex items-center justify-center space-x-2 transition-all cursor-pointer shadow-md"
             >
               {isVerifying ? (
                 <>
@@ -990,7 +990,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                   `https://search.google.com/local/writereview?placeid=${restaurant?.slug === 'casa-bella' ? 'ChIJCasaBellaTrattoriaPune' : 'ChIJSaffronHouseKoregaonParkPune'}`;
                 window.open(googleUrl, '_blank', 'noopener,noreferrer');
               }}
-              className="text-xs text-amber-400 font-semibold hover:underline flex items-center space-x-1 cursor-pointer"
+              className="text-xs text-[#924E00] font-semibold hover:text-[#F9A620] flex items-center space-x-1 cursor-pointer"
             >
               <span>Didn't open? Re-open Google Maps</span>
               <ExternalLink className="w-3 h-3" />
@@ -1004,8 +1004,8 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
         {step === 'wheel' && (
           <div className="w-full flex flex-col items-center pt-2 space-y-3.5 text-center">
             {/* Header info */}
-            <div className="flex items-center space-x-1.5 bg-emerald-500/20 border border-emerald-500/40 px-3 py-1 rounded-full text-[11px] font-bold text-emerald-300">
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
+            <div className="flex items-center space-x-1.5 bg-emerald-500/15 border border-emerald-500/30 px-3 py-1 rounded-full text-[11px] font-bold text-emerald-700">
+              <Check className="w-3.5 h-3.5 text-emerald-600" />
               <span>Review Verified! Spin for Guaranteed Reward</span>
             </div>
 
@@ -1020,7 +1020,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
 
               {/* Pointer indicator at 12 o'clock */}
               <div className="absolute -top-1 left-1/2 -translate-x-1/2 z-20 pointer-events-none filter drop-shadow-md">
-                <div className="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[22px] border-t-amber-400" />
+                <div className="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[22px] border-t-[#F9A620]" />
               </div>
             </div>
 
@@ -1031,8 +1031,8 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               disabled={isSpinning}
               className={`w-full py-4 px-6 rounded-2xl font-serif text-sm font-bold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
                 isSpinning
-                  ? 'bg-white/[0.06] text-slate-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-amber-500 via-amber-600 to-amber-600 hover:brightness-110 active:scale-95 text-slate-950 animate-pulse shadow-lg'
+                  ? 'bg-white text-[#924E00]/40 cursor-not-allowed border border-[#924E00]/10'
+                  : 'bg-[#F9A620] hover:bg-[#e89512] active:scale-95 text-white shadow-md'
               }`}
             >
               <RotateCw className={`w-4 h-4 ${isSpinning ? 'animate-spin' : ''}`} />
@@ -1046,34 +1046,34 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
         {/* ═══════════════════════════════════════════════════════════ */}
         {step === 'reward_won' && wonPrize && (
           <div className="w-full flex flex-col items-center pt-2 space-y-3.5 text-center animate-in fade-in zoom-in-95 duration-200">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 flex items-center justify-center text-3xl text-slate-950 animate-bounce shadow-lg">
+            <div className="w-14 h-14 rounded-2xl bg-[#F9A620] flex items-center justify-center text-3xl text-white shadow-sm">
               {wonPrize.emoji}
             </div>
 
             <div>
-              <span className="text-[10px] uppercase font-black tracking-widest text-amber-400 block">
+              <span className="text-[10px] uppercase font-black tracking-widest text-[#F9A620] block">
                 🎉 Verified Google Review Winner!
               </span>
-              <h3 className="font-serif font-bold text-xl text-white mt-0.5">
+              <h3 className="font-serif font-bold text-xl text-[#924E00] mt-0.5">
                 {wonPrize.label}
               </h3>
             </div>
 
             {/* ANTI-CHEAT DYNAMIC LIVE VOUCHER CARD */}
-            <div className="w-full relative overflow-hidden rounded-2xl border-2 border-amber-400 text-left bg-gradient-to-br from-[#090D16] via-[#0D1322] to-[#090D16] text-white p-4 space-y-3">
+            <div className="w-full relative overflow-hidden rounded-2xl border-2 border-[#F9A620] text-left bg-white text-[#924E00] p-4 space-y-3 shadow-md">
               {/* Animated Live Security Watermark Banner */}
-              <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
+              <div className="flex items-center justify-between border-b border-[#924E00]/10 pb-2.5">
                 <div className="flex items-center space-x-2">
                   <span className="relative flex h-2.5 w-2.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                   </span>
-                  <span className="text-[10px] font-mono font-bold tracking-wider text-emerald-400 uppercase">
+                  <span className="text-[10px] font-mono font-bold tracking-wider text-emerald-600 uppercase">
                     Live Session: {liveClock || 'Active'}
                   </span>
                 </div>
-                <span className="text-[9px] bg-amber-500/20 text-amber-300 font-bold px-2 py-0.5 rounded-full border border-amber-400/30 flex items-center gap-1">
-                  <ShieldCheck className="w-3 h-3 text-amber-400" />
+                <span className="text-[9px] bg-[#FFF2D6] text-[#924E00] font-bold px-2 py-0.5 rounded-full border border-[#F9A620]/30 flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3 text-[#F9A620]" />
                   Anti-Screenshot Guard
                 </span>
               </div>
@@ -1081,17 +1081,17 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               {/* Status Header */}
               <div className="flex items-start justify-between">
                 <div>
-                  <span className="text-[10px] uppercase tracking-wider text-slate-400 block font-semibold">
+                  <span className="text-[10px] uppercase tracking-wider text-[#924E00]/60 block font-semibold">
                     Authorized Diner Table
                   </span>
-                  <span className="text-sm font-bold text-white font-serif">
+                  <span className="text-sm font-bold text-[#924E00] font-serif">
                     {activeTable?.label || 'Table 1'} • {restaurant?.name}
                   </span>
                 </div>
                 <div className="text-right">
-                  <span className="text-[9px] uppercase tracking-wider text-slate-400 block">Security Code</span>
+                  <span className="text-[9px] uppercase tracking-wider text-[#924E00]/60 block">Security Code</span>
                   <div className="flex items-center space-x-1">
-                    <span className="font-mono text-xs font-black text-amber-400 tracking-wider">
+                    <span className="font-mono text-xs font-black text-[#924E00] bg-[#FFF2D6] px-2 py-0.5 rounded border border-[#F9A620]/30 tracking-wider">
                       {voucherCode || 'WIN-4821'}
                     </span>
                     <button
@@ -1101,25 +1101,25 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                         setCopiedVoucher(true);
                         setTimeout(() => setCopiedVoucher(false), 2000);
                       }}
-                      className="p-1 rounded-md hover:bg-white/10 text-slate-400 hover:text-white cursor-pointer"
+                      className="p-1 rounded-md hover:bg-[#FFF7E6] text-[#924E00]/60 hover:text-[#924E00] cursor-pointer"
                       title="Copy Voucher Code"
                     >
-                      {copiedVoucher ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                      {copiedVoucher ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
                     </button>
                   </div>
                 </div>
               </div>
 
               {/* Reward Display */}
-              <div className="bg-[#12192B] border border-white/10 rounded-xl p-3 flex items-center justify-between">
+              <div className="bg-[#FFF7E6] border border-[#924E00]/15 rounded-xl p-3 flex items-center justify-between">
                 <div className="flex items-center space-x-2.5">
                   <span className="text-2xl">{wonPrize.emoji}</span>
                   <div>
-                    <span className="text-xs font-bold text-white block">{wonPrize.label}</span>
-                    <span className="text-[10px] text-emerald-400 font-medium">Valid on today's dining bill</span>
+                    <span className="text-xs font-bold text-[#924E00] block">{wonPrize.label}</span>
+                    <span className="text-[10px] text-emerald-600 font-medium">Valid on today's dining bill</span>
                   </div>
                 </div>
-                <span className="text-xs font-bold bg-amber-500/20 text-amber-300 px-2 py-1 rounded-lg border border-amber-400/30">
+                <span className="text-xs font-bold bg-[#F9A620] text-white px-2 py-1 rounded-lg">
                   {wonPrize.shortLabel}
                 </span>
               </div>
@@ -1127,42 +1127,42 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               {/* 15-MINUTE LIVE COUNTDOWN TIMER OR REDEEMED SEAL */}
               {!isVoucherRedeemed ? (
                 voucherSecondsLeft > 0 ? (
-                  <div className="bg-amber-950/40 border border-amber-500/30 rounded-xl p-2.5 space-y-1.5">
+                  <div className="bg-[#FFF7E6] border border-[#F9A620]/30 rounded-xl p-2.5 space-y-1.5">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-amber-300 flex items-center gap-1.5">
-                        <Timer className="w-3.5 h-3.5 text-amber-400 animate-spin" /> Live Claim Window
+                      <span className="font-bold text-[#924E00] flex items-center gap-1.5">
+                        <Timer className="w-3.5 h-3.5 text-[#F9A620]" /> Live Claim Window
                       </span>
-                      <span className="font-mono font-black text-amber-400 text-sm tracking-wider">
+                      <span className="font-mono font-black text-[#924E00] text-sm tracking-wider">
                         {Math.floor(voucherSecondsLeft / 60).toString().padStart(2, '0')}:
                         {(voucherSecondsLeft % 60).toString().padStart(2, '0')}
                       </span>
                     </div>
 
                     {/* Progress Bar */}
-                    <div className="w-full bg-[#090D16] h-1.5 rounded-full overflow-hidden border border-white/[0.06]">
+                    <div className="w-full bg-[#FFF2D6] h-1.5 rounded-full overflow-hidden border border-[#924E00]/10">
                       <div
-                        className="bg-gradient-to-r from-amber-500 to-emerald-400 h-full transition-all duration-1000"
+                        className="bg-[#F9A620] h-full transition-all duration-1000"
                         style={{ width: `${(voucherSecondsLeft / 900) * 100}%` }}
                       />
                     </div>
-                    <span className="text-[10px] text-amber-200/70 block leading-tight">
+                    <span className="text-[10px] text-[#924E00]/70 block leading-tight">
                       Screenshots and expired timers will not be accepted by staff.
                     </span>
                   </div>
                 ) : (
-                  <div className="bg-red-950/40 border border-red-500/40 rounded-xl p-2.5 flex items-center space-x-2 text-red-300 text-xs">
-                    <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0" />
+                  <div className="bg-red-50 border border-red-200 rounded-xl p-2.5 flex items-center space-x-2 text-red-700 text-xs">
+                    <AlertTriangle className="w-4 h-4 text-red-500 flex-shrink-0" />
                     <span>Voucher expired. Please request a new bill from your server.</span>
                   </div>
                 )
               ) : (
-                <div className="bg-emerald-950/60 border border-emerald-500/50 rounded-xl p-3 flex items-center space-x-2.5 text-emerald-300">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                <div className="bg-emerald-50 border border-emerald-300 rounded-xl p-3 flex items-center space-x-2.5 text-emerald-800">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
                   <div>
                     <span className="text-xs font-bold block uppercase tracking-wide">
-                      ✓ VOIDED & APPLIED TO BILL
+                      ✓ VOIDED &amp; APPLIED TO BILL
                     </span>
-                    <span className="text-[10px] text-emerald-400/80">
+                    <span className="text-[10px] text-emerald-700">
                       Redeemed by Server at {redeemedTimestamp} • Cannot be re-used.
                     </span>
                   </div>
@@ -1172,11 +1172,11 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               {/* INSTANT ZERO-PASSWORD 1-TAP REDEMPTION */}
               {!isVoucherRedeemed && voucherSecondsLeft > 0 && (
                 <div className="pt-2 space-y-2">
-                  <div className="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-xl text-center space-y-1">
-                    <p className="text-xs font-bold text-amber-300">
+                  <div className="p-2.5 bg-[#FFF7E6] border border-[#F9A620]/30 rounded-xl text-center space-y-1">
+                    <p className="text-xs font-bold text-[#924E00]">
                       Show this voucher code to your waiter or server
                     </p>
-                    <p className="text-[11px] text-slate-400">
+                    <p className="text-[11px] text-[#924E00]/70">
                       Zero password required. Your reward is automatically honored on your table bill.
                     </p>
                   </div>
@@ -1188,7 +1188,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                       setRedeemedTimestamp(new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }));
                       playWinFanfare();
                     }}
-                    className="w-full py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 active:scale-95 text-white font-bold text-xs rounded-xl shadow-lg transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
+                    className="w-full py-2.5 bg-[#F9A620] hover:bg-[#e89512] active:scale-95 text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
                   >
                     <Check className="w-4 h-4 text-white" />
                     <span>Redeem Voucher at Table (1-Tap)</span>
@@ -1197,14 +1197,14 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               )}
             </div>
 
-            <p className="text-[11px] text-slate-400">
-              Kitchen staff & POS have been alerted for {activeTable?.label || 'Table 1'}.
+            <p className="text-[11px] text-[#924E00]/70">
+              Kitchen staff &amp; POS have been alerted for {activeTable?.label || 'Table 1'}.
             </p>
 
             <button
               type="button"
               onClick={onClose}
-              className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl text-xs font-bold transition-colors shadow-lg flex items-center justify-center space-x-1.5 cursor-pointer"
+              className="w-full py-3 bg-white hover:bg-[#FFF7E6] text-[#924E00] border border-[#924E00]/20 rounded-xl text-xs font-bold transition-colors shadow-xs flex items-center justify-center space-x-1.5 cursor-pointer"
             >
               <span>Return to Dining Menu</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -1217,30 +1217,30 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
         {/* ═══════════════════════════════════════════════════════════ */}
         {step === 'urgent_service' && (
           <div className="w-full flex flex-col items-center pt-2 space-y-3.5 text-center">
-            <div className="w-full bg-red-950/40 border-2 border-red-500/40 rounded-2xl p-3.5 flex items-center space-x-3 text-left">
+            <div className="w-full bg-red-50 border border-red-200 rounded-2xl p-3.5 flex items-center space-x-3 text-left">
               <span className="text-2xl animate-pulse flex-shrink-0">🚨</span>
               <div>
-                <span className="text-[10px] uppercase font-bold text-red-400 tracking-wider block">
+                <span className="text-[10px] uppercase font-bold text-red-600 tracking-wider block">
                   Urgent Staff Intervention Dispatched
                 </span>
-                <p className="text-xs font-bold text-red-200 mt-0.5">
+                <p className="text-xs font-bold text-red-900 mt-0.5">
                   Floor Manager alerted for {activeTable?.label || 'Table 1'} ({starRating}★ rating)!
                 </p>
               </div>
             </div>
 
             <div>
-              <h4 className="font-serif font-bold text-base text-white">
+              <h4 className="font-serif font-bold text-base text-[#924E00]">
                 We Want to Make This Right Immediately!
               </h4>
-              <p className="text-xs text-slate-400 mt-1 max-w-sm leading-relaxed">
+              <p className="text-xs text-[#924E00]/75 mt-1 max-w-sm leading-relaxed">
                 Your dining experience is our top priority. A floor manager is attending your table right now. Please tell us what we can resolve:
               </p>
             </div>
 
             {/* Quick Issue Chips */}
             <div className="w-full space-y-1 text-left">
-              <label className="text-[11px] font-bold text-slate-400">What can we resolve right now?</label>
+              <label className="text-[11px] font-bold text-[#924E00]">What can we resolve right now?</label>
               <div className="flex flex-wrap gap-1.5">
                 {[
                   'Food taste / temperature 🍲',
@@ -1262,8 +1262,8 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
                       }}
                       className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer ${
                         isSel
-                          ? 'bg-red-700 text-white font-bold'
-                          : 'bg-[#12192B] text-slate-200 border border-white/[0.08] hover:bg-white/[0.06]'
+                          ? 'bg-red-600 text-white font-bold'
+                          : 'bg-white text-red-900 border border-red-200 hover:bg-red-50'
                       }`}
                     >
                       {issue}
@@ -1275,13 +1275,13 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
 
             {/* Note textarea */}
             <div className="w-full text-left space-y-1">
-              <label className="text-[11px] font-bold text-slate-400">Any specific note for the manager?</label>
+              <label className="text-[11px] font-bold text-[#924E00]">Any specific note for the manager?</label>
               <textarea
                 rows={2}
                 value={urgentNote}
                 onChange={(e) => setUrgentNote(e.target.value)}
                 placeholder="e.g. Dal Makhani was lukewarm, need warm replacement..."
-                className="w-full bg-[#090D16] border border-white/[0.08] rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500"
+                className="w-full bg-white border border-[#924E00]/20 rounded-xl p-2.5 text-xs text-[#924E00] focus:outline-none focus:border-[#F9A620]"
               />
             </div>
 
@@ -1289,17 +1289,17 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               type="button"
               onClick={handleSubmitUrgentDetails}
               disabled={isAlertingTeam}
-              className="w-full py-3 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-serif text-xs font-bold rounded-xl shadow-lg transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
+              className="w-full py-3 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-serif text-xs font-bold rounded-xl shadow-xs transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
             >
               <span>🚨 Send Manager to Table Now</span>
             </button>
 
-            <div className="w-full flex items-center justify-between gap-2 pt-2 border-t border-white/[0.08] text-xs">
+            <div className="w-full flex items-center justify-between gap-2 pt-2 border-t border-[#924E00]/10 text-xs">
               <a
                 href={restaurant?.google_place_url || 'https://maps.google.com'}
                 target="_blank"
                 rel="noreferrer"
-                className="text-[11px] text-slate-400 hover:text-white underline flex items-center gap-1 font-medium"
+                className="text-[11px] text-[#924E00]/70 hover:text-[#924E00] underline flex items-center gap-1 font-medium"
               >
                 <span>Leave public review on Google Maps</span>
                 <ExternalLink className="w-3 h-3" />
@@ -1307,7 +1307,7 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
               <button
                 type="button"
                 onClick={() => setStep('wheel')}
-                className="text-[11px] text-amber-400 font-bold hover:underline cursor-pointer"
+                className="text-[11px] text-[#F9A620] font-bold hover:underline cursor-pointer"
               >
                 Spin Table Wheel →
               </button>
@@ -1318,27 +1318,27 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
         {/* Urgent Resolved */}
         {step === 'urgent_resolved' && (
           <div className="w-full flex flex-col items-center pt-3 space-y-3.5 text-center">
-            <div className="w-14 h-14 rounded-full bg-emerald-500/20 border-2 border-emerald-500/40 text-emerald-300 flex items-center justify-center text-2xl">
+            <div className="w-14 h-14 rounded-full bg-emerald-500/15 border-2 border-emerald-500/30 text-emerald-600 flex items-center justify-center text-2xl">
               ✓
             </div>
-            <h4 className="font-serif font-bold text-base text-white">
+            <h4 className="font-serif font-bold text-base text-[#924E00]">
               Manager Attending {activeTable?.label || 'Table 1'}
             </h4>
-            <p className="text-xs text-slate-400 max-w-sm leading-relaxed">
+            <p className="text-xs text-[#924E00]/70 max-w-sm leading-relaxed">
               Our restaurant management has received your notes and is walking to your table right now.
             </p>
             <div className="w-full space-y-2 pt-1">
               <button
                 type="button"
                 onClick={() => setStep('wheel')}
-                className="w-full py-2.5 bg-amber-500 hover:bg-amber-600 active:scale-95 text-slate-950 font-bold rounded-xl text-xs shadow-sm cursor-pointer"
+                className="w-full py-2.5 bg-[#F9A620] hover:bg-[#e89512] active:scale-95 text-white font-bold rounded-xl text-xs shadow-xs cursor-pointer"
               >
                 Claim Table Appreciation Wheel Treat
               </button>
               <button
                 type="button"
                 onClick={onClose}
-                className="w-full py-2 bg-[#090D16] border border-white/[0.08] text-slate-300 rounded-xl text-xs font-semibold hover:bg-white/[0.06] hover:text-white cursor-pointer"
+                className="w-full py-2 bg-white border border-[#924E00]/15 text-[#924E00] rounded-xl text-xs font-semibold hover:bg-[#FFF7E6] cursor-pointer"
               >
                 Return to Menu
               </button>

@@ -512,34 +512,34 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-end justify-center">
+    <div className="fixed inset-0 z-50 bg-[#924E00]/40 backdrop-blur-sm flex items-end justify-center">
       <div 
-        className="bg-[#0D1322] text-slate-100 rounded-t-3xl max-w-xl w-full h-[85vh] flex flex-col p-4 animate-in slide-in-from-bottom duration-200 border border-white/[0.08] shadow-2xl"
+        className="bg-[#FFF7E6] text-[#924E00] rounded-t-3xl max-w-xl w-full h-[85vh] flex flex-col p-4 animate-in slide-in-from-bottom duration-200 border border-[#924E00]/10 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex justify-between items-center pb-3 border-b border-white/[0.08]">
+        <div className="flex justify-between items-center pb-3 border-b border-[#924E00]/10">
           <div className="flex items-center space-x-2.5">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center text-white shadow-sm">
-              <Sparkles className="w-4 h-4" />
+            <div className="w-9 h-9 rounded-full bg-[#F9A620] flex items-center justify-center text-white shadow-xs">
+              <Sparkles className="w-4 h-4 text-white" />
             </div>
             <div>
               <div className="flex items-center space-x-1.5">
-                <h3 className="font-serif font-bold text-base text-white">AI Dining Concierge</h3>
-                <span className="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                  🧑‍🍳 Chef &amp; Owner Trained
+                <h3 className="font-serif font-bold text-base text-[#924E00]">AI Dining Concierge</h3>
+                <span className="text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#F9A620]/20 text-[#924E00] border border-[#F9A620]/30">
+                  🧑‍🍳 Chef &amp; Sommelier
                 </span>
               </div>
-              <p className="text-[10px] text-slate-400">
+              <p className="text-[11px] text-[#924E00]/70">
                 {focusDish
                   ? `Focused on: ${focusDish.name}`
-                  : `Trained on secret kitchen recipes & authentic spice index`}
+                  : `Ask about ingredients, wine pairings, and dietary safety`}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-full text-slate-400 hover:bg-white/[0.08] hover:text-white transition-colors"
+            className="p-1.5 rounded-full text-[#924E00]/60 hover:bg-white/80 hover:text-[#924E00] transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -547,22 +547,22 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
 
         {/* Focused Dish Banner */}
         {focusDish && (
-          <div className="flex items-center space-x-3 p-2.5 bg-amber-500/10 border border-amber-500/20 rounded-xl my-2">
+          <div className="flex items-center space-x-3 p-2.5 bg-white/90 border border-[#F9A620]/30 rounded-2xl my-2 shadow-xs">
             <img
               src={focusDish.image_url}
               alt={focusDish.name}
-              className="w-10 h-10 rounded-lg object-cover flex-shrink-0"
+              className="w-11 h-11 rounded-xl object-cover flex-shrink-0"
             />
             <div className="flex-1 min-w-0">
-              <h4 className="font-bold text-xs text-white truncate">{focusDish.name}</h4>
-              <span className="text-[10px] text-amber-400">₹{focusDish.price.toFixed(2)} • Spice {focusDish.spice_level}/5</span>
+              <h4 className="font-bold text-xs text-[#924E00] truncate">{focusDish.name}</h4>
+              <span className="text-[11px] text-[#F9A620] font-bold">₹{focusDish.price.toFixed(2)} • Spice {focusDish.spice_level}/5</span>
             </div>
           </div>
         )}
 
         {/* Allergy Policy Guard Banner */}
-        <div className="bg-amber-500/10 border border-amber-500/25 p-2.5 rounded-xl my-1.5 flex items-start space-x-2 text-[11px] text-amber-200 leading-tight">
-          <ShieldAlert className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+        <div className="bg-[#FFF2D6] border border-[#F9A620]/30 p-2.5 rounded-2xl my-1.5 flex items-start space-x-2 text-[11px] text-[#924E00]/80 leading-tight">
+          <ShieldAlert className="w-4 h-4 text-[#F9A620] flex-shrink-0 mt-0.5" />
           <p>
             {ALLERGY_DISCLAIMER}
           </p>
@@ -573,31 +573,31 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
           <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 scrollbar-none">
             <button
               onClick={() => handleSendQuery("Which dishes are 100% Jain safe with isolated prep?")}
-              className="px-2.5 py-1 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 text-[11px] font-bold border border-emerald-500/30 flex-shrink-0 transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-full bg-white hover:bg-[#FFF2D6] text-[#924E00] text-[11px] font-bold border border-[#924E00]/15 flex-shrink-0 transition-colors cursor-pointer shadow-xs"
             >
               🌱 100% Jain Safe
             </button>
             <button
               onClick={() => handleSendQuery("Which dishes are strictly Gluten-Free and celiac safe?")}
-              className="px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-[11px] font-bold border border-amber-500/30 flex-shrink-0 transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-full bg-white hover:bg-[#FFF2D6] text-[#924E00] text-[11px] font-bold border border-[#924E00]/15 flex-shrink-0 transition-colors cursor-pointer shadow-xs"
             >
               🌾 Gluten-Free / Celiac
             </button>
             <button
               onClick={() => handleSendQuery("Which dishes are completely free of peanuts, tree nuts, and nut oils?")}
-              className="px-2.5 py-1 rounded-lg bg-orange-500/10 hover:bg-orange-500/20 text-orange-300 text-[11px] font-bold border border-orange-500/30 flex-shrink-0 transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-full bg-white hover:bg-[#FFF2D6] text-[#924E00] text-[11px] font-bold border border-[#924E00]/15 flex-shrink-0 transition-colors cursor-pointer shadow-xs"
             >
               🥜 Nut-Allergy Safe
             </button>
             <button
               onClick={() => handleSendQuery("Which dishes are 100% Plant-Based Vegan with zero dairy or ghee?")}
-              className="px-2.5 py-1 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 text-[11px] font-bold border border-emerald-500/30 flex-shrink-0 transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-full bg-white hover:bg-[#FFF2D6] text-[#924E00] text-[11px] font-bold border border-[#924E00]/15 flex-shrink-0 transition-colors cursor-pointer shadow-xs"
             >
               🥬 Pure Vegan
             </button>
             <button
               onClick={() => handleSendQuery("What are your zero-spice, mild dishes suitable for kids?")}
-              className="px-2.5 py-1 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 text-[11px] font-bold border border-cyan-500/30 flex-shrink-0 transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-full bg-white hover:bg-[#FFF2D6] text-[#924E00] text-[11px] font-bold border border-[#924E00]/15 flex-shrink-0 transition-colors cursor-pointer shadow-xs"
             >
               👶 Kid-Friendly Mild
             </button>
@@ -614,8 +614,8 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
               <div
                 className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed whitespace-pre-line ${
                   m.role === 'user'
-                    ? 'bg-amber-500 text-white rounded-tr-none shadow-sm font-medium'
-                    : 'bg-[#12192B] text-slate-100 rounded-tl-none border border-white/[0.08]'
+                    ? 'bg-[#F9A620] text-white rounded-tr-none shadow-xs font-medium'
+                    : 'bg-white text-[#924E00] rounded-tl-none border border-[#924E00]/10 shadow-xs'
                 }`}
               >
                 {m.content}
@@ -627,24 +627,24 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                   {m.recommendations.map((rec) => (
                     <div
                       key={rec.item.id}
-                      className="bg-[#12192B] border border-white/[0.08] hover:border-amber-500/40 rounded-2xl p-3 shadow-lg flex items-center justify-between gap-3"
+                      className="bg-white border border-[#924E00]/10 hover:border-[#F9A620]/40 rounded-2xl p-3 shadow-xs flex items-center justify-between gap-3 transition-all"
                     >
                       <img
                         src={rec.item.image_url}
                         alt={rec.item.name}
-                        className="w-14 h-14 rounded-xl object-cover flex-shrink-0 bg-[#090D16]"
+                        className="w-14 h-14 rounded-xl object-cover flex-shrink-0 bg-[#FFF7E6]"
                       />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center space-x-1 mb-0.5">
-                          <span className="text-[10px] text-amber-400 font-bold uppercase tracking-wider">
+                          <span className="text-[10px] text-[#F9A620] font-bold uppercase tracking-wider">
                             Verified Match
                           </span>
                         </div>
-                        <h4 className="font-serif font-bold text-xs text-white truncate">
+                        <h4 className="font-serif font-bold text-xs text-[#924E00] truncate">
                           {rec.item.name}
                         </h4>
-                        <p className="text-[10px] text-slate-400 line-clamp-1">{rec.reason}</p>
-                        <span className="text-xs font-bold text-amber-400 mt-0.5 block">
+                        <p className="text-[10px] text-[#924E00]/70 line-clamp-1">{rec.reason}</p>
+                        <span className="text-xs font-bold text-[#F9A620] mt-0.5 block">
                           ₹{rec.item.price.toFixed(2)}
                         </span>
                       </div>
@@ -654,9 +654,9 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                           onConfirmAdd(rec.item);
                           onClose();
                         }}
-                        className="bg-amber-500 hover:bg-amber-600 text-white text-[11px] font-bold px-3 py-2 rounded-xl flex items-center space-x-1 shadow-lg transition-colors flex-shrink-0 cursor-pointer"
+                        className="bg-[#F9A620] hover:bg-[#e89512] active:scale-[0.98] text-white text-[11px] font-bold px-3 py-2 rounded-xl flex items-center space-x-1 shadow-xs transition-all flex-shrink-0 cursor-pointer"
                       >
-                        <Plus className="w-3.5 h-3.5" />
+                        <Plus className="w-3.5 h-3.5 text-white" />
                         <span>Add</span>
                       </button>
                     </div>
@@ -667,22 +667,22 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
           ))}
 
           {loading && (
-            <div className="flex items-center space-x-2 text-xs text-slate-400 py-2">
-              <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
-              <span>Analyzing menu & kitchen data...</span>
+            <div className="flex items-center space-x-2 text-xs text-[#924E00]/70 py-2">
+              <span className="w-2 h-2 rounded-full bg-[#F9A620] animate-ping" />
+              <span>Analyzing menu & kitchen records...</span>
             </div>
           )}
           <div ref={messagesEndRef} className="h-2 flex-shrink-0" />
         </div>
 
         {/* Context-aware Quick action chips */}
-        <div className="flex space-x-1.5 overflow-x-auto py-2.5 no-scrollbar border-t border-white/[0.08]">
+        <div className="flex space-x-1.5 overflow-x-auto py-2.5 no-scrollbar border-t border-[#924E00]/10">
           {quickActions.map((q, idx) => (
             <button
               key={idx}
               type="button"
               onClick={() => handleSendQuery(q.query)}
-              className="whitespace-nowrap bg-[#12192B] hover:bg-amber-500/20 hover:text-amber-300 border border-white/[0.08] hover:border-amber-500/40 text-[11px] font-bold px-3 py-1.5 rounded-full text-slate-300 transition-all flex items-center space-x-1 shadow-sm cursor-pointer"
+              className="whitespace-nowrap bg-white hover:bg-[#FFF2D6] text-[#924E00] border border-[#924E00]/15 text-[11px] font-bold px-3.5 py-1.5 rounded-full transition-all flex items-center space-x-1 shadow-xs cursor-pointer"
             >
               {q.icon && <span className="mr-0.5">{q.icon}</span>}
               <span>{q.label}</span>
@@ -691,21 +691,22 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
         </div>
 
         {/* Input Form */}
-        <div className="flex items-center space-x-2 pt-2 border-t border-white/[0.08]">
+        <div className="flex items-center space-x-2 pt-2 border-t border-[#924E00]/10">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSendQuery(input)}
-            placeholder={focusDish ? `Ask about ${focusDish.name}...` : "Ask about ingredients, pairings, allergens..."}
-            className="flex-1 bg-[#090D16] border border-white/[0.08] rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-500/60 placeholder-slate-500"
+            placeholder={focusDish ? `Ask about ${focusDish.name}...` : "Ask about ingredients, pairings, dietary options..."}
+            className="flex-1 bg-white border border-[#924E00]/15 rounded-full px-4 py-2.5 text-xs text-[#924E00] focus:outline-none focus:border-[#F9A620] placeholder-[#924E00]/40 shadow-xs"
           />
           <button
             type="button"
             onClick={() => handleSendQuery(input)}
-            className="p-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl shadow-lg transition-colors cursor-pointer"
+            className="h-10 w-10 bg-[#F9A620] hover:bg-[#e89512] active:scale-[0.98] text-white flex items-center justify-center rounded-full shadow-xs transition-all cursor-pointer shrink-0"
+            aria-label="Send message to AI"
           >
-            <Send className="w-4 h-4" />
+            <Send className="w-4 h-4 text-white" />
           </button>
         </div>
       </div>

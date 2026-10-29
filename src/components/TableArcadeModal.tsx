@@ -767,30 +767,30 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
-      <div className="w-full max-w-4xl max-h-[94vh] bg-[#0A0F1D] border border-white/[0.12] rounded-3xl shadow-2xl flex flex-col overflow-hidden text-slate-100">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-[#924E00]/40 backdrop-blur-sm animate-fadeIn">
+      <div className="w-full max-w-4xl max-h-[94vh] bg-[#FFF7E6] border border-[#924E00]/15 rounded-3xl shadow-2xl flex flex-col overflow-hidden text-[#924E00]">
         
         {/* Header Bar */}
-        <div className="px-4 sm:px-6 py-3.5 bg-[#0D1527] border-b border-white/[0.08] flex items-center justify-between">
+        <div className="px-4 sm:px-6 py-3.5 bg-white border-b border-[#924E00]/10 flex items-center justify-between">
           <div className="flex items-center space-x-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-400 flex items-center justify-center text-slate-950 font-black shadow-md">
-              <Gamepad2 className="w-5 h-5 text-slate-950" />
+            <div className="w-9 h-9 rounded-xl bg-[#F9A620] flex items-center justify-center text-white font-black shadow-xs">
+              <Gamepad2 className="w-5 h-5 text-white" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <h3 className="font-serif font-black text-base sm:text-lg text-white">Table Arcade</h3>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                <h3 className="font-serif font-black text-base sm:text-lg text-[#924E00]">Table Arcade</h3>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#F9A620]/15 text-[#924E00] border border-[#F9A620]/30">
                   {tableLabel}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400">Play while waiting for your order • {restaurantName}</p>
+              <p className="text-[11px] text-[#924E00]/70">Play while waiting for your order • {restaurantName}</p>
             </div>
           </div>
 
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.12] text-slate-400 hover:text-white transition-all cursor-pointer"
+            className="p-2 rounded-xl bg-[#924E00]/5 hover:bg-[#924E00]/10 text-[#924E00]/60 hover:text-[#924E00] transition-all cursor-pointer"
             title="Close Games"
           >
             <X className="w-5 h-5" />
@@ -800,15 +800,15 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
         {/* ═══════════════════════════════════════════════════════════ */}
         {/* UNIVERSAL DIFFICULTY SELECTOR                             */}
         {/* ═══════════════════════════════════════════════════════════ */}
-        <div className="px-4 sm:px-6 py-2.5 bg-[#0C1222] border-b border-white/[0.08] flex items-center justify-center">
-          <div className="flex items-center space-x-1.5 bg-black/40 p-1 rounded-xl border border-white/[0.08]">
+        <div className="px-4 sm:px-6 py-2.5 bg-[#FFF2D6] border-b border-[#924E00]/10 flex items-center justify-center">
+          <div className="flex items-center space-x-1.5 bg-white/80 p-1 rounded-xl border border-[#924E00]/15">
             <button
               type="button"
               onClick={() => setDifficulty('easy')}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 difficulty === 'easy'
-                  ? 'bg-emerald-500 text-slate-950 font-black shadow-sm'
-                  : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
+                  ? 'bg-emerald-600 text-white font-black shadow-xs'
+                  : 'text-[#924E00]/70 hover:text-[#924E00] hover:bg-white'
               }`}
             >
               Easy
@@ -819,8 +819,8 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
               onClick={() => setDifficulty('medium')}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 difficulty === 'medium'
-                  ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                  : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
+                  ? 'bg-[#F9A620] text-white font-black shadow-xs'
+                  : 'text-[#924E00]/70 hover:text-[#924E00] hover:bg-white'
               }`}
             >
               Medium
@@ -831,8 +831,8 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
               onClick={() => setDifficulty('hard')}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 difficulty === 'hard'
-                  ? 'bg-rose-500 text-white font-black shadow-sm'
-                  : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
+                  ? 'bg-rose-600 text-white font-black shadow-xs'
+                  : 'text-[#924E00]/70 hover:text-[#924E00] hover:bg-white'
               }`}
             >
               Hard
@@ -841,14 +841,14 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
         </div>
 
         {/* Tab Navigation */}
-        <div className="px-3 sm:px-6 py-2 bg-[#090D18] border-b border-white/[0.06] flex items-center space-x-1 sm:space-x-2 overflow-x-auto scrollbar-none">
+        <div className="px-3 sm:px-6 py-2 bg-[#FFF7E6] border-b border-[#924E00]/10 flex items-center space-x-1 sm:space-x-2 overflow-x-auto scrollbar-none">
           <button
             type="button"
             onClick={() => setActiveTab('solitaire')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 cursor-pointer ${
               activeTab === 'solitaire'
-                ? 'bg-amber-500 text-slate-950 shadow-md font-black'
-                : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
+                ? 'bg-[#F9A620] text-white shadow-xs font-black'
+                : 'text-[#924E00]/70 hover:text-[#924E00] hover:bg-white'
             }`}
           >
             <span>♠️</span>
@@ -860,8 +860,8 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
             onClick={() => setActiveTab('crossword')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 cursor-pointer ${
               activeTab === 'crossword'
-                ? 'bg-amber-500 text-slate-950 shadow-md font-black'
-                : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
+                ? 'bg-[#F9A620] text-white shadow-xs font-black'
+                : 'text-[#924E00]/70 hover:text-[#924E00] hover:bg-white'
             }`}
           >
             <span>✍️</span>
@@ -873,8 +873,8 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
             onClick={() => setActiveTab('trivia')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 cursor-pointer ${
               activeTab === 'trivia'
-                ? 'bg-amber-500 text-slate-950 shadow-md font-black'
-                : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
+                ? 'bg-[#F9A620] text-white shadow-xs font-black'
+                : 'text-[#924E00]/70 hover:text-[#924E00] hover:bg-white'
             }`}
           >
             <Users className="w-3.5 h-3.5" />
@@ -886,8 +886,8 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
             onClick={() => setActiveTab('billRoulette')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 cursor-pointer ${
               activeTab === 'billRoulette'
-                ? 'bg-gradient-to-r from-rose-500 to-amber-500 text-white shadow-md font-black'
-                : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
+                ? 'bg-[#F9A620] text-white shadow-xs font-black'
+                : 'text-[#924E00]/70 hover:text-[#924E00] hover:bg-white'
             }`}
           >
             <Dices className="w-3.5 h-3.5" />

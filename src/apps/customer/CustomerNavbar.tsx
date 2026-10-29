@@ -5,7 +5,8 @@ import {
   Menu as MenuIcon,
   X,
   Languages,
-  Check
+  Check,
+  Sparkles
 } from 'lucide-react';
 import { useRestaurantStore } from '../../store/restaurantStore';
 import { QrScannerModal } from '../../components/QrScannerModal';
@@ -130,15 +131,29 @@ export const CustomerNavbar: React.FC = () => {
               )}
             </div>
 
+            {/* Chef AI Button */}
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent('open-ai-assistant'))}
+              className="h-10 px-3 sm:px-4 rounded-full bg-white hover:bg-[#FFF2D6] text-[#924E00] border-2 border-[#F9A620] font-bold text-xs sm:text-sm flex items-center space-x-1.5 transition-all shadow-xs cursor-pointer"
+              title="Ask Chef AI Dining Concierge"
+              aria-label="Ask Chef AI"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#F9A620]" />
+              <span>Chef AI</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse hidden sm:inline" />
+            </button>
+
             {/* Primary Action Button */}
             <button
               type="button"
               onClick={() => setIsQrScannerOpen(true)}
-              className="h-10 px-4 sm:px-5 rounded-full bg-[#F9A620] hover:bg-[#e89512] active:scale-[0.98] text-white font-medium text-xs sm:text-sm flex items-center space-x-2 transition-all shadow-xs cursor-pointer"
+              className="h-10 px-3.5 sm:px-5 rounded-full bg-[#F9A620] hover:bg-[#e89512] active:scale-[0.98] text-white font-medium text-xs sm:text-sm flex items-center space-x-1.5 sm:space-x-2 transition-all shadow-xs cursor-pointer"
               aria-label="Scan Table QR Code"
             >
               <QrCode className="w-4 h-4" />
-              <span>Scan Table</span>
+              <span className="hidden sm:inline">Scan Table</span>
+              <span className="sm:hidden">Scan</span>
             </button>
 
             {/* Mobile Menu Toggle */}
@@ -156,6 +171,20 @@ export const CustomerNavbar: React.FC = () => {
         {/* Mobile Menu Drawer */}
         {mobileMenuOpen && (
           <div className="md:hidden px-4 pt-2 pb-4 border-t border-[#924E00]/10 bg-[#FFF7E6]/95 backdrop-blur-md flex flex-col space-y-1 text-sm font-medium text-[#924E00]">
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                window.dispatchEvent(new CustomEvent('open-ai-assistant'));
+              }}
+              className="py-2.5 px-3 text-left rounded-xl bg-[#F9A620]/15 hover:bg-[#F9A620]/25 transition-colors flex items-center justify-between font-bold text-[#924E00]"
+            >
+              <span className="flex items-center space-x-2">
+                <Sparkles className="w-4 h-4 text-[#F9A620]" />
+                <span>Ask Chef AI Assistant</span>
+              </span>
+              <span className="text-[10px] bg-[#F9A620] text-white px-2 py-0.5 rounded-full">Live</span>
+            </button>
             <button
               type="button"
               onClick={() => scrollToSection('discover')}
