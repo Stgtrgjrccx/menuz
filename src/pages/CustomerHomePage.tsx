@@ -17,7 +17,9 @@ import {
   Pizza,
   Cake,
   Sunset,
-  Check
+  Check,
+  Gift,
+  Gamepad2
 } from 'lucide-react';
 import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantStore';
 import { isWorkingWithMenuz, Restaurant } from '../types';
@@ -222,6 +224,15 @@ export const CustomerHomePage: React.FC = () => {
     navigate(`/r/${venue.slug}/menu?t=${venue.token}`);
   };
 
+  const handleOpenWinChallenge = (venue?: typeof affiliatedVenues[0]) => {
+    if (venue?.rawRest) {
+      setWinChallengeVenue(venue.rawRest);
+    } else if (affiliatedVenues[0]?.rawRest) {
+      setWinChallengeVenue(affiliatedVenues[0].rawRest);
+    }
+    setIsWinChallengeOpen(true);
+  };
+
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -262,6 +273,15 @@ export const CustomerHomePage: React.FC = () => {
               >
                 <span>Explore Restaurants</span>
                 <ArrowRight className="w-4 h-4 text-white" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleOpenWinChallenge()}
+                className="h-12 px-6 rounded-full bg-white/90 hover:bg-white active:scale-[0.98] text-[#924E00] border border-[#F9A620]/60 font-medium text-sm sm:text-base flex items-center space-x-2 transition-all shadow-xs cursor-pointer"
+              >
+                <span className="text-base">🎁</span>
+                <span>Win Treats &amp; Discounts</span>
               </button>
 
               <button
@@ -326,6 +346,35 @@ export const CustomerHomePage: React.FC = () => {
               </button>
             );
           })}
+        </div>
+      </section>
+
+      {/* ───────────────────────────────────────────────────────────── */}
+      {/* 2.5 DINE-IN WIN CHALLENGE SHOWCASE BANNER                     */}
+      {/* ───────────────────────────────────────────────────────────── */}
+      <section className="py-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="bg-gradient-to-r from-white via-[#FFF7E6] to-white border border-[#F9A620]/35 rounded-3xl p-6 sm:p-8 shadow-[0_8px_30px_rgba(249,166,32,0.08)] relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-2 max-w-2xl">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#F9A620]/15 text-[#924E00] text-xs font-bold border border-[#F9A620]/30">
+              <Gift className="w-3.5 h-3.5 text-[#F9A620]" />
+              <span>🎁 Dine-In Win Challenge</span>
+            </div>
+            <h3 className="font-serif font-bold text-2xl sm:text-3xl text-[#924E00]">
+              Review &amp; Unlock Instant Food Treats &amp; Discounts
+            </h3>
+            <p className="text-xs sm:text-sm text-[#924E00]/80 leading-relaxed font-sans">
+              Leave a quick 5-star Google review for your dining experience to play the reward challenge: Spin the Lucky Wheel, Scratch &amp; Win, or open Mystery Box treats!
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => handleOpenWinChallenge()}
+            className="h-12 px-7 rounded-full bg-[#F9A620] hover:bg-[#e89512] active:scale-[0.98] text-white font-medium text-xs sm:text-sm shadow-xs flex items-center justify-center space-x-2 shrink-0 transition-all cursor-pointer"
+          >
+            <span>Play Win Challenge</span>
+            <ArrowRight className="w-4 h-4 text-white" />
+          </button>
         </div>
       </section>
 
@@ -432,19 +481,33 @@ export const CustomerHomePage: React.FC = () => {
                     </p>
                   </div>
 
-                  {/* Single Clean Action Row */}
-                  <div className="pt-3 border-t border-[#924E00]/10 flex items-center justify-between gap-3">
+                  {/* Multi-Action Clean Row */}
+                  <div className="pt-3 border-t border-[#924E00]/10 flex items-center justify-between gap-2.5">
                     <button
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleLaunchTable(venue);
                       }}
-                      className="flex-1 h-11 px-5 rounded-full bg-[#F9A620] hover:bg-[#e89512] active:scale-[0.98] text-white font-medium text-xs sm:text-sm flex items-center justify-center space-x-2 transition-all shadow-xs"
+                      className="flex-1 h-11 px-4 sm:px-5 rounded-full bg-[#F9A620] hover:bg-[#e89512] active:scale-[0.98] text-white font-medium text-xs sm:text-sm flex items-center justify-center space-x-1.5 sm:space-x-2 transition-all shadow-xs cursor-pointer"
                     >
                       <UtensilsCrossed className="w-3.5 h-3.5 text-white" />
-                      <span>View Menu &amp; Order</span>
+                      <span>View Menu</span>
                       <ArrowRight className="w-3.5 h-3.5 text-white" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleOpenWinChallenge(venue);
+                      }}
+                      className="h-11 px-3.5 rounded-full bg-[#FFF2D6] hover:bg-white text-[#924E00] border border-[#F9A620]/40 font-medium text-xs flex items-center space-x-1 transition-all shadow-xs cursor-pointer shrink-0"
+                      title={`Play Win Challenge for ${venue.name}`}
+                      aria-label={`Play Win Challenge for ${venue.name}`}
+                    >
+                      <span>🎁</span>
+                      <span className="hidden sm:inline">Win</span>
                     </button>
 
                     <button
@@ -453,7 +516,7 @@ export const CustomerHomePage: React.FC = () => {
                         e.stopPropagation();
                         handleOpenScanner(venue.slug);
                       }}
-                      className="w-11 h-11 rounded-full bg-white hover:bg-[#FFF7E6] border border-[#924E00]/15 text-[#924E00] flex items-center justify-center transition-all shadow-xs"
+                      className="w-11 h-11 rounded-full bg-white hover:bg-[#FFF7E6] border border-[#924E00]/15 text-[#924E00] flex items-center justify-center transition-all shadow-xs cursor-pointer shrink-0"
                       title="Scan Table QR"
                       aria-label={`Scan Table QR for ${venue.name}`}
                     >
@@ -589,6 +652,148 @@ export const CustomerHomePage: React.FC = () => {
       </section>
 
       {/* ───────────────────────────────────────────────────────────── */}
+      {/* 5.5 TABLE ARCADE & WAITING GAMES (FOR TABLE DINERS)           */}
+      {/* ───────────────────────────────────────────────────────────── */}
+      <section id="arcade" className="py-12 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full border-t border-[#924E00]/10">
+        <div className="bg-white/80 rounded-3xl border border-[#924E00]/10 p-6 sm:p-10 shadow-[0_8px_30px_rgba(146,78,0,0.04)] relative overflow-hidden">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-[#924E00]/10">
+            <div className="space-y-2 max-w-2xl">
+              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#F9A620]/15 text-[#924E00] text-xs font-semibold">
+                <Gamepad2 className="w-3.5 h-3.5 text-[#F9A620]" />
+                <span>Exclusively for Table Diners</span>
+              </div>
+              <h2 className="font-serif font-bold text-3xl sm:text-4xl text-[#924E00]">
+                Play Games While Waiting For Your Food
+              </h2>
+              <p className="text-xs sm:text-sm text-[#924E00]/80 leading-relaxed font-sans">
+                App-free dining games designed for your table. Play classic Klondike Solitaire, solve culinary crosswords, battle companions in multiplayer trivia, or spin the roulette wheel to decide who pays the check.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setIsArcadeOpen(true)}
+              className="h-12 px-7 rounded-full bg-[#F9A620] hover:bg-[#e89512] active:scale-[0.98] text-white font-medium text-sm sm:text-base shadow-xs flex items-center justify-center space-x-2 transition-all cursor-pointer shrink-0"
+            >
+              <Gamepad2 className="w-4 h-4 text-white" />
+              <span>Launch Table Arcade</span>
+            </button>
+          </div>
+
+          {/* 4 Interactive Game Cards in 3-Color Brand System */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 pt-8">
+            {/* Game 1: Solitaire */}
+            <div
+              onClick={() => setIsArcadeOpen(true)}
+              className="p-5 rounded-2xl bg-[#FFF7E6] hover:bg-white border border-[#924E00]/10 hover:border-[#F9A620]/40 shadow-xs hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
+            >
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 rounded-xl bg-[#F9A620]/20 text-xl flex items-center justify-center">
+                    🃏
+                  </div>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white text-[#924E00] border border-[#924E00]/15">
+                    Kids → Adults
+                  </span>
+                </div>
+                <h3 className="font-serif font-bold text-base text-[#924E00] group-hover:text-[#F9A620] transition-colors">
+                  Klondike Solitaire
+                </h3>
+                <p className="text-xs text-[#924E00]/75 leading-relaxed font-sans">
+                  Classic patience cards. Easy (Draw 1 for kids), Medium (Draw 3), and Hard (3-pass limit challenge for adults).
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-[#924E00]/10 flex items-center justify-between text-xs text-[#924E00] font-semibold">
+                <span>Play Solitaire</span>
+                <span className="text-[#F9A620] group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+            </div>
+
+            {/* Game 2: Crossword */}
+            <div
+              onClick={() => setIsArcadeOpen(true)}
+              className="p-5 rounded-2xl bg-[#FFF7E6] hover:bg-white border border-[#924E00]/10 hover:border-[#F9A620]/40 shadow-xs hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
+            >
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 rounded-xl bg-[#F9A620]/20 text-xl flex items-center justify-center">
+                    ✏️
+                  </div>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white text-[#924E00] border border-[#924E00]/15">
+                    Food Quiz
+                  </span>
+                </div>
+                <h3 className="font-serif font-bold text-base text-[#924E00] group-hover:text-[#F9A620] transition-colors">
+                  Mini Crossword
+                </h3>
+                <p className="text-xs text-[#924E00]/75 leading-relaxed font-sans">
+                  Quick 5x5 culinary word puzzles. Simple clues for children, gourmet ingredients for culinary masters.
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-[#924E00]/10 flex items-center justify-between text-xs text-[#924E00] font-semibold">
+                <span>Solve Puzzle</span>
+                <span className="text-[#F9A620] group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+            </div>
+
+            {/* Game 3: Table Battle Trivia */}
+            <div
+              onClick={() => setIsArcadeOpen(true)}
+              className="p-5 rounded-2xl bg-[#FFF7E6] hover:bg-white border border-[#924E00]/10 hover:border-[#F9A620]/40 shadow-xs hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
+            >
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 rounded-xl bg-[#F9A620]/20 text-xl flex items-center justify-center">
+                    🧠
+                  </div>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white text-[#924E00] border border-[#924E00]/15">
+                    Multiplayer
+                  </span>
+                </div>
+                <h3 className="font-serif font-bold text-base text-[#924E00] group-hover:text-[#F9A620] transition-colors">
+                  Table Battle Trivia
+                </h3>
+                <p className="text-xs text-[#924E00]/75 leading-relaxed font-sans">
+                  Fast-paced buzzer trivia. Food origins, Bollywood cuisine, and spicy culinary history.
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-[#924E00]/10 flex items-center justify-between text-xs text-[#924E00] font-semibold">
+                <span>Start Trivia</span>
+                <span className="text-[#F9A620] group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+            </div>
+
+            {/* Game 4: Bill Roulette */}
+            <div
+              onClick={() => setIsArcadeOpen(true)}
+              className="p-5 rounded-2xl bg-[#FFF7E6] hover:bg-white border border-[#924E00]/10 hover:border-[#F9A620]/40 shadow-xs hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
+            >
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 rounded-xl bg-[#F9A620]/20 text-xl flex items-center justify-center">
+                    🎲
+                  </div>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white text-[#924E00] border border-[#924E00]/15">
+                    Who Pays?
+                  </span>
+                </div>
+                <h3 className="font-serif font-bold text-base text-[#924E00] group-hover:text-[#F9A620] transition-colors">
+                  Bill Roulette
+                </h3>
+                <p className="text-xs text-[#924E00]/75 leading-relaxed font-sans">
+                  Interactive spinning wheel. Silly dares &amp; treats for kids, friendly social forfeits for teens, or real dining check for adults.
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-[#924E00]/10 flex items-center justify-between text-xs text-[#924E00] font-semibold">
+                <span>Spin Roulette</span>
+                <span className="text-[#F9A620] group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ───────────────────────────────────────────────────────────── */}
       {/* 6. ABOUT: PHILOSOPHY & INDEPENDENT DINING                     */}
       {/* ───────────────────────────────────────────────────────────── */}
       <section id="about" className="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full border-t border-[#924E00]/10">
@@ -622,6 +827,8 @@ export const CustomerHomePage: React.FC = () => {
           <button onClick={() => scrollToSection('restaurants')} className="hover:text-[#924E00] cursor-pointer">Restaurants</button>
           <span>•</span>
           <button onClick={() => scrollToSection('experiences')} className="hover:text-[#924E00] cursor-pointer">Experiences</button>
+          <span>•</span>
+          <button onClick={() => scrollToSection('arcade')} className="hover:text-[#924E00] cursor-pointer">Arcade</button>
           <span>•</span>
           <button onClick={() => scrollToSection('about')} className="hover:text-[#924E00] cursor-pointer">About</button>
         </div>

@@ -76,6 +76,14 @@ export const CustomerNavbar: React.FC = () => {
             </button>
             <button
               type="button"
+              onClick={() => scrollToSection('arcade')}
+              className="hover:text-[#924E00] transition-colors cursor-pointer flex items-center space-x-1"
+            >
+              <span>Arcade</span>
+              <span className="text-[9px] bg-[#F9A620]/20 text-[#924E00] px-1.5 py-0.2 rounded-full font-bold">4 Games</span>
+            </button>
+            <button
+              type="button"
               onClick={() => scrollToSection('about')}
               className="hover:text-[#924E00] transition-colors cursor-pointer"
             >
@@ -168,6 +176,14 @@ export const CustomerNavbar: React.FC = () => {
               className="py-2.5 px-3 text-left rounded-xl hover:bg-white/60 transition-colors"
             >
               Experiences
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('arcade')}
+              className="py-2.5 px-3 text-left rounded-xl hover:bg-white/60 transition-colors flex items-center justify-between"
+            >
+              <span>Table Arcade</span>
+              <span className="text-[10px] bg-[#F9A620]/20 text-[#924E00] px-2 py-0.5 rounded-full font-bold">4 Games</span>
             </button>
             <button
               type="button"
