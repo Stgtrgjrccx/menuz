@@ -554,17 +554,17 @@ export const MasterAdminDashboard: React.FC = () => {
 
   if (!isAdminAuthenticated) {
     return (
-      <div className="min-h-[85vh] flex items-center justify-center px-4 py-12 bg-slate-950">
-        <div className="max-w-md w-full bg-slate-900 border border-slate-800 p-8 rounded-3xl shadow-2xl space-y-6 text-center">
-          <div className="w-16 h-16 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
-            <Lock className="w-8 h-8" />
+      <div className="min-h-[85vh] flex items-center justify-center px-4 py-12 bg-[#FFF7E6]">
+        <div className="max-w-md w-full bg-white/90 border border-[#924E00]/15 p-8 rounded-3xl shadow-xl space-y-6 text-center">
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-[#F9A620]/15 border border-[#F9A620]/30 flex items-center justify-center text-[#924E00]">
+            <Lock className="w-8 h-8 text-[#F9A620]" />
           </div>
           <div className="space-y-2">
-            <span className="text-[11px] font-mono font-bold text-amber-400 uppercase tracking-widest bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+            <span className="text-[11px] font-mono font-bold text-[#924E00] uppercase tracking-widest bg-[#F9A620]/15 px-3 py-1 rounded-full border border-[#F9A620]/30">
               Restricted Operations Access
             </span>
-            <h1 className="text-2xl font-black text-white">Master Admin Authorization</h1>
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <h1 className="text-2xl font-serif font-black text-[#924E00]">Master Admin Authorization</h1>
+            <p className="text-xs text-[#924E00]/80 leading-relaxed">
               Enter your authorized Menuz platform administrator passphrase to manage demo venues, restaurant registries, and POS integrations.
             </p>
           </div>
@@ -596,7 +596,7 @@ export const MasterAdminDashboard: React.FC = () => {
           >
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="text-[11px] font-bold text-slate-400">Master Secret Passphrase</label>
+                <label className="text-[11px] font-bold text-[#924E00]">Master Secret Passphrase</label>
               </div>
               <input
                 type="password"
@@ -606,11 +606,11 @@ export const MasterAdminDashboard: React.FC = () => {
                   setAuthError(false);
                 }}
                 placeholder="Enter Master Passphrase"
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 font-mono text-center tracking-wider"
+                className="w-full bg-white border border-[#924E00]/20 rounded-xl px-4 py-3 text-sm text-[#924E00] placeholder:text-[#924E00]/40 focus:outline-none focus:border-[#F9A620] font-mono text-center tracking-wider"
                 autoFocus
               />
               {authError && (
-                <div className="text-xs text-rose-400 font-medium mt-2 flex items-center justify-center gap-1">
+                <div className="text-xs text-rose-600 font-medium mt-2 flex items-center justify-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
                   <span>Invalid administrator credentials. Access denied.</span>
                 </div>
@@ -618,12 +618,12 @@ export const MasterAdminDashboard: React.FC = () => {
             </div>
             <button
               type="submit"
-              className="w-full py-3 bg-amber-500 hover:bg-amber-600 active:scale-95 text-slate-950 font-bold text-sm rounded-xl transition-all shadow-md cursor-pointer"
+              className="w-full py-3 bg-[#F9A620] hover:bg-[#e89512] active:scale-95 text-white font-bold text-sm rounded-xl transition-all shadow-xs cursor-pointer"
             >
               Verify &amp; Unlock Master HQ
             </button>
-            <div className="flex items-center justify-center gap-4 text-xs text-slate-400 pt-2 border-t border-slate-800">
-              <Link to="/" className="hover:text-amber-400 transition-colors flex items-center gap-1">
+            <div className="flex items-center justify-center gap-4 text-xs text-[#924E00]/70 pt-2 border-t border-[#924E00]/10">
+              <Link to="/" className="hover:text-[#924E00] transition-colors flex items-center gap-1">
                 <ArrowLeft className="w-3.5 h-3.5" /> Return to Public Home
               </Link>
             </div>
@@ -634,7 +634,7 @@ export const MasterAdminDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#060913] pb-24 text-slate-100 font-sans">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#FFF7E6] pb-24 text-[#924E00] font-sans">
       {/* ═══════════════════════════════════════════════════════════ */}
       {/* STANDALONE ENTERPRISE MASTER HQ GLOBAL COMMAND HEADER        */}
       {/* ═══════════════════════════════════════════════════════════ */}

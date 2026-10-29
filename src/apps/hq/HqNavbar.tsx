@@ -1,23 +1,18 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
-  ShieldCheck,
   Building2,
   Bell,
   ExternalLink,
   ChevronDown,
   Check,
   Trash2,
-  LogOut,
-  Sparkles,
-  BarChart3,
-  QrCode
+  LogOut
 } from 'lucide-react';
 import { useRestaurantStore, isValidRestaurantRecord } from '../../store/restaurantStore';
 import { getCustomerSiteUrl } from '../../config/siteMode';
 
 export const HqNavbar: React.FC = () => {
-  const location = useLocation();
   const navigate = useNavigate();
 
   const notifications = useRestaurantStore((state) => state.notifications);
@@ -69,7 +64,7 @@ export const HqNavbar: React.FC = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-40 bg-[#090D16]/95 backdrop-blur-md border-b border-white/[0.08] px-3 sm:px-6 py-2.5 transition-all">
+    <nav className="sticky top-0 z-40 bg-[#FFF7E6]/90 backdrop-blur-md border-b border-[#924E00]/10 px-3 sm:px-6 py-2.5 transition-all">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
         {/* Left: HQ Brand & Badges */}
         <div className="flex items-center space-x-3">
@@ -78,21 +73,17 @@ export const HqNavbar: React.FC = () => {
             className="flex items-center space-x-2.5 group focus:outline-none"
             title="Menuz Master Admin HQ"
           >
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-amber-400 to-amber-300 p-0.5 shadow-md shadow-amber-500/20 group-hover:shadow-amber-500/30 transition-all flex items-center justify-center">
-              <div className="w-full h-full bg-[#090D16] rounded-[10px] flex items-center justify-center">
-                <span className="font-serif font-black text-transparent bg-clip-text bg-gradient-to-tr from-amber-400 to-amber-200 text-lg">
-                  M
-                </span>
-              </div>
+            <div className="w-8 h-8 rounded-full bg-[#F9A620] flex items-center justify-center text-white shadow-xs">
+              <span className="font-serif font-bold text-sm tracking-tight">M</span>
             </div>
             <div>
               <div className="flex items-center space-x-1.5">
-                <span className="font-black tracking-tight text-white text-base">MENUZ</span>
-                <span className="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                <span className="font-serif font-black tracking-tight text-[#924E00] text-lg">menuz</span>
+                <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-[#F9A620]/15 text-[#924E00] border border-[#F9A620]/30">
                   HQ
                 </span>
               </div>
-              <p className="text-[10px] text-slate-400 font-medium hidden sm:block">
+              <p className="text-[10px] text-[#924E00]/70 font-medium hidden sm:block">
                 Master Platform Governance &amp; Partner Network
               </p>
             </div>
@@ -105,19 +96,19 @@ export const HqNavbar: React.FC = () => {
             <button
               type="button"
               onClick={() => setVenueDropdownOpen(!venueDropdownOpen)}
-              className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] hover:border-white/[0.15] text-xs font-semibold text-slate-200 transition-all cursor-pointer"
+              className="flex items-center space-x-2 px-3.5 py-2 rounded-full bg-white/80 border border-[#924E00]/15 hover:bg-white text-xs font-semibold text-[#924E00] transition-all cursor-pointer shadow-xs"
             >
-              <Building2 className="w-3.5 h-3.5 text-amber-400" />
+              <Building2 className="w-3.5 h-3.5 text-[#F9A620]" />
               <span className="max-w-[160px] truncate">{restaurant?.name || 'Select Restaurant'}</span>
-              <span className="text-[10px] text-amber-400 font-mono px-1.5 py-0.5 rounded bg-amber-400/10">
+              <span className="text-[10px] text-[#924E00] font-mono px-1.5 py-0.5 rounded-full bg-[#F9A620]/20">
                 {restaurants.length} active
               </span>
-              <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${venueDropdownOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-3.5 h-3.5 text-[#924E00]/60 transition-transform ${venueDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {venueDropdownOpen && (
-              <div className="absolute left-0 mt-2 w-72 max-h-80 overflow-y-auto rounded-2xl bg-[#0D1322] border border-white/[0.1] shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
-                <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-white/[0.06] mb-1">
+              <div className="absolute left-0 mt-2 w-72 max-h-80 overflow-y-auto rounded-2xl bg-white border border-[#924E00]/15 shadow-xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
+                <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[#924E00]/60 border-b border-[#924E00]/10 mb-1">
                   Active Venues ({restaurants.length})
                 </div>
                 {restaurants.map((r) => (
@@ -127,12 +118,12 @@ export const HqNavbar: React.FC = () => {
                     onClick={() => handleSelectRestaurant(r.id)}
                     className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-xs text-left transition-colors cursor-pointer ${
                       r.id === restaurant?.id
-                        ? 'bg-amber-500/15 text-amber-300 font-semibold'
-                        : 'text-slate-300 hover:bg-white/[0.04]'
+                        ? 'bg-[#F9A620]/15 text-[#924E00] font-semibold'
+                        : 'text-[#924E00]/80 hover:bg-[#FFF7E6]'
                     }`}
                   >
                     <span className="truncate">{r.name}</span>
-                    {r.id === restaurant?.id && <Check className="w-3.5 h-3.5 text-amber-400 shrink-0" />}
+                    {r.id === restaurant?.id && <Check className="w-3.5 h-3.5 text-[#F9A620] shrink-0" />}
                   </button>
                 ))}
               </div>
@@ -147,11 +138,11 @@ export const HqNavbar: React.FC = () => {
             href={getCustomerSiteUrl('')}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 hover:bg-indigo-500/20 text-xs font-semibold transition-all"
+            className="hidden sm:inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-[#F9A620]/15 border border-[#F9A620]/30 text-[#924E00] hover:bg-[#F9A620]/25 text-xs font-semibold transition-all shadow-xs"
             title="Open Customer Discovery Portal in new tab"
           >
             <span>Customer Portal</span>
-            <ExternalLink className="w-3 h-3 text-indigo-400" />
+            <ExternalLink className="w-3 h-3 text-[#924E00]" />
           </a>
 
           {/* Notifications Bell */}
@@ -159,26 +150,26 @@ export const HqNavbar: React.FC = () => {
             <button
               type="button"
               onClick={() => setNotifOpen(!notifOpen)}
-              className="relative p-2 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] text-slate-300 hover:text-white transition-all cursor-pointer"
+              className="relative w-9 h-9 rounded-full bg-white/80 border border-[#924E00]/15 hover:bg-white text-[#924E00] flex items-center justify-center transition-all cursor-pointer shadow-xs"
               title="Notifications"
             >
               <Bell className="w-4 h-4" />
               {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-500 text-[9px] font-bold text-black flex items-center justify-center animate-pulse">
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#F9A620] text-[9px] font-bold text-white flex items-center justify-center">
                   {unreadCount > 9 ? '9+' : unreadCount}
                 </span>
               )}
             </button>
 
             {notifOpen && (
-              <div className="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto rounded-2xl bg-[#0D1322] border border-white/[0.1] shadow-2xl p-3 z-50 animate-in fade-in zoom-in-95 duration-150">
-                <div className="flex items-center justify-between pb-2 border-b border-white/[0.08] mb-2">
-                  <span className="text-xs font-bold text-white">System Notifications</span>
+              <div className="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto rounded-2xl bg-white border border-[#924E00]/15 shadow-xl p-3 z-50 animate-in fade-in zoom-in-95 duration-150">
+                <div className="flex items-center justify-between pb-2 border-b border-[#924E00]/10 mb-2">
+                  <span className="text-xs font-bold text-[#924E00]">System Notifications</span>
                   {notifications.length > 0 && (
                     <button
                       type="button"
                       onClick={clearAllNotifications}
-                      className="text-[10px] text-slate-400 hover:text-red-400 transition-colors flex items-center space-x-1 cursor-pointer"
+                      className="text-[10px] text-[#924E00]/60 hover:text-red-500 transition-colors flex items-center space-x-1 cursor-pointer"
                     >
                       <Trash2 className="w-3 h-3" />
                       <span>Clear All</span>
@@ -186,7 +177,7 @@ export const HqNavbar: React.FC = () => {
                   )}
                 </div>
                 {notifications.length === 0 ? (
-                  <p className="text-xs text-slate-500 text-center py-4">No notifications yet.</p>
+                  <p className="text-xs text-[#924E00]/60 text-center py-4">No notifications yet.</p>
                 ) : (
                   <div className="space-y-1.5">
                     {notifications.map((n) => (
@@ -194,11 +185,11 @@ export const HqNavbar: React.FC = () => {
                         key={n.id}
                         onClick={() => markNotificationRead(n.id)}
                         className={`p-2 rounded-xl text-xs transition-colors cursor-pointer ${
-                          n.read ? 'bg-white/[0.02] text-slate-400' : 'bg-white/[0.06] text-white font-medium'
+                          n.read ? 'bg-[#FFF7E6]/50 text-[#924E00]/60' : 'bg-[#FFF7E6] text-[#924E00] font-medium'
                         }`}
                       >
                         <p>{n.message}</p>
-                        <span className="text-[9px] text-slate-500 font-mono mt-0.5 block">
+                        <span className="text-[9px] text-[#924E00]/50 font-mono mt-0.5 block">
                           {new Date(n.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
@@ -213,7 +204,7 @@ export const HqNavbar: React.FC = () => {
           <button
             type="button"
             onClick={handleLogout}
-            className="p-2 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:bg-rose-500/10 hover:border-rose-500/20 text-slate-400 hover:text-rose-400 transition-all cursor-pointer"
+            className="w-9 h-9 rounded-full bg-white/80 border border-[#924E00]/15 hover:bg-rose-50 text-[#924E00] hover:text-rose-600 flex items-center justify-center transition-all cursor-pointer shadow-xs"
             title="Lock HQ Session"
           >
             <LogOut className="w-4 h-4" />
@@ -223,3 +214,5 @@ export const HqNavbar: React.FC = () => {
     </nav>
   );
 };
+
+export default HqNavbar;

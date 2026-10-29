@@ -374,7 +374,7 @@ export const ManagerDashboard: React.FC = () => {
   }, [restaurants]);
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#090D16] text-slate-100 p-3 sm:p-5 md:p-6 max-w-4xl mx-auto space-y-4 pb-20">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#FFF7E6] text-[#924E00] p-3 sm:p-5 md:p-6 max-w-4xl mx-auto space-y-4 pb-20">
       {/* ── Compact Navigation Top Bar ────────────────────────────── */}
       <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-white/[0.08]">
         <div className="flex items-center space-x-2">
