@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   QrCode,
-  UtensilsCrossed,
+  Search,
   Sparkles,
   Compass,
-  Menu,
+  UtensilsCrossed,
+  Menu as MenuIcon,
   X,
   Languages,
-  Check
+  Check,
+  Bookmark,
+  Share2,
+  Smartphone
 } from 'lucide-react';
 import { useRestaurantStore } from '../../store/restaurantStore';
 import { QrScannerModal } from '../../components/QrScannerModal';
@@ -30,72 +34,123 @@ export const CustomerNavbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
 
-  // If on a dedicated diner table menu view, keep navbar minimal
-  const isDinerView = location.pathname.includes('/menu');
+  const scrollToSection = (id: string) => {
+    setMobileMenuOpen(false);
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <>
-      <nav className="sticky top-0 z-40 bg-[#090D16]/95 backdrop-blur-md border-b border-white/[0.08] px-3 sm:px-6 py-2.5 transition-all">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
-          {/* Left: Customer Brand Logo */}
+      {/* ───────────────────────────────────────────────────────────── */}
+      {/* GOLDEN HOUR FROSTED GLASS NAVIGATION BAR                      */}
+      {/* ───────────────────────────────────────────────────────────── */}
+      <nav className="sticky top-0 z-50 bg-[#FFF7E6]/80 backdrop-blur-xl border-b border-[#924E00]/10 shadow-[0_4px_30px_rgba(146,78,0,0.04)] px-4 sm:px-8 py-3 transition-all duration-300">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+          
+          {/* 1. Left: Brand Emblem & Wordmark */}
           <Link
             to="/"
-            className="flex items-center space-x-2.5 group focus:outline-none"
-            title="Menuz Pune Dining Guide"
+            className="flex items-center space-x-3 group focus:outline-none shrink-0"
+            title="Menuz — Golden Hour Dining"
           >
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-amber-400 to-amber-300 p-0.5 shadow-md shadow-amber-500/20 group-hover:shadow-amber-500/30 transition-all flex items-center justify-center">
-              <div className="w-full h-full bg-[#090D16] rounded-[10px] flex items-center justify-center">
-                <span className="font-serif font-black text-transparent bg-clip-text bg-gradient-to-tr from-amber-400 to-amber-200 text-lg">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#F9A620] via-[#FFAE33] to-[#FFD188] p-[1.5px] shadow-[0_6px_20px_rgba(249,166,32,0.25)] group-hover:shadow-[0_8px_25px_rgba(249,166,32,0.35)] transition-all">
+              <div className="w-full h-full bg-[#FFF7E6] rounded-[14px] flex items-center justify-center">
+                <span className="font-serif font-black text-[#924E00] text-xl tracking-tight">
                   M
                 </span>
               </div>
             </div>
             <div>
-              <div className="flex items-center space-x-1.5">
-                <span className="font-black tracking-tight text-white text-base">MENUZ</span>
-                <span className="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                  CUSTOMER
+              <div className="flex items-center space-x-2">
+                <span className="font-serif font-black tracking-tight text-[#924E00] text-xl">
+                  menuz
+                </span>
+                <span className="text-[10px] font-sans font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-[#F9A620]/15 text-[#924E00] border border-[#F9A620]/30 shadow-xs">
+                  Golden Hour
                 </span>
               </div>
-              <p className="text-[10px] text-slate-400 font-medium hidden sm:block">
-                Digital Menus &amp; QR Ordering • Pune
+              <p className="text-[10px] font-medium text-[#924E00]/65 hidden sm:block">
+                Curated Dining &amp; Tableside Experiences
               </p>
             </div>
           </Link>
 
-          {/* Center / Right: Dining Actions */}
-          <div className="flex items-center space-x-2 sm:space-x-3">
-            {/* Active Table indicator if customer scanned a QR */}
-            {activeTable && (
-              <div className="hidden sm:flex items-center space-x-1.5 px-3 py-1 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-semibold">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>{restaurant?.name || 'Restaurant'}: {activeTable.label}</span>
-              </div>
-            )}
-
-            {/* Scan Table QR Button */}
+          {/* 2. Center: Editorial Navigation Links (Desktop) */}
+          <div className="hidden lg:flex items-center space-x-7 font-sans font-medium text-sm text-[#924E00]/80">
             <button
               type="button"
-              onClick={() => setIsQrScannerOpen(true)}
-              className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs shadow-md shadow-amber-500/20 active:scale-95 transition-all cursor-pointer"
+              onClick={() => scrollToSection('discover')}
+              className="hover:text-[#924E00] hover:font-semibold transition-colors cursor-pointer"
             >
-              <QrCode className="w-3.5 h-3.5" />
-              <span>Scan Table QR</span>
+              Discover
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('categories')}
+              className="hover:text-[#924E00] hover:font-semibold transition-colors cursor-pointer"
+            >
+              Categories
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('featured-restaurants')}
+              className="hover:text-[#924E00] hover:font-semibold transition-colors cursor-pointer"
+            >
+              Restaurants
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('experiences')}
+              className="hover:text-[#924E00] hover:font-semibold transition-colors cursor-pointer"
+            >
+              Experiences
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('social-discovery')}
+              className="hover:text-[#924E00] hover:font-semibold transition-colors cursor-pointer"
+            >
+              Social
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('about')}
+              className="hover:text-[#924E00] hover:font-semibold transition-colors cursor-pointer"
+            >
+              About
+            </button>
+          </div>
+
+          {/* 3. Right: Search & Actions */}
+          <div className="flex items-center space-x-2.5 sm:space-x-3 shrink-0">
+            
+            {/* Search Button (triggers scroll to search input) */}
+            <button
+              type="button"
+              onClick={() => scrollToSection('featured-restaurants')}
+              className="p-2 sm:px-3 sm:py-2 rounded-xl bg-white/70 hover:bg-white/95 border border-[#924E00]/10 text-[#924E00] hover:text-[#924E00] text-xs font-medium flex items-center space-x-1.5 backdrop-blur-md shadow-[0_2px_10px_rgba(146,78,0,0.03)] transition-all cursor-pointer"
+              title="Search restaurants & cuisines"
+            >
+              <Search className="w-4 h-4 text-[#924E00]" />
+              <span className="hidden sm:inline">Search</span>
             </button>
 
-            {/* Language Selector */}
+            {/* Language Selector Glass Dropdown */}
             <div className="relative">
               <button
                 type="button"
                 onClick={() => setLangMenuOpen(!langMenuOpen)}
-                className="p-2 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] text-slate-300 hover:text-white transition-all cursor-pointer"
-                title="Select Language"
+                className="p-2 rounded-xl bg-white/70 hover:bg-white/95 border border-[#924E00]/10 text-[#924E00] backdrop-blur-md shadow-[0_2px_10px_rgba(146,78,0,0.03)] transition-all cursor-pointer"
+                title="Choose Language"
               >
-                <Languages className="w-4 h-4" />
+                <Languages className="w-4 h-4 text-[#924E00]" />
               </button>
 
               {langMenuOpen && (
-                <div className="absolute right-0 mt-2 w-44 rounded-2xl bg-[#0D1322] border border-white/[0.1] shadow-2xl p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+                <div className="absolute right-0 mt-2 w-44 rounded-2xl bg-[#FFF7E6]/95 backdrop-blur-2xl border border-[#924E00]/15 shadow-[0_16px_40px_rgba(146,78,0,0.12)] p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
                   {SUPPORTED_LANGUAGES.map((lang) => (
                     <button
                       key={lang.code}
@@ -106,28 +161,87 @@ export const CustomerNavbar: React.FC = () => {
                       }}
                       className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs text-left transition-colors cursor-pointer ${
                         selectedLanguage === lang.code
-                          ? 'bg-amber-500/15 text-amber-300 font-semibold'
-                          : 'text-slate-300 hover:bg-white/[0.04]'
+                          ? 'bg-[#F9A620]/20 text-[#924E00] font-bold'
+                          : 'text-[#924E00]/80 hover:bg-white/60'
                       }`}
                     >
                       <span>{lang.label}</span>
-                      {selectedLanguage === lang.code && <Check className="w-3.5 h-3.5 text-amber-400" />}
+                      {selectedLanguage === lang.code && <Check className="w-3.5 h-3.5 text-[#F9A620]" />}
                     </button>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* Mobile Explore Link */}
-            <Link
-              to="/"
-              className="sm:hidden p-2 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] text-slate-300"
-              title="Explore Pune Restaurants"
+            {/* Scan Table QR / Get The App (Primary Button) */}
+            <button
+              type="button"
+              onClick={() => setIsQrScannerOpen(true)}
+              className="py-2 sm:py-2.5 px-3.5 sm:px-5 rounded-xl bg-gradient-to-r from-[#F9A620] to-[#FFAE33] hover:brightness-105 active:scale-95 text-[#FFF7E6] font-bold text-xs sm:text-sm shadow-[0_4px_16px_rgba(249,166,32,0.35)] flex items-center space-x-2 transition-all cursor-pointer shrink-0"
             >
-              <Compass className="w-4 h-4" />
-            </Link>
+              <QrCode className="w-4 h-4 text-[#FFF7E6]" />
+              <span className="font-semibold">Scan Table QR</span>
+            </button>
+
+            {/* Mobile Menu Hamburger */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2 rounded-xl bg-white/70 border border-[#924E00]/10 text-[#924E00] backdrop-blur-md cursor-pointer"
+              title="Toggle Menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <MenuIcon className="w-5 h-5" />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Navigation Drawer with Glassmorphism */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden mt-3 pt-3 border-t border-[#924E00]/10 flex flex-col space-y-2.5 font-sans font-medium text-sm text-[#924E00] animate-in fade-in slide-in-from-top-2 duration-200">
+            <button
+              type="button"
+              onClick={() => scrollToSection('discover')}
+              className="px-3 py-2 text-left rounded-xl bg-white/40 hover:bg-white/80 transition-colors"
+            >
+              Discover
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('categories')}
+              className="px-3 py-2 text-left rounded-xl bg-white/40 hover:bg-white/80 transition-colors"
+            >
+              Dining Categories
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('featured-restaurants')}
+              className="px-3 py-2 text-left rounded-xl bg-white/40 hover:bg-white/80 transition-colors"
+            >
+              Featured Restaurants
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('experiences')}
+              className="px-3 py-2 text-left rounded-xl bg-white/40 hover:bg-white/80 transition-colors"
+            >
+              Signature Experiences
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('social-discovery')}
+              className="px-3 py-2 text-left rounded-xl bg-white/40 hover:bg-white/80 transition-colors"
+            >
+              Social Dining &amp; Favourites
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('about')}
+              className="px-3 py-2 text-left rounded-xl bg-white/40 hover:bg-white/80 transition-colors"
+            >
+              About Menuz
+            </button>
+          </div>
+        )}
       </nav>
 
       {/* QR Scanner Modal */}

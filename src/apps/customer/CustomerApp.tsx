@@ -43,7 +43,7 @@ export const CustomerApp: React.FC = () => {
   return (
     <HashRouter>
       <CustomerRouteSEOManager />
-      <div className="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col bg-[#090D16] text-slate-100 font-sans antialiased selection:bg-amber-500/20 selection:text-amber-200">
+      <div className="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col bg-[#FFF7E6] text-[#924E00] font-sans antialiased selection:bg-[#F9A620]/30 selection:text-[#924E00]">
         <CustomerNavbar />
         <div className="flex-1">
           <ErrorBoundary>
