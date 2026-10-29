@@ -106,6 +106,46 @@
   }
 }
 
+/* ───────────────────────────────────────────────────────────── */
+/* CUSTOMER LIGHT-MODE THEME SCOPE (Exact Brand Colors)          */
+/* ───────────────────────────────────────────────────────────── */
+html.customer-theme,
+body.customer-theme,
+.customer-theme #root,
+.customer-theme {
+  background-color: #FFF7E6 !important;
+  color: #924E00 !important;
+  padding-top: 0 !important;
+}
+
+.customer-theme input,
+.customer-theme textarea,
+.customer-theme select {
+  color: #924E00 !important;
+  -webkit-text-fill-color: #924E00 !important;
+  background-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+.customer-theme input::placeholder,
+.customer-theme textarea::placeholder {
+  color: rgba(146, 78, 0, 0.45) !important;
+  -webkit-text-fill-color: rgba(146, 78, 0, 0.45) !important;
+}
+
+.customer-theme input:focus,
+.customer-theme textarea:focus,
+.customer-theme select:focus {
+  color: #924E00 !important;
+  -webkit-text-fill-color: #924E00 !important;
+  border-color: #F9A620 !important;
+}
+
+.customer-theme ::selection {
+  background-color: rgba(249, 166, 32, 0.3) !important;
+  color: #924E00 !important;
+}
+
 /* Ensure all horizontal scrolling strips isolate their scroll physics */
 .overflow-x-auto, [class*="overflow-x-auto"] {
   overscroll-behavior-x: contain !important;
