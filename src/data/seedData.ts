@@ -225,11 +225,11 @@ export const SEED_TABLES: RestaurantTable[] = [
 
 export const SEED_CATEGORIES: MenuCategory[] = [
   // Saffron House
-  { id: 'cat-app', restaurant_id: 'rest-saffron-house-01', name: 'Appetizers', sort_order: 1, is_active: true },
-  { id: 'cat-clay', restaurant_id: 'rest-saffron-house-01', name: 'Clay Oven (Tandoor)', sort_order: 2, is_active: true },
-  { id: 'cat-curry', restaurant_id: 'rest-saffron-house-01', name: 'Heritage Curries', sort_order: 3, is_active: true },
-  { id: 'cat-bread', restaurant_id: 'rest-saffron-house-01', name: 'Breads & Rice', sort_order: 4, is_active: true },
-  { id: 'cat-bev', restaurant_id: 'rest-saffron-house-01', name: 'Beverages & Desserts', sort_order: 5, is_active: true },
+  { id: 'cat-biryani', restaurant_id: 'rest-saffron-house-01', name: 'Dum Biryani', sort_order: 1, is_active: true },
+  { id: 'cat-app', restaurant_id: 'rest-saffron-house-01', name: 'Kebabs & Starters', sort_order: 2, is_active: true },
+  { id: 'cat-curry', restaurant_id: 'rest-saffron-house-01', name: 'Awadhi Curries', sort_order: 3, is_active: true },
+  { id: 'cat-bread', restaurant_id: 'rest-saffron-house-01', name: 'Artisanal Breads', sort_order: 4, is_active: true },
+  { id: 'cat-bev', restaurant_id: 'rest-saffron-house-01', name: 'Desserts', sort_order: 5, is_active: true },
   // Casa Bella Trattoria
   { id: 'cat-cb-anti', restaurant_id: 'rest-casa-bella-02', name: 'Antipasti & Crudo', sort_order: 1, is_active: true },
   { id: 'cat-cb-pizza', restaurant_id: 'rest-casa-bella-02', name: 'Woodfired Pizza', sort_order: 2, is_active: true },
@@ -238,6 +238,80 @@ export const SEED_CATEGORIES: MenuCategory[] = [
 ];
 
 export const SEED_MENU_ITEMS: MenuItem[] = [
+  // Stitch Signature Dishes for Saffron House
+  {
+    id: 'item-stitch-biryani-1',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-biryani',
+    name: 'Royal Murgh Dum Biryani',
+    price: 480.00,
+    short_description: 'Fragrant long-grain aged basmati rice layered with chicken steeped in saffron, roasted spices, and kewra essence in a sealed copper handi.',
+    full_description: 'Authentic Awadhi Dum Pukht preparation. 12-hour saffron-infused marinade, caramelized shallots, Kewra essence and aged long-grain basmati sealed in heavy copper handi over slow-burning embers.',
+    ingredients: ['Aged Basmati Rice', 'Farm Fresh Chicken', 'Kashmiri Saffron', 'Kewra Water', 'Caramelized Birista Shallots', 'Desi Ghee'],
+    allergens: ['Dairy'],
+    dietary_flags: ['Non-Vegetarian', 'Slow Cooked'],
+    spice_level: 2,
+    serving_size: 'Serves 1–2 · 650g · Mild Spice',
+    image_url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDAsLjblrxFEiA8Y_LoXXnjd9KkqzqzQ7-dNnZCQ-TmA0CCdiybNfOSZweMWqQdLixsw9WwHLGczE-KMtpBpClz_B9BbR_bZ2YOUrCm8QZdjgnYCrMCp_SmsqAcNL8rzpmRKvwBGa-yBW9Jyhm9rrqT7kdSrxba0RpyUrPp2KAHOSKkkfJGT8Iiy0JuQb9ZJlJI8JQLBAsNFl77Xrnqkx6hvrQj6_nKIji8lA22k8FQ',
+    is_available: true,
+    pairing_item_ids: ['item-bev-1'],
+    chef_notes: 'Slow cooked in sealed copper handi. Pairs exquisitely with smoked saffron raita.',
+    sort_order: 1
+  },
+  {
+    id: 'item-stitch-paneer-2',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-app',
+    name: 'Awadhi Paneer Tikka',
+    price: 390.00,
+    short_description: 'Tandoor-charred malai cottage cheese cubes infused with yellow chili and cold-pressed mustard oil, finished with fresh mint emulsion.',
+    full_description: 'Hand-churned organic cottage cheese steeped in cold-pressed Kachi Ghani mustard oil, crushed yellow chili, and roasted carom seeds. Roasted over charcoal in earthen tandoor.',
+    ingredients: ['Fresh Malai Paneer', 'Yellow Chili', 'Mustard Oil', 'Ajwain', 'Mint Chutney'],
+    allergens: ['Dairy'],
+    dietary_flags: ['Vegetarian', "Chef's Selection"],
+    spice_level: 2,
+    serving_size: '5 Skewered Cubes · Serves 2',
+    image_url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD41C3kXbSyvV_zONkzQBB0paLcb7W3MdzFmwP1FEKDOm7BX2PwZ7coip1Gev93FTsCY6ed3JEdpxW2g3RkRmPKtxU3wHodqqutmPVlMN8mS8GvJVAja9Nl1tWtUiY-5rJ-Wl732GoSqpF84EszNQsCSfQO8yZd1NWjUQvwrKDXArl_MTAlKHNs9j1Q6qQ_V9ivPHQ9mOedqNE5Vu8nlVO0xlajxF6R3lmgchH1JJRq',
+    is_available: true,
+    pairing_item_ids: [],
+    sort_order: 2
+  },
+  {
+    id: 'item-stitch-kebab-3',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-app',
+    name: 'Galouti Kebab with Sheermal',
+    price: 540.00,
+    short_description: 'Smoked minced lamb patties flavored with 160 aromatic potli herbs, served atop saffron-sweetened sheermal flatbreads.',
+    full_description: 'Melt-in-mouth smoked lamb patties infused with raw papaya tenderizer, smoked cloves, and royal Lucknowi spice blends. Plated on miniature golden saffron sheermal rounds.',
+    ingredients: ['Minced Lamb', 'Potli Masala (160 Herbs)', 'Raw Papaya', 'Ghee', 'Saffron Sheermal'],
+    allergens: ['Gluten', 'Dairy'],
+    dietary_flags: ['Non-Vegetarian', 'Signature'],
+    spice_level: 3,
+    serving_size: '4 Kebabs · 2 Sheermal',
+    image_url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDir_wlWI_bV_OpGByV2sJsCKqjjjan30jN7wl94lczNEp_3skuXgjKeg1in6WWMKax_p6yxhBfYfyApPKJlHkDPdLuafRyh_CwMOmZ4mr4G6sDQgE82aW0T9Kd3iVc_w_BF5Yb8BA3PJyg72yUcS1v9eF5eXT614bowQxmwJC1kEoiQ-YlaKA0APrSf3zsqiWmDkr2-pLTBlpIwAXViuxHV2jG4GcDyDNKuYA9BJSV',
+    is_available: true,
+    pairing_item_ids: [],
+    sort_order: 3
+  },
+  {
+    id: 'item-stitch-dessert-4',
+    restaurant_id: 'rest-saffron-house-01',
+    category_id: 'cat-bev',
+    name: 'Shahi Tukda & Rabdi Fondue',
+    price: 320.00,
+    short_description: 'Ghee-crisped brioche steeped in cardamom-saffron syrup, served with warm reduced pistachio rabdi and chandi vark.',
+    full_description: 'Traditional Mughal royal dessert. Thick artisanal brioche slices fried in pure cow ghee, soaked in golden saffron reduction, and served with a clay pot of simmering pistachio rabdi.',
+    ingredients: ['Artisan Brioche', 'Pure Ghee', 'Reduced Whole Milk', 'Pistachio', 'Cardamom', 'Chandi Vark'],
+    allergens: ['Dairy', 'Gluten', 'Nuts'],
+    dietary_flags: ['Vegetarian', 'Dessert'],
+    spice_level: 0,
+    serving_size: 'Serves 2 · Contains Pistachio & Milk',
+    image_url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCNluqJaEUf3-w1-fs5goVkxR8lTMJAiLKeF2sanlu6t5RjvNEe0Zgko5ta215hbFwpCUAUVYJ8M3r2N3IR7Vh1t2oOafxcDHREuhTyZe3JSbQnfIczKvbgLhTnLsc-0D2YOvW1aVS7PuDIl0JAg9ZhWSMULPPQgnNcDrkEKYHcvHjXbYSvPltBm6nSE3X9EtwBQq41Ha6gctmLXu2mfPwrkjB8ZR9qPOb-zPVRApOs',
+    is_available: true,
+    pairing_item_ids: [],
+    sort_order: 4
+  },
   // Appetizers
   {
     id: 'item-app-1',

@@ -2,11 +2,27 @@
 export default {
   content: [
     "./index.html",
+    "./customer.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       colors: {
+        stitch: {
+          bg: '#131315',
+          surface: '#131315',
+          'surface-low': '#1b1b1d',
+          'surface-container': '#201f21',
+          'surface-high': '#2a2a2c',
+          'surface-highest': '#353437',
+          primary: '#ff5722',
+          'primary-dim': '#ffb5a0',
+          secondary: '#ffb955',
+          tertiary: '#88d982',
+          'on-surface': '#e5e1e4',
+          'on-surface-variant': '#e4beb4',
+          outline: '#ab8980',
+        },
         saffron: {
           50: '#FFF7ED',
           100: '#FFEDD5',

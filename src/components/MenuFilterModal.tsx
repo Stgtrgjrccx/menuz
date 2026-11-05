@@ -84,20 +84,20 @@ export const MenuFilterModal: React.FC<MenuFilterModalProps> = ({
   ];
 
   return createPortal(
-    <div className="fixed inset-0 z-50 bg-[#924E00]/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4">
       <div
-        className="bg-[#FFF7E6] text-[#924E00] w-full max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[90vh] flex flex-col overflow-hidden border border-[#924E00]/15 shadow-2xl animate-in slide-in-from-bottom duration-200"
+        className="bg-[#131315] text-[#e5e1e4] w-full max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[90vh] flex flex-col overflow-hidden border border-white/10 shadow-2xl animate-in slide-in-from-bottom duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-4 border-b border-[#924E00]/10 flex items-center justify-between bg-white/80">
+        <div className="p-4 border-b border-white/10 flex items-center justify-between bg-[#1b1b1d]">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-xl bg-[#F9A620]/20 text-[#924E00] border border-[#F9A620]/40 flex items-center justify-center">
-              <SlidersHorizontal className="w-4 h-4 text-[#F9A620]" />
+            <div className="w-8 h-8 rounded-xl bg-[#ff5722]/20 text-[#e5e1e4] border border-[#ff5722]/30 flex items-center justify-center">
+              <SlidersHorizontal className="w-4 h-4 text-[#ff5722]" />
             </div>
             <div>
-              <h3 className="font-serif font-bold text-base text-[#924E00]">Menu Filters &amp; Sorting</h3>
-              <p className="text-[11px] text-[#924E00]/70">Personalize your dining taste profile</p>
+              <h3 className="font-serif font-bold text-base text-[#e5e1e4]">Menu Filters &amp; Sorting</h3>
+              <p className="text-[11px] text-[#ab8980]">Personalize your dining taste profile</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
@@ -105,7 +105,7 @@ export const MenuFilterModal: React.FC<MenuFilterModalProps> = ({
               <button
                 type="button"
                 onClick={handleReset}
-                className="text-[11px] text-[#F9A620] hover:text-[#e89512] flex items-center space-x-1 font-semibold px-2 py-1 rounded-lg bg-[#F9A620]/10 border border-[#F9A620]/20 transition-all cursor-pointer"
+                className="text-[11px] text-[#ff5722] hover:text-[#ff6f3d] flex items-center space-x-1 font-semibold px-2 py-1 rounded-lg bg-[#ff5722]/15 border border-[#ff5722]/30 transition-all cursor-pointer"
               >
                 <RotateCcw className="w-3 h-3" />
                 <span>Reset</span>
@@ -113,7 +113,7 @@ export const MenuFilterModal: React.FC<MenuFilterModalProps> = ({
             )}
             <button
               onClick={onClose}
-              className="p-1.5 rounded-full text-[#924E00]/50 hover:text-[#924E00] hover:bg-[#924E00]/10 transition-colors cursor-pointer"
+              className="p-1.5 rounded-full text-[#ab8980] hover:text-[#e5e1e4] hover:bg-[#924E00]/10 transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -121,15 +121,15 @@ export const MenuFilterModal: React.FC<MenuFilterModalProps> = ({
         </div>
 
         {/* Filter Content */}
-        <div className="p-4 sm:p-5 overflow-y-auto space-y-6 text-xs bg-[#FFF7E6]">
+        <div className="p-4 sm:p-5 overflow-y-auto space-y-6 text-xs bg-[#131315]">
           {/* 1. Dietary & Allergens (#12) */}
           <div className="space-y-2.5">
             <div className="flex items-center justify-between">
-              <span className="font-serif font-bold text-[#924E00] text-xs tracking-wider uppercase flex items-center space-x-1.5">
+              <span className="font-serif font-bold text-[#e5e1e4] text-xs tracking-wider uppercase flex items-center space-x-1.5">
                 <span>🥗</span>
                 <span>Dietary &amp; Allergen Preferences</span>
               </span>
-              <span className="text-[10px] text-[#924E00]/60">Strict Kitchen Filtering</span>
+              <span className="text-[10px] text-[#ab8980]">Strict Kitchen Filtering</span>
             </div>
             <div className="grid grid-cols-2 gap-2">
               {dietaryItems.map((item) => {
@@ -141,17 +141,17 @@ export const MenuFilterModal: React.FC<MenuFilterModalProps> = ({
                     onClick={() => onFiltersChange({ ...filters, dietary: item.id })}
                     className={`p-2.5 rounded-xl border text-left flex items-start space-x-2 transition-all cursor-pointer ${
                       isSelected
-                        ? 'bg-[#F9A620]/20 border-[#F9A620] text-[#924E00] shadow-xs ring-1 ring-[#F9A620]/40 font-bold'
-                        : 'bg-white border-[#924E00]/10 text-[#924E00]/80 hover:border-[#F9A620]'
+                        ? 'bg-[#ff5722]/20 border-[#ff5722] text-[#e5e1e4] shadow-xs ring-1 ring-[#ff5722]/40 font-bold'
+                        : 'bg-[#1b1b1d] border-white/10 text-[#ab8980] hover:border-[#ff5722]'
                     }`}
                   >
                     <span className="text-base flex-shrink-0">{item.icon}</span>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between">
                         <span className="font-semibold text-xs truncate">{item.label}</span>
-                        {isSelected && <Check className="w-3 h-3 text-[#F9A620] ml-1 flex-shrink-0" />}
+                        {isSelected && <Check className="w-3 h-3 text-[#ff5722] ml-1 flex-shrink-0" />}
                       </div>
-                      <p className="text-[10px] text-[#924E00]/60 line-clamp-1 mt-0.5">{item.desc}</p>
+                      <p className="text-[10px] text-[#ab8980] line-clamp-1 mt-0.5">{item.desc}</p>
                     </div>
                   </button>
                 );
@@ -162,11 +162,11 @@ export const MenuFilterModal: React.FC<MenuFilterModalProps> = ({
           {/* 2. Spice Heat Level (Low to High Options) */}
           <div className="space-y-2.5">
             <div className="flex items-center justify-between">
-              <span className="font-serif font-bold text-[#924E00] text-xs tracking-wider uppercase flex items-center space-x-1.5">
+              <span className="font-serif font-bold text-[#e5e1e4] text-xs tracking-wider uppercase flex items-center space-x-1.5">
                 <span>🌶️</span>
                 <span>Spice Heat Level Gauge</span>
               </span>
-              <span className="text-[10px] text-[#924E00]/60">From Mild to Fiery</span>
+              <span className="text-[10px] text-[#ab8980]">From Mild to Fiery</span>
             </div>
             <div className="grid grid-cols-2 gap-2">
               {spiceItems.map((item) => {
@@ -178,17 +178,17 @@ export const MenuFilterModal: React.FC<MenuFilterModalProps> = ({
                     onClick={() => onFiltersChange({ ...filters, spice: item.id })}
                     className={`p-2.5 rounded-xl border text-left flex items-start space-x-2 transition-all cursor-pointer ${
                       isSelected
-                        ? 'bg-[#F9A620]/20 border-[#F9A620] text-[#924E00] shadow-xs ring-1 ring-[#F9A620]/40 font-bold'
-                        : 'bg-white border-[#924E00]/10 text-[#924E00]/80 hover:border-[#F9A620]'
+                        ? 'bg-[#ff5722]/20 border-[#ff5722] text-[#e5e1e4] shadow-xs ring-1 ring-[#ff5722]/40 font-bold'
+                        : 'bg-[#1b1b1d] border-white/10 text-[#ab8980] hover:border-[#ff5722]'
                     }`}
                   >
                     <span className="text-base flex-shrink-0">{item.icon}</span>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between">
                         <span className="font-semibold text-xs truncate">{item.label}</span>
-                        {isSelected && <Check className="w-3 h-3 text-[#F9A620] ml-1 flex-shrink-0" />}
+                        {isSelected && <Check className="w-3 h-3 text-[#ff5722] ml-1 flex-shrink-0" />}
                       </div>
-                      <p className="text-[10px] text-[#924E00]/60 line-clamp-1 mt-0.5">{item.desc}</p>
+                      <p className="text-[10px] text-[#ab8980] line-clamp-1 mt-0.5">{item.desc}</p>
                     </div>
                   </button>
                 );
@@ -199,11 +199,11 @@ export const MenuFilterModal: React.FC<MenuFilterModalProps> = ({
           {/* 3. Sort Order (Low to High, High to Low) */}
           <div className="space-y-2.5">
             <div className="flex items-center justify-between">
-              <span className="font-serif font-bold text-[#924E00] text-xs tracking-wider uppercase flex items-center space-x-1.5">
-                <ArrowUpDown className="w-3.5 h-3.5 text-[#F9A620]" />
+              <span className="font-serif font-bold text-[#e5e1e4] text-xs tracking-wider uppercase flex items-center space-x-1.5">
+                <ArrowUpDown className="w-3.5 h-3.5 text-[#ff5722]" />
                 <span>Price &amp; Spice Sorting</span>
               </span>
-              <span className="text-[10px] text-[#924E00]/60">Order by preference</span>
+              <span className="text-[10px] text-[#ab8980]">Order by preference</span>
             </div>
             <div className="space-y-1.5">
               {sortItems.map((item) => {
@@ -215,15 +215,15 @@ export const MenuFilterModal: React.FC<MenuFilterModalProps> = ({
                     onClick={() => onFiltersChange({ ...filters, sort: item.id })}
                     className={`w-full p-2.5 rounded-xl border text-left flex items-center justify-between transition-all cursor-pointer ${
                       isSelected
-                        ? 'bg-[#F9A620]/20 border-[#F9A620] text-[#924E00] font-bold'
-                        : 'bg-white border-[#924E00]/10 text-[#924E00]/80 hover:border-[#F9A620]'
+                        ? 'bg-[#ff5722]/20 border-[#ff5722] text-[#e5e1e4] font-bold'
+                        : 'bg-[#1b1b1d] border-white/10 text-[#ab8980] hover:border-[#ff5722]'
                     }`}
                   >
                     <div className="flex items-center space-x-2">
                       <span>{item.icon}</span>
                       <span className="text-xs">{item.label}</span>
                     </div>
-                    {isSelected && <Check className="w-3.5 h-3.5 text-[#F9A620]" />}
+                    {isSelected && <Check className="w-3.5 h-3.5 text-[#ff5722]" />}
                   </button>
                 );
               })}
@@ -233,11 +233,11 @@ export const MenuFilterModal: React.FC<MenuFilterModalProps> = ({
           {/* 4. Culinary Studio Badges & Highlights */}
           <div className="space-y-2.5">
             <div className="flex items-center justify-between">
-              <span className="font-serif font-bold text-[#924E00] text-xs tracking-wider uppercase flex items-center space-x-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-[#F9A620]" />
+              <span className="font-serif font-bold text-[#e5e1e4] text-xs tracking-wider uppercase flex items-center space-x-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-[#ff5722]" />
                 <span>Culinary Studio Curations</span>
               </span>
-              <span className="text-[10px] text-[#924E00]/60">Chef &amp; Sommelier Picks</span>
+              <span className="text-[10px] text-[#ab8980]">Chef &amp; Sommelier Picks</span>
             </div>
             <div className="grid grid-cols-2 gap-2">
               {highlightItems.map((item) => {
@@ -249,13 +249,13 @@ export const MenuFilterModal: React.FC<MenuFilterModalProps> = ({
                     onClick={() => onFiltersChange({ ...filters, highlight: item.id })}
                     className={`p-2 rounded-xl border text-left flex items-center space-x-2 transition-all cursor-pointer ${
                       isSelected
-                        ? 'bg-[#F9A620]/20 border-[#F9A620] text-[#924E00] font-bold'
-                        : 'bg-white border-[#924E00]/10 text-[#924E00]/80 hover:border-[#F9A620]'
+                        ? 'bg-[#ff5722]/20 border-[#ff5722] text-[#e5e1e4] font-bold'
+                        : 'bg-[#1b1b1d] border-white/10 text-[#ab8980] hover:border-[#ff5722]'
                     }`}
                   >
                     <span className="text-sm flex-shrink-0">{item.icon}</span>
                     <span className="text-xs truncate flex-1">{item.label}</span>
-                    {isSelected && <Check className="w-3 h-3 text-[#F9A620] flex-shrink-0" />}
+                    {isSelected && <Check className="w-3 h-3 text-[#ff5722] flex-shrink-0" />}
                   </button>
                 );
               })}
@@ -264,14 +264,14 @@ export const MenuFilterModal: React.FC<MenuFilterModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="p-4 bg-white border-t border-[#924E00]/10 flex items-center justify-between gap-3">
-          <div className="text-xs text-[#924E00]/80">
-            Showing <strong className="text-[#924E00] font-bold">{totalFilteredCount}</strong> matching dishes
+        <div className="p-4 bg-[#1b1b1d] border-t border-white/10 flex items-center justify-between gap-3">
+          <div className="text-xs text-[#ab8980]">
+            Showing <strong className="text-[#e5e1e4] font-bold">{totalFilteredCount}</strong> matching dishes
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="px-6 py-2.5 rounded-xl bg-[#F9A620] hover:bg-[#e89512] text-white font-bold text-xs shadow-xs transition-all active:scale-95 cursor-pointer"
+            className="px-6 py-2.5 rounded-xl bg-[#ff5722] hover:bg-[#ff6f3d] text-white font-bold text-xs shadow-xs transition-all active:scale-95 cursor-pointer"
           >
             Apply Filters
           </button>

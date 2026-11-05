@@ -156,7 +156,7 @@ const DEDICATED_ITEMS_KEY = 'menuz_custom_menu_items';
 const DEDICATED_CATEGORIES_KEY = 'menuz_custom_categories';
 const DEDICATED_CHALLENGES_KEY = 'menuz_custom_challenges';
 
-const STORAGE_KEY = 'menuz_master_cloud_storage_v20_permanent_venues';
+const STORAGE_KEY = 'menuz_master_cloud_storage_v21_stitch_design';
 
 const LEGACY_STORAGE_KEYS = [
   'menuz_master_cloud_storage_v20_permanent_venues',

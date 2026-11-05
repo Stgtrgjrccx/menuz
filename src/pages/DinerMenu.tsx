@@ -70,6 +70,8 @@ export const DinerMenu: React.FC = () => {
   const activeOrderId = useRestaurantStore((state) => state.activeOrderId);
   const setActiveOrderId = useRestaurantStore((state) => state.setActiveOrderId);
   const addItemToCart = useRestaurantStore((state) => state.addItemToCart);
+  const updateCartQuantity = useRestaurantStore((state) => state.updateCartQuantity);
+  const removeCartItem = useRestaurantStore((state) => state.removeCartItem);
   const callWaiter = useRestaurantStore((state) => state.callWaiter);
   const completeChallenge = useRestaurantStore((state) => state.completeChallenge);
   const selectedLanguage = useRestaurantStore((state) => state.selectedLanguage);
@@ -235,9 +237,29 @@ export const DinerMenu: React.FC = () => {
   const [waiterCalled, setWaiterCalled] = useState(false);
   const [waiterToast, setWaiterToast] = useState<string | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+
+  const toggleFavorite = (dishId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setFavorites((prev) => {
+      const next = new Set(prev);
+      if (next.has(dishId)) next.delete(dishId);
+      else next.add(dishId);
+      return next;
+    });
+  };
 
   const toggleStoryExpand = (dishId: string) => {
     setExpandedStories((prev) => ({ ...prev, [dishId]: !prev[dishId] }));
+  };
+
+  const handleUpdateQuantity = (dishId: string, newQty: number) => {
+    if (newQty <= 0) {
+      removeCartItem(dishId);
+    } else {
+      updateCartQuantity(dishId, newQty);
+    }
   };
 
   const handleOpenAi = (dish: MenuItem | null = null, query: string | null = null) => {
@@ -709,18 +731,18 @@ export const DinerMenu: React.FC = () => {
   }
 
   return (
-    <div ref={mainRef} className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#FFF7E6] text-[#924E00] pb-28">
+    <div ref={mainRef} className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#131315] text-[#e5e1e4] pb-36 font-sans selection:bg-[#ff5722]/30 selection:text-white">
       {/* ═══════════════════════════════════════════════════════════ */}
       {/* LIVE TOAST: WAITER CALLED NOTIFICATION                     */}
       {/* ═══════════════════════════════════════════════════════════ */}
       {waiterCalled && (
-        <div className="fixed top-4 left-4 right-4 max-w-sm mx-auto z-50 bg-white text-[#924E00] p-3.5 rounded-2xl border border-[#F9A620]/40 shadow-xl flex items-center space-x-3 animate-slideDown">
-          <div className="w-8 h-8 rounded-xl bg-[#F9A620] flex items-center justify-center flex-shrink-0 text-white">
+        <div className="fixed top-4 left-4 right-4 max-w-sm mx-auto z-50 bg-[#1b1b1d] text-[#e5e1e4] p-3.5 rounded-2xl border border-emerald-500/50 shadow-2xl flex items-center space-x-3 animate-slideDown">
+          <div className="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center flex-shrink-0 text-white shadow-md">
             <Bell className="w-4 h-4 text-white animate-bounce" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="font-serif font-bold text-xs text-[#924E00]">Waiter Alert Sent!</p>
-            <p className="text-[10px] text-[#924E00]/70">
+            <p className="font-bold text-xs text-white">Waiter Alert Transmitted!</p>
+            <p className="text-[10px] text-[#ab8980]">
               Staff has been notified for {activeTable?.label || 'your table'}. A server is on their way.
             </p>
           </div>
@@ -728,1089 +750,486 @@ export const DinerMenu: React.FC = () => {
       )}
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* 0. STREAMLINED DINER TOP BAR (MOBILE-FIRST)                 */}
+      {/* 0. STITCH TOP APP BAR (HEADER)                              */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <div className="sticky top-0 z-30 h-12 sm:h-14 bg-[#FFF7E6]/95 backdrop-blur-md text-[#924E00] border-b border-[#924E00]/10 px-3 sm:px-4 flex items-center justify-between shadow-xs">
-        {/* Links back to Home & All Menus */}
-        <div className="flex items-center space-x-2">
-          <Link
-            to={IS_HQ_SITE ? "/customer" : "/"}
-            className="flex items-center space-x-1.5 text-xs text-[#924E00]/70 hover:text-[#924E00] transition-colors group flex-shrink-0"
-            title="Back to Menuz Home"
-          >
-            <span className="w-5 h-5 rounded-lg bg-[#F9A620] flex items-center justify-center font-bold text-[10px] text-white shadow-xs">
-              M
-            </span>
-            <span className="font-serif font-black text-[#924E00] group-hover:text-[#F9A620] transition-colors text-sm sm:text-base">
-              menuz
-            </span>
-          </Link>
-
-          <Link
-            to="/menu"
-            className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-white/80 hover:bg-white text-xs font-semibold text-[#924E00] border border-[#924E00]/15 transition-all shadow-xs"
-            title="Explore other restaurant menus"
-          >
-            <ArrowLeft className="w-3.5 h-3.5 text-[#F9A620]" />
-            <span className="hidden sm:inline">All Menus</span>
-          </Link>
+      <header className="fixed top-0 left-0 w-full z-40 flex justify-between items-center px-4 py-3 bg-[#131315]/90 backdrop-blur-md shadow-sm border-b border-white/5">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-full bg-[#201f21] flex items-center justify-center text-[#ff5722] border border-white/5 flex-shrink-0">
+            <span className="material-symbols-outlined text-lg">restaurant</span>
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-sm sm:text-base font-bold text-[#e5e1e4] tracking-tight">
+                {targetRestaurant.name || 'Saffron House'}
+              </h1>
+              <span className="text-[11px] text-[#ab8980] font-medium hidden xs:inline">
+                · {targetRestaurant.location || 'Koregaon Park'}
+              </span>
+            </div>
+            <p className="text-[11px] text-[#ffb955] flex items-center gap-1.5 font-medium">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#88d982] inline-block animate-pulse"></span>
+              {activeTable ? activeTable.label : 'Table 04'} · {activeTable?.capacity || 2} Guests
+            </p>
+          </div>
         </div>
-
-        {/* Table Arcade, Language selector & Cart */}
-        <div className="flex items-center space-x-1.5 sm:space-x-2">
-          {/* Table Arcade Pill */}
+        <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => setIsTableArcadeOpen(true)}
-            className="px-2.5 py-1 rounded-full bg-[#F9A620]/15 hover:bg-[#F9A620]/25 border border-[#F9A620]/40 text-[#924E00] text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer shadow-xs"
-            title="Play Solitaire, Crossword & Multiplayer Games for this table"
+            aria-label="Search dishes"
+            onClick={() => setIsSearchExpanded(!isSearchExpanded)}
+            className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
+              isSearchExpanded || searchQuery
+                ? 'bg-[#ff5722] text-white'
+                : 'bg-[#201f21] text-[#ab8980] hover:text-[#e5e1e4] hover:bg-[#2a2a2c]'
+            }`}
           >
-            <Gamepad2 className="w-3.5 h-3.5 text-[#F9A620]" />
-            <span className="hidden sm:inline">Table Arcade</span>
-            <span className="sm:hidden text-[10px]">Games</span>
+            <span className="material-symbols-outlined text-lg">search</span>
           </button>
-
-          <LanguageSelector />
-
-          {cart.length > 0 && (
-            <button
-              onClick={() => setIsCartOpen(true)}
-              className="relative p-1.5 rounded-xl text-[#924E00] hover:bg-[#FFF2D6] bg-white border border-[#924E00]/15 transition-colors flex-shrink-0 shadow-xs cursor-pointer"
-              title="Open Table Cart"
-            >
-              <ShoppingBag className="w-4 h-4 text-[#F9A620]" />
-              <span className="absolute -top-1 -right-1 bg-[#F9A620] text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold shadow-xs">
-                {cart.reduce((a, b) => a + b.quantity, 0)}
-              </span>
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* ═══════════════════════════════════════════════════════════ */}
-      {/* LIVE TABLE SYNC TOAST                                      */}
-      {/* ═══════════════════════════════════════════════════════════ */}
-      {tableSyncAlert && (
-        <div className="fixed top-14 left-4 right-4 max-w-sm mx-auto z-40 bg-white text-[#924E00] p-3 rounded-2xl border border-emerald-500/40 shadow-lg flex items-center space-x-2.5 animate-slideDown">
-          <div className="w-7 h-7 rounded-lg bg-emerald-600 flex items-center justify-center flex-shrink-0">
-            <Users className="w-3.5 h-3.5 text-white" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="font-serif font-bold text-xs text-[#924E00] leading-tight">Live Table Sync</p>
-            <p className="text-[10px] text-emerald-700 truncate">{tableSyncAlert}</p>
-          </div>
-        </div>
-      )}
-
-      {/* ═══════════════════════════════════════════════════════════ */}
-      {/* SMART HAPPY HOUR ACTIVE BANNER                             */}
-      {/* ═══════════════════════════════════════════════════════════ */}
-      {isHappyHourActive && (
-        <div className="bg-gradient-to-r from-[#F9A620] via-[#e89512] to-[#F9A620] text-white px-4 py-2 flex items-center justify-between text-xs font-bold shadow-xs">
-          <div className="flex items-center space-x-2">
-            <span className="w-2 h-2 rounded-full bg-white animate-ping" />
-            <span className="tracking-wide">
-              {restaurant.happy_hour_config?.banner_label || '⚡ Twilight Happy Hour: 20% Off All Beverages & Chef Starters!'}
-            </span>
-          </div>
           <button
-            onClick={() => setForceHappyHourDemo(!forceHappyHourDemo)}
-            className="text-[10px] underline opacity-90 hover:opacity-100 cursor-pointer ml-2"
+            type="button"
+            aria-label="Filter dishes"
+            onClick={() => setIsFilterModalOpen(true)}
+            className="w-9 h-9 rounded-full bg-[#201f21] flex items-center justify-center text-[#ab8980] hover:text-[#e5e1e4] hover:bg-[#2a2a2c] transition-colors relative cursor-pointer"
           >
-            {forceHappyHourDemo ? 'Hide Demo' : 'Preview Live'}
+            <span className="material-symbols-outlined text-lg">tune</span>
+            {activeFiltersCount > 0 && (
+              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#ff5722]"></span>
+            )}
+          </button>
+          <button
+            type="button"
+            aria-label="Call Service"
+            onClick={handleCallWaiter}
+            disabled={waiterCalled}
+            className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
+              waiterCalled
+                ? 'bg-emerald-600 text-white'
+                : 'bg-[#201f21] text-[#ab8980] hover:text-[#e5e1e4] hover:bg-[#2a2a2c]'
+            }`}
+          >
+            <span className="material-symbols-outlined text-lg">room_service</span>
           </button>
         </div>
-      )}
+      </header>
 
-      {/* ═══════════════════════════════════════════════════════════ */}
-      {/* COMPACT SCROLLYTELLING HERO (MENU-FIRST VIEWPORT)           */}
-      {/* ═══════════════════════════════════════════════════════════ */}
-      <section
-        ref={heroRef}
-        className="relative min-h-[16vh] sm:min-h-[20vh] flex flex-col items-center justify-center text-center px-3 sm:px-6 overflow-hidden pt-5 pb-4 sm:pt-7 sm:pb-5 bg-gradient-to-b from-[#FFF2D6] via-[#FFF7E6] to-[#FFF7E6] border-b border-[#924E00]/10"
-      >
-        <div
-          className="absolute top-2 right-4 w-28 h-28 sm:w-40 sm:h-40 rounded-full opacity-10 blur-3xl pointer-events-none bg-[#F9A620]"
-        />
-        <div
-          className="absolute bottom-2 left-4 w-24 h-24 sm:w-32 sm:h-32 rounded-full opacity-10 blur-2xl pointer-events-none bg-[#F9A620]"
-        />
-
-        <div className="relative z-10 max-w-lg mx-auto space-y-1.5 sm:space-y-2.5">
-          {/* Restaurant badge with multiplayer session indicator */}
-          <div className="flex flex-wrap items-center justify-center gap-1.5">
-            <span className="inline-block px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] tracking-wider uppercase font-bold border bg-white/90 backdrop-blur-sm text-[#924E00] border-[#924E00]/15 shadow-xs">
-              {activeTable?.label ? `${t.table} ${activeTable.label}` : `${t.table} 1`} • {restaurant?.cuisine || 'Contemporary Dining'}
-            </span>
-            <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[8.5px] sm:text-[9.5px] font-bold border bg-emerald-100 text-emerald-800 border-emerald-300 shadow-xs">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
-              <span>Live Sync ({activeTableGuests})</span>
-            </span>
-          </div>
-
-          {/* Restaurant name */}
-          <h1 className="font-serif text-xl sm:text-3xl md:text-4xl font-bold text-[#924E00] leading-tight tracking-tight">
-            {restaurant?.name || 'Saffron House'}
-          </h1>
-
-          <p className="text-[10px] sm:text-xs text-[#924E00]/80 leading-snug max-w-sm mx-auto line-clamp-1">
-            {restaurant?.authentic_photography_statement ||
-              'Curated menu crafted with authentic spices and chef specialties.'}
-          </p>
-
-          {/* Streamlined, Minimalist Quick Action Pills (Glanceable without clutter) */}
-          <div className="flex items-center justify-center gap-1.5 sm:gap-2 pt-1 overflow-x-auto max-w-full pb-0.5 scrollbar-none">
-            <button
-              onClick={() => handleOpenChallenge()}
-              className="px-3 py-1 bg-[#F9A620] hover:bg-[#e89512] active:scale-95 text-white text-[10px] sm:text-[11px] font-semibold rounded-full shadow-xs transition-all flex items-center space-x-1 cursor-pointer flex-shrink-0"
-            >
-              <span className="text-xs">⭐</span>
-              <span>Review &amp; Win</span>
-            </button>
-
-            <button
-              onClick={() => {
-                setAiFocusDish(null);
-                setIsAiOpen(true);
-              }}
-              className="px-3 py-1 bg-white hover:bg-[#FFF2D6] text-[#924E00] text-[10px] sm:text-[11px] font-semibold rounded-full transition-all flex items-center space-x-1 border border-[#924E00]/15 shadow-xs cursor-pointer flex-shrink-0"
-            >
-              <span className="text-xs">🧑‍🍳</span>
-              <span>Chef AI</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse ml-0.5" />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════ */}
-      {/* SLEEK, COMPACT SURPRISE TABLE REWARD TEASER                */}
-      {/* ═══════════════════════════════════════════════════════════ */}
-      {!rewardBannerDismissed && (
-        <div className="max-w-xl mx-auto px-3 sm:px-4 -mt-1.5 sm:-mt-2 relative z-20">
-          <div className="w-full bg-white/95 backdrop-blur-md p-2.5 sm:p-3 rounded-2xl flex items-center justify-between space-x-2 text-[#924E00] border border-[#F9A620]/30 shadow-sm">
-            <div
-              onClick={() => handleOpenChallenge()}
-              className="flex items-center space-x-2 min-w-0 cursor-pointer flex-1"
-            >
-              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-[#F9A620] flex items-center justify-center text-sm sm:text-base flex-shrink-0 shadow-xs text-white font-bold">
-                ⭐
-              </div>
-              <div className="min-w-0">
-                <div className="flex items-center space-x-1.5">
-                  <span className="text-[8.5px] sm:text-[9.5px] uppercase font-bold tracking-wider text-[#F9A620] truncate">
-                    Google Review &amp; Treats
-                  </span>
-                  <span className="px-1.5 py-0.2 rounded text-[7.5px] sm:text-[8.5px] font-bold bg-green-100 text-green-800">
-                    Guaranteed
-                  </span>
-                </div>
-                <p className="text-[10px] sm:text-[11px] text-[#924E00]/80 truncate font-medium">
-                  1-Tap 5-Star Draft + Win Complimentary Treats
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-1 flex-shrink-0">
+      {/* Expandable Search Input Drawer */}
+      {isSearchExpanded && (
+        <div className="fixed top-[57px] left-0 right-0 z-30 bg-[#1b1b1d]/95 backdrop-blur-md px-4 py-2 border-b border-white/5 animate-slideDown shadow-lg">
+          <div className="max-w-xl mx-auto relative flex items-center">
+            <span className="material-symbols-outlined absolute left-3 text-[#ab8980] text-lg">search</span>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search curries, biryanis, kebabs, breads..."
+              className="w-full bg-[#201f21] text-[#e5e1e4] pl-10 pr-10 py-2 rounded-full text-xs placeholder-[#ab8980]/70 border border-white/10 focus:outline-none focus:border-[#ff5722]"
+              autoFocus
+            />
+            {searchQuery && (
               <button
                 type="button"
-                onClick={() => handleOpenChallenge()}
-                className="px-2.5 py-1 rounded-xl bg-[#F9A620] hover:bg-[#e89512] active:scale-95 text-white font-bold text-[10px] sm:text-xs flex items-center space-x-0.5 shadow-xs transition-all cursor-pointer"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 text-[#ab8980] hover:text-[#e5e1e4]"
               >
-                <span>Review &amp; Win</span>
-                <span>→</span>
+                <span className="material-symbols-outlined text-sm">close</span>
               </button>
-              <button
-                type="button"
-                title="Dismiss"
-                onClick={() => setRewardBannerDismissed(true)}
-                className="p-1 rounded-full text-[#924E00]/40 hover:text-[#924E00] transition-colors"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            </div>
+            )}
           </div>
         </div>
       )}
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* STICKY SEARCH, CATEGORY & DIETARY FILTER BAR (#12)           */}
+      {/* MAIN CONTENT CONTAINER                                      */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <div ref={menuSectionRef} className="sticky top-12 sm:top-14 z-20 bg-[#FFF7E6]/98 backdrop-blur-md pt-2.5 pb-2 border-b border-[#924E00]/10 shadow-xs">
-        <div className="max-w-xl mx-auto px-3 sm:px-4 space-y-2">
-          {/* Row 1: Search Bar + View Mode Toggle (#11 Story Mode) */}
-          <div className="flex items-center gap-2">
-            <div className="relative flex-1 min-w-0">
-              <Search className="w-4 h-4 text-[#924E00]/40 absolute left-3 top-3 pointer-events-none" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={t.searchPlaceholder || "Search dish, starters, drinks..."}
-                className="w-full pl-10 pr-10 py-2.5 bg-white rounded-xl text-xs border border-[#924E00]/15 focus:outline-none focus:border-[#F9A620] placeholder-[#924E00]/40 text-[#924E00] shadow-xs truncate placeholder:truncate"
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-2.5 text-[#924E00]/40 hover:text-[#924E00] p-1 rounded-md transition-colors cursor-pointer"
-                  title="Clear search"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              )}
-            </div>
-
-            {/* View Mode Switcher: Magazine Stories vs Classic */}
-            <div className="flex items-center bg-white p-0.5 rounded-xl border border-[#924E00]/15 shadow-xs flex-shrink-0">
-              <button
-                type="button"
-                onClick={() => setMenuViewMode('magazine')}
-                className={`px-2 py-1.5 rounded-lg text-[10px] sm:text-[11px] font-bold flex items-center space-x-1 transition-all cursor-pointer ${
-                  menuViewMode === 'magazine'
-                    ? 'bg-[#F9A620] text-white shadow-xs'
-                    : 'text-[#924E00]/70 hover:text-[#924E00]'
-                }`}
-                title="Visual Menu with Dish Stories &amp; Chef Notes"
-              >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">{t.storiesView || 'Stories'}</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setMenuViewMode('classic')}
-                className={`px-2 py-1.5 rounded-lg text-[10px] sm:text-[11px] font-bold flex items-center space-x-1 transition-all cursor-pointer ${
-                  menuViewMode === 'classic'
-                    ? 'bg-[#F9A620] text-white shadow-xs'
-                    : 'text-[#924E00]/70 hover:text-[#924E00]'
-                }`}
-                title="Compact Classic List View"
-              >
-                <LayoutGrid className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">{t.classicView || 'Classic'}</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Row 2: Category Chips */}
-          <div className="flex space-x-1.5 sm:space-x-2 overflow-x-auto pb-0.5 scrollbar-none">
+      <main className="pt-16 max-w-xl mx-auto px-4 md:px-0">
+        {/* Sticky Category Pill Rail */}
+        <section className="sticky top-[57px] z-20 bg-[#131315]/95 backdrop-blur-md py-2.5 -mx-4 px-4 overflow-x-auto no-scrollbar border-b border-white/5 flex items-center space-x-2">
+          <button
+            type="button"
+            onClick={() => setSelectedCategory('all')}
+            className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 active:scale-95 cursor-pointer ${
+              selectedCategory === 'all'
+                ? 'bg-[#e5e1e4] text-[#131315] font-bold shadow-sm'
+                : 'bg-[#201f21] text-[#ab8980] hover:text-[#e5e1e4] border border-white/5'
+            }`}
+          >
+            All Dishes
+          </button>
+          {currentRestCategories.map((cat) => (
             <button
+              key={cat.id}
               type="button"
-              onClick={() => setSelectedCategory('all')}
-              className={`whitespace-nowrap px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold transition-all cursor-pointer ${
-                selectedCategory === 'all'
-                  ? 'bg-[#F9A620] text-white font-bold shadow-xs'
-                  : 'bg-white text-[#924E00] border border-[#924E00]/15 hover:border-[#F9A620]'
+              onClick={() => setSelectedCategory(cat.id)}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 active:scale-95 cursor-pointer ${
+                selectedCategory === cat.id
+                  ? 'bg-[#e5e1e4] text-[#131315] font-bold shadow-sm'
+                  : 'bg-[#201f21] text-[#ab8980] hover:text-[#e5e1e4] border border-white/5'
               }`}
             >
-              {t.filterAll}
+              {translateCategory(cat.name, selectedLanguage)}
             </button>
-            {currentRestCategories.map((cat) => (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`whitespace-nowrap px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold transition-all cursor-pointer ${
-                  selectedCategory === cat.id
-                    ? 'bg-[#F9A620] text-white font-bold shadow-xs'
-                    : 'bg-white text-[#924E00] border border-[#924E00]/15 hover:border-[#F9A620]'
-                }`}
-              >
-                {translateCategory(cat.name, selectedLanguage)}
-              </button>
-            ))}
-          </div>
+          ))}
+        </section>
 
-          {/* Row 3: Quick Filter Pills (#12 Dietary & Spice Options) */}
-          <div className="flex items-center space-x-1.5 overflow-x-auto pb-0.5 scrollbar-none">
-            {/* Filter Modal Trigger with Active Count */}
-            <button
-              type="button"
-              onClick={() => setIsFilterModalOpen(true)}
-              className={`whitespace-nowrap px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold flex items-center space-x-1 border transition-all cursor-pointer flex-shrink-0 ${
-                activeFiltersCount > 0
-                  ? 'bg-[#F9A620]/20 text-[#924E00] border-[#F9A620]'
-                  : 'bg-white text-[#924E00] border-[#924E00]/15 hover:border-[#F9A620]'
-              }`}
-            >
-              <SlidersHorizontal className="w-3 h-3 text-[#F9A620]" />
-              <span>Filters</span>
-              {activeFiltersCount > 0 && (
-                <span className="w-4 h-4 rounded-full bg-[#F9A620] text-white text-[9px] font-black flex items-center justify-center ml-0.5">
-                  {activeFiltersCount}
-                </span>
-              )}
-            </button>
-
-            {/* Quick Veg Filter */}
-            <button
-              type="button"
-              onClick={() => setFilters((prev) => ({ ...prev, dietary: prev.dietary === 'veg' ? 'all' : 'veg' }))}
-              className={`whitespace-nowrap px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-semibold flex items-center space-x-1 border transition-all cursor-pointer flex-shrink-0 ${
-                filters.dietary === 'veg'
-                  ? 'bg-emerald-100 text-emerald-800 border-emerald-400 font-bold'
-                  : 'bg-white text-[#924E00]/80 border-[#924E00]/15 hover:text-[#924E00]'
-              }`}
-            >
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
-              <span>{t.filterVeg}</span>
-            </button>
-
-            {/* Quick Non-Veg Filter */}
-            <button
-              type="button"
-              onClick={() => setFilters((prev) => ({ ...prev, dietary: prev.dietary === 'non_veg' ? 'all' : 'non_veg' }))}
-              className={`whitespace-nowrap px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-semibold flex items-center space-x-1 border transition-all cursor-pointer flex-shrink-0 ${
-                filters.dietary === 'non_veg'
-                  ? 'bg-red-100 text-red-800 border-red-400 font-bold'
-                  : 'bg-white text-[#924E00]/80 border-[#924E00]/15 hover:text-[#924E00]'
-              }`}
-            >
-              <span className="w-2 h-2 rounded-full bg-red-500" />
-              <span>{t.filterNonVeg}</span>
-            </button>
-
-            {/* Quick Mild Spice Filter */}
-            <button
-              type="button"
-              onClick={() => setFilters((prev) => ({ ...prev, spice: prev.spice === 'mild' ? 'all' : 'mild' }))}
-              className={`whitespace-nowrap px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-semibold flex items-center space-x-1 border transition-all cursor-pointer flex-shrink-0 ${
-                filters.spice === 'mild'
-                  ? 'bg-teal-100 text-teal-800 border-teal-400 font-bold'
-                  : 'bg-white text-[#924E00]/80 border-[#924E00]/15 hover:text-[#924E00]'
-              }`}
-            >
-              <span>🥗</span>
-              <span>{t.mild}</span>
-            </button>
-
-            {/* Quick Fiery Spice Filter */}
-            <button
-              type="button"
-              onClick={() => setFilters((prev) => ({ ...prev, spice: prev.spice === 'hot' ? 'all' : 'hot' }))}
-              className={`whitespace-nowrap px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-semibold flex items-center space-x-1 border transition-all cursor-pointer flex-shrink-0 ${
-                filters.spice === 'hot'
-                  ? 'bg-orange-100 text-orange-800 border-orange-400 font-bold'
-                  : 'bg-white text-[#924E00]/80 border-[#924E00]/15 hover:text-[#924E00]'
-              }`}
-            >
-              <Flame className="w-3 h-3 text-orange-500 fill-orange-500" />
-              <span>{t.fiery || t.hot || 'Fiery'}</span>
-            </button>
-
-            {/* Quick Chef's Picks */}
-            <button
-              type="button"
-              onClick={() => setFilters((prev) => ({ ...prev, highlight: prev.highlight === 'chef_pick' ? 'all' : 'chef_pick' }))}
-              className={`whitespace-nowrap px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-semibold flex items-center space-x-1 border transition-all cursor-pointer flex-shrink-0 ${
-                filters.highlight === 'chef_pick'
-                  ? 'bg-[#F9A620]/20 text-[#924E00] border-[#F9A620] font-bold'
-                  : 'bg-white text-[#924E00]/80 border-[#924E00]/15 hover:text-[#924E00]'
-              }`}
-            >
-              <span>⭐</span>
-              <span>{t.chefPicksOnly || "Chef's Picks"}</span>
-            </button>
-
-            {/* Quick Drink Pairings */}
-            <button
-              type="button"
-              onClick={() => setFilters((prev) => ({ ...prev, highlight: prev.highlight === 'has_pairing' ? 'all' : 'has_pairing' }))}
-              className={`whitespace-nowrap px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-semibold flex items-center space-x-1 border transition-all cursor-pointer flex-shrink-0 ${
-                filters.highlight === 'has_pairing'
-                  ? 'bg-purple-100 text-purple-800 border-purple-400 font-bold'
-                  : 'bg-white text-[#924E00]/80 border-[#924E00]/15 hover:text-[#924E00]'
-              }`}
-            >
-              <span>🍷</span>
-              <span>{t.pairingsOnly || 'Pairings'}</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* ═══════════════════════════════════════════════════════════ */}
-      {/* SCROLLYTELLING MENU SECTIONS — One per category            */}
-      {/* ═══════════════════════════════════════════════════════════ */}
-      <main className="max-w-xl mx-auto px-3 sm:px-4 mt-4 sm:mt-6 space-y-6 sm:space-y-8 pb-32">
-        {filteredDishes.length === 0 ? (
-          <div className="text-center py-12 sm:py-16 bg-white rounded-3xl p-6 border border-[#924E00]/10 shadow-xs space-y-3">
-            <p className="font-serif font-bold text-[#924E00] text-base">No dishes match your taste filters</p>
-            <p className="text-xs text-[#924E00]/70 max-w-xs mx-auto">Try resetting dietary or spice heat preferences to see all culinary selections.</p>
+        {/* Active Filter Chips Bar */}
+        {(activeFiltersCount > 0 || searchQuery) && (
+          <div className="mt-3 flex items-center flex-wrap gap-1.5 text-xs">
+            <span className="text-[#ab8980] text-[11px]">Filtered:</span>
+            {searchQuery && (
+              <span className="px-2 py-0.5 rounded-full bg-[#201f21] border border-white/10 text-[#e5e1e4] flex items-center gap-1">
+                "{searchQuery}"
+                <button type="button" onClick={() => setSearchQuery('')} className="hover:text-red-400">×</button>
+              </span>
+            )}
+            {filters.dietary !== 'all' && (
+              <span className="px-2 py-0.5 rounded-full bg-[#ff5722]/15 border border-[#ff5722]/30 text-[#ffb5a0] flex items-center gap-1 capitalize">
+                {filters.dietary.replace('_', ' ')}
+                <button type="button" onClick={() => setFilters((prev) => ({ ...prev, dietary: 'all' }))}>×</button>
+              </span>
+            )}
+            {filters.spice !== 'all' && (
+              <span className="px-2 py-0.5 rounded-full bg-[#ffb955]/15 border border-[#ffb955]/30 text-[#ffb955] flex items-center gap-1 capitalize">
+                {filters.spice} spice
+                <button type="button" onClick={() => setFilters((prev) => ({ ...prev, spice: 'all' }))}>×</button>
+              </span>
+            )}
             <button
               type="button"
               onClick={() => {
-                setSelectedCategory('all');
                 setSearchQuery('');
                 setFilters({ dietary: 'all', spice: 'all', sort: 'default', highlight: 'all' });
               }}
-              className="px-4 py-2 rounded-xl bg-[#F9A620] hover:bg-[#e89512] text-white font-bold text-xs shadow-xs transition-all active:scale-95 cursor-pointer inline-flex items-center space-x-1.5"
+              className="text-[11px] text-[#ff5722] hover:underline ml-1 cursor-pointer"
             >
-              <span>Reset All Filters</span>
+              Reset All
             </button>
           </div>
-        ) : (
-          dishesByCategory.map(({ category, items }) => {
-            if (!category || !category.id) return null;
-            return (
-              <section key={category.id} className="space-y-3 sm:space-y-4">
-                {/* Category Header */}
-                <div className="relative py-2 sm:py-3">
-                  <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                    <div className="w-full border-t border-[#924E00]/10" />
-                  </div>
-                  <div className="relative flex justify-center">
-                    <span className="bg-[#FFF7E6] px-3.5 sm:px-4 py-0.5 sm:py-1 rounded-full border border-[#924E00]/15 shadow-xs">
-                      <h3 className="font-serif text-xs sm:text-sm font-bold text-[#924E00] tracking-wide">
-                        {translateCategory(category.name || 'Menu Selection', selectedLanguage)}
-                      </h3>
-                    </span>
-                  </div>
-                </div>
-
-                {/* ═══════════════════════════════════════════════════════════ */}
-                {/* DISH CARDS: MAGAZINE STORY MODE (#11) vs CLASSIC LIST      */}
-                {/* ═══════════════════════════════════════════════════════════ */}
-                {menuViewMode === 'magazine' ? (
-                  /* ─── MAGAZINE STORY VIEW (#11 VISUAL MENU WITH DISH STORIES) ─── */
-                  <div className="space-y-4 sm:space-y-5">
-                    {(items || []).filter(Boolean).map((dish) => {
-                      const flags = Array.isArray(dish.dietary_flags) ? dish.dietary_flags : [];
-                      const isVeg = flags.some((f) => {
-                        const lf = String(f).toLowerCase();
-                        return lf === 'veg' || lf === 'vegetarian' || lf === 'vegan' || lf === 'jain';
-                      });
-
-                      const dishPhotos: { src: string; label?: string }[] = [];
-                      if (dish.gallery_images && dish.gallery_images.length > 0) {
-                        dish.gallery_images.forEach((g) => dishPhotos.push({ src: g.src, label: g.label || g.alt }));
-                      } else if (dish.image_url) {
-                        dishPhotos.push({ src: dish.image_url, label: 'Main' });
-                      }
-                      if (dish.image_url && !dishPhotos.some((p) => p.src === dish.image_url)) {
-                        dishPhotos.unshift({ src: dish.image_url, label: 'Main' });
-                      }
-
-                      const tDish = getTranslatedDish(dish, selectedLanguage);
-
-                      return (
-                        <article
-                          key={dish.id}
-                          onClick={() => setActiveDish(tDish)}
-                          className={`bg-white rounded-3xl overflow-hidden border border-[#924E00]/10 hover:border-[#F9A620]/50 transition-all shadow-xs hover:shadow-md cursor-pointer group ${
-                            !dish.is_available ? 'opacity-50' : ''
-                          }`}
-                        >
-                          {/* Top Visual Photography Hero with Ambient Badges */}
-                          <div
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setLightboxDish(tDish);
-                              setLightboxIndex(0);
-                            }}
-                            className="relative w-full h-52 sm:h-64 bg-[#FFF2D6] overflow-hidden group/img cursor-zoom-in"
-                            title="Click to view & zoom high-resolution photo"
-                          >
-                            <img
-                              src={dishPhotos[0]?.src || dish.image_url || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800'}
-                              alt={tDish.name}
-                              className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-500"
-                            />
-                            {/* Ambient Top Gradient */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-black/25" />
-
-                            {/* Floating Badges */}
-                            <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-                              <div className="flex items-center space-x-1.5">
-                                {/* Veg / Non-Veg Indicator */}
-                                <span
-                                  className={`w-4 h-4 rounded-xs border flex items-center justify-center bg-white/90 backdrop-blur-sm shadow-xs ${
-                                    isVeg ? 'border-emerald-500' : 'border-red-500'
-                                  }`}
-                                >
-                                  <span className={`w-2 h-2 rounded-full ${isVeg ? 'bg-emerald-500' : 'bg-red-500'}`} />
-                                </span>
-
-                                {dish.is_signature && (
-                                  <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-[#F9A620] text-white uppercase tracking-wider shadow-xs">
-                                    {t.signature || 'Signature'}
-                                  </span>
-                                )}
-
-                                {dish.is_bestseller && (
-                                  <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-400 text-[#924E00] flex items-center space-x-0.5 shadow-xs">
-                                    <Star className="w-2.5 h-2.5 fill-[#924E00]" />
-                                    <span>{t.bestseller || 'Bestseller'}</span>
-                                  </span>
-                                )}
-
-                                {dish.is_chef_recommended && (
-                                  <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-cyan-100 text-cyan-800 border border-cyan-300 shadow-xs">
-                                    {t.chefSpecial || "Chef's Pick"}
-                                  </span>
-                                )}
-                              </div>
-
-                              {/* Spice & Serving Badge */}
-                              <div className="flex items-center space-x-1.5">
-                                {(dish.spice_level || 0) > 0 && (
-                                  <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-white/90 text-[#924E00] border border-[#924E00]/15 flex items-center space-x-0.5 backdrop-blur-sm shadow-xs">
-                                    <Flame className="w-3 h-3 fill-orange-500 text-orange-500" />
-                                    <span>{t.spiceHeat || 'Heat'} {dish.spice_level}/5</span>
-                                  </span>
-                                )}
-
-                                {dishPhotos.length > 1 && (
-                                  <span className="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-white/90 text-[#924E00] border border-[#924E00]/15 backdrop-blur-sm shadow-xs">
-                                    📸 {dishPhotos.length} Views
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-
-                            {/* Zoom prompt */}
-                            <div className="absolute bottom-3 right-3 opacity-0 group-hover/img:opacity-100 transition-opacity bg-white/90 backdrop-blur-sm text-[#924E00] px-2.5 py-1 rounded-full text-[10px] font-bold flex items-center space-x-1 border border-[#924E00]/15 shadow-xs">
-                              <Maximize2 className="w-3 h-3 text-[#F9A620]" />
-                              <span>Zoom HD</span>
-                            </div>
-
-                            {!dish.is_available && (
-                              <div className="absolute inset-0 bg-white/80 backdrop-blur-xs flex items-center justify-center">
-                                <span className="text-xs uppercase font-bold text-white tracking-widest px-3 py-1.5 bg-red-600 rounded-lg shadow-md">
-                                  Sold Out
-                                </span>
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Magazine Card Content */}
-                          <div className="p-4 sm:p-5 space-y-3 -mt-3 relative z-10 bg-white">
-                            {/* Dish Header: Title & Price */}
-                            <div className="flex items-start justify-between gap-3">
-                              <div className="min-w-0">
-                                <h3 className="font-serif font-bold text-base sm:text-lg text-[#924E00] leading-tight">
-                                  {tDish.name}
-                                </h3>
-                                {dish.serving_size && (
-                                  <span className="text-[10px] text-[#924E00]/60 font-medium mt-0.5 inline-block">
-                                    {t.serves || 'Portion'}: {dish.serving_size}
-                                  </span>
-                                )}
-                              </div>
-                              <div className="text-right flex-shrink-0">
-                                <span className="font-serif font-bold text-base sm:text-lg text-[#924E00]">
-                                  ₹{typeof dish.price === 'number' ? dish.price.toFixed(2) : (Number(dish.price) || 0).toFixed(2)}
-                                </span>
-                              </div>
-                            </div>
-
-                            {/* Description */}
-                            <p className="text-xs text-[#924E00]/80 leading-relaxed">
-                              {tDish.short_description || tDish.full_description}
-                            </p>
-
-                            {/* ── CULINARY STORYTELLING (#11 DISH STORIES) ── */}
-                            {tDish.chef_story && (
-                              <div className="bg-[#FFF2D6] border-l-4 border-[#F9A620] p-3 rounded-r-2xl space-y-1">
-                                <div className="flex items-center space-x-1 text-[#F9A620] text-[10px] font-serif font-bold uppercase tracking-wider">
-                                  <span>📜</span>
-                                  <span>{t.chefStoryTitle || 'Heritage Lore & Origin'}</span>
-                                </div>
-                                <p className="text-xs text-[#924E00] leading-relaxed italic font-serif">
-                                  "{tDish.chef_story}"
-                                </p>
-                              </div>
-                            )}
-
-                            {/* Master Chef Tasting Note */}
-                            {tDish.chef_notes && (
-                              <div className="bg-amber-50/80 border border-[#F9A620]/20 p-2.5 rounded-xl space-y-0.5 text-xs text-[#924E00]">
-                                <span className="font-bold text-[#F9A620] text-[11px] flex items-center space-x-1">
-                                  <span>🧑‍🍳</span>
-                                  <span>{t.tastingNotesTitle || "Chef's Tasting Note:"}</span>
-                                </span>
-                                <p className="text-[#924E00]/80 text-[11px] leading-relaxed">
-                                  {tDish.chef_notes}
-                                </p>
-                              </div>
-                            )}
-
-                            {/* Founder's Table Pitch */}
-                            {tDish.owner_pitch && (
-                              <div className="bg-orange-50/80 border border-orange-300/30 p-2.5 rounded-xl space-y-0.5 text-xs text-[#924E00]">
-                                <span className="font-bold text-orange-600 text-[11px] flex items-center space-x-1">
-                                  <span>🎙️</span>
-                                  <span>Founder's Pitch:</span>
-                                </span>
-                                <p className="text-[#924E00]/80 text-[11px] leading-relaxed">
-                                  {tDish.owner_pitch}
-                                </p>
-                              </div>
-                            )}
-
-                            {/* Beverage Pairing & Serving Temp Badges */}
-                            {(dish.pairing_drink_name || dish.temperature_style) && (
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-                                {dish.pairing_drink_name && (
-                                  <div className="bg-purple-50 border border-purple-200/80 p-2 rounded-xl text-xs flex items-center space-x-2">
-                                    <span className="text-base">🍷</span>
-                                    <div className="min-w-0">
-                                      <p className="text-[10px] text-purple-700 font-bold uppercase tracking-wider">{t.sommelierPairingTitle || 'Sommelier Pairing'}</p>
-                                      <p className="font-semibold text-purple-950 text-xs truncate">{dish.pairing_drink_name}</p>
-                                    </div>
-                                  </div>
-                                )}
-
-                                {dish.temperature_style && (
-                                  <div className="bg-blue-50 border border-blue-200/80 p-2 rounded-xl text-xs flex items-center space-x-2">
-                                    <span className="text-base">🌡️</span>
-                                    <div className="min-w-0">
-                                      <p className="text-[10px] text-blue-700 font-bold uppercase tracking-wider">{t.servingTempTitle || 'Serving Style'}</p>
-                                      <p className="font-semibold text-blue-950 text-xs truncate">{dish.temperature_style}</p>
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                            )}
-
-                            {/* Action Row */}
-                            <div className="flex items-center justify-between pt-2 border-t border-[#924E00]/10 gap-2">
-                              {/* Ask Chef AI button */}
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleOpenAi(tDish, `Tell me more about ${tDish.name} — origin lore, flavor profile, and beverage pairing.`);
-                                }}
-                                className="px-3 py-2 rounded-xl bg-white hover:bg-[#FFF7E6] text-[#924E00] border border-[#924E00]/15 flex items-center space-x-1.5 text-xs font-bold transition-all active:scale-95 cursor-pointer shadow-xs"
-                              >
-                                <span>🧑‍🍳</span>
-                                <span>{t.aiSommelier || 'Ask AI Sommelier'}</span>
-                              </button>
-
-                              {dish.is_available ? (
-                                <button
-                                  type="button"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setActiveDish(tDish);
-                                  }}
-                                  className="px-4 py-2 rounded-xl bg-[#F9A620] hover:bg-[#e89512] active:scale-95 text-white font-bold text-xs shadow-xs transition-all flex items-center space-x-1 cursor-pointer"
-                                >
-                                  <span>+ {t.add}</span>
-                                </button>
-                              ) : (
-                                <span className="text-xs text-[#924E00]/50 font-semibold">Sold Out</span>
-                              )}
-                            </div>
-                          </div>
-                        </article>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  /* ─── CLASSIC COMPACT VIEW WITH EXPANDABLE STORIES ─── */
-                  <div className="space-y-2.5 sm:space-y-3">
-                    {(items || []).filter(Boolean).map((dish) => {
-                      const flags = Array.isArray(dish.dietary_flags) ? dish.dietary_flags : [];
-                      const isVeg = flags.some((f) => {
-                        const lf = String(f).toLowerCase();
-                        return lf === 'veg' || lf === 'vegetarian' || lf === 'vegan' || lf === 'jain';
-                      });
-
-                      const dishPhotos: { src: string; label?: string }[] = [];
-                      if (dish.gallery_images && dish.gallery_images.length > 0) {
-                        dish.gallery_images.forEach((g) => dishPhotos.push({ src: g.src, label: g.label || g.alt }));
-                      } else if (dish.image_url) {
-                        dishPhotos.push({ src: dish.image_url, label: 'Main' });
-                      }
-                      if (dish.image_url && !dishPhotos.some((p) => p.src === dish.image_url)) {
-                        dishPhotos.unshift({ src: dish.image_url, label: 'Main' });
-                      }
-
-                      const hasSecondary = dishPhotos.length > 1;
-                      const isStoryExpanded = expandedStories[dish.id];
-
-                      const tDish = getTranslatedDish(dish, selectedLanguage);
-
-                      return (
-                        <div
-                          key={dish.id}
-                          onClick={() => setActiveDish(tDish)}
-                          className={`bg-white rounded-2xl p-3 sm:p-3.5 border border-[#924E00]/10 cursor-pointer transition-all hover:border-[#F9A620]/50 shadow-xs hover:shadow-sm active:scale-[0.99] space-y-2.5 ${
-                            !dish.is_available ? 'opacity-50' : ''
-                          }`}
-                        >
-                          <div className="flex items-start space-x-3">
-                            {/* Photo Gallery Container */}
-                            {hasSecondary ? (
-                              <div className="flex items-center space-x-1.5 flex-shrink-0">
-                                <div
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setLightboxDish(tDish);
-                                    setLightboxIndex(0);
-                                  }}
-                                  className="w-16 h-20 sm:w-20 sm:h-24 rounded-xl bg-[#FFF2D6] overflow-hidden relative group/img cursor-zoom-in border border-[#F9A620]/40 hover:border-[#F9A620] transition-all shadow-xs"
-                                  title="Primary Photo - Click to zoom"
-                                >
-                                  <img
-                                    src={dishPhotos[0].src}
-                                    alt={`${tDish.name} - View 1`}
-                                    className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
-                                  />
-                                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
-                                    <Maximize2 className="w-3.5 h-3.5 text-white drop-shadow" />
-                                  </div>
-                                  <div className="absolute top-1 left-1 px-1 py-0.2 bg-[#F9A620] rounded text-[7px] font-bold text-white shadow-xs">
-                                    1
-                                  </div>
-                                </div>
-
-                                <div
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setLightboxDish(tDish);
-                                    setLightboxIndex(1);
-                                  }}
-                                  className="w-16 h-20 sm:w-20 sm:h-24 rounded-xl bg-[#FFF2D6] overflow-hidden relative group/img cursor-zoom-in border border-[#924E00]/15 hover:border-[#F9A620] transition-all shadow-xs"
-                                  title="Second Photo - Click to zoom"
-                                >
-                                  <img
-                                    src={dishPhotos[1].src}
-                                    alt={`${tDish.name} - View 2`}
-                                    className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
-                                  />
-                                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
-                                    <Maximize2 className="w-3.5 h-3.5 text-white drop-shadow" />
-                                  </div>
-                                  <div className="absolute top-1 left-1 px-1 py-0.2 bg-white/90 rounded text-[7px] font-bold text-[#924E00] border border-[#924E00]/15">
-                                    2
-                                  </div>
-                                  {dishPhotos.length > 2 && (
-                                    <div className="absolute bottom-1 right-1 px-1.5 py-0.2 bg-white/90 rounded text-[8px] font-mono text-[#924E00] font-bold border border-[#924E00]/15 shadow-xs">
-                                      +{dishPhotos.length - 2}
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            ) : (
-                              <div
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setLightboxDish(tDish);
-                                  setLightboxIndex(0);
-                                }}
-                                className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl flex-shrink-0 bg-[#FFF2D6] overflow-hidden relative group/img cursor-zoom-in border border-[#924E00]/10 hover:border-[#F9A620] transition-all shadow-xs"
-                                title="Click to view & zoom photo"
-                              >
-                                <img
-                                  src={dish.image_url || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400'}
-                                  alt={tDish.name || 'Dish'}
-                                  className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
-                                />
-                                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
-                                  <Maximize2 className="w-4 h-4 text-white drop-shadow" />
-                                </div>
-                                {!dish.is_available && (
-                                  <div className="absolute inset-0 bg-white/80 flex items-center justify-center p-1 text-center">
-                                    <span className="text-[8px] sm:text-[9px] uppercase font-bold text-white tracking-widest px-1.5 py-0.5 rounded bg-red-600">
-                                      Sold Out
-                                    </span>
-                                  </div>
-                                )}
-                                {dish.is_bestseller && (
-                                  <div className="absolute top-1 left-1 px-1.5 py-0.5 bg-[#F9A620] rounded text-[8px] font-bold text-white flex items-center space-x-0.5 shadow-xs">
-                                    <Star className="w-2.5 h-2.5 fill-white" />
-                                    <span>{t.bestseller || 'Best'}</span>
-                                  </div>
-                                )}
-                              </div>
-                            )}
-
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center space-x-1.5 mb-0.5 sm:mb-1 flex-wrap gap-y-1">
-                                <span
-                                  className={`w-3 h-3 rounded-xs border flex items-center justify-center ${
-                                    isVeg ? 'border-emerald-500' : 'border-red-500'
-                                  }`}
-                                >
-                                  <span className={`w-1.5 h-1.5 rounded-full ${isVeg ? 'bg-emerald-500' : 'bg-red-500'}`} />
-                                </span>
-                                {(dish.spice_level || 0) > 0 && (
-                                  <div className="flex items-center text-orange-500 pl-1 border-l border-[#924E00]/10">
-                                    <Flame className="w-3 h-3 fill-orange-500" />
-                                    <span className="text-[10px] font-bold ml-0.5">{dish.spice_level}</span>
-                                  </div>
-                                )}
-                                {dish.is_chef_recommended && (
-                                  <span className="text-[8px] sm:text-[9px] font-bold text-cyan-800 bg-cyan-100 px-1.5 py-0.2 rounded border border-cyan-300">
-                                    {t.chefSpecial || "Chef's Pick"}
-                                  </span>
-                                )}
-                              </div>
-
-                              <h3 className="font-serif font-bold text-xs sm:text-sm text-[#924E00] leading-tight truncate">
-                                {tDish.name}
-                              </h3>
-                              <p className="text-[11px] sm:text-xs text-[#924E00]/80 line-clamp-2 mt-0.5 leading-snug">
-                                {tDish.short_description || tDish.full_description || ''}
-                              </p>
-
-                              <div className="flex items-center justify-between mt-2 pt-1.5 border-t border-[#924E00]/10">
-                                <span className="font-bold text-xs sm:text-sm text-[#924E00]">
-                                  ₹{typeof dish.price === 'number' ? dish.price.toFixed(2) : (Number(dish.price) || 0).toFixed(2)}
-                                </span>
-
-                                <div className="flex items-center space-x-1.5 sm:space-x-2">
-                                  {/* Expand Story Button if dish has lore */}
-                                  {(dish.chef_story || dish.pairing_drink_name) && (
-                                    <button
-                                      type="button"
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        toggleStoryExpand(dish.id);
-                                      }}
-                                      className="px-2 py-1 rounded-lg bg-[#F9A620]/15 hover:bg-[#F9A620]/25 text-[#924E00] border border-[#F9A620]/30 text-[10px] sm:text-[11px] font-bold transition-all"
-                                      title="Toggle Culinary Lore &amp; Pairing"
-                                    >
-                                      <span>{isStoryExpanded ? 'Hide Story' : `📖 ${t.chefStoryTitle || 'Story'}`}</span>
-                                    </button>
-                                  )}
-
-                                  {/* Ask Chef quick button */}
-                                  <button
-                                    type="button"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      handleOpenAi(tDish, `Tell me about ${tDish.name} — chef's secret notes, spice level, and pairing.`);
-                                    }}
-                                    className="px-2 sm:px-2.5 py-1 rounded-lg bg-white hover:bg-[#FFF7E6] text-[#924E00] border border-[#924E00]/15 flex items-center space-x-1 text-[10px] sm:text-[11px] font-bold shadow-xs transition-all active:scale-95 cursor-pointer"
-                                    title={`Ask Chef about ${tDish.name}`}
-                                  >
-                                    <span className="text-xs">🧑‍🍳</span>
-                                    <span className="hidden sm:inline">Ask</span>
-                                  </button>
-
-                                  {dish.is_available ? (
-                                    <button
-                                      type="button"
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        setActiveDish(tDish);
-                                      }}
-                                      className="px-2.5 py-1 rounded-lg bg-[#F9A620] hover:bg-[#e89512] active:scale-95 text-white font-bold text-[11px] sm:text-xs transition-all shadow-xs"
-                                    >
-                                      + {t.add}
-                                    </button>
-                                  ) : (
-                                    <span className="text-[10px] text-[#924E00]/50 font-semibold">Sold Out</span>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Inline Expanded Culinary Lore & Pairing */}
-                          {isStoryExpanded && (
-                            <div className="pt-2 border-t border-[#924E00]/10 space-y-2 animate-fadeIn text-xs">
-                              {tDish.chef_story && (
-                                <div className="bg-[#FFF2D6] p-2.5 rounded-xl border border-[#F9A620]/20 italic text-[#924E00] font-serif">
-                                  "{tDish.chef_story}"
-                                </div>
-                              )}
-                              {dish.pairing_drink_name && (
-                                <div className="bg-purple-50 p-2 rounded-xl border border-purple-200 text-purple-900 flex items-center justify-between text-[11px]">
-                                  <span className="font-bold">🍷 Pairing: {dish.pairing_drink_name}</span>
-                                  {dish.pairing_reason && <span className="text-purple-700">{dish.pairing_reason}</span>}
-                                </div>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </section>
-            );
-          })
         )}
-      </main>
 
-      {/* ═══════════════════════════════════════════════════════════ */}
-      {/* UNIFIED ERGONOMIC MOBILE BOTTOM DOCK (ZERO SCREEN OVERLAP)  */}
-      {/* ═══════════════════════════════════════════════════════════ */}
-
-      {/* Floating Waiter Alert Toast */}
-      {waiterToast && (
-        <div className="fixed top-14 left-4 right-4 max-w-md mx-auto z-50 animate-bounce">
-          <div className="bg-white text-[#924E00] px-4 py-3 rounded-2xl shadow-xl border border-[#924E00]/15 flex items-center space-x-3 text-xs font-semibold">
-            <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-ping flex-shrink-0" />
-            <span className="flex-1">{waiterToast}</span>
-            <button onClick={() => setWaiterToast(null)} className="text-[#924E00]/50 hover:text-[#924E00]">
-              <X className="w-4 h-4" />
+        {/* Surprise Table Treat / Spin Wheel Banner */}
+        {selectedChallenge && !rewardBannerDismissed && (
+          <div className="mt-4 p-3.5 rounded-2xl bg-gradient-to-r from-[#201f21] via-[#2a2a2c] to-[#201f21] border border-[#ffb955]/30 shadow-lg flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-[#ffb955]/15 flex items-center justify-center text-[#ffb955] flex-shrink-0">
+                <Gift className="w-5 h-5 text-[#ffb955] animate-bounce" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-[#e5e1e4]">Surprise Table Treat Available!</p>
+                <p className="text-[11px] text-[#ab8980]">Spin the wheel to unlock complimentary desserts or dishes.</p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => handleOpenChallenge(undefined, 'wheel')}
+              className="px-3 py-1.5 rounded-full bg-[#ff5722] hover:bg-[#ff6f3d] text-white text-xs font-bold shadow-md shadow-[#ff5722]/20 active:scale-95 transition-all flex-shrink-0 cursor-pointer"
+            >
+              Spin Now
             </button>
           </div>
+        )}
+
+        {/* Dish Cards List */}
+        <div className="mt-4 space-y-5">
+          {filteredDishes.length === 0 ? (
+            <div className="text-center py-16 bg-[#1b1b1d] rounded-2xl border border-white/5 p-6">
+              <span className="material-symbols-outlined text-4xl text-[#ab8980] mb-2">restaurant</span>
+              <h3 className="text-sm font-bold text-[#e5e1e4]">No dishes match your selection</h3>
+              <p className="text-xs text-[#ab8980] mt-1">Try adjusting your dietary or search filters</p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery('');
+                  setSelectedCategory('all');
+                  setFilters({ dietary: 'all', spice: 'all', sort: 'default', highlight: 'all' });
+                }}
+                className="mt-4 px-4 py-1.5 rounded-full bg-[#ff5722] text-white text-xs font-semibold cursor-pointer"
+              >
+                View Full Menu
+              </button>
+            </div>
+          ) : (
+            filteredDishes.map((dish) => {
+              const itemQuantity = cart.find((ci) => ci.menu_item_id === dish.id)?.quantity || 0;
+              const isFav = favorites.has(dish.id);
+              const tDish = getTranslatedDish(dish, selectedLanguage);
+              const flags = Array.isArray(dish.dietary_flags) ? dish.dietary_flags.map((f) => String(f).toLowerCase().replace(/[-_ ]/g, '')) : [];
+              const isVeg = (flags.some((f) => f.includes('veg') || f.includes('vegetarian') || f.includes('vegan') || f.includes('jain'))) && !flags.some((f) => f.includes('nonveg'));
+
+              return (
+                <article
+                  key={dish.id}
+                  className="bg-[#1b1b1d] rounded-2xl overflow-hidden border border-white/5 shadow-xl transition-all duration-300 hover:border-white/10"
+                >
+                  {/* Dish Image (4:3 aspect ratio) */}
+                  <div
+                    onClick={() => setActiveDish(dish)}
+                    className="relative w-full aspect-[4/3] bg-[#2a2a2c] overflow-hidden cursor-pointer group"
+                  >
+                    <img
+                      src={dish.image_url || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&q=80'}
+                      alt={tDish.name || dish.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1b1b1d] via-transparent to-black/40" />
+
+                    {/* Top Left Indicators */}
+                    <div className="absolute top-3 left-3 flex items-center gap-2">
+                      {/* Veg / Non-Veg FSSAI Indicator */}
+                      <div className="w-5 h-5 rounded bg-black/60 backdrop-blur-md p-0.5 border border-white/10 flex items-center justify-center">
+                        <div className={`w-3 h-3 border ${isVeg ? 'border-emerald-500' : 'border-red-500'} rounded-xs flex items-center justify-center`}>
+                          <div className={`w-1.5 h-1.5 rounded-full ${isVeg ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                        </div>
+                      </div>
+
+                      {/* Badge Tag */}
+                      {dish.is_bestseller && (
+                        <span className="px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[11px] font-medium text-[#ffb955]">
+                          Chef's Selection
+                        </span>
+                      )}
+                      {dish.is_signature && !dish.is_bestseller && (
+                        <span className="px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[11px] font-medium text-[#e5e1e4]">
+                          Signature Offering
+                        </span>
+                      )}
+                      {dish.is_chef_recommended && !dish.is_bestseller && !dish.is_signature && (
+                        <span className="px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[11px] font-medium text-[#e5e1e4]">
+                          Slow Cooked
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Top Right Favorite Button */}
+                    <div className="absolute top-3 right-3 flex items-center gap-2">
+                      <button
+                        type="button"
+                        aria-label="Favorite dish"
+                        onClick={(e) => toggleFavorite(dish.id, e)}
+                        className={`w-8 h-8 rounded-full bg-black/60 backdrop-blur-md border border-white/10 flex items-center justify-center transition-colors cursor-pointer ${
+                          isFav ? 'text-red-500' : 'text-white hover:text-red-400'
+                        }`}
+                      >
+                        <span
+                          className="material-symbols-outlined text-[18px]"
+                          style={{ fontVariationSettings: isFav ? "'FILL' 1" : "'FILL' 0" }}
+                        >
+                          favorite
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Dish Info */}
+                  <div className="p-4">
+                    <div className="flex justify-between items-start gap-2">
+                      <div>
+                        <h2
+                          onClick={() => setActiveDish(dish)}
+                          className="text-base font-bold text-[#e5e1e4] tracking-tight hover:text-[#ff5722] cursor-pointer transition-colors"
+                        >
+                          {tDish.name || dish.name}
+                        </h2>
+                        <p className="text-xs text-[#ab8980] line-clamp-2 mt-1 leading-relaxed">
+                          {tDish.short_description || dish.short_description || dish.full_description}
+                        </p>
+                      </div>
+                      <div className="text-right flex-shrink-0">
+                        <span className="text-base font-bold text-[#ffb955]">
+                          ₹{dish.price}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Meta Chips */}
+                    <div className="mt-3 flex items-center gap-2 text-[11px] text-[#ab8980] flex-wrap">
+                      {dish.serving_size && (
+                        <span className="flex items-center gap-1 bg-[#201f21] px-2 py-0.5 rounded-full border border-white/5">
+                          <span className="material-symbols-outlined text-[13px] text-[#ffb955]">scale</span>
+                          Serves {dish.serving_size}
+                        </span>
+                      )}
+                      {dish.spice_level > 0 && (
+                        <span className="flex items-center gap-1 bg-[#201f21] px-2 py-0.5 rounded-full border border-white/5 capitalize">
+                          <span className="material-symbols-outlined text-[13px] text-[#ff5722]">local_fire_department</span>
+                          {dish.spice_level === 1 ? 'Mild' : dish.spice_level === 2 ? 'Medium' : 'Hot'}
+                        </span>
+                      )}
+                      {dish.pairing_drink_name && (
+                        <span className="flex items-center gap-1 bg-[#201f21] px-2 py-0.5 rounded-full border border-white/5">
+                          <span className="material-symbols-outlined text-[13px] text-[#ffb955]">wine_bar</span>
+                          Pairs with {dish.pairing_drink_name}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Bottom Actions Row */}
+                    <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between">
+                      <button
+                        type="button"
+                        onClick={() => setActiveDish(dish)}
+                        className="text-xs text-[#ab8980] hover:text-[#e5e1e4] flex items-center gap-1 transition-colors cursor-pointer"
+                      >
+                        <span className="material-symbols-outlined text-sm">info</span>
+                        <span>Sourcing & Nutrition</span>
+                      </button>
+
+                      {/* Cart Stepper or Add Button */}
+                      {itemQuantity > 0 ? (
+                        <div className="flex items-center bg-[#201f21] rounded-full p-0.5 border border-white/10">
+                          <button
+                            type="button"
+                            onClick={() => handleUpdateQuantity(dish.id, itemQuantity - 1)}
+                            className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-white/10 text-[#e5e1e4] active:scale-95 transition-all cursor-pointer"
+                          >
+                            <span className="material-symbols-outlined text-[16px]">remove</span>
+                          </button>
+                          <span className="w-6 text-center text-xs font-bold text-[#e5e1e4]">
+                            {itemQuantity}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => handleUpdateQuantity(dish.id, itemQuantity + 1)}
+                            className="w-7 h-7 rounded-full bg-[#ff5722] text-white flex items-center justify-center active:scale-95 transition-all shadow-sm cursor-pointer"
+                          >
+                            <span className="material-symbols-outlined text-[16px]">add</span>
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            addItemToCart({
+                              menu_item_id: dish.id,
+                              name: dish.name,
+                              price: dish.price,
+                              quantity: 1,
+                              image_url: dish.image_url,
+                              selected_options: []
+                            });
+                          }}
+                          className="px-3.5 py-1.5 rounded-full bg-[#ff5722] hover:bg-[#ff6f3d] text-white text-xs font-semibold flex items-center gap-1 active:scale-95 transition-all shadow-md shadow-[#ff5722]/20 cursor-pointer"
+                        >
+                          <span className="material-symbols-outlined text-base">add</span>
+                          <span>Add to Order</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </article>
+              );
+            })
+          )}
         </div>
-      )}
 
-      {/* Back to Top Quick Trigger */}
-      {showScrollTop && (
-        <button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-20 left-3 sm:left-4 z-30 p-2.5 rounded-full bg-white/95 backdrop-blur-md text-[#924E00] border border-[#924E00]/15 hover:border-[#F9A620] hover:text-[#F9A620] transition-all shadow-md active:scale-95"
-          title="Back to top"
-        >
-          <ArrowUp className="w-4 h-4" />
-        </button>
-      )}
-
-      {/* ═══════════════════════════════════════════════════════════ */}
-      {/* PERSISTENT FLOATING CIRCULAR ACTIONS (WIN PERK & CHEF AI)   */}
-      {/* ═══════════════════════════════════════════════════════════ */}
-      <div
-        className={`fixed right-3 sm:right-5 z-40 flex flex-col items-end gap-2.5 transition-all duration-300 pointer-events-auto ${
-          totalCartCount > 0 ? 'bottom-20 sm:bottom-24' : 'bottom-16 sm:bottom-20'
-        }`}
-      >
-        {/* Win Reward Floating Circular Button */}
-        <button
-          type="button"
-          onClick={() => handleOpenChallenge()}
-          className="group relative flex flex-col items-center cursor-pointer active:scale-90 transition-transform"
-          title="Win Today's Surprise Table Reward"
-        >
-          {/* Continuous Ambient Glow Ring */}
-          <span className="absolute -inset-1 rounded-full bg-gradient-to-tr from-[#F9A620] to-amber-300 opacity-60 blur-xs animate-pulse pointer-events-none" />
-
-          <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#F9A620] text-white shadow-lg border-2 border-white flex items-center justify-center text-lg sm:text-xl">
-            🎁
+        {/* Captain / Chef AI Recommendations Card */}
+        <div className="my-6 p-4 rounded-2xl bg-[#201f21] border border-white/5 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-[#2a2a2c] flex items-center justify-center text-[#ffb955] flex-shrink-0">
+              <span className="material-symbols-outlined text-base">restaurant_menu</span>
+            </div>
+            <div>
+              <p className="text-xs text-[#e5e1e4] font-semibold">Need Culinary Recommendations?</p>
+              <p className="text-[11px] text-[#ab8980]">Our captain or Chef AI can tailor spice levels and pairing courses.</p>
+            </div>
           </div>
-          <span className="mt-0.5 text-[8.5px] sm:text-[9.5px] font-bold text-[#924E00] bg-white border border-[#924E00]/15 px-2 py-0.5 rounded-full shadow-xs whitespace-nowrap opacity-90 group-hover:opacity-100 transition-opacity">
-            Review &amp; Win
-          </span>
-        </button>
-
-        {/* Chef AI Live Concierge Floating Circular Button */}
-        <button
-          type="button"
-          onClick={() => handleOpenAi(null)}
-          className="group relative flex flex-col items-center cursor-pointer active:scale-90 transition-transform"
-          title="Ask Chef's AI Concierge"
-        >
-          {/* Continuous Ambient Pulsing Glow Halo */}
-          <span className="absolute -inset-1 rounded-full bg-gradient-to-tr from-[#F9A620]/40 to-amber-200/50 opacity-60 blur-xs animate-pulse pointer-events-none" />
-
-          <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white backdrop-blur-xl border-2 border-[#F9A620] shadow-lg flex items-center justify-center text-lg sm:text-xl text-[#924E00]">
-            <Sparkles className="w-5 h-5 text-[#F9A620] animate-pulse" />
-
-            {/* Live Online Ping Indicator */}
-            <span className="absolute top-0 right-0 flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 border border-white"></span>
-            </span>
-          </div>
-          <span className="mt-0.5 text-[8.5px] sm:text-[9.5px] font-bold text-[#924E00] bg-white border border-[#924E00]/15 px-2 py-0.5 rounded-full shadow-xs whitespace-nowrap opacity-90 group-hover:opacity-100 transition-opacity">
-            Chef AI
-          </span>
-        </button>
-      </div>
-
-      {/* DOCK VARIANT 1: Active Cart Bar when items are selected */}
-      {totalCartCount > 0 ? (
-        <div className="fixed bottom-3 left-3 right-3 max-w-xl mx-auto z-40">
-          <div className="bg-[#FFF7E6]/95 backdrop-blur-xl p-1.5 rounded-2xl border border-[#F9A620]/40 shadow-xl flex items-center gap-2">
-            {/* Quick Chef AI Mini Button */}
+          <div className="flex items-center gap-2 flex-shrink-0">
             <button
               type="button"
-              onClick={() => handleOpenAi(null)}
-              className="p-2.5 rounded-xl bg-white hover:bg-[#FFF2D6] text-[#924E00] border border-[#924E00]/15 flex-shrink-0 active:scale-95 transition-all shadow-xs cursor-pointer"
-              title="Ask Chef's AI"
+              onClick={() => setIsAiOpen(true)}
+              className="px-3 py-1.5 rounded-full bg-[#2a2a2c] hover:bg-[#353437] text-[#e5e1e4] text-xs border border-white/10 active:scale-95 transition-transform flex items-center gap-1 cursor-pointer"
             >
-              <Sparkles className="w-4 h-4 text-[#F9A620]" />
+              <span className="material-symbols-outlined text-sm text-[#ffb955]">sparkles</span>
+              <span>Chef AI</span>
             </button>
-
-            {/* Quick Table Arcade Mini Button */}
-            <button
-              type="button"
-              onClick={() => setIsTableArcadeOpen(true)}
-              className="p-2.5 rounded-xl border flex-shrink-0 bg-white hover:bg-[#FFF2D6] text-[#924E00] border-[#924E00]/15 active:scale-95 transition-all cursor-pointer shadow-xs"
-              title="Open Table Arcade (Solitaire, Crossword & Games)"
-            >
-              <Gamepad2 className="w-4 h-4 text-[#F9A620]" />
-            </button>
-
-            {/* Quick Waiter Mini Button */}
             <button
               type="button"
               onClick={handleCallWaiter}
               disabled={waiterCalled}
-              className={`p-2.5 rounded-xl border flex-shrink-0 active:scale-95 transition-all shadow-xs cursor-pointer ${
-                waiterCalled
-                  ? 'bg-emerald-600 text-white border-emerald-500'
-                  : 'bg-white text-[#924E00] border-[#924E00]/15 hover:bg-[#FFF2D6]'
-              }`}
-              title="Call Waiter"
+              className="px-3 py-1.5 rounded-full bg-[#ff5722] hover:bg-[#ff6f3d] text-white text-xs font-semibold active:scale-95 transition-transform cursor-pointer"
             >
-              <Bell className="w-4 h-4" />
-            </button>
-
-            {/* Main Cart CTA Button */}
-            <button
-              type="button"
-              onClick={() => setIsCartOpen(true)}
-              className="flex-1 bg-[#F9A620] hover:bg-[#e89512] active:scale-95 text-white font-bold py-2.5 px-3.5 rounded-xl flex items-center justify-between shadow-md transition-all cursor-pointer"
-            >
-              <div className="flex items-center space-x-2">
-                <span className="bg-white text-[#924E00] text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
-                  {totalCartCount}
-                </span>
-                <span className="text-xs sm:text-sm font-serif font-bold">View Order</span>
-              </div>
-              <div className="flex items-center space-x-1 text-xs font-bold font-sans">
-                <span>₹{cartSubtotal.toFixed(2)}</span>
-                <span>→</span>
-              </div>
+              {waiterCalled ? 'Alerted' : 'Call Captain'}
             </button>
           </div>
         </div>
-      ) : (
-        /* DOCK VARIANT 2: Sleek Floating Waiter Call & Table Arcade when cart is empty */
-        <div className="fixed bottom-3 right-3 sm:right-6 z-40 flex items-center gap-1.5 sm:gap-2">
-          {/* Table Arcade Floating Button */}
-          <button
-            type="button"
-            onClick={() => setIsTableArcadeOpen(true)}
-            className="px-3 py-2 rounded-full shadow-md border bg-white/95 backdrop-blur-md text-[#924E00] border-[#924E00]/15 hover:border-[#F9A620] active:scale-95 transition-all flex items-center space-x-1.5 cursor-pointer"
-            title="Play Solitaire, Crossword & Table Games while waiting"
-          >
-            <Gamepad2 className="w-4 h-4 text-[#F9A620]" />
-            <span className="text-[11px] font-bold text-[#924E00]">
-              Table Arcade
-            </span>
-          </button>
+      </main>
 
-          {/* Call Waiter Quick Pill */}
-          <button
-            type="button"
-            onClick={handleCallWaiter}
-            disabled={waiterCalled}
-            className={`px-3 py-2 rounded-full shadow-md border active:scale-95 transition-all flex items-center space-x-1.5 cursor-pointer ${
-              waiterCalled
-                ? 'bg-emerald-600 text-white border-emerald-400'
-                : 'bg-white/95 backdrop-blur-md text-[#924E00] border-[#924E00]/15 hover:border-[#F9A620]'
-            }`}
-            title="Call Waiter to Table"
-          >
-            <Bell className={`w-4 h-4 ${waiterCalled ? 'animate-bounce text-white' : 'text-[#F9A620]'}`} />
-            <span className="text-[11px] font-bold text-[#924E00]">
-              {waiterCalled ? 'Waiter Alerted' : 'Call Waiter'}
-            </span>
-          </button>
+      {/* Sticky Bottom Contextual Order Tray */}
+      {totalCartCount > 0 && (
+        <div className="fixed bottom-16 left-0 right-0 z-40 px-4 pointer-events-none max-w-xl mx-auto">
+          <div className="pointer-events-auto bg-[#2a2a2c]/95 backdrop-blur-xl border border-white/10 rounded-2xl p-3 shadow-2xl flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-[#ff5722]/15 flex items-center justify-center text-[#ff5722]">
+                <span className="material-symbols-outlined text-lg">receipt_long</span>
+              </div>
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs text-[#e5e1e4] font-semibold">
+                    {totalCartCount} {totalCartCount === 1 ? 'item' : 'items'} in table order
+                  </span>
+                  <span className="w-1 h-1 rounded-full bg-[#ab8980]"></span>
+                  <span className="text-xs text-[#ffb955] font-bold">
+                    ₹{cartSubtotal.toFixed(0)}
+                  </span>
+                </div>
+                <p className="text-[11px] text-[#ab8980]">Ready to transmit to kitchen</p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsCartOpen(true)}
+              className="px-4 py-2 rounded-full bg-[#ff5722] hover:bg-[#ff6f3d] text-white text-xs font-semibold shadow-md shadow-[#ff5722]/25 flex items-center gap-1.5 active:scale-95 transition-all cursor-pointer"
+            >
+              <span>Review & Send</span>
+              <span className="material-symbols-outlined text-base">arrow_forward</span>
+            </button>
+          </div>
         </div>
       )}
+
+      {/* Fixed Bottom Navigation Bar */}
+      <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-[#1b1b1d]/95 backdrop-blur-lg shadow-2xl border-t border-white/5">
+        <button
+          type="button"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="flex flex-col items-center justify-center text-[#ff5722] px-4 py-1 transition-colors duration-200 active:scale-95 cursor-pointer"
+        >
+          <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+            menu_book
+          </span>
+          <span className="text-[11px] font-bold mt-0.5">Menu</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setIsCartOpen(true)}
+          className="flex flex-col items-center justify-center text-[#ab8980] hover:text-[#e5e1e4] px-4 py-1 transition-colors duration-200 active:scale-95 relative cursor-pointer"
+        >
+          <span className="material-symbols-outlined text-xl">receipt_long</span>
+          <span className="text-[11px] mt-0.5">Table Order</span>
+          {totalCartCount > 0 && (
+            <span className="absolute top-0 right-3 w-4 h-4 rounded-full bg-[#ff5722] text-white text-[9px] font-bold flex items-center justify-center">
+              {totalCartCount}
+            </span>
+          )}
+        </button>
+        <button
+          type="button"
+          onClick={handleCallWaiter}
+          disabled={waiterCalled}
+          className="flex flex-col items-center justify-center text-[#ab8980] hover:text-[#e5e1e4] px-4 py-1 transition-colors duration-200 active:scale-95 cursor-pointer"
+        >
+          <span className="material-symbols-outlined text-xl">room_service</span>
+          <span className="text-[11px] mt-0.5">{waiterCalled ? 'Alerted' : 'Concierge'}</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setIsTableArcadeOpen(true)}
+          className="flex flex-col items-center justify-center text-[#ab8980] hover:text-[#e5e1e4] px-4 py-1 transition-colors duration-200 active:scale-95 cursor-pointer"
+        >
+          <span className="material-symbols-outlined text-xl">sports_esports</span>
+          <span className="text-[11px] mt-0.5">Arcade</span>
+        </button>
+      </nav>
 
       {/* ═══════════════════════════════════════════════════════════ */}
       {/* INTERACTIVE SPIN THE WHEEL REWARD GAME                      */}
