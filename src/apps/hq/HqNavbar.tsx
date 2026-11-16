@@ -167,15 +167,13 @@ export const HqNavbar: React.FC = () => {
             <span>Kitchen</span>
           </Link>
 
-          {/* External Link to Customer Site */}
+          {/* Link to Customer Site (Visible on both phone and laptop) */}
           <a
             href={getCustomerSiteUrl('')}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden sm:inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-[#ff5722]/15 border border-[#ff5722]/30 text-[#ffb5a0] hover:bg-[#ff5722]/25 text-xs font-semibold transition-all shadow-xs"
-            title="Open Customer Discovery Portal in new tab"
+            className="inline-flex items-center space-x-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#ff5722]/15 border border-[#ff5722]/30 text-[#ffb5a0] hover:bg-[#ff5722]/25 text-[11px] sm:text-xs font-semibold transition-all shadow-xs cursor-pointer"
+            title="Open Customer Discovery Portal"
           >
-            <span>Customer Portal</span>
+            <span>Customer</span>
             <ExternalLink className="w-3 h-3 text-[#ffb5a0]" />
           </a>
 

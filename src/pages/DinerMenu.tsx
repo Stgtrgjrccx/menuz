@@ -760,13 +760,13 @@ export const DinerMenu: React.FC = () => {
       {/* 0. STITCH TOP APP BAR (HEADER)                              */}
       {/* ═══════════════════════════════════════════════════════════ */}
       <header className="fixed top-0 left-0 w-full z-40 flex justify-between items-center px-4 py-3 bg-[#131315]/90 backdrop-blur-md shadow-sm border-b border-white/5">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full bg-[#201f21] flex items-center justify-center text-[#ff5722] border border-white/5 flex-shrink-0">
-            <span className="material-symbols-outlined text-lg">restaurant</span>
+        <Link to="/" title="Return to Pune Dining Discovery Home" className="flex items-center gap-2.5 sm:gap-3 group cursor-pointer">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#201f21] group-hover:bg-[#ff5722] flex items-center justify-center text-[#ff5722] group-hover:text-white border border-white/5 group-hover:border-[#ff5722] flex-shrink-0 transition-colors shadow-sm">
+            <span className="material-symbols-outlined text-base sm:text-lg">arrow_back</span>
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-sm sm:text-base font-bold text-[#e5e1e4] tracking-tight">
+              <h1 className="text-sm sm:text-base font-bold text-[#e5e1e4] group-hover:text-[#ffb955] tracking-tight transition-colors">
                 {targetRestaurant.name || 'Saffron House'}
               </h1>
               <span className="text-[11px] text-[#ab8980] font-medium hidden xs:inline">
@@ -778,7 +778,7 @@ export const DinerMenu: React.FC = () => {
               {activeTable ? activeTable.label : 'Table 04'} · {activeTable?.capacity || 2} Guests
             </p>
           </div>
-        </div>
+        </Link>
         <div className="flex items-center gap-2">
           <button
             type="button"
@@ -1375,16 +1375,23 @@ export const DinerMenu: React.FC = () => {
       )}
 
       {/* Fixed Bottom Navigation Bar */}
-      <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-[#1b1b1d]/95 backdrop-blur-lg shadow-2xl border-t border-white/5">
+      <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 sm:px-4 py-2 bg-[#1b1b1d]/95 backdrop-blur-lg shadow-2xl border-t border-white/5">
+        <Link
+          to="/"
+          className="flex flex-col items-center justify-center text-[#ab8980] hover:text-[#ff5722] px-2.5 sm:px-4 py-1 transition-colors duration-200 active:scale-95 cursor-pointer"
+        >
+          <span className="material-symbols-outlined text-lg sm:text-xl">home</span>
+          <span className="text-[10px] sm:text-[11px] mt-0.5 font-medium">Home</span>
+        </Link>
         <button
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="flex flex-col items-center justify-center text-[#ff5722] px-4 py-1 transition-colors duration-200 active:scale-95 cursor-pointer"
+          className="flex flex-col items-center justify-center text-[#ff5722] px-2.5 sm:px-4 py-1 transition-colors duration-200 active:scale-95 cursor-pointer"
         >
-          <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+          <span className="material-symbols-outlined text-lg sm:text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>
             menu_book
           </span>
-          <span className="text-[11px] font-bold mt-0.5">Menu</span>
+          <span className="text-[10px] sm:text-[11px] font-bold mt-0.5">Menu</span>
         </button>
         <button
           type="button"

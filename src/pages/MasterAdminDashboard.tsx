@@ -623,9 +623,9 @@ export const MasterAdminDashboard: React.FC = () => {
               Verify &amp; Unlock Master HQ
             </button>
             <div className="flex items-center justify-center gap-4 text-xs text-[#ab8980] pt-2 border-t border-white/10">
-              <Link to="/" className="hover:text-[#ffb955] transition-colors flex items-center gap-1">
-                <ArrowLeft className="w-3.5 h-3.5" /> Return to Public Home
-              </Link>
+              <a href={getCustomerSiteUrl()} className="hover:text-[#ffb955] transition-colors flex items-center gap-1 cursor-pointer">
+                <ArrowLeft className="w-3.5 h-3.5" /> Go to Customer Discovery Home
+              </a>
             </div>
           </form>
         </div>
