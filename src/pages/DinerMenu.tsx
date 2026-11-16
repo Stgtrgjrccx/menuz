@@ -24,6 +24,7 @@ import {
   Wine,
   Layers,
   LayoutGrid,
+  List,
   Info,
   Home,
   QrCode,
@@ -33,7 +34,9 @@ import {
 import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantStore';
 import { MenuItem, ReviewChallenge, Restaurant } from '../types';
 import { SEED_RESTAURANTS } from '../data/seedData';
+import { motion } from 'framer-motion';
 import { DishDetailModal } from '../components/DishDetailModal';
+import { SpatialDishShowroomModal } from '../components/SpatialDishShowroomModal';
 import { ImageLightboxModal } from '../components/ImageLightboxModal';
 import { CartDrawer } from '../components/CartDrawer';
 import { AiAssistantDrawer } from '../components/AiAssistantDrawer';
@@ -216,7 +219,7 @@ export const DinerMenu: React.FC = () => {
 
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [menuViewMode, setMenuViewMode] = useState<'magazine' | 'classic'>('magazine');
+  const [menuViewMode, setMenuViewMode] = useState<'showroom' | 'classic'>('showroom');
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
   const [filters, setFilters] = useState<MenuFilterState>({
     dietary: 'all',
@@ -227,6 +230,7 @@ export const DinerMenu: React.FC = () => {
   const [expandedStories, setExpandedStories] = useState<Record<string, boolean>>({});
 
   const [activeDish, setActiveDish] = useState<MenuItem | null>(null);
+  const [spatialDish, setSpatialDish] = useState<MenuItem | null>(null);
   const [lightboxDish, setLightboxDish] = useState<MenuItem | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState<number>(0);
   const [isAiOpen, setIsAiOpen] = useState<boolean>(false);
@@ -928,27 +932,193 @@ export const DinerMenu: React.FC = () => {
           </div>
         )}
 
-        {/* Dish Cards List */}
-        <div className="mt-4 space-y-5">
-          {filteredDishes.length === 0 ? (
-            <div className="text-center py-16 bg-[#1b1b1d] rounded-2xl border border-white/5 p-6">
-              <span className="material-symbols-outlined text-4xl text-[#ab8980] mb-2">restaurant</span>
-              <h3 className="text-sm font-bold text-[#e5e1e4]">No dishes match your selection</h3>
-              <p className="text-xs text-[#ab8980] mt-1">Try adjusting your dietary or search filters</p>
-              <button
-                type="button"
-                onClick={() => {
-                  setSearchQuery('');
-                  setSelectedCategory('all');
-                  setFilters({ dietary: 'all', spice: 'all', sort: 'default', highlight: 'all' });
-                }}
-                className="mt-4 px-4 py-1.5 rounded-full bg-[#ff5722] text-white text-xs font-semibold cursor-pointer"
-              >
-                View Full Menu
-              </button>
+        {/* Section Header & View Mode Switcher */}
+        <div className="mt-6 mb-4 flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#ffb955] animate-pulse" />
+              <span className="text-[11px] font-mono uppercase tracking-widest text-[#ffb955] font-semibold">
+                {selectedCategory === 'all'
+                  ? 'FULL COLLECTION // SERIES 01'
+                  : `${categories.find((c) => c.id === selectedCategory)?.name?.toUpperCase() || 'COLLECTION'} // SERIES 01`}
+              </span>
             </div>
-          ) : (
-            filteredDishes.map((dish) => {
+            <h2 className="text-base sm:text-lg font-serif font-bold text-[#e5e1e4] tracking-tight mt-0.5">
+              {menuViewMode === 'showroom' ? 'Culinary Showroom Wall' : 'Menu Selection'}
+            </h2>
+          </div>
+
+          {/* View Mode Switcher */}
+          <div className="flex items-center bg-black/40 border border-white/10 rounded-xl p-1 gap-1">
+            <button
+              type="button"
+              onClick={() => setMenuViewMode('showroom')}
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-mono flex items-center gap-1.5 transition-all cursor-pointer ${
+                menuViewMode === 'showroom'
+                  ? 'bg-[#ffb955] text-black font-bold shadow-md shadow-[#ffb955]/20'
+                  : 'text-[#ab8980] hover:text-[#e5e1e4]'
+              }`}
+              title="Showroom Wall Mode (Squares)"
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Showroom Wall</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setMenuViewMode('classic')}
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-mono flex items-center gap-1.5 transition-all cursor-pointer ${
+                menuViewMode === 'classic'
+                  ? 'bg-[#ffb955] text-black font-bold shadow-md shadow-[#ffb955]/20'
+                  : 'text-[#ab8980] hover:text-[#e5e1e4]'
+              }`}
+              title="Classic Card List"
+            >
+              <List className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">List</span>
+            </button>
+          </div>
+        </div>
+
+        {filteredDishes.length === 0 ? (
+          <div className="text-center py-16 bg-[#1b1b1d] rounded-2xl border border-white/5 p-6">
+            <span className="material-symbols-outlined text-4xl text-[#ab8980] mb-2">restaurant</span>
+            <h3 className="text-sm font-bold text-[#e5e1e4]">No dishes match your selection</h3>
+            <p className="text-xs text-[#ab8980] mt-1">Try adjusting your dietary or search filters</p>
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery('');
+                setSelectedCategory('all');
+                setFilters({ dietary: 'all', spice: 'all', sort: 'default', highlight: 'all' });
+              }}
+              className="mt-4 px-4 py-1.5 rounded-full bg-[#ff5722] text-white text-xs font-semibold cursor-pointer"
+            >
+              View Full Menu
+            </button>
+          </div>
+        ) : menuViewMode === 'showroom' ? (
+          /* ── SHOWROOM WALL: SQUARES NEXT TO EACH OTHER (LAST DEPT. STYLE) ── */
+          <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5 sm:gap-5 lg:gap-6">
+            {filteredDishes.map((dish, index) => {
+              const isFav = favorites.has(dish.id);
+              const tDish = getTranslatedDish(dish, selectedLanguage);
+              const flags = Array.isArray(dish.dietary_flags)
+                ? dish.dietary_flags.map((f) => String(f).toLowerCase().replace(/[-_ ]/g, ''))
+                : [];
+              const isVeg =
+                flags.some(
+                  (f) =>
+                    f.includes('veg') ||
+                    f.includes('vegetarian') ||
+                    f.includes('vegan') ||
+                    f.includes('jain')
+                ) && !flags.some((f) => f.includes('nonveg'));
+              const catName = categories.find((c) => c.id === dish.category_id)?.name;
+              const cartItem = cart.find((ci) => ci.menu_item_id === dish.id);
+
+              return (
+                <div
+                  key={dish.id}
+                  onClick={() => setSpatialDish(dish)}
+                  className="group relative flex flex-col cursor-pointer"
+                >
+                  {/* Square Image Box with Shared-Element Zoom */}
+                  <motion.div
+                    layoutId={`dish-frame-${dish.id}`}
+                    className="relative w-full aspect-square rounded-2xl overflow-hidden bg-[#18171a] border border-white/10 group-hover:border-[#ffb955]/60 transition-all duration-300 shadow-lg group-hover:shadow-[0_12px_30px_-5px_rgba(255,185,85,0.25)]"
+                    transition={{ type: 'spring', stiffness: 320, damping: 30 }}
+                  >
+                    <motion.img
+                      layoutId={`dish-img-${dish.id}`}
+                      src={dish.image_url || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&q=80'}
+                      alt={tDish.name || dish.name}
+                      className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
+                      loading="lazy"
+                      transition={{ type: 'spring', stiffness: 320, damping: 30 }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
+
+                    {/* Top Left Veg / Non-Veg Indicator */}
+                    <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
+                      <div className="w-5 h-5 rounded bg-black/70 backdrop-blur-md p-0.5 border border-white/15 flex items-center justify-center shadow">
+                        <div
+                          className={`w-3 h-3 border ${
+                            isVeg ? 'border-emerald-500' : 'border-red-500'
+                          } rounded-xs flex items-center justify-center`}
+                        >
+                          <div className={`w-1.5 h-1.5 rounded-full ${isVeg ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                        </div>
+                      </div>
+                      {dish.is_signature && (
+                        <span className="px-1.5 py-0.5 rounded bg-black/75 backdrop-blur-md text-[9px] font-mono text-[#ffb955] font-bold border border-[#ffb955]/30 shadow">
+                          ★
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Top Right Favorite Button */}
+                    <button
+                      type="button"
+                      aria-label="Favorite"
+                      onClick={(e) => toggleFavorite(dish.id, e)}
+                      className={`absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-black/70 backdrop-blur-md border border-white/10 flex items-center justify-center transition-colors cursor-pointer ${
+                        isFav ? 'text-red-500' : 'text-white/70 hover:text-red-400'
+                      }`}
+                    >
+                      <span
+                        className="material-symbols-outlined text-[15px]"
+                        style={{ fontVariationSettings: isFav ? "'FILL' 1" : "'FILL' 0" }}
+                      >
+                        favorite
+                      </span>
+                    </button>
+
+                    {/* Cart Quantity Indicator if already in table tray */}
+                    {cartItem && cartItem.quantity > 0 && (
+                      <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-full bg-[#ffb955] text-black font-mono font-bold text-[10px] shadow-lg flex items-center gap-1">
+                        <ShoppingBag className="w-2.5 h-2.5" />
+                        <span>{cartItem.quantity}</span>
+                      </div>
+                    )}
+                  </motion.div>
+
+                  {/* Edge-lit Illuminated Glass Shelf Line (LAST DEPT. signature plinth) */}
+                  <div className="w-full mt-2.5 flex flex-col items-center">
+                    <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-[#ffb955]/50 group-hover:via-[#ffb955] to-transparent transition-all duration-300 shadow-[0_0_10px_rgba(255,185,85,0.4)] group-hover:shadow-[0_0_20px_rgba(255,185,85,0.85)]" />
+                    <div className="w-[88%] h-1 bg-gradient-to-b from-[#ffb955]/15 to-transparent rounded-b" />
+                  </div>
+
+                  {/* Dish Name & Price Written Directly Below */}
+                  <div className="mt-2 px-1 flex flex-col">
+                    <div className="flex items-start justify-between gap-1">
+                      <h3 className="text-xs md:text-sm font-bold font-mono text-[#e5e1e4] group-hover:text-[#ffb955] transition-colors truncate uppercase tracking-wider">
+                        {tDish.name || dish.name}
+                      </h3>
+                      <span className="text-xs md:text-sm font-mono font-bold text-[#ffb955] flex-shrink-0">
+                        ₹{dish.price}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-[11px] text-[#ab8980] mt-1 font-mono">
+                      <span className="truncate uppercase text-[10px] text-[#ab8980]">
+                        {String(index + 1).padStart(2, '0')} // {catName || 'STUDIO'}
+                      </span>
+                      {dish.spice_level > 0 && (
+                        <span className="flex items-center text-[#ff5722] text-[10px]">
+                          <Flame className="w-3 h-3 inline mr-0.5" />
+                          {dish.spice_level}/5
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          /* ── CLASSIC CARD LIST MODE ── */
+          <div className="mt-4 space-y-5">
+            {filteredDishes.map((dish) => {
               const itemQuantity = cart.find((ci) => ci.menu_item_id === dish.id)?.quantity || 0;
               const isFav = favorites.has(dish.id);
               const tDish = getTranslatedDish(dish, selectedLanguage);
@@ -960,16 +1130,20 @@ export const DinerMenu: React.FC = () => {
                   key={dish.id}
                   className="bg-[#1b1b1d] rounded-2xl overflow-hidden border border-white/5 shadow-xl transition-all duration-300 hover:border-white/10"
                 >
-                  {/* Dish Image (4:3 aspect ratio) */}
-                  <div
-                    onClick={() => setActiveDish(dish)}
+                  {/* Dish Image (4:3 aspect ratio) with Spatial Flight Zoom */}
+                  <motion.div
+                    layoutId={`dish-frame-${dish.id}`}
+                    onClick={() => setSpatialDish(dish)}
                     className="relative w-full aspect-[4/3] bg-[#2a2a2c] overflow-hidden cursor-pointer group"
+                    transition={{ type: 'spring', stiffness: 320, damping: 30 }}
                   >
-                    <img
+                    <motion.img
+                      layoutId={`dish-img-${dish.id}`}
                       src={dish.image_url || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&q=80'}
                       alt={tDish.name || dish.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       loading="lazy"
+                      transition={{ type: 'spring', stiffness: 320, damping: 30 }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#1b1b1d] via-transparent to-black/40" />
 
@@ -1018,7 +1192,7 @@ export const DinerMenu: React.FC = () => {
                         </span>
                       </button>
                     </div>
-                  </div>
+                  </motion.div>
 
                   {/* Dish Info */}
                   <div className="p-4">
@@ -1118,9 +1292,9 @@ export const DinerMenu: React.FC = () => {
                   </div>
                 </article>
               );
-            })
-          )}
-        </div>
+            })}
+          </div>
+        )}
 
         {/* Captain / Chef AI Recommendations Card */}
         <div className="my-6 p-4 rounded-2xl bg-[#201f21] border border-white/5 flex items-center justify-between gap-3">
@@ -1250,7 +1424,21 @@ export const DinerMenu: React.FC = () => {
         restaurantName={targetRestaurant.name || 'Menuz Diner'}
       />
 
-      {/* Dish Detail Modal */}
+      {/* Spatial Dish Showroom Stage (LAST DEPT. Zoom Animation) */}
+      <SpatialDishShowroomModal
+        dish={spatialDish}
+        onClose={() => setSpatialDish(null)}
+        onAskAi={(dish) => {
+          setSpatialDish(null);
+          setAiFocusDish(dish);
+          setIsAiOpen(true);
+        }}
+        onOpenCart={() => setIsCartOpen(true)}
+        categoryName={categories.find((c) => c.id === spatialDish?.category_id)?.name}
+        tableLabel={activeTable?.label}
+      />
+
+      {/* Dish Detail Modal (Standard Quick Drawer) */}
       <DishDetailModal
         dish={activeDish}
         onClose={() => setActiveDish(null)}
