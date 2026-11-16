@@ -536,14 +536,14 @@ export const DinerMenu: React.FC = () => {
 
   if (errorMsg) {
     return (
-      <div className="min-h-screen bg-[#FFF7E6] text-[#924E00] flex items-center justify-center p-6">
-        <div className="max-w-md w-full bg-white/90 rounded-3xl p-6 shadow-xl text-center border border-red-500/30 text-[#924E00]">
+      <div className="min-h-screen bg-[#131315] text-[#e5e1e4] flex items-center justify-center p-6">
+        <div className="max-w-md w-full bg-[#1b1b1d] rounded-3xl p-6 shadow-2xl text-center border border-red-500/30 text-[#e5e1e4]">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-3" />
-          <h2 className="font-serif text-xl font-bold text-[#924E00] mb-2">QR Code Issue</h2>
-          <p className="text-[#924E00]/80 text-sm mb-4 leading-relaxed">{errorMsg}</p>
+          <h2 className="font-serif text-xl font-bold text-[#f5f1ea] mb-2">QR Code Issue</h2>
+          <p className="text-[#ab8980] text-sm mb-4 leading-relaxed">{errorMsg}</p>
           <Link
             to={IS_HQ_SITE ? "/customer" : "/"}
-            className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-[#F9A620] hover:bg-[#e89512] text-white text-xs font-bold transition-all shadow-xs"
+            className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-[#ff5722] hover:bg-[#ff6f3d] text-white text-xs font-bold transition-all shadow-lg"
           >
             <Home className="w-4 h-4 text-white" />
             <span>Return to Home</span>
@@ -587,19 +587,19 @@ export const DinerMenu: React.FC = () => {
 
   if (!restaurantSlug) {
     return (
-      <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#FFF7E6] text-[#924E00] font-sans pb-24">
+      <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#131315] text-[#e5e1e4] font-sans pb-24">
         {/* Top Header */}
-        <header className="sticky top-0 z-40 bg-[#FFF7E6]/95 backdrop-blur-md border-b border-[#924E00]/10 px-4 sm:px-6 h-16 flex items-center justify-between">
+        <header className="sticky top-0 z-40 bg-[#131315]/95 backdrop-blur-md border-b border-white/10 px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2.5">
-            <div className="w-8 h-8 rounded-xl bg-[#F9A620] flex items-center justify-center font-black text-white text-base shadow-xs">
+            <div className="w-8 h-8 rounded-xl bg-[#ff5722] flex items-center justify-center font-black text-white text-base shadow-xs">
               M
             </div>
             <div className="flex flex-col">
               <div className="flex items-center space-x-1.5">
-                <span className="font-serif font-black text-lg tracking-tight text-[#924E00]">
+                <span className="font-serif font-black text-lg tracking-tight text-[#f5f1ea]">
                   menuz
                 </span>
-                <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#F9A620]/15 text-[#924E00] border border-[#F9A620]/30 font-bold">
+                <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#ffb955]/15 text-[#ffb955] border border-[#ffb955]/30 font-bold">
                   DINER HUB
                 </span>
               </div>
@@ -610,9 +610,9 @@ export const DinerMenu: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsQrScannerOpen(true)}
-              className="px-3.5 py-1.5 rounded-xl bg-[#F9A620] hover:bg-[#e89512] active:scale-95 text-white text-xs font-semibold shadow-xs flex items-center space-x-1.5 cursor-pointer transition-all"
+              className="px-3.5 py-1.5 rounded-xl bg-[#ffb955] hover:bg-[#ffa726] active:scale-95 text-black text-xs font-bold shadow-xs flex items-center space-x-1.5 cursor-pointer transition-all"
             >
-              <QrCode className="w-3.5 h-3.5 text-white" />
+              <QrCode className="w-3.5 h-3.5 text-black" />
               <span>Scan Table QR</span>
             </button>
             <LanguageSelector />
@@ -622,33 +622,33 @@ export const DinerMenu: React.FC = () => {
         {/* Hero section */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-3">
-            <span className="px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-[#F9A620]/15 text-[#924E00] border border-[#F9A620]/30">
+            <span className="px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-[#ffb955]/15 text-[#ffb955] border border-[#ffb955]/30">
               Pune Food &amp; Dining Ecosystem
             </span>
-            <h1 className="font-serif text-3xl sm:text-5xl font-extrabold text-[#924E00] tracking-tight">
+            <h1 className="font-serif text-3xl sm:text-5xl font-extrabold text-[#f5f1ea] tracking-tight">
               Pune Digital Table Menus
             </h1>
-            <p className="text-sm text-[#924E00]/80 leading-relaxed">
+            <p className="text-sm text-[#ab8980] leading-relaxed">
               Scan your table standee QR to join a live multiplayer session, or choose any of Pune's iconic dining landmarks to explore authentic digital menus with instant dietary filters.
             </p>
           </div>
 
           {/* Table Scan Card */}
-          <div className="max-w-2xl mx-auto bg-white border border-[#924E00]/15 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+          <div className="max-w-2xl mx-auto bg-[#1b1b1d] border border-white/10 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
             <div className="space-y-1.5 text-center sm:text-left">
-              <div className="inline-flex items-center space-x-1.5 text-xs font-bold text-[#F9A620]">
+              <div className="inline-flex items-center space-x-1.5 text-xs font-bold text-[#ffb955]">
                 <QrCode className="w-4 h-4" />
                 <span>Seated at a Table Right Now?</span>
               </div>
-              <h3 className="text-lg sm:text-xl font-bold text-[#924E00]">Join Your Table's Multiplayer Cart</h3>
-              <p className="text-xs text-[#924E00]/80 max-w-md">
+              <h3 className="text-lg sm:text-xl font-bold text-[#f5f1ea]">Join Your Table's Multiplayer Cart</h3>
+              <p className="text-xs text-[#ab8980] max-w-md">
                 Point your phone camera at the Menuz table standee to immediately order dishes, call the waiter, and split the bill.
               </p>
             </div>
             <button
               type="button"
               onClick={() => setIsQrScannerOpen(true)}
-              className="px-6 py-3.5 rounded-2xl bg-[#F9A620] hover:bg-[#e89512] active:scale-95 text-white font-bold text-sm shadow-md flex items-center space-x-2 shrink-0 cursor-pointer transition-all"
+              className="px-6 py-3.5 rounded-2xl bg-[#ff5722] hover:bg-[#ff6f3d] active:scale-95 text-white font-bold text-sm shadow-md flex items-center space-x-2 shrink-0 cursor-pointer transition-all"
             >
               <QrCode className="w-5 h-5 text-white" />
               <span>Launch Camera Scanner</span>
@@ -658,13 +658,13 @@ export const DinerMenu: React.FC = () => {
           {/* Search and Filters */}
           <div className="space-y-4">
             <div className="relative max-w-xl mx-auto">
-              <Search className="w-5 h-5 text-[#924E00]/40 absolute left-4 top-1/2 -translate-y-1/2" />
+              <Search className="w-5 h-5 text-[#ab8980] absolute left-4 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={hubSearchQuery}
                 onChange={(e) => setHubSearchQuery(e.target.value)}
                 placeholder="Search restaurant or dishes (e.g. Vaishali, Goodluck, Dosa, Strudel)..."
-                className="w-full bg-white border border-[#924E00]/15 rounded-2xl pl-12 pr-4 py-3.5 text-sm text-[#924E00] placeholder-[#924E00]/40 focus:outline-none focus:border-[#F9A620] shadow-xs"
+                className="w-full bg-[#1b1b1d] border border-white/10 rounded-2xl pl-12 pr-4 py-3.5 text-sm text-[#e5e1e4] placeholder-[#ab8980] focus:outline-none focus:border-[#ffb955] shadow-inner"
               />
             </div>
 
@@ -676,8 +676,8 @@ export const DinerMenu: React.FC = () => {
                   onClick={() => setHubCategory(cat)}
                   className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
                     hubCategory === cat
-                      ? 'bg-[#F9A620] text-white font-bold shadow-xs'
-                      : 'bg-white hover:bg-[#FFF7E6] text-[#924E00] border border-[#924E00]/15'
+                      ? 'bg-[#ffb955] text-black font-bold shadow-xs'
+                      : 'bg-[#1b1b1d] hover:bg-white/10 text-[#ab8980] border border-white/10'
                   }`}
                 >
                   {cat === 'all' ? 'All Pune Landmarks' : cat}
@@ -691,31 +691,31 @@ export const DinerMenu: React.FC = () => {
             {filteredHubRestaurants.map((r) => (
               <div
                 key={r.id}
-                className="bg-white border border-[#924E00]/10 hover:border-[#F9A620]/40 rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all group flex flex-col justify-between"
+                className="bg-[#1b1b1d] border border-white/10 hover:border-[#ffb955]/40 rounded-2xl overflow-hidden shadow-xl transition-all group flex flex-col justify-between"
               >
                 <div>
-                  <div className="relative h-44 w-full overflow-hidden bg-[#FFF2D6]">
+                  <div className="relative h-44 w-full overflow-hidden bg-[#201f21]">
                     <img
                       src={r.logo_url || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&auto=format&fit=crop'}
                       alt={r.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-transparent to-transparent" />
-                    <span className="absolute top-3 left-3 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/90 backdrop-blur-md text-[#924E00] border border-[#924E00]/15 shadow-xs">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                    <span className="absolute top-3 left-3 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-black/70 backdrop-blur-md text-[#ffb955] border border-[#ffb955]/30 shadow-xs">
                       {r.location || 'Pune, India'}
                     </span>
                   </div>
                   <div className="p-4 space-y-1.5">
-                    <h3 className="font-serif text-lg font-bold text-[#924E00] group-hover:text-[#F9A620] transition-colors">
+                    <h3 className="font-serif text-lg font-bold text-[#f5f1ea] group-hover:text-[#ffb955] transition-colors">
                       {r.name}
                     </h3>
-                    <p className="text-xs text-[#924E00]/80 line-clamp-1">{r.cuisine}</p>
+                    <p className="text-xs text-[#ab8980] line-clamp-1">{r.cuisine}</p>
                   </div>
                 </div>
                 <div className="p-4 pt-0">
                   <Link
                     to={`/r/${r.slug}/menu`}
-                    className="w-full py-2.5 rounded-xl bg-[#F9A620]/15 hover:bg-[#F9A620] text-[#924E00] hover:text-white border border-[#F9A620]/30 text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer shadow-xs"
+                    className="w-full py-2.5 rounded-xl bg-[#ffb955]/15 hover:bg-[#ffb955] text-[#ffb955] hover:text-black border border-[#ffb955]/30 text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer shadow-xs"
                   >
                     <BookOpen className="w-3.5 h-3.5" />
                     <span>Open Live Menu &amp; Order</span>
@@ -998,7 +998,7 @@ export const DinerMenu: React.FC = () => {
           </div>
         ) : menuViewMode === 'showroom' ? (
           /* ── SHOWROOM WALL: SQUARES NEXT TO EACH OTHER (LAST DEPT. STYLE) ── */
-          <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5 sm:gap-5 lg:gap-6">
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-7 lg:gap-8">
             {filteredDishes.map((dish, index) => {
               const isFav = favorites.has(dish.id);
               const tDish = getTranslatedDish(dish, selectedLanguage);
@@ -1022,10 +1022,10 @@ export const DinerMenu: React.FC = () => {
                   onClick={() => setSpatialDish(dish)}
                   className="group relative flex flex-col cursor-pointer"
                 >
-                  {/* Square Image Box with Shared-Element Zoom */}
+                  {/* Square Image Box with Shared-Element Zoom (Larger Pictures) */}
                   <motion.div
                     layoutId={`dish-frame-${dish.id}`}
-                    className="relative w-full aspect-square rounded-2xl overflow-hidden bg-[#18171a] border border-white/10 group-hover:border-[#ffb955]/60 transition-all duration-300 shadow-lg group-hover:shadow-[0_12px_30px_-5px_rgba(255,185,85,0.25)]"
+                    className="relative w-full aspect-square rounded-2xl overflow-hidden bg-[#18171a] border border-white/10 group-hover:border-[#ffb955]/60 transition-all duration-300 shadow-xl group-hover:shadow-[0_16px_36px_-6px_rgba(255,185,85,0.3)]"
                     transition={{ type: 'spring', stiffness: 320, damping: 30 }}
                   >
                     <motion.img
@@ -1039,7 +1039,7 @@ export const DinerMenu: React.FC = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
 
                     {/* Top Left Veg / Non-Veg Indicator */}
-                    <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
+                    <div className="absolute top-3 left-3 flex items-center gap-1.5">
                       <div className="w-5 h-5 rounded bg-black/70 backdrop-blur-md p-0.5 border border-white/15 flex items-center justify-center shadow">
                         <div
                           className={`w-3 h-3 border ${
@@ -1050,8 +1050,8 @@ export const DinerMenu: React.FC = () => {
                         </div>
                       </div>
                       {dish.is_signature && (
-                        <span className="px-1.5 py-0.5 rounded bg-black/75 backdrop-blur-md text-[9px] font-mono text-[#ffb955] font-bold border border-[#ffb955]/30 shadow">
-                          ★
+                        <span className="px-2 py-0.5 rounded bg-black/75 backdrop-blur-md text-[9px] font-mono text-[#ffb955] font-bold border border-[#ffb955]/30 shadow">
+                          ★ SIGNATURE
                         </span>
                       )}
                     </div>
@@ -1061,12 +1061,12 @@ export const DinerMenu: React.FC = () => {
                       type="button"
                       aria-label="Favorite"
                       onClick={(e) => toggleFavorite(dish.id, e)}
-                      className={`absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-black/70 backdrop-blur-md border border-white/10 flex items-center justify-center transition-colors cursor-pointer ${
+                      className={`absolute top-3 right-3 w-8 h-8 rounded-full bg-black/70 backdrop-blur-md border border-white/10 flex items-center justify-center transition-colors cursor-pointer ${
                         isFav ? 'text-red-500' : 'text-white/70 hover:text-red-400'
                       }`}
                     >
                       <span
-                        className="material-symbols-outlined text-[15px]"
+                        className="material-symbols-outlined text-[16px]"
                         style={{ fontVariationSettings: isFav ? "'FILL' 1" : "'FILL' 0" }}
                       >
                         favorite
@@ -1075,39 +1075,49 @@ export const DinerMenu: React.FC = () => {
 
                     {/* Cart Quantity Indicator if already in table tray */}
                     {cartItem && cartItem.quantity > 0 && (
-                      <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-full bg-[#ffb955] text-black font-mono font-bold text-[10px] shadow-lg flex items-center gap-1">
-                        <ShoppingBag className="w-2.5 h-2.5" />
-                        <span>{cartItem.quantity}</span>
+                      <div className="absolute bottom-3 right-3 px-2.5 py-0.5 rounded-full bg-[#ffb955] text-black font-mono font-bold text-xs shadow-lg flex items-center gap-1">
+                        <ShoppingBag className="w-3 h-3" />
+                        <span>{cartItem.quantity} in tray</span>
                       </div>
                     )}
                   </motion.div>
 
                   {/* Edge-lit Illuminated Glass Shelf Line (LAST DEPT. signature plinth) */}
-                  <div className="w-full mt-2.5 flex flex-col items-center">
-                    <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-[#ffb955]/50 group-hover:via-[#ffb955] to-transparent transition-all duration-300 shadow-[0_0_10px_rgba(255,185,85,0.4)] group-hover:shadow-[0_0_20px_rgba(255,185,85,0.85)]" />
+                  <div className="w-full mt-3 flex flex-col items-center">
+                    <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-[#ffb955]/60 group-hover:via-[#ffb955] to-transparent transition-all duration-300 shadow-[0_0_12px_rgba(255,185,85,0.45)] group-hover:shadow-[0_0_24px_rgba(255,185,85,0.9)]" />
                     <div className="w-[88%] h-1 bg-gradient-to-b from-[#ffb955]/15 to-transparent rounded-b" />
                   </div>
 
-                  {/* Dish Name & Price Written Directly Below */}
-                  <div className="mt-2 px-1 flex flex-col">
-                    <div className="flex items-start justify-between gap-1">
-                      <h3 className="text-xs md:text-sm font-bold font-mono text-[#e5e1e4] group-hover:text-[#ffb955] transition-colors truncate uppercase tracking-wider">
-                        {tDish.name || dish.name}
-                      </h3>
-                      <span className="text-xs md:text-sm font-mono font-bold text-[#ffb955] flex-shrink-0">
+                  {/* Dish Name & Details Written Directly Below (Full Name, Completely Readable) */}
+                  <div className="mt-3 px-1 flex flex-col gap-1.5">
+                    {/* Top sub-row: Serial Index + Price */}
+                    <div className="flex items-center justify-between text-[11px] font-mono">
+                      <span className="uppercase text-[#ab8980] tracking-wider text-[10px]">
+                        {String(index + 1).padStart(2, '0')} // {catName || 'STUDIO'}
+                      </span>
+                      <span className="font-mono font-bold text-sm text-[#ffb955]">
                         ₹{dish.price}
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px] text-[#ab8980] mt-1 font-mono">
-                      <span className="truncate uppercase text-[10px] text-[#ab8980]">
-                        {String(index + 1).padStart(2, '0')} // {catName || 'STUDIO'}
-                      </span>
+                    {/* Full Dish Name: completely readable, wraps naturally, clean font sizing */}
+                    <h3 className="text-sm sm:text-base font-bold font-serif text-[#f5f1ea] group-hover:text-[#ffb955] transition-colors leading-snug tracking-tight">
+                      {tDish.name || dish.name}
+                    </h3>
+
+                    {/* Bottom Metadata: Spice heat scale & serving size */}
+                    <div className="flex items-center gap-2 text-[11px] text-[#ab8980] font-mono mt-0.5">
                       {dish.spice_level > 0 && (
-                        <span className="flex items-center text-[#ff5722] text-[10px]">
-                          <Flame className="w-3 h-3 inline mr-0.5" />
-                          {dish.spice_level}/5
+                        <span className="flex items-center text-[#ff5722]">
+                          <Flame className="w-3.5 h-3.5 inline mr-1" />
+                          <span>Heat {dish.spice_level}/5</span>
                         </span>
+                      )}
+                      {dish.serving_size && (
+                        <>
+                          <span className="text-white/20">•</span>
+                          <span>Serves {dish.serving_size}</span>
+                        </>
                       )}
                     </div>
                   </div>

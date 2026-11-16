@@ -767,13 +767,13 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-[#924E00]/40 backdrop-blur-sm animate-fadeIn">
-      <div className="w-full max-w-4xl max-h-[94vh] bg-[#FFF7E6] border border-[#924E00]/15 rounded-3xl shadow-2xl flex flex-col overflow-hidden text-[#924E00]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
+      <div className="w-full max-w-4xl max-h-[94vh] bg-[#161517] border border-white/10 rounded-3xl shadow-2xl flex flex-col overflow-hidden text-[#e5e1e4]">
         
         {/* Header Bar */}
-        <div className="px-4 sm:px-6 py-3.5 bg-white border-b border-[#924E00]/10 flex items-center justify-between">
+        <div className="px-4 sm:px-6 py-3.5 bg-[#131315] border-b border-white/10 flex items-center justify-between">
           <div className="flex items-center space-x-2.5">
-            <div className="w-9 h-9 rounded-xl bg-[#F9A620] flex items-center justify-center text-white font-black shadow-xs">
+            <div className="w-9 h-9 rounded-xl bg-[#ff5722] flex items-center justify-center text-white font-black shadow-xs">
               <Gamepad2 className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -841,7 +841,7 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
         </div>
 
         {/* Tab Navigation */}
-        <div className="px-3 sm:px-6 py-2 bg-[#FFF7E6] border-b border-[#924E00]/10 flex items-center space-x-1 sm:space-x-2 overflow-x-auto scrollbar-none">
+        <div className="px-3 sm:px-6 py-2 bg-[#18171a] border-b border-white/10 flex items-center space-x-1 sm:space-x-2 overflow-x-auto scrollbar-none">
           <button
             type="button"
             onClick={() => setActiveTab('solitaire')}

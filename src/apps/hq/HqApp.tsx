@@ -60,7 +60,7 @@ export const HqApp: React.FC = () => {
   return (
     <HashRouter>
       <HqRouteSEOManager />
-      <div className="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col bg-[#FFF7E6] text-[#924E00] font-sans antialiased selection:bg-[#F9A620]/30 selection:text-[#924E00]">
+      <div className="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col bg-[#131315] text-[#e5e1e4] font-sans antialiased selection:bg-[#ff5722]/30 selection:text-white">
         <HqNavbar />
         <div className="flex-1">
           <ErrorBoundary>

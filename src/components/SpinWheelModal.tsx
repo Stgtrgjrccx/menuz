@@ -667,11 +667,11 @@ export const SpinWheelModal: React.FC<SpinWheelModalProps> = ({
     >
       <div
         style={{
-          backgroundColor: '#FFF7E6',
+          backgroundColor: '#161517',
           maxHeight: '94vh',
           overflowY: 'auto'
         }}
-        className="rounded-2xl sm:rounded-3xl max-w-md w-full p-3.5 sm:p-6 shadow-2xl border border-[#924E00]/15 relative flex flex-col items-center text-[#924E00]"
+        className="rounded-2xl sm:rounded-3xl max-w-md w-full p-3.5 sm:p-6 shadow-2xl border border-white/10 relative flex flex-col items-center text-[#e5e1e4]"
       >
         {/* Confetti canvas */}
         <canvas
