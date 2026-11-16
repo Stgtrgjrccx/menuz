@@ -13,15 +13,15 @@ const CustomerRouteSEOManager: React.FC = () => {
 
   useEffect(() => {
     const path = location.pathname;
-    let pageTitle = 'Menuz Customer | Digital Dining & QR Menus';
-    let metaDesc = 'Elevate dine-in revenue with Menuz: zero-app multiplayer QR ordering, instant ESC/POS KOT printing, 1-click Google 5-star review builder, and 0% food commission in Pune, India.';
+    let pageTitle = 'Menuz | View the Menu in One Scan or Tap';
+    let metaDesc = 'View restaurant menus in one scan or tap. Explore high-definition plating photography, dietary preferences, and prices with zero app downloads.';
 
     if (path.includes('/menu')) {
-      pageTitle = 'Digital Table Menu & Multiplayer Cart | Menuz';
-      metaDesc = 'Interactive, app-free dining menu with real-time multiplayer table sync, dietary filters, and direct kitchen KOT ordering.';
+      pageTitle = 'Visual Menu Showroom | Menuz';
+      metaDesc = 'View the complete restaurant menu with high-definition dish photos, dietary filters, and prices.';
     } else if (path.includes('/review')) {
-      pageTitle = 'Google 5-Star Review Generator | 1-Tap AI Drafts & Table Rewards | Menuz';
-      metaDesc = 'Generate authentic 5-star Google review drafts in 1 tap, private floor escalation, and spin the lucky reward wheel for instant table treats.';
+      pageTitle = 'Google Review Generator | Menuz';
+      metaDesc = 'Share your dining feedback and review in 1 tap.';
     }
 
     document.title = pageTitle;

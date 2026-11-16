@@ -116,18 +116,18 @@ export const CustomerHomePage: React.FC = () => {
         {/* Monolithic Category Badge */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#18171a] border border-white/10 text-xs font-mono text-[#ffb955] mb-6 shadow-sm">
           <span className="w-1.5 h-1.5 rounded-full bg-[#ff5722] animate-pulse" />
-          <span className="tracking-widest uppercase font-semibold">Autonomous Tableside Dining</span>
+          <span className="tracking-widest uppercase font-semibold">Digital Menu Viewer</span>
         </div>
 
         {/* Main Headline */}
         <h1 className="font-serif font-bold text-4xl sm:text-6xl lg:text-7xl text-[#f5f1ea] tracking-tight leading-[1.08] max-w-4xl">
-          Instant dining, <br className="hidden sm:inline" />
-          <span className="italic font-normal text-[#ffb955]">straight from your table.</span>
+          View the menu in <br className="hidden sm:inline" />
+          <span className="italic font-normal text-[#ffb955]">one scan or tap.</span>
         </h1>
 
         {/* Unambiguous Value Proposition */}
         <p className="mt-5 text-sm sm:text-base md:text-lg text-[#ab8980] max-w-2xl leading-relaxed">
-          Scan the QR code at your dining table to explore high-definition plating photography, order dishes together in real time, and split the bill. No app download required.
+          Point your phone camera at any table QR or tap a venue below to explore full restaurant menus with high-definition dish photos and prices. Zero app downloads required.
         </p>
 
         {/* Primary High-Contrast Actions */}
@@ -164,12 +164,12 @@ export const CustomerHomePage: React.FC = () => {
           <div className="p-5 sm:p-6 rounded-2xl bg-[#131215] border border-white/5 flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between text-[11px] font-mono text-[#ff5722] font-bold tracking-widest mb-3">
-                <span>01 // SCAN</span>
+                <span>01 // SCAN OR TAP</span>
                 <QrCode className="w-4 h-4 text-[#ff5722]" />
               </div>
-              <h2 className="text-base font-bold font-serif text-[#f5f1ea]">Scan Table Standee</h2>
+              <h2 className="text-base font-bold font-serif text-[#f5f1ea]">Open Any Menu Instantly</h2>
               <p className="mt-1.5 text-xs text-[#ab8980] leading-relaxed">
-                Point your phone camera at the QR code standee on your table. Instantly joins your table's session with zero app installations.
+                Point your phone camera at a table QR or tap any restaurant below. The complete visual menu opens instantly in your browser.
               </p>
             </div>
           </div>
@@ -178,12 +178,12 @@ export const CustomerHomePage: React.FC = () => {
           <div className="p-5 sm:p-6 rounded-2xl bg-[#131215] border border-white/5 flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between text-[11px] font-mono text-[#ffb955] font-bold tracking-widest mb-3">
-                <span>02 // EXPLORE</span>
+                <span>02 // BROWSE DISHES</span>
                 <UtensilsCrossed className="w-4 h-4 text-[#ffb955]" />
               </div>
-              <h2 className="text-base font-bold font-serif text-[#f5f1ea]">Order in Showroom Mode</h2>
+              <h2 className="text-base font-bold font-serif text-[#f5f1ea]">High-Definition Food Photos</h2>
               <p className="mt-1.5 text-xs text-[#ab8980] leading-relaxed">
-                Browse square dishes on illuminated shelves, review chef ingredient sourcing, and sync cart additions with table companions in real time.
+                Browse square dish photos placed on illuminated shelves with complete item names, ingredients, and transparent prices.
               </p>
             </div>
           </div>
@@ -192,12 +192,12 @@ export const CustomerHomePage: React.FC = () => {
           <div className="p-5 sm:p-6 rounded-2xl bg-[#131215] border border-white/5 flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between text-[11px] font-mono text-emerald-400 font-bold tracking-widest mb-3">
-                <span>03 // DINE</span>
+                <span>03 // FILTER &amp; DECIDE</span>
                 <Sparkles className="w-4 h-4 text-emerald-400" />
               </div>
-              <h2 className="text-base font-bold font-serif text-[#f5f1ea]">Direct Kitchen Routing</h2>
+              <h2 className="text-base font-bold font-serif text-[#f5f1ea]">Instant Dietary Filters</h2>
               <p className="mt-1.5 text-xs text-[#ab8980] leading-relaxed">
-                Orders fire directly to the kitchen's thermal KOT printer. Track fulfillment live, alert your waiter, and split the bill with 1 tap.
+                Filter instantly by vegetarian, spice level, and chef signatures. Know exactly what you are ordering before you ask the server.
               </p>
             </div>
           </div>
@@ -211,10 +211,10 @@ export const CustomerHomePage: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>
             <span className="text-[11px] font-mono uppercase tracking-widest text-[#ffb955] font-semibold block mb-1">
-              VERIFIED VENUES // PUNE, INDIA
+              DIGITAL MENUS // PUNE, INDIA
             </span>
             <h2 className="font-serif font-bold text-2xl sm:text-3xl text-[#f5f1ea] tracking-tight">
-              Select a Restaurant
+              Explore Restaurant Menus
             </h2>
           </div>
 
@@ -281,7 +281,7 @@ export const CustomerHomePage: React.FC = () => {
                   {/* Live Status Pulse */}
                   <span className="absolute bottom-3 left-3 flex items-center gap-1.5 text-[10px] font-mono text-emerald-400 font-semibold bg-black/60 px-2 py-0.5 rounded-md backdrop-blur-xs">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    <span>Tableside Active</span>
+                    <span>Digital Menu Ready</span>
                   </span>
                 </div>
 
@@ -304,7 +304,7 @@ export const CustomerHomePage: React.FC = () => {
                   onClick={() => navigate(`/r/${venue.slug}/menu?t=${venue.token}`)}
                   className="w-full py-2.5 rounded-xl bg-[#ffb955]/15 hover:bg-[#ffb955] text-[#ffb955] hover:text-black border border-[#ffb955]/30 hover:border-[#ffb955] text-xs font-mono font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs active:scale-98"
                 >
-                  <span>Open Showroom Menu</span>
+                  <span>View Menu</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -323,9 +323,9 @@ export const CustomerHomePage: React.FC = () => {
               <Sparkles className="w-5 h-5 text-[#ffb955]" />
             </div>
             <div>
-              <h2 className="text-sm font-bold font-serif text-[#f5f1ea]">Unsure what to order?</h2>
+              <h2 className="text-sm font-bold font-serif text-[#f5f1ea]">Need a recommendation?</h2>
               <p className="text-xs text-[#ab8980] mt-0.5">
-                Chef AI Concierge provides spice calibration, dietary checks, and wine pairings.
+                Ask Chef AI about dish ingredients, spice levels, allergen details, and pairings.
               </p>
             </div>
           </div>
@@ -335,7 +335,7 @@ export const CustomerHomePage: React.FC = () => {
             onClick={() => setIsAiOpen(true)}
             className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#1b1b1d] hover:bg-white/10 border border-white/10 text-xs font-mono font-semibold text-[#f5f1ea] hover:text-[#ffb955] transition-all flex items-center justify-center gap-2 cursor-pointer flex-shrink-0"
           >
-            <span>Consult Chef AI</span>
+            <span>Ask Chef AI</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -349,7 +349,7 @@ export const CustomerHomePage: React.FC = () => {
           <div className="flex items-center gap-2">
             <span className="font-serif font-black text-sm text-[#f5f1ea]">menuz</span>
             <span>—</span>
-            <span>Autonomous Tableside Dining OS</span>
+            <span>Instant Digital Menu Viewer • Pune, India</span>
           </div>
           <div className="flex items-center gap-4 text-[11px]">
             <button
