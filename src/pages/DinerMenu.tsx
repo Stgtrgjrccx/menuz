@@ -54,8 +54,11 @@ import { findAuthenticPuneMenu } from '../data/authenticPuneMenus';
 
 
 export const DinerMenu: React.FC = () => {
-  const { restaurantSlug, tableId } = useParams<{ restaurantSlug: string; tableId?: string }>();
+  const { restaurantSlug: rawSlug, tableId } = useParams<{ restaurantSlug?: string; tableId?: string }>();
   const [searchParams] = useSearchParams();
+  const showHub = searchParams.get('view') === 'hub';
+  // Default to Saffron House so diner menu dishes appear directly on /menu
+  const restaurantSlug = rawSlug || (showHub ? undefined : 'saffron-house');
   const tableToken = searchParams.get('t') || tableId || '';
 
   const restaurants = useRestaurantStore((state) => state.restaurants);
@@ -998,7 +1001,7 @@ export const DinerMenu: React.FC = () => {
           </div>
         ) : menuViewMode === 'showroom' ? (
           /* ── SHOWROOM WALL: SQUARES NEXT TO EACH OTHER (LAST DEPT. STYLE) ── */
-          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-7 lg:gap-8">
+          <div className="mt-4 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8">
             {filteredDishes.map((dish, index) => {
               const isFav = favorites.has(dish.id);
               const tDish = getTranslatedDish(dish, selectedLanguage);
@@ -1022,10 +1025,10 @@ export const DinerMenu: React.FC = () => {
                   onClick={() => setSpatialDish(dish)}
                   className="group relative flex flex-col cursor-pointer"
                 >
-                  {/* Square Image Box with Shared-Element Zoom (Larger Pictures) */}
+                  {/* Square Image Box with Shared-Element Zoom */}
                   <motion.div
                     layoutId={`dish-frame-${dish.id}`}
-                    className="relative w-full aspect-square rounded-2xl overflow-hidden bg-[#18171a] border border-white/10 group-hover:border-[#ffb955]/60 transition-all duration-300 shadow-xl group-hover:shadow-[0_16px_36px_-6px_rgba(255,185,85,0.3)]"
+                    className="relative w-full aspect-square rounded-xl sm:rounded-2xl overflow-hidden bg-[#18171a] border border-white/10 group-hover:border-[#ffb955]/60 transition-all duration-300 shadow-xl group-hover:shadow-[0_16px_36px_-6px_rgba(255,185,85,0.3)]"
                     transition={{ type: 'spring', stiffness: 320, damping: 30 }}
                   >
                     <motion.img
@@ -1039,18 +1042,18 @@ export const DinerMenu: React.FC = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
 
                     {/* Top Left Veg / Non-Veg Indicator */}
-                    <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                      <div className="w-5 h-5 rounded bg-black/70 backdrop-blur-md p-0.5 border border-white/15 flex items-center justify-center shadow">
+                    <div className="absolute top-2 left-2 sm:top-3 sm:left-3 flex items-center gap-1 sm:gap-1.5">
+                      <div className="w-4 h-4 sm:w-5 sm:h-5 rounded bg-black/70 backdrop-blur-md p-0.5 border border-white/15 flex items-center justify-center shadow">
                         <div
-                          className={`w-3 h-3 border ${
+                          className={`w-2.5 h-2.5 sm:w-3 sm:h-3 border ${
                             isVeg ? 'border-emerald-500' : 'border-red-500'
                           } rounded-xs flex items-center justify-center`}
                         >
-                          <div className={`w-1.5 h-1.5 rounded-full ${isVeg ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                          <div className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full ${isVeg ? 'bg-emerald-500' : 'bg-red-500'}`} />
                         </div>
                       </div>
                       {dish.is_signature && (
-                        <span className="px-2 py-0.5 rounded bg-black/75 backdrop-blur-md text-[9px] font-mono text-[#ffb955] font-bold border border-[#ffb955]/30 shadow">
+                        <span className="px-1.5 py-0.5 rounded bg-black/75 backdrop-blur-md text-[8px] sm:text-[9px] font-mono text-[#ffb955] font-bold border border-[#ffb955]/30 shadow">
                           ★ SIGNATURE
                         </span>
                       )}
@@ -1061,12 +1064,12 @@ export const DinerMenu: React.FC = () => {
                       type="button"
                       aria-label="Favorite"
                       onClick={(e) => toggleFavorite(dish.id, e)}
-                      className={`absolute top-3 right-3 w-8 h-8 rounded-full bg-black/70 backdrop-blur-md border border-white/10 flex items-center justify-center transition-colors cursor-pointer ${
+                      className={`absolute top-2 right-2 sm:top-3 sm:right-3 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-black/70 backdrop-blur-md border border-white/10 flex items-center justify-center transition-colors cursor-pointer ${
                         isFav ? 'text-red-500' : 'text-white/70 hover:text-red-400'
                       }`}
                     >
                       <span
-                        className="material-symbols-outlined text-[16px]"
+                        className="material-symbols-outlined text-[14px] sm:text-[16px]"
                         style={{ fontVariationSettings: isFav ? "'FILL' 1" : "'FILL' 0" }}
                       >
                         favorite
@@ -1075,7 +1078,7 @@ export const DinerMenu: React.FC = () => {
 
                     {/* Cart Quantity Indicator if already in table tray */}
                     {cartItem && cartItem.quantity > 0 && (
-                      <div className="absolute bottom-3 right-3 px-2.5 py-0.5 rounded-full bg-[#ffb955] text-black font-mono font-bold text-xs shadow-lg flex items-center gap-1">
+                      <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 px-2 py-0.5 rounded-full bg-[#ffb955] text-black font-mono font-bold text-[10px] sm:text-xs shadow-lg flex items-center gap-1">
                         <ShoppingBag className="w-3 h-3" />
                         <span>{cartItem.quantity} in tray</span>
                       </div>
@@ -1083,33 +1086,33 @@ export const DinerMenu: React.FC = () => {
                   </motion.div>
 
                   {/* Edge-lit Illuminated Glass Shelf Line (LAST DEPT. signature plinth) */}
-                  <div className="w-full mt-3 flex flex-col items-center">
+                  <div className="w-full mt-2 sm:mt-3 flex flex-col items-center">
                     <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-[#ffb955]/60 group-hover:via-[#ffb955] to-transparent transition-all duration-300 shadow-[0_0_12px_rgba(255,185,85,0.45)] group-hover:shadow-[0_0_24px_rgba(255,185,85,0.9)]" />
                     <div className="w-[88%] h-1 bg-gradient-to-b from-[#ffb955]/15 to-transparent rounded-b" />
                   </div>
 
                   {/* Dish Name & Details Written Directly Below (Full Name, Completely Readable) */}
-                  <div className="mt-3 px-1 flex flex-col gap-1.5">
+                  <div className="mt-2 sm:mt-3 px-0.5 sm:px-1 flex flex-col gap-1 sm:gap-1.5">
                     {/* Top sub-row: Serial Index + Price */}
-                    <div className="flex items-center justify-between text-[11px] font-mono">
-                      <span className="uppercase text-[#ab8980] tracking-wider text-[10px]">
+                    <div className="flex items-center justify-between text-[10px] sm:text-[11px] font-mono">
+                      <span className="uppercase text-[#ab8980] tracking-wider text-[9px] sm:text-[10px] truncate max-w-[65%]">
                         {String(index + 1).padStart(2, '0')} // {catName || 'STUDIO'}
                       </span>
-                      <span className="font-mono font-bold text-sm text-[#ffb955]">
+                      <span className="font-mono font-bold text-xs sm:text-sm text-[#ffb955]">
                         ₹{dish.price}
                       </span>
                     </div>
 
                     {/* Full Dish Name: completely readable, wraps naturally, clean font sizing */}
-                    <h3 className="text-sm sm:text-base font-bold font-serif text-[#f5f1ea] group-hover:text-[#ffb955] transition-colors leading-snug tracking-tight">
+                    <h3 className="text-xs sm:text-base font-bold font-serif text-[#f5f1ea] group-hover:text-[#ffb955] transition-colors leading-snug tracking-tight">
                       {tDish.name || dish.name}
                     </h3>
 
                     {/* Bottom Metadata: Spice heat scale & serving size */}
-                    <div className="flex items-center gap-2 text-[11px] text-[#ab8980] font-mono mt-0.5">
+                    <div className="flex items-center flex-wrap gap-1 sm:gap-2 text-[9px] sm:text-[11px] text-[#ab8980] font-mono mt-0.5">
                       {dish.spice_level > 0 && (
                         <span className="flex items-center text-[#ff5722]">
-                          <Flame className="w-3.5 h-3.5 inline mr-1" />
+                          <Flame className="w-3 h-3 sm:w-3.5 sm:h-3.5 inline mr-0.5" />
                           <span>Heat {dish.spice_level}/5</span>
                         </span>
                       )}

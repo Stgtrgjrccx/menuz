@@ -29,34 +29,34 @@ export const KitchenKDS: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#090D16] text-slate-100 p-3 sm:p-4 md:p-6">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#131315] text-[#e5e1e4] p-3 sm:p-4 md:p-6 font-sans">
       {/* Header */}
-      <header className="flex flex-wrap justify-between items-center pb-4 mb-6 border-b border-white/[0.08] gap-3">
+      <header className="flex flex-wrap justify-between items-center pb-4 mb-6 border-b border-white/10 gap-3">
         <div className="flex items-center space-x-3">
-          <div className="p-2.5 bg-gradient-to-tr from-amber-600 to-amber-500 rounded-2xl text-slate-950 font-black shadow-sm">
-            <ChefHat className="w-6 h-6 text-slate-950" />
+          <div className="p-2.5 bg-gradient-to-tr from-[#ff5722] to-[#ffb955] rounded-2xl text-black font-black shadow-md">
+            <ChefHat className="w-6 h-6 text-black" />
           </div>
           <div>
-            <span className="text-[10px] uppercase font-mono tracking-widest text-amber-400 block font-bold">
+            <span className="text-[10px] uppercase font-mono tracking-widest text-[#ffb955] block font-bold">
               Kitchen Display System (KDS)
             </span>
-            <h1 className="font-serif text-2xl font-bold text-white">{restaurant.name} Station</h1>
+            <h1 className="font-serif text-2xl font-bold text-[#f5f1ea]">{restaurant.name} Station</h1>
           </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5">
           <Link
             to={`/manage/${restaurant.slug || 'saffron-house'}`}
-            className="px-3.5 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 hover:border-amber-400/60 text-xs font-bold flex items-center space-x-1.5 transition-all shadow-sm active:scale-95"
+            className="px-3.5 py-1.5 rounded-lg bg-[#ffb955]/15 hover:bg-[#ffb955]/25 text-[#ffb955] border border-[#ffb955]/30 hover:border-[#ffb955]/60 text-xs font-bold flex items-center space-x-1.5 transition-all shadow-sm active:scale-95"
           >
             <span>Floor Ops Hub</span>
           </Link>
 
           <div className="flex items-center space-x-2 text-xs font-mono">
-            <span className="bg-[#0D1322] px-3 py-1.5 rounded-lg border border-white/[0.08] text-slate-300">
+            <span className="bg-[#1b1b1d] px-3 py-1.5 rounded-lg border border-white/10 text-[#ab8980]">
               Active: {orders.filter(o => o.status !== 'served' && o.status !== 'cancelled').length}
             </span>
-            <span className="text-emerald-400 flex items-center space-x-1.5 bg-[#0D1322] px-3 py-1.5 rounded-lg border border-white/[0.08]">
+            <span className="text-emerald-400 flex items-center space-x-1.5 bg-[#1b1b1d] px-3 py-1.5 rounded-lg border border-white/10">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span>Live KDS</span>
             </span>
@@ -72,7 +72,7 @@ export const KitchenKDS: React.FC = () => {
           return (
             <div
               key={col.key}
-              className="bg-[#0D1322]/80 rounded-2xl p-4 border border-white/[0.08] flex flex-col min-h-[78vh] backdrop-blur-sm"
+              className="bg-[#161517]/80 rounded-2xl p-4 border border-white/10 flex flex-col min-h-[78vh] backdrop-blur-sm"
             >
               {/* Column Header */}
               <div className="flex justify-between items-center pb-3 mb-3 border-b border-white/[0.08]">
@@ -98,8 +98,8 @@ export const KitchenKDS: React.FC = () => {
                     return (
                       <div
                         key={order.id}
-                        className={`bg-[#12192B] rounded-xl p-3.5 border transition-all shadow-md ${
-                          isUrgent ? 'border-rose-500/80 ring-1 ring-rose-500/50' : 'border-white/[0.08] hover:border-white/[0.18]'
+                        className={`bg-[#1b1b1d] rounded-xl p-3.5 border transition-all shadow-md ${
+                          isUrgent ? 'border-rose-500/80 ring-1 ring-rose-500/50' : 'border-white/10 hover:border-[#ffb955]/30'
                         }`}
                       >
                         {/* Order Meta */}

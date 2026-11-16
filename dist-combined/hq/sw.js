@@ -1,43 +1,16 @@
-// Menuz Progressive Web App Service Worker (v6 safari-cache-bust)
-const CACHE_NAME = 'menuz-v6-safari-cache-bust';
-const ASSETS_TO_CACHE = [
-  './',
-  './index.html',
-  './manifest.json',
-  './favicon.svg',
-  './apple-touch-icon.png',
-  './icon-192.png'
-];
-
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
-    }).then(() => self.skipWaiting())
-  );
+// Self-unregistering Service Worker to guarantee live updates on all mobile browsers
+self.addEventListener('install', () => {
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys.map((key) => {
-          if (key !== CACHE_NAME) {
-            return caches.delete(key);
-          }
-        })
-      );
-    }).then(() => self.clients.claim())
+    caches.keys().then((keys) => Promise.all(keys.map((k) => caches.delete(k))))
+      .then(() => self.clients.claim())
+      .then(() => self.registration.unregister())
   );
 });
 
 self.addEventListener('fetch', (event) => {
-  // Pass-through network requests with cache fallback
-  if (event.request.method !== 'GET') return;
-  
-  event.respondWith(
-    fetch(event.request).catch(() => {
-      return caches.match(event.request);
-    })
-  );
+  event.respondWith(fetch(event.request));
 });

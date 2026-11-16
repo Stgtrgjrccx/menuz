@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   Building2,
   Bell,
@@ -16,6 +16,16 @@ import { getCustomerSiteUrl, IS_OWNER_SITE } from '../../config/siteMode';
 
 export const HqNavbar: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Omit HQ navbar when viewing dedicated full-screen pages like Diner Menu or Executive Pitch Deck
+  if (
+    location.pathname === '/pitch' ||
+    location.pathname.startsWith('/r/') ||
+    location.pathname.startsWith('/menu')
+  ) {
+    return null;
+  }
 
   const notifications = useRestaurantStore((state) => state.notifications);
   const markNotificationRead = useRestaurantStore((state) => state.markNotificationRead);

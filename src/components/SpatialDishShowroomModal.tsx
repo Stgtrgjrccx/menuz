@@ -203,7 +203,7 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
         </motion.header>
 
         {/* Main Stage Grid: Spatial Hero Stage on Left, Brutalist Specs on Right */}
-        <div className="w-full max-w-6xl flex-1 flex flex-col md:flex-row items-center justify-center gap-6 lg:gap-10 p-4 md:p-6 my-auto">
+        <div className="w-full max-w-6xl flex-1 flex flex-col md:flex-row items-center justify-center gap-4 sm:gap-6 lg:gap-10 p-3 sm:p-4 md:p-6 my-auto">
           
           {/* ── LEFT: Spatial Hero Plinth & Edge-Lit Floating Shelf ── */}
           <div className="w-full md:w-1/2 flex flex-col items-center justify-center relative">
@@ -211,7 +211,7 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
             {/* The Floating Canvas with Framer Motion Shared Element */}
             <motion.div
               layoutId={`dish-frame-${dish.id}`}
-              className="relative w-full aspect-square max-w-md lg:max-w-lg rounded-2xl overflow-hidden bg-[#161517] border border-white/15 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] group"
+              className="relative w-full aspect-square max-w-[270px] sm:max-w-md lg:max-w-lg rounded-2xl overflow-hidden bg-[#161517] border border-white/15 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] group"
               transition={{ type: 'spring', stiffness: 320, damping: 30 }}
             >
               {/* Hero Dish Image */}

@@ -73,7 +73,6 @@ export const CustomerApp: React.FC = () => {
             </Routes>
           </ErrorBoundary>
         </div>
-        <PwaInstallModal />
       </div>
     </HashRouter>
   );

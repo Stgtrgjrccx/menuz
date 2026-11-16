@@ -253,11 +253,11 @@ export const PitchDeckPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#090D16] text-slate-100 flex flex-col font-sans selection:bg-amber-500 selection:text-black antialiased">
+    <div className="min-h-screen bg-[#131315] text-[#e5e1e4] flex flex-col font-sans selection:bg-[#ff5722] selection:text-white antialiased">
       {/* ══════════════════════════════════════════════════════════════════ */}
       {/* 1. TOP STICKY EXECUTIVE NAVIGATION BAR                            */}
       {/* ══════════════════════════════════════════════════════════════════ */}
-      <header className="sticky top-0 z-50 bg-[#0D121C]/95 backdrop-blur-md border-b border-slate-800 px-4 sm:px-6 py-3">
+      <header className="sticky top-0 z-50 bg-[#161517]/95 backdrop-blur-md border-b border-white/10 px-4 sm:px-6 py-3">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           {/* Brand Logo */}
           <div className="flex items-center space-x-3">
