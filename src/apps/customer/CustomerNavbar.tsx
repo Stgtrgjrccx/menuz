@@ -6,7 +6,8 @@ import {
   X,
   Languages,
   Check,
-  Sparkles
+  Sparkles,
+  UtensilsCrossed
 } from 'lucide-react';
 import { useRestaurantStore } from '../../store/restaurantStore';
 import { QrScannerModal } from '../../components/QrScannerModal';
@@ -59,42 +60,20 @@ export const CustomerNavbar: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8 text-sm font-medium text-[#e5e1e4]/80">
-            <button
-              type="button"
-              onClick={() => scrollToSection('discover')}
-              className="hover:text-[#e5e1e4] transition-colors cursor-pointer"
+          <nav className="hidden md:flex items-center space-x-6 text-sm font-medium text-[#e5e1e4]/80">
+            <Link
+              to="/menu"
+              className="hover:text-[#ffb955] transition-colors cursor-pointer flex items-center gap-1.5"
             >
-              Discover
-            </button>
+              <UtensilsCrossed className="w-3.5 h-3.5 text-[#ffb955]" />
+              <span>Showroom Menu</span>
+            </Link>
             <button
               type="button"
               onClick={() => scrollToSection('restaurants')}
               className="hover:text-[#e5e1e4] transition-colors cursor-pointer"
             >
               Restaurants
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollToSection('experiences')}
-              className="hover:text-[#e5e1e4] transition-colors cursor-pointer"
-            >
-              Experiences
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollToSection('arcade')}
-              className="hover:text-[#e5e1e4] transition-colors cursor-pointer flex items-center space-x-1"
-            >
-              <span>Arcade</span>
-              <span className="text-[9px] bg-[#ff5722]/20 text-[#ffb5a0] px-1.5 py-0.2 rounded-full font-bold border border-[#ff5722]/30">4 Games</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollToSection('about')}
-              className="hover:text-[#e5e1e4] transition-colors cursor-pointer"
-            >
-              About
             </button>
           </nav>
 
@@ -177,6 +156,24 @@ export const CustomerNavbar: React.FC = () => {
         {/* Mobile Menu Drawer */}
         {mobileMenuOpen && (
           <div className="md:hidden px-4 pt-2 pb-4 border-t border-white/5 bg-[#131315]/95 backdrop-blur-md flex flex-col space-y-1 text-sm font-medium text-[#e5e1e4]">
+            <Link
+              to="/menu"
+              onClick={() => setMobileMenuOpen(false)}
+              className="py-2.5 px-3 text-left rounded-xl hover:bg-[#201f21] transition-colors flex items-center justify-between text-[#ffb955] font-semibold"
+            >
+              <span className="flex items-center space-x-2">
+                <UtensilsCrossed className="w-4 h-4 text-[#ffb955]" />
+                <span>Showroom Menu</span>
+              </span>
+              <span className="text-[10px] bg-[#ffb955]/20 text-[#ffb955] px-2 py-0.5 rounded-full font-mono">Live</span>
+            </Link>
+            <button
+              type="button"
+              onClick={() => scrollToSection('restaurants')}
+              className="py-2.5 px-3 text-left rounded-xl hover:bg-[#201f21] transition-colors"
+            >
+              Featured Restaurants
+            </button>
             <button
               type="button"
               onClick={() => {
@@ -189,43 +186,6 @@ export const CustomerNavbar: React.FC = () => {
                 <Sparkles className="w-4 h-4 text-[#ff5722]" />
                 <span>Ask Chef AI Assistant</span>
               </span>
-              <span className="text-[10px] bg-[#ff5722] text-white px-2 py-0.5 rounded-full">Live</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollToSection('discover')}
-              className="py-2.5 px-3 text-left rounded-xl hover:bg-[#201f21] transition-colors"
-            >
-              Discover
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollToSection('restaurants')}
-              className="py-2.5 px-3 text-left rounded-xl hover:bg-[#201f21] transition-colors"
-            >
-              Restaurants
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollToSection('experiences')}
-              className="py-2.5 px-3 text-left rounded-xl hover:bg-[#201f21] transition-colors"
-            >
-              Experiences
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollToSection('arcade')}
-              className="py-2.5 px-3 text-left rounded-xl hover:bg-[#201f21] transition-colors flex items-center justify-between"
-            >
-              <span>Table Arcade</span>
-              <span className="text-[10px] bg-[#ff5722]/20 text-[#ffb5a0] px-2 py-0.5 rounded-full font-bold border border-[#ff5722]/30">4 Games</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollToSection('about')}
-              className="py-2.5 px-3 text-left rounded-xl hover:bg-[#201f21] transition-colors"
-            >
-              About
             </button>
           </div>
         )}

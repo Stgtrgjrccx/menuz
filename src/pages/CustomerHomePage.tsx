@@ -5,136 +5,32 @@ import {
   Search,
   UtensilsCrossed,
   MapPin,
-  Star,
-  ArrowRight,
-  Heart,
-  Share2,
   Sparkles,
-  Compass,
-  Wine,
-  Coffee,
-  GlassWater,
-  Pizza,
-  Cake,
-  Sunset,
+  ArrowRight,
+  ShieldCheck,
   Check,
-  Gift,
-  Gamepad2,
-  Bot,
-  MessageSquare
+  Clock,
+  Compass
 } from 'lucide-react';
 import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantStore';
-import { isWorkingWithMenuz, Restaurant } from '../types';
+import { isWorkingWithMenuz } from '../types';
 import { QrScannerModal } from '../components/QrScannerModal';
-import { TableArcadeModal } from '../components/TableArcadeModal';
-import { WinChallengeModal } from '../components/WinChallengeModal';
 import { AiAssistantDrawer } from '../components/AiAssistantDrawer';
-
-/* ─────────────────────────────────────────────────────────────────────────────
- * SHELVED SECTION: CURATED COLLECTIONS
- * Note: Per product requirements, Curated Collections is shelved for initial launch.
- * REMINDER: Re-enable and un-shelf this section after onboarding the first 10 customers!
- * ───────────────────────────────────────────────────────────────────────────── */
-export const SHELVED_CURATED_COLLECTIONS = [
-  {
-    id: 'date-night',
-    title: 'Date-Night Sanctuary',
-    subtitle: 'Candlelit courtyards, intimate bistros & acoustic evenings',
-    image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1000&auto=format&fit=crop&q=80',
-    placesCount: 14,
-    tag: 'Romantic'
-  },
-  {
-    id: 'rooftops',
-    title: 'Golden-Hour Rooftops',
-    subtitle: 'Panoramic sunset skylines, botanical spritzes & twilight breezes',
-    image: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=1000&auto=format&fit=crop&q=80',
-    placesCount: 19,
-    tag: 'Sunset Views'
-  },
-  {
-    id: 'hidden-gems',
-    title: "Pune's Heritage Gems",
-    subtitle: 'Century-old Irani cafes, tucked-away verandahs & secret recipes',
-    image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1000&auto=format&fit=crop&q=80',
-    placesCount: 11,
-    tag: 'Heritage'
-  },
-  {
-    id: 'aesthetic-cafes',
-    title: 'Sunlit Artisan Cafés',
-    subtitle: 'Pour-overs, slow fermented sourdough & tranquil reading nooks',
-    image: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1000&auto=format&fit=crop&q=80',
-    placesCount: 22,
-    tag: 'Café Culture'
-  },
-  {
-    id: 'group-dining',
-    title: 'Feasts & Sharing Tables',
-    subtitle: 'Wood-fired sourdough platters, celebratory biryanis & live grills',
-    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=1000&auto=format&fit=crop&q=80',
-    placesCount: 16,
-    tag: 'Celebration'
-  },
-  {
-    id: 'trending',
-    title: 'Trending This Weekend',
-    subtitle: 'The city’s most bookmarked dishes and seasonal tasting menus',
-    image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1000&auto=format&fit=crop&q=80',
-    placesCount: 8,
-    tag: 'Buzzing'
-  }
-];
-
-// Curated Dining Categories
-const DINING_CATEGORIES = [
-  { id: 'all', label: 'All', icon: Compass },
-  { id: 'fine-dining', label: 'Fine Dining', icon: Wine },
-  { id: 'cafes', label: 'Cafés', icon: Coffee },
-  { id: 'bars', label: 'Bars & Lounges', icon: GlassWater },
-  { id: 'quick-bites', label: 'Gourmet Bites', icon: Pizza },
-  { id: 'desserts', label: 'Desserts & Bakes', icon: Cake },
-  { id: 'rooftop', label: 'Rooftops', icon: Sunset }
-];
 
 export const CustomerHomePage: React.FC = () => {
   const navigate = useNavigate();
   const rawRestaurants = useRestaurantStore((state) => state.restaurants);
   const tables = useRestaurantStore((state) => state.tables);
 
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeCategory, setActiveCategory] = useState<string>('all');
-  const [savedFavorites, setSavedFavorites] = useState<string[]>(() => {
-    try {
-      const stored = localStorage.getItem('menuz_saved_favorites');
-      return stored ? JSON.parse(stored) : ['saffron-house', 'casa-bella'];
-    } catch {
-      return ['saffron-house', 'casa-bella'];
-    }
-  });
-
   const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
-  const [selectedScannerSlug, setSelectedScannerSlug] = useState<string | undefined>(undefined);
-  const [isArcadeOpen, setIsArcadeOpen] = useState(false);
-  const [isWinChallengeOpen, setIsWinChallengeOpen] = useState(false);
-  const [winChallengeVenue, setWinChallengeVenue] = useState<Restaurant | null>(null);
   const [isAiOpen, setIsAiOpen] = useState(false);
   const [aiInitialQuery, setAiInitialQuery] = useState<string | null>(null);
-  const [conciergeSearch, setConciergeSearch] = useState('');
-  const [shareToastOpen, setShareToastOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState('all');
 
-  const handleOpenAi = (queryText?: string) => {
-    if (queryText) {
-      setAiInitialQuery(queryText);
-    } else {
-      setAiInitialQuery(null);
-    }
-    setIsAiOpen(true);
-  };
-
+  // Listen for global custom events to open camera scanner or AI concierge
   useEffect(() => {
-    const handleArcade = () => setIsArcadeOpen(true);
-    const handleWin = () => setIsWinChallengeOpen(true);
+    const handleScanner = () => setIsQrScannerOpen(true);
     const handleAi = (e?: Event) => {
       const customEvt = e as CustomEvent<{ query?: string }>;
       if (customEvt?.detail?.query) {
@@ -142,50 +38,22 @@ export const CustomerHomePage: React.FC = () => {
       }
       setIsAiOpen(true);
     };
-    window.addEventListener('open-table-arcade', handleArcade);
-    window.addEventListener('open-google-review', handleWin);
-    window.addEventListener('open-win-challenge', handleWin);
+    window.addEventListener('open-qr-scanner', handleScanner);
     window.addEventListener('open-ai-assistant', handleAi);
     return () => {
-      window.removeEventListener('open-table-arcade', handleArcade);
-      window.removeEventListener('open-google-review', handleWin);
-      window.removeEventListener('open-win-challenge', handleWin);
+      window.removeEventListener('open-qr-scanner', handleScanner);
       window.removeEventListener('open-ai-assistant', handleAi);
     };
   }, []);
 
-  const toggleFavorite = (slug: string) => {
-    setSavedFavorites((prev) => {
-      const updated = prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug];
-      try {
-        localStorage.setItem('menuz_saved_favorites', JSON.stringify(updated));
-      } catch {}
-      return updated;
-    });
-  };
-
-  const handleShareCollection = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: 'Menuz — Golden Hour Dining in Pune',
-        text: 'Explore handpicked restaurants, rooftops, and cafés in Pune with direct tableside ordering on Menuz.',
-        url: window.location.href
-      }).catch(() => {});
-    } else {
-      navigator.clipboard.writeText(window.location.href);
-      setShareToastOpen(true);
-      setTimeout(() => setShareToastOpen(false), 2500);
-    }
-  };
-
-  // Strictly ONLY verified restaurants affiliated with Menuz
+  // Verified partner restaurants affiliated with Menuz
   const affiliatedVenues = useMemo(() => {
     return rawRestaurants
       .filter((r) => r && r.id && !isDishNameAsRestaurant(r) && isWorkingWithMenuz(r))
       .map((r) => {
         const restTables = tables.filter((t) => t.restaurant_id === r.id);
         const firstTable = restTables[0] || { label: 'Table 1', public_token: `table-token-01-${r.slug}` };
-        
+
         let customImage = r.cover_image_url || r.logo_url;
         if (!customImage || customImage.includes('unsplash.com/photo-1517248135467')) {
           if (r.cuisine.toLowerCase().includes('italian') || r.name.toLowerCase().includes('casa')) {
@@ -205,884 +73,322 @@ export const CustomerHomePage: React.FC = () => {
           slug: r.slug,
           cuisine: r.cuisine,
           location: r.location || 'Pune, India',
-          rating: 4.9,
-          costForTwo: r.cuisine.includes('Italian') ? '₹1,400 for two' : '₹1,200 for two',
           specialty: r.cuisine.includes('Italian')
             ? 'Wood-fired sourdough Neapolitan crusts & hand-rolled pasta'
-            : 'Dum Pukht slow-cooked Awadhi curries & heritage tandoori grills',
+            : r.cuisine.includes('Bakery')
+            ? 'European sourdough breads, artisan pastries & cold brews'
+            : r.cuisine.includes('Bistro')
+            ? 'French café classics, savoury crêpes & delicate macarons'
+            : 'Dum Pukht slow-cooked Awadhi curries & heritage royal biryani',
           imageUrl: customImage,
-          token: firstTable.public_token,
-          rawRest: r
+          token: firstTable.public_token
         };
       });
   }, [rawRestaurants, tables]);
 
-  // Filtered restaurants based on query & category
+  // Filtered venues list
   const filteredVenues = useMemo(() => {
     return affiliatedVenues.filter((v) => {
+      const q = searchQuery.toLowerCase().trim();
       const matchesSearch =
-        searchQuery === '' ||
-        v.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        v.cuisine.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        v.location.toLowerCase().includes(searchQuery.toLowerCase());
+        !q ||
+        v.name.toLowerCase().includes(q) ||
+        v.cuisine.toLowerCase().includes(q) ||
+        v.location.toLowerCase().includes(q);
 
-      const matchesCat =
-        activeCategory === 'all' ||
-        (activeCategory === 'fine-dining' && (v.cuisine.includes('Mughlai') || v.cuisine.includes('Awadhi') || v.cuisine.includes('Continental'))) ||
-        (activeCategory === 'cafes' && (v.cuisine.includes('Bakery') || v.cuisine.includes('European') || v.name.includes('Bakery'))) ||
-        (activeCategory === 'bars' && (v.cuisine.includes('Continental') || v.cuisine.includes('Lounge') || v.name.includes('George'))) ||
-        (activeCategory === 'quick-bites' && (v.cuisine.includes('Italian') || v.cuisine.includes('Pizza'))) ||
-        (activeCategory === 'desserts' && (v.cuisine.includes('Bakery') || v.cuisine.includes('Bistro'))) ||
-        (activeCategory === 'rooftop' && (v.location.includes('Koregaon') || v.location.includes('Kalyani')));
+      const matchesFilter =
+        selectedFilter === 'all' ||
+        (selectedFilter === 'mughlai' && (v.cuisine.includes('Mughlai') || v.cuisine.includes('Awadhi'))) ||
+        (selectedFilter === 'italian' && (v.cuisine.includes('Italian') || v.cuisine.includes('Pizza'))) ||
+        (selectedFilter === 'bakery' && (v.cuisine.includes('Bakery') || v.cuisine.includes('Coffee'))) ||
+        (selectedFilter === 'continental' && (v.cuisine.includes('Continental') || v.cuisine.includes('Bistro')));
 
-      return matchesSearch && matchesCat;
+      return matchesSearch && matchesFilter;
     });
-  }, [affiliatedVenues, searchQuery, activeCategory]);
-
-  const handleOpenScanner = (slug?: string) => {
-    setSelectedScannerSlug(slug);
-    setIsQrScannerOpen(true);
-  };
-
-  const handleLaunchTable = (venue: typeof affiliatedVenues[0]) => {
-    navigate(`/r/${venue.slug}/menu?t=${venue.token}`);
-  };
-
-  const handleOpenWinChallenge = (venue?: typeof affiliatedVenues[0]) => {
-    if (venue?.rawRest) {
-      setWinChallengeVenue(venue.rawRest);
-    } else if (affiliatedVenues[0]?.rawRest) {
-      setWinChallengeVenue(affiliatedVenues[0].rawRest);
-    }
-    setIsWinChallengeOpen(true);
-  };
-
-  const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  };
+  }, [affiliatedVenues, searchQuery, selectedFilter]);
 
   return (
-    <div className="min-h-screen bg-[#131315] text-[#e5e1e4] flex flex-col font-sans selection:bg-[#ff5722]/30 selection:text-white">
-      
+    <div className="min-h-screen bg-[#0d0c0e] text-[#e5e1e4] flex flex-col font-sans selection:bg-[#ff5722]/30 selection:text-white">
       {/* ───────────────────────────────────────────────────────────── */}
-      {/* 1. HERO SECTION: MINIMALIST EDITORIAL LUXURY                  */}
+      {/* 1. HERO SECTION: ULTRA-MINIMALIST & INSTANTLY CLEAR           */}
       {/* ───────────────────────────────────────────────────────────── */}
-      <section id="discover" className="pt-12 sm:pt-20 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-          
-          {/* Left: Editorial Focus */}
-          <div className="lg:col-span-7 space-y-6">
-            
-            <div className="inline-flex items-center space-x-2 text-xs font-semibold text-[#ab8980] uppercase tracking-widest">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#ff5722]" />
-              <span>Pune Dining Discovery</span>
-            </div>
-
-            <h1 className="font-serif font-bold text-4xl sm:text-6xl lg:text-[68px] text-[#e5e1e4] tracking-tight leading-[1.08]">
-              Golden-hour dining, <br />
-              <span className="italic font-normal text-[#ff5722]">effortlessly discovered.</span>
-            </h1>
-
-            <p className="text-base sm:text-lg text-[#ab8980] max-w-xl leading-relaxed">
-              Explore handpicked restaurants in Pune. Scan any table QR with your camera to browse authentic menus, order together, and enjoy seamless tableside dining.
-            </p>
-
-            {/* Standardized Primary & Secondary Actions */}
-            <div className="flex flex-wrap items-center gap-3.5 pt-2">
-              <button
-                type="button"
-                onClick={() => scrollToSection('restaurants')}
-                className="h-12 px-7 rounded-full bg-[#ff5722] hover:bg-[#ff6f3d] active:scale-[0.98] text-white font-medium text-sm sm:text-base flex items-center space-x-2.5 transition-all shadow-xs cursor-pointer"
-              >
-                <span>Explore Restaurants</span>
-                <ArrowRight className="w-4 h-4 text-white" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setIsAiOpen(true)}
-                className="h-12 px-6 rounded-full bg-[#1b1b1d] hover:bg-[#201f21] active:scale-[0.98] text-[#e5e1e4] border-2 border-[#ff5722] font-medium text-sm sm:text-base flex items-center space-x-2 transition-all shadow-xs cursor-pointer"
-              >
-                <span className="text-base">✨</span>
-                <span>Ask Chef AI</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleOpenWinChallenge()}
-                className="h-12 px-6 rounded-full bg-[#1b1b1d] hover:bg-[#201f21] active:scale-[0.98] text-[#e5e1e4] border border-[#ff5722]/50 font-medium text-sm sm:text-base flex items-center space-x-2 transition-all shadow-xs cursor-pointer"
-              >
-                <span className="text-base">🎁</span>
-                <span>Win Treats &amp; Discounts</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleOpenScanner()}
-                className="h-12 px-6 rounded-full bg-[#1b1b1d] hover:bg-[#201f21] active:scale-[0.98] text-[#e5e1e4] border border-white/10 font-medium text-sm sm:text-base flex items-center space-x-2 transition-all shadow-xs cursor-pointer"
-              >
-                <QrCode className="w-4 h-4 text-[#ff5722]" />
-                <span>Scan Table QR</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Right: Pure, Unobstructed Food Photography */}
-          <div className="lg:col-span-5">
-            <div className="relative rounded-3xl overflow-hidden aspect-[4/5] shadow-2xl border border-white/10 bg-[#1b1b1d]">
-              <img
-                src="https://images.unsplash.com/photo-1544025162-d76694265947?w=1000&auto=format&fit=crop&q=85"
-                alt="Golden hour dining table in Pune"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#131315]/80 via-transparent to-transparent" />
-              <div className="absolute bottom-5 left-5 right-5 text-white">
-                <span className="text-[11px] font-medium tracking-wide uppercase opacity-80">
-                  Featured Experience
-                </span>
-                <h3 className="font-serif font-bold text-xl sm:text-2xl mt-1">
-                  Casa Bella &amp; Saffron House
-                </h3>
-                <p className="text-xs opacity-90">Kalyani Nagar &amp; Koregaon Park</p>
-              </div>
-            </div>
-          </div>
-
+      <section className="pt-16 sm:pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full text-center flex flex-col items-center">
+        {/* Monolithic Category Badge */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#18171a] border border-white/10 text-xs font-mono text-[#ffb955] mb-6 shadow-sm">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#ff5722] animate-pulse" />
+          <span className="tracking-widest uppercase font-semibold">Autonomous Tableside Dining</span>
         </div>
-      </section>
 
-      {/* ───────────────────────────────────────────────────────────── */}
-      {/* 2. DINING CATEGORIES: CLEAN PILL NAVIGATION                   */}
-      {/* ───────────────────────────────────────────────────────────── */}
-      <section className="py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full border-t border-white/10">
-        <div className="flex items-center space-x-2 overflow-x-auto scrollbar-none py-2">
-          {DINING_CATEGORIES.map((cat) => {
-            const Icon = cat.icon;
-            const isActive = activeCategory === cat.id;
-            return (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => {
-                  setActiveCategory(cat.id);
-                  scrollToSection('restaurants');
-                }}
-                className={`h-10 px-4 rounded-full flex items-center space-x-2 text-xs sm:text-sm font-medium whitespace-nowrap transition-all cursor-pointer ${
-                  isActive
-                    ? 'bg-[#ff5722] text-white shadow-xs'
-                    : 'bg-[#1b1b1d] hover:bg-[#201f21] text-[#ab8980] border border-white/10'
-                }`}
-              >
-                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-[#ff5722]'}`} />
-                <span>{cat.label}</span>
-              </button>
-            );
-          })}
-        </div>
-      </section>
+        {/* Main Headline */}
+        <h1 className="font-serif font-bold text-4xl sm:text-6xl lg:text-7xl text-[#f5f1ea] tracking-tight leading-[1.08] max-w-4xl">
+          Instant dining, <br className="hidden sm:inline" />
+          <span className="italic font-normal text-[#ffb955]">straight from your table.</span>
+        </h1>
 
-      {/* ───────────────────────────────────────────────────────────── */}
-      {/* 2.5 DINE-IN WIN CHALLENGE SHOWCASE BANNER                     */}
-      {/* ───────────────────────────────────────────────────────────── */}
-      <section className="py-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="bg-gradient-to-r from-[#1b1b1d] via-[#201f21] to-[#1b1b1d] border border-[#ff5722]/35 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#ff5722]/15 text-[#e5e1e4] text-xs font-bold border border-[#ff5722]/30">
-              <Gift className="w-3.5 h-3.5 text-[#ff5722]" />
-              <span>🎁 Dine-In Win Challenge</span>
-            </div>
-            <h3 className="font-serif font-bold text-2xl sm:text-3xl text-[#e5e1e4]">
-              Review &amp; Unlock Instant Food Treats &amp; Discounts
-            </h3>
-            <p className="text-xs sm:text-sm text-[#ab8980] leading-relaxed font-sans">
-              Leave a quick 5-star Google review for your dining experience to play the reward challenge: Spin the Lucky Wheel, Scratch &amp; Win, or open Mystery Box treats!
-            </p>
-          </div>
+        {/* Unambiguous Value Proposition */}
+        <p className="mt-5 text-sm sm:text-base md:text-lg text-[#ab8980] max-w-2xl leading-relaxed">
+          Scan the QR code at your dining table to explore high-definition plating photography, order dishes together in real time, and split the bill. No app download required.
+        </p>
 
+        {/* Primary High-Contrast Actions */}
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full sm:w-auto">
+          {/* Action 1: Scan Table QR */}
           <button
             type="button"
-            onClick={() => handleOpenWinChallenge()}
-            className="h-12 px-7 rounded-full bg-[#ff5722] hover:bg-[#ff6f3d] active:scale-[0.98] text-white font-medium text-xs sm:text-sm shadow-xs flex items-center justify-center space-x-2 shrink-0 transition-all cursor-pointer"
+            onClick={() => setIsQrScannerOpen(true)}
+            className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-[#ff5722] hover:bg-[#ff6f3d] active:scale-98 text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2.5 shadow-xl shadow-[#ff5722]/20 transition-all cursor-pointer"
           >
-            <span>Play Win Challenge</span>
-            <ArrowRight className="w-4 h-4 text-white" />
+            <QrCode className="w-4 h-4 text-white" />
+            <span>Scan Table QR</span>
+          </button>
+
+          {/* Action 2: Open Showroom Menu */}
+          <button
+            type="button"
+            onClick={() => navigate('/menu')}
+            className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-[#18171a] hover:bg-[#201f21] border border-white/10 hover:border-[#ffb955]/50 active:scale-98 text-[#f5f1ea] hover:text-[#ffb955] font-semibold text-sm sm:text-base flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
+          >
+            <UtensilsCrossed className="w-4 h-4 text-[#ffb955]" />
+            <span>Browse Showroom Menu</span>
+            <ArrowRight className="w-4 h-4 text-[#ab8980]" />
           </button>
         </div>
       </section>
 
       {/* ───────────────────────────────────────────────────────────── */}
-      {/* 2.7 CHEF AI DINING CONCIERGE: INTERACTIVE CHATBOT SECTION     */}
+      {/* 2. THREE-STEP FLOW: HOW MENUZ WORKS IN 10 SECONDS            */}
       {/* ───────────────────────────────────────────────────────────── */}
-      <section id="concierge" className="py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="bg-gradient-to-br from-[#1b1b1d] via-[#201f21] to-[#1b1b1d] border-2 border-[#ff5722]/40 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
-          {/* Subtle Golden Glow Accent */}
-          <div className="absolute top-0 right-0 w-72 h-72 bg-gradient-to-br from-[#F9A620]/25 to-transparent rounded-full blur-3xl pointer-events-none" />
-
-          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-            {/* Left Column: Heading, Direct Ask Input, and Quick Chips */}
-            <div className="max-w-2xl space-y-3.5">
-              <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-[#ff5722]/15 text-[#e5e1e4] text-xs font-bold border border-[#ff5722]/30 shadow-2xs">
-                <Sparkles className="w-3.5 h-3.5 text-[#ff5722] animate-pulse" />
-                <span>Chef AI • 24/7 Dining Concierge</span>
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping ml-1" />
+      <section className="py-10 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full border-t border-white/5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          {/* Step 1 */}
+          <div className="p-5 sm:p-6 rounded-2xl bg-[#131215] border border-white/5 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between text-[11px] font-mono text-[#ff5722] font-bold tracking-widest mb-3">
+                <span>01 // SCAN</span>
+                <QrCode className="w-4 h-4 text-[#ff5722]" />
               </div>
-
-              <h3 className="font-serif font-black text-2xl sm:text-4xl text-[#e5e1e4] tracking-tight leading-tight">
-                Ask Chef AI Anything About Dining &amp; Dishes
-              </h3>
-
-              <p className="text-xs sm:text-sm text-[#ab8980] leading-relaxed font-sans">
-                Trained directly on authentic kitchen recipes, exact spice calibrations (1–5), sommelier pairings, and allergen isolation across Pune's partner restaurants.
+              <h2 className="text-base font-bold font-serif text-[#f5f1ea]">Scan Table Standee</h2>
+              <p className="mt-1.5 text-xs text-[#ab8980] leading-relaxed">
+                Point your phone camera at the QR code standee on your table. Instantly joins your table's session with zero app installations.
               </p>
-
-              {/* Direct Ask Input Bar */}
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (conciergeSearch.trim()) {
-                    handleOpenAi(conciergeSearch.trim());
-                    setConciergeSearch('');
-                  } else {
-                    handleOpenAi();
-                  }
-                }}
-                className="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 max-w-xl"
-              >
-                <div className="relative flex-1">
-                  <Bot className="w-4 h-4 text-[#ff5722] absolute left-3.5 top-3.5" />
-                  <input
-                    type="text"
-                    value={conciergeSearch}
-                    onChange={(e) => setConciergeSearch(e.target.value)}
-                    placeholder="Ask Chef AI (e.g. 'Best Butter Chicken?', 'Romantic Rooftop', 'Vegan & Mild picks')..."
-                    className="w-full h-11 pl-10 pr-4 text-xs sm:text-sm bg-[#1b1b1d] text-[#e5e1e4] placeholder:text-[#e5e1e4]/45 rounded-full border border-white/10 focus:outline-none focus:border-[#ff5722] shadow-inner transition-colors"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="h-11 px-6 rounded-full bg-[#ff5722] hover:bg-[#ff6f3d] active:scale-[0.98] text-white font-bold text-xs sm:text-sm shadow-md flex items-center justify-center space-x-2 transition-all cursor-pointer shrink-0"
-                >
-                  <Sparkles className="w-4 h-4 text-white" />
-                  <span>Ask Chef AI</span>
-                </button>
-              </form>
-
-              {/* Popular Fast-Access Prompt Pills */}
-              <div className="pt-2">
-                <span className="text-[11px] font-bold text-[#ab8980] block mb-1.5 uppercase tracking-wider">
-                  Popular Concierge Inquiries:
-                </span>
-                <div className="flex flex-wrap gap-1.5">
-                  {[
-                    { label: "🍛 Best Butter Chicken in town?", query: "Which restaurant has the absolute best, most authentic Butter Chicken?" },
-                    { label: "🍷 Romantic Rooftop & Cocktails", query: "Recommend a romantic rooftop dining experience with artisan cocktails" },
-                    { label: "🛡️ 100% Jain & Vegan Safe", query: "Show 100% Jain and pure Vegan safe dining picks with isolated cookware" },
-                    { label: "🌶️ Mild & Kid-Friendly Feasts", query: "What are your mildest, kid-friendly dishes for family dining?" },
-                    { label: "🍕 Woodfired Truffle Pizzas", query: "Where can I get authentic woodfired sourdough pizzas and handmade pastas?" },
-                    { label: "🍮 Chef's Signature Desserts", query: "What are the most famous signature desserts and sweet endings?" }
-                  ].map((chip) => (
-                    <button
-                      key={chip.label}
-                      type="button"
-                      onClick={() => handleOpenAi(chip.query)}
-                      className="px-3 py-1 rounded-full bg-[#1b1b1d] hover:bg-[#201f21] active:scale-95 text-[#e5e1e4] border border-white/10 text-xs font-medium transition-all shadow-2xs cursor-pointer flex items-center space-x-1"
-                    >
-                      <span>{chip.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
             </div>
+          </div>
 
-            {/* Right Column: Mini Feature Showcase Card */}
-            <div className="w-full lg:w-80 bg-[#1b1b1d] backdrop-blur-sm border border-white/10 rounded-2xl p-5 shadow-xs flex flex-col space-y-3.5 shrink-0">
-              <div className="flex items-center space-x-2.5 border-b border-white/10 pb-3">
-                <div className="w-9 h-9 rounded-full bg-[#ff5722]/20 flex items-center justify-center text-[#e5e1e4] shrink-0">
-                  <MessageSquare className="w-4 h-4 text-[#ff5722]" />
-                </div>
-                <div>
-                  <h4 className="font-serif font-bold text-sm text-[#e5e1e4]">Live Chef Concierge</h4>
-                  <span className="text-[10px] text-emerald-600 font-bold flex items-center space-x-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span>Always online for tables</span>
-                  </span>
-                </div>
+          {/* Step 2 */}
+          <div className="p-5 sm:p-6 rounded-2xl bg-[#131215] border border-white/5 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between text-[11px] font-mono text-[#ffb955] font-bold tracking-widest mb-3">
+                <span>02 // EXPLORE</span>
+                <UtensilsCrossed className="w-4 h-4 text-[#ffb955]" />
               </div>
+              <h2 className="text-base font-bold font-serif text-[#f5f1ea]">Order in Showroom Mode</h2>
+              <p className="mt-1.5 text-xs text-[#ab8980] leading-relaxed">
+                Browse square dishes on illuminated shelves, review chef ingredient sourcing, and sync cart additions with table companions in real time.
+              </p>
+            </div>
+          </div>
 
-              <div className="space-y-2.5 text-xs text-[#ab8980]">
-                <div className="flex items-start space-x-2">
-                  <span className="text-base shrink-0">🧑‍🍳</span>
-                  <div>
-                    <strong className="text-[#e5e1e4] font-semibold">Kitchen Secrets &amp; Lore:</strong> Dish backstory, ingredients &amp; cooking technique.
-                  </div>
-                </div>
-                <div className="flex items-start space-x-2">
-                  <span className="text-base shrink-0">🌶️</span>
-                  <div>
-                    <strong className="text-[#e5e1e4] font-semibold">True Heat Calibration:</strong> 1 to 5 flame scale verified with head chefs.
-                  </div>
-                </div>
-                <div className="flex items-start space-x-2">
-                  <span className="text-base shrink-0">🍷</span>
-                  <div>
-                    <strong className="text-[#e5e1e4] font-semibold">Curated Pairings:</strong> Sommelier-selected wines, artisan brews &amp; coolers.
-                  </div>
-                </div>
+          {/* Step 3 */}
+          <div className="p-5 sm:p-6 rounded-2xl bg-[#131215] border border-white/5 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between text-[11px] font-mono text-emerald-400 font-bold tracking-widest mb-3">
+                <span>03 // DINE</span>
+                <Sparkles className="w-4 h-4 text-emerald-400" />
               </div>
-
-              <button
-                type="button"
-                onClick={() => handleOpenAi()}
-                className="w-full py-2.5 rounded-xl bg-[#131315] hover:bg-[#201f21] text-[#e5e1e4] border border-[#ff5722]/30 font-bold text-xs flex items-center justify-center space-x-1.5 transition-colors cursor-pointer mt-1"
-              >
-                <span>Launch Full Concierge Chat</span>
-                <ArrowRight className="w-3.5 h-3.5 text-[#ff5722]" />
-              </button>
+              <h2 className="text-base font-bold font-serif text-[#f5f1ea]">Direct Kitchen Routing</h2>
+              <p className="mt-1.5 text-xs text-[#ab8980] leading-relaxed">
+                Orders fire directly to the kitchen's thermal KOT printer. Track fulfillment live, alert your waiter, and split the bill with 1 tap.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
       {/* ───────────────────────────────────────────────────────────── */}
-      {/* 3. FEATURED RESTAURANTS: CLEAN CATALOG & ACCESSIBLE ACTIONS   */}
+      {/* 3. CURATED RESTAURANTS DIRECTORY (CLEAN & MINIMALIST)          */}
       {/* ───────────────────────────────────────────────────────────── */}
-      <section id="restaurants" className="py-12 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        
-        {/* Section Header with Search */}
+      <section id="restaurants" className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full border-t border-white/5">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>
-            <h2 className="font-serif font-bold text-3xl sm:text-4xl text-[#e5e1e4]">
-              Featured Restaurants
+            <span className="text-[11px] font-mono uppercase tracking-widest text-[#ffb955] font-semibold block mb-1">
+              VERIFIED VENUES // PUNE, INDIA
+            </span>
+            <h2 className="font-serif font-bold text-2xl sm:text-3xl text-[#f5f1ea] tracking-tight">
+              Select a Restaurant
             </h2>
-            <p className="text-sm text-[#ab8980] mt-1">
-              Verified dining partners equipped with Menuz tableside ordering.
-            </p>
           </div>
 
-          {/* Minimal Search Bar */}
-          <div className="relative min-w-[260px] sm:min-w-[320px]">
-            <Search className="w-4 h-4 text-[#ab8980]/50 absolute left-3.5 top-3.5" />
+          {/* Search Input */}
+          <div className="relative w-full sm:w-72">
+            <Search className="w-4 h-4 text-[#ab8980] absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by restaurant or cuisine..."
-              className="w-full h-11 pl-10 pr-9 text-xs sm:text-sm bg-[#1b1b1d] text-[#e5e1e4] placeholder:text-[#ab8980]/50 rounded-full border border-white/10 focus:outline-none focus:border-[#ff5722] transition-colors"
+              placeholder="Search by name or cuisine..."
+              className="w-full bg-[#18171a] border border-white/10 rounded-full pl-9 pr-4 py-2 text-xs text-[#e5e1e4] placeholder-[#ab8980] focus:outline-none focus:border-[#ffb955]"
             />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3.5 top-3.5 text-xs text-[#ab8980] hover:text-[#e5e1e4]"
-                aria-label="Clear search query"
-              >
-                ✕
-              </button>
-            )}
           </div>
+        </div>
+
+        {/* Filter Pills */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-6 no-scrollbar text-xs font-mono">
+          {[
+            { id: 'all', label: 'All Venues' },
+            { id: 'mughlai', label: 'Awadhi & Mughlai' },
+            { id: 'italian', label: 'Artisanal Pizza' },
+            { id: 'continental', label: 'Bistro & Grills' },
+            { id: 'bakery', label: 'European Bakery' }
+          ].map((pill) => (
+            <button
+              key={pill.id}
+              type="button"
+              onClick={() => setSelectedFilter(pill.id)}
+              className={`px-3 py-1.5 rounded-full whitespace-nowrap transition-all cursor-pointer ${
+                selectedFilter === pill.id
+                  ? 'bg-[#ffb955] text-black font-bold shadow-xs'
+                  : 'bg-[#18171a] text-[#ab8980] hover:text-[#e5e1e4] border border-white/5'
+              }`}
+            >
+              {pill.label}
+            </button>
+          ))}
         </div>
 
         {/* Restaurant Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {filteredVenues.map((venue) => {
-            const isFavorite = savedFavorites.includes(venue.slug);
-            return (
-              <div
-                key={venue.slug}
-                onClick={() => handleLaunchTable(venue)}
-                className="bg-[#1b1b1d] hover:bg-[#201f21] rounded-3xl overflow-hidden border border-white/10 hover:border-[#ff5722]/30 shadow-lg hover:shadow-2xl transition-all cursor-pointer flex flex-col group"
-              >
-                {/* Photo */}
-                <div className="relative aspect-[16/10] overflow-hidden bg-[#131315]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {filteredVenues.map((venue) => (
+            <div
+              key={venue.id}
+              className="bg-[#131215] border border-white/5 hover:border-[#ffb955]/40 rounded-2xl overflow-hidden transition-all duration-300 group flex flex-col justify-between shadow-xl"
+            >
+              <div>
+                {/* Photo Header */}
+                <div className="relative h-44 w-full overflow-hidden bg-[#18171a]">
                   <img
                     src={venue.imageUrl}
                     alt={venue.name}
-                    className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
                   
-                  {/* Rating Tag */}
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 rounded-full bg-[#1b1b1d] text-xs font-semibold text-[#e5e1e4] flex items-center space-x-1 shadow-xs">
-                      <Star className="w-3.5 h-3.5 fill-[#ff5722] text-[#ff5722]" />
-                      <span>{venue.rating}</span>
-                    </span>
-                  </div>
+                  {/* Location Badge */}
+                  <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-black/75 backdrop-blur-md text-[#ffb955] border border-[#ffb955]/30">
+                    {venue.location}
+                  </span>
 
-                  {/* Favorite Button */}
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleFavorite(venue.slug);
-                    }}
-                    className="absolute top-4 right-4 w-9 h-9 rounded-full bg-[#1b1b1d] hover:bg-[#201f21] text-[#e5e1e4] flex items-center justify-center transition-all shadow-xs"
-                    aria-label={isFavorite ? `Remove ${venue.name} from favorites` : `Save ${venue.name} to favorites`}
-                  >
-                    <Heart className={`w-4 h-4 ${isFavorite ? 'fill-[#ff5722] text-[#ff5722]' : 'text-[#e5e1e4]'}`} />
-                  </button>
-
-                  <div className="absolute bottom-4 left-4 right-4 text-white">
-                    <h3 className="font-serif font-bold text-2xl group-hover:text-[#FFD188] transition-colors drop-shadow-sm">
-                      {venue.name}
-                    </h3>
-                    <div className="flex items-center space-x-2 text-xs text-white/90 mt-0.5">
-                      <span className="flex items-center space-x-1">
-                        <MapPin className="w-3.5 h-3.5 text-[#ff5722]" />
-                        <span>{venue.location}</span>
-                      </span>
-                      <span>•</span>
-                      <span>{venue.costForTwo}</span>
-                    </div>
-                  </div>
+                  {/* Live Status Pulse */}
+                  <span className="absolute bottom-3 left-3 flex items-center gap-1.5 text-[10px] font-mono text-emerald-400 font-semibold bg-black/60 px-2 py-0.5 rounded-md backdrop-blur-xs">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span>Tableside Active</span>
+                  </span>
                 </div>
 
-                {/* Card Body & Actions */}
-                <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                  <div className="space-y-1">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#ff5722]">
-                      {venue.cuisine}
-                    </span>
-                    <p className="text-xs sm:text-sm text-[#ab8980] leading-relaxed font-sans">
-                      {venue.specialty}
-                    </p>
-                  </div>
-
-                  {/* Multi-Action Clean Row */}
-                  <div className="pt-3 border-t border-white/10 flex items-center justify-between gap-2.5">
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleLaunchTable(venue);
-                      }}
-                      className="flex-1 h-11 px-4 sm:px-5 rounded-full bg-[#ff5722] hover:bg-[#ff6f3d] active:scale-[0.98] text-white font-medium text-xs sm:text-sm flex items-center justify-center space-x-1.5 sm:space-x-2 transition-all shadow-xs cursor-pointer"
-                    >
-                      <UtensilsCrossed className="w-3.5 h-3.5 text-white" />
-                      <span>View Menu</span>
-                      <ArrowRight className="w-3.5 h-3.5 text-white" />
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleOpenWinChallenge(venue);
-                      }}
-                      className="h-11 px-3.5 rounded-full bg-[#201f21] hover:bg-[#1b1b1d] text-[#e5e1e4] border border-[#ff5722]/40 font-medium text-xs flex items-center space-x-1 transition-all shadow-xs cursor-pointer shrink-0"
-                      title={`Play Win Challenge for ${venue.name}`}
-                      aria-label={`Play Win Challenge for ${venue.name}`}
-                    >
-                      <span>🎁</span>
-                      <span className="hidden sm:inline">Win</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleOpenScanner(venue.slug);
-                      }}
-                      className="w-11 h-11 rounded-full bg-[#1b1b1d] hover:bg-[#131315] border border-white/10 text-[#e5e1e4] flex items-center justify-center transition-all shadow-xs cursor-pointer shrink-0"
-                      title="Scan Table QR"
-                      aria-label={`Scan Table QR for ${venue.name}`}
-                    >
-                      <QrCode className="w-4 h-4 text-[#ff5722]" />
-                    </button>
-                  </div>
+                {/* Details */}
+                <div className="p-4 space-y-1.5">
+                  <h3 className="font-serif text-lg font-bold text-[#f5f1ea] group-hover:text-[#ffb955] transition-colors">
+                    {venue.name}
+                  </h3>
+                  <p className="text-xs text-[#ab8980] line-clamp-1">{venue.cuisine}</p>
+                  <p className="text-[11px] text-[#ab8980]/80 line-clamp-2 leading-relaxed pt-1">
+                    {venue.specialty}
+                  </p>
                 </div>
               </div>
-            );
-          })}
-        </div>
 
-        {filteredVenues.length === 0 && (
-          <div className="text-center py-16 bg-[#1b1b1d]/60 rounded-3xl border border-white/10 space-y-3">
-            <UtensilsCrossed className="w-10 h-10 text-[#ab8980]/50 mx-auto" />
-            <h3 className="font-serif font-bold text-xl text-[#e5e1e4]">No Restaurants Found</h3>
-            <p className="text-xs sm:text-sm text-[#ab8980] max-w-sm mx-auto">
-              Try adjusting your search query or reset the category filter.
-            </p>
-            <button
-              onClick={() => {
-                setSearchQuery('');
-                setActiveCategory('all');
-              }}
-              className="text-xs font-semibold text-[#ff5722] hover:underline cursor-pointer"
-            >
-              Reset Filters
-            </button>
-          </div>
-        )}
-      </section>
-
-      {/* ───────────────────────────────────────────────────────────── */}
-      {/* 4. SIGNATURE EXPERIENCES: FOCUSED VISUAL STORIES              */}
-      {/* ───────────────────────────────────────────────────────────── */}
-      <section id="experiences" className="py-12 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full border-t border-white/10">
-        <div className="text-center space-y-2 max-w-xl mx-auto mb-12">
-          <h2 className="font-serif font-bold text-3xl sm:text-4xl text-[#e5e1e4]">
-            Signature Experiences
-          </h2>
-          <p className="text-sm text-[#ab8980]">
-            More than just dining—moments crafted to linger long after golden hour.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          
-          <div className="bg-[#1b1b1d] rounded-3xl overflow-hidden border border-white/10 shadow-xs flex flex-col">
-            <div className="aspect-[16/10] overflow-hidden bg-[#131315]">
-              <img
-                src="https://images.unsplash.com/photo-1544025162-d76694265947?w=700&auto=format&fit=crop&q=80"
-                alt="Chef's tasting counter"
-                className="w-full h-full object-cover"
-              />
+              {/* Action Button */}
+              <div className="p-4 pt-0">
+                <button
+                  type="button"
+                  onClick={() => navigate(`/r/${venue.slug}/menu?t=${venue.token}`)}
+                  className="w-full py-2.5 rounded-xl bg-[#ffb955]/15 hover:bg-[#ffb955] text-[#ffb955] hover:text-black border border-[#ffb955]/30 hover:border-[#ffb955] text-xs font-mono font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs active:scale-98"
+                >
+                  <span>Open Showroom Menu</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
-            <div className="p-6 space-y-2 flex-1">
-              <h3 className="font-serif font-bold text-xl text-[#e5e1e4]">
-                The Chef's Tasting Table
-              </h3>
-              <p className="text-xs sm:text-sm text-[#ab8980] leading-relaxed font-sans">
-                Slow-simmered Dum Pukht pots sealed with dough, infused with saffron and Kashmiri cardamom.
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-[#1b1b1d] rounded-3xl overflow-hidden border border-white/10 shadow-xs flex flex-col">
-            <div className="aspect-[16/10] overflow-hidden bg-[#131315]">
-              <img
-                src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=700&auto=format&fit=crop&q=80"
-                alt="Sourdough pizza and spritzes"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="p-6 space-y-2 flex-1">
-              <h3 className="font-serif font-bold text-xl text-[#e5e1e4]">
-                Sunset Sourdough &amp; Spritzes
-              </h3>
-              <p className="text-xs sm:text-sm text-[#ab8980] leading-relaxed font-sans">
-                Hand-stretched Neapolitan crusts baked in oak wood-fired ovens, paired with citrus spritzes.
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-[#1b1b1d] rounded-3xl overflow-hidden border border-white/10 shadow-xs flex flex-col">
-            <div className="aspect-[16/10] overflow-hidden bg-[#131315]">
-              <img
-                src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=700&auto=format&fit=crop&q=80"
-                alt="Friends dining together"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="p-6 space-y-2 flex-1">
-              <h3 className="font-serif font-bold text-xl text-[#e5e1e4]">
-                Multiplayer Tableside Dining
-              </h3>
-              <p className="text-xs sm:text-sm text-[#ab8980] leading-relaxed font-sans">
-                Every diner scans with their phone, building a synchronized table order straight to the kitchen.
-              </p>
-            </div>
-          </div>
-
+          ))}
         </div>
       </section>
 
       {/* ───────────────────────────────────────────────────────────── */}
-      {/* 5. SOCIAL DISCOVERY: EFFORTLESS SHARING                       */}
+      {/* 4. CHEF AI STRIP (CLEAN & SUBTLE)                             */}
       {/* ───────────────────────────────────────────────────────────── */}
-      <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="bg-[#1b1b1d] rounded-3xl border border-white/10 p-8 sm:p-12 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2 max-w-xl">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#ff5722]">
-              Social Discovery
-            </span>
-            <h2 className="font-serif font-bold text-2xl sm:text-3xl text-[#e5e1e4]">
-              Save Favourites. Plan Meals Together.
-            </h2>
-            <p className="text-xs sm:text-sm text-[#ab8980] leading-relaxed">
-              Build your personal dining list across Pune and share recommendations with dining companions.
-            </p>
+      <section className="py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
+        <div className="p-5 sm:p-6 rounded-2xl bg-[#131215] border border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5 text-center sm:text-left">
+            <div className="w-10 h-10 rounded-xl bg-[#ffb955]/15 border border-[#ffb955]/30 flex items-center justify-center text-[#ffb955] flex-shrink-0">
+              <Sparkles className="w-5 h-5 text-[#ffb955]" />
+            </div>
+            <div>
+              <h2 className="text-sm font-bold font-serif text-[#f5f1ea]">Unsure what to order?</h2>
+              <p className="text-xs text-[#ab8980] mt-0.5">
+                Chef AI Concierge provides spice calibration, dietary checks, and wine pairings.
+              </p>
+            </div>
           </div>
 
-          <div className="flex items-center space-x-3 shrink-0">
+          <button
+            type="button"
+            onClick={() => setIsAiOpen(true)}
+            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#1b1b1d] hover:bg-white/10 border border-white/10 text-xs font-mono font-semibold text-[#f5f1ea] hover:text-[#ffb955] transition-all flex items-center justify-center gap-2 cursor-pointer flex-shrink-0"
+          >
+            <span>Consult Chef AI</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </section>
+
+      {/* ───────────────────────────────────────────────────────────── */}
+      {/* 5. MINIMALIST FOOTER                                          */}
+      {/* ───────────────────────────────────────────────────────────── */}
+      <footer className="mt-auto py-8 px-4 sm:px-6 lg:px-8 border-t border-white/5 text-center text-xs text-[#ab8980] font-mono">
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <span className="font-serif font-black text-sm text-[#f5f1ea]">menuz</span>
+            <span>—</span>
+            <span>Autonomous Tableside Dining OS</span>
+          </div>
+          <div className="flex items-center gap-4 text-[11px]">
             <button
               type="button"
-              onClick={handleShareCollection}
-              className="h-11 px-5 rounded-full bg-[#ff5722] hover:bg-[#ff6f3d] active:scale-[0.98] text-white font-medium text-xs sm:text-sm flex items-center space-x-2 transition-all shadow-xs cursor-pointer"
+              onClick={() => navigate('/menu')}
+              className="hover:text-[#ffb955] transition-colors cursor-pointer"
             >
-              <Share2 className="w-3.5 h-3.5 text-white" />
-              <span>Share Menuz with Friends</span>
+              Showroom Menu
             </button>
-          </div>
-        </div>
-      </section>
-
-      {/* ───────────────────────────────────────────────────────────── */}
-      {/* 5.5 TABLE ARCADE & WAITING GAMES (FOR TABLE DINERS)           */}
-      {/* ───────────────────────────────────────────────────────────── */}
-      <section id="arcade" className="py-12 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full border-t border-white/10">
-        <div className="bg-[#1b1b1d] rounded-3xl border border-white/10 p-6 sm:p-10 shadow-[0_8px_30px_rgba(146,78,0,0.04)] relative overflow-hidden">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-white/10">
-            <div className="space-y-2 max-w-2xl">
-              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#ff5722]/15 text-[#e5e1e4] text-xs font-semibold">
-                <Gamepad2 className="w-3.5 h-3.5 text-[#ff5722]" />
-                <span>Exclusively for Table Diners</span>
-              </div>
-              <h2 className="font-serif font-bold text-3xl sm:text-4xl text-[#e5e1e4]">
-                Play Games While Waiting For Your Food
-              </h2>
-              <p className="text-xs sm:text-sm text-[#ab8980] leading-relaxed font-sans">
-                App-free dining games designed for your table. Play classic Klondike Solitaire, solve culinary crosswords, battle companions in multiplayer trivia, or spin the roulette wheel to decide who pays the check.
-              </p>
-            </div>
-
             <button
               type="button"
-              onClick={() => setIsArcadeOpen(true)}
-              className="h-12 px-7 rounded-full bg-[#ff5722] hover:bg-[#ff6f3d] active:scale-[0.98] text-white font-medium text-sm sm:text-base shadow-xs flex items-center justify-center space-x-2 transition-all cursor-pointer shrink-0"
+              onClick={() => setIsQrScannerOpen(true)}
+              className="hover:text-[#ffb955] transition-colors cursor-pointer"
             >
-              <Gamepad2 className="w-4 h-4 text-white" />
-              <span>Launch Table Arcade</span>
+              Scan Table QR
             </button>
           </div>
-
-          {/* 4 Interactive Game Cards in 3-Color Brand System */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 pt-8">
-            {/* Game 1: Solitaire */}
-            <div
-              onClick={() => setIsArcadeOpen(true)}
-              className="p-5 rounded-2xl bg-[#131315] hover:bg-[#1b1b1d] border border-white/10 hover:border-[#ff5722]/40 shadow-xs hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
-            >
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-xl bg-[#ff5722]/20 text-xl flex items-center justify-center">
-                    🃏
-                  </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#1b1b1d] text-[#e5e1e4] border border-white/10">
-                    Kids → Adults
-                  </span>
-                </div>
-                <h3 className="font-serif font-bold text-base text-[#e5e1e4] group-hover:text-[#ff5722] transition-colors">
-                  Klondike Solitaire
-                </h3>
-                <p className="text-xs text-[#ab8980] leading-relaxed font-sans">
-                  Classic patience cards. Easy (Draw 1 for kids), Medium (Draw 3), and Hard (3-pass limit challenge for adults).
-                </p>
-              </div>
-              <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs text-[#e5e1e4] font-semibold">
-                <span>Play Solitaire</span>
-                <span className="text-[#ff5722] group-hover:translate-x-1 transition-transform">→</span>
-              </div>
-            </div>
-
-            {/* Game 2: Crossword */}
-            <div
-              onClick={() => setIsArcadeOpen(true)}
-              className="p-5 rounded-2xl bg-[#131315] hover:bg-[#1b1b1d] border border-white/10 hover:border-[#ff5722]/40 shadow-xs hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
-            >
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-xl bg-[#ff5722]/20 text-xl flex items-center justify-center">
-                    ✏️
-                  </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#1b1b1d] text-[#e5e1e4] border border-white/10">
-                    Food Quiz
-                  </span>
-                </div>
-                <h3 className="font-serif font-bold text-base text-[#e5e1e4] group-hover:text-[#ff5722] transition-colors">
-                  Mini Crossword
-                </h3>
-                <p className="text-xs text-[#ab8980] leading-relaxed font-sans">
-                  Quick 5x5 culinary word puzzles. Simple clues for children, gourmet ingredients for culinary masters.
-                </p>
-              </div>
-              <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs text-[#e5e1e4] font-semibold">
-                <span>Solve Puzzle</span>
-                <span className="text-[#ff5722] group-hover:translate-x-1 transition-transform">→</span>
-              </div>
-            </div>
-
-            {/* Game 3: Table Battle Trivia */}
-            <div
-              onClick={() => setIsArcadeOpen(true)}
-              className="p-5 rounded-2xl bg-[#131315] hover:bg-[#1b1b1d] border border-white/10 hover:border-[#ff5722]/40 shadow-xs hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
-            >
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-xl bg-[#ff5722]/20 text-xl flex items-center justify-center">
-                    🧠
-                  </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#1b1b1d] text-[#e5e1e4] border border-white/10">
-                    Multiplayer
-                  </span>
-                </div>
-                <h3 className="font-serif font-bold text-base text-[#e5e1e4] group-hover:text-[#ff5722] transition-colors">
-                  Table Battle Trivia
-                </h3>
-                <p className="text-xs text-[#ab8980] leading-relaxed font-sans">
-                  Fast-paced buzzer trivia. Food origins, Bollywood cuisine, and spicy culinary history.
-                </p>
-              </div>
-              <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs text-[#e5e1e4] font-semibold">
-                <span>Start Trivia</span>
-                <span className="text-[#ff5722] group-hover:translate-x-1 transition-transform">→</span>
-              </div>
-            </div>
-
-            {/* Game 4: Bill Roulette */}
-            <div
-              onClick={() => setIsArcadeOpen(true)}
-              className="p-5 rounded-2xl bg-[#131315] hover:bg-[#1b1b1d] border border-white/10 hover:border-[#ff5722]/40 shadow-xs hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
-            >
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-xl bg-[#ff5722]/20 text-xl flex items-center justify-center">
-                    🎲
-                  </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#1b1b1d] text-[#e5e1e4] border border-white/10">
-                    Who Pays?
-                  </span>
-                </div>
-                <h3 className="font-serif font-bold text-base text-[#e5e1e4] group-hover:text-[#ff5722] transition-colors">
-                  Bill Roulette
-                </h3>
-                <p className="text-xs text-[#ab8980] leading-relaxed font-sans">
-                  Interactive spinning wheel. Silly dares &amp; treats for kids, friendly social forfeits for teens, or real dining check for adults.
-                </p>
-              </div>
-              <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs text-[#e5e1e4] font-semibold">
-                <span>Spin Roulette</span>
-                <span className="text-[#ff5722] group-hover:translate-x-1 transition-transform">→</span>
-              </div>
-            </div>
-          </div>
         </div>
-      </section>
-
-      {/* ───────────────────────────────────────────────────────────── */}
-      {/* 6. ABOUT: PHILOSOPHY & INDEPENDENT DINING                     */}
-      {/* ───────────────────────────────────────────────────────────── */}
-      <section id="about" className="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full border-t border-white/10">
-        <div className="max-w-2xl mx-auto text-center space-y-4">
-          <div className="w-10 h-10 rounded-full bg-[#ff5722] flex items-center justify-center text-white font-serif font-bold mx-auto shadow-xs">
-            M
-          </div>
-          <h2 className="font-serif font-bold text-2xl sm:text-3xl text-[#e5e1e4]">
-            The Menuz Hospitality Philosophy
-          </h2>
-          <p className="text-xs sm:text-sm text-[#ab8980] leading-relaxed font-sans">
-            Menuz empowers restaurants to stay independent with zero percent commission on dining food sales, instant direct thermal kitchen printing, and app-free table QR experiences.
-          </p>
-          <div className="pt-2 text-xs font-semibold text-[#ab8980] flex items-center justify-center space-x-4">
-            <span>0% Commission</span>
-            <span>•</span>
-            <span>Direct Ordering</span>
-            <span>•</span>
-            <span>Verified Partners</span>
-          </div>
-        </div>
-      </section>
-
-      {/* ───────────────────────────────────────────────────────────── */}
-      {/* 7. FOOTER                                                     */}
-      {/* ───────────────────────────────────────────────────────────── */}
-      <footer className="mt-auto py-8 border-t border-white/10 bg-[#1b1b1d]/40 text-center text-xs text-[#ab8980] space-y-2">
-        <div className="flex items-center justify-center space-x-6 text-[11px] text-[#ab8980]">
-          <button onClick={() => scrollToSection('discover')} className="hover:text-[#e5e1e4] cursor-pointer">Discover</button>
-          <span>•</span>
-          <button onClick={() => scrollToSection('restaurants')} className="hover:text-[#e5e1e4] cursor-pointer">Restaurants</button>
-          <span>•</span>
-          <button onClick={() => scrollToSection('experiences')} className="hover:text-[#e5e1e4] cursor-pointer">Experiences</button>
-          <span>•</span>
-          <button onClick={() => scrollToSection('arcade')} className="hover:text-[#e5e1e4] cursor-pointer">Arcade</button>
-          <span>•</span>
-          <button onClick={() => scrollToSection('about')} className="hover:text-[#e5e1e4] cursor-pointer">About</button>
-        </div>
-        <p className="text-[10px]">
-          © {new Date().getFullYear()} Menuz Technologies. Golden-Hour Dining in Pune.
-        </p>
       </footer>
 
-      {/* Floating Action Buttons */}
-      <div className="fixed bottom-6 left-4 sm:left-6 z-40">
-        <button
-          type="button"
-          onClick={() => handleOpenAi()}
-          className="h-12 px-4 sm:px-5 rounded-full bg-[#1b1b1d] hover:bg-[#131315] active:scale-[0.98] text-[#e5e1e4] border-2 border-[#ff5722] font-bold text-xs sm:text-sm flex items-center space-x-2.5 shadow-[0_8px_25px_rgba(249,166,32,0.3)] transition-all cursor-pointer backdrop-blur-md ring-4 ring-[#F9A620]/15"
-          aria-label="Ask AI Dining Concierge"
-        >
-          <span className="text-base">✨</span>
-          <div className="flex flex-col text-left">
-            <span className="flex items-center space-x-1.5 leading-tight">
-              <span>Ask Chef AI</span>
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            </span>
-            <span className="text-[10px] text-[#e5e1e4]/65 font-normal hidden sm:inline">24/7 Table &amp; Menu Assistant</span>
-          </div>
-        </button>
-      </div>
-
-      <div className="fixed bottom-6 right-4 sm:right-6 z-40">
-        <button
-          type="button"
-          onClick={() => handleOpenScanner()}
-          className="h-12 px-4 sm:px-5 rounded-full bg-[#ff5722] hover:bg-[#ff6f3d] active:scale-[0.98] text-white font-medium text-xs sm:text-sm flex items-center space-x-2 shadow-lg transition-all cursor-pointer"
-          aria-label="Scan Table QR Code"
-        >
-          <QrCode className="w-4 h-4 text-white" />
-          <span>Scan Table</span>
-        </button>
-      </div>
-
-      {/* Share Toast */}
-      {shareToastOpen && (
-        <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-[#924E00] text-white px-4 py-2.5 rounded-full shadow-lg text-xs font-medium flex items-center space-x-2 animate-in fade-in duration-150">
-          <Check className="w-3.5 h-3.5 text-[#ff5722]" />
-          <span>Link copied to clipboard!</span>
-        </div>
+      {/* Camera QR Scanner Modal */}
+      {isQrScannerOpen && (
+        <QrScannerModal
+          isOpen={isQrScannerOpen}
+          onClose={() => setIsQrScannerOpen(false)}
+        />
       )}
 
-      {/* QR Scanner Modal */}
-      <QrScannerModal
-        isOpen={isQrScannerOpen}
-        onClose={() => setIsQrScannerOpen(false)}
-        defaultRestaurantSlug={selectedScannerSlug}
-      />
-
-      {/* Table Arcade Modal */}
-      <TableArcadeModal
-        isOpen={isArcadeOpen}
-        onClose={() => setIsArcadeOpen(false)}
-        tableLabel="Diner Table"
-        restaurantName="Menuz Dining Experience"
-      />
-
-      {/* Win Challenge Modal */}
-      <WinChallengeModal
-        isOpen={isWinChallengeOpen}
-        onClose={() => setIsWinChallengeOpen(false)}
-        targetRestaurant={winChallengeVenue || affiliatedVenues[0]?.rawRest}
-      />
-
-      {/* AI Dining Concierge Chatbot Drawer */}
+      {/* Chef AI Concierge Drawer */}
       <AiAssistantDrawer
         isOpen={isAiOpen}
         onClose={() => {
           setIsAiOpen(false);
           setAiInitialQuery(null);
         }}
-        initialQuery={aiInitialQuery}
         focusDish={null}
-        onConfirmAdd={() => {
-          if (affiliatedVenues[0]) {
-            handleLaunchTable(affiliatedVenues[0]);
-          }
-        }}
+        onConfirmAdd={() => navigate('/menu')}
+        initialQuery={aiInitialQuery}
       />
     </div>
   );
 };
-
-export default CustomerHomePage;
