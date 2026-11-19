@@ -1212,7 +1212,7 @@ export const DinerMenu: React.FC = () => {
                     <div className="flex justify-between items-start gap-2">
                       <div>
                         <h2
-                          onClick={() => setActiveDish(dish)}
+                          onClick={() => setSpatialDish(dish)}
                           className="text-base font-bold text-[#e5e1e4] tracking-tight hover:text-[#ff5722] cursor-pointer transition-colors"
                         >
                           {tDish.name || dish.name}
@@ -1254,7 +1254,7 @@ export const DinerMenu: React.FC = () => {
                     <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between">
                       <button
                         type="button"
-                        onClick={() => setActiveDish(dish)}
+                        onClick={() => setSpatialDish(dish)}
                         className="text-xs text-[#ab8980] hover:text-[#e5e1e4] flex items-center gap-1 transition-colors cursor-pointer"
                       >
                         <span className="material-symbols-outlined text-sm">info</span>

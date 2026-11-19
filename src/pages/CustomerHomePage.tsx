@@ -76,10 +76,10 @@ export const CustomerHomePage: React.FC = () => {
           specialty: r.cuisine.includes('Italian')
             ? 'Wood-fired sourdough Neapolitan crusts & hand-rolled pasta'
             : r.cuisine.includes('Bakery')
-            ? 'European sourdough breads, artisan pastries & cold brews'
-            : r.cuisine.includes('Bistro')
-            ? 'French café classics, savoury crêpes & delicate macarons'
-            : 'Dum Pukht slow-cooked Awadhi curries & heritage royal biryani',
+              ? 'European sourdough breads, artisan pastries & cold brews'
+              : r.cuisine.includes('Bistro')
+                ? 'French café classics, savoury crêpes & delicate macarons'
+                : 'Dum Pukht slow-cooked Awadhi curries & heritage royal biryani',
           imageUrl: customImage,
           token: firstTable.public_token
         };
@@ -244,11 +244,10 @@ export const CustomerHomePage: React.FC = () => {
               key={pill.id}
               type="button"
               onClick={() => setSelectedFilter(pill.id)}
-              className={`px-3 py-1.5 rounded-full whitespace-nowrap transition-all cursor-pointer ${
-                selectedFilter === pill.id
+              className={`px-3 py-1.5 rounded-full whitespace-nowrap transition-all cursor-pointer ${selectedFilter === pill.id
                   ? 'bg-[#ffb955] text-black font-bold shadow-xs'
                   : 'bg-[#18171a] text-[#ab8980] hover:text-[#e5e1e4] border border-white/5'
-              }`}
+                }`}
             >
               {pill.label}
             </button>
@@ -272,7 +271,7 @@ export const CustomerHomePage: React.FC = () => {
                     loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
-                  
+
                   {/* Location Badge */}
                   <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-black/75 backdrop-blur-md text-[#ffb955] border border-[#ffb955]/30">
                     {venue.location}

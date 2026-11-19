@@ -140,7 +140,7 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
 
   return createPortal(
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 overflow-y-auto bg-[#0a090b]/90 backdrop-blur-xl flex flex-col items-center justify-start md:justify-center p-0 md:p-6 lg:p-10 select-none">
+      <div className="fixed inset-0 z-50 overflow-y-auto bg-[#0a090b]/95 backdrop-blur-xl flex flex-col items-center justify-start select-none">
         
         {/* Ambient Dark Slate Background with Warm Culinary Light Spotlight */}
         <div 
@@ -155,55 +155,59 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
           }}
         />
 
-        {/* Top Studio Bar */}
+        {/* Top Studio Bar - Sticky at Top of Screen */}
         <motion.header
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
-          className="w-full max-w-6xl px-4 py-4 md:py-3 flex items-center justify-between border-b border-white/10 text-xs font-mono tracking-wider text-[#ab8980]"
+          className="sticky top-0 z-50 w-full bg-[#0d0c0e]/95 backdrop-blur-md border-b border-white/10 shadow-lg px-4 py-3"
         >
-          <div className="flex items-center gap-3">
-            <button
-              onClick={onClose}
-              type="button"
-              className="group flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 hover:border-[#ffb955]/40 text-[#e5e1e4] hover:text-[#ffb955] transition-all cursor-pointer"
-            >
-              <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
-              <span className="uppercase text-[11px] font-sans font-semibold">Back to Menu</span>
-            </button>
-            <span className="hidden sm:inline-block text-white/20">•</span>
-            <span className="hidden sm:inline-block text-[#ffb955] font-semibold uppercase">
-              SERIES 01 / CULINARY SHOWROOM
-            </span>
-            {categoryName && (
-              <>
-                <span className="hidden md:inline-block text-white/20">•</span>
-                <span className="hidden md:inline-block uppercase text-[#e5e1e4]/70">{categoryName}</span>
-              </>
-            )}
-          </div>
-
-          <div className="flex items-center gap-3">
-            {tableLabel && (
-              <span className="hidden sm:inline-block px-2.5 py-1 rounded bg-black/40 border border-white/10 text-[#ab8980]">
-                {tableLabel}
+          <div className="w-full max-w-6xl mx-auto flex items-center justify-between text-xs font-mono tracking-wider text-[#ab8980]">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={onClose}
+                type="button"
+                className="group flex items-center gap-2 px-4 py-2 rounded-full bg-[#ffb955]/15 hover:bg-[#ffb955] text-[#ffb955] hover:text-black border border-[#ffb955]/40 hover:border-[#ffb955] transition-all cursor-pointer shadow-md active:scale-95 font-sans font-bold text-xs"
+                aria-label="Back to Menu"
+              >
+                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+                <span className="uppercase tracking-wider">Back to Menu</span>
+              </button>
+              <span className="hidden sm:inline-block text-white/20">•</span>
+              <span className="hidden sm:inline-block text-[#ffb955] font-semibold uppercase">
+                SERIES 01 / CULINARY SHOWROOM
               </span>
-            )}
-            <button
-              onClick={onClose}
-              type="button"
-              className="p-1.5 rounded-full bg-white/5 hover:bg-white/10 text-[#ab8980] hover:text-white border border-white/10 transition-colors cursor-pointer"
-              aria-label="Close"
-              title="Close (Esc)"
-            >
-              <X className="w-5 h-5" />
-            </button>
+              {categoryName && (
+                <>
+                  <span className="hidden md:inline-block text-white/20">•</span>
+                  <span className="hidden md:inline-block uppercase text-[#e5e1e4]/70">{categoryName}</span>
+                </>
+              )}
+            </div>
+
+            <div className="flex items-center gap-3">
+              {tableLabel && (
+                <span className="hidden sm:inline-block px-2.5 py-1 rounded bg-black/40 border border-white/10 text-[#ab8980]">
+                  {tableLabel}
+                </span>
+              )}
+              <button
+                onClick={onClose}
+                type="button"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-[#e5e1e4] hover:text-white border border-white/15 transition-colors cursor-pointer text-xs font-sans font-semibold"
+                aria-label="Close"
+                title="Close (Esc)"
+              >
+                <X className="w-4 h-4" />
+                <span className="hidden sm:inline">Close</span>
+              </button>
+            </div>
           </div>
         </motion.header>
 
         {/* Main Stage Grid: Spatial Hero Stage on Left, Brutalist Specs on Right */}
-        <div className="w-full max-w-6xl flex-1 flex flex-col md:flex-row items-center justify-center gap-4 sm:gap-6 lg:gap-10 p-3 sm:p-4 md:p-6 my-auto">
+        <div className="w-full max-w-6xl flex-1 flex flex-col md:flex-row items-center md:items-start justify-center gap-4 sm:gap-6 lg:gap-10 p-4 sm:p-6 md:p-8 my-2 md:my-auto">
           
           {/* ── LEFT: Spatial Hero Plinth & Edge-Lit Floating Shelf ── */}
           <div className="w-full md:w-1/2 flex flex-col items-center justify-center relative">
@@ -303,7 +307,7 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full md:w-1/2 flex flex-col justify-between bg-[#131215]/80 backdrop-blur-md border border-white/10 rounded-2xl p-5 md:p-6 lg:p-8 shadow-2xl text-[#e5e1e4] max-h-[85vh] overflow-y-auto"
+            className="w-full md:w-1/2 flex flex-col justify-between bg-[#131215]/90 backdrop-blur-md border border-white/10 rounded-2xl p-5 md:p-6 lg:p-8 shadow-2xl text-[#e5e1e4] md:max-h-[82vh] md:overflow-y-auto"
           >
             <div>
               {/* Category & Serial Code */}
@@ -516,6 +520,17 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
               >
                 <Sparkles className="w-3.5 h-3.5 text-[#ffb955]" />
                 <span>Ask AI Sommelier about spice & ingredients</span>
+              </button>
+
+              {/* Prominent Secondary Back to Menu Button */}
+              <button
+                type="button"
+                onClick={onClose}
+                aria-label="Back to Full Menu"
+                className="w-full py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#ffb955]/40 text-xs font-mono font-semibold text-[#e5e1e4] hover:text-[#ffb955] flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-98 shadow-sm"
+              >
+                <ArrowLeft className="w-4 h-4 text-[#ffb955]" />
+                <span>Back to Full Menu</span>
               </button>
             </div>
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Flame, Sparkles, ShoppingBag, Plus, Minus, Maximize2 } from 'lucide-react';
+import { X, Flame, Sparkles, ShoppingBag, Plus, Minus, Maximize2, ArrowLeft } from 'lucide-react';
 import { MenuItem, SelectedOptionSnapshot } from '../types';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { DishHoverExpandGallery } from './DishHoverExpandGallery';
@@ -100,13 +100,22 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
           className="bg-[#131315] text-[#e5e1e4] rounded-t-3xl max-w-xl w-full max-h-[92vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-200 border border-white/10 shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Drag handle & close */}
-          <div className="relative pt-3 pb-2 px-5 flex items-center justify-between border-b border-white/10">
-            <div className="w-10 h-1 bg-[#1b1b1d]/20 rounded-full mx-auto absolute left-1/2 -translate-x-1/2 top-2" />
-            <span className="text-xs font-semibold text-[#ffb955] tracking-wide uppercase">Signature Offering</span>
+          {/* Top Bar with Prominent Back to Menu Button */}
+          <div className="relative pt-3 pb-2.5 px-4 flex items-center justify-between border-b border-white/10 bg-[#18171a]">
             <button
+              type="button"
               onClick={onClose}
-              className="p-1 rounded-full text-[#ab8980] hover:bg-[#1b1b1d]/80 hover:text-[#e5e1e4] transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#ffb955]/15 hover:bg-[#ffb955] text-[#ffb955] hover:text-black border border-[#ffb955]/40 hover:border-[#ffb955] font-semibold text-xs transition-all cursor-pointer shadow-sm active:scale-95"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Back to Menu</span>
+            </button>
+            <span className="text-xs font-semibold text-[#ffb955] tracking-wider uppercase font-mono hidden sm:inline">Dish Details</span>
+            <button
+              type="button"
+              onClick={onClose}
+              className="p-1.5 rounded-full text-[#ab8980] hover:bg-white/10 hover:text-[#e5e1e4] transition-colors cursor-pointer"
+              aria-label="Close"
             >
               <X className="w-5 h-5" />
             </button>
@@ -409,6 +418,16 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
             >
               <Sparkles className="w-3.5 h-3.5 text-[#ffb955]" />
               <span>{t.aiSommelier || 'Ask AI Sommelier'}</span>
+            </button>
+
+            {/* Bottom Back Button */}
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-full bg-white/5 hover:bg-white/10 text-[#e5e1e4] hover:text-[#ffb955] font-semibold py-2.5 px-4 rounded-xl border border-white/10 flex items-center justify-center gap-2 text-xs transition-all cursor-pointer active:scale-98"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 text-[#ffb955]" />
+              <span>Back to Menu</span>
             </button>
           </div>
         </div>
