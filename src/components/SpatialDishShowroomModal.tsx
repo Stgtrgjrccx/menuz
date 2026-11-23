@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -50,11 +50,33 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
   // Pull / Scroll Down to Minimize tracking
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [pullY, setPullY] = useState(0);
+  const [isClosing, setIsClosing] = useState(false);
+  const closingTimerRef = useRef<NodeJS.Timeout | null>(null);
   const touchStartY = useRef<number | null>(null);
   const touchStartX = useRef<number | null>(null);
   const isPullingDown = useRef(false);
   const hasTriggeredClose = useRef(false);
   const mountTime = useRef(0);
+
+  // Smooth graceful close with 1-2s (1.4s) toggle/minimize transition
+  const triggerSmoothClose = useCallback(() => {
+    if (hasTriggeredClose.current) return;
+    hasTriggeredClose.current = true;
+    setIsClosing(true);
+
+    closingTimerRef.current = setTimeout(() => {
+      onClose();
+    }, 1400);
+  }, [onClose]);
+
+  // Clean up timer on unmount
+  useEffect(() => {
+    return () => {
+      if (closingTimerRef.current) {
+        clearTimeout(closingTimerRef.current);
+      }
+    };
+  }, []);
 
   // Collect available photo angles (guaranteed multiple photos for every dish) - called unconditionally
   const photos = useMemo(() => {
@@ -70,13 +92,12 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
     const handleGlobalWheel = (e: WheelEvent) => {
       // Grace period: ignore wheel events for 450ms after modal opens
       if (Date.now() - mountTime.current < 450) return;
-      if (hasTriggeredClose.current) return;
+      if (hasTriggeredClose.current || isClosing) return;
 
       const scrollTop = scrollContainerRef.current ? scrollContainerRef.current.scrollTop : 0;
-      // Only trigger minimize on two-finger pull-down (e.deltaY < -20 when at the very top)
-      if (scrollTop <= 0 && e.deltaY < -20) {
-        hasTriggeredClose.current = true;
-        onClose();
+      // Only trigger minimize on deliberate two-finger pull-down (e.deltaY < -35 when at the very top)
+      if (scrollTop <= 0 && e.deltaY < -35) {
+        triggerSmoothClose();
       }
     };
 
@@ -84,7 +105,7 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
     return () => {
       window.removeEventListener('wheel', handleGlobalWheel);
     };
-  }, [dish, onClose]);
+  }, [dish, isClosing, triggerSmoothClose]);
 
   // Multi-channel Touch listener (Mobile Drag/Swipe from Top to Bottom)
   useEffect(() => {
@@ -94,11 +115,11 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
     let canPull = false;
 
     const onGlobalTouchStart = (e: TouchEvent) => {
-      if (Date.now() - mountTime.current < 450) return;
+      if (Date.now() - mountTime.current < 450 || isClosing) return;
       const clientY = e.touches[0].clientY;
       const scrollTop = scrollContainerRef.current ? scrollContainerRef.current.scrollTop : 0;
       // Engage only when starting on the top bar area or top boundary
-      if (clientY < 160 || scrollTop <= 5) {
+      if (clientY < 180 || scrollTop <= 5) {
         startY = clientY;
         startX = e.touches[0].clientX;
         canPull = true;
@@ -108,27 +129,28 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
     };
 
     const onGlobalTouchMove = (e: TouchEvent) => {
-      if (!canPull) return;
+      if (!canPull || isClosing) return;
       const currentY = e.touches[0].clientY;
       const currentX = e.touches[0].clientX;
       const diffY = currentY - startY;
       const diffX = currentX - startX;
 
       // Downward drag (pulling down from the top)
-      if (diffY > 15 && diffY > Math.abs(diffX) * 1.4) {
-        setPullY(Math.min(diffY * 0.75, 180));
+      if (diffY > 15 && diffY > Math.abs(diffX) * 1.3) {
+        setPullY(Math.min(diffY * 0.75, 220));
       }
     };
 
     const onGlobalTouchEnd = (e: TouchEvent) => {
-      if (!canPull) return;
+      if (!canPull || isClosing) return;
       const currentY = e.changedTouches[0].clientY;
       const diffY = currentY - startY;
-      if (diffY > 45 && !hasTriggeredClose.current) {
-        hasTriggeredClose.current = true;
-        onClose();
+      // Deliberate downward drag (> 70px) triggers the 1.4s smooth minimize toggle
+      if (diffY > 70 && !hasTriggeredClose.current) {
+        triggerSmoothClose();
+      } else {
+        setPullY(0);
       }
-      setPullY(0);
       canPull = false;
     };
 
@@ -141,11 +163,15 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
       window.removeEventListener('touchmove', onGlobalTouchMove);
       window.removeEventListener('touchend', onGlobalTouchEnd);
     };
-  }, [dish, onClose]);
+  }, [dish, isClosing, triggerSmoothClose]);
 
   // Reset internal state when a new dish is opened
   useEffect(() => {
     if (dish) {
+      if (closingTimerRef.current) {
+        clearTimeout(closingTimerRef.current);
+      }
+      setIsClosing(false);
       setQuantity(1);
       setSelectedOptions({});
       setActivePhotoIdx(0);
@@ -160,12 +186,12 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
     if (!dish) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose();
+        triggerSmoothClose();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [dish, onClose]);
+  }, [dish, triggerSmoothClose]);
 
   if (!dish) return null;
 
@@ -225,9 +251,22 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
         ref={scrollContainerRef}
         className="fixed inset-0 z-50 overflow-y-auto bg-[#0a090b]/95 backdrop-blur-xl flex flex-col items-center justify-start select-none"
         style={{
-          transform: pullY > 0 ? `translateY(${pullY}px)` : undefined,
-          opacity: pullY > 0 ? Math.max(0.4, 1 - pullY / 350) : 1,
-          transition: pullY === 0 ? 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease-out' : 'none',
+          transform: isClosing
+            ? 'translateY(100vh) scale(0.92)'
+            : pullY > 0
+            ? `translateY(${pullY}px)`
+            : 'translateY(0px)',
+          opacity: isClosing
+            ? 0
+            : pullY > 0
+            ? Math.max(0.4, 1 - pullY / 350)
+            : 1,
+          transition: isClosing
+            ? 'transform 1.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1)'
+            : pullY === 0
+            ? 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease-out'
+            : 'none',
+          pointerEvents: isClosing ? 'none' : 'auto',
         }}
       >
         
@@ -252,30 +291,36 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
           transition={{ duration: 0.3 }}
           className="sticky top-0 z-50 w-full bg-[#0d0c0e]/95 backdrop-blur-md border-b border-white/10 shadow-lg px-4 pt-1.5 pb-3"
         >
-          {/* Pull Down to Minimize Handle Bar */}
+          {/* Pull Down to Minimize Handle Bar with 1-2s Toggle Animation */}
           <motion.div 
-            drag="y"
+            drag={isClosing ? false : "y"}
             dragConstraints={{ top: 0, bottom: 0 }}
             dragElastic={0.6}
             onDragEnd={(_, info) => {
-              if (info.offset.y > 20 || info.velocity.y > 100) {
-                onClose();
+              if (info.offset.y > 40 || info.velocity.y > 180) {
+                triggerSmoothClose();
               }
             }}
-            onClick={onClose}
+            onClick={triggerSmoothClose}
             className="w-full flex flex-col items-center justify-center pt-0.5 pb-2 cursor-pointer group touch-none"
             title="Scroll down, pull down, or click to minimize"
           >
-            <div className="w-16 sm:w-20 h-1.5 rounded-full bg-[#ffb955]/50 group-hover:bg-[#ffb955] transition-all shadow-[0_0_8px_rgba(255,185,85,0.4)]" />
-            <span className="text-[10px] font-mono text-[#ffb955]/80 group-hover:text-[#ffb955] transition-colors mt-1 font-semibold flex items-center gap-1">
-              <span>↓</span> Scroll or pull down to minimize
+            <div className={`w-16 sm:w-20 h-1.5 rounded-full transition-all shadow-[0_0_8px_rgba(255,185,85,0.4)] ${isClosing ? 'bg-[#ffb955] scale-110 animate-pulse' : 'bg-[#ffb955]/50 group-hover:bg-[#ffb955]'}`} />
+            <span className="text-[10px] font-mono text-[#ffb955]/80 group-hover:text-[#ffb955] transition-colors mt-1 font-semibold flex items-center gap-1.5">
+              {isClosing ? (
+                <span className="text-[#ffb955] animate-pulse">✦ Returning to menu...</span>
+              ) : (
+                <>
+                  <span>↓</span> Scroll or pull down to minimize
+                </>
+              )}
             </span>
           </motion.div>
 
           <div className="w-full max-w-6xl mx-auto flex items-center justify-between text-xs font-mono tracking-wider text-[#ab8980]">
             <div className="flex items-center gap-3">
               <button
-                onClick={onClose}
+                onClick={triggerSmoothClose}
                 type="button"
                 className="group flex items-center gap-2 px-4 py-2 rounded-full bg-[#ffb955]/15 hover:bg-[#ffb955] text-[#ffb955] hover:text-black border border-[#ffb955]/40 hover:border-[#ffb955] transition-all cursor-pointer shadow-md active:scale-95 font-sans font-bold text-xs"
                 aria-label="Back to Menu"
@@ -302,7 +347,7 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
                 </span>
               )}
               <button
-                onClick={onClose}
+                onClick={triggerSmoothClose}
                 type="button"
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-[#e5e1e4] hover:text-white border border-white/15 transition-colors cursor-pointer text-xs font-sans font-semibold"
                 aria-label="Close"
@@ -633,7 +678,7 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
               {/* Prominent Secondary Back to Menu Button */}
               <button
                 type="button"
-                onClick={onClose}
+                onClick={triggerSmoothClose}
                 aria-label="Back to Full Menu"
                 className="w-full py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#ffb955]/40 text-xs font-mono font-semibold text-[#e5e1e4] hover:text-[#ffb955] flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-98 shadow-sm"
               >

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, useEffect } from 'react';
+import React, { useState, useRef, useMemo, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { X, Flame, Sparkles, ShoppingBag, Plus, Minus, Maximize2, ArrowLeft } from 'lucide-react';
@@ -33,8 +33,30 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
   // Pull / Scroll Down to Minimize tracking
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [pullY, setPullY] = useState(0);
+  const [isClosing, setIsClosing] = useState(false);
+  const closingTimerRef = useRef<NodeJS.Timeout | null>(null);
   const hasTriggeredClose = useRef(false);
   const mountTime = useRef(0);
+
+  // Smooth graceful close with 1-2s (1.4s) toggle/minimize transition
+  const triggerSmoothClose = useCallback(() => {
+    if (hasTriggeredClose.current) return;
+    hasTriggeredClose.current = true;
+    setIsClosing(true);
+
+    closingTimerRef.current = setTimeout(() => {
+      onClose();
+    }, 1400);
+  }, [onClose]);
+
+  // Clean up timer on unmount
+  useEffect(() => {
+    return () => {
+      if (closingTimerRef.current) {
+        clearTimeout(closingTimerRef.current);
+      }
+    };
+  }, []);
 
   // Extract all photos attached to dish (guaranteed 3-4 photos) - called unconditionally
   const dishPhotos = useMemo(() => (dish ? getDishPhotos(dish) : []), [dish]);
@@ -55,11 +77,10 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
 
     const handleGlobalWheel = (e: WheelEvent) => {
       if (Date.now() - mountTime.current < 450) return;
-      if (hasTriggeredClose.current) return;
+      if (hasTriggeredClose.current || isClosing) return;
       const scrollTop = scrollContainerRef.current ? scrollContainerRef.current.scrollTop : 0;
-      if (scrollTop <= 0 && e.deltaY < -20) {
-        hasTriggeredClose.current = true;
-        onClose();
+      if (scrollTop <= 0 && e.deltaY < -35) {
+        triggerSmoothClose();
       }
     };
 
@@ -67,7 +88,7 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
     return () => {
       window.removeEventListener('wheel', handleGlobalWheel);
     };
-  }, [dish, onClose]);
+  }, [dish, isClosing, triggerSmoothClose]);
 
   // Multi-channel Touch listener (Mobile Drag/Swipe from Top to Bottom)
   useEffect(() => {
@@ -77,10 +98,10 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
     let canPull = false;
 
     const onGlobalTouchStart = (e: TouchEvent) => {
-      if (Date.now() - mountTime.current < 450) return;
+      if (Date.now() - mountTime.current < 450 || isClosing) return;
       const clientY = e.touches[0].clientY;
       const scrollTop = scrollContainerRef.current ? scrollContainerRef.current.scrollTop : 0;
-      if (clientY < 160 || scrollTop <= 5) {
+      if (clientY < 180 || scrollTop <= 5) {
         startY = clientY;
         startX = e.touches[0].clientX;
         canPull = true;
@@ -90,26 +111,26 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
     };
 
     const onGlobalTouchMove = (e: TouchEvent) => {
-      if (!canPull) return;
+      if (!canPull || isClosing) return;
       const currentY = e.touches[0].clientY;
       const currentX = e.touches[0].clientX;
       const diffY = currentY - startY;
       const diffX = currentX - startX;
 
-      if (diffY > 15 && diffY > Math.abs(diffX) * 1.4) {
-        setPullY(Math.min(diffY * 0.75, 180));
+      if (diffY > 15 && diffY > Math.abs(diffX) * 1.3) {
+        setPullY(Math.min(diffY * 0.75, 220));
       }
     };
 
     const onGlobalTouchEnd = (e: TouchEvent) => {
-      if (!canPull) return;
+      if (!canPull || isClosing) return;
       const currentY = e.changedTouches[0].clientY;
       const diffY = currentY - startY;
-      if (diffY > 45 && !hasTriggeredClose.current) {
-        hasTriggeredClose.current = true;
-        onClose();
+      if (diffY > 70 && !hasTriggeredClose.current) {
+        triggerSmoothClose();
+      } else {
+        setPullY(0);
       }
-      setPullY(0);
       canPull = false;
     };
 
@@ -122,7 +143,22 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
       window.removeEventListener('touchmove', onGlobalTouchMove);
       window.removeEventListener('touchend', onGlobalTouchEnd);
     };
-  }, [dish, onClose]);
+  }, [dish, isClosing, triggerSmoothClose]);
+
+  // Reset internal state when a new dish is opened
+  useEffect(() => {
+    if (dish) {
+      if (closingTimerRef.current) {
+        clearTimeout(closingTimerRef.current);
+      }
+      setIsClosing(false);
+      setQuantity(1);
+      setSelectedOptions({});
+      setActivePhotoIdx(0);
+      setPullY(0);
+      hasTriggeredClose.current = false;
+    }
+  }, [dish?.id]);
 
   if (!dish) return null;
 
@@ -180,36 +216,59 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
   return createPortal(
     <>
       <div 
-        onClick={onClose}
+        onClick={triggerSmoothClose}
         className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end justify-center"
+        style={{
+          opacity: isClosing ? 0 : 1,
+          transition: isClosing ? 'opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1)' : 'opacity 0.25s ease-out',
+          pointerEvents: isClosing ? 'none' : 'auto',
+        }}
       >
         <div 
           ref={scrollContainerRef}
           style={{
-            transform: pullY > 0 ? `translateY(${pullY}px)` : undefined,
-            opacity: pullY > 0 ? Math.max(0.4, 1 - pullY / 300) : 1,
-            transition: pullY === 0 ? 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease-out' : 'none',
+            transform: isClosing
+              ? 'translateY(100%) scale(0.95)'
+              : pullY > 0
+              ? `translateY(${pullY}px)`
+              : undefined,
+            opacity: isClosing
+              ? 0
+              : pullY > 0
+              ? Math.max(0.4, 1 - pullY / 300)
+              : 1,
+            transition: isClosing
+              ? 'transform 1.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1)'
+              : pullY === 0
+              ? 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease-out'
+              : 'none',
           }}
           className="bg-[#131315] text-[#e5e1e4] rounded-t-3xl max-w-xl w-full max-h-[92vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-200 border border-white/10 shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Pull Down Indicator Handle */}
+          {/* Pull Down Indicator Handle with 1-2s Toggle Animation */}
           <motion.div 
-            drag="y"
+            drag={isClosing ? false : "y"}
             dragConstraints={{ top: 0, bottom: 0 }}
             dragElastic={0.6}
             onDragEnd={(_, info) => {
-              if (info.offset.y > 20 || info.velocity.y > 100) {
-                onClose();
+              if (info.offset.y > 40 || info.velocity.y > 180) {
+                triggerSmoothClose();
               }
             }}
-            onClick={onClose}
+            onClick={triggerSmoothClose}
             className="w-full flex flex-col items-center justify-center pt-2 pb-1.5 bg-[#18171a] cursor-pointer group touch-none"
             title="Scroll or pull down to minimize"
           >
-            <div className="w-16 h-1.5 rounded-full bg-[#ffb955]/40 group-hover:bg-[#ffb955] transition-all shadow-sm" />
-            <span className="text-[10px] font-mono text-[#ffb955]/70 group-hover:text-[#ffb955] transition-colors mt-0.5 font-semibold">
-              ↓ Scroll or drag down to minimize
+            <div className={`w-16 h-1.5 rounded-full transition-all shadow-sm ${isClosing ? 'bg-[#ffb955] scale-110 animate-pulse' : 'bg-[#ffb955]/40 group-hover:bg-[#ffb955]'}`} />
+            <span className="text-[10px] font-mono text-[#ffb955]/70 group-hover:text-[#ffb955] transition-colors mt-0.5 font-semibold flex items-center gap-1.5">
+              {isClosing ? (
+                <span className="text-[#ffb955] animate-pulse">✦ Returning to menu...</span>
+              ) : (
+                <>
+                  <span>↓</span> Scroll or drag down to minimize
+                </>
+              )}
             </span>
           </motion.div>
 
@@ -217,7 +276,7 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
           <div className="relative pt-1.5 pb-2.5 px-4 flex items-center justify-between border-b border-white/10 bg-[#18171a]">
             <button
               type="button"
-              onClick={onClose}
+              onClick={triggerSmoothClose}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#ffb955]/15 hover:bg-[#ffb955] text-[#ffb955] hover:text-black border border-[#ffb955]/40 hover:border-[#ffb955] font-semibold text-xs transition-all cursor-pointer shadow-sm active:scale-95"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
@@ -226,7 +285,7 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
             <span className="text-xs font-semibold text-[#ffb955] tracking-wider uppercase font-mono hidden sm:inline">Dish Details</span>
             <button
               type="button"
-              onClick={onClose}
+              onClick={triggerSmoothClose}
               className="p-1.5 rounded-full text-[#ab8980] hover:bg-white/10 hover:text-[#e5e1e4] transition-colors cursor-pointer"
               aria-label="Close"
             >
@@ -536,7 +595,7 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
             {/* Bottom Back Button */}
             <button
               type="button"
-              onClick={onClose}
+              onClick={triggerSmoothClose}
               className="w-full bg-white/5 hover:bg-white/10 text-[#e5e1e4] hover:text-[#ffb955] font-semibold py-2.5 px-4 rounded-xl border border-white/10 flex items-center justify-center gap-2 text-xs transition-all cursor-pointer active:scale-98"
             >
               <ArrowLeft className="w-3.5 h-3.5 text-[#ffb955]" />
