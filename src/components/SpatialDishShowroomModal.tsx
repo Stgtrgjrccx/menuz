@@ -54,21 +54,23 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
   const touchStartX = useRef<number | null>(null);
   const isPullingDown = useRef(false);
   const hasTriggeredClose = useRef(false);
+  const mountTime = useRef(0);
 
-  // Multi-channel Wheel listener (Desktop Mouse Wheel Down & Trackpad Pull-down)
+  // Multi-channel Wheel listener (Desktop Trackpad Pull-down at top)
   useEffect(() => {
+    mountTime.current = Date.now();
     hasTriggeredClose.current = false;
 
     const handleGlobalWheel = (e: WheelEvent) => {
+      // Grace period: ignore wheel events for 450ms after modal opens
+      if (Date.now() - mountTime.current < 450) return;
       if (hasTriggeredClose.current) return;
+
       const scrollTop = scrollContainerRef.current ? scrollContainerRef.current.scrollTop : 0;
-      // When at top boundary of the modal:
-      if (scrollTop <= 15) {
-        // Scrolling down (standard mouse wheel down deltaY > 15) OR trackpad pull-down (deltaY < -15)
-        if (e.deltaY > 15 || e.deltaY < -15) {
-          hasTriggeredClose.current = true;
-          onClose();
-        }
+      // Only trigger minimize on two-finger pull-down (e.deltaY < -20 when at the very top)
+      if (scrollTop <= 0 && e.deltaY < -20) {
+        hasTriggeredClose.current = true;
+        onClose();
       }
     };
 
@@ -78,16 +80,19 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
     };
   }, [onClose]);
 
-  // Multi-channel Touch listener (Mobile Drag/Swipe from Up to Down)
+  // Multi-channel Touch listener (Mobile Drag/Swipe from Top to Bottom)
   useEffect(() => {
     let startY = 0;
     let startX = 0;
     let canPull = false;
 
     const onGlobalTouchStart = (e: TouchEvent) => {
+      if (Date.now() - mountTime.current < 450) return;
+      const clientY = e.touches[0].clientY;
       const scrollTop = scrollContainerRef.current ? scrollContainerRef.current.scrollTop : 0;
-      if (scrollTop <= 20) {
-        startY = e.touches[0].clientY;
+      // Engage only when starting on the top bar area or top boundary
+      if (clientY < 160 || scrollTop <= 5) {
+        startY = clientY;
         startX = e.touches[0].clientX;
         canPull = true;
       } else {
@@ -102,9 +107,9 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
       const diffY = currentY - startY;
       const diffX = currentX - startX;
 
-      // Downward drag (scrolling from up to down)
-      if (diffY > 12 && diffY > Math.abs(diffX)) {
-        setPullY(Math.min(diffY * 0.8, 200));
+      // Downward drag (pulling down from the top)
+      if (diffY > 15 && diffY > Math.abs(diffX) * 1.4) {
+        setPullY(Math.min(diffY * 0.75, 180));
       }
     };
 
@@ -112,7 +117,7 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
       if (!canPull) return;
       const currentY = e.changedTouches[0].clientY;
       const diffY = currentY - startY;
-      if (diffY > 30 && !hasTriggeredClose.current) {
+      if (diffY > 45 && !hasTriggeredClose.current) {
         hasTriggeredClose.current = true;
         onClose();
       }

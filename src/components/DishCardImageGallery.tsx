@@ -39,15 +39,8 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
     wasSwiping.current = false;
   };
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (touchStartX.current === null || touchStartY.current === null) return;
-    const diffX = e.touches[0].clientX - touchStartX.current;
-    const diffY = e.touches[0].clientY - touchStartY.current;
-
-    // If moving horizontally more than vertically
-    if (Math.abs(diffX) > 10 && Math.abs(diffX) > Math.abs(diffY)) {
-      wasSwiping.current = true;
-    }
+  const handleTouchMove = () => {
+    // Keep touchmove clean so subtle finger movement does not cancel clicks
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
@@ -55,7 +48,8 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
     const diffX = e.changedTouches[0].clientX - touchStartX.current;
     const diffY = e.changedTouches[0].clientY - touchStartY.current;
 
-    if (Math.abs(diffX) > 25 && Math.abs(diffX) > Math.abs(diffY)) {
+    // Only set wasSwiping if there was an actual deliberate horizontal swipe (> 35px)
+    if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY) * 1.3) {
       if (diffX < 0) {
         // Swipe Left -> Next Photo
         setActiveIdx((prev) => (prev + 1) % photos.length);
@@ -64,14 +58,17 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
         setActiveIdx((prev) => (prev - 1 + photos.length) % photos.length);
       }
       wasSwiping.current = true;
+    } else {
+      wasSwiping.current = false;
     }
 
     touchStartX.current = null;
     touchStartY.current = null;
   };
 
-  const handleCardClick = () => {
+  const handleCardClick = (e: React.MouseEvent) => {
     if (wasSwiping.current) {
+      e.stopPropagation();
       wasSwiping.current = false;
       return;
     }
