@@ -36,8 +36,20 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
   const hasTriggeredClose = useRef(false);
   const mountTime = useRef(0);
 
+  // Extract all photos attached to dish (guaranteed 3-4 photos) - called unconditionally
+  const dishPhotos = useMemo(() => (dish ? getDishPhotos(dish) : []), [dish]);
+  const modalPhotos: { src: string; label?: string }[] = useMemo(
+    () =>
+      dishPhotos.map((src, idx) => ({
+        src,
+        label: idx === 0 ? 'Main View' : `View 0${idx + 1}`
+      })),
+    [dishPhotos]
+  );
+
   // Multi-channel Wheel listener (Desktop Trackpad Pull-down at top)
   useEffect(() => {
+    if (!dish) return;
     mountTime.current = Date.now();
     hasTriggeredClose.current = false;
 
@@ -55,10 +67,11 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
     return () => {
       window.removeEventListener('wheel', handleGlobalWheel);
     };
-  }, [onClose]);
+  }, [dish, onClose]);
 
   // Multi-channel Touch listener (Mobile Drag/Swipe from Top to Bottom)
   useEffect(() => {
+    if (!dish) return;
     let startY = 0;
     let startX = 0;
     let canPull = false;
@@ -109,23 +122,11 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
       window.removeEventListener('touchmove', onGlobalTouchMove);
       window.removeEventListener('touchend', onGlobalTouchEnd);
     };
-  }, [onClose]);
+  }, [dish, onClose]);
 
   if (!dish) return null;
 
   const tDish = getTranslatedDish(dish, selectedLanguage);
-
-  // Extract all photos attached to dish (guaranteed 3-4 photos)
-  const dishPhotos = useMemo(() => (dish ? getDishPhotos(dish) : []), [dish]);
-  const modalPhotos: { src: string; label?: string }[] = useMemo(
-    () =>
-      dishPhotos.map((src, idx) => ({
-        src,
-        label: idx === 0 ? 'Main View' : `View 0${idx + 1}`
-      })),
-    [dishPhotos]
-  );
-
   const currentHeroPhoto = modalPhotos[activePhotoIdx]?.src || dish.image_url;
 
   const flags = Array.isArray(dish.dietary_flags) ? dish.dietary_flags : [];

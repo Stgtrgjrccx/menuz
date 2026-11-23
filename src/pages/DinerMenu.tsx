@@ -1363,30 +1363,34 @@ export const DinerMenu: React.FC = () => {
       />
 
       {/* Spatial Dish Showroom Stage (LAST DEPT. Zoom Animation) */}
-      <SpatialDishShowroomModal
-        dish={spatialDish}
-        onClose={() => setSpatialDish(null)}
-        onAskAi={(dish) => {
-          setSpatialDish(null);
-          setAiFocusDish(dish);
-          setIsAiOpen(true);
-        }}
-        onOpenCart={() => setIsCartOpen(true)}
-        categoryName={categories.find((c) => c.id === spatialDish?.category_id)?.name}
-        tableLabel={activeTable?.label}
-      />
+      {spatialDish && (
+        <SpatialDishShowroomModal
+          dish={spatialDish}
+          onClose={() => setSpatialDish(null)}
+          onAskAi={(dish) => {
+            setSpatialDish(null);
+            setAiFocusDish(dish);
+            setIsAiOpen(true);
+          }}
+          onOpenCart={() => setIsCartOpen(true)}
+          categoryName={categories.find((c) => c.id === spatialDish?.category_id)?.name}
+          tableLabel={activeTable?.label}
+        />
+      )}
 
       {/* Dish Detail Modal (Standard Quick Drawer) */}
-      <DishDetailModal
-        dish={activeDish}
-        onClose={() => setActiveDish(null)}
-        onAskAi={(dish) => {
-          setActiveDish(null);
-          setAiFocusDish(dish);
-          setIsAiOpen(true);
-        }}
-        onOpenCart={() => setIsCartOpen(true)}
-      />
+      {activeDish && (
+        <DishDetailModal
+          dish={activeDish}
+          onClose={() => setActiveDish(null)}
+          onAskAi={(dish) => {
+            setActiveDish(null);
+            setAiFocusDish(dish);
+            setIsAiOpen(true);
+          }}
+          onOpenCart={() => setIsCartOpen(true)}
+        />
+      )}
 
       {/* AI Assistant Drawer */}
       <AiAssistantDrawer

@@ -56,8 +56,14 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
   const hasTriggeredClose = useRef(false);
   const mountTime = useRef(0);
 
+  // Collect available photo angles (guaranteed multiple photos for every dish) - called unconditionally
+  const photos = useMemo(() => {
+    return dish ? getDishGalleryImages(dish) : [];
+  }, [dish]);
+
   // Multi-channel Wheel listener (Desktop Trackpad Pull-down at top)
   useEffect(() => {
+    if (!dish) return;
     mountTime.current = Date.now();
     hasTriggeredClose.current = false;
 
@@ -78,10 +84,11 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
     return () => {
       window.removeEventListener('wheel', handleGlobalWheel);
     };
-  }, [onClose]);
+  }, [dish, onClose]);
 
   // Multi-channel Touch listener (Mobile Drag/Swipe from Top to Bottom)
   useEffect(() => {
+    if (!dish) return;
     let startY = 0;
     let startX = 0;
     let canPull = false;
@@ -134,7 +141,7 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
       window.removeEventListener('touchmove', onGlobalTouchMove);
       window.removeEventListener('touchend', onGlobalTouchEnd);
     };
-  }, [onClose]);
+  }, [dish, onClose]);
 
   // Reset internal state when a new dish is opened
   useEffect(() => {
@@ -150,6 +157,7 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
 
   // Handle ESC key to smoothly fly back to the menu
   useEffect(() => {
+    if (!dish) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
@@ -157,17 +165,11 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+  }, [dish, onClose]);
 
   if (!dish) return null;
 
   const tDish = getTranslatedDish(dish, selectedLanguage);
-
-  // Collect available photo angles (guaranteed multiple photos for every dish)
-  const photos = useMemo(() => {
-    return getDishGalleryImages(dish);
-  }, [dish]);
-
   const currentPhoto = photos[activePhotoIdx]?.src || dish.image_url;
 
   // Dietary and spice attributes
@@ -319,19 +321,18 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
           {/* ── LEFT: Spatial Hero Plinth & Edge-Lit Floating Shelf ── */}
           <div className="w-full md:w-1/2 flex flex-col items-center justify-center relative">
             
-            {/* The Floating Canvas with Framer Motion Shared Element */}
+            {/* The Floating Canvas */}
             <motion.div
-              layoutId={`dish-frame-${dish.id}`}
-              className="relative w-full aspect-square max-w-[270px] sm:max-w-md lg:max-w-lg rounded-2xl overflow-hidden bg-[#161517] border border-white/15 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] group"
+              initial={{ scale: 0.94, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
               transition={{ type: 'spring', stiffness: 320, damping: 30 }}
+              className="relative w-full aspect-square max-w-[270px] sm:max-w-md lg:max-w-lg rounded-2xl overflow-hidden bg-[#161517] border border-white/15 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] group"
             >
               {/* Hero Dish Image */}
-              <motion.img
-                layoutId={`dish-img-${dish.id}`}
+              <img
                 src={currentPhoto}
                 alt={tDish.name || dish.name}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                transition={{ type: 'spring', stiffness: 320, damping: 30 }}
               />
 
               {/* Monolithic Ambient Vignette */}
@@ -420,7 +421,7 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
               {/* Category & Serial Code */}
               <div className="flex items-center justify-between text-xs font-mono text-[#ab8980] border-b border-white/10 pb-3">
                 <span className="uppercase text-[#ffb955] tracking-widest">
-                  SILHOUETTE REF // {dish.id.slice(0, 8).toUpperCase()}
+                  SILHOUETTE REF // {String(dish.id || 'MENUZ-01').slice(0, 8).toUpperCase()}
                 </span>
                 <span className="text-[11px]">{isVeg ? 'VEGETARIAN' : 'NON-VEG'}</span>
               </div>

@@ -71,6 +71,18 @@ export class ErrorBoundary extends Component<Props, State> {
               <p className="text-xs sm:text-sm text-slate-400/80 leading-relaxed">
                 We encountered a temporary rendering interruption. All your restaurants, menus, orders, and table sessions remain completely safe and preserved.
               </p>
+              {this.state.error && (
+                <div className="mt-3 p-3 bg-red-950/40 border border-red-500/30 rounded-xl text-left font-mono text-[11px] text-red-300">
+                  <div className="font-bold text-red-200 mb-1">
+                    {this.state.error.name}: {this.state.error.message}
+                  </div>
+                  {this.state.error.stack && (
+                    <pre className="text-[10px] text-red-400/80 max-h-32 overflow-y-auto whitespace-pre-wrap">
+                      {this.state.error.stack}
+                    </pre>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="flex flex-col sm:flex-row gap-2.5 pt-2">

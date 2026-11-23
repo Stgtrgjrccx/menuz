@@ -86,22 +86,16 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
   };
 
   return (
-    <motion.div
-      layoutId={`dish-frame-${dish.id}`}
+    <div
       onClick={handleCardClick}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
       className={`relative w-full ${aspectRatioClass} rounded-xl sm:rounded-2xl overflow-hidden bg-[#18171a] border border-white/10 group-hover:border-[#ffb955]/60 transition-all duration-300 shadow-xl group-hover:shadow-[0_16px_36px_-6px_rgba(255,185,85,0.3)] select-none cursor-pointer`}
-      transition={{ type: 'spring', stiffness: 320, damping: 30 }}
     >
       {/* Active Photo */}
-      <motion.img
+      <img
         key={activeIdx}
-        layoutId={`dish-img-${dish.id}`}
-        initial={{ opacity: 0.85 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.2 }}
         src={photos[activeIdx] || dish.image_url}
         alt={dishNameDisplay || dish.name}
         className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
@@ -216,6 +210,6 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
           <span>{cartQuantity} in tray</span>
         </div>
       )}
-    </motion.div>
+    </div>
   );
 };
