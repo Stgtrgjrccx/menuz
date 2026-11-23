@@ -1,5 +1,6 @@
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { motion } from 'framer-motion';
 import { X, Flame, Sparkles, ShoppingBag, Plus, Minus, Maximize2, ArrowLeft } from 'lucide-react';
 import { MenuItem, SelectedOptionSnapshot } from '../types';
 import { useRestaurantStore } from '../store/restaurantStore';
@@ -32,53 +33,80 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
   // Pull / Scroll Down to Minimize tracking
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [pullY, setPullY] = useState(0);
-  const touchStartY = useRef<number | null>(null);
-  const touchStartX = useRef<number | null>(null);
-  const isPullingDown = useRef(false);
+  const hasTriggeredClose = useRef(false);
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    const scrollTop = scrollContainerRef.current ? scrollContainerRef.current.scrollTop : 0;
-    if (scrollTop <= 8) {
-      touchStartY.current = e.touches[0].clientY;
-      touchStartX.current = e.touches[0].clientX;
-      isPullingDown.current = true;
-    } else {
-      isPullingDown.current = false;
-    }
-  };
+  // Multi-channel Wheel listener (Desktop Mouse Wheel Down & Trackpad Pull-down)
+  useEffect(() => {
+    hasTriggeredClose.current = false;
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isPullingDown.current || touchStartY.current === null || touchStartX.current === null) return;
-    const currentY = e.touches[0].clientY;
-    const currentX = e.touches[0].clientX;
-    const diffY = currentY - touchStartY.current;
-    const diffX = currentX - touchStartX.current;
+    const handleGlobalWheel = (e: WheelEvent) => {
+      if (hasTriggeredClose.current) return;
+      const scrollTop = scrollContainerRef.current ? scrollContainerRef.current.scrollTop : 0;
+      if (scrollTop <= 15) {
+        if (e.deltaY > 15 || e.deltaY < -15) {
+          hasTriggeredClose.current = true;
+          onClose();
+        }
+      }
+    };
 
-    if (diffY > 0 && diffY > Math.abs(diffX)) {
-      const dampened = Math.min(diffY * 0.72, 220);
-      setPullY(dampened);
-    } else if (diffY < 0) {
+    window.addEventListener('wheel', handleGlobalWheel, { passive: true });
+    return () => {
+      window.removeEventListener('wheel', handleGlobalWheel);
+    };
+  }, [onClose]);
+
+  // Multi-channel Touch listener (Mobile Drag/Swipe from Up to Down)
+  useEffect(() => {
+    let startY = 0;
+    let startX = 0;
+    let canPull = false;
+
+    const onGlobalTouchStart = (e: TouchEvent) => {
+      const scrollTop = scrollContainerRef.current ? scrollContainerRef.current.scrollTop : 0;
+      if (scrollTop <= 20) {
+        startY = e.touches[0].clientY;
+        startX = e.touches[0].clientX;
+        canPull = true;
+      } else {
+        canPull = false;
+      }
+    };
+
+    const onGlobalTouchMove = (e: TouchEvent) => {
+      if (!canPull) return;
+      const currentY = e.touches[0].clientY;
+      const currentX = e.touches[0].clientX;
+      const diffY = currentY - startY;
+      const diffX = currentX - startX;
+
+      if (diffY > 12 && diffY > Math.abs(diffX)) {
+        setPullY(Math.min(diffY * 0.8, 180));
+      }
+    };
+
+    const onGlobalTouchEnd = (e: TouchEvent) => {
+      if (!canPull) return;
+      const currentY = e.changedTouches[0].clientY;
+      const diffY = currentY - startY;
+      if (diffY > 30 && !hasTriggeredClose.current) {
+        hasTriggeredClose.current = true;
+        onClose();
+      }
       setPullY(0);
-      isPullingDown.current = false;
-    }
-  };
+      canPull = false;
+    };
 
-  const handleTouchEnd = () => {
-    if (isPullingDown.current && pullY > 60) {
-      onClose();
-    }
-    setPullY(0);
-    isPullingDown.current = false;
-    touchStartY.current = null;
-    touchStartX.current = null;
-  };
+    window.addEventListener('touchstart', onGlobalTouchStart, { passive: true });
+    window.addEventListener('touchmove', onGlobalTouchMove, { passive: true });
+    window.addEventListener('touchend', onGlobalTouchEnd, { passive: true });
 
-  const handleWheel = (e: React.WheelEvent) => {
-    const scrollTop = scrollContainerRef.current ? scrollContainerRef.current.scrollTop : 0;
-    if (scrollTop <= 0 && e.deltaY < -16) {
-      onClose();
-    }
-  };
+    return () => {
+      window.removeEventListener('touchstart', onGlobalTouchStart);
+      window.removeEventListener('touchmove', onGlobalTouchMove);
+      window.removeEventListener('touchend', onGlobalTouchEnd);
+    };
+  }, [onClose]);
 
   if (!dish) return null;
 
@@ -153,10 +181,6 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
       >
         <div 
           ref={scrollContainerRef}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          onWheel={handleWheel}
           style={{
             transform: pullY > 0 ? `translateY(${pullY}px)` : undefined,
             opacity: pullY > 0 ? Math.max(0.4, 1 - pullY / 300) : 1,
@@ -166,13 +190,24 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
           onClick={(e) => e.stopPropagation()}
         >
           {/* Pull Down Indicator Handle */}
-          <div 
+          <motion.div 
+            drag="y"
+            dragConstraints={{ top: 0, bottom: 0 }}
+            dragElastic={0.6}
+            onDragEnd={(_, info) => {
+              if (info.offset.y > 20 || info.velocity.y > 100) {
+                onClose();
+              }
+            }}
             onClick={onClose}
-            className="w-full flex items-center justify-center pt-2 pb-1 bg-[#18171a] cursor-pointer group"
+            className="w-full flex flex-col items-center justify-center pt-2 pb-1.5 bg-[#18171a] cursor-pointer group touch-none"
             title="Scroll or pull down to minimize"
           >
-            <div className="w-12 h-1 rounded-full bg-white/20 group-hover:bg-[#ffb955] transition-colors" />
-          </div>
+            <div className="w-16 h-1.5 rounded-full bg-[#ffb955]/40 group-hover:bg-[#ffb955] transition-all shadow-sm" />
+            <span className="text-[10px] font-mono text-[#ffb955]/70 group-hover:text-[#ffb955] transition-colors mt-0.5 font-semibold">
+              ↓ Scroll or drag down to minimize
+            </span>
+          </motion.div>
 
           {/* Top Bar with Prominent Back to Menu Button */}
           <div className="relative pt-1.5 pb-2.5 px-4 flex items-center justify-between border-b border-white/10 bg-[#18171a]">

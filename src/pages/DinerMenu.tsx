@@ -39,6 +39,7 @@ import { DishDetailModal } from '../components/DishDetailModal';
 import { SpatialDishShowroomModal } from '../components/SpatialDishShowroomModal';
 import { DishCardImageGallery } from '../components/DishCardImageGallery';
 import { ImageLightboxModal } from '../components/ImageLightboxModal';
+import { getDishGalleryImages } from '../utils/dishPhotoUtils';
 import { CartDrawer } from '../components/CartDrawer';
 import { AiAssistantDrawer } from '../components/AiAssistantDrawer';
 import { OrderTrackerModal } from '../components/OrderTrackerModal';
@@ -156,28 +157,44 @@ export const DinerMenu: React.FC = () => {
 
   // Scoped dishes, categories, and tables for this restaurant
   const currentRestMenuItems = useMemo(() => {
+    let rawList: MenuItem[] = [];
     // 1. Check if this is an authentic Pune landmark with a scanned real-world menu blueprint
     const blueprint = findAuthenticPuneMenu(targetRestaurant.name, targetRestaurant.slug);
     if (blueprint) {
-      return generateCuisineMenu(
+      rawList = generateCuisineMenu(
         targetRestaurant.id,
         targetRestaurant.slug || 'menu',
         targetRestaurant.cuisine,
         targetRestaurant.name
       ).dishes;
+    } else {
+      // 2. Check if custom user-added items exist for this exact restaurant
+      const list = menuItems.filter((m) => m.restaurant_id === targetRestaurant.id);
+      if (list.length > 0) {
+        rawList = list;
+      } else {
+        // 3. Fallback to cuisine-specific generator
+        rawList = generateCuisineMenu(
+          targetRestaurant.id,
+          targetRestaurant.slug || 'menu',
+          targetRestaurant.cuisine,
+          targetRestaurant.name
+        ).dishes;
+      }
     }
 
-    // 2. Check if custom user-added items exist for this exact restaurant
-    const list = menuItems.filter((m) => m.restaurant_id === targetRestaurant.id);
-    if (list.length > 0) return list;
+    // Guarantee every single dish has multiple images for viewing
+    return rawList.map((dish) => {
+      const photos = getDishGalleryImages(dish);
+      const gallery = (Array.isArray(dish.gallery_images) && dish.gallery_images.length >= 3)
+        ? dish.gallery_images
+        : photos;
 
-    // 3. Fallback to cuisine-specific generator
-    return generateCuisineMenu(
-      targetRestaurant.id,
-      targetRestaurant.slug || 'menu',
-      targetRestaurant.cuisine,
-      targetRestaurant.name
-    ).dishes;
+      return {
+        ...dish,
+        gallery_images: gallery
+      };
+    });
   }, [menuItems, targetRestaurant]);
 
   const currentRestCategories = useMemo(() => {

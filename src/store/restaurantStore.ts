@@ -35,6 +35,7 @@ import {
 } from '../data/seedData';
 import { generateCuisineMenu } from '../data/cuisineMenuGenerator';
 import { cloudSyncManager } from '../lib/cloudSyncManager';
+import { getDishGalleryImages } from '../utils/dishPhotoUtils';
 
 
 export interface CartItem {
@@ -452,7 +453,10 @@ const cleanDishItem = (m: MenuItem, restNames: string[] = []): MenuItem => {
     ingredients: Array.isArray(m.ingredients) ? m.ingredients : [],
     allergens: Array.isArray(m.allergens) ? m.allergens : [],
     option_groups: Array.isArray(m.option_groups) ? m.option_groups : [],
-    is_available: m.is_available !== false
+    is_available: m.is_available !== false,
+    gallery_images: (Array.isArray(m.gallery_images) && m.gallery_images.length >= 3)
+      ? m.gallery_images
+      : getDishGalleryImages(m)
   };
 };
 

@@ -253,6 +253,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 2,
     serving_size: 'Serves 1–2 · 650g · Mild Spice',
     image_url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDAsLjblrxFEiA8Y_LoXXnjd9KkqzqzQ7-dNnZCQ-TmA0CCdiybNfOSZweMWqQdLixsw9WwHLGczE-KMtpBpClz_B9BbR_bZ2YOUrCm8QZdjgnYCrMCp_SmsqAcNL8rzpmRKvwBGa-yBW9Jyhm9rrqT7kdSrxba0RpyUrPp2KAHOSKkkfJGT8Iiy0JuQb9ZJlJI8JQLBAsNFl77Xrnqkx6hvrQj6_nKIji8lA22k8FQ',
+    gallery_images: [
+      { src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDAsLjblrxFEiA8Y_LoXXnjd9KkqzqzQ7-dNnZCQ-TmA0CCdiybNfOSZweMWqQdLixsw9WwHLGczE-KMtpBpClz_B9BbR_bZ2YOUrCm8QZdjgnYCrMCp_SmsqAcNL8rzpmRKvwBGa-yBW9Jyhm9rrqT7kdSrxba0RpyUrPp2KAHOSKkkfJGT8Iiy0JuQb9ZJlJI8JQLBAsNFl77Xrnqkx6hvrQj6_nKIji8lA22k8FQ', label: 'Royal Murgh Dum Biryani - Plating Presentation', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=800&auto=format&fit=crop', label: 'Royal Murgh Dum Biryani - Angle 02 Plating View', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=800&auto=format&fit=crop', label: 'Royal Murgh Dum Biryani - Angle 03 Texture & Garnish', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=800&auto=format&fit=crop', label: 'Royal Murgh Dum Biryani - Angle 04 Table Setting', code: '# 04' }
+    ],
     is_available: true,
     pairing_item_ids: ['item-bev-1'],
     chef_notes: 'Slow cooked in sealed copper handi. Pairs exquisitely with smoked saffron raita.',
@@ -272,6 +278,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 2,
     serving_size: '5 Skewered Cubes · Serves 2',
     image_url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD41C3kXbSyvV_zONkzQBB0paLcb7W3MdzFmwP1FEKDOm7BX2PwZ7coip1Gev93FTsCY6ed3JEdpxW2g3RkRmPKtxU3wHodqqutmPVlMN8mS8GvJVAja9Nl1tWtUiY-5rJ-Wl732GoSqpF84EszNQsCSfQO8yZd1NWjUQvwrKDXArl_MTAlKHNs9j1Q6qQ_V9ivPHQ9mOedqNE5Vu8nlVO0xlajxF6R3lmgchH1JJRq',
+    gallery_images: [
+      { src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD41C3kXbSyvV_zONkzQBB0paLcb7W3MdzFmwP1FEKDOm7BX2PwZ7coip1Gev93FTsCY6ed3JEdpxW2g3RkRmPKtxU3wHodqqutmPVlMN8mS8GvJVAja9Nl1tWtUiY-5rJ-Wl732GoSqpF84EszNQsCSfQO8yZd1NWjUQvwrKDXArl_MTAlKHNs9j1Q6qQ_V9ivPHQ9mOedqNE5Vu8nlVO0xlajxF6R3lmgchH1JJRq', label: 'Awadhi Paneer Tikka - Plating Presentation', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=800&auto=format&fit=crop', label: 'Awadhi Paneer Tikka - Angle 02 Plating View', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=800&auto=format&fit=crop', label: 'Awadhi Paneer Tikka - Angle 03 Texture & Garnish', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=800&auto=format&fit=crop', label: 'Awadhi Paneer Tikka - Angle 04 Table Setting', code: '# 04' }
+    ],
     is_available: true,
     pairing_item_ids: [],
     sort_order: 2
@@ -290,6 +302,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 3,
     serving_size: '4 Kebabs · 2 Sheermal',
     image_url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDir_wlWI_bV_OpGByV2sJsCKqjjjan30jN7wl94lczNEp_3skuXgjKeg1in6WWMKax_p6yxhBfYfyApPKJlHkDPdLuafRyh_CwMOmZ4mr4G6sDQgE82aW0T9Kd3iVc_w_BF5Yb8BA3PJyg72yUcS1v9eF5eXT614bowQxmwJC1kEoiQ-YlaKA0APrSf3zsqiWmDkr2-pLTBlpIwAXViuxHV2jG4GcDyDNKuYA9BJSV',
+    gallery_images: [
+      { src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDir_wlWI_bV_OpGByV2sJsCKqjjjan30jN7wl94lczNEp_3skuXgjKeg1in6WWMKax_p6yxhBfYfyApPKJlHkDPdLuafRyh_CwMOmZ4mr4G6sDQgE82aW0T9Kd3iVc_w_BF5Yb8BA3PJyg72yUcS1v9eF5eXT614bowQxmwJC1kEoiQ-YlaKA0APrSf3zsqiWmDkr2-pLTBlpIwAXViuxHV2jG4GcDyDNKuYA9BJSV', label: 'Galouti Kebab with Sheermal - Plating Presentation', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=800&auto=format&fit=crop', label: 'Galouti Kebab with Sheermal - Angle 02 Plating View', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop', label: 'Galouti Kebab with Sheermal - Angle 03 Texture & Garnish', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&auto=format&fit=crop', label: 'Galouti Kebab with Sheermal - Angle 04 Table Setting', code: '# 04' }
+    ],
     is_available: true,
     pairing_item_ids: [],
     sort_order: 3
@@ -308,6 +326,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 0,
     serving_size: 'Serves 2 · Contains Pistachio & Milk',
     image_url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCNluqJaEUf3-w1-fs5goVkxR8lTMJAiLKeF2sanlu6t5RjvNEe0Zgko5ta215hbFwpCUAUVYJ8M3r2N3IR7Vh1t2oOafxcDHREuhTyZe3JSbQnfIczKvbgLhTnLsc-0D2YOvW1aVS7PuDIl0JAg9ZhWSMULPPQgnNcDrkEKYHcvHjXbYSvPltBm6nSE3X9EtwBQq41Ha6gctmLXu2mfPwrkjB8ZR9qPOb-zPVRApOs',
+    gallery_images: [
+      { src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCNluqJaEUf3-w1-fs5goVkxR8lTMJAiLKeF2sanlu6t5RjvNEe0Zgko5ta215hbFwpCUAUVYJ8M3r2N3IR7Vh1t2oOafxcDHREuhTyZe3JSbQnfIczKvbgLhTnLsc-0D2YOvW1aVS7PuDIl0JAg9ZhWSMULPPQgnNcDrkEKYHcvHjXbYSvPltBm6nSE3X9EtwBQq41Ha6gctmLXu2mfPwrkjB8ZR9qPOb-zPVRApOs', label: 'Shahi Tukda & Rabdi Fondue - Plating Presentation', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800&auto=format&fit=crop', label: 'Shahi Tukda & Rabdi Fondue - Angle 02 Plating View', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=800&auto=format&fit=crop', label: 'Shahi Tukda & Rabdi Fondue - Angle 03 Texture & Garnish', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1587314168485-3236d6710814?w=800&auto=format&fit=crop', label: 'Shahi Tukda & Rabdi Fondue - Angle 04 Table Setting', code: '# 04' }
+    ],
     is_available: true,
     pairing_item_ids: [],
     sort_order: 4
@@ -352,6 +376,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 1,
     serving_size: '4 pieces',
     image_url: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&auto=format&fit=crop', label: 'Beetroot & Goat Cheese Tikki - Plating Presentation', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&auto=format&fit=crop', label: 'Beetroot & Goat Cheese Tikki - Angle 02 Plating View', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&auto=format&fit=crop', label: 'Beetroot & Goat Cheese Tikki - Angle 03 Texture & Garnish', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&auto=format&fit=crop', label: 'Beetroot & Goat Cheese Tikki - Angle 04 Table Setting', code: '# 04' }
+    ],
     is_available: true,
     pairing_item_ids: [],
     sort_order: 2
@@ -370,6 +400,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 3,
     serving_size: '2 clusters',
     image_url: 'https://images.unsplash.com/photo-1559742811-822873691df8?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1559742811-822873691df8?w=600&auto=format&fit=crop', label: 'Amritsari Soft Shell Crab - Plating Presentation', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=800&auto=format&fit=crop', label: 'Amritsari Soft Shell Crab - Angle 02 Plating View', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=800&auto=format&fit=crop', label: 'Amritsari Soft Shell Crab - Angle 03 Texture & Garnish', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&auto=format&fit=crop', label: 'Amritsari Soft Shell Crab - Angle 04 Table Setting', code: '# 04' }
+    ],
     is_available: true,
     pairing_item_ids: [],
     sort_order: 3
@@ -388,6 +424,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 1,
     serving_size: '1 bowl (Serves 1-2)',
     image_url: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop', label: 'Avocado & Pomelo Bhel - Plating Presentation', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&auto=format&fit=crop', label: 'Avocado & Pomelo Bhel - Angle 02 Plating View', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&auto=format&fit=crop', label: 'Avocado & Pomelo Bhel - Angle 03 Texture & Garnish', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&auto=format&fit=crop', label: 'Avocado & Pomelo Bhel - Angle 04 Table Setting', code: '# 04' }
+    ],
     is_available: true,
     pairing_item_ids: [],
     sort_order: 4
@@ -431,6 +473,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 3,
     serving_size: '6 pieces',
     image_url: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=600&auto=format&fit=crop', label: 'Bhatia Peshawari Murgh Tikka - Plating Presentation', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=800&auto=format&fit=crop', label: 'Bhatia Peshawari Murgh Tikka - Angle 02 Plating View', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop', label: 'Bhatia Peshawari Murgh Tikka - Angle 03 Texture & Garnish', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&auto=format&fit=crop', label: 'Bhatia Peshawari Murgh Tikka - Angle 04 Table Setting', code: '# 04' }
+    ],
     is_available: true,
     pairing_item_ids: ['item-bread-3'],
     sort_order: 2
@@ -449,6 +497,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 3,
     serving_size: '4 jumbo prawns',
     image_url: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&auto=format&fit=crop', label: 'Tandoori Jheenga (Jumbo Prawns) - Plating Presentation', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=800&auto=format&fit=crop', label: 'Tandoori Jheenga (Jumbo Prawns) - Angle 02 Plating View', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop', label: 'Tandoori Jheenga (Jumbo Prawns) - Angle 03 Texture & Garnish', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&auto=format&fit=crop', label: 'Tandoori Jheenga (Jumbo Prawns) - Angle 04 Table Setting', code: '# 04' }
+    ],
     is_available: true,
     pairing_item_ids: [],
     sort_order: 3
@@ -467,6 +521,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 2,
     serving_size: '4 kebabs',
     image_url: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=600&auto=format&fit=crop', label: 'Galouti Kebab on Sheermal - Plating Presentation', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=800&auto=format&fit=crop', label: 'Galouti Kebab on Sheermal - Angle 02 Plating View', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop', label: 'Galouti Kebab on Sheermal - Angle 03 Texture & Garnish', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&auto=format&fit=crop', label: 'Galouti Kebab on Sheermal - Angle 04 Table Setting', code: '# 04' }
+    ],
     is_available: false, // SOLD OUT DISH 1
     pairing_item_ids: [],
     sort_order: 4
@@ -552,6 +612,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 3,
     serving_size: 'Serves 2',
     image_url: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=600&auto=format&fit=crop', label: 'Raan-e-Awadh (Pulled Lamb Shank) - Plating Presentation', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&auto=format&fit=crop', label: 'Raan-e-Awadh (Pulled Lamb Shank) - Angle 02 Plating View', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&auto=format&fit=crop', label: 'Raan-e-Awadh (Pulled Lamb Shank) - Angle 03 Texture & Garnish', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&auto=format&fit=crop', label: 'Raan-e-Awadh (Pulled Lamb Shank) - Angle 04 Table Setting', code: '# 04' }
+    ],
     is_available: true,
     pairing_item_ids: ['item-bread-3'],
     sort_order: 3
@@ -570,6 +636,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 2,
     serving_size: 'Serves 2',
     image_url: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&auto=format&fit=crop', label: 'Paneer Lababdar - Plating Presentation', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=800&auto=format&fit=crop', label: 'Paneer Lababdar - Angle 02 Plating View', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=800&auto=format&fit=crop', label: 'Paneer Lababdar - Angle 03 Texture & Garnish', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=800&auto=format&fit=crop', label: 'Paneer Lababdar - Angle 04 Table Setting', code: '# 04' }
+    ],
     is_available: true,
     pairing_item_ids: ['item-bread-3'],
     sort_order: 4
@@ -588,6 +660,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 3,
     serving_size: 'Serves 2',
     image_url: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=600&auto=format&fit=crop', label: 'Alleppey Raw Mango Fish Curry - Plating Presentation', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=800&auto=format&fit=crop', label: 'Alleppey Raw Mango Fish Curry - Angle 02 Plating View', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=800&auto=format&fit=crop', label: 'Alleppey Raw Mango Fish Curry - Angle 03 Texture & Garnish', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&auto=format&fit=crop', label: 'Alleppey Raw Mango Fish Curry - Angle 04 Table Setting', code: '# 04' }
+    ],
     is_available: false, // SOLD OUT DISH 2
     pairing_item_ids: ['item-bread-2'],
     sort_order: 5
@@ -608,6 +686,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 3,
     serving_size: '1 clay handi (Serves 2)',
     image_url: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600&auto=format&fit=crop', label: 'Nizami Dum Mutton Biryani - Plating Presentation', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=800&auto=format&fit=crop', label: 'Nizami Dum Mutton Biryani - Angle 02 Plating View', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=800&auto=format&fit=crop', label: 'Nizami Dum Mutton Biryani - Angle 03 Texture & Garnish', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=800&auto=format&fit=crop', label: 'Nizami Dum Mutton Biryani - Angle 04 Table Setting', code: '# 04' }
+    ],
     is_available: true,
     pairing_item_ids: ['item-bev-1'],
     sort_order: 1
@@ -626,6 +710,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 1,
     serving_size: 'Serves 2',
     image_url: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600&auto=format&fit=crop', label: 'Smoked Wild Morel Pulao - Plating Presentation', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=800&auto=format&fit=crop', label: 'Smoked Wild Morel Pulao - Angle 02 Plating View', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=800&auto=format&fit=crop', label: 'Smoked Wild Morel Pulao - Angle 03 Texture & Garnish', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=800&auto=format&fit=crop', label: 'Smoked Wild Morel Pulao - Angle 04 Table Setting', code: '# 04' }
+    ],
     is_available: true,
     pairing_item_ids: ['item-curry-2'],
     sort_order: 2
@@ -644,6 +734,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 0,
     serving_size: '2 pieces',
     image_url: 'https://images.unsplash.com/photo-1626074353765-517a681e40be?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1626074353765-517a681e40be?w=800&auto=format&fit=crop', label: 'Artisanal Tandoori Naan - Blistered Tandoor Crust', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=800&auto=format&fit=crop', label: 'Artisanal Tandoori Naan - Fresh Churned Butter Glaze', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=800&auto=format&fit=crop', label: 'Artisanal Tandoori Naan - Clay Oven Baking View', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&auto=format&fit=crop', label: 'Artisanal Tandoori Naan - Table Presentation with Curries', code: '# 04' }
+    ],
     is_available: true,
     pairing_item_ids: ['item-curry-1', 'item-curry-2'],
     sort_order: 3,
@@ -679,6 +775,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 0,
     serving_size: '1 piece',
     image_url: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&auto=format&fit=crop', label: 'Layered Laccha Paratha - Plating Presentation', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=800&auto=format&fit=crop', label: 'Layered Laccha Paratha - Angle 02 Plating View', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=800&auto=format&fit=crop', label: 'Layered Laccha Paratha - Angle 03 Texture & Garnish', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&auto=format&fit=crop', label: 'Layered Laccha Paratha - Angle 04 Table Setting', code: '# 04' }
+    ],
     is_available: true,
     pairing_item_ids: ['item-curry-1'],
     sort_order: 4
@@ -699,6 +801,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 0,
     serving_size: '350 ml',
     image_url: 'https://images.unsplash.com/photo-1525385133512-2f3bdd039054?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1525385133512-2f3bdd039054?w=600&auto=format&fit=crop', label: 'Alphonso Mango & Cardamom Lassi - Plating Presentation', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=800&auto=format&fit=crop', label: 'Alphonso Mango & Cardamom Lassi - Angle 02 Plating View', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1556881286-fc6915169721?w=800&auto=format&fit=crop', label: 'Alphonso Mango & Cardamom Lassi - Angle 03 Texture & Garnish', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1536935338788-846bb9981813?w=800&auto=format&fit=crop', label: 'Alphonso Mango & Cardamom Lassi - Angle 04 Table Setting', code: '# 04' }
+    ],
     is_available: true,
     pairing_item_ids: ['item-curry-1', 'item-bread-1'],
     sort_order: 1
@@ -717,6 +825,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 0,
     serving_size: '1 bar',
     image_url: 'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=600&auto=format&fit=crop', label: 'Paan & Rose Petal Kulfi Pop - Plating Presentation', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800&auto=format&fit=crop', label: 'Paan & Rose Petal Kulfi Pop - Angle 02 Plating View', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=800&auto=format&fit=crop', label: 'Paan & Rose Petal Kulfi Pop - Angle 03 Texture & Garnish', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1587314168485-3236d6710814?w=800&auto=format&fit=crop', label: 'Paan & Rose Petal Kulfi Pop - Angle 04 Table Setting', code: '# 04' }
+    ],
     is_available: true,
     pairing_item_ids: [],
     sort_order: 2
@@ -735,6 +849,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 0,
     serving_size: '250 ml',
     image_url: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=600&auto=format&fit=crop', label: 'Smoked Kashmiri Kahwa - Plating Presentation', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=800&auto=format&fit=crop', label: 'Smoked Kashmiri Kahwa - Angle 02 Plating View', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1556881286-fc6915169721?w=800&auto=format&fit=crop', label: 'Smoked Kashmiri Kahwa - Angle 03 Texture & Garnish', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1536935338788-846bb9981813?w=800&auto=format&fit=crop', label: 'Smoked Kashmiri Kahwa - Angle 04 Table Setting', code: '# 04' }
+    ],
     is_available: true,
     pairing_item_ids: [],
     sort_order: 3
@@ -755,6 +875,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 0,
     serving_size: '1 Portion',
     image_url: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop', label: 'Burrata Pugliese con Pomodorini - Plating Presentation', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&auto=format&fit=crop', label: 'Burrata Pugliese con Pomodorini - Angle 02 Plating View', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&auto=format&fit=crop', label: 'Burrata Pugliese con Pomodorini - Angle 03 Texture & Garnish', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&auto=format&fit=crop', label: 'Burrata Pugliese con Pomodorini - Angle 04 Table Setting', code: '# 04' }
+    ],
     is_available: true,
     pairing_item_ids: ['item-cb-3'],
     chef_notes: 'Our burrata is flown in fresh weekly from artisanal cheesemakers in Puglia.',
@@ -798,6 +924,12 @@ export const SEED_MENU_ITEMS: MenuItem[] = [
     spice_level: 0,
     serving_size: '12-inch Pizza',
     image_url: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=600&auto=format&fit=crop',
+    gallery_images: [
+      { src: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=600&auto=format&fit=crop', label: 'Tartufo Nero & Wild Mushroom Pizza - Plating Presentation', code: '# 01' },
+      { src: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&auto=format&fit=crop', label: 'Tartufo Nero & Wild Mushroom Pizza - Angle 02 Plating View', code: '# 02' },
+      { src: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800&auto=format&fit=crop', label: 'Tartufo Nero & Wild Mushroom Pizza - Angle 03 Texture & Garnish', code: '# 03' },
+      { src: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&auto=format&fit=crop', label: 'Tartufo Nero & Wild Mushroom Pizza - Angle 04 Table Setting', code: '# 04' }
+    ],
     is_available: true,
     pairing_item_ids: [],
     chef_notes: 'Chef Alessandro’s signature Umbrian specialty.',

@@ -19,7 +19,7 @@ import {
 import { MenuItem, SelectedOptionSnapshot } from '../types';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { TRANSLATIONS, getTranslatedDish } from '../utils/i18n';
-import { getDishPhotos } from '../utils/dishPhotoUtils';
+import { getDishPhotos, getDishGalleryImages } from '../utils/dishPhotoUtils';
 
 interface SpatialDishShowroomModalProps {
   dish: MenuItem | null;
@@ -53,53 +53,83 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
   const touchStartY = useRef<number | null>(null);
   const touchStartX = useRef<number | null>(null);
   const isPullingDown = useRef(false);
+  const hasTriggeredClose = useRef(false);
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    const scrollTop = scrollContainerRef.current ? scrollContainerRef.current.scrollTop : 0;
-    // Only activate pull gesture if user is at the top of the detail page
-    if (scrollTop <= 8) {
-      touchStartY.current = e.touches[0].clientY;
-      touchStartX.current = e.touches[0].clientX;
-      isPullingDown.current = true;
-    } else {
-      isPullingDown.current = false;
-    }
-  };
+  // Multi-channel Wheel listener (Desktop Mouse Wheel Down & Trackpad Pull-down)
+  useEffect(() => {
+    hasTriggeredClose.current = false;
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isPullingDown.current || touchStartY.current === null || touchStartX.current === null) return;
-    const currentY = e.touches[0].clientY;
-    const currentX = e.touches[0].clientX;
-    const diffY = currentY - touchStartY.current;
-    const diffX = currentX - touchStartX.current;
+    const handleGlobalWheel = (e: WheelEvent) => {
+      if (hasTriggeredClose.current) return;
+      const scrollTop = scrollContainerRef.current ? scrollContainerRef.current.scrollTop : 0;
+      // When at top boundary of the modal:
+      if (scrollTop <= 15) {
+        // Scrolling down (standard mouse wheel down deltaY > 15) OR trackpad pull-down (deltaY < -15)
+        if (e.deltaY > 15 || e.deltaY < -15) {
+          hasTriggeredClose.current = true;
+          onClose();
+        }
+      }
+    };
 
-    // Detect pull down from top (downward drag exceeding horizontal drag)
-    if (diffY > 0 && diffY > Math.abs(diffX)) {
-      const dampened = Math.min(diffY * 0.72, 240);
-      setPullY(dampened);
-    } else if (diffY < 0) {
+    window.addEventListener('wheel', handleGlobalWheel, { passive: true });
+    return () => {
+      window.removeEventListener('wheel', handleGlobalWheel);
+    };
+  }, [onClose]);
+
+  // Multi-channel Touch listener (Mobile Drag/Swipe from Up to Down)
+  useEffect(() => {
+    let startY = 0;
+    let startX = 0;
+    let canPull = false;
+
+    const onGlobalTouchStart = (e: TouchEvent) => {
+      const scrollTop = scrollContainerRef.current ? scrollContainerRef.current.scrollTop : 0;
+      if (scrollTop <= 20) {
+        startY = e.touches[0].clientY;
+        startX = e.touches[0].clientX;
+        canPull = true;
+      } else {
+        canPull = false;
+      }
+    };
+
+    const onGlobalTouchMove = (e: TouchEvent) => {
+      if (!canPull) return;
+      const currentY = e.touches[0].clientY;
+      const currentX = e.touches[0].clientX;
+      const diffY = currentY - startY;
+      const diffX = currentX - startX;
+
+      // Downward drag (scrolling from up to down)
+      if (diffY > 12 && diffY > Math.abs(diffX)) {
+        setPullY(Math.min(diffY * 0.8, 200));
+      }
+    };
+
+    const onGlobalTouchEnd = (e: TouchEvent) => {
+      if (!canPull) return;
+      const currentY = e.changedTouches[0].clientY;
+      const diffY = currentY - startY;
+      if (diffY > 30 && !hasTriggeredClose.current) {
+        hasTriggeredClose.current = true;
+        onClose();
+      }
       setPullY(0);
-      isPullingDown.current = false;
-    }
-  };
+      canPull = false;
+    };
 
-  const handleTouchEnd = () => {
-    if (isPullingDown.current && pullY > 60) {
-      onClose();
-    }
-    setPullY(0);
-    isPullingDown.current = false;
-    touchStartY.current = null;
-    touchStartX.current = null;
-  };
+    window.addEventListener('touchstart', onGlobalTouchStart, { passive: true });
+    window.addEventListener('touchmove', onGlobalTouchMove, { passive: true });
+    window.addEventListener('touchend', onGlobalTouchEnd, { passive: true });
 
-  const handleWheel = (e: React.WheelEvent) => {
-    const scrollTop = scrollContainerRef.current ? scrollContainerRef.current.scrollTop : 0;
-    // When at the very top, scrolling from up to down (trackpad downward drag: negative deltaY) triggers minimize
-    if (scrollTop <= 0 && e.deltaY < -16) {
-      onClose();
-    }
-  };
+    return () => {
+      window.removeEventListener('touchstart', onGlobalTouchStart);
+      window.removeEventListener('touchmove', onGlobalTouchMove);
+      window.removeEventListener('touchend', onGlobalTouchEnd);
+    };
+  }, [onClose]);
 
   // Reset internal state when a new dish is opened
   useEffect(() => {
@@ -109,6 +139,7 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
       setActivePhotoIdx(0);
       setAddedPuff(false);
       setPullY(0);
+      hasTriggeredClose.current = false;
     }
   }, [dish?.id]);
 
@@ -127,16 +158,10 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
 
   const tDish = getTranslatedDish(dish, selectedLanguage);
 
-  // Collect available photo angles (guaranteed 3-4 photos for every dish)
-  const dishPhotos = useMemo(() => (dish ? getDishPhotos(dish) : []), [dish]);
-  const photos = useMemo(
-    () =>
-      dishPhotos.map((src, idx) => ({
-        src,
-        label: idx === 0 ? 'Plating View 01' : `Angle 0${idx + 1}`
-      })),
-    [dishPhotos]
-  );
+  // Collect available photo angles (guaranteed multiple photos for every dish)
+  const photos = useMemo(() => {
+    return getDishGalleryImages(dish);
+  }, [dish]);
 
   const currentPhoto = photos[activePhotoIdx]?.src || dish.image_url;
 
@@ -191,10 +216,6 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
     <AnimatePresence>
       <div 
         ref={scrollContainerRef}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-        onWheel={handleWheel}
         className="fixed inset-0 z-50 overflow-y-auto bg-[#0a090b]/95 backdrop-blur-xl flex flex-col items-center justify-start select-none"
         style={{
           transform: pullY > 0 ? `translateY(${pullY}px)` : undefined,
@@ -224,14 +245,25 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
           transition={{ duration: 0.3 }}
           className="sticky top-0 z-50 w-full bg-[#0d0c0e]/95 backdrop-blur-md border-b border-white/10 shadow-lg px-4 pt-1.5 pb-3"
         >
-          {/* Pull Down Indicator Handle */}
-          <div 
+          {/* Pull Down to Minimize Handle Bar */}
+          <motion.div 
+            drag="y"
+            dragConstraints={{ top: 0, bottom: 0 }}
+            dragElastic={0.6}
+            onDragEnd={(_, info) => {
+              if (info.offset.y > 20 || info.velocity.y > 100) {
+                onClose();
+              }
+            }}
             onClick={onClose}
-            className="w-full flex items-center justify-center pb-1.5 cursor-pointer group"
-            title="Scroll or pull down to minimize and return to menu"
+            className="w-full flex flex-col items-center justify-center pt-0.5 pb-2 cursor-pointer group touch-none"
+            title="Scroll down, pull down, or click to minimize"
           >
-            <div className="w-12 h-1 rounded-full bg-white/25 group-hover:bg-[#ffb955] transition-colors" />
-          </div>
+            <div className="w-16 sm:w-20 h-1.5 rounded-full bg-[#ffb955]/50 group-hover:bg-[#ffb955] transition-all shadow-[0_0_8px_rgba(255,185,85,0.4)]" />
+            <span className="text-[10px] font-mono text-[#ffb955]/80 group-hover:text-[#ffb955] transition-colors mt-1 font-semibold flex items-center gap-1">
+              <span>↓</span> Scroll or pull down to minimize
+            </span>
+          </motion.div>
 
           <div className="w-full max-w-6xl mx-auto flex items-center justify-between text-xs font-mono tracking-wider text-[#ab8980]">
             <div className="flex items-center gap-3">
