@@ -28,14 +28,24 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
   const photos = useMemo(() => getDishPhotos(dish), [dish]);
   const [activeIdx, setActiveIdx] = useState(0);
 
-  // Swipe gesture tracking (touch swipe horizontally toggles photos)
+  // Swipe gesture & single-tap detection
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
+  const touchStartTime = useRef<number>(0);
   const wasSwiping = useRef(false);
+  const lastModalOpenTime = useRef<number>(0);
+
+  const triggerOpenModal = () => {
+    // 400ms debounce prevents synthetic click from double firing after touch
+    if (Date.now() - lastModalOpenTime.current < 400) return;
+    lastModalOpenTime.current = Date.now();
+    onOpenModal();
+  };
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
+    touchStartTime.current = Date.now();
     wasSwiping.current = false;
   };
 
@@ -47,6 +57,7 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
     if (touchStartX.current === null || touchStartY.current === null) return;
     const diffX = e.changedTouches[0].clientX - touchStartX.current;
     const diffY = e.changedTouches[0].clientY - touchStartY.current;
+    const elapsed = Date.now() - touchStartTime.current;
 
     // Only set wasSwiping if there was an actual deliberate horizontal swipe (> 35px)
     if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY) * 1.3) {
@@ -58,6 +69,10 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
         setActiveIdx((prev) => (prev - 1 + photos.length) % photos.length);
       }
       wasSwiping.current = true;
+    } else if (Math.abs(diffX) < 18 && Math.abs(diffY) < 18 && elapsed < 450) {
+      // Direct clean single tap (< 18px jitter, < 450ms) -> Open modal immediately on 1 tap!
+      wasSwiping.current = false;
+      triggerOpenModal();
     } else {
       wasSwiping.current = false;
     }
@@ -72,7 +87,7 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
       wasSwiping.current = false;
       return;
     }
-    onOpenModal();
+    triggerOpenModal();
   };
 
   const handlePrev = (e: React.MouseEvent) => {
@@ -139,6 +154,11 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
           type="button"
           aria-label="Favorite"
           onClick={(e) => onToggleFavorite(dish.id, e)}
+          onTouchStart={(e) => e.stopPropagation()}
+          onTouchEnd={(e) => {
+            e.stopPropagation();
+            onToggleFavorite(dish.id, e as any);
+          }}
           className={`absolute top-2 right-2 sm:top-3 sm:right-3 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-black/70 backdrop-blur-md border border-white/10 flex items-center justify-center transition-colors cursor-pointer z-20 ${
             isFav ? 'text-red-500' : 'text-white/70 hover:text-red-400'
           }`}
@@ -158,16 +178,18 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
           <button
             type="button"
             onClick={handlePrev}
+            onTouchStart={(e) => e.stopPropagation()}
             aria-label="Previous photo"
-            className="absolute left-1.5 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-black/60 hover:bg-black/85 text-white/80 hover:text-white backdrop-blur-md border border-white/15 hidden group-hover:flex items-center justify-center transition-opacity cursor-pointer z-20 shadow-md"
+            className="absolute left-1.5 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-black/60 hover:bg-black/85 text-white/80 hover:text-white backdrop-blur-md border border-white/15 hidden md:group-hover:flex items-center justify-center transition-opacity cursor-pointer z-20 shadow-md"
           >
             <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
           <button
             type="button"
             onClick={handleNext}
+            onTouchStart={(e) => e.stopPropagation()}
             aria-label="Next photo"
-            className="absolute right-1.5 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-black/60 hover:bg-black/85 text-white/80 hover:text-white backdrop-blur-md border border-white/15 hidden group-hover:flex items-center justify-center transition-opacity cursor-pointer z-20 shadow-md"
+            className="absolute right-1.5 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-black/60 hover:bg-black/85 text-white/80 hover:text-white backdrop-blur-md border border-white/15 hidden md:group-hover:flex items-center justify-center transition-opacity cursor-pointer z-20 shadow-md"
           >
             <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
@@ -182,6 +204,11 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
             e.stopPropagation();
             setActiveIdx((prev) => (prev + 1) % photos.length);
           }}
+          onTouchStart={(e) => e.stopPropagation()}
+          onTouchEnd={(e) => {
+            e.stopPropagation();
+            setActiveIdx((prev) => (prev + 1) % photos.length);
+          }}
           title="Toggle photos"
         >
           {photos.map((_, dotIdx) => (
@@ -189,6 +216,11 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
               key={dotIdx}
               type="button"
               onClick={(e) => {
+                e.stopPropagation();
+                setActiveIdx(dotIdx);
+              }}
+              onTouchStart={(e) => e.stopPropagation()}
+              onTouchEnd={(e) => {
                 e.stopPropagation();
                 setActiveIdx(dotIdx);
               }}
