@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -19,6 +19,7 @@ import {
 import { MenuItem, SelectedOptionSnapshot } from '../types';
 import { useRestaurantStore } from '../store/restaurantStore';
 import { TRANSLATIONS, getTranslatedDish } from '../utils/i18n';
+import { getDishPhotos } from '../utils/dishPhotoUtils';
 
 interface SpatialDishShowroomModalProps {
   dish: MenuItem | null;
@@ -46,6 +47,60 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
   const [activePhotoIdx, setActivePhotoIdx] = useState(0);
   const [addedPuff, setAddedPuff] = useState(false);
 
+  // Pull / Scroll Down to Minimize tracking
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [pullY, setPullY] = useState(0);
+  const touchStartY = useRef<number | null>(null);
+  const touchStartX = useRef<number | null>(null);
+  const isPullingDown = useRef(false);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const scrollTop = scrollContainerRef.current ? scrollContainerRef.current.scrollTop : 0;
+    // Only activate pull gesture if user is at the top of the detail page
+    if (scrollTop <= 8) {
+      touchStartY.current = e.touches[0].clientY;
+      touchStartX.current = e.touches[0].clientX;
+      isPullingDown.current = true;
+    } else {
+      isPullingDown.current = false;
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isPullingDown.current || touchStartY.current === null || touchStartX.current === null) return;
+    const currentY = e.touches[0].clientY;
+    const currentX = e.touches[0].clientX;
+    const diffY = currentY - touchStartY.current;
+    const diffX = currentX - touchStartX.current;
+
+    // Detect pull down from top (downward drag exceeding horizontal drag)
+    if (diffY > 0 && diffY > Math.abs(diffX)) {
+      const dampened = Math.min(diffY * 0.72, 240);
+      setPullY(dampened);
+    } else if (diffY < 0) {
+      setPullY(0);
+      isPullingDown.current = false;
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (isPullingDown.current && pullY > 60) {
+      onClose();
+    }
+    setPullY(0);
+    isPullingDown.current = false;
+    touchStartY.current = null;
+    touchStartX.current = null;
+  };
+
+  const handleWheel = (e: React.WheelEvent) => {
+    const scrollTop = scrollContainerRef.current ? scrollContainerRef.current.scrollTop : 0;
+    // When at the very top, scrolling from up to down (trackpad downward drag: negative deltaY) triggers minimize
+    if (scrollTop <= 0 && e.deltaY < -16) {
+      onClose();
+    }
+  };
+
   // Reset internal state when a new dish is opened
   useEffect(() => {
     if (dish) {
@@ -53,6 +108,7 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
       setSelectedOptions({});
       setActivePhotoIdx(0);
       setAddedPuff(false);
+      setPullY(0);
     }
   }, [dish?.id]);
 
@@ -71,23 +127,16 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
 
   const tDish = getTranslatedDish(dish, selectedLanguage);
 
-  // Collect available photo angles
-  const photos: { src: string; label: string }[] = [];
-  if (dish.gallery_images && dish.gallery_images.length > 0) {
-    dish.gallery_images.forEach((g, idx) => {
-      photos.push({
-        src: g.src,
-        label: g.label || g.alt || `Angle 0${idx + 1}`
-      });
-    });
-  } else if (dish.image_url) {
-    photos.push({ src: dish.image_url, label: 'Plating View 01' });
-  }
-
-  // Ensure primary photo is present at index 0
-  if (dish.image_url && !photos.some((p) => p.src === dish.image_url)) {
-    photos.unshift({ src: dish.image_url, label: 'Plating View 01' });
-  }
+  // Collect available photo angles (guaranteed 3-4 photos for every dish)
+  const dishPhotos = useMemo(() => (dish ? getDishPhotos(dish) : []), [dish]);
+  const photos = useMemo(
+    () =>
+      dishPhotos.map((src, idx) => ({
+        src,
+        label: idx === 0 ? 'Plating View 01' : `Angle 0${idx + 1}`
+      })),
+    [dishPhotos]
+  );
 
   const currentPhoto = photos[activePhotoIdx]?.src || dish.image_url;
 
@@ -140,7 +189,19 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
 
   return createPortal(
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 overflow-y-auto bg-[#0a090b]/95 backdrop-blur-xl flex flex-col items-center justify-start select-none">
+      <div 
+        ref={scrollContainerRef}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onWheel={handleWheel}
+        className="fixed inset-0 z-50 overflow-y-auto bg-[#0a090b]/95 backdrop-blur-xl flex flex-col items-center justify-start select-none"
+        style={{
+          transform: pullY > 0 ? `translateY(${pullY}px)` : undefined,
+          opacity: pullY > 0 ? Math.max(0.4, 1 - pullY / 350) : 1,
+          transition: pullY === 0 ? 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease-out' : 'none',
+        }}
+      >
         
         {/* Ambient Dark Slate Background with Warm Culinary Light Spotlight */}
         <div 
@@ -161,8 +222,17 @@ export const SpatialDishShowroomModal: React.FC<SpatialDishShowroomModalProps> =
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
-          className="sticky top-0 z-50 w-full bg-[#0d0c0e]/95 backdrop-blur-md border-b border-white/10 shadow-lg px-4 py-3"
+          className="sticky top-0 z-50 w-full bg-[#0d0c0e]/95 backdrop-blur-md border-b border-white/10 shadow-lg px-4 pt-1.5 pb-3"
         >
+          {/* Pull Down Indicator Handle */}
+          <div 
+            onClick={onClose}
+            className="w-full flex items-center justify-center pb-1.5 cursor-pointer group"
+            title="Scroll or pull down to minimize and return to menu"
+          >
+            <div className="w-12 h-1 rounded-full bg-white/25 group-hover:bg-[#ffb955] transition-colors" />
+          </div>
+
           <div className="w-full max-w-6xl mx-auto flex items-center justify-between text-xs font-mono tracking-wider text-[#ab8980]">
             <div className="flex items-center gap-3">
               <button

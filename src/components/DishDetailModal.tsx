@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Flame, Sparkles, ShoppingBag, Plus, Minus, Maximize2, ArrowLeft } from 'lucide-react';
 import { MenuItem, SelectedOptionSnapshot } from '../types';
@@ -6,6 +6,7 @@ import { useRestaurantStore } from '../store/restaurantStore';
 import { DishHoverExpandGallery } from './DishHoverExpandGallery';
 import { ImageLightboxModal } from './ImageLightboxModal';
 import { TRANSLATIONS, getTranslatedDish } from '../utils/i18n';
+import { getDishPhotos } from '../utils/dishPhotoUtils';
 
 interface DishDetailModalProps {
   dish: MenuItem | null;
@@ -28,20 +29,71 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
   const [activePhotoIdx, setActivePhotoIdx] = useState(0);
   const addItemToCart = useRestaurantStore((state) => state.addItemToCart);
 
+  // Pull / Scroll Down to Minimize tracking
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [pullY, setPullY] = useState(0);
+  const touchStartY = useRef<number | null>(null);
+  const touchStartX = useRef<number | null>(null);
+  const isPullingDown = useRef(false);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const scrollTop = scrollContainerRef.current ? scrollContainerRef.current.scrollTop : 0;
+    if (scrollTop <= 8) {
+      touchStartY.current = e.touches[0].clientY;
+      touchStartX.current = e.touches[0].clientX;
+      isPullingDown.current = true;
+    } else {
+      isPullingDown.current = false;
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isPullingDown.current || touchStartY.current === null || touchStartX.current === null) return;
+    const currentY = e.touches[0].clientY;
+    const currentX = e.touches[0].clientX;
+    const diffY = currentY - touchStartY.current;
+    const diffX = currentX - touchStartX.current;
+
+    if (diffY > 0 && diffY > Math.abs(diffX)) {
+      const dampened = Math.min(diffY * 0.72, 220);
+      setPullY(dampened);
+    } else if (diffY < 0) {
+      setPullY(0);
+      isPullingDown.current = false;
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (isPullingDown.current && pullY > 60) {
+      onClose();
+    }
+    setPullY(0);
+    isPullingDown.current = false;
+    touchStartY.current = null;
+    touchStartX.current = null;
+  };
+
+  const handleWheel = (e: React.WheelEvent) => {
+    const scrollTop = scrollContainerRef.current ? scrollContainerRef.current.scrollTop : 0;
+    if (scrollTop <= 0 && e.deltaY < -16) {
+      onClose();
+    }
+  };
+
   if (!dish) return null;
 
   const tDish = getTranslatedDish(dish, selectedLanguage);
 
-  // Extract all photos attached to dish
-  const modalPhotos: { src: string; label?: string }[] = [];
-  if (dish.gallery_images && dish.gallery_images.length > 0) {
-    dish.gallery_images.forEach((g) => modalPhotos.push({ src: g.src, label: g.label || g.alt }));
-  } else if (dish.image_url) {
-    modalPhotos.push({ src: dish.image_url, label: 'Main View' });
-  }
-  if (dish.image_url && !modalPhotos.some((p) => p.src === dish.image_url)) {
-    modalPhotos.unshift({ src: dish.image_url, label: 'Main View' });
-  }
+  // Extract all photos attached to dish (guaranteed 3-4 photos)
+  const dishPhotos = useMemo(() => (dish ? getDishPhotos(dish) : []), [dish]);
+  const modalPhotos: { src: string; label?: string }[] = useMemo(
+    () =>
+      dishPhotos.map((src, idx) => ({
+        src,
+        label: idx === 0 ? 'Main View' : `View 0${idx + 1}`
+      })),
+    [dishPhotos]
+  );
 
   const currentHeroPhoto = modalPhotos[activePhotoIdx]?.src || dish.image_url;
 
@@ -95,13 +147,35 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
 
   return createPortal(
     <>
-      <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end justify-center">
+      <div 
+        onClick={onClose}
+        className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end justify-center"
+      >
         <div 
+          ref={scrollContainerRef}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onWheel={handleWheel}
+          style={{
+            transform: pullY > 0 ? `translateY(${pullY}px)` : undefined,
+            opacity: pullY > 0 ? Math.max(0.4, 1 - pullY / 300) : 1,
+            transition: pullY === 0 ? 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease-out' : 'none',
+          }}
           className="bg-[#131315] text-[#e5e1e4] rounded-t-3xl max-w-xl w-full max-h-[92vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-200 border border-white/10 shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
+          {/* Pull Down Indicator Handle */}
+          <div 
+            onClick={onClose}
+            className="w-full flex items-center justify-center pt-2 pb-1 bg-[#18171a] cursor-pointer group"
+            title="Scroll or pull down to minimize"
+          >
+            <div className="w-12 h-1 rounded-full bg-white/20 group-hover:bg-[#ffb955] transition-colors" />
+          </div>
+
           {/* Top Bar with Prominent Back to Menu Button */}
-          <div className="relative pt-3 pb-2.5 px-4 flex items-center justify-between border-b border-white/10 bg-[#18171a]">
+          <div className="relative pt-1.5 pb-2.5 px-4 flex items-center justify-between border-b border-white/10 bg-[#18171a]">
             <button
               type="button"
               onClick={onClose}
