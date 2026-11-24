@@ -181,8 +181,18 @@ const server = http.createServer(async (req, res) => {
         const { role, passcode, restaurantId } = JSON.parse(body || '{}');
 
         if (role === 'admin') {
+          // No built-in fallback list: this repository is public, so any default
+          // passphrase shipped here is a published credential. With the variable
+          // unset we fail closed — the rest of the API keeps serving, only
+          // privileged login is refused until the operator configures it.
           const envPasscode = process.env.HQ_ADMIN_PASSPHRASE;
-          const validPasscodes = envPasscode ? [envPasscode.trim().toLowerCase()] : ['menuz2026', 'admin123', 'menuz', '8888', 'menuz@admin', 'menuz2025'];
+          if (!envPasscode || !envPasscode.trim()) {
+            console.error('[auth] HQ_ADMIN_PASSPHRASE is not set — refusing all admin logins.');
+            res.writeHead(503, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ success: false, error: 'Master Admin login is not configured on this server.' }));
+            return;
+          }
+          const validPasscodes = [envPasscode.trim().toLowerCase()];
           if (!passcode || !validPasscodes.includes(passcode.trim().toLowerCase())) {
             res.writeHead(401, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ success: false, error: 'Invalid Master Admin passphrase. Access denied.' }));
@@ -199,8 +209,16 @@ const server = http.createServer(async (req, res) => {
 
         if (role === 'owner' || role === 'manager') {
           const envPin = process.env.RESTAURANT_PARTNER_PIN;
-          const validPins = envPin ? [envPin.trim().toLowerCase()] : ['owner123', 'menuz', 'manager', 'partner', '8888'];
-          if (passcode && !validPins.includes(passcode.trim().toLowerCase())) {
+          if (!envPin || !envPin.trim()) {
+            console.error('[auth] RESTAURANT_PARTNER_PIN is not set — refusing all owner/manager logins.');
+            res.writeHead(503, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ success: false, error: 'Restaurant Partner login is not configured on this server.' }));
+            return;
+          }
+          const validPins = [envPin.trim().toLowerCase()];
+          // `passcode &&` here let a request with NO passcode fall straight through
+          // and be issued an owner session. It must be `!passcode ||`.
+          if (!passcode || !validPins.includes(passcode.trim().toLowerCase())) {
             res.writeHead(401, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ success: false, error: 'Invalid Restaurant Partner credentials.' }));
             return;
@@ -529,14 +547,22 @@ Menuz Master Admin HQ provides platform administrators with real-time control ac
     }
   }
 
+  // A request for a real file (anything with an extension) must fall through to the
+  // static block below. Otherwise /customer/assets/app.js is answered with index.html
+  // as text/html, and the browser refuses the module over its MIME type — which blanks
+  // the whole customer app.
+  const looksLikeAsset =
+    /\.[a-z0-9]+$/i.test(url.pathname) && url.pathname !== '/index.html';
+
   // Zone 3: Customer Dining & Discovery (/customer, /customer/*, /, /menu, /r/*)
   if (
-    url.pathname === '/customer' ||
-    url.pathname.startsWith('/customer/') ||
-    url.pathname === '/' ||
-    url.pathname === '/index.html' ||
-    url.pathname.startsWith('/r/') ||
-    url.pathname.startsWith('/menu')
+    !looksLikeAsset &&
+    (url.pathname === '/customer' ||
+      url.pathname.startsWith('/customer/') ||
+      url.pathname === '/' ||
+      url.pathname === '/index.html' ||
+      url.pathname.startsWith('/r/') ||
+      url.pathname.startsWith('/menu'))
   ) {
     const custSubDir = path.join(__dirname, 'dist-combined', 'customer', 'index.html');
     const custFile = fs.existsSync(custSubDir) ? custSubDir : path.join(__dirname, 'dist-combined', 'index.html');
@@ -554,6 +580,9 @@ Menuz Master Admin HQ provides platform administrators with real-time control ac
     path.join(__dirname, 'dist-combined'),
     path.join(__dirname, 'dist-combined', 'hq'),
     path.join(__dirname, 'dist-combined', 'owner'),
+    // Without this, /customer/assets/*.js falls through to the SPA fallback and is
+    // served as text/html, so the customer app renders a blank page.
+    path.join(__dirname, 'dist-combined', 'customer'),
     path.join(__dirname, 'dist'),
     path.join(__dirname, 'public'),
     path.join(__dirname)

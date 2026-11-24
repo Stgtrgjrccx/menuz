@@ -107,7 +107,10 @@ export const SEED_RESTAURANT: Restaurant = {
 
 export const SEED_CASA_BELLA: Restaurant = {
   id: 'rest-casa-bella-02',
-  slug: 'casa-bella',
+  // Must match the slug database.js seeds for this venue: the server is the source
+  // of truth for the slug printed into every QR standee. If the two disagree, a
+  // scanned QR resolves to nothing.
+  slug: 'casa-bella-trattoria',
   name: 'Casa Bella Trattoria',
   cuisine: 'Artisanal Italian Trattoria',
   location: 'Koregaon Park, Pune',
