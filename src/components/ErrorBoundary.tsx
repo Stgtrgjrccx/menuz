@@ -58,26 +58,26 @@ export class ErrorBoundary extends Component<Props, State> {
       }
 
       return (
-        <div className="min-h-screen bg-[#090D16]/[0.03] flex items-center justify-center p-4">
-          <div className="max-w-md w-full bg-[#0D1322] rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/[0.08] text-center space-y-5 animate-in fade-in zoom-in-95 duration-200">
-            <div className="w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center mx-auto text-amber-600 border border-amber-200/80 shadow-inner">
+        <div className="min-h-screen bg-[#FFFFFF]/[0.03] flex items-center justify-center p-4">
+          <div className="max-w-md w-full bg-[#F5F1E8] rounded-3xl p-6 sm:p-8 shadow-2xl border border-black/[0.08] text-center space-y-5 animate-in fade-in zoom-in-95 duration-200">
+            <div className="w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center mx-auto text-amber-600 border border-[#F4511E]/80 shadow-inner">
               <AlertTriangle className="w-8 h-8 animate-pulse" />
             </div>
 
             <div className="space-y-2">
-              <h2 className="font-serif text-xl sm:text-2xl font-bold text-white">
+              <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#141414]">
                 Application Interruption Recovered
               </h2>
-              <p className="text-xs sm:text-sm text-slate-400/80 leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#6E6E6E]/80 leading-relaxed">
                 We encountered a temporary rendering interruption. All your restaurants, menus, orders, and table sessions remain completely safe and preserved.
               </p>
               {this.state.error && (
-                <div className="mt-3 p-3 bg-red-950/40 border border-red-500/30 rounded-xl text-left font-mono text-[11px] text-red-300">
-                  <div className="font-bold text-red-200 mb-1">
+                <div className="mt-3 p-3 bg-red-950/40 border border-red-500/30 rounded-xl text-left font-mono text-[11px] text-[#C23A1C]">
+                  <div className="font-bold text-[#C23A1C] mb-1">
                     {this.state.error.name}: {this.state.error.message}
                   </div>
                   {this.state.error.stack && (
-                    <pre className="text-[10px] text-red-400/80 max-h-32 overflow-y-auto whitespace-pre-wrap">
+                    <pre className="text-[10px] text-[#C23A1C]/80 max-h-32 overflow-y-auto whitespace-pre-wrap">
                       {this.state.error.stack}
                     </pre>
                   )}
@@ -89,7 +89,7 @@ export class ErrorBoundary extends Component<Props, State> {
               <button
                 type="button"
                 onClick={this.handleReset}
-                className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-[#090D16] text-white rounded-xl text-xs sm:text-sm font-semibold hover:bg-[#0D1322] transition-all shadow-md active:scale-95 cursor-pointer"
+                className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-[#FFFFFF] text-[#141414] rounded-xl text-xs sm:text-sm font-semibold hover:bg-[#F5F1E8] transition-all shadow-md active:scale-95 cursor-pointer"
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Reload View
@@ -97,7 +97,7 @@ export class ErrorBoundary extends Component<Props, State> {
               <button
                 type="button"
                 onClick={this.handleGoHome}
-                className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-[#090D16]/[0.04] text-white border border-white/[0.08] rounded-xl text-xs sm:text-sm font-semibold hover:bg-white/[0.06] transition-all active:scale-95 cursor-pointer"
+                className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-[#FFFFFF]/[0.04] text-[#141414] border border-black/[0.08] rounded-xl text-xs sm:text-sm font-semibold hover:bg-black/[0.04] transition-all active:scale-95 cursor-pointer"
               >
                 <Home className="w-4 h-4 mr-2" />
                 Go to Home
@@ -107,18 +107,18 @@ export class ErrorBoundary extends Component<Props, State> {
             <button
               type="button"
               onClick={this.handleSafeRecovery}
-              className="text-[11px] text-slate-400 hover:text-amber-400 transition-colors underline cursor-pointer"
+              className="text-[11px] text-[#6E6E6E] hover:text-[#2D4A3E] transition-colors underline cursor-pointer"
             >
               Safe restart to Home (preserves all restaurant data &amp; orders)
             </button>
 
             {(typeof import.meta !== 'undefined' && import.meta.env?.DEV) && this.state.error && (
-              <details className="text-left text-[11px] bg-[#090D16] text-emerald-400 p-3 rounded-xl overflow-x-auto mt-4 font-mono">
-                <summary className="cursor-pointer text-gray-400 font-semibold mb-1">
+              <details className="text-left text-[11px] bg-[#FFFFFF] text-[#2F7A4F] p-3 rounded-xl overflow-x-auto mt-4 font-mono">
+                <summary className="cursor-pointer text-[#6E6E6E] font-semibold mb-1">
                   Technical Diagnostics
                 </summary>
-                <p className="font-bold text-rose-400">{this.state.error.toString()}</p>
-                <pre className="mt-2 whitespace-pre-wrap text-[10px] text-gray-400">
+                <p className="font-bold text-[#C23A1C]">{this.state.error.toString()}</p>
+                <pre className="mt-2 whitespace-pre-wrap text-[10px] text-[#6E6E6E]">
                   {this.state.errorInfo?.componentStack}
                 </pre>
               </details>

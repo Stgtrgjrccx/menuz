@@ -24,7 +24,7 @@ test('2. Restaurant CRUD and Slug resolution', async () => {
     tax_rate_percent: 5.0,
     ordering_enabled: true,
     is_menuz_partner: true,
-    brand_colors: { primary: '#10B981', background: '#090D16', text: '#FFFFFF' }
+    brand_colors: { primary: '#10B981', background: '#FFFFFF', text: '#FFFFFF' }
   };
 
   const saved = await db.upsertRestaurant(testRest);

@@ -42,7 +42,7 @@ export const CustomerNavbar: React.FC = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-[#131315]/90 backdrop-blur-md border-b border-white/5 transition-all text-[#e5e1e4]">
+      <header className="sticky top-0 z-50 bg-[#FFFFFF]/90 backdrop-blur-md border-b border-black/5 transition-all text-[#141414]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
           
           {/* Brand */}
@@ -51,27 +51,27 @@ export const CustomerNavbar: React.FC = () => {
             className="flex items-center space-x-2.5 group focus:outline-none"
             aria-label="Menuz Home"
           >
-            <div className="w-8 h-8 rounded-full bg-[#ff5722] flex items-center justify-center text-white shadow-md shadow-[#ff5722]/20">
+            <div className="w-8 h-8 rounded-full bg-[#F4511E] flex items-center justify-center text-white shadow-md shadow-[#F4511E]/20">
               <span className="font-serif font-bold text-sm tracking-tight">M</span>
             </div>
-            <span className="font-serif font-black tracking-tight text-[#e5e1e4] text-xl sm:text-2xl">
+            <span className="font-serif font-black tracking-tight text-[#141414] text-xl sm:text-2xl">
               menuz
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6 text-sm font-medium text-[#e5e1e4]/80">
+          <nav className="hidden md:flex items-center space-x-6 text-sm font-medium text-[#141414]/80">
             <Link
               to="/menu"
-              className="hover:text-[#ffb955] transition-colors cursor-pointer flex items-center gap-1.5"
+              className="hover:text-[#2D4A3E] transition-colors cursor-pointer flex items-center gap-1.5"
             >
-              <UtensilsCrossed className="w-3.5 h-3.5 text-[#ffb955]" />
+              <UtensilsCrossed className="w-3.5 h-3.5 text-[#2D4A3E]" />
               <span>Showroom Menu</span>
             </Link>
             <button
               type="button"
               onClick={() => scrollToSection('restaurants')}
-              className="hover:text-[#e5e1e4] transition-colors cursor-pointer"
+              className="hover:text-[#141414] transition-colors cursor-pointer"
             >
               Restaurants
             </button>
@@ -85,15 +85,15 @@ export const CustomerNavbar: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setLangMenuOpen(!langMenuOpen)}
-                className="w-10 h-10 rounded-full bg-[#201f21] hover:bg-[#2a2a2c] border border-white/10 text-[#e5e1e4] flex items-center justify-center transition-all cursor-pointer shadow-sm"
+                className="w-10 h-10 rounded-full bg-[#F5F1E8] hover:bg-[#EFE9DD] border border-black/10 text-[#141414] flex items-center justify-center transition-all cursor-pointer shadow-sm"
                 title="Change Language"
                 aria-label="Change Language"
               >
-                <Languages className="w-4 h-4 text-[#e5e1e4]" />
+                <Languages className="w-4 h-4 text-[#141414]" />
               </button>
 
               {langMenuOpen && (
-                <div className="absolute right-0 mt-2 w-44 rounded-2xl bg-[#201f21] border border-white/10 shadow-2xl p-1.5 z-50 text-[#e5e1e4]">
+                <div className="absolute right-0 mt-2 w-44 rounded-2xl bg-[#F5F1E8] border border-black/10 shadow-2xl p-1.5 z-50 text-[#141414]">
                   {SUPPORTED_LANGUAGES.map((lang) => (
                     <button
                       key={lang.code}
@@ -104,12 +104,12 @@ export const CustomerNavbar: React.FC = () => {
                       }}
                       className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs text-left transition-colors cursor-pointer ${
                         selectedLanguage === lang.code
-                          ? 'bg-[#ff5722]/20 text-[#ffb5a0] font-bold'
-                          : 'text-[#e5e1e4]/80 hover:bg-[#2a2a2c]'
+                          ? 'bg-[#F4511E]/20 text-[#F4511E] font-bold'
+                          : 'text-[#141414]/80 hover:bg-[#EFE9DD]'
                       }`}
                     >
                       <span>{lang.label}</span>
-                      {selectedLanguage === lang.code && <Check className="w-3.5 h-3.5 text-[#ff5722]" />}
+                      {selectedLanguage === lang.code && <Check className="w-3.5 h-3.5 text-[#F4511E]" />}
                     </button>
                   ))}
                 </div>
@@ -120,11 +120,11 @@ export const CustomerNavbar: React.FC = () => {
             <button
               type="button"
               onClick={() => window.dispatchEvent(new CustomEvent('open-ai-assistant'))}
-              className="h-10 px-3 sm:px-4 rounded-full bg-[#201f21] hover:bg-[#2a2a2c] text-[#e5e1e4] border border-[#ff5722] font-semibold text-xs sm:text-sm flex items-center space-x-1.5 transition-all shadow-sm cursor-pointer"
+              className="h-10 px-3 sm:px-4 rounded-full bg-[#F5F1E8] hover:bg-[#EFE9DD] text-[#141414] border border-[#F4511E] font-semibold text-xs sm:text-sm flex items-center space-x-1.5 transition-all shadow-sm cursor-pointer"
               title="Ask Chef AI Dining Concierge"
               aria-label="Ask Chef AI"
             >
-              <Sparkles className="w-3.5 h-3.5 text-[#ff5722]" />
+              <Sparkles className="w-3.5 h-3.5 text-[#F4511E]" />
               <span>Chef AI</span>
               <span className="w-1.5 h-1.5 rounded-full bg-[#88d982] animate-pulse hidden sm:inline" />
             </button>
@@ -133,7 +133,7 @@ export const CustomerNavbar: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsQrScannerOpen(true)}
-              className="h-10 px-3.5 sm:px-5 rounded-full bg-[#ff5722] hover:bg-[#ff7043] active:scale-[0.98] text-white font-medium text-xs sm:text-sm flex items-center space-x-1.5 sm:space-x-2 transition-all shadow-md shadow-[#ff5722]/25 cursor-pointer"
+              className="h-10 px-3.5 sm:px-5 rounded-full bg-[#F4511E] hover:bg-[#F4511E] active:scale-[0.98] text-white font-medium text-xs sm:text-sm flex items-center space-x-1.5 sm:space-x-2 transition-all shadow-md shadow-[#F4511E]/25 cursor-pointer"
               aria-label="Scan Table QR Code"
             >
               <QrCode className="w-4 h-4" />
@@ -145,7 +145,7 @@ export const CustomerNavbar: React.FC = () => {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden w-10 h-10 rounded-full bg-[#201f21] hover:bg-[#2a2a2c] border border-white/10 text-[#e5e1e4] flex items-center justify-center transition-all cursor-pointer"
+              className="md:hidden w-10 h-10 rounded-full bg-[#F5F1E8] hover:bg-[#EFE9DD] border border-black/10 text-[#141414] flex items-center justify-center transition-all cursor-pointer"
               aria-label={mobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <MenuIcon className="w-5 h-5" />}
@@ -155,22 +155,22 @@ export const CustomerNavbar: React.FC = () => {
 
         {/* Mobile Menu Drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden px-4 pt-2 pb-4 border-t border-white/5 bg-[#131315]/95 backdrop-blur-md flex flex-col space-y-1 text-sm font-medium text-[#e5e1e4]">
+          <div className="md:hidden px-4 pt-2 pb-4 border-t border-black/5 bg-[#FFFFFF]/95 backdrop-blur-md flex flex-col space-y-1 text-sm font-medium text-[#141414]">
             <Link
               to="/menu"
               onClick={() => setMobileMenuOpen(false)}
-              className="py-2.5 px-3 text-left rounded-xl hover:bg-[#201f21] transition-colors flex items-center justify-between text-[#ffb955] font-semibold"
+              className="py-2.5 px-3 text-left rounded-xl hover:bg-[#F5F1E8] transition-colors flex items-center justify-between text-[#2D4A3E] font-semibold"
             >
               <span className="flex items-center space-x-2">
-                <UtensilsCrossed className="w-4 h-4 text-[#ffb955]" />
+                <UtensilsCrossed className="w-4 h-4 text-[#2D4A3E]" />
                 <span>Showroom Menu</span>
               </span>
-              <span className="text-[10px] bg-[#ffb955]/20 text-[#ffb955] px-2 py-0.5 rounded-full font-mono">Live</span>
+              <span className="text-[10px] bg-[#F4511E]/20 text-[#2D4A3E] px-2 py-0.5 rounded-full font-mono">Live</span>
             </Link>
             <button
               type="button"
               onClick={() => scrollToSection('restaurants')}
-              className="py-2.5 px-3 text-left rounded-xl hover:bg-[#201f21] transition-colors"
+              className="py-2.5 px-3 text-left rounded-xl hover:bg-[#F5F1E8] transition-colors"
             >
               Featured Restaurants
             </button>
@@ -180,10 +180,10 @@ export const CustomerNavbar: React.FC = () => {
                 setMobileMenuOpen(false);
                 window.dispatchEvent(new CustomEvent('open-ai-assistant'));
               }}
-              className="py-2.5 px-3 text-left rounded-xl bg-[#ff5722]/15 hover:bg-[#ff5722]/25 transition-colors flex items-center justify-between font-bold text-[#e5e1e4]"
+              className="py-2.5 px-3 text-left rounded-xl bg-[#F4511E]/15 hover:bg-[#F4511E]/25 transition-colors flex items-center justify-between font-bold text-[#141414]"
             >
               <span className="flex items-center space-x-2">
-                <Sparkles className="w-4 h-4 text-[#ff5722]" />
+                <Sparkles className="w-4 h-4 text-[#F4511E]" />
                 <span>Ask Chef AI Assistant</span>
               </span>
             </button>

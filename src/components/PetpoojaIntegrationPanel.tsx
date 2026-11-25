@@ -138,20 +138,20 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
   };
 
   return (
-    <div className="bg-[#0D1322] rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+    <div className="bg-[#F5F1E8] rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
       {/* Top Banner */}
-      <div className="bg-gradient-to-r from-orange-600 via-amber-600 to-amber-700 text-white p-6">
+      <div className="bg-gradient-to-r from-[#F4511E] via-[#F4511E] to-[#F4511E] text-white p-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center space-x-2.5 mb-2">
               <span className="bg-white text-orange-700 text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-sm">
                 Official POS Bridge
               </span>
-              <span className="bg-orange-500/40 text-white text-[11px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1">
+              <span className="bg-[#F4511E]/40 text-[#141414] text-[11px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1">
                 <ShieldCheck className="w-3 h-3" /> Petpooja Certified JSON Spec
               </span>
             </div>
-            <h2 className="text-2xl font-serif font-bold text-white tracking-tight">
+            <h2 className="text-2xl font-serif font-bold text-[#141414] tracking-tight">
               Petpooja POS Direct Kitchen Dispatch
             </h2>
             <p className="text-sm text-orange-100 max-w-xl mt-1">
@@ -159,27 +159,27 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
             </p>
           </div>
 
-          <div className="flex items-center gap-2 bg-black/20 backdrop-blur-xs p-3 rounded-xl border border-white/10 self-start md:self-auto">
+          <div className="flex items-center gap-2 bg-black/20 backdrop-blur-xs p-3 rounded-xl border border-black/10 self-start md:self-auto">
             <div className={`w-3 h-3 rounded-full ${config.enabled ? 'bg-emerald-400 animate-pulse' : 'bg-gray-400'}`} />
             <div>
               <div className="text-xs font-bold leading-none">
                 {config.enabled ? 'POS Link Active' : 'POS Link Paused'}
               </div>
-              <div className="text-[10px] text-orange-200 mt-0.5">
-                RestID: <code className="font-mono text-white">{config.rest_id}</code>
+              <div className="text-[10px] text-[#C23A1C] mt-0.5">
+                RestID: <code className="font-mono text-[#141414]">{config.rest_id}</code>
               </div>
             </div>
           </div>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex space-x-2 mt-6 border-t border-white/20 pt-4">
+        <div className="flex space-x-2 mt-6 border-t border-black/20 pt-4">
           <button
             onClick={() => setActiveTab('simulator')}
             className={`px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all ${
               activeTab === 'simulator'
                 ? 'bg-white text-orange-800 shadow-sm'
-                : 'text-white/80 hover:bg-white/10'
+                : 'text-[#141414]/80 hover:bg-black/[0.06]'
             }`}
           >
             <Printer className="w-3.5 h-3.5" /> Live KOT Simulator
@@ -189,7 +189,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
             className={`px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all ${
               activeTab === 'credentials'
                 ? 'bg-white text-orange-800 shadow-sm'
-                : 'text-white/80 hover:bg-white/10'
+                : 'text-[#141414]/80 hover:bg-black/[0.06]'
             }`}
           >
             <Sliders className="w-3.5 h-3.5" /> API Keys & Credentials
@@ -199,7 +199,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
             className={`px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all ${
               activeTab === 'guide'
                 ? 'bg-white text-orange-800 shadow-sm'
-                : 'text-white/80 hover:bg-white/10'
+                : 'text-[#141414]/80 hover:bg-black/[0.06]'
             }`}
           >
             <HelpCircle className="w-3.5 h-3.5" /> Pilot Onboarding Guide (Option 3)
@@ -214,7 +214,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* Left Controls */}
             <div className="lg:col-span-6 space-y-6">
-              <div className="bg-amber-50/60 border border-amber-200 rounded-xl p-4">
+              <div className="bg-amber-50/60 border border-[#F4511E] rounded-xl p-4">
                 <h3 className="font-bold text-sm text-amber-950 flex items-center gap-2">
                   <Zap className="w-4 h-4 text-amber-600" /> Test Kitchen KOT Dispatch
                 </h3>
@@ -230,7 +230,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
                     <select
                       value={simTable}
                       onChange={(e) => setSimTable(e.target.value)}
-                      className="w-full text-xs font-medium border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-orange-500 bg-[#090D16]"
+                      className="w-full text-xs font-medium border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-[#F4511E] bg-[#FFFFFF]"
                     >
                       <option value="Table 1 (Indoor)">Table 1 (Indoor)</option>
                       <option value="Table 2 (Indoor)">Table 2 (Indoor)</option>
@@ -245,7 +245,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
                       type="text"
                       value={simDinerName}
                       onChange={(e) => setSimDinerName(e.target.value)}
-                      className="w-full text-xs font-medium border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-orange-500 bg-[#090D16]"
+                      className="w-full text-xs font-medium border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-[#F4511E] bg-[#FFFFFF]"
                     />
                   </div>
                 </div>
@@ -268,7 +268,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
                         onChange={(e) => setIncludeFoodReward(e.target.checked)}
                         className="sr-only peer"
                       />
-                      <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-orange-600"></div>
+                      <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#F4511E]"></div>
                     </label>
                   </div>
 
@@ -281,14 +281,14 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
                 </div>
 
                 {/* Items Preview */}
-                <div className="border border-gray-200 rounded-xl p-3 bg-[#090D16] space-y-2">
+                <div className="border border-gray-200 rounded-xl p-3 bg-[#FFFFFF] space-y-2">
                   <div className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
                     Basket Summary (3 Items)
                   </div>
                   {sampleOrder.items.map((it, idx) => (
                     <div key={idx} className="flex justify-between items-center text-xs py-1 border-b border-gray-100 last:border-0">
                       <div>
-                        <span className="font-semibold text-gray-900">{it.quantity}x {it.item_name_snapshot}</span>
+                        <span className="font-semibold text-[#141414]">{it.quantity}x {it.item_name_snapshot}</span>
                         {it.selected_options_snapshot.length > 0 && (
                           <span className="text-[10px] text-gray-500 block">
                             ↳ {it.selected_options_snapshot.map((o) => o.name).join(', ')}
@@ -308,7 +308,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
                   type="button"
                   disabled={isFiringKot}
                   onClick={handleTestKot}
-                  className="w-full py-3.5 px-4 bg-orange-600 hover:bg-orange-700 disabled:bg-gray-300 text-white rounded-xl font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
+                  className="w-full py-3.5 px-4 bg-[#F4511E] hover:bg-[#F4511E] disabled:bg-gray-300 text-white rounded-xl font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
                 >
                   {isFiringKot ? (
                     <>
@@ -341,11 +341,11 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
 
               {/* Thermal Paper Styling */}
               {showJsonPayload && lastReceipt ? (
-                <div className="bg-gray-900 text-emerald-400 p-4 rounded-xl font-mono text-[11px] overflow-x-auto max-h-[480px]">
+                <div className="bg-[#F5F1E8] text-[#2F7A4F] p-4 rounded-xl font-mono text-[11px] overflow-x-auto max-h-[480px]">
                   <pre>{JSON.stringify(lastReceipt.raw_payload, null, 2)}</pre>
                 </div>
               ) : (
-                <div className="bg-amber-50/30 border-2 border-dashed border-gray-300 rounded-xl p-5 shadow-sm font-mono text-xs text-gray-900 leading-relaxed max-w-md mx-auto">
+                <div className="bg-amber-50/30 border-2 border-dashed border-gray-300 rounded-xl p-5 shadow-sm font-mono text-xs text-[#141414] leading-relaxed max-w-md mx-auto">
                   {lastReceipt ? (
                     <div>
                       {/* Thermal Receipt Header */}
@@ -433,7 +433,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
                     </div>
                   ) : (
                     <div className="text-center py-16 text-gray-500 space-y-2">
-                      <Printer className="w-10 h-10 mx-auto text-gray-400" />
+                      <Printer className="w-10 h-10 mx-auto text-[#6E6E6E]" />
                       <p className="font-bold text-gray-700">No KOT Printed Yet</p>
                       <p className="text-xs max-w-xs mx-auto">
                         Click the orange <strong>"⚡ Fire KOT into Petpooja Kitchen Station"</strong> button on the left to simulate a live printout.
@@ -451,7 +451,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
           <div className="max-w-2xl space-y-6">
             <div className="flex items-center justify-between pb-4 border-b border-gray-200">
               <div>
-                <h3 className="font-bold text-base text-gray-900">Petpooja API Configuration</h3>
+                <h3 className="font-bold text-base text-[#141414]">Petpooja API Configuration</h3>
                 <p className="text-xs text-gray-500">
                   Enter the credentials provided by the restaurant or Petpooja partner support.
                 </p>
@@ -465,7 +465,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
                     onChange={(e) => setConfig({ ...config, enabled: e.target.checked })}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-600"></div>
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#F4511E]"></div>
                 </label>
               </div>
             </div>
@@ -478,7 +478,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
                   value={config.rest_id}
                   onChange={(e) => setConfig({ ...config, rest_id: e.target.value })}
                   placeholder="e.g. pp_pune_saffron_01 or 123456"
-                  className="w-full p-2.5 border border-gray-300 rounded-lg font-mono focus:ring-2 focus:ring-orange-500"
+                  className="w-full p-2.5 border border-gray-300 rounded-lg font-mono focus:ring-2 focus:ring-[#F4511E]"
                 />
                 <span className="text-[11px] text-gray-500 mt-0.5 block">
                   The unique outlet code assigned to this branch in Petpooja's database.
@@ -493,7 +493,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
                     value={config.app_key}
                     onChange={(e) => setConfig({ ...config, app_key: e.target.value })}
                     placeholder="Enter App Key"
-                    className="w-full p-2.5 border border-gray-300 rounded-lg font-mono focus:ring-2 focus:ring-orange-500"
+                    className="w-full p-2.5 border border-gray-300 rounded-lg font-mono focus:ring-2 focus:ring-[#F4511E]"
                   />
                 </div>
                 <div>
@@ -503,7 +503,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
                     value={config.app_secret}
                     onChange={(e) => setConfig({ ...config, app_secret: e.target.value })}
                     placeholder="Enter App Secret"
-                    className="w-full p-2.5 border border-gray-300 rounded-lg font-mono focus:ring-2 focus:ring-orange-500"
+                    className="w-full p-2.5 border border-gray-300 rounded-lg font-mono focus:ring-2 focus:ring-[#F4511E]"
                   />
                 </div>
               </div>
@@ -517,7 +517,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
                       name="env"
                       checked={config.environment === 'sandbox'}
                       onChange={() => setConfig({ ...config, environment: 'sandbox' })}
-                      className="text-orange-600 focus:ring-orange-500"
+                      className="text-orange-600 focus:ring-[#F4511E]"
                     />
                     <span>Sandbox / Staging (Testing & Simulation)</span>
                   </label>
@@ -527,7 +527,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
                       name="env"
                       checked={config.environment === 'production'}
                       onChange={() => setConfig({ ...config, environment: 'production' })}
-                      className="text-orange-600 focus:ring-orange-500"
+                      className="text-orange-600 focus:ring-[#F4511E]"
                     />
                     <span className="font-bold text-emerald-700">Production (Live Kitchen Printer)</span>
                   </label>
@@ -538,7 +538,7 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
                 <button
                   type="button"
                   onClick={handleSaveConfig}
-                  className="px-6 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-lg transition-colors flex items-center gap-2"
+                  className="px-6 py-2.5 bg-[#F4511E] hover:bg-[#F4511E] text-white font-bold rounded-lg transition-colors flex items-center gap-2"
                 >
                   <CheckCircle2 className="w-4 h-4" /> Save POS Credentials
                 </button>
@@ -566,12 +566,12 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
 
             <div className="space-y-4">
               {/* Step 1 */}
-              <div className="flex gap-4 items-start p-4 bg-[#090D16] border border-gray-200 rounded-xl">
+              <div className="flex gap-4 items-start p-4 bg-[#FFFFFF] border border-gray-200 rounded-xl">
                 <div className="w-8 h-8 rounded-full bg-orange-100 text-orange-700 font-black flex items-center justify-center shrink-0 text-sm">
                   1
                 </div>
                 <div>
-                  <h4 className="font-bold text-sm text-gray-900">The Restaurant Owner Asks Their Account Manager</h4>
+                  <h4 className="font-bold text-sm text-[#141414]">The Restaurant Owner Asks Their Account Manager</h4>
                   <p className="text-xs text-gray-600 mt-1 leading-relaxed">
                     Every Petpooja restaurant in Pune has a local field account manager (or POS support WhatsApp group). The owner simply sends:
                   </p>
@@ -582,12 +582,12 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
               </div>
 
               {/* Step 2 */}
-              <div className="flex gap-4 items-start p-4 bg-[#090D16] border border-gray-200 rounded-xl">
+              <div className="flex gap-4 items-start p-4 bg-[#FFFFFF] border border-gray-200 rounded-xl">
                 <div className="w-8 h-8 rounded-full bg-orange-100 text-orange-700 font-black flex items-center justify-center shrink-0 text-sm">
                   2
                 </div>
                 <div>
-                  <h4 className="font-bold text-sm text-gray-900">Petpooja Whitelists Menuz on that Outlet</h4>
+                  <h4 className="font-bold text-sm text-[#141414]">Petpooja Whitelists Menuz on that Outlet</h4>
                   <p className="text-xs text-gray-600 mt-1 leading-relaxed">
                     Petpooja emails the keys to the restaurant owner or displays them in their merchant back-office at <code>petpooja.com/dashboard/integrations</code>.
                   </p>
@@ -595,12 +595,12 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
               </div>
 
               {/* Step 3 */}
-              <div className="flex gap-4 items-start p-4 bg-[#090D16] border border-gray-200 rounded-xl">
+              <div className="flex gap-4 items-start p-4 bg-[#FFFFFF] border border-gray-200 rounded-xl">
                 <div className="w-8 h-8 rounded-full bg-orange-100 text-orange-700 font-black flex items-center justify-center shrink-0 text-sm">
                   3
                 </div>
                 <div>
-                  <h4 className="font-bold text-sm text-gray-900">Paste Credentials into Menuz</h4>
+                  <h4 className="font-bold text-sm text-[#141414]">Paste Credentials into Menuz</h4>
                   <p className="text-xs text-gray-600 mt-1 leading-relaxed">
                     In the <strong>Credentials</strong> tab above, you paste their <code>RestID</code>, <code>App Key</code>, and <code>App Secret</code>, then flip the switch to <strong>Production</strong>.
                   </p>
@@ -608,12 +608,12 @@ export const PetpoojaIntegrationPanel: React.FC<PetpoojaIntegrationPanelProps> =
               </div>
 
               {/* Step 4 */}
-              <div className="flex gap-4 items-start p-4 bg-[#090D16] border border-gray-200 rounded-xl">
+              <div className="flex gap-4 items-start p-4 bg-[#FFFFFF] border border-gray-200 rounded-xl">
                 <div className="w-8 h-8 rounded-full bg-orange-100 text-orange-700 font-black flex items-center justify-center shrink-0 text-sm">
                   4
                 </div>
                 <div>
-                  <h4 className="font-bold text-sm text-gray-900">1-Click "Sync Menu" & Live KOT Printing</h4>
+                  <h4 className="font-bold text-sm text-[#141414]">1-Click "Sync Menu" & Live KOT Printing</h4>
                   <p className="text-xs text-gray-600 mt-1 leading-relaxed">
                     Menuz pulls their active dishes, prices, and categories into our QR menu. Any customer ordering at the table immediately prints at their kitchen counter with zero manual punching!
                   </p>

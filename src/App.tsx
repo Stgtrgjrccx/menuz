@@ -119,7 +119,7 @@ export const App: React.FC = () => {
     // Configure native status bar & splash screen on native devices
     try {
       StatusBar.setStyle({ style: Style.Dark }).catch(() => {});
-      StatusBar.setBackgroundColor({ color: '#090D16' }).catch(() => {});
+      StatusBar.setBackgroundColor({ color: '#141414' }).catch(() => {});
       SplashScreen.hide().catch(() => {});
     } catch (e) {}
   }, []);
@@ -127,7 +127,7 @@ export const App: React.FC = () => {
   return (
     <HashRouter>
       <RouteSEOManager />
-      <div className="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col bg-[#090D16] text-slate-100 font-sans antialiased selection:bg-amber-500/20 selection:text-amber-200">
+      <div className="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col bg-[#FFFFFF] text-[#141414] font-sans antialiased selection:bg-[#F4511E]/20 selection:text-[#2D4A3E]">
         <ReturnToHqBanner />
         <Navbar />
         <div className="flex-1">

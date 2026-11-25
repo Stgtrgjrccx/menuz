@@ -79,7 +79,7 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
   // Games Config
   const [slices, setSlices] = useState<GameSliceConfig[]>(
     existingConfig?.games?.spin_wheel?.slices || [
-      { id: '1', label: '15% Off Bill', reward: '15% Off Total Bill', emoji: '🎉', color: '#F59E0B', probabilityWeight: 30 },
+      { id: '1', label: '15% Off Bill', reward: '15% Off Total Bill', emoji: '🎉', color: '#2D4A3E', probabilityWeight: 30 },
       { id: '2', label: 'Free Dessert', reward: 'Free Chef Dessert Treat', emoji: '🍨', color: '#EC4899', probabilityWeight: 25 },
       { id: '3', label: '10% Off Bill', reward: '10% Bill Discount', emoji: '✨', color: '#10B981', probabilityWeight: 25 },
       { id: '4', label: 'Free Beverage', reward: 'Free Signature Drink', emoji: '🥤', color: '#3B82F6', probabilityWeight: 12 },
@@ -212,15 +212,15 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
 
   return (
     <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl overflow-y-auto pt-[max(env(safe-area-inset-top,20px),24px)] pb-12 px-3 sm:px-6 flex justify-center items-start overscroll-contain animate-in fade-in duration-150">
-      <div className="bg-[#0D1322] rounded-3xl max-w-4xl w-full shadow-2xl p-4 sm:p-7 relative space-y-4 sm:space-y-6 border border-amber-500/30 text-white my-2 sm:my-6">
+      <div className="bg-[#F5F1E8] rounded-3xl max-w-4xl w-full shadow-2xl p-4 sm:p-7 relative space-y-4 sm:space-y-6 border border-[#F4511E]/30 text-[#141414] my-2 sm:my-6">
         
         {/* Top Header */}
-        <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-white/[0.08] gap-2">
+        <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-black/[0.08] gap-2">
           <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-slate-200 hover:text-white font-bold text-xs border border-white/[0.1] transition-all cursor-pointer flex-shrink-0"
+              className="inline-flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-black/[0.04] hover:bg-black/[0.04] text-[#3A3A3A] hover:text-[#141414] font-bold text-xs border border-black/[0.1] transition-all cursor-pointer flex-shrink-0"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back</span>
@@ -228,11 +228,11 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
             <div className="min-w-0">
               <div className="flex items-center space-x-2">
                 <span className="text-xl sm:text-2xl">⭐</span>
-                <h3 className="font-serif font-black text-base sm:text-xl text-white truncate">
+                <h3 className="font-serif font-black text-base sm:text-xl text-[#141414] truncate">
                   Google Reviews &amp; Win Challenge Portal
                 </h3>
               </div>
-              <p className="text-[10px] sm:text-xs text-slate-400 truncate">
+              <p className="text-[10px] sm:text-xs text-[#6E6E6E] truncate">
                 Configure rewards, discounts, and custom interactive games for {restaurant.name}
               </p>
             </div>
@@ -240,21 +240,21 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 sm:p-2 rounded-full bg-white/[0.06] hover:bg-white/[0.15] text-slate-300 hover:text-white transition-colors cursor-pointer flex-shrink-0"
+            className="p-1.5 sm:p-2 rounded-full bg-black/[0.04] hover:bg-black/[0.04] text-[#4A4A4A] hover:text-[#141414] transition-colors cursor-pointer flex-shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* 3 Portal Tabs */}
-        <div className="grid grid-cols-3 gap-1.5 p-1 bg-white/[0.04] rounded-2xl border border-white/[0.08] text-xs font-bold text-center">
+        <div className="grid grid-cols-3 gap-1.5 p-1 bg-black/[0.04] rounded-2xl border border-black/[0.08] text-xs font-bold text-center">
           <button
             type="button"
             onClick={() => setActiveTab('rewards_config')}
             className={`py-2 px-3 rounded-xl transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
               activeTab === 'rewards_config'
-                ? 'bg-amber-500 text-slate-950 font-black shadow-md'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-[#F4511E] text-[#FFFFFF] font-black shadow-md'
+                : 'text-[#6E6E6E] hover:text-[#141414]'
             }`}
           >
             <Gift className="w-3.5 h-3.5" />
@@ -265,8 +265,8 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
             onClick={() => setActiveTab('game_customizer')}
             className={`py-2 px-3 rounded-xl transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
               activeTab === 'game_customizer'
-                ? 'bg-amber-500 text-slate-950 font-black shadow-md'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-[#F4511E] text-[#FFFFFF] font-black shadow-md'
+                : 'text-[#6E6E6E] hover:text-[#141414]'
             }`}
           >
             <Trophy className="w-3.5 h-3.5" />
@@ -277,8 +277,8 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
             onClick={() => setActiveTab('live_reviews')}
             className={`py-2 px-3 rounded-xl transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
               activeTab === 'live_reviews'
-                ? 'bg-amber-500 text-slate-950 font-black shadow-md'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-[#F4511E] text-[#FFFFFF] font-black shadow-md'
+                : 'text-[#6E6E6E] hover:text-[#141414]'
             }`}
           >
             <Star className="w-3.5 h-3.5" />
@@ -292,13 +292,13 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
         {activeTab === 'rewards_config' && (
           <div className="space-y-5">
             {/* Master Toggle Banner */}
-            <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between gap-4">
+            <div className="p-4 rounded-2xl bg-[#F4511E]/10 border border-[#F4511E]/30 flex items-center justify-between gap-4">
               <div className="space-y-0.5">
-                <div className="text-xs font-black text-amber-300 uppercase tracking-wider flex items-center space-x-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <div className="text-xs font-black text-[#2D4A3E] uppercase tracking-wider flex items-center space-x-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-[#2D4A3E]" />
                   <span>Win Challenge Rewards Engine</span>
                 </div>
-                <p className="text-[11px] text-slate-300">
+                <p className="text-[11px] text-[#4A4A4A]">
                   Allow diners who leave 5-star Google reviews to unlock instant table discounts &amp; treats.
                 </p>
               </div>
@@ -309,34 +309,34 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
                   onChange={(e) => setEnabled(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500" />
+                <div className="w-11 h-6 bg-[#E8DCC8] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#F4511E]" />
               </label>
             </div>
 
             {/* Google Integration Settings */}
-            <div className="bg-[#090D16] p-4 sm:p-5 rounded-2xl border border-white/[0.08] space-y-4">
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center space-x-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <div className="bg-[#FFFFFF] p-4 sm:p-5 rounded-2xl border border-black/[0.08] space-y-4">
+              <h4 className="text-xs font-bold text-[#141414] uppercase tracking-wider flex items-center space-x-1.5">
+                <ShieldCheck className="w-4 h-4 text-[#2F7A4F]" />
                 <span>Google Maps Business Link &amp; Shield</span>
               </h4>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                 <div className="space-y-1 sm:col-span-2">
-                  <label className="text-slate-400 font-medium">Google Place / Maps Review URL</label>
+                  <label className="text-[#6E6E6E] font-medium">Google Place / Maps Review URL</label>
                   <div className="flex gap-2">
                     <input
                       type="url"
                       value={googlePlaceUrl}
                       onChange={(e) => setGooglePlaceUrl(e.target.value)}
                       placeholder="https://search.google.com/local/writereview?placeid=..."
-                      className="flex-1 px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.1] text-white focus:outline-none focus:border-amber-400"
+                      className="flex-1 px-3 py-2 rounded-xl bg-black/[0.04] border border-black/[0.1] text-[#141414] focus:outline-none focus:border-[#F4511E]"
                     />
                     {googlePlaceUrl && (
                       <a
                         href={googlePlaceUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="px-3 py-2 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-amber-300 font-bold flex items-center space-x-1"
+                        className="px-3 py-2 rounded-xl bg-black/[0.04] hover:bg-black/[0.04] text-[#2D4A3E] font-bold flex items-center space-x-1"
                       >
                         <ExternalLink className="w-3.5 h-3.5" />
                         <span>Test Link</span>
@@ -346,28 +346,28 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-slate-400 font-medium">Minimum Rating for Public Google Posting</label>
+                  <label className="text-[#6E6E6E] font-medium">Minimum Rating for Public Google Posting</label>
                   <select
                     value={minRating}
                     onChange={(e) => setMinRating(Number(e.target.value))}
-                    className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.1] text-white focus:outline-none focus:border-amber-400 cursor-pointer"
+                    className="w-full px-3 py-2 rounded-xl bg-black/[0.04] border border-black/[0.1] text-[#141414] focus:outline-none focus:border-[#F4511E] cursor-pointer"
                   >
-                    <option value={4} className="bg-slate-900">4 Stars &amp; Above (Recommended)</option>
-                    <option value={5} className="bg-slate-900">5 Stars Strictly</option>
+                    <option value={4} className="bg-[#F5F1E8]">4 Stars &amp; Above (Recommended)</option>
+                    <option value={5} className="bg-[#F5F1E8]">5 Stars Strictly</option>
                   </select>
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-slate-400 font-medium">Private Manager Escalation (&lt;4 Stars)</label>
+                  <label className="text-[#6E6E6E] font-medium">Private Manager Escalation (&lt;4 Stars)</label>
                   <div className="flex items-center space-x-2 pt-2">
                     <input
                       type="checkbox"
                       id="escalation-toggle"
                       checked={privateEscalation}
                       onChange={(e) => setPrivateEscalation(e.target.checked)}
-                      className="rounded bg-slate-800 border-white/20 text-amber-500 cursor-pointer"
+                      className="rounded bg-[#EFE9DD] border-black/20 text-amber-500 cursor-pointer"
                     />
-                    <label htmlFor="escalation-toggle" className="text-slate-300 cursor-pointer">
+                    <label htmlFor="escalation-toggle" className="text-[#4A4A4A] cursor-pointer">
                       Route lower ratings privately to manager KDS
                     </label>
                   </div>
@@ -376,9 +376,9 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
             </div>
 
             {/* Reward & Discount Type Selector */}
-            <div className="bg-[#090D16] p-4 sm:p-5 rounded-2xl border border-white/[0.08] space-y-4">
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center space-x-1.5">
-                <Percent className="w-4 h-4 text-amber-400" />
+            <div className="bg-[#FFFFFF] p-4 sm:p-5 rounded-2xl border border-black/[0.08] space-y-4">
+              <h4 className="text-xs font-bold text-[#141414] uppercase tracking-wider flex items-center space-x-1.5">
+                <Percent className="w-4 h-4 text-[#2D4A3E]" />
                 <span>Custom Reward &amp; Discount Rules</span>
               </h4>
 
@@ -396,12 +396,12 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
                     onClick={() => setRewardType(item.id as any)}
                     className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
                       rewardType === item.id
-                        ? 'bg-amber-500/20 border-amber-400 text-white font-bold'
-                        : 'bg-white/[0.03] border-white/[0.08] text-slate-400 hover:text-white'
+                        ? 'bg-[#F4511E]/20 border-[#F4511E] text-[#141414] font-bold'
+                        : 'bg-black/[0.04] border-black/[0.08] text-[#6E6E6E] hover:text-[#141414]'
                     }`}
                   >
-                    <div className="text-xs font-bold text-white">{item.label}</div>
-                    <div className="text-[10px] text-slate-400 mt-0.5">{item.desc}</div>
+                    <div className="text-xs font-bold text-[#141414]">{item.label}</div>
+                    <div className="text-[10px] text-[#6E6E6E] mt-0.5">{item.desc}</div>
                   </button>
                 ))}
               </div>
@@ -410,64 +410,64 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 text-xs">
                 {rewardType === 'percent_discount' && (
                   <div className="space-y-1">
-                    <label className="text-slate-400 font-medium">Discount Percentage (%)</label>
+                    <label className="text-[#6E6E6E] font-medium">Discount Percentage (%)</label>
                     <input
                       type="number"
                       min={5}
                       max={50}
                       value={discountPercent}
                       onChange={(e) => setDiscountPercent(Number(e.target.value))}
-                      className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.1] text-white focus:outline-none focus:border-amber-400"
+                      className="w-full px-3 py-2 rounded-xl bg-black/[0.04] border border-black/[0.1] text-[#141414] focus:outline-none focus:border-[#F4511E]"
                     />
                   </div>
                 )}
 
                 {rewardType === 'flat_discount' && (
                   <div className="space-y-1">
-                    <label className="text-slate-400 font-medium">Flat Amount (₹)</label>
+                    <label className="text-[#6E6E6E] font-medium">Flat Amount (₹)</label>
                     <input
                       type="number"
                       min={50}
                       max={1000}
                       value={flatAmount}
                       onChange={(e) => setFlatAmount(Number(e.target.value))}
-                      className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.1] text-white focus:outline-none focus:border-amber-400"
+                      className="w-full px-3 py-2 rounded-xl bg-black/[0.04] border border-black/[0.1] text-[#141414] focus:outline-none focus:border-[#F4511E]"
                     />
                   </div>
                 )}
 
                 {(rewardType === 'free_dessert' || rewardType === 'free_beverage' || rewardType === 'chef_special') && (
                   <div className="space-y-1 sm:col-span-2">
-                    <label className="text-slate-400 font-medium">Complimentary Dish Name</label>
+                    <label className="text-[#6E6E6E] font-medium">Complimentary Dish Name</label>
                     <input
                       type="text"
                       value={freeItemName}
                       onChange={(e) => setFreeItemName(e.target.value)}
                       placeholder="e.g. Royal Saffron Kulfi & Rabri"
-                      className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.1] text-white focus:outline-none focus:border-amber-400"
+                      className="w-full px-3 py-2 rounded-xl bg-black/[0.04] border border-black/[0.1] text-[#141414] focus:outline-none focus:border-[#F4511E]"
                     />
                   </div>
                 )}
 
                 <div className="space-y-1">
-                  <label className="text-slate-400 font-medium">Minimum Bill Amount (₹)</label>
+                  <label className="text-[#6E6E6E] font-medium">Minimum Bill Amount (₹)</label>
                   <input
                     type="number"
                     min={0}
                     value={minBill}
                     onChange={(e) => setMinBill(Number(e.target.value))}
-                    className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.1] text-white focus:outline-none focus:border-amber-400"
+                    className="w-full px-3 py-2 rounded-xl bg-black/[0.04] border border-black/[0.1] text-[#141414] focus:outline-none focus:border-[#F4511E]"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-slate-400 font-medium">Promo Voucher Prefix</label>
+                  <label className="text-[#6E6E6E] font-medium">Promo Voucher Prefix</label>
                   <input
                     type="text"
                     value={promoPrefix}
                     onChange={(e) => setPromoPrefix(e.target.value.toUpperCase())}
                     placeholder="WIN-SAFFRON-"
-                    className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.1] text-white focus:outline-none focus:border-amber-400 font-mono"
+                    className="w-full px-3 py-2 rounded-xl bg-black/[0.04] border border-black/[0.1] text-[#141414] focus:outline-none focus:border-[#F4511E] font-mono"
                   />
                 </div>
               </div>
@@ -481,14 +481,14 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
         {activeTab === 'game_customizer' && (
           <div className="space-y-5">
             {/* Active Game Mode Picker */}
-            <div className="bg-[#090D16] p-4 sm:p-5 rounded-2xl border border-white/[0.08] space-y-3">
+            <div className="bg-[#FFFFFF] p-4 sm:p-5 rounded-2xl border border-black/[0.08] space-y-3">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
-                  <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center space-x-1.5">
-                    <Trophy className="w-4 h-4 text-amber-400" />
+                  <h4 className="text-xs font-bold text-[#141414] uppercase tracking-wider flex items-center space-x-1.5">
+                    <Trophy className="w-4 h-4 text-[#2D4A3E]" />
                     <span>Select Active Reward Game</span>
                   </h4>
-                  <p className="text-[11px] text-slate-400">
+                  <p className="text-[11px] text-[#6E6E6E]">
                     Brainstormed interactive dining games designed to engage diners and reward 5-star reviews.
                   </p>
                 </div>
@@ -498,9 +498,9 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
                     id="choice-toggle"
                     checked={allowPlayerChoice}
                     onChange={(e) => setAllowPlayerChoice(e.target.checked)}
-                    className="rounded bg-slate-800 border-white/20 text-amber-500 cursor-pointer"
+                    className="rounded bg-[#EFE9DD] border-black/20 text-amber-500 cursor-pointer"
                   />
-                  <label htmlFor="choice-toggle" className="text-xs text-slate-300 font-medium cursor-pointer">
+                  <label htmlFor="choice-toggle" className="text-xs text-[#4A4A4A] font-medium cursor-pointer">
                     Allow Diners to Choose Game
                   </label>
                 </div>
@@ -541,21 +541,21 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
                       onClick={() => setActiveGame(game.id as any)}
                       className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
                         isSelected
-                          ? 'bg-amber-500/15 border-amber-400 shadow-lg'
-                          : 'bg-white/[0.03] border-white/[0.08] hover:border-white/20'
+                          ? 'bg-[#F4511E]/15 border-[#F4511E] shadow-lg'
+                          : 'bg-black/[0.04] border-black/[0.08] hover:border-black/20'
                       }`}
                     >
                       <div className="space-y-1.5">
                         <div className="flex items-center justify-between">
                           <span className="text-2xl">{game.emoji}</span>
                           {isSelected && (
-                            <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black">
+                            <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-[#F4511E] text-[#FFFFFF] font-black">
                               ACTIVE
                             </span>
                           )}
                         </div>
-                        <h5 className="font-bold text-xs text-white">{game.name}</h5>
-                        <p className="text-[10px] text-slate-400 leading-relaxed">{game.desc}</p>
+                        <h5 className="font-bold text-xs text-[#141414]">{game.name}</h5>
+                        <p className="text-[10px] text-[#6E6E6E] leading-relaxed">{game.desc}</p>
                       </div>
 
                       <button
@@ -564,7 +564,7 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
                           e.stopPropagation();
                           handleTestSimulator(game.id as any);
                         }}
-                        className="mt-3 py-1.5 px-2.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] text-amber-300 font-bold text-[10px] flex items-center justify-center space-x-1 transition-colors"
+                        className="mt-3 py-1.5 px-2.5 rounded-lg bg-black/[0.04] hover:bg-black/[0.04] text-[#2D4A3E] font-bold text-[10px] flex items-center justify-center space-x-1 transition-colors"
                       >
                         <Eye className="w-3 h-3" />
                         <span>Test Play</span>
@@ -577,15 +577,15 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
 
             {/* Customizer Sub-section for Spin Wheel */}
             {activeGame === 'spin_wheel' && (
-              <div className="bg-[#090D16] p-4 sm:p-5 rounded-2xl border border-white/[0.08] space-y-4">
+              <div className="bg-[#FFFFFF] p-4 sm:p-5 rounded-2xl border border-black/[0.08] space-y-4">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center space-x-1.5">
+                  <h4 className="text-xs font-bold text-[#141414] uppercase tracking-wider flex items-center space-x-1.5">
                     <span>🎡 Spin Wheel Slices ({slices.length})</span>
                   </h4>
                   <button
                     type="button"
                     onClick={handleAddSlice}
-                    className="px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 font-black text-xs flex items-center space-x-1 cursor-pointer"
+                    className="px-2.5 py-1 rounded-lg bg-[#F4511E] text-[#FFFFFF] font-black text-xs flex items-center space-x-1 cursor-pointer"
                   >
                     <Plus className="w-3 h-3" />
                     <span>Add Slice</span>
@@ -596,7 +596,7 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
                   {slices.map((slice, idx) => (
                     <div
                       key={slice.id}
-                      className="p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center gap-2 text-xs"
+                      className="p-2.5 rounded-xl bg-black/[0.04] border border-black/[0.06] flex items-center gap-2 text-xs"
                     >
                       <input
                         type="color"
@@ -617,7 +617,7 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
                           setSlices(updated);
                         }}
                         placeholder="Slice label"
-                        className="flex-1 px-2.5 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.1] text-white"
+                        className="flex-1 px-2.5 py-1.5 rounded-lg bg-black/[0.04] border border-black/[0.1] text-[#141414]"
                       />
                       <input
                         type="text"
@@ -628,12 +628,12 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
                           setSlices(updated);
                         }}
                         placeholder="Prize reward description"
-                        className="flex-1 px-2.5 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.1] text-white"
+                        className="flex-1 px-2.5 py-1.5 rounded-lg bg-black/[0.04] border border-black/[0.1] text-[#141414]"
                       />
                       <button
                         type="button"
                         onClick={() => handleRemoveSlice(slice.id)}
-                        className="p-1.5 text-slate-500 hover:text-rose-400 cursor-pointer"
+                        className="p-1.5 text-[#7A7A7A] hover:text-[#C23A1C] cursor-pointer"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -645,27 +645,27 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
 
             {/* Customizer Sub-section for Scratch Card */}
             {activeGame === 'scratch_card' && (
-              <div className="bg-[#090D16] p-4 sm:p-5 rounded-2xl border border-white/[0.08] space-y-4 text-xs">
-                <h4 className="font-bold text-white uppercase tracking-wider">
+              <div className="bg-[#FFFFFF] p-4 sm:p-5 rounded-2xl border border-black/[0.08] space-y-4 text-xs">
+                <h4 className="font-bold text-[#141414] uppercase tracking-wider">
                   🎟️ Scratch &amp; Win Card Customizer
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-slate-400 font-medium">Scratch Card Heading Title</label>
+                    <label className="text-[#6E6E6E] font-medium">Scratch Card Heading Title</label>
                     <input
                       type="text"
                       value={scratchTitle}
                       onChange={(e) => setScratchTitle(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.1] text-white"
+                      className="w-full px-3 py-2 rounded-xl bg-black/[0.04] border border-black/[0.1] text-[#141414]"
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-slate-400 font-medium">Hidden Reward Prize Beneath Card</label>
+                    <label className="text-[#6E6E6E] font-medium">Hidden Reward Prize Beneath Card</label>
                     <input
                       type="text"
                       value={scratchPrize}
                       onChange={(e) => setScratchPrize(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.1] text-white"
+                      className="w-full px-3 py-2 rounded-xl bg-black/[0.04] border border-black/[0.1] text-[#141414]"
                     />
                   </div>
                 </div>
@@ -674,18 +674,18 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
 
             {/* Customizer Sub-section for Mystery Box */}
             {activeGame === 'mystery_box' && (
-              <div className="bg-[#090D16] p-4 sm:p-5 rounded-2xl border border-white/[0.08] space-y-4 text-xs">
-                <h4 className="font-bold text-white uppercase tracking-wider">
+              <div className="bg-[#FFFFFF] p-4 sm:p-5 rounded-2xl border border-black/[0.08] space-y-4 text-xs">
+                <h4 className="font-bold text-[#141414] uppercase tracking-wider">
                   📦 Mystery Dining Box Prizes
                 </h4>
                 <div className="space-y-2">
                   {mysteryBoxes.map((box, idx) => (
                     <div
                       key={box.id}
-                      className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center gap-3"
+                      className="p-3 rounded-xl bg-black/[0.04] border border-black/[0.06] flex items-center gap-3"
                     >
                       <span className="text-xl">{box.emoji}</span>
-                      <div className="font-bold text-white min-w-[80px]">Box #{box.id}</div>
+                      <div className="font-bold text-[#141414] min-w-[80px]">Box #{box.id}</div>
                       <input
                         type="text"
                         value={box.prize}
@@ -694,7 +694,7 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
                           updated[idx].prize = e.target.value;
                           setMysteryBoxes(updated);
                         }}
-                        className="flex-1 px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.1] text-white"
+                        className="flex-1 px-3 py-1.5 rounded-lg bg-black/[0.04] border border-black/[0.1] text-[#141414]"
                       />
                     </div>
                   ))}
@@ -704,27 +704,27 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
 
             {/* Customizer Sub-section for Dice */}
             {activeGame === 'lucky_dice' && (
-              <div className="bg-[#090D16] p-4 sm:p-5 rounded-2xl border border-white/[0.08] space-y-4 text-xs">
-                <h4 className="font-bold text-white uppercase tracking-wider">
+              <div className="bg-[#FFFFFF] p-4 sm:p-5 rounded-2xl border border-black/[0.08] space-y-4 text-xs">
+                <h4 className="font-bold text-[#141414] uppercase tracking-wider">
                   🎲 Lucky Dice Roll Rules &amp; Prizes
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-slate-400 font-medium">Grand Prize (Rolls 7+ or Doubles)</label>
+                    <label className="text-[#6E6E6E] font-medium">Grand Prize (Rolls 7+ or Doubles)</label>
                     <input
                       type="text"
                       value={diceGrandPrize}
                       onChange={(e) => setDiceGrandPrize(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.1] text-white"
+                      className="w-full px-3 py-2 rounded-xl bg-black/[0.04] border border-black/[0.1] text-[#141414]"
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-slate-400 font-medium">Runner-Up Prize</label>
+                    <label className="text-[#6E6E6E] font-medium">Runner-Up Prize</label>
                     <input
                       type="text"
                       value={diceRunnerPrize}
                       onChange={(e) => setDiceRunnerPrize(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.1] text-white"
+                      className="w-full px-3 py-2 rounded-xl bg-black/[0.04] border border-black/[0.1] text-[#141414]"
                     />
                   </div>
                 </div>
@@ -740,24 +740,24 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
               {restaurantReviews.map((rev) => (
-                <div key={rev.id} className="bg-slate-900/90 p-4 rounded-2xl border border-white/[0.08] space-y-2">
+                <div key={rev.id} className="bg-[#F5F1E8]/90 p-4 rounded-2xl border border-black/[0.08] space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-xs text-white">{rev.customer_name || 'Verified Diner'}</span>
-                    <div className="flex items-center text-amber-400 text-xs">
+                    <span className="font-bold text-xs text-[#141414]">{rev.customer_name || 'Verified Diner'}</span>
+                    <div className="flex items-center text-[#2D4A3E] text-xs">
                       {Array.from({ length: rev.rating }).map((_, i) => (
-                        <Star key={i} className="w-3 h-3 fill-amber-400" />
+                        <Star key={i} className="w-3 h-3 fill-[#2D4A3E]" />
                       ))}
                     </div>
                   </div>
-                  <p className="text-xs text-slate-300 leading-relaxed">"{rev.review_text}"</p>
-                  <div className="flex items-center justify-between pt-1 text-[10px] text-slate-500 font-mono">
+                  <p className="text-xs text-[#4A4A4A] leading-relaxed">"{rev.review_text}"</p>
+                  <div className="flex items-center justify-between pt-1 text-[10px] text-[#7A7A7A] font-mono">
                     <span>{new Date(rev.created_at).toLocaleDateString()}</span>
-                    <span className="text-emerald-400">✓ Verified Dine-In</span>
+                    <span className="text-[#2F7A4F]">✓ Verified Dine-In</span>
                   </div>
                 </div>
               ))}
               {restaurantReviews.length === 0 && (
-                <div className="p-8 text-center text-slate-400 sm:col-span-2">
+                <div className="p-8 text-center text-[#6E6E6E] sm:col-span-2">
                   No diner reviews logged yet. Diners who complete the Win Challenge will appear here!
                 </div>
               )}
@@ -766,11 +766,11 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
         )}
 
         {/* Bottom Actions Footer */}
-        <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between gap-3">
+        <div className="pt-4 border-t border-black/[0.08] flex items-center justify-between gap-3">
           <button
             type="button"
             onClick={() => handleTestSimulator(activeGame)}
-            className="px-4 py-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] text-amber-300 font-bold text-xs flex items-center space-x-1.5 transition-colors cursor-pointer"
+            className="px-4 py-2.5 rounded-xl bg-black/[0.04] hover:bg-black/[0.04] text-[#2D4A3E] font-bold text-xs flex items-center space-x-1.5 transition-colors cursor-pointer"
           >
             <Eye className="w-4 h-4" />
             <span>Test Play Customer Popup</span>
@@ -778,7 +778,7 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
 
           <div className="flex items-center space-x-3">
             {saveSuccess && (
-              <span className="text-xs font-bold text-emerald-400 flex items-center space-x-1 animate-in fade-in">
+              <span className="text-xs font-bold text-[#2F7A4F] flex items-center space-x-1 animate-in fade-in">
                 <CheckCircle2 className="w-4 h-4" />
                 <span>Saved &amp; Live!</span>
               </span>
@@ -786,7 +786,7 @@ export const ReviewRewardsManagementModal: React.FC<ReviewRewardsManagementModal
             <button
               type="button"
               onClick={handleSave}
-              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 text-slate-950 font-black text-xs flex items-center space-x-1.5 shadow-lg transition-all cursor-pointer"
+              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#F4511E] to-[#F4511E] hover:brightness-110 active:scale-95 text-[#FFFFFF] font-black text-xs flex items-center space-x-1.5 shadow-lg transition-all cursor-pointer"
             >
               <Save className="w-4 h-4" />
               <span>Save &amp; Activate Changes</span>

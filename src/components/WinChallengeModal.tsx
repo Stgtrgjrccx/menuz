@@ -103,7 +103,7 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
     return config?.games?.spin_wheel?.slices?.length
       ? config.games.spin_wheel.slices
       : [
-          { id: '1', label: '15% Off Bill', reward: '15% Off Total Bill', emoji: '🎉', color: '#F59E0B', textColor: '#000', probabilityWeight: 30 },
+          { id: '1', label: '15% Off Bill', reward: '15% Off Total Bill', emoji: '🎉', color: '#2D4A3E', textColor: '#000', probabilityWeight: 30 },
           { id: '2', label: 'Free Dessert', reward: 'Free Chef Dessert Treat', emoji: '🍨', color: '#EC4899', textColor: '#fff', probabilityWeight: 25 },
           { id: '3', label: '10% Off Bill', reward: '10% Bill Discount', emoji: '✨', color: '#10B981', textColor: '#fff', probabilityWeight: 25 },
           { id: '4', label: 'Free Beverage', reward: 'Free Signature Drink', emoji: '🥤', color: '#3B82F6', textColor: '#fff', probabilityWeight: 12 },
@@ -294,24 +294,24 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
 
   return createPortal(
     <div className="fixed inset-0 z-[10000] bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 overflow-y-auto animate-in fade-in duration-200">
-      <div className="bg-[#0D1322] border border-amber-500/30 rounded-3xl max-w-lg w-full text-slate-100 shadow-2xl overflow-hidden relative my-auto">
+      <div className="bg-[#F5F1E8] border border-[#F4511E]/30 rounded-3xl max-w-lg w-full text-[#141414] shadow-2xl overflow-hidden relative my-auto">
         
         {/* Header */}
-        <div className="p-4 sm:p-5 bg-gradient-to-r from-amber-500/15 via-purple-500/10 to-transparent border-b border-white/[0.08] flex items-center justify-between">
+        <div className="p-4 sm:p-5 bg-gradient-to-r from-[#F4511E]/15 via-[#F4511E]/10 to-transparent border-b border-black/[0.08] flex items-center justify-between">
           <div className="flex items-center space-x-2.5">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-400 text-slate-950 font-black flex items-center justify-center text-lg shadow-md">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#F4511E] to-[#F4511E] text-[#FFFFFF] font-black flex items-center justify-center text-lg shadow-md">
               🎁
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <h3 className="font-serif font-black text-base sm:text-lg text-white">
+                <h3 className="font-serif font-black text-base sm:text-lg text-[#141414]">
                   Win Challenge
                 </h3>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#F4511E]/20 text-[#2D4A3E] border border-[#F4511E]/30">
                   {activeRest?.name || 'Menuz'}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400">
+              <p className="text-[11px] text-[#6E6E6E]">
                 Review &amp; Unlock Instant Dining Treats
               </p>
             </div>
@@ -319,25 +319,25 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] text-slate-400 hover:text-white transition-colors cursor-pointer"
+            className="p-2 rounded-xl bg-black/[0.04] hover:bg-black/[0.04] text-[#6E6E6E] hover:text-[#141414] transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Progress Tracker */}
-        <div className="px-5 py-2.5 bg-white/[0.02] border-b border-white/[0.06] flex items-center justify-between text-[11px] font-bold">
-          <div className={`flex items-center space-x-1.5 ${stage === 'review' ? 'text-amber-400' : 'text-emerald-400'}`}>
+        <div className="px-5 py-2.5 bg-black/[0.04] border-b border-black/[0.06] flex items-center justify-between text-[11px] font-bold">
+          <div className={`flex items-center space-x-1.5 ${stage === 'review' ? 'text-[#2D4A3E]' : 'text-[#2F7A4F]'}`}>
             <span className="w-4 h-4 rounded-full border flex items-center justify-center text-[10px]">1</span>
             <span>Google Review</span>
           </div>
           <span className="text-slate-600">→</span>
-          <div className={`flex items-center space-x-1.5 ${stage === 'game' ? 'text-amber-400' : stage === 'won' ? 'text-emerald-400' : 'text-slate-500'}`}>
+          <div className={`flex items-center space-x-1.5 ${stage === 'game' ? 'text-[#2D4A3E]' : stage === 'won' ? 'text-[#2F7A4F]' : 'text-[#7A7A7A]'}`}>
             <span className="w-4 h-4 rounded-full border flex items-center justify-center text-[10px]">2</span>
             <span>Play Game</span>
           </div>
           <span className="text-slate-600">→</span>
-          <div className={`flex items-center space-x-1.5 ${stage === 'won' ? 'text-emerald-400' : 'text-slate-500'}`}>
+          <div className={`flex items-center space-x-1.5 ${stage === 'won' ? 'text-[#2F7A4F]' : 'text-[#7A7A7A]'}`}>
             <span className="w-4 h-4 rounded-full border flex items-center justify-center text-[10px]">3</span>
             <span>Claim Treat</span>
           </div>
@@ -352,7 +352,7 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
           {stage === 'review' && (
             <div className="space-y-4">
               <div className="text-center space-y-1">
-                <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">
+                <span className="text-xs font-bold text-[#2D4A3E] uppercase tracking-wider">
                   Step 1 • How was your dining experience?
                 </span>
                 <div className="flex justify-center items-center space-x-2 py-2">
@@ -365,7 +365,7 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
                     >
                       <Star
                         className={`w-7 h-7 sm:w-8 sm:h-8 transition-colors ${
-                          s <= rating ? 'fill-amber-400 text-amber-400' : 'text-slate-600'
+                          s <= rating ? 'fill-[#2D4A3E] text-[#2D4A3E]' : 'text-slate-600'
                         }`}
                       />
                     </button>
@@ -375,7 +375,7 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
 
               {/* Tag selector */}
               <div>
-                <label className="text-[11px] font-bold text-slate-400 block mb-1.5 uppercase">
+                <label className="text-[11px] font-bold text-[#6E6E6E] block mb-1.5 uppercase">
                   What did you love most? (Tap tags)
                 </label>
                 <div className="flex flex-wrap gap-1.5">
@@ -394,8 +394,8 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
                         }}
                         className={`text-xs px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
                           isSelected
-                            ? 'bg-amber-500/20 border-amber-400 text-amber-300 font-bold'
-                            : 'bg-white/[0.04] border-white/[0.08] text-slate-300 hover:border-white/20'
+                            ? 'bg-[#F4511E]/20 border-[#F4511E] text-[#2D4A3E] font-bold'
+                            : 'bg-black/[0.04] border-black/[0.08] text-[#4A4A4A] hover:border-black/20'
                         }`}
                       >
                         {tag}
@@ -406,22 +406,22 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
               </div>
 
               {/* AI Generated Review Preview Box */}
-              <div className="bg-[#090D16] p-3.5 rounded-2xl border border-white/[0.08] space-y-2">
-                <div className="flex items-center justify-between text-[11px] text-slate-400">
-                  <span className="flex items-center space-x-1 font-bold text-amber-400">
+              <div className="bg-[#FFFFFF] p-3.5 rounded-2xl border border-black/[0.08] space-y-2">
+                <div className="flex items-center justify-between text-[11px] text-[#6E6E6E]">
+                  <span className="flex items-center space-x-1 font-bold text-[#2D4A3E]">
                     <Sparkles className="w-3.5 h-3.5" />
                     <span>1-Tap AI Draft Ready to Post</span>
                   </span>
                   <button
                     type="button"
                     onClick={handleCopyReview}
-                    className="text-xs text-amber-300 hover:text-white flex items-center space-x-1 cursor-pointer font-bold"
+                    className="text-xs text-[#2D4A3E] hover:text-[#141414] flex items-center space-x-1 cursor-pointer font-bold"
                   >
-                    {copiedReview ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                    {copiedReview ? <Check className="w-3 h-3 text-[#2F7A4F]" /> : <Copy className="w-3 h-3" />}
                     <span>{copiedReview ? 'Copied!' : 'Copy Draft'}</span>
                   </button>
                 </div>
-                <p className="text-xs text-slate-200 leading-relaxed italic bg-white/[0.02] p-2 rounded-xl border border-white/[0.04]">
+                <p className="text-xs text-[#3A3A3A] leading-relaxed italic bg-black/[0.04] p-2 rounded-xl border border-black/[0.04]">
                   "{reviewDraft}"
                 </p>
               </div>
@@ -431,7 +431,7 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
                 <button
                   type="button"
                   onClick={handleOpenGoogle}
-                  className="w-full py-3 px-4 rounded-xl bg-white text-slate-900 hover:bg-slate-100 font-black text-xs sm:text-sm flex items-center justify-center space-x-2 shadow-lg transition-transform active:scale-95 cursor-pointer"
+                  className="w-full py-3 px-4 rounded-xl bg-white text-[#141414] hover:bg-slate-100 font-black text-xs sm:text-sm flex items-center justify-center space-x-2 shadow-lg transition-transform active:scale-95 cursor-pointer"
                 >
                   <img
                     src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png"
@@ -439,15 +439,15 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
                     className="w-4 h-4 object-contain"
                   />
                   <span>Post Review on Google Maps</span>
-                  <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
+                  <ExternalLink className="w-3.5 h-3.5 text-[#7A7A7A]" />
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setStage('game')}
-                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 font-black text-xs sm:text-sm text-slate-950 flex items-center justify-center space-x-2 shadow-xl shadow-amber-950/40 transition-transform active:scale-95 cursor-pointer"
+                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#F4511E] to-[#F4511E] hover:brightness-110 font-black text-xs sm:text-sm text-[#FFFFFF] flex items-center justify-center space-x-2 shadow-xl shadow-amber-950/40 transition-transform active:scale-95 cursor-pointer"
                 >
-                  <Trophy className="w-4 h-4 text-slate-950" />
+                  <Trophy className="w-4 h-4 text-[#141414]" />
                   <span>I'm Ready • Play Win Challenge Games! →</span>
                 </button>
               </div>
@@ -462,12 +462,12 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
               
               {/* Game Selector Tab Pills (if allowed) */}
               {(config?.allow_player_choice !== false) && (
-                <div className="grid grid-cols-5 gap-1 p-1 bg-white/[0.04] rounded-xl border border-white/[0.08] text-[10px] font-bold text-center">
+                <div className="grid grid-cols-5 gap-1 p-1 bg-black/[0.04] rounded-xl border border-black/[0.08] text-[10px] font-bold text-center">
                   <button
                     type="button"
                     onClick={() => setSelectedGame('turntable_roulette')}
                     className={`py-1.5 rounded-lg transition-all cursor-pointer ${
-                      selectedGame === 'turntable_roulette' ? 'bg-amber-500 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
+                      selectedGame === 'turntable_roulette' ? 'bg-[#F4511E] text-[#FFFFFF] font-black' : 'text-[#6E6E6E] hover:text-[#141414]'
                     }`}
                   >
                     🎯 Turntable
@@ -476,7 +476,7 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
                     type="button"
                     onClick={() => setSelectedGame('spin_wheel')}
                     className={`py-1.5 rounded-lg transition-all cursor-pointer ${
-                      selectedGame === 'spin_wheel' ? 'bg-amber-500 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
+                      selectedGame === 'spin_wheel' ? 'bg-[#F4511E] text-[#FFFFFF] font-black' : 'text-[#6E6E6E] hover:text-[#141414]'
                     }`}
                   >
                     🎡 Wheel
@@ -485,7 +485,7 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
                     type="button"
                     onClick={() => setSelectedGame('scratch_card')}
                     className={`py-1.5 rounded-lg transition-all cursor-pointer ${
-                      selectedGame === 'scratch_card' ? 'bg-amber-500 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
+                      selectedGame === 'scratch_card' ? 'bg-[#F4511E] text-[#FFFFFF] font-black' : 'text-[#6E6E6E] hover:text-[#141414]'
                     }`}
                   >
                     🎟️ Scratch
@@ -494,7 +494,7 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
                     type="button"
                     onClick={() => setSelectedGame('mystery_box')}
                     className={`py-1.5 rounded-lg transition-all cursor-pointer ${
-                      selectedGame === 'mystery_box' ? 'bg-amber-500 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
+                      selectedGame === 'mystery_box' ? 'bg-[#F4511E] text-[#FFFFFF] font-black' : 'text-[#6E6E6E] hover:text-[#141414]'
                     }`}
                   >
                     📦 Mystery
@@ -503,7 +503,7 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
                     type="button"
                     onClick={() => setSelectedGame('lucky_dice')}
                     className={`py-1.5 rounded-lg transition-all cursor-pointer ${
-                      selectedGame === 'lucky_dice' ? 'bg-amber-500 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
+                      selectedGame === 'lucky_dice' ? 'bg-[#F4511E] text-[#FFFFFF] font-black' : 'text-[#6E6E6E] hover:text-[#141414]'
                     }`}
                   >
                     🎲 Dice
@@ -515,10 +515,10 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
               {selectedGame === 'turntable_roulette' && (
                 <div className="flex flex-col items-center justify-center space-y-4 py-2 font-mono">
                   <div className="text-center space-y-1">
-                    <div className="text-xs text-amber-400 font-bold uppercase tracking-wider">
+                    <div className="text-xs text-[#2D4A3E] font-bold uppercase tracking-wider">
                       [ISOMETRIC 3D ROULETTE PLINTH]
                     </div>
-                    <p className="text-[11px] text-slate-400 font-sans">
+                    <p className="text-[11px] text-[#6E6E6E] font-sans">
                       Flick with your finger or cursor to spin the turntable plinth. It settles on one of 4 tableside treats.
                     </p>
                   </div>
@@ -536,11 +536,11 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
                   {/* 4 Quarter Cards */}
                   <div className="grid grid-cols-2 gap-2 w-full text-left">
                     {TURNTABLE_REWARDS.map((rew) => (
-                      <div key={rew.id} className="p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center space-x-2">
+                      <div key={rew.id} className="p-2.5 rounded-xl bg-black/[0.04] border border-black/[0.08] flex items-center space-x-2">
                         <span className="text-xl shrink-0">{rew.emoji}</span>
                         <div className="min-w-0">
-                          <div className="text-[11px] font-bold text-white truncate">{rew.name}</div>
-                          <div className="text-[10px] text-slate-400 truncate font-sans">{rew.subtitle}</div>
+                          <div className="text-[11px] font-bold text-[#141414] truncate">{rew.name}</div>
+                          <div className="text-[10px] text-[#6E6E6E] truncate font-sans">{rew.subtitle}</div>
                         </div>
                       </div>
                     ))}
@@ -550,7 +550,7 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
                     type="button"
                     disabled={isSpinningTurntable}
                     onClick={handleSpinTurntable}
-                    className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 disabled:opacity-50 text-slate-950 font-black text-xs sm:text-sm flex items-center justify-center space-x-2 shadow-xl cursor-pointer"
+                    className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#F4511E] to-[#F4511E] hover:brightness-110 active:scale-95 disabled:opacity-50 text-[#FFFFFF] font-black text-xs sm:text-sm flex items-center justify-center space-x-2 shadow-xl cursor-pointer"
                   >
                     <RotateCw className={`w-4 h-4 ${isSpinningTurntable ? 'animate-spin' : ''}`} />
                     <span>{isSpinningTurntable ? 'TURNTABLE IN MOTION...' : 'FLICK & CLAIM REWARD'}</span>
@@ -571,7 +571,7 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
                         transform: `rotate(${wheelRotation}deg)`,
                         transition: isSpinning ? 'transform 4s cubic-bezier(0.15, 0.9, 0.25, 1)' : 'none'
                       }}
-                      className="w-full h-full rounded-full border-4 border-amber-400/80 shadow-2xl relative overflow-hidden bg-slate-900"
+                      className="w-full h-full rounded-full border-4 border-[#F4511E]/80 shadow-2xl relative overflow-hidden bg-[#F5F1E8]"
                     >
                       <svg viewBox="0 0 100 100" className="w-full h-full">
                         {slices.map((slice, i) => {
@@ -589,14 +589,14 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
                               key={slice.id}
                               d={pathData}
                               fill={slice.color}
-                              stroke="#0A0E17"
+                              stroke="#FFFFFF"
                               strokeWidth="0.8"
                             />
                           );
                         })}
                       </svg>
                       {/* Center Hub */}
-                      <div className="absolute inset-0 m-auto w-12 h-12 rounded-full bg-[#0D1322] border-2 border-amber-400 shadow-xl flex items-center justify-center font-black text-amber-400 text-xs">
+                      <div className="absolute inset-0 m-auto w-12 h-12 rounded-full bg-[#F5F1E8] border-2 border-[#F4511E] shadow-xl flex items-center justify-center font-black text-[#2D4A3E] text-xs">
                         WIN
                       </div>
                     </div>
@@ -606,7 +606,7 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
                     type="button"
                     disabled={isSpinning}
                     onClick={handleSpinWheel}
-                    className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 disabled:opacity-50 text-slate-950 font-black text-sm flex items-center justify-center space-x-2 shadow-xl cursor-pointer"
+                    className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#F4511E] to-[#F4511E] hover:brightness-110 active:scale-95 disabled:opacity-50 text-[#FFFFFF] font-black text-sm flex items-center justify-center space-x-2 shadow-xl cursor-pointer"
                   >
                     <RotateCw className={`w-4 h-4 ${isSpinning ? 'animate-spin' : ''}`} />
                     <span>{isSpinning ? 'Spinning Wheel...' : 'Spin The Wheel Now!'}</span>
@@ -617,17 +617,17 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
               {/* GAME 2: SCRATCH CARD */}
               {selectedGame === 'scratch_card' && (
                 <div className="space-y-3 text-center">
-                  <p className="text-xs text-slate-300">
+                  <p className="text-xs text-[#4A4A4A]">
                     Use your finger or mouse to scratch the silver card and reveal your prize!
                   </p>
-                  <div className="relative w-full h-44 rounded-2xl overflow-hidden border border-white/20 shadow-2xl bg-gradient-to-br from-amber-900/60 to-purple-950/80 flex items-center justify-center">
+                  <div className="relative w-full h-44 rounded-2xl overflow-hidden border border-black/20 shadow-2xl bg-gradient-to-br from-[#F4511E]/60 to-[#2D4A3E]/80 flex items-center justify-center">
                     {/* Underlying Prize */}
                     <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center space-y-1">
                       <span className="text-3xl">🎉</span>
-                      <h4 className="font-serif font-black text-lg text-amber-300">
+                      <h4 className="font-serif font-black text-lg text-[#2D4A3E]">
                         {config?.games?.scratch_card?.hidden_prize || '15% Off Your Entire Bill!'}
                       </h4>
-                      <p className="text-[10px] text-slate-300">Dine-in voucher ready to claim</p>
+                      <p className="text-[10px] text-[#4A4A4A]">Dine-in voucher ready to claim</p>
                     </div>
 
                     {/* Scratch Canvas Surface */}
@@ -651,7 +651,7 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
               {/* GAME 3: MYSTERY DINING BOX */}
               {selectedGame === 'mystery_box' && (
                 <div className="space-y-3 text-center py-2">
-                  <p className="text-xs text-slate-300">
+                  <p className="text-xs text-[#4A4A4A]">
                     Tap any of the 3 chef treasure boxes to reveal your prize!
                   </p>
                   <div className="grid grid-cols-3 gap-3">
@@ -663,14 +663,14 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
                         onClick={() => handlePickBox(boxId)}
                         className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col items-center justify-center space-y-2 group ${
                           selectedBox === boxId
-                            ? 'bg-amber-500/20 border-amber-400 scale-105 shadow-xl'
-                            : 'bg-white/[0.04] border-white/[0.1] hover:border-amber-400/50 hover:bg-white/[0.08]'
+                            ? 'bg-[#F4511E]/20 border-[#F4511E] scale-105 shadow-xl'
+                            : 'bg-black/[0.04] border-black/[0.1] hover:border-[#F4511E]/50 hover:bg-black/[0.04]'
                         }`}
                       >
                         <span className={`text-3xl sm:text-4xl transition-transform ${isOpeningBox && selectedBox === boxId ? 'animate-bounce' : 'group-hover:scale-110'}`}>
                           {selectedBox === boxId ? '🎁' : '📦'}
                         </span>
-                        <span className="text-xs font-bold text-white">
+                        <span className="text-xs font-bold text-[#141414]">
                           Box #{boxId}
                         </span>
                       </button>
@@ -682,14 +682,14 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
               {/* GAME 4: LUCKY DICE ROLL */}
               {selectedGame === 'lucky_dice' && (
                 <div className="space-y-4 text-center py-2">
-                  <p className="text-xs text-slate-300">
+                  <p className="text-xs text-[#4A4A4A]">
                     Roll the golden dice! Score 7 or doubles to win the Grand VIP Discount!
                   </p>
                   <div className="flex items-center justify-center space-x-6 py-4">
                     {diceValues.map((val, idx) => (
                       <div
                         key={idx}
-                        className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-tr from-amber-400 to-amber-200 text-slate-950 font-black text-3xl sm:text-4xl flex items-center justify-center shadow-2xl border-2 border-white/40 ${
+                        className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-tr from-[#F4511E] to-amber-200 text-[#FFFFFF] font-black text-3xl sm:text-4xl flex items-center justify-center shadow-2xl border-2 border-black/40 ${
                           isRollingDice ? 'animate-spin' : ''
                         }`}
                       >
@@ -701,9 +701,9 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
                     type="button"
                     disabled={isRollingDice}
                     onClick={handleRollDice}
-                    className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 text-slate-950 font-black text-sm flex items-center justify-center space-x-2 shadow-xl cursor-pointer"
+                    className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#F4511E] to-[#F4511E] hover:brightness-110 text-[#FFFFFF] font-black text-sm flex items-center justify-center space-x-2 shadow-xl cursor-pointer"
                   >
-                    <Dice5 className="w-5 h-5 text-slate-950" />
+                    <Dice5 className="w-5 h-5 text-[#141414]" />
                     <span>{isRollingDice ? 'Rolling Dice...' : 'Roll Dice Now!'}</span>
                   </button>
                 </div>
@@ -716,29 +716,29 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
           {/* ═══════════════════════════════════════════════════════════ */}
           {stage === 'won' && (
             <div className="space-y-4 text-center py-2 animate-in zoom-in-95 duration-200">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-400 text-slate-950 flex items-center justify-center text-3xl mx-auto shadow-xl">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-400 text-[#FFFFFF] flex items-center justify-center text-3xl mx-auto shadow-xl">
                 🏆
               </div>
 
               <div className="space-y-1">
-                <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">
+                <span className="text-[11px] font-bold text-[#2F7A4F] uppercase tracking-wider">
                   Congratulations! Reward Unlocked
                 </span>
-                <h3 className="font-serif font-black text-xl sm:text-2xl text-white">
+                <h3 className="font-serif font-black text-xl sm:text-2xl text-[#141414]">
                   {wonReward}
                 </h3>
-                <p className="text-xs text-slate-300">
+                <p className="text-xs text-[#4A4A4A]">
                   Valid for your dining session at {activeRest?.name || 'Restaurant'}.
                 </p>
               </div>
 
               {/* Unique Voucher Code Card */}
-              <div className="p-4 rounded-2xl bg-gradient-to-br from-[#121929] to-[#0A0E17] border border-amber-500/40 space-y-2">
-                <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+              <div className="p-4 rounded-2xl bg-gradient-to-br from-[#F5F1E8] to-[#FFFFFF] border border-[#F4511E]/40 space-y-2">
+                <span className="text-[10px] uppercase font-bold text-[#6E6E6E] block tracking-wider">
                   Your Table Voucher Code
                 </span>
                 <div className="flex items-center justify-center space-x-3">
-                  <span className="font-mono font-black text-lg sm:text-xl text-amber-300 tracking-wider">
+                  <span className="font-mono font-black text-lg sm:text-xl text-[#2D4A3E] tracking-wider">
                     {voucherCode}
                   </span>
                   <button
@@ -748,13 +748,13 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
                       setCopiedCode(true);
                       setTimeout(() => setCopiedCode(false), 3000);
                     }}
-                    className="p-2 rounded-lg bg-white/[0.08] hover:bg-white/[0.15] text-slate-200 hover:text-white transition-colors cursor-pointer"
+                    className="p-2 rounded-lg bg-black/[0.04] hover:bg-black/[0.04] text-[#3A3A3A] hover:text-[#141414] transition-colors cursor-pointer"
                     title="Copy Code"
                   >
-                    {copiedCode ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                    {copiedCode ? <Check className="w-4 h-4 text-[#2F7A4F]" /> : <Copy className="w-4 h-4" />}
                   </button>
                 </div>
-                <p className="text-[11px] text-slate-400">
+                <p className="text-[11px] text-[#6E6E6E]">
                   Show this code to your waiter or manager when settling the bill to redeem your reward!
                 </p>
               </div>
@@ -762,7 +762,7 @@ export const WinChallengeModal: React.FC<WinChallengeModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="w-full py-3 px-4 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-white font-bold text-xs sm:text-sm border border-white/[0.12] transition-colors cursor-pointer"
+                className="w-full py-3 px-4 rounded-xl bg-black/[0.04] hover:bg-black/[0.04] text-[#141414] font-bold text-xs sm:text-sm border border-black/[0.12] transition-colors cursor-pointer"
               >
                 Close &amp; Enjoy Your Meal
               </button>

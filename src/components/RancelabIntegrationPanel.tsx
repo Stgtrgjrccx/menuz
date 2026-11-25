@@ -110,39 +110,39 @@ export const RancelabIntegrationPanel: React.FC<RancelabIntegrationPanelProps> =
 
   const tabClass = (tab: string) =>
     `px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all ${
-      activeTab === tab ? 'bg-white text-violet-800 shadow-sm' : 'text-white/80 hover:bg-white/10'
+      activeTab === tab ? 'bg-white text-[#2D4A3E] shadow-sm' : 'text-[#141414]/80 hover:bg-black/[0.06]'
     }`;
 
   return (
-    <div className="bg-[#0D1322] rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+    <div className="bg-[#F5F1E8] rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
       {/* Banner */}
-      <div className="bg-gradient-to-r from-violet-800 via-purple-700 to-violet-800 text-white p-6">
+      <div className="bg-gradient-to-r from-[#2D4A3E] via-[#2D4A3E] to-[#2D4A3E] text-white p-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center space-x-2.5 mb-2">
-              <span className="bg-white text-violet-700 text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-sm">
+              <span className="bg-white text-[#2D4A3E] text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-sm">
                 Enterprise ERP Bridge
               </span>
-              <span className="bg-purple-500/40 text-white text-[11px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1">
+              <span className="bg-[#F4511E]/40 text-[#141414] text-[11px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1">
                 <BarChart3 className="w-3 h-3" /> RanceLab · 200k+ Restaurants
               </span>
             </div>
-            <h2 className="text-2xl font-serif font-bold text-white tracking-tight">
+            <h2 className="text-2xl font-serif font-bold text-[#141414] tracking-tight">
               RanceLab Precision Billing Suite Dispatch
             </h2>
-            <p className="text-sm text-purple-100 max-w-xl mt-1">
+            <p className="text-sm text-[#2D4A3E] max-w-xl mt-1">
               Menuz pushes orders to RanceLab's Integrations & Apps Panel — GST-slab aware, offline-resilient, with full inventory deduction and KOT auto-generation.
             </p>
           </div>
-          <div className="flex items-center gap-2 bg-black/20 backdrop-blur-xs p-3 rounded-xl border border-white/10 self-start md:self-auto">
+          <div className="flex items-center gap-2 bg-black/20 backdrop-blur-xs p-3 rounded-xl border border-black/10 self-start md:self-auto">
             <div className={`w-3 h-3 rounded-full ${config.enabled ? 'bg-emerald-400 animate-pulse' : 'bg-gray-400'}`} />
             <div>
               <div className="text-xs font-bold leading-none">{config.enabled ? 'POS Link Active' : 'POS Link Paused'}</div>
-              <div className="text-[10px] text-purple-200 mt-0.5">Branch: <code className="font-mono text-white">{config.branch_code}</code></div>
+              <div className="text-[10px] text-[#2D4A3E] mt-0.5">Branch: <code className="font-mono text-[#141414]">{config.branch_code}</code></div>
             </div>
           </div>
         </div>
-        <div className="flex space-x-2 mt-6 border-t border-white/20 pt-4">
+        <div className="flex space-x-2 mt-6 border-t border-black/20 pt-4">
           <button onClick={() => setActiveTab('simulator')} className={tabClass('simulator')}><Printer className="w-3.5 h-3.5" /> Live KOT Simulator</button>
           <button onClick={() => setActiveTab('credentials')} className={tabClass('credentials')}><Sliders className="w-3.5 h-3.5" /> API Keys & GST Config</button>
           <button onClick={() => setActiveTab('guide')} className={tabClass('guide')}><HelpCircle className="w-3.5 h-3.5" /> Onboarding Guide</button>
@@ -154,19 +154,19 @@ export const RancelabIntegrationPanel: React.FC<RancelabIntegrationPanelProps> =
         {activeTab === 'simulator' && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div className="lg:col-span-6 space-y-5">
-              <div className="bg-violet-50/60 border border-violet-200 rounded-xl p-4">
-                <h3 className="font-bold text-sm text-violet-950 flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-violet-600" /> Test RanceLab Push Order Dispatch
+              <div className="bg-[#FDE5DD]/60 border border-[#F4511E] rounded-xl p-4">
+                <h3 className="font-bold text-sm text-[#2D4A3E] flex items-center gap-2">
+                  <Zap className="w-4 h-4 text-[#2D4A3E]" /> Test RanceLab Push Order Dispatch
                 </h3>
-                <p className="text-xs text-violet-900/80 mt-1 leading-relaxed">
-                  Simulates a POST to <code className="font-mono bg-violet-100 px-1 rounded">https://api.rancelab.com/v1/integration/order/push</code> with GST slab {config.gst_slab}% applied. KOT auto-generates at kitchen printer with inventory deduction.
+                <p className="text-xs text-[#2D4A3E]/80 mt-1 leading-relaxed">
+                  Simulates a POST to <code className="font-mono bg-[#FDE5DD] px-1 rounded">https://api.rancelab.com/v1/integration/order/push</code> with GST slab {config.gst_slab}% applied. KOT auto-generates at kitchen printer with inventory deduction.
                 </p>
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-gray-700 mb-1">Simulated Table</label>
                 <select value={simTable} onChange={(e) => setSimTable(e.target.value)}
-                  className="w-full text-xs font-medium border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-violet-500 bg-[#090D16]">
+                  className="w-full text-xs font-medium border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-[#F4511E] bg-[#FFFFFF]">
                   <option>Table 1 (Indoor)</option><option>Table 2 (Indoor)</option>
                   <option>Table 4 (Patio)</option><option>Table 8 (Family AC)</option><option>Table 12 (Balcony)</option>
                 </select>
@@ -177,7 +177,7 @@ export const RancelabIntegrationPanel: React.FC<RancelabIntegrationPanelProps> =
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="text-xs font-bold text-gray-800 flex items-center gap-1.5">
-                      <Tag className="w-3.5 h-3.5 text-violet-600" /> Optional: Complimentary Food Reward
+                      <Tag className="w-3.5 h-3.5 text-[#2D4A3E]" /> Optional: Complimentary Food Reward
                     </span>
                     <p className="text-[11px] text-gray-500 mt-0.5">
                       Discounts are completely optional. Many owners prefer rewarding diners with a complimentary food/dessert item rather than discounting the bill.
@@ -190,31 +190,31 @@ export const RancelabIntegrationPanel: React.FC<RancelabIntegrationPanelProps> =
                       onChange={(e) => setIncludeFoodReward(e.target.checked)}
                       className="sr-only peer"
                     />
-                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-violet-600"></div>
+                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#F4511E]"></div>
                   </label>
                 </div>
 
                 {includeFoodReward && (
-                  <div className="text-[11px] text-violet-900 bg-violet-50 border border-violet-200 p-2.5 rounded-lg flex items-center gap-2">
+                  <div className="text-[11px] text-[#2D4A3E] bg-[#FDE5DD] border border-[#F4511E] p-2.5 rounded-lg flex items-center gap-2">
                     <span>🎁</span>
                     <span>1x Complimentary Chef Dessert (₹0) added to kitchen ticket. Zero bill discount deducted.</span>
                   </div>
                 )}
               </div>
 
-              <div className="border border-gray-200 rounded-xl p-3 bg-[#090D16] space-y-2">
+              <div className="border border-gray-200 rounded-xl p-3 bg-[#FFFFFF] space-y-2">
                 <div className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Basket (3 Items)</div>
                 {sampleOrder.items.map((it, idx) => (
                   <div key={idx} className="flex justify-between items-center text-xs py-1 border-b border-gray-100 last:border-0">
-                    <span className="font-semibold text-gray-900">{it.quantity}x {it.item_name_snapshot}</span>
+                    <span className="font-semibold text-[#141414]">{it.quantity}x {it.item_name_snapshot}</span>
                     <span className="font-mono text-gray-700">₹{it.line_total_amount}</span>
                   </div>
                 ))}
-                <div className="text-[10px] text-violet-700 font-semibold pt-1">GST Slab: {config.gst_slab}% (Indian tax slab)</div>
+                <div className="text-[10px] text-[#2D4A3E] font-semibold pt-1">GST Slab: {config.gst_slab}% (Indian tax slab)</div>
               </div>
 
               <button type="button" disabled={isFiringKot} onClick={handleTestKot}
-                className="w-full py-3.5 px-4 bg-violet-700 hover:bg-violet-800 disabled:bg-gray-300 text-white rounded-xl font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2">
+                className="w-full py-3.5 px-4 bg-[#F4511E] hover:bg-[#F4511E] disabled:bg-gray-300 text-[#141414] rounded-xl font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2">
                 {isFiringKot
                   ? <><RefreshCw className="w-4 h-4 animate-spin" /> Dispatching to RanceLab ERP...</>
                   : <><Send className="w-4 h-4" /> ⚡ Fire KOT into RanceLab Billing Suite</>}
@@ -227,23 +227,23 @@ export const RancelabIntegrationPanel: React.FC<RancelabIntegrationPanelProps> =
                   <Receipt className="w-4 h-4 text-gray-600" /> Kitchen Thermal Printer Preview (80mm)
                 </span>
                 {lastReceipt && (
-                  <button onClick={() => setShowJsonPayload(!showJsonPayload)} className="text-xs text-violet-600 font-bold hover:underline flex items-center gap-1">
+                  <button onClick={() => setShowJsonPayload(!showJsonPayload)} className="text-xs text-[#2D4A3E] font-bold hover:underline flex items-center gap-1">
                     <Terminal className="w-3.5 h-3.5" /> {showJsonPayload ? 'View Receipt' : 'View Raw JSON'}
                   </button>
                 )}
               </div>
               {showJsonPayload && lastReceipt ? (
-                <div className="bg-gray-900 text-emerald-400 p-4 rounded-xl font-mono text-[11px] overflow-x-auto max-h-[480px]">
+                <div className="bg-[#F5F1E8] text-[#2F7A4F] p-4 rounded-xl font-mono text-[11px] overflow-x-auto max-h-[480px]">
                   <pre>{JSON.stringify(lastReceipt.raw_payload, null, 2)}</pre>
                 </div>
               ) : (
-                <div className="bg-violet-50/10 border-2 border-dashed border-gray-300 rounded-xl p-5 font-mono text-xs text-gray-900 leading-relaxed max-w-md mx-auto">
+                <div className="bg-[#FDE5DD]/10 border-2 border-dashed border-gray-300 rounded-xl p-5 font-mono text-xs text-[#141414] leading-relaxed max-w-md mx-auto">
                   {lastReceipt ? (
                     <div>
                       <div className="text-center border-b border-dashed border-gray-400 pb-3">
                         <div className="text-base font-black tracking-tight">{lastReceipt.restaurant_name.toUpperCase()}</div>
                         <div className="text-[11px] font-bold text-gray-600">RANCELAB KITCHEN ORDER TICKET (KOT)</div>
-                        <div className="text-xs font-bold mt-1 text-violet-800 bg-violet-100/80 px-2 py-0.5 rounded-sm inline-block">{lastReceipt.kot_number}</div>
+                        <div className="text-xs font-bold mt-1 text-[#2D4A3E] bg-[#FDE5DD]/80 px-2 py-0.5 rounded-sm inline-block">{lastReceipt.kot_number}</div>
                       </div>
                       <div className="py-2 border-b border-dashed border-gray-400 text-[11px] space-y-0.5">
                         <div className="flex justify-between font-bold text-sm text-black">
@@ -283,7 +283,7 @@ export const RancelabIntegrationPanel: React.FC<RancelabIntegrationPanelProps> =
                     </div>
                   ) : (
                     <div className="text-center py-16 text-gray-500 space-y-2">
-                      <Printer className="w-10 h-10 mx-auto text-gray-400" />
+                      <Printer className="w-10 h-10 mx-auto text-[#6E6E6E]" />
                       <p className="font-bold text-gray-700">No KOT Printed Yet</p>
                       <p className="text-xs max-w-xs mx-auto">Click <strong>"⚡ Fire KOT into RanceLab Billing Suite"</strong> to simulate.</p>
                     </div>
@@ -299,25 +299,25 @@ export const RancelabIntegrationPanel: React.FC<RancelabIntegrationPanelProps> =
           <div className="max-w-2xl space-y-6">
             <div className="flex items-center justify-between pb-4 border-b border-gray-200">
               <div>
-                <h3 className="font-bold text-base text-gray-900">RanceLab API & GST Configuration</h3>
+                <h3 className="font-bold text-base text-[#141414]">RanceLab API & GST Configuration</h3>
                 <p className="text-xs text-gray-500 mt-1">Partner credentials issued by RanceLab (sales@rancelab.com · +91 98319 26662). RanceLab has 30+ years and 200k+ customers globally.</p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" checked={config.enabled} onChange={(e) => setConfig({ ...config, enabled: e.target.checked })} className="sr-only peer" />
-                <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-violet-700"></div>
+                <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#F4511E]"></div>
               </label>
             </div>
             <div className="space-y-4 text-xs">
               <div>
                 <label className="block font-bold text-gray-700 mb-1">Branch Code</label>
                 <input type="text" value={config.branch_code} onChange={(e) => setConfig({ ...config, branch_code: e.target.value })}
-                  placeholder="rl_pune_branch_01" className="w-full p-2.5 border border-gray-300 rounded-lg font-mono focus:ring-2 focus:ring-violet-500" />
+                  placeholder="rl_pune_branch_01" className="w-full p-2.5 border border-gray-300 rounded-lg font-mono focus:ring-2 focus:ring-[#F4511E]" />
                 <span className="text-[11px] text-gray-500 mt-0.5 block">Unique outlet/branch code from RanceLab admin panel.</span>
               </div>
               <div>
                 <label className="block font-bold text-gray-700 mb-1">Partner Key (X-Partner-Key header)</label>
                 <input type="password" value={config.partner_key} onChange={(e) => setConfig({ ...config, partner_key: e.target.value })}
-                  placeholder="Enter Partner Key" className="w-full p-2.5 border border-gray-300 rounded-lg font-mono focus:ring-2 focus:ring-violet-500" />
+                  placeholder="Enter Partner Key" className="w-full p-2.5 border border-gray-300 rounded-lg font-mono focus:ring-2 focus:ring-[#F4511E]" />
                 <span className="text-[11px] text-gray-500 mt-0.5 block">Issued by RanceLab to Menuz as an authorized integration partner.</span>
               </div>
               <div>
@@ -325,8 +325,8 @@ export const RancelabIntegrationPanel: React.FC<RancelabIntegrationPanelProps> =
                 <div className="flex gap-3">
                   {([5, 12, 18, 28] as const).map((slab) => (
                     <label key={slab} className="flex items-center gap-1.5 cursor-pointer">
-                      <input type="radio" name="gst-slab" checked={config.gst_slab === slab} onChange={() => setConfig({ ...config, gst_slab: slab })} className="text-violet-600" />
-                      <span className={config.gst_slab === slab ? 'font-bold text-violet-700' : ''}>{slab}%</span>
+                      <input type="radio" name="gst-slab" checked={config.gst_slab === slab} onChange={() => setConfig({ ...config, gst_slab: slab })} className="text-[#2D4A3E]" />
+                      <span className={config.gst_slab === slab ? 'font-bold text-[#2D4A3E]' : ''}>{slab}%</span>
                     </label>
                   ))}
                 </div>
@@ -335,13 +335,13 @@ export const RancelabIntegrationPanel: React.FC<RancelabIntegrationPanelProps> =
               <div className="flex gap-4">
                 {(['sandbox', 'production'] as const).map((env) => (
                   <label key={env} className="flex items-center gap-2 cursor-pointer text-xs">
-                    <input type="radio" name="rl-env" checked={config.environment === env} onChange={() => setConfig({ ...config, environment: env })} className="text-violet-600" />
+                    <input type="radio" name="rl-env" checked={config.environment === env} onChange={() => setConfig({ ...config, environment: env })} className="text-[#2D4A3E]" />
                     <span className={env === 'production' ? 'font-bold text-emerald-700' : ''}>{env === 'sandbox' ? 'Sandbox / Testing' : 'Production (Live Kitchen)'}</span>
                   </label>
                 ))}
               </div>
               <button type="button" onClick={handleSaveConfig}
-                className="px-6 py-2.5 bg-violet-700 hover:bg-violet-800 text-white font-bold rounded-lg transition-colors flex items-center gap-2">
+                className="px-6 py-2.5 bg-[#F4511E] hover:bg-[#F4511E] text-[#141414] font-bold rounded-lg transition-colors flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4" /> Save RanceLab Configuration
               </button>
               {savedNotification && <span className="text-emerald-600 font-semibold ml-3">✓ Saved!</span>}
@@ -352,11 +352,11 @@ export const RancelabIntegrationPanel: React.FC<RancelabIntegrationPanelProps> =
         {/* TAB 3: GUIDE */}
         {activeTab === 'guide' && (
           <div className="max-w-3xl space-y-5">
-            <div className="bg-violet-50 border border-violet-200 rounded-xl p-4">
-              <h3 className="font-bold text-sm text-violet-950 flex items-center gap-2">
-                <HelpCircle className="w-4 h-4 text-violet-600" /> How RanceLab Integration Works
+            <div className="bg-[#FDE5DD] border border-[#F4511E] rounded-xl p-4">
+              <h3 className="font-bold text-sm text-[#2D4A3E] flex items-center gap-2">
+                <HelpCircle className="w-4 h-4 text-[#2D4A3E]" /> How RanceLab Integration Works
               </h3>
-              <p className="text-xs text-violet-900/80 mt-1">
+              <p className="text-xs text-[#2D4A3E]/80 mt-1">
                 RanceLab is one of India's most established POS ERP vendors (30+ years, 200k+ customers). They have a formal partner program and provide API access via their Integrations & Apps Panel. Contact: <strong>sales@rancelab.com</strong> or <strong>+91 98319 26662</strong>.
               </p>
             </div>
@@ -366,10 +366,10 @@ export const RancelabIntegrationPanel: React.FC<RancelabIntegrationPanelProps> =
               { step: 3, title: 'Configure GST Slab per Restaurant', desc: 'Indian GST varies: 5% for AC restaurants, 12% for non-AC. Enter the correct slab per outlet — RanceLab\'s billing engine applies it to every Menuz-pushed order automatically.' },
               { step: 4, title: 'Live Dispatch with Full ERP Integration', desc: 'Every Menuz QR order pushes to RanceLab, triggers KOT printing, deducts raw material inventory, and appears in the manager\'s consolidated sales report — all in one transaction.' }
             ].map(({ step, title, desc }) => (
-              <div key={step} className="flex gap-4 items-start p-4 bg-[#090D16] border border-gray-200 rounded-xl">
-                <div className="w-8 h-8 rounded-full bg-violet-100 text-violet-700 font-black flex items-center justify-center shrink-0 text-sm">{step}</div>
+              <div key={step} className="flex gap-4 items-start p-4 bg-[#FFFFFF] border border-gray-200 rounded-xl">
+                <div className="w-8 h-8 rounded-full bg-[#FDE5DD] text-[#2D4A3E] font-black flex items-center justify-center shrink-0 text-sm">{step}</div>
                 <div>
-                  <h4 className="font-bold text-sm text-gray-900">{title}</h4>
+                  <h4 className="font-bold text-sm text-[#141414]">{title}</h4>
                   <p className="text-xs text-gray-600 mt-1 leading-relaxed">{desc}</p>
                 </div>
               </div>

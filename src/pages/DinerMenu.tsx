@@ -565,16 +565,16 @@ export const DinerMenu: React.FC = () => {
 
   if (errorMsg) {
     return (
-      <div className="min-h-screen bg-[#131315] text-[#e5e1e4] flex items-center justify-center p-6">
-        <div className="max-w-md w-full bg-[#1b1b1d] rounded-3xl p-6 shadow-2xl text-center border border-red-500/30 text-[#e5e1e4]">
+      <div className="min-h-screen bg-[#FFFFFF] text-[#141414] flex items-center justify-center p-6">
+        <div className="max-w-md w-full bg-[#F5F1E8] rounded-3xl p-6 shadow-2xl text-center border border-red-500/30 text-[#141414]">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-3" />
-          <h2 className="font-serif text-xl font-bold text-[#f5f1ea] mb-2">QR Code Issue</h2>
-          <p className="text-[#ab8980] text-sm mb-4 leading-relaxed">{errorMsg}</p>
+          <h2 className="font-serif text-xl font-bold text-[#141414] mb-2">QR Code Issue</h2>
+          <p className="text-[#6E6E6E] text-sm mb-4 leading-relaxed">{errorMsg}</p>
           <Link
             to={IS_HQ_SITE ? "/customer" : "/"}
-            className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-[#ff5722] hover:bg-[#ff6f3d] text-white text-xs font-bold transition-all shadow-lg"
+            className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-[#F4511E] hover:bg-[#E24A19] text-white text-xs font-bold transition-all shadow-lg"
           >
-            <Home className="w-4 h-4 text-white" />
+            <Home className="w-4 h-4 text-[#141414]" />
             <span>Return to Home</span>
           </Link>
         </div>
@@ -618,18 +618,18 @@ export const DinerMenu: React.FC = () => {
   // a diner scanning a stale QR would be shown the wrong dishes and the wrong prices.
   if (slugNotFound) {
     return (
-      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#131315] text-[#e5e1e4] font-sans px-6 text-center">
-        <div className="w-14 h-14 rounded-2xl bg-[#ff5722]/15 border border-[#ff5722]/30 flex items-center justify-center mb-5">
-          <span className="font-serif font-black text-2xl text-[#ff5722]">M</span>
+      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#FFFFFF] text-[#141414] font-sans px-6 text-center">
+        <div className="w-14 h-14 rounded-2xl bg-[#F4511E]/15 border border-[#F4511E]/30 flex items-center justify-center mb-5">
+          <span className="font-serif font-black text-2xl text-[#F4511E]">M</span>
         </div>
         <h1 className="font-serif text-2xl font-bold mb-2">Menu not found</h1>
-        <p className="text-sm text-[#ab8980] max-w-xs mb-6">
+        <p className="text-sm text-[#6E6E6E] max-w-xs mb-6">
           We couldn&apos;t find a restaurant for this code. The QR may be out of date —
           please ask your server for the current one.
         </p>
         <Link
           to="/"
-          className="px-5 py-2.5 rounded-full bg-[#ff5722] text-white text-sm font-bold"
+          className="px-5 py-2.5 rounded-full bg-[#F4511E] text-white text-sm font-bold"
         >
           Browse restaurants
         </Link>
@@ -639,19 +639,19 @@ export const DinerMenu: React.FC = () => {
 
   if (!restaurantSlug) {
     return (
-      <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#131315] text-[#e5e1e4] font-sans pb-24">
+      <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#FFFFFF] text-[#141414] font-sans pb-24">
         {/* Top Header */}
-        <header className="sticky top-0 z-40 bg-[#131315]/95 backdrop-blur-md border-b border-white/10 px-4 sm:px-6 h-16 flex items-center justify-between">
+        <header className="sticky top-0 z-40 bg-[#FFFFFF]/95 backdrop-blur-md border-b border-black/10 px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2.5">
-            <div className="w-8 h-8 rounded-xl bg-[#ff5722] flex items-center justify-center font-black text-white text-base shadow-xs">
+            <div className="w-8 h-8 rounded-xl bg-[#F4511E] flex items-center justify-center font-black text-white text-base shadow-xs">
               M
             </div>
             <div className="flex flex-col">
               <div className="flex items-center space-x-1.5">
-                <span className="font-serif font-black text-lg tracking-tight text-[#f5f1ea]">
+                <span className="font-serif font-black text-lg tracking-tight text-[#141414]">
                   menuz
                 </span>
-                <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#ffb955]/15 text-[#ffb955] border border-[#ffb955]/30 font-bold">
+                <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#F4511E]/15 text-[#2D4A3E] border border-[#F4511E]/30 font-bold">
                   DINER HUB
                 </span>
               </div>
@@ -662,7 +662,7 @@ export const DinerMenu: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsQrScannerOpen(true)}
-              className="px-3.5 py-1.5 rounded-xl bg-[#ffb955] hover:bg-[#ffa726] active:scale-95 text-black text-xs font-bold shadow-xs flex items-center space-x-1.5 cursor-pointer transition-all"
+              className="px-3.5 py-1.5 rounded-xl bg-[#F4511E] hover:bg-[#F4511E] active:scale-95 text-black text-xs font-bold shadow-xs flex items-center space-x-1.5 cursor-pointer transition-all"
             >
               <QrCode className="w-3.5 h-3.5 text-black" />
               <span>Scan Table QR</span>
@@ -674,35 +674,35 @@ export const DinerMenu: React.FC = () => {
         {/* Hero section */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-3">
-            <span className="px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-[#ffb955]/15 text-[#ffb955] border border-[#ffb955]/30">
+            <span className="px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-[#F4511E]/15 text-[#2D4A3E] border border-[#F4511E]/30">
               Pune Food &amp; Dining Ecosystem
             </span>
-            <h1 className="font-serif text-3xl sm:text-5xl font-extrabold text-[#f5f1ea] tracking-tight">
+            <h1 className="font-serif text-3xl sm:text-5xl font-extrabold text-[#141414] tracking-tight">
               Pune Digital Table Menus
             </h1>
-            <p className="text-sm text-[#ab8980] leading-relaxed">
+            <p className="text-sm text-[#6E6E6E] leading-relaxed">
               Scan your table standee QR to join a live multiplayer session, or choose any of Pune's iconic dining landmarks to explore authentic digital menus with instant dietary filters.
             </p>
           </div>
 
           {/* Table Scan Card */}
-          <div className="max-w-2xl mx-auto bg-[#1b1b1d] border border-white/10 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+          <div className="max-w-2xl mx-auto bg-[#F5F1E8] border border-black/10 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
             <div className="space-y-1.5 text-center sm:text-left">
-              <div className="inline-flex items-center space-x-1.5 text-xs font-bold text-[#ffb955]">
+              <div className="inline-flex items-center space-x-1.5 text-xs font-bold text-[#2D4A3E]">
                 <QrCode className="w-4 h-4" />
                 <span>Seated at a Table Right Now?</span>
               </div>
-              <h3 className="text-lg sm:text-xl font-bold text-[#f5f1ea]">Join Your Table's Multiplayer Cart</h3>
-              <p className="text-xs text-[#ab8980] max-w-md">
+              <h3 className="text-lg sm:text-xl font-bold text-[#141414]">Join Your Table's Multiplayer Cart</h3>
+              <p className="text-xs text-[#6E6E6E] max-w-md">
                 Point your phone camera at the Menuz table standee to immediately order dishes, call the waiter, and split the bill.
               </p>
             </div>
             <button
               type="button"
               onClick={() => setIsQrScannerOpen(true)}
-              className="px-6 py-3.5 rounded-2xl bg-[#ff5722] hover:bg-[#ff6f3d] active:scale-95 text-white font-bold text-sm shadow-md flex items-center space-x-2 shrink-0 cursor-pointer transition-all"
+              className="px-6 py-3.5 rounded-2xl bg-[#F4511E] hover:bg-[#E24A19] active:scale-95 text-white font-bold text-sm shadow-md flex items-center space-x-2 shrink-0 cursor-pointer transition-all"
             >
-              <QrCode className="w-5 h-5 text-white" />
+              <QrCode className="w-5 h-5 text-[#141414]" />
               <span>Launch Camera Scanner</span>
             </button>
           </div>
@@ -710,13 +710,13 @@ export const DinerMenu: React.FC = () => {
           {/* Search and Filters */}
           <div className="space-y-4">
             <div className="relative max-w-xl mx-auto">
-              <Search className="w-5 h-5 text-[#ab8980] absolute left-4 top-1/2 -translate-y-1/2" />
+              <Search className="w-5 h-5 text-[#6E6E6E] absolute left-4 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={hubSearchQuery}
                 onChange={(e) => setHubSearchQuery(e.target.value)}
                 placeholder="Search restaurant or dishes (e.g. Vaishali, Goodluck, Dosa, Strudel)..."
-                className="w-full bg-[#1b1b1d] border border-white/10 rounded-2xl pl-12 pr-4 py-3.5 text-sm text-[#e5e1e4] placeholder-[#ab8980] focus:outline-none focus:border-[#ffb955] shadow-inner"
+                className="w-full bg-[#F5F1E8] border border-black/10 rounded-2xl pl-12 pr-4 py-3.5 text-sm text-[#141414] placeholder-[#6E6E6E] focus:outline-none focus:border-[#F4511E] shadow-inner"
               />
             </div>
 
@@ -728,8 +728,8 @@ export const DinerMenu: React.FC = () => {
                   onClick={() => setHubCategory(cat)}
                   className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
                     hubCategory === cat
-                      ? 'bg-[#ffb955] text-black font-bold shadow-xs'
-                      : 'bg-[#1b1b1d] hover:bg-white/10 text-[#ab8980] border border-white/10'
+                      ? 'bg-[#F4511E] text-black font-bold shadow-xs'
+                      : 'bg-[#F5F1E8] hover:bg-black/[0.06] text-[#6E6E6E] border border-black/10'
                   }`}
                 >
                   {cat === 'all' ? 'All Pune Landmarks' : cat}
@@ -743,31 +743,31 @@ export const DinerMenu: React.FC = () => {
             {filteredHubRestaurants.map((r) => (
               <div
                 key={r.id}
-                className="bg-[#1b1b1d] border border-white/10 hover:border-[#ffb955]/40 rounded-2xl overflow-hidden shadow-xl transition-all group flex flex-col justify-between"
+                className="bg-[#F5F1E8] border border-black/10 hover:border-[#F4511E]/40 rounded-2xl overflow-hidden shadow-xl transition-all group flex flex-col justify-between"
               >
                 <div>
-                  <div className="relative h-44 w-full overflow-hidden bg-[#201f21]">
+                  <div className="relative h-44 w-full overflow-hidden bg-[#F5F1E8]">
                     <img
                       src={r.logo_url || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&auto=format&fit=crop'}
                       alt={r.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                    <span className="absolute top-3 left-3 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-black/70 backdrop-blur-md text-[#ffb955] border border-[#ffb955]/30 shadow-xs">
+                    <span className="absolute top-3 left-3 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-black/70 backdrop-blur-md text-[#FFC46B] border border-[#F4511E]/30 shadow-xs">
                       {r.location || 'Pune, India'}
                     </span>
                   </div>
                   <div className="p-4 space-y-1.5">
-                    <h3 className="font-serif text-lg font-bold text-[#f5f1ea] group-hover:text-[#ffb955] transition-colors">
+                    <h3 className="font-serif text-lg font-bold text-[#141414] group-hover:text-[#2D4A3E] transition-colors">
                       {r.name}
                     </h3>
-                    <p className="text-xs text-[#ab8980] line-clamp-1">{r.cuisine}</p>
+                    <p className="text-xs text-[#6E6E6E] line-clamp-1">{r.cuisine}</p>
                   </div>
                 </div>
                 <div className="p-4 pt-0">
                   <Link
                     to={`/r/${r.slug}/menu`}
-                    className="w-full py-2.5 rounded-xl bg-[#ffb955]/15 hover:bg-[#ffb955] text-[#ffb955] hover:text-black border border-[#ffb955]/30 text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer shadow-xs"
+                    className="w-full py-2.5 rounded-xl bg-[#F4511E]/15 hover:bg-[#F4511E] text-[#2D4A3E] hover:text-black border border-[#F4511E]/30 text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer shadow-xs"
                   >
                     <BookOpen className="w-3.5 h-3.5" />
                     <span>Open Live Menu &amp; Order</span>
@@ -787,18 +787,18 @@ export const DinerMenu: React.FC = () => {
   }
 
   return (
-    <div ref={mainRef} className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#131315] text-[#e5e1e4] pb-36 font-sans selection:bg-[#ff5722]/30 selection:text-white">
+    <div ref={mainRef} className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#FFFFFF] text-[#141414] pb-36 font-sans selection:bg-[#F4511E]/30 selection:text-[#141414]">
       {/* ═══════════════════════════════════════════════════════════ */}
       {/* LIVE TOAST: WAITER CALLED NOTIFICATION                     */}
       {/* ═══════════════════════════════════════════════════════════ */}
       {waiterCalled && (
-        <div className="fixed top-4 left-4 right-4 max-w-sm mx-auto z-50 bg-[#1b1b1d] text-[#e5e1e4] p-3.5 rounded-2xl border border-emerald-500/50 shadow-2xl flex items-center space-x-3 animate-slideDown">
+        <div className="fixed top-4 left-4 right-4 max-w-sm mx-auto z-50 bg-[#F5F1E8] text-[#141414] p-3.5 rounded-2xl border border-emerald-500/50 shadow-2xl flex items-center space-x-3 animate-slideDown">
           <div className="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center flex-shrink-0 text-white shadow-md">
-            <Bell className="w-4 h-4 text-white animate-bounce" />
+            <Bell className="w-4 h-4 text-[#141414] animate-bounce" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="font-bold text-xs text-white">Waiter Alert Transmitted!</p>
-            <p className="text-[10px] text-[#ab8980]">
+            <p className="font-bold text-xs text-[#141414]">Waiter Alert Transmitted!</p>
+            <p className="text-[10px] text-[#6E6E6E]">
               Staff has been notified for {activeTable?.label || 'your table'}. A server is on their way.
             </p>
           </div>
@@ -808,21 +808,21 @@ export const DinerMenu: React.FC = () => {
       {/* ═══════════════════════════════════════════════════════════ */}
       {/* 0. STITCH TOP APP BAR (HEADER)                              */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <header className="fixed top-0 left-0 w-full z-40 flex justify-between items-center px-4 py-3 bg-[#131315]/90 backdrop-blur-md shadow-sm border-b border-white/5">
+      <header className="fixed top-0 left-0 w-full z-40 flex justify-between items-center px-4 py-3 bg-[#FFFFFF]/90 backdrop-blur-md shadow-sm border-b border-black/5">
         <Link to="/" title="Return to Pune Dining Discovery Home" className="flex items-center gap-2.5 sm:gap-3 group cursor-pointer">
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#201f21] group-hover:bg-[#ff5722] flex items-center justify-center text-[#ff5722] group-hover:text-white border border-white/5 group-hover:border-[#ff5722] flex-shrink-0 transition-colors shadow-sm">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#F5F1E8] group-hover:bg-[#F4511E] flex items-center justify-center text-[#F4511E] group-hover:text-white border border-black/5 group-hover:border-[#F4511E] flex-shrink-0 transition-colors shadow-sm">
             <span className="material-symbols-outlined text-base sm:text-lg">arrow_back</span>
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-sm sm:text-base font-bold text-[#e5e1e4] group-hover:text-[#ffb955] tracking-tight transition-colors">
+              <h1 className="text-sm sm:text-base font-bold text-[#141414] group-hover:text-[#2D4A3E] tracking-tight transition-colors">
                 {targetRestaurant.name || 'Saffron House'}
               </h1>
-              <span className="text-[11px] text-[#ab8980] font-medium hidden xs:inline">
+              <span className="text-[11px] text-[#6E6E6E] font-medium hidden xs:inline">
                 · {targetRestaurant.location || 'Koregaon Park'}
               </span>
             </div>
-            <p className="text-[11px] text-[#ffb955] flex items-center gap-1.5 font-medium">
+            <p className="text-[11px] text-[#2D4A3E] flex items-center gap-1.5 font-medium">
               <span className="w-1.5 h-1.5 rounded-full bg-[#88d982] inline-block animate-pulse"></span>
               {activeTable ? activeTable.label : 'Table 04'} · {activeTable?.capacity || 2} Guests
             </p>
@@ -835,8 +835,8 @@ export const DinerMenu: React.FC = () => {
             onClick={() => setIsSearchExpanded(!isSearchExpanded)}
             className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
               isSearchExpanded || searchQuery
-                ? 'bg-[#ff5722] text-white'
-                : 'bg-[#201f21] text-[#ab8980] hover:text-[#e5e1e4] hover:bg-[#2a2a2c]'
+                ? 'bg-[#F4511E] text-white'
+                : 'bg-[#F5F1E8] text-[#6E6E6E] hover:text-[#141414] hover:bg-[#EFE9DD]'
             }`}
           >
             <span className="material-symbols-outlined text-lg">search</span>
@@ -845,11 +845,11 @@ export const DinerMenu: React.FC = () => {
             type="button"
             aria-label="Filter dishes"
             onClick={() => setIsFilterModalOpen(true)}
-            className="w-9 h-9 rounded-full bg-[#201f21] flex items-center justify-center text-[#ab8980] hover:text-[#e5e1e4] hover:bg-[#2a2a2c] transition-colors relative cursor-pointer"
+            className="w-9 h-9 rounded-full bg-[#F5F1E8] flex items-center justify-center text-[#6E6E6E] hover:text-[#141414] hover:bg-[#EFE9DD] transition-colors relative cursor-pointer"
           >
             <span className="material-symbols-outlined text-lg">tune</span>
             {activeFiltersCount > 0 && (
-              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#ff5722]"></span>
+              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#F4511E]"></span>
             )}
           </button>
           <button
@@ -860,7 +860,7 @@ export const DinerMenu: React.FC = () => {
             className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
               waiterCalled
                 ? 'bg-emerald-600 text-white'
-                : 'bg-[#201f21] text-[#ab8980] hover:text-[#e5e1e4] hover:bg-[#2a2a2c]'
+                : 'bg-[#F5F1E8] text-[#6E6E6E] hover:text-[#141414] hover:bg-[#EFE9DD]'
             }`}
           >
             <span className="material-symbols-outlined text-lg">room_service</span>
@@ -870,22 +870,22 @@ export const DinerMenu: React.FC = () => {
 
       {/* Expandable Search Input Drawer */}
       {isSearchExpanded && (
-        <div className="fixed top-[57px] left-0 right-0 z-30 bg-[#1b1b1d]/95 backdrop-blur-md px-4 py-2 border-b border-white/5 animate-slideDown shadow-lg">
+        <div className="fixed top-[57px] left-0 right-0 z-30 bg-[#F5F1E8]/95 backdrop-blur-md px-4 py-2 border-b border-black/5 animate-slideDown shadow-lg">
           <div className="max-w-xl mx-auto relative flex items-center">
-            <span className="material-symbols-outlined absolute left-3 text-[#ab8980] text-lg">search</span>
+            <span className="material-symbols-outlined absolute left-3 text-[#6E6E6E] text-lg">search</span>
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search curries, biryanis, kebabs, breads..."
-              className="w-full bg-[#201f21] text-[#e5e1e4] pl-10 pr-10 py-2 rounded-full text-xs placeholder-[#ab8980]/70 border border-white/10 focus:outline-none focus:border-[#ff5722]"
+              className="w-full bg-[#F5F1E8] text-[#141414] pl-10 pr-10 py-2 rounded-full text-xs placeholder-[#6E6E6E]/70 border border-black/10 focus:outline-none focus:border-[#F4511E]"
               autoFocus
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 text-[#ab8980] hover:text-[#e5e1e4]"
+                className="absolute right-3 text-[#6E6E6E] hover:text-[#141414]"
               >
                 <span className="material-symbols-outlined text-sm">close</span>
               </button>
@@ -899,14 +899,14 @@ export const DinerMenu: React.FC = () => {
       {/* ═══════════════════════════════════════════════════════════ */}
       <main className="pt-16 max-w-xl mx-auto px-4 md:px-0">
         {/* Sticky Category Pill Rail */}
-        <section className="sticky top-[57px] z-20 bg-[#131315]/95 backdrop-blur-md py-2.5 -mx-4 px-4 overflow-x-auto no-scrollbar border-b border-white/5 flex items-center space-x-2">
+        <section className="sticky top-[57px] z-20 bg-[#FFFFFF]/95 backdrop-blur-md py-2.5 -mx-4 px-4 overflow-x-auto no-scrollbar border-b border-black/5 flex items-center space-x-2">
           <button
             type="button"
             onClick={() => setSelectedCategory('all')}
             className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 active:scale-95 cursor-pointer ${
               selectedCategory === 'all'
-                ? 'bg-[#e5e1e4] text-[#131315] font-bold shadow-sm'
-                : 'bg-[#201f21] text-[#ab8980] hover:text-[#e5e1e4] border border-white/5'
+                ? 'bg-[#141414] text-white font-bold shadow-sm'
+                : 'bg-[#F5F1E8] text-[#6E6E6E] hover:text-[#141414] border border-black/5'
             }`}
           >
             All Dishes
@@ -918,8 +918,8 @@ export const DinerMenu: React.FC = () => {
               onClick={() => setSelectedCategory(cat.id)}
               className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 active:scale-95 cursor-pointer ${
                 selectedCategory === cat.id
-                  ? 'bg-[#e5e1e4] text-[#131315] font-bold shadow-sm'
-                  : 'bg-[#201f21] text-[#ab8980] hover:text-[#e5e1e4] border border-white/5'
+                  ? 'bg-[#141414] text-white font-bold shadow-sm'
+                  : 'bg-[#F5F1E8] text-[#6E6E6E] hover:text-[#141414] border border-black/5'
               }`}
             >
               {translateCategory(cat.name, selectedLanguage)}
@@ -930,21 +930,21 @@ export const DinerMenu: React.FC = () => {
         {/* Active Filter Chips Bar */}
         {(activeFiltersCount > 0 || searchQuery) && (
           <div className="mt-3 flex items-center flex-wrap gap-1.5 text-xs">
-            <span className="text-[#ab8980] text-[11px]">Filtered:</span>
+            <span className="text-[#6E6E6E] text-[11px]">Filtered:</span>
             {searchQuery && (
-              <span className="px-2 py-0.5 rounded-full bg-[#201f21] border border-white/10 text-[#e5e1e4] flex items-center gap-1">
+              <span className="px-2 py-0.5 rounded-full bg-[#F5F1E8] border border-black/10 text-[#141414] flex items-center gap-1">
                 "{searchQuery}"
-                <button type="button" onClick={() => setSearchQuery('')} className="hover:text-red-400">×</button>
+                <button type="button" onClick={() => setSearchQuery('')} className="hover:text-[#C23A1C]">×</button>
               </span>
             )}
             {filters.dietary !== 'all' && (
-              <span className="px-2 py-0.5 rounded-full bg-[#ff5722]/15 border border-[#ff5722]/30 text-[#ffb5a0] flex items-center gap-1 capitalize">
+              <span className="px-2 py-0.5 rounded-full bg-[#F4511E]/15 border border-[#F4511E]/30 text-[#F4511E] flex items-center gap-1 capitalize">
                 {filters.dietary.replace('_', ' ')}
                 <button type="button" onClick={() => setFilters((prev) => ({ ...prev, dietary: 'all' }))}>×</button>
               </span>
             )}
             {filters.spice !== 'all' && (
-              <span className="px-2 py-0.5 rounded-full bg-[#ffb955]/15 border border-[#ffb955]/30 text-[#ffb955] flex items-center gap-1 capitalize">
+              <span className="px-2 py-0.5 rounded-full bg-[#F4511E]/15 border border-[#F4511E]/30 text-[#2D4A3E] flex items-center gap-1 capitalize">
                 {filters.spice} spice
                 <button type="button" onClick={() => setFilters((prev) => ({ ...prev, spice: 'all' }))}>×</button>
               </span>
@@ -955,7 +955,7 @@ export const DinerMenu: React.FC = () => {
                 setSearchQuery('');
                 setFilters({ dietary: 'all', spice: 'all', sort: 'default', highlight: 'all' });
               }}
-              className="text-[11px] text-[#ff5722] hover:underline ml-1 cursor-pointer"
+              className="text-[11px] text-[#F4511E] hover:underline ml-1 cursor-pointer"
             >
               Reset All
             </button>
@@ -964,20 +964,20 @@ export const DinerMenu: React.FC = () => {
 
         {/* Surprise Table Treat / Spin Wheel Banner */}
         {selectedChallenge && !rewardBannerDismissed && (
-          <div className="mt-4 p-3.5 rounded-2xl bg-gradient-to-r from-[#201f21] via-[#2a2a2c] to-[#201f21] border border-[#ffb955]/30 shadow-lg flex items-center justify-between gap-3">
+          <div className="mt-4 p-3.5 rounded-2xl bg-gradient-to-r from-[#F5F1E8] via-[#EFE9DD] to-[#F5F1E8] border border-[#F4511E]/30 shadow-lg flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#ffb955]/15 flex items-center justify-center text-[#ffb955] flex-shrink-0">
-                <Gift className="w-5 h-5 text-[#ffb955] animate-bounce" />
+              <div className="w-10 h-10 rounded-xl bg-[#F4511E]/15 flex items-center justify-center text-[#2D4A3E] flex-shrink-0">
+                <Gift className="w-5 h-5 text-[#2D4A3E] animate-bounce" />
               </div>
               <div>
-                <p className="text-xs font-bold text-[#e5e1e4]">Surprise Table Treat Available!</p>
-                <p className="text-[11px] text-[#ab8980]">Spin the wheel to unlock complimentary desserts or dishes.</p>
+                <p className="text-xs font-bold text-[#141414]">Surprise Table Treat Available!</p>
+                <p className="text-[11px] text-[#6E6E6E]">Spin the wheel to unlock complimentary desserts or dishes.</p>
               </div>
             </div>
             <button
               type="button"
               onClick={() => handleOpenChallenge(undefined, 'wheel')}
-              className="px-3 py-1.5 rounded-full bg-[#ff5722] hover:bg-[#ff6f3d] text-white text-xs font-bold shadow-md shadow-[#ff5722]/20 active:scale-95 transition-all flex-shrink-0 cursor-pointer"
+              className="px-3 py-1.5 rounded-full bg-[#F4511E] hover:bg-[#E24A19] text-white text-xs font-bold shadow-md shadow-[#F4511E]/20 active:scale-95 transition-all flex-shrink-0 cursor-pointer"
             >
               Spin Now
             </button>
@@ -988,27 +988,27 @@ export const DinerMenu: React.FC = () => {
         <div className="mt-6 mb-4 flex items-center justify-between">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#ffb955] animate-pulse" />
-              <span className="text-[11px] font-mono uppercase tracking-widest text-[#ffb955] font-semibold">
+              <span className="w-2 h-2 rounded-full bg-[#F4511E] animate-pulse" />
+              <span className="text-[11px] font-mono uppercase tracking-widest text-[#2D4A3E] font-semibold">
                 {selectedCategory === 'all'
                   ? 'FULL COLLECTION // SERIES 01'
                   : `${categories.find((c) => c.id === selectedCategory)?.name?.toUpperCase() || 'COLLECTION'} // SERIES 01`}
               </span>
             </div>
-            <h2 className="text-base sm:text-lg font-serif font-bold text-[#e5e1e4] tracking-tight mt-0.5">
+            <h2 className="text-base sm:text-lg font-serif font-bold text-[#141414] tracking-tight mt-0.5">
               {menuViewMode === 'showroom' ? 'Culinary Showroom Wall' : 'Menu Selection'}
             </h2>
           </div>
 
           {/* View Mode Switcher */}
-          <div className="flex items-center bg-black/40 border border-white/10 rounded-xl p-1 gap-1">
+          <div className="flex items-center bg-[#F5F1E8] border border-black/10 rounded-xl p-1 gap-1">
             <button
               type="button"
               onClick={() => setMenuViewMode('showroom')}
               className={`px-2.5 py-1.5 rounded-lg text-xs font-mono flex items-center gap-1.5 transition-all cursor-pointer ${
                 menuViewMode === 'showroom'
-                  ? 'bg-[#ffb955] text-black font-bold shadow-md shadow-[#ffb955]/20'
-                  : 'text-[#ab8980] hover:text-[#e5e1e4]'
+                  ? 'bg-[#141414] text-white font-bold shadow-md'
+                  : 'text-[#6E6E6E] hover:text-[#141414]'
               }`}
               title="Showroom Wall Mode (Squares)"
             >
@@ -1020,8 +1020,8 @@ export const DinerMenu: React.FC = () => {
               onClick={() => setMenuViewMode('classic')}
               className={`px-2.5 py-1.5 rounded-lg text-xs font-mono flex items-center gap-1.5 transition-all cursor-pointer ${
                 menuViewMode === 'classic'
-                  ? 'bg-[#ffb955] text-black font-bold shadow-md shadow-[#ffb955]/20'
-                  : 'text-[#ab8980] hover:text-[#e5e1e4]'
+                  ? 'bg-[#141414] text-white font-bold shadow-md'
+                  : 'text-[#6E6E6E] hover:text-[#141414]'
               }`}
               title="Classic Card List"
             >
@@ -1032,10 +1032,10 @@ export const DinerMenu: React.FC = () => {
         </div>
 
         {filteredDishes.length === 0 ? (
-          <div className="text-center py-16 bg-[#1b1b1d] rounded-2xl border border-white/5 p-6">
-            <span className="material-symbols-outlined text-4xl text-[#ab8980] mb-2">restaurant</span>
-            <h3 className="text-sm font-bold text-[#e5e1e4]">No dishes match your selection</h3>
-            <p className="text-xs text-[#ab8980] mt-1">Try adjusting your dietary or search filters</p>
+          <div className="text-center py-16 bg-[#F5F1E8] rounded-2xl border border-black/5 p-6">
+            <span className="material-symbols-outlined text-4xl text-[#6E6E6E] mb-2">restaurant</span>
+            <h3 className="text-sm font-bold text-[#141414]">No dishes match your selection</h3>
+            <p className="text-xs text-[#6E6E6E] mt-1">Try adjusting your dietary or search filters</p>
             <button
               type="button"
               onClick={() => {
@@ -1043,7 +1043,7 @@ export const DinerMenu: React.FC = () => {
                 setSelectedCategory('all');
                 setFilters({ dietary: 'all', spice: 'all', sort: 'default', highlight: 'all' });
               }}
-              className="mt-4 px-4 py-1.5 rounded-full bg-[#ff5722] text-white text-xs font-semibold cursor-pointer"
+              className="mt-4 px-4 py-1.5 rounded-full bg-[#F4511E] text-white text-xs font-semibold cursor-pointer"
             >
               View Full Menu
             </button>
@@ -1088,38 +1088,38 @@ export const DinerMenu: React.FC = () => {
 
                   {/* Edge-lit Illuminated Glass Shelf Line (LAST DEPT. signature plinth) */}
                   <div className="w-full mt-2 sm:mt-3 flex flex-col items-center">
-                    <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-[#ffb955]/60 group-hover:via-[#ffb955] to-transparent transition-all duration-300 shadow-[0_0_12px_rgba(255,185,85,0.45)] group-hover:shadow-[0_0_24px_rgba(255,185,85,0.9)]" />
-                    <div className="w-[88%] h-1 bg-gradient-to-b from-[#ffb955]/15 to-transparent rounded-b" />
+                    <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-[#F4511E]/60 group-hover:via-[#F4511E] to-transparent transition-all duration-300 shadow-[0_0_12px_rgba(255,185,85,0.45)] group-hover:shadow-[0_0_24px_rgba(255,185,85,0.9)]" />
+                    <div className="w-[88%] h-1 bg-gradient-to-b from-[#F4511E]/15 to-transparent rounded-b" />
                   </div>
 
                   {/* Dish Name & Details Written Directly Below (Full Name, Completely Readable) */}
                   <div className="mt-2 sm:mt-3 px-0.5 sm:px-1 flex flex-col gap-1 sm:gap-1.5">
                     {/* Top sub-row: Serial Index + Price */}
                     <div className="flex items-center justify-between text-[10px] sm:text-[11px] font-mono">
-                      <span className="uppercase text-[#ab8980] tracking-wider text-[9px] sm:text-[10px] truncate max-w-[65%]">
+                      <span className="uppercase text-[#6E6E6E] tracking-wider text-[9px] sm:text-[10px] truncate max-w-[65%]">
                         {String(index + 1).padStart(2, '0')} // {catName || 'STUDIO'}
                       </span>
-                      <span className="font-mono font-bold text-xs sm:text-sm text-[#ffb955]">
+                      <span className="font-mono font-bold text-xs sm:text-sm text-[#2D4A3E]">
                         ₹{dish.price}
                       </span>
                     </div>
 
                     {/* Full Dish Name: completely readable, wraps naturally, clean font sizing */}
-                    <h3 className="text-xs sm:text-base font-bold font-serif text-[#f5f1ea] group-hover:text-[#ffb955] transition-colors leading-snug tracking-tight">
+                    <h3 className="text-xs sm:text-base font-bold font-serif text-[#141414] group-hover:text-[#2D4A3E] transition-colors leading-snug tracking-tight">
                       {tDish.name || dish.name}
                     </h3>
 
                     {/* Bottom Metadata: Spice heat scale & serving size */}
-                    <div className="flex items-center flex-wrap gap-1 sm:gap-2 text-[9px] sm:text-[11px] text-[#ab8980] font-mono mt-0.5">
+                    <div className="flex items-center flex-wrap gap-1 sm:gap-2 text-[9px] sm:text-[11px] text-[#6E6E6E] font-mono mt-0.5">
                       {dish.spice_level > 0 && (
-                        <span className="flex items-center text-[#ff5722]">
+                        <span className="flex items-center text-[#F4511E]">
                           <Flame className="w-3 h-3 sm:w-3.5 sm:h-3.5 inline mr-0.5" />
                           <span>Heat {dish.spice_level}/5</span>
                         </span>
                       )}
                       {dish.serving_size && (
                         <>
-                          <span className="text-white/20">•</span>
+                          <span className="text-[#141414]/20">•</span>
                           <span>Serves {dish.serving_size}</span>
                         </>
                       )}
@@ -1142,7 +1142,7 @@ export const DinerMenu: React.FC = () => {
               return (
                 <article
                   key={dish.id}
-                  className="bg-[#1b1b1d] rounded-2xl overflow-hidden border border-white/5 shadow-xl transition-all duration-300 hover:border-white/10"
+                  className="bg-[#F5F1E8] rounded-2xl overflow-hidden border border-black/5 shadow-xl transition-all duration-300 hover:border-black/10"
                 >
                   {/* Dish Image (4:3 aspect ratio) with Multi-Photo Gallery Toggle */}
                   <DishCardImageGallery
@@ -1162,49 +1162,49 @@ export const DinerMenu: React.FC = () => {
                       <div>
                         <h2
                           onClick={() => setSpatialDish(dish)}
-                          className="text-base font-bold text-[#e5e1e4] tracking-tight hover:text-[#ff5722] cursor-pointer transition-colors"
+                          className="text-base font-bold text-[#141414] tracking-tight hover:text-[#F4511E] cursor-pointer transition-colors"
                         >
                           {tDish.name || dish.name}
                         </h2>
-                        <p className="text-xs text-[#ab8980] line-clamp-2 mt-1 leading-relaxed">
+                        <p className="text-xs text-[#6E6E6E] line-clamp-2 mt-1 leading-relaxed">
                           {tDish.short_description || dish.short_description || dish.full_description}
                         </p>
                       </div>
                       <div className="text-right flex-shrink-0">
-                        <span className="text-base font-bold text-[#ffb955]">
+                        <span className="text-base font-bold text-[#2D4A3E]">
                           ₹{dish.price}
                         </span>
                       </div>
                     </div>
 
                     {/* Meta Chips */}
-                    <div className="mt-3 flex items-center gap-2 text-[11px] text-[#ab8980] flex-wrap">
+                    <div className="mt-3 flex items-center gap-2 text-[11px] text-[#6E6E6E] flex-wrap">
                       {dish.serving_size && (
-                        <span className="flex items-center gap-1 bg-[#201f21] px-2 py-0.5 rounded-full border border-white/5">
-                          <span className="material-symbols-outlined text-[13px] text-[#ffb955]">scale</span>
+                        <span className="flex items-center gap-1 bg-[#F5F1E8] px-2 py-0.5 rounded-full border border-black/5">
+                          <span className="material-symbols-outlined text-[13px] text-[#2D4A3E]">scale</span>
                           Serves {dish.serving_size}
                         </span>
                       )}
                       {dish.spice_level > 0 && (
-                        <span className="flex items-center gap-1 bg-[#201f21] px-2 py-0.5 rounded-full border border-white/5 capitalize">
-                          <span className="material-symbols-outlined text-[13px] text-[#ff5722]">local_fire_department</span>
+                        <span className="flex items-center gap-1 bg-[#F5F1E8] px-2 py-0.5 rounded-full border border-black/5 capitalize">
+                          <span className="material-symbols-outlined text-[13px] text-[#F4511E]">local_fire_department</span>
                           {dish.spice_level === 1 ? 'Mild' : dish.spice_level === 2 ? 'Medium' : 'Hot'}
                         </span>
                       )}
                       {dish.pairing_drink_name && (
-                        <span className="flex items-center gap-1 bg-[#201f21] px-2 py-0.5 rounded-full border border-white/5">
-                          <span className="material-symbols-outlined text-[13px] text-[#ffb955]">wine_bar</span>
+                        <span className="flex items-center gap-1 bg-[#F5F1E8] px-2 py-0.5 rounded-full border border-black/5">
+                          <span className="material-symbols-outlined text-[13px] text-[#2D4A3E]">wine_bar</span>
                           Pairs with {dish.pairing_drink_name}
                         </span>
                       )}
                     </div>
 
                     {/* Bottom Actions Row */}
-                    <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between">
+                    <div className="mt-4 pt-3 border-t border-black/5 flex items-center justify-between">
                       <button
                         type="button"
                         onClick={() => setSpatialDish(dish)}
-                        className="text-xs text-[#ab8980] hover:text-[#e5e1e4] flex items-center gap-1 transition-colors cursor-pointer"
+                        className="text-xs text-[#6E6E6E] hover:text-[#141414] flex items-center gap-1 transition-colors cursor-pointer"
                       >
                         <span className="material-symbols-outlined text-sm">info</span>
                         <span>Sourcing & Nutrition</span>
@@ -1212,21 +1212,21 @@ export const DinerMenu: React.FC = () => {
 
                       {/* Cart Stepper or Add Button */}
                       {itemQuantity > 0 ? (
-                        <div className="flex items-center bg-[#201f21] rounded-full p-0.5 border border-white/10">
+                        <div className="flex items-center bg-[#F5F1E8] rounded-full p-0.5 border border-black/10">
                           <button
                             type="button"
                             onClick={() => handleUpdateQuantity(dish.id, itemQuantity - 1)}
-                            className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-white/10 text-[#e5e1e4] active:scale-95 transition-all cursor-pointer"
+                            className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-black/[0.06] text-[#141414] active:scale-95 transition-all cursor-pointer"
                           >
                             <span className="material-symbols-outlined text-[16px]">remove</span>
                           </button>
-                          <span className="w-6 text-center text-xs font-bold text-[#e5e1e4]">
+                          <span className="w-6 text-center text-xs font-bold text-[#141414]">
                             {itemQuantity}
                           </span>
                           <button
                             type="button"
                             onClick={() => handleUpdateQuantity(dish.id, itemQuantity + 1)}
-                            className="w-7 h-7 rounded-full bg-[#ff5722] text-white flex items-center justify-center active:scale-95 transition-all shadow-sm cursor-pointer"
+                            className="w-7 h-7 rounded-full bg-[#F4511E] text-white flex items-center justify-center active:scale-95 transition-all shadow-sm cursor-pointer"
                           >
                             <span className="material-symbols-outlined text-[16px]">add</span>
                           </button>
@@ -1244,7 +1244,7 @@ export const DinerMenu: React.FC = () => {
                               selected_options: []
                             });
                           }}
-                          className="px-3.5 py-1.5 rounded-full bg-[#ff5722] hover:bg-[#ff6f3d] text-white text-xs font-semibold flex items-center gap-1 active:scale-95 transition-all shadow-md shadow-[#ff5722]/20 cursor-pointer"
+                          className="px-3.5 py-1.5 rounded-full bg-[#F4511E] hover:bg-[#E24A19] text-white text-xs font-semibold flex items-center gap-1 active:scale-95 transition-all shadow-md shadow-[#F4511E]/20 cursor-pointer"
                         >
                           <span className="material-symbols-outlined text-base">add</span>
                           <span>Add to Order</span>
@@ -1259,30 +1259,30 @@ export const DinerMenu: React.FC = () => {
         )}
 
         {/* Captain / Chef AI Recommendations Card */}
-        <div className="my-6 p-4 rounded-2xl bg-[#201f21] border border-white/5 flex items-center justify-between gap-3">
+        <div className="my-6 p-4 rounded-2xl bg-[#F5F1E8] border border-black/5 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-[#2a2a2c] flex items-center justify-center text-[#ffb955] flex-shrink-0">
+            <div className="w-8 h-8 rounded-full bg-[#EFE9DD] flex items-center justify-center text-[#2D4A3E] flex-shrink-0">
               <span className="material-symbols-outlined text-base">restaurant_menu</span>
             </div>
             <div>
-              <p className="text-xs text-[#e5e1e4] font-semibold">Need Culinary Recommendations?</p>
-              <p className="text-[11px] text-[#ab8980]">Our captain or Chef AI can tailor spice levels and pairing courses.</p>
+              <p className="text-xs text-[#141414] font-semibold">Need Culinary Recommendations?</p>
+              <p className="text-[11px] text-[#6E6E6E]">Our captain or Chef AI can tailor spice levels and pairing courses.</p>
             </div>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
             <button
               type="button"
               onClick={() => setIsAiOpen(true)}
-              className="px-3 py-1.5 rounded-full bg-[#2a2a2c] hover:bg-[#353437] text-[#e5e1e4] text-xs border border-white/10 active:scale-95 transition-transform flex items-center gap-1 cursor-pointer"
+              className="px-3 py-1.5 rounded-full bg-[#EFE9DD] hover:bg-[#EFE9DD] text-[#141414] text-xs border border-black/10 active:scale-95 transition-transform flex items-center gap-1 cursor-pointer"
             >
-              <span className="material-symbols-outlined text-sm text-[#ffb955]">sparkles</span>
+              <span className="material-symbols-outlined text-sm text-[#2D4A3E]">sparkles</span>
               <span>Chef AI</span>
             </button>
             <button
               type="button"
               onClick={handleCallWaiter}
               disabled={waiterCalled}
-              className="px-3 py-1.5 rounded-full bg-[#ff5722] hover:bg-[#ff6f3d] text-white text-xs font-semibold active:scale-95 transition-transform cursor-pointer"
+              className="px-3 py-1.5 rounded-full bg-[#F4511E] hover:bg-[#E24A19] text-white text-xs font-semibold active:scale-95 transition-transform cursor-pointer"
             >
               {waiterCalled ? 'Alerted' : 'Call Captain'}
             </button>
@@ -1293,28 +1293,28 @@ export const DinerMenu: React.FC = () => {
       {/* Sticky Bottom Contextual Order Tray */}
       {totalCartCount > 0 && (
         <div className="fixed bottom-16 left-0 right-0 z-40 px-4 pointer-events-none max-w-xl mx-auto">
-          <div className="pointer-events-auto bg-[#2a2a2c]/95 backdrop-blur-xl border border-white/10 rounded-2xl p-3 shadow-2xl flex items-center justify-between gap-3">
+          <div className="pointer-events-auto bg-[#EFE9DD]/95 backdrop-blur-xl border border-black/10 rounded-2xl p-3 shadow-2xl flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-[#ff5722]/15 flex items-center justify-center text-[#ff5722]">
+              <div className="w-9 h-9 rounded-xl bg-[#F4511E]/15 flex items-center justify-center text-[#F4511E]">
                 <span className="material-symbols-outlined text-lg">receipt_long</span>
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs text-[#e5e1e4] font-semibold">
+                  <span className="text-xs text-[#141414] font-semibold">
                     {totalCartCount} {totalCartCount === 1 ? 'item' : 'items'} in table order
                   </span>
                   <span className="w-1 h-1 rounded-full bg-[#ab8980]"></span>
-                  <span className="text-xs text-[#ffb955] font-bold">
+                  <span className="text-xs text-[#2D4A3E] font-bold">
                     ₹{cartSubtotal.toFixed(0)}
                   </span>
                 </div>
-                <p className="text-[11px] text-[#ab8980]">Ready to transmit to kitchen</p>
+                <p className="text-[11px] text-[#6E6E6E]">Ready to transmit to kitchen</p>
               </div>
             </div>
             <button
               type="button"
               onClick={() => setIsCartOpen(true)}
-              className="px-4 py-2 rounded-full bg-[#ff5722] hover:bg-[#ff6f3d] text-white text-xs font-semibold shadow-md shadow-[#ff5722]/25 flex items-center gap-1.5 active:scale-95 transition-all cursor-pointer"
+              className="px-4 py-2 rounded-full bg-[#F4511E] hover:bg-[#E24A19] text-white text-xs font-semibold shadow-md shadow-[#F4511E]/25 flex items-center gap-1.5 active:scale-95 transition-all cursor-pointer"
             >
               <span>Review & Send</span>
               <span className="material-symbols-outlined text-base">arrow_forward</span>
@@ -1324,10 +1324,10 @@ export const DinerMenu: React.FC = () => {
       )}
 
       {/* Fixed Bottom Navigation Bar */}
-      <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 sm:px-4 py-2 bg-[#1b1b1d]/95 backdrop-blur-lg shadow-2xl border-t border-white/5">
+      <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 sm:px-4 py-2 bg-[#F5F1E8]/95 backdrop-blur-lg shadow-2xl border-t border-black/5">
         <Link
           to="/"
-          className="flex flex-col items-center justify-center text-[#ab8980] hover:text-[#ff5722] px-2.5 sm:px-4 py-1 transition-colors duration-200 active:scale-95 cursor-pointer"
+          className="flex flex-col items-center justify-center text-[#6E6E6E] hover:text-[#F4511E] px-2.5 sm:px-4 py-1 transition-colors duration-200 active:scale-95 cursor-pointer"
         >
           <span className="material-symbols-outlined text-lg sm:text-xl">home</span>
           <span className="text-[10px] sm:text-[11px] mt-0.5 font-medium">Home</span>
@@ -1335,7 +1335,7 @@ export const DinerMenu: React.FC = () => {
         <button
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="flex flex-col items-center justify-center text-[#ff5722] px-2.5 sm:px-4 py-1 transition-colors duration-200 active:scale-95 cursor-pointer"
+          className="flex flex-col items-center justify-center text-[#F4511E] px-2.5 sm:px-4 py-1 transition-colors duration-200 active:scale-95 cursor-pointer"
         >
           <span className="material-symbols-outlined text-lg sm:text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>
             menu_book
@@ -1345,12 +1345,12 @@ export const DinerMenu: React.FC = () => {
         <button
           type="button"
           onClick={() => setIsCartOpen(true)}
-          className="flex flex-col items-center justify-center text-[#ab8980] hover:text-[#e5e1e4] px-4 py-1 transition-colors duration-200 active:scale-95 relative cursor-pointer"
+          className="flex flex-col items-center justify-center text-[#6E6E6E] hover:text-[#141414] px-4 py-1 transition-colors duration-200 active:scale-95 relative cursor-pointer"
         >
           <span className="material-symbols-outlined text-xl">receipt_long</span>
           <span className="text-[11px] mt-0.5">Table Order</span>
           {totalCartCount > 0 && (
-            <span className="absolute top-0 right-3 w-4 h-4 rounded-full bg-[#ff5722] text-white text-[9px] font-bold flex items-center justify-center">
+            <span className="absolute top-0 right-3 w-4 h-4 rounded-full bg-[#F4511E] text-white text-[9px] font-bold flex items-center justify-center">
               {totalCartCount}
             </span>
           )}
@@ -1359,7 +1359,7 @@ export const DinerMenu: React.FC = () => {
           type="button"
           onClick={handleCallWaiter}
           disabled={waiterCalled}
-          className="flex flex-col items-center justify-center text-[#ab8980] hover:text-[#e5e1e4] px-4 py-1 transition-colors duration-200 active:scale-95 cursor-pointer"
+          className="flex flex-col items-center justify-center text-[#6E6E6E] hover:text-[#141414] px-4 py-1 transition-colors duration-200 active:scale-95 cursor-pointer"
         >
           <span className="material-symbols-outlined text-xl">room_service</span>
           <span className="text-[11px] mt-0.5">{waiterCalled ? 'Alerted' : 'Concierge'}</span>
@@ -1367,7 +1367,7 @@ export const DinerMenu: React.FC = () => {
         <button
           type="button"
           onClick={() => setIsTableArcadeOpen(true)}
-          className="flex flex-col items-center justify-center text-[#ab8980] hover:text-[#e5e1e4] px-4 py-1 transition-colors duration-200 active:scale-95 cursor-pointer"
+          className="flex flex-col items-center justify-center text-[#6E6E6E] hover:text-[#141414] px-4 py-1 transition-colors duration-200 active:scale-95 cursor-pointer"
         >
           <span className="material-symbols-outlined text-xl">sports_esports</span>
           <span className="text-[11px] mt-0.5">Arcade</span>

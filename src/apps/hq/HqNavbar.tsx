@@ -76,7 +76,7 @@ export const HqNavbar: React.FC = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-40 bg-[#131315]/95 backdrop-blur-md border-b border-white/10 px-3 sm:px-6 py-2.5 transition-all text-[#e5e1e4]">
+    <nav className="sticky top-0 z-40 bg-[#FFFFFF]/95 backdrop-blur-md border-b border-black/10 px-3 sm:px-6 py-2.5 transition-all text-[#141414]">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
         {/* Left: Brand & Mode Badge */}
         <div className="flex items-center space-x-3">
@@ -85,17 +85,17 @@ export const HqNavbar: React.FC = () => {
             className="flex items-center space-x-2.5 group focus:outline-none"
             title={IS_OWNER_SITE ? "Menuz Restaurant Operations Hub" : "Menuz Master Admin HQ"}
           >
-            <div className="w-8 h-8 rounded-full bg-[#ff5722] flex items-center justify-center text-white shadow-md shadow-[#ff5722]/20">
+            <div className="w-8 h-8 rounded-full bg-[#F4511E] flex items-center justify-center text-white shadow-md shadow-[#F4511E]/20">
               <span className="font-serif font-bold text-sm tracking-tight">M</span>
             </div>
             <div>
               <div className="flex items-center space-x-1.5">
-                <span className="font-serif font-black tracking-tight text-[#f5f1ea] text-lg">menuz</span>
-                <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-[#ffb955]/15 text-[#ffb955] border border-[#ffb955]/30">
+                <span className="font-serif font-black tracking-tight text-[#141414] text-lg">menuz</span>
+                <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-[#F4511E]/15 text-[#2D4A3E] border border-[#F4511E]/30">
                   {IS_OWNER_SITE ? 'RESTAURANT' : 'HQ'}
                 </span>
               </div>
-              <p className="text-[10px] text-[#ab8980] font-medium hidden sm:block">
+              <p className="text-[10px] text-[#6E6E6E] font-medium hidden sm:block">
                 {IS_OWNER_SITE
                   ? 'Food Operations Hub & Seating Management'
                   : 'Master Platform Governance & Partner Network'}
@@ -110,19 +110,19 @@ export const HqNavbar: React.FC = () => {
             <button
               type="button"
               onClick={() => setVenueDropdownOpen(!venueDropdownOpen)}
-              className="flex items-center space-x-2 px-3.5 py-2 rounded-full bg-[#1b1b1d] border border-white/10 hover:border-[#ffb955]/40 text-xs font-semibold text-[#e5e1e4] transition-all cursor-pointer shadow-md"
+              className="flex items-center space-x-2 px-3.5 py-2 rounded-full bg-[#F5F1E8] border border-black/10 hover:border-[#F4511E]/40 text-xs font-semibold text-[#141414] transition-all cursor-pointer shadow-md"
             >
-              <Building2 className="w-3.5 h-3.5 text-[#ffb955]" />
+              <Building2 className="w-3.5 h-3.5 text-[#2D4A3E]" />
               <span className="max-w-[160px] truncate">{restaurant?.name || 'Select Restaurant'}</span>
-              <span className="text-[10px] text-[#ffb955] font-mono px-1.5 py-0.5 rounded-full bg-[#ffb955]/15 border border-[#ffb955]/20">
+              <span className="text-[10px] text-[#2D4A3E] font-mono px-1.5 py-0.5 rounded-full bg-[#F4511E]/15 border border-[#F4511E]/20">
                 {restaurants.length} active
               </span>
-              <ChevronDown className={`w-3.5 h-3.5 text-[#ab8980] transition-transform ${venueDropdownOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-3.5 h-3.5 text-[#6E6E6E] transition-transform ${venueDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {venueDropdownOpen && (
-              <div className="absolute left-0 mt-2 w-72 max-h-80 overflow-y-auto rounded-2xl bg-[#161517] border border-white/10 shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
-                <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[#ab8980] border-b border-white/10 mb-1">
+              <div className="absolute left-0 mt-2 w-72 max-h-80 overflow-y-auto rounded-2xl bg-[#F5F1E8] border border-black/10 shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
+                <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[#6E6E6E] border-b border-black/10 mb-1">
                   Active Venues ({restaurants.length})
                 </div>
                 {restaurants.map((r) => (
@@ -132,12 +132,12 @@ export const HqNavbar: React.FC = () => {
                     onClick={() => handleSelectRestaurant(r.id)}
                     className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-xs text-left transition-colors cursor-pointer ${
                       r.id === restaurant?.id
-                        ? 'bg-[#ffb955]/15 text-[#ffb955] font-semibold border border-[#ffb955]/20'
-                        : 'text-[#e5e1e4]/80 hover:bg-white/5'
+                        ? 'bg-[#F4511E]/15 text-[#2D4A3E] font-semibold border border-[#F4511E]/20'
+                        : 'text-[#141414]/80 hover:bg-black/[0.03]'
                     }`}
                   >
                     <span className="truncate">{r.name}</span>
-                    {r.id === restaurant?.id && <Check className="w-3.5 h-3.5 text-[#ffb955] shrink-0" />}
+                    {r.id === restaurant?.id && <Check className="w-3.5 h-3.5 text-[#2D4A3E] shrink-0" />}
                   </button>
                 ))}
               </div>
@@ -150,7 +150,7 @@ export const HqNavbar: React.FC = () => {
           {/* Direct Menu Launch Button for Restaurant Managers */}
           <Link
             to={`/r/${restaurant?.slug || 'saffron-house'}/menu`}
-            className="hidden sm:inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-[#ffb955] hover:bg-[#ffa726] active:scale-95 text-black text-xs font-bold transition-all shadow-md"
+            className="hidden sm:inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-[#F4511E] hover:bg-[#F4511E] active:scale-95 text-black text-xs font-bold transition-all shadow-md"
             title="Open Live Table QR Menu"
           >
             <UtensilsCrossed className="w-3 h-3 text-black" />
@@ -160,21 +160,21 @@ export const HqNavbar: React.FC = () => {
           {/* Kitchen Display Link */}
           <Link
             to="/kitchen"
-            className="hidden sm:inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-full bg-[#1b1b1d] hover:bg-white/10 border border-white/10 text-xs font-semibold text-[#e5e1e4] transition-all shadow-xs"
+            className="hidden sm:inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-full bg-[#F5F1E8] hover:bg-black/[0.06] border border-black/10 text-xs font-semibold text-[#141414] transition-all shadow-xs"
             title="Open Kitchen Display System"
           >
-            <ChefHat className="w-3 h-3 text-[#ffb955]" />
+            <ChefHat className="w-3 h-3 text-[#2D4A3E]" />
             <span>Kitchen</span>
           </Link>
 
           {/* Link to Customer Site (Visible on both phone and laptop) */}
           <a
             href={getCustomerSiteUrl('')}
-            className="inline-flex items-center space-x-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#ff5722]/15 border border-[#ff5722]/30 text-[#ffb5a0] hover:bg-[#ff5722]/25 text-[11px] sm:text-xs font-semibold transition-all shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#F4511E]/15 border border-[#F4511E]/30 text-[#F4511E] hover:bg-[#F4511E]/25 text-[11px] sm:text-xs font-semibold transition-all shadow-xs cursor-pointer"
             title="Open Customer Discovery Portal"
           >
             <span>Customer</span>
-            <ExternalLink className="w-3 h-3 text-[#ffb5a0]" />
+            <ExternalLink className="w-3 h-3 text-[#F4511E]" />
           </a>
 
           {/* Notifications Bell */}
@@ -182,26 +182,26 @@ export const HqNavbar: React.FC = () => {
             <button
               type="button"
               onClick={() => setNotifOpen(!notifOpen)}
-              className="relative w-9 h-9 rounded-full bg-[#1b1b1d] border border-white/10 hover:bg-white/10 text-[#e5e1e4] flex items-center justify-center transition-all cursor-pointer shadow-xs"
+              className="relative w-9 h-9 rounded-full bg-[#F5F1E8] border border-black/10 hover:bg-black/[0.06] text-[#141414] flex items-center justify-center transition-all cursor-pointer shadow-xs"
               title="Notifications"
             >
               <Bell className="w-4 h-4" />
               {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#ff5722] text-[9px] font-bold text-white flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#F4511E] text-[9px] font-bold text-white flex items-center justify-center">
                   {unreadCount > 9 ? '9+' : unreadCount}
                 </span>
               )}
             </button>
 
             {notifOpen && (
-              <div className="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto rounded-2xl bg-[#161517] border border-white/10 shadow-2xl p-3 z-50 animate-in fade-in zoom-in-95 duration-150 text-[#e5e1e4]">
-                <div className="flex items-center justify-between pb-2 border-b border-white/10 mb-2">
-                  <span className="text-xs font-bold text-[#f5f1ea]">System Notifications</span>
+              <div className="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto rounded-2xl bg-[#F5F1E8] border border-black/10 shadow-2xl p-3 z-50 animate-in fade-in zoom-in-95 duration-150 text-[#141414]">
+                <div className="flex items-center justify-between pb-2 border-b border-black/10 mb-2">
+                  <span className="text-xs font-bold text-[#141414]">System Notifications</span>
                   {notifications.length > 0 && (
                     <button
                       type="button"
                       onClick={clearAllNotifications}
-                      className="text-[10px] text-[#ab8980] hover:text-red-400 transition-colors flex items-center space-x-1 cursor-pointer"
+                      className="text-[10px] text-[#6E6E6E] hover:text-[#C23A1C] transition-colors flex items-center space-x-1 cursor-pointer"
                     >
                       <Trash2 className="w-3 h-3" />
                       <span>Clear All</span>
@@ -209,7 +209,7 @@ export const HqNavbar: React.FC = () => {
                   )}
                 </div>
                 {notifications.length === 0 ? (
-                  <p className="text-xs text-[#ab8980] text-center py-4">No notifications yet.</p>
+                  <p className="text-xs text-[#6E6E6E] text-center py-4">No notifications yet.</p>
                 ) : (
                   <div className="space-y-1.5">
                     {notifications.map((n) => (
@@ -217,11 +217,11 @@ export const HqNavbar: React.FC = () => {
                         key={n.id}
                         onClick={() => markNotificationRead(n.id)}
                         className={`p-2 rounded-xl text-xs transition-colors cursor-pointer ${
-                          n.read ? 'bg-white/5 text-[#ab8980]' : 'bg-[#1b1b1d] text-[#e5e1e4] font-medium border border-white/5'
+                          n.read ? 'bg-black/[0.03] text-[#6E6E6E]' : 'bg-[#F5F1E8] text-[#141414] font-medium border border-black/5'
                         }`}
                       >
                         <p>{n.message}</p>
-                        <span className="text-[9px] text-[#ab8980] font-mono mt-0.5 block">
+                        <span className="text-[9px] text-[#6E6E6E] font-mono mt-0.5 block">
                           {new Date(n.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
@@ -236,7 +236,7 @@ export const HqNavbar: React.FC = () => {
           <button
             type="button"
             onClick={handleLogout}
-            className="w-9 h-9 rounded-full bg-[#1b1b1d] border border-white/10 hover:bg-rose-500/20 text-[#ab8980] hover:text-rose-400 flex items-center justify-center transition-all cursor-pointer shadow-xs"
+            className="w-9 h-9 rounded-full bg-[#F5F1E8] border border-black/10 hover:bg-rose-500/20 text-[#6E6E6E] hover:text-[#C23A1C] flex items-center justify-center transition-all cursor-pointer shadow-xs"
             title="Lock Session"
           >
             <LogOut className="w-4 h-4" />
