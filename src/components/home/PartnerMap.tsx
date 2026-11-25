@@ -130,6 +130,7 @@ export const PartnerMap: React.FC<Props> = ({ token, partners, selectedId, onSel
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markers = useRef<mapboxgl.Marker[]>([]);
+  const fullCount = useRef(0);
   const deselectRef = useRef<(() => void) | undefined>(onDeselect);
   deselectRef.current = onDeselect;
 
@@ -227,7 +228,10 @@ export const PartnerMap: React.FC<Props> = ({ token, partners, selectedId, onSel
   useEffect(() => {
     const map = mapRef.current;
     if (!map || partners.length === 0) return;
-    if (partners.length > 4) {
+    fullCount.current = Math.max(fullCount.current, partners.length);
+    const isFullSet = partners.length >= fullCount.current;
+    map.setMinZoom(isFullSet ? 12.4 : 11);
+    if (isFullSet && partners.length > 4) {
       // Fit central Pune (Camp, Deccan, Koregaon Park, Yerawada) to whatever screen this is, keeping
       // the pins clear of the bottom card. Baner and Viman Nagar are a swipe away.
       map.fitBounds(
@@ -245,7 +249,7 @@ export const PartnerMap: React.FC<Props> = ({ token, partners, selectedId, onSel
     }
     const b = new mapboxgl.LngLatBounds();
     partners.forEach((p) => b.extend([p.lng, p.lat]));
-    map.fitBounds(b, { padding: { top: 50, bottom: 300, left: 70, right: 70 }, maxZoom: 15, duration: 600 });
+    map.fitBounds(b, { padding: { top: 50, bottom: 300, left: 70, right: 70 }, maxZoom: 14.5, duration: 600 });
   }, [partners]);
 
   // Mapbox's own stylesheet forces the map element to position:relative, which collapses it

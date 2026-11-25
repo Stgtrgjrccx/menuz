@@ -27,6 +27,7 @@ const FILTERS: { id: string; label: string; match: (cuisine: string) => boolean 
   { id: 'all', label: 'All', match: () => true },
   { id: 'indian', label: 'Indian', match: (c) => /indian|mughlai|awadhi|kolhapuri|maharashtrian|thali|parsi|misal/i.test(c) },
   { id: 'cafe', label: 'Cafés & Bakery', match: (c) => /bakery|coffee|café|cafe|patisserie|sweets|bistro/i.test(c) },
+  { id: 'dessert', label: 'Desserts', match: (c) => /dessert|patisserie|bakery|sweets|mithai|gelato|ice cream|viennoiserie|biscuit|cake/i.test(c) },
   { id: 'asian', label: 'Asian', match: (c) => /asian|japanese|thai|sushi|chinese/i.test(c) },
   { id: 'brewery', label: 'Brewery', match: (c) => /brew|beer|microbrew/i.test(c) },
   { id: 'italian', label: 'Italian', match: (c) => /italian|pizza|pasta/i.test(c) }
