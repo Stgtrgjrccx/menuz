@@ -128,7 +128,7 @@ export const CustomerHomePage: React.FC = () => {
       style={{ height: '100dvh', fontFamily: "'Rubik', system-ui, sans-serif" }}
     >
       {/* Header */}
-      <header className="flex items-center justify-between px-4 pt-3 pb-2 bg-white z-20">
+      <header className="flex items-center justify-between px-4 pt-3 pb-2 bg-white z-20 max-w-[560px] mx-auto w-full">
         <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold" style={{ background: C.green, color: '#fff' }}>
           M
         </div>
@@ -147,7 +147,7 @@ export const CustomerHomePage: React.FC = () => {
       </header>
 
       {/* Map / List toggle */}
-      <div className="mx-4 rounded-xl p-1 flex gap-1 z-20" style={{ background: '#F1EEE8' }} role="tablist">
+      <div className="mx-4 rounded-xl p-1 flex gap-1 z-20 self-center max-w-[560px] mx-auto w-full" style={{ background: '#F1EEE8', width: 'calc(100% - 2rem)' }} role="tablist">
         {(
           [
             ['map', 'Map', MapIcon],
@@ -169,7 +169,7 @@ export const CustomerHomePage: React.FC = () => {
       </div>
 
       {/* Filters */}
-      <div className="flex gap-2 px-4 py-3 overflow-x-auto z-20" style={{ scrollbarWidth: 'none' }}>
+      <div className="flex gap-2 px-4 py-3 overflow-x-auto z-20 max-w-[560px] mx-auto w-full" style={{ scrollbarWidth: 'none' }}>
         {FILTERS.map((f) => (
           <button
             key={f.id}
@@ -194,7 +194,7 @@ export const CustomerHomePage: React.FC = () => {
             <PartnerMap token={MAPBOX_TOKEN} partners={mapPartners} selectedId={selected?.id ?? null} onSelect={onSelect} />
           </Suspense>
         ) : (
-          <div className="absolute inset-0 overflow-y-auto p-4 pb-28 space-y-3">
+          <div className="absolute inset-0 overflow-y-auto p-4 pb-28 space-y-3 [&>*]:max-w-[560px] [&>*]:mx-auto [&>*]:block">
             {visible.length === 0 && (
               <p className="text-center text-sm pt-10" style={{ color: C.grey }}>
                 No partner restaurants match this filter yet.
@@ -227,8 +227,8 @@ export const CustomerHomePage: React.FC = () => {
       {/* Selected restaurant sheet */}
       {showMap && selected && (
         <section
-          className="absolute left-0 right-0 z-30 bg-white rounded-t-[22px] px-4 pt-2.5 pb-3"
-          style={{ bottom: 92, boxShadow: '0 -6px 24px rgba(0,0,0,.10)' }}
+          className="absolute z-30 bg-white rounded-t-[22px] px-4 pt-2.5 pb-3 w-full max-w-[560px]"
+          style={{ bottom: 92, left: '50%', transform: 'translateX(-50%)', boxShadow: '0 -6px 24px rgba(0,0,0,.10)' }}
           aria-label={`${selected.name} details`}
         >
           <div className="w-10 h-1 rounded mx-auto mb-3" style={{ background: '#DEDAD2' }} />
@@ -279,7 +279,8 @@ export const CustomerHomePage: React.FC = () => {
       )}
 
       {/* Bottom bar */}
-      <nav className="absolute bottom-0 left-0 right-0 z-40 bg-white border-t flex items-end pt-2 pb-4" style={{ borderColor: C.line }} aria-label="Main">
+      <nav className="absolute bottom-0 left-0 right-0 z-40 bg-white border-t pt-2 pb-4" style={{ borderColor: C.line }} aria-label="Main">
+        <div className="flex items-end max-w-[560px] mx-auto w-full">
         <NavItem label="Map" icon={<MapIcon className="w-5 h-5" />} active={view === 'map'} onClick={() => setView('map')} />
         <NavItem label="Offers" icon={<Tag className="w-5 h-5" />} onClick={() => soon('Offers')} />
         <div className="flex-1 flex flex-col items-center">
@@ -306,6 +307,7 @@ export const CustomerHomePage: React.FC = () => {
         </div>
         <NavItem label="Rewards" icon={<Heart className="w-5 h-5" />} onClick={() => soon('Rewards')} />
         <NavItem label="Profile" icon={<User className="w-5 h-5" />} onClick={() => soon('Profiles')} />
+        </div>
       </nav>
 
       {isScannerOpen && <QrScannerModal isOpen={isScannerOpen} onClose={() => setIsScannerOpen(false)} />}
