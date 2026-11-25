@@ -19,6 +19,7 @@ interface Props {
   partners: MapPartner[];
   selectedId: string | null;
   onSelect: (id: string) => void;
+  onDeselect?: () => void;
   /** Called once the map tiles have loaded, so the page can drop its loading screen. */
   onReady?: () => void;
 }
@@ -88,7 +89,7 @@ function pinElement(partner: MapPartner, selected: boolean): HTMLDivElement {
   el.setAttribute('role', 'button');
   el.setAttribute(
     'aria-label',
-    `${partner.name}${hasRating ? `, rating ${partner.rating!.toFixed(1)}` : ''}${partner.offer ? `, ${partner.offer} off tonight` : ''}`
+    `${partner.name}${hasRating ? `, rating ${partner.rating!.toFixed(1)}` : ''}${partner.offer ? `, ${partner.offer} off` : ''}`
   );
 
   const tail = document.createElement('div');
@@ -125,10 +126,12 @@ function pinElement(partner: MapPartner, selected: boolean): HTMLDivElement {
   return el;
 }
 
-export const PartnerMap: React.FC<Props> = ({ token, partners, selectedId, onSelect, onReady }) => {
+export const PartnerMap: React.FC<Props> = ({ token, partners, selectedId, onSelect, onDeselect, onReady }) => {
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markers = useRef<mapboxgl.Marker[]>([]);
+  const deselectRef = useRef<(() => void) | undefined>(onDeselect);
+  deselectRef.current = onDeselect;
 
   // Create the map once.
   useEffect(() => {
@@ -139,12 +142,15 @@ export const PartnerMap: React.FC<Props> = ({ token, partners, selectedId, onSel
       style: 'mapbox://styles/mapbox/light-v11',
       center: PUNE_CENTER,
       zoom: 13.2,
+      minZoom: 12.4, // zoom-out is locked: pins are always shown one by one; swipe to explore
+      maxBounds: [[73.72, 18.46], [73.98, 18.64]],
       attributionControl: false,
       cooperativeGestures: false
     });
     map.addControl(new mapboxgl.AttributionControl({ compact: true }), 'bottom-left');
     map.on('style.load', () => applyMenuzStyle(map));
     map.once('idle', () => onReady?.());
+    map.on('click', () => deselectRef.current?.());
     mapRef.current = map;
     return () => {
       map.remove();
@@ -161,66 +167,48 @@ export const PartnerMap: React.FC<Props> = ({ token, partners, selectedId, onSel
     markers.current.forEach((m) => m.remove());
     markers.current = [];
 
-    const placed = partners.map((p) => ({ p, pt: map.project([p.lng, p.lat]) }));
-    const solo = placed.find((x) => x.p.id === selectedId) || null; // the selected pin never merges
-    const rest = placed.filter((x) => x !== solo);
-    const used = new Set<string>();
-    const groups: typeof placed[] = [];
-    for (const a of rest) {
-      if (used.has(a.p.id)) continue;
-      used.add(a.p.id);
-      const g = [a];
-      for (const c of rest) {
-        if (used.has(c.p.id)) continue;
-        if (Math.abs(a.pt.x - c.pt.x) < 54 && Math.abs(a.pt.y - c.pt.y) < 32) {
-          used.add(c.p.id);
-          g.push(c);
+    // Every restaurant keeps its own pin. Where two would sit on top of each other on screen,
+    // the later one slides sideways into the nearest free slot (never merged into a number).
+    const W = 58, H = 30;
+    const placed = partners
+      .map((p) => ({ p, pt: map.project([p.lng, p.lat]), dx: 0 }))
+      .sort((m, n) => m.pt.y - n.pt.y || m.pt.x - n.pt.x);
+    const taken: { x: number; y: number }[] = [];
+    const slots = [0, 1, -1, 2, -2, 3, -3, 4, -4];
+    for (const q of placed) {
+      for (const k of slots) {
+        const x = q.pt.x + k * W;
+        if (!taken.some((t) => Math.abs(t.x - x) < W && Math.abs(t.y - q.pt.y) < H)) {
+          q.dx = k * W;
+          taken.push({ x, y: q.pt.y });
+          break;
         }
       }
-      groups.push(g);
     }
+    const solo = placed.find((x) => x.p.id === selectedId) || null;
 
-    const add = (el: HTMLElement, lng: number, lat: number, top = false) => {
-      const m = new mapboxgl.Marker({ element: el, anchor: 'bottom' }).setLngLat([lng, lat]).addTo(map);
+    const add = (el: HTMLElement, lng: number, lat: number, top = false, dx = 0) => {
+      const m = new mapboxgl.Marker({ element: el, anchor: 'bottom', offset: [dx, 0] }).setLngLat([lng, lat]).addTo(map);
       if (top) m.getElement().style.zIndex = '5';
       markers.current.push(m);
     };
 
-    for (const g of groups) {
-      if (g.length === 1) {
-        const q = g[0].p;
-        const el = pinElement(q, false);
-        el.addEventListener('click', (e) => {
-          e.stopPropagation();
-          onSelect(q.id);
-          map.easeTo({ center: [q.lng, q.lat], offset: [0, -110], duration: 450 });
-        });
-        add(el, q.lng, q.lat);
-      } else {
-        const lng = g.reduce((t, x) => t + x.p.lng, 0) / g.length;
-        const lat = g.reduce((t, x) => t + x.p.lat, 0) / g.length;
-        const el = document.createElement('div');
-        el.textContent = String(g.length);
-        el.setAttribute('role', 'button');
-        el.setAttribute('aria-label', `${g.length} restaurants, tap to zoom in`);
-        el.style.cssText =
-          `cursor:pointer;width:42px;height:42px;border-radius:50%;background:${PALETTE.green};color:#fff;` +
-          'font:600 16px Rubik,system-ui,sans-serif;display:flex;align-items:center;justify-content:center;' +
-          'border:3px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.3);transform:translateY(21px);';
-        el.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const bounds = new mapboxgl.LngLatBounds();
-          g.forEach((x) => bounds.extend([x.p.lng, x.p.lat]));
-          map.fitBounds(bounds, { padding: { top: 120, bottom: 320, left: 70, right: 70 }, maxZoom: 17, duration: 500 });
-        });
-        add(el, lng, lat);
-      }
+    for (const g of placed) {
+      if (g === solo) continue;
+      const q = g.p;
+      const el = pinElement(q, false);
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        onSelect(q.id);
+        map.easeTo({ center: [q.lng, q.lat], offset: [0, -110], duration: 450 });
+      });
+      add(el, q.lng, q.lat, false, g.dx);
     }
     if (solo) {
       const q = solo.p;
       const el = pinElement(q, true);
       el.addEventListener('click', (e) => e.stopPropagation());
-      add(el, q.lng, q.lat, true);
+      add(el, q.lng, q.lat, true, solo.dx);
     }
   };
 
