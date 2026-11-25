@@ -252,7 +252,14 @@ export function upsertRestaurant(r) {
   }
 
   const now = Date.now();
-  const slug = r.slug || r.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  // A slug is a restaurant's permanent address: every printed QR standee encodes it.
+  // Only derive one from the name when the caller did not supply it (i.e. on insert).
+  // On update, a caller that omits `slug` must NOT silently rewrite it — doing so
+  // invalidates every QR code already on the tables.
+  const providedSlug =
+    typeof r.slug === 'string' && r.slug.trim() ? r.slug.trim() : null;
+  const slug =
+    providedSlug || r.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
   const stmt = db.prepare(`
     INSERT INTO restaurants (
@@ -265,7 +272,7 @@ export function upsertRestaurant(r) {
       ?, ?, ?, ?, ?
     )
     ON CONFLICT(id) DO UPDATE SET
-      slug = excluded.slug,
+      slug = COALESCE(?, restaurants.slug),
       name = excluded.name,
       cuisine = COALESCE(excluded.cuisine, restaurants.cuisine),
       location = COALESCE(excluded.location, restaurants.location),
@@ -303,7 +310,9 @@ export function upsertRestaurant(r) {
     r.is_menuz_partner !== false ? 1 : 0,
     typeof r.ai_persona === 'object' ? JSON.stringify(r.ai_persona) : (r.ai_persona || null),
     r.created_at || now,
-    now
+    now,
+    // last placeholder: the ON CONFLICT slug guard above
+    providedSlug
   );
 
   return getRestaurantById(r.id);

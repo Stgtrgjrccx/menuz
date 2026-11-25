@@ -84,8 +84,14 @@ services:
         value: production
       - key: PORT
         value: 10000
+      # Secrets are NEVER committed. Set these in the Render dashboard
+      # (Service -> Environment). `sync: false` keeps the value out of this file.
       - key: DATABASE_URL
-        value: postgresql://menuz_db_user:98yERmtCSCCxyrg6lJGLuFbwrWe1MJcH@dpg-db71227f3r2c73cre7g0-a/menuz_db
+        sync: false
+      - key: HQ_ADMIN_PASSPHRASE
+        sync: false
+      - key: RESTAURANT_PARTNER_PIN
+        sync: false
     disk:
       name: menuz-sqlite-disk
       mountPath: /data

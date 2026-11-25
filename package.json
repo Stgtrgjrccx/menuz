@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:customer": "tsc -b && vite build --mode customer --outDir dist-customer",
+    "build:customer": "tsc -b && vite build --mode customer --outDir dist-customer && node scripts/finalize-customer-dist.js",
     "build:owner": "tsc -b && vite build --mode owner --outDir dist-owner",
     "build:hq": "tsc -b && vite build --mode hq --outDir dist-hq",
     "build:all": "npm run build:customer && npm run build:owner && npm run build:hq && node scripts/assemble-dist-combined.js",

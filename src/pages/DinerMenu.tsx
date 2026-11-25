@@ -99,8 +99,10 @@ export const DinerMenu: React.FC = () => {
   const [hubCategory, setHubCategory] = useState('all');
   const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
 
-  // Synchronously resolve target restaurant from route slug or active store restaurant
-  const targetRestaurant = useMemo(() => {
+  // Synchronously resolve target restaurant from route slug or active store restaurant.
+  // Reports `matched` so an unknown slug can render "not found" instead of silently
+  // serving a different restaurant's menu and prices.
+  const resolvedTarget = useMemo((): { r: Restaurant; matched: boolean } => {
     if (restaurantSlug) {
       // 1. Direct match in store restaurants by slug or id
       const direct = restaurants.find(
@@ -111,7 +113,7 @@ export const DinerMenu: React.FC = () => {
           r.id === `rest-${restaurantSlug}-01` ||
           r.id.toLowerCase().includes(restaurantSlug.toLowerCase())
       );
-      if (direct) return direct;
+      if (direct) return { r: direct, matched: true };
 
       // 2. Pune directory fallback
       const cleanSlug = restaurantSlug.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
@@ -120,7 +122,7 @@ export const DinerMenu: React.FC = () => {
         return pSlug === cleanSlug || pSlug.includes(cleanSlug) || cleanSlug.includes(pSlug);
       });
       if (dir) {
-        return {
+        return { matched: true, r: {
           id: `rest-${cleanSlug}`,
           slug: cleanSlug,
           name: dir.name,
@@ -136,11 +138,17 @@ export const DinerMenu: React.FC = () => {
           currency: 'INR',
           tax_rate_percent: 5.0,
           google_place_url: `https://search.google.com/local/writereview?placeid=${cleanSlug}`
-        } as Restaurant;
+        } as Restaurant };
       }
     }
-    return restaurant || restaurants[0];
+    return { r: restaurant || restaurants[0], matched: !restaurantSlug };
   }, [restaurantSlug, restaurants, restaurant]);
+
+  const targetRestaurant = resolvedTarget.r;
+  // Only trust a "no match" verdict once the store has actually loaded restaurants,
+  // otherwise the first paint would flash a not-found screen.
+  const slugNotFound =
+    !!restaurantSlug && !resolvedTarget.matched && restaurants.length > 0;
 
   // Sync route targetRestaurant with active restaurant in store
   useEffect(() => {
@@ -605,6 +613,29 @@ export const DinerMenu: React.FC = () => {
       return matchSearch && matchCategory;
     });
   }, [restaurants, hubSearchQuery, hubCategory]);
+
+  // An unrecognised slug must never fall through to another restaurant's menu:
+  // a diner scanning a stale QR would be shown the wrong dishes and the wrong prices.
+  if (slugNotFound) {
+    return (
+      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#131315] text-[#e5e1e4] font-sans px-6 text-center">
+        <div className="w-14 h-14 rounded-2xl bg-[#ff5722]/15 border border-[#ff5722]/30 flex items-center justify-center mb-5">
+          <span className="font-serif font-black text-2xl text-[#ff5722]">M</span>
+        </div>
+        <h1 className="font-serif text-2xl font-bold mb-2">Menu not found</h1>
+        <p className="text-sm text-[#ab8980] max-w-xs mb-6">
+          We couldn&apos;t find a restaurant for this code. The QR may be out of date —
+          please ask your server for the current one.
+        </p>
+        <Link
+          to="/"
+          className="px-5 py-2.5 rounded-full bg-[#ff5722] text-white text-sm font-bold"
+        >
+          Browse restaurants
+        </Link>
+      </div>
+    );
+  }
 
   if (!restaurantSlug) {
     return (
