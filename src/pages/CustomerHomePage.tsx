@@ -5,7 +5,7 @@ import { useRestaurantStore, isDishNameAsRestaurant } from '../store/restaurantS
 import { isWorkingWithMenuz } from '../types';
 import { QrScannerModal } from '../components/QrScannerModal';
 import { AiAssistantDrawer } from '../components/AiAssistantDrawer';
-import { geoFor } from '../data/partnerGeo';
+import { geoFor, PREVIEW_RESTAURANTS } from '../data/partnerGeo';
 import type { MapPartner } from '../components/home/PartnerMap';
 
 // The map library is large; load it only when the home screen is opened.
@@ -25,10 +25,11 @@ const C = {
 
 const FILTERS: { id: string; label: string; match: (cuisine: string) => boolean }[] = [
   { id: 'all', label: 'All', match: () => true },
-  { id: 'mughlai', label: 'Mughlai', match: (c) => /mughlai|awadhi/i.test(c) },
-  { id: 'italian', label: 'Italian', match: (c) => /italian|pizza/i.test(c) },
-  { id: 'bakery', label: 'Bakery & Café', match: (c) => /bakery|coffee|café|cafe/i.test(c) },
-  { id: 'continental', label: 'Continental', match: (c) => /continental|bistro/i.test(c) }
+  { id: 'indian', label: 'Indian', match: (c) => /indian|mughlai|awadhi|kolhapuri|maharashtrian|thali|parsi|misal/i.test(c) },
+  { id: 'cafe', label: 'Cafés & Bakery', match: (c) => /bakery|coffee|café|cafe|patisserie|sweets|bistro/i.test(c) },
+  { id: 'asian', label: 'Asian', match: (c) => /asian|japanese|thai|sushi|chinese/i.test(c) },
+  { id: 'brewery', label: 'Brewery', match: (c) => /brew|beer|microbrew/i.test(c) },
+  { id: 'italian', label: 'Italian', match: (c) => /italian|pizza|pasta/i.test(c) }
 ];
 
 interface Venue {
@@ -42,6 +43,8 @@ interface Venue {
   ratingCount?: number;
   lat?: number;
   lng?: number;
+  /** Not signed up yet: shown so the map is not empty. */
+  preview?: boolean;
 }
 
 export const CustomerHomePage: React.FC = () => {
@@ -56,6 +59,8 @@ export const CustomerHomePage: React.FC = () => {
   const [isAiOpen, setIsAiOpen] = useState(false);
   const [aiQuery, setAiQuery] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [mapReady, setMapReady] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
 
   // Global events: other parts of the app can ask for the scanner or the AI concierge.
   useEffect(() => {
@@ -97,10 +102,27 @@ export const CustomerHomePage: React.FC = () => {
     [rawRestaurants, tables]
   );
 
+  const allVenues = useMemo<Venue[]>(() => {
+    const have = new Set(venues.map((v) => v.slug));
+    const preview: Venue[] = PREVIEW_RESTAURANTS.filter((p) => !have.has(p.slug)).map((p) => ({
+      id: `preview-${p.slug}`,
+      name: p.name,
+      slug: p.slug,
+      cuisine: p.cuisine,
+      location: p.area,
+      token: '',
+      rating: p.rating,
+      lat: p.lat,
+      lng: p.lng,
+      preview: true
+    }));
+    return [...venues, ...preview];
+  }, [venues]);
+
   const visible = useMemo(() => {
     const f = FILTERS.find((x) => x.id === filter) || FILTERS[0];
-    return venues.filter((v) => f.match(v.cuisine));
-  }, [venues, filter]);
+    return allVenues.filter((v) => f.match(v.cuisine));
+  }, [allVenues, filter]);
 
   const mapPartners = useMemo<MapPartner[]>(
     () =>
@@ -113,7 +135,7 @@ export const CustomerHomePage: React.FC = () => {
   const selected = visible.find((v) => v.id === selectedId) || visible[0] || null;
   const onSelect = useCallback((id: string) => setSelectedId(id), []);
 
-  const openMenu = (v: Venue) => navigate(`/r/${v.slug}/menu?t=${v.token}`);
+  const openMenu = (v: Venue) => navigate(`/r/${v.slug}/menu?${v.token ? `t=${v.token}` : 'table=1'}`);
 
   const soon = (what: string) => {
     setNotice(`${what} is coming soon`);
@@ -122,11 +144,40 @@ export const CustomerHomePage: React.FC = () => {
 
   const showMap = view === 'map' && !!MAPBOX_TOKEN;
 
+  // Loading screen: stays until the map has drawn (or 9s at most, or straight away with no map).
+  useEffect(() => {
+    if (!MAPBOX_TOKEN) setMapReady(true);
+    const fail = window.setTimeout(() => setMapReady(true), 9000);
+    return () => window.clearTimeout(fail);
+  }, []);
+  useEffect(() => {
+    if (!mapReady) return;
+    const t = window.setTimeout(() => setShowSplash(false), 450);
+    return () => window.clearTimeout(t);
+  }, [mapReady]);
+  const onMapReady = useCallback(() => setMapReady(true), []);
+
   return (
     <div
       className="relative flex flex-col w-full bg-white text-[#141414] overflow-hidden"
       style={{ height: '100dvh', fontFamily: "'Rubik', system-ui, sans-serif" }}
     >
+      {showSplash && (
+        <div
+          role="status"
+          aria-label="Loading Menuz"
+          className="absolute inset-0 z-[70] flex flex-col items-center justify-center bg-white"
+          style={{ opacity: mapReady ? 0 : 1, transition: 'opacity 400ms ease', pointerEvents: mapReady ? 'none' : 'auto' }}
+        >
+          <p style={{ fontFamily: "'Anton', Impact, sans-serif", fontSize: 44, letterSpacing: 1, color: C.ink }}>
+            MEN<span style={{ color: C.orange }}>UZ</span>
+          </p>
+          <div className="mt-4 h-[3px] w-28 rounded overflow-hidden" style={{ background: '#EFEBE3' }}>
+            <div className="h-full rounded animate-pulse" style={{ width: '60%', background: C.orange }} />
+          </div>
+          <p className="mt-3 text-[12px]" style={{ color: C.grey }}>Finding restaurants near you…</p>
+        </div>
+      )}
       {/* Header */}
       <header className="flex items-center justify-between px-4 pt-3 pb-2 bg-white z-20 max-w-[560px] mx-auto w-full">
         <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold" style={{ background: C.green, color: '#fff' }}>
@@ -191,7 +242,7 @@ export const CustomerHomePage: React.FC = () => {
       <div className="relative flex-1 min-h-0" style={{ background: C.paper }}>
         {showMap ? (
           <Suspense fallback={<div className="absolute inset-0 flex items-center justify-center text-sm" style={{ color: C.grey }}>Loading map…</div>}>
-            <PartnerMap token={MAPBOX_TOKEN} partners={mapPartners} selectedId={selected?.id ?? null} onSelect={onSelect} />
+            <PartnerMap token={MAPBOX_TOKEN} partners={mapPartners} selectedId={selected?.id ?? null} onSelect={onSelect} onReady={onMapReady} />
           </Suspense>
         ) : (
           <div className="absolute inset-0 overflow-y-auto p-4 pb-28 space-y-3 [&>*]:max-w-[560px] [&>*]:mx-auto [&>*]:block">
@@ -247,7 +298,7 @@ export const CustomerHomePage: React.FC = () => {
                   <Star className="w-3.5 h-3.5 fill-current" aria-hidden /> {selected.rating.toFixed(1)}
                 </p>
                 <p className="text-[9px] tracking-[0.12em] font-semibold" style={{ color: '#9A9A9A' }}>
-                  GOOGLE{selected.ratingCount ? ` · ${selected.ratingCount}` : ''}
+                  GOOGLE{selected.ratingCount ? ` · ${selected.ratingCount}` : ' · APPROX.'}
                 </p>
               </div>
             ) : (
