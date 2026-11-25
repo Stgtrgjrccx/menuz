@@ -41,6 +41,7 @@ interface Venue {
   token: string;
   rating?: number;
   ratingCount?: number;
+  offerPct?: number;
   lat?: number;
   lng?: number;
   /** Not signed up yet: shown so the map is not empty. */
@@ -112,6 +113,7 @@ export const CustomerHomePage: React.FC = () => {
       location: p.area,
       token: '',
       rating: p.rating,
+      offerPct: p.offerPct,
       lat: p.lat,
       lng: p.lng,
       preview: true
@@ -128,12 +130,14 @@ export const CustomerHomePage: React.FC = () => {
     () =>
       visible
         .filter((v) => typeof v.lat === 'number' && typeof v.lng === 'number')
-        .map((v) => ({ id: v.id, name: v.name, lat: v.lat!, lng: v.lng!, rating: v.rating })),
+        .map((v) => ({ id: v.id, name: v.name, lat: v.lat!, lng: v.lng!, rating: v.rating, offer: v.offerPct ? `${v.offerPct}%` : undefined })),
     [visible]
   );
 
-  const selected = visible.find((v) => v.id === selectedId) || visible[0] || null;
-  const onSelect = useCallback((id: string) => setSelectedId(id), []);
+  const [dismissed, setDismissed] = useState(false);
+  const selected = dismissed ? null : visible.find((v) => v.id === selectedId) || visible[0] || null;
+  const onSelect = useCallback((id: string) => { setDismissed(false); setSelectedId(id); }, []);
+  const onDeselect = useCallback(() => setDismissed(true), []);
 
   const openMenu = (v: Venue) => navigate(`/r/${v.slug}/menu?${v.token ? `t=${v.token}` : 'table=1'}`);
 
@@ -242,7 +246,7 @@ export const CustomerHomePage: React.FC = () => {
       <div className="relative flex-1 min-h-0" style={{ background: C.paper }}>
         {showMap ? (
           <Suspense fallback={<div className="absolute inset-0 flex items-center justify-center text-sm" style={{ color: C.grey }}>Loading map…</div>}>
-            <PartnerMap token={MAPBOX_TOKEN} partners={mapPartners} selectedId={selected?.id ?? null} onSelect={onSelect} onReady={onMapReady} />
+            <PartnerMap token={MAPBOX_TOKEN} partners={mapPartners} selectedId={selected?.id ?? null} onSelect={onSelect} onDeselect={onDeselect} onReady={onMapReady} />
           </Suspense>
         ) : (
           <div className="absolute inset-0 overflow-y-auto p-4 pb-28 space-y-3 [&>*]:max-w-[560px] [&>*]:mx-auto [&>*]:block">
@@ -307,6 +311,12 @@ export const CustomerHomePage: React.FC = () => {
               </p>
             )}
           </div>
+          {selected.offerPct ? (
+            <p className="mt-2.5 inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-[13px] font-semibold" style={{ background: '#FDE5DD', color: '#B83A12' }}>
+              {selected.offerPct}% off
+              <span className="text-[9px] tracking-[0.12em] font-semibold" style={{ color: '#9A6A58' }}>SAMPLE OFFER</span>
+            </p>
+          ) : null}
           <button
             type="button"
             onClick={() => openMenu(selected)}
