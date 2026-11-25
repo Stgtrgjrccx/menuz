@@ -243,7 +243,7 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
               ? 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease-out'
               : 'none',
           }}
-          className="bg-[#131315] text-[#e5e1e4] rounded-t-3xl max-w-xl w-full max-h-[92vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-200 border border-white/10 shadow-2xl"
+          className="bg-[#FFFFFF] text-[#141414] rounded-t-3xl max-w-xl w-full max-h-[92vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-200 border border-black/10 shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Pull Down Indicator Handle with 1-2s Toggle Animation */}
@@ -257,13 +257,13 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
               }
             }}
             onClick={triggerSmoothClose}
-            className="w-full flex flex-col items-center justify-center pt-2 pb-1.5 bg-[#18171a] cursor-pointer group touch-none"
+            className="w-full flex flex-col items-center justify-center pt-2 pb-1.5 bg-[#F5F1E8] cursor-pointer group touch-none"
             title="Scroll or pull down to minimize"
           >
-            <div className={`w-16 h-1.5 rounded-full transition-all shadow-sm ${isClosing ? 'bg-[#ffb955] scale-110 animate-pulse' : 'bg-[#ffb955]/40 group-hover:bg-[#ffb955]'}`} />
-            <span className="text-[10px] font-mono text-[#ffb955]/70 group-hover:text-[#ffb955] transition-colors mt-0.5 font-semibold flex items-center gap-1.5">
+            <div className={`w-16 h-1.5 rounded-full transition-all shadow-sm ${isClosing ? 'bg-[#F4511E] scale-110 animate-pulse' : 'bg-[#F4511E]/40 group-hover:bg-[#F4511E]'}`} />
+            <span className="text-[10px] font-mono text-[#2D4A3E]/70 group-hover:text-[#2D4A3E] transition-colors mt-0.5 font-semibold flex items-center gap-1.5">
               {isClosing ? (
-                <span className="text-[#ffb955] animate-pulse">✦ Returning to menu...</span>
+                <span className="text-[#2D4A3E] animate-pulse">✦ Returning to menu...</span>
               ) : (
                 <>
                   <span>↓</span> Scroll or drag down to minimize
@@ -273,20 +273,20 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
           </motion.div>
 
           {/* Top Bar with Prominent Back to Menu Button */}
-          <div className="relative pt-1.5 pb-2.5 px-4 flex items-center justify-between border-b border-white/10 bg-[#18171a]">
+          <div className="relative pt-1.5 pb-2.5 px-4 flex items-center justify-between border-b border-black/10 bg-[#F5F1E8]">
             <button
               type="button"
               onClick={triggerSmoothClose}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#ffb955]/15 hover:bg-[#ffb955] text-[#ffb955] hover:text-black border border-[#ffb955]/40 hover:border-[#ffb955] font-semibold text-xs transition-all cursor-pointer shadow-sm active:scale-95"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F4511E]/15 hover:bg-[#F4511E] text-[#2D4A3E] hover:text-black border border-[#F4511E]/40 hover:border-[#F4511E] font-semibold text-xs transition-all cursor-pointer shadow-sm active:scale-95"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to Menu</span>
             </button>
-            <span className="text-xs font-semibold text-[#ffb955] tracking-wider uppercase font-mono hidden sm:inline">Dish Details</span>
+            <span className="text-xs font-semibold text-[#2D4A3E] tracking-wider uppercase font-mono hidden sm:inline">Dish Details</span>
             <button
               type="button"
               onClick={triggerSmoothClose}
-              className="p-1.5 rounded-full text-[#ab8980] hover:bg-white/10 hover:text-[#e5e1e4] transition-colors cursor-pointer"
+              className="p-1.5 rounded-full text-[#6E6E6E] hover:bg-black/[0.06] hover:text-[#141414] transition-colors cursor-pointer"
               aria-label="Close"
             >
               <X className="w-5 h-5" />
@@ -299,7 +299,7 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
             <div className="space-y-2.5">
               <div
                 onClick={() => handleOpenLightbox(activePhotoIdx)}
-                className="w-full h-56 sm:h-64 rounded-2xl overflow-hidden relative bg-[#1b1b1d] group cursor-pointer border border-white/10 hover:border-[#ff5722]/50 transition-colors shadow-xs"
+                className="w-full h-56 sm:h-64 rounded-2xl overflow-hidden relative bg-[#F5F1E8] group cursor-pointer border border-black/10 hover:border-[#F4511E]/50 transition-colors shadow-xs"
                 title="Click to zoom full-screen"
               >
                 <img
@@ -308,16 +308,16 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-3">
-                  <span className="text-[11px] font-bold text-white bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-full border border-white/20 flex items-center gap-1">
-                    <Maximize2 className="w-3 h-3 text-[#FFD188]" />
+                  <span className="text-[11px] font-bold text-white bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-full border border-black/20 flex items-center gap-1">
+                    <Maximize2 className="w-3 h-3 text-[#2D4A3E]" />
                     <span>Click to Zoom HD</span>
                   </span>
-                  <span className="text-[10px] font-mono bg-black/70 px-2 py-0.5 rounded text-white border border-white/20">
+                  <span className="text-[10px] font-mono bg-black/70 px-2 py-0.5 rounded text-white border border-black/20">
                     Photo {activePhotoIdx + 1} of {modalPhotos.length}
                   </span>
                 </div>
                 {!dish.is_available && (
-                  <div className="absolute inset-0 bg-[#1b1b1d]/80 flex items-center justify-center backdrop-blur-xs">
+                  <div className="absolute inset-0 bg-[#F5F1E8]/80 flex items-center justify-center backdrop-blur-xs">
                     <span className="text-xs uppercase font-bold text-white tracking-widest px-3 py-1.5 bg-red-600 rounded-lg shadow-md">
                       Currently Sold Out
                     </span>
@@ -328,8 +328,8 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
               {/* Side-by-side / Multi-Photo Thumbnails */}
               {modalPhotos.length > 1 && (
                 <div className="space-y-1">
-                  <div className="flex items-center justify-between text-[11px] text-[#ab8980] px-0.5">
-                    <span className="font-bold text-[#ffb955] flex items-center gap-1">
+                  <div className="flex items-center justify-between text-[11px] text-[#6E6E6E] px-0.5">
+                    <span className="font-bold text-[#2D4A3E] flex items-center gap-1">
                       📸 Dish Photos ({modalPhotos.length} Views):
                     </span>
                     <span>Click any photo to preview</span>
@@ -344,8 +344,8 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
                           onClick={() => setActivePhotoIdx(idx)}
                           className={`relative w-20 h-16 sm:w-24 sm:h-18 rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all cursor-pointer ${
                             isActive
-                              ? 'border-[#ff5722] shadow-md ring-2 ring-[#ff5722]/40 scale-105'
-                              : 'border-white/10 opacity-70 hover:opacity-100'
+                              ? 'border-[#F4511E] shadow-md ring-2 ring-[#F4511E]/40 scale-105'
+                              : 'border-black/10 opacity-70 hover:opacity-100'
                           }`}
                         >
                           <img src={img.src} alt={`View ${idx + 1}`} className="w-full h-full object-cover" />
@@ -368,36 +368,36 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
                 }`}>
                   <span className={`w-2 h-2 rounded-full ${isVeg ? 'bg-emerald-600' : 'bg-red-600'}`} />
                 </span>
-                <span className="text-xs font-semibold text-[#ab8980]">{isVeg ? 'Vegetarian' : 'Non-Vegetarian'}</span>
+                <span className="text-xs font-semibold text-[#6E6E6E]">{isVeg ? 'Vegetarian' : 'Non-Vegetarian'}</span>
                 
                 {dish.spice_level > 0 && (
-                  <div className="flex items-center space-x-0.5 text-[#ffb955] pl-2 border-l border-white/10">
-                    <Flame className="w-3.5 h-3.5 fill-[#ff5722]" />
+                  <div className="flex items-center space-x-0.5 text-[#2D4A3E] pl-2 border-l border-black/10">
+                    <Flame className="w-3.5 h-3.5 fill-[#F4511E]" />
                     <span className="text-xs font-bold">Spice {dish.spice_level}/5</span>
                   </div>
                 )}
                 {dish.serving_size && (
-                  <span className="text-xs text-[#ab8980] pl-2 border-l border-white/10">
+                  <span className="text-xs text-[#6E6E6E] pl-2 border-l border-black/10">
                     {dish.serving_size}
                   </span>
                 )}
               </div>
 
               <div className="flex items-baseline justify-between gap-2">
-                <h2 className="font-serif text-2xl font-bold text-[#e5e1e4] leading-tight">{tDish.name}</h2>
-                <span className="font-bold text-xl text-[#ffb955] whitespace-nowrap">₹{dish.price.toFixed(2)}</span>
+                <h2 className="font-serif text-2xl font-bold text-[#141414] leading-tight">{tDish.name}</h2>
+                <span className="font-bold text-xl text-[#2D4A3E] whitespace-nowrap">₹{dish.price.toFixed(2)}</span>
               </div>
-              <p className="text-sm text-[#ab8980] leading-relaxed mt-2">{tDish.full_description || tDish.short_description}</p>
+              <p className="text-sm text-[#6E6E6E] leading-relaxed mt-2">{tDish.full_description || tDish.short_description}</p>
             </div>
 
             {/* Heritage Lore & Origin Story */}
             {tDish.chef_story && (
-              <div className="bg-[#1b1b1d] border border-[#ff5722]/30 p-4 rounded-2xl space-y-1.5 shadow-xs">
-                <div className="flex items-center space-x-1.5 text-[#ffb955] text-xs font-serif font-bold">
+              <div className="bg-[#F5F1E8] border border-[#F4511E]/30 p-4 rounded-2xl space-y-1.5 shadow-xs">
+                <div className="flex items-center space-x-1.5 text-[#2D4A3E] text-xs font-serif font-bold">
                   <span>📜</span>
                   <span>{t.chefStoryTitle || 'Culinary Heritage & Origin Lore'}</span>
                 </div>
-                <p className="text-xs text-[#ab8980] leading-relaxed italic font-serif">
+                <p className="text-xs text-[#6E6E6E] leading-relaxed italic font-serif">
                   "{tDish.chef_story}"
                 </p>
               </div>
@@ -405,12 +405,12 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
 
             {/* Master Chef's Tasting Note */}
             {tDish.chef_notes && (
-              <div className="bg-[#1b1b1d] border border-white/10 p-3.5 rounded-2xl space-y-1 text-xs shadow-xs">
-                <div className="flex items-center space-x-1.5 text-[#ffb955] font-bold">
+              <div className="bg-[#F5F1E8] border border-black/10 p-3.5 rounded-2xl space-y-1 text-xs shadow-xs">
+                <div className="flex items-center space-x-1.5 text-[#2D4A3E] font-bold">
                   <span>🧑‍🍳</span>
                   <span>{t.tastingNotesTitle || "Master Chef's Tasting Notes"}</span>
                 </div>
-                <p className="text-[#ab8980] leading-relaxed">
+                <p className="text-[#6E6E6E] leading-relaxed">
                   {tDish.chef_notes}
                 </p>
               </div>
@@ -418,12 +418,12 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
 
             {/* Founder's Table Pitch */}
             {tDish.owner_pitch && (
-              <div className="bg-[#1b1b1d] border border-white/10 p-3.5 rounded-2xl space-y-1 text-xs shadow-xs">
-                <div className="flex items-center space-x-1.5 text-[#ffb955] font-bold">
+              <div className="bg-[#F5F1E8] border border-black/10 p-3.5 rounded-2xl space-y-1 text-xs shadow-xs">
+                <div className="flex items-center space-x-1.5 text-[#2D4A3E] font-bold">
                   <span>🎙️</span>
                   <span>Founder's Table Recommendation</span>
                 </div>
-                <p className="text-[#ab8980] leading-relaxed">
+                <p className="text-[#6E6E6E] leading-relaxed">
                   {tDish.owner_pitch}
                 </p>
               </div>
@@ -433,38 +433,38 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
             {(dish.pairing_drink_name || dish.temperature_style) && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {dish.pairing_drink_name && (
-                  <div className="bg-[#1b1b1d] border border-white/10 p-3 rounded-2xl space-y-1 text-xs shadow-xs">
-                    <div className="flex items-center space-x-1.5 text-[#ffb955] font-bold">
+                  <div className="bg-[#F5F1E8] border border-black/10 p-3 rounded-2xl space-y-1 text-xs shadow-xs">
+                    <div className="flex items-center space-x-1.5 text-[#2D4A3E] font-bold">
                       <span>🍷</span>
                       <span>Ideal Beverage Pairing</span>
                     </div>
-                    <p className="font-semibold text-[#e5e1e4] text-xs">{dish.pairing_drink_name}</p>
+                    <p className="font-semibold text-[#141414] text-xs">{dish.pairing_drink_name}</p>
                     {dish.pairing_reason && (
-                      <p className="text-[11px] text-[#ab8980] leading-snug">{dish.pairing_reason}</p>
+                      <p className="text-[11px] text-[#6E6E6E] leading-snug">{dish.pairing_reason}</p>
                     )}
                   </div>
                 )}
 
                 {dish.temperature_style && (
-                  <div className="bg-[#1b1b1d] border border-white/10 p-3 rounded-2xl space-y-1 text-xs shadow-xs">
-                    <div className="flex items-center space-x-1.5 text-[#ffb955] font-bold">
+                  <div className="bg-[#F5F1E8] border border-black/10 p-3 rounded-2xl space-y-1 text-xs shadow-xs">
+                    <div className="flex items-center space-x-1.5 text-[#2D4A3E] font-bold">
                       <span>🌡️</span>
                       <span>Preparation &amp; Serving Style</span>
                     </div>
-                    <p className="font-semibold text-[#e5e1e4] text-xs">{dish.temperature_style}</p>
+                    <p className="font-semibold text-[#141414] text-xs">{dish.temperature_style}</p>
                   </div>
                 )}
               </div>
             )}
 
             {/* Badges */}
-            <div className="bg-[#1b1b1d] p-3.5 rounded-2xl space-y-2 text-xs border border-white/10 shadow-xs">
+            <div className="bg-[#F5F1E8] p-3.5 rounded-2xl space-y-2 text-xs border border-black/10 shadow-xs">
               {flags.length > 0 && (
                 <div className="flex items-center space-x-2">
-                  <span className="font-semibold text-[#e5e1e4] w-20 flex-shrink-0">Dietary:</span>
+                  <span className="font-semibold text-[#141414] w-20 flex-shrink-0">Dietary:</span>
                   <div className="flex flex-wrap gap-1">
                     {flags.map((d, idx) => (
-                      <span key={idx} className="bg-emerald-950/40 border border-emerald-500/30 text-emerald-400 px-2 py-0.5 rounded-full font-medium text-[11px]">
+                      <span key={idx} className="bg-emerald-950/40 border border-emerald-500/30 text-[#2F7A4F] px-2 py-0.5 rounded-full font-medium text-[11px]">
                         {d}
                       </span>
                     ))}
@@ -474,10 +474,10 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
 
               {allergens.length > 0 ? (
                 <div className="flex items-center space-x-2">
-                  <span className="font-semibold text-[#e5e1e4] w-20 flex-shrink-0">Allergens:</span>
+                  <span className="font-semibold text-[#141414] w-20 flex-shrink-0">Allergens:</span>
                   <div className="flex flex-wrap gap-1">
                     {allergens.map((a, idx) => (
-                      <span key={idx} className="bg-[#201f21] border border-[#ff5722]/30 text-[#e5e1e4] px-2 py-0.5 rounded-full font-medium text-[11px]">
+                      <span key={idx} className="bg-[#F5F1E8] border border-[#F4511E]/30 text-[#141414] px-2 py-0.5 rounded-full font-medium text-[11px]">
                         {a}
                       </span>
                     ))}
@@ -485,14 +485,14 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
                 </div>
               ) : (
                 <div className="flex items-center space-x-2">
-                  <span className="font-semibold text-[#e5e1e4] w-20 flex-shrink-0">Allergens:</span>
-                  <span className="text-[#ab8980] text-[11px]">None declared in kitchen specs</span>
+                  <span className="font-semibold text-[#141414] w-20 flex-shrink-0">Allergens:</span>
+                  <span className="text-[#6E6E6E] text-[11px]">None declared in kitchen specs</span>
                 </div>
               )}
 
               <div className="flex items-start space-x-2">
-                <span className="font-semibold text-[#e5e1e4] w-20 flex-shrink-0">Ingredients:</span>
-                <span className="text-[#ab8980] text-[11px] leading-tight">
+                <span className="font-semibold text-[#141414] w-20 flex-shrink-0">Ingredients:</span>
+                <span className="text-[#6E6E6E] text-[11px] leading-tight">
                   {ingredients.length > 0 ? ingredients.join(', ') : 'Chef signature culinary recipe'}
                 </span>
               </div>
@@ -502,10 +502,10 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
             {optionGroups.length > 0 && (
               <div className="space-y-3 pt-2">
                 {optionGroups.map((group) => (
-                  <div key={group.id} className="border border-white/10 rounded-2xl p-3.5 bg-[#1b1b1d] shadow-xs">
+                  <div key={group.id} className="border border-black/10 rounded-2xl p-3.5 bg-[#F5F1E8] shadow-xs">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="font-serif font-bold text-xs text-[#e5e1e4]">{group.name}</span>
-                      <span className="text-[10px] text-[#ab8980] uppercase font-semibold">
+                      <span className="font-serif font-bold text-xs text-[#141414]">{group.name}</span>
+                      <span className="text-[10px] text-[#6E6E6E] uppercase font-semibold">
                         {group.is_required ? 'Required' : 'Optional'}
                       </span>
                     </div>
@@ -519,12 +519,12 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
                             onClick={() => handleOptionToggle(group.id, opt.id, opt.name, opt.price_modifier)}
                             className={`w-full flex items-center justify-between p-2.5 rounded-xl text-xs transition-all border cursor-pointer ${
                               isSelected
-                                ? 'bg-[#201f21] border-[#ff5722] text-[#e5e1e4] font-bold shadow-xs'
-                                : 'bg-[#1b1b1d] hover:bg-[#201f21] border-white/10 text-[#ab8980]'
+                                ? 'bg-[#F5F1E8] border-[#F4511E] text-[#141414] font-bold shadow-xs'
+                                : 'bg-[#F5F1E8] hover:bg-[#F5F1E8] border-black/10 text-[#6E6E6E]'
                             }`}
                           >
                             <span>{opt.name}</span>
-                            <span className="font-semibold text-[#ffb955]">
+                            <span className="font-semibold text-[#2D4A3E]">
                               {opt.price_modifier > 0 ? `+₹${opt.price_modifier.toFixed(2)}` : 'Included'}
                             </span>
                           </button>
@@ -538,23 +538,23 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
           </div>
 
           {/* Bottom Actions Bar */}
-          <div className="p-4 bg-[#1b1b1d] border-t border-white/10 space-y-2.5">
+          <div className="p-4 bg-[#F5F1E8] border-t border-black/10 space-y-2.5">
             {dish.is_available ? (
               <div className="flex items-center space-x-3">
                 {/* Quantity Selector */}
-                <div className="flex items-center bg-[#1b1b1d] rounded-xl border border-white/10 p-1 shadow-xs">
+                <div className="flex items-center bg-[#F5F1E8] rounded-xl border border-black/10 p-1 shadow-xs">
                   <button
                     type="button"
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-8 h-8 rounded-lg bg-[#1b1b1d] hover:bg-[#201f21] flex items-center justify-center text-[#e5e1e4] transition-colors cursor-pointer"
+                    className="w-8 h-8 rounded-lg bg-[#F5F1E8] hover:bg-[#F5F1E8] flex items-center justify-center text-[#141414] transition-colors cursor-pointer"
                   >
                     <Minus className="w-3.5 h-3.5" />
                   </button>
-                  <span className="w-8 text-center text-xs font-bold text-[#e5e1e4]">{quantity}</span>
+                  <span className="w-8 text-center text-xs font-bold text-[#141414]">{quantity}</span>
                   <button
                     type="button"
                     onClick={() => setQuantity(quantity + 1)}
-                    className="w-8 h-8 rounded-lg bg-[#1b1b1d] hover:bg-[#201f21] flex items-center justify-center text-[#e5e1e4] transition-colors cursor-pointer"
+                    className="w-8 h-8 rounded-lg bg-[#F5F1E8] hover:bg-[#F5F1E8] flex items-center justify-center text-[#141414] transition-colors cursor-pointer"
                   >
                     <Plus className="w-3.5 h-3.5" />
                   </button>
@@ -564,10 +564,10 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
                 <button
                   type="button"
                   onClick={handleAddToCart}
-                  className="flex-1 bg-[#ff5722] hover:bg-[#ff6f3d] active:scale-[0.98] text-white font-medium py-3 px-4 rounded-xl shadow-xs flex items-center justify-between text-xs sm:text-sm transition-all cursor-pointer"
+                  className="flex-1 bg-[#F4511E] hover:bg-[#E24A19] active:scale-[0.98] text-white font-medium py-3 px-4 rounded-xl shadow-xs flex items-center justify-between text-xs sm:text-sm transition-all cursor-pointer"
                 >
                   <div className="flex items-center space-x-1.5">
-                    <ShoppingBag className="w-4 h-4 text-white" />
+                    <ShoppingBag className="w-4 h-4 text-[#141414]" />
                     <span>+ {t.add}</span>
                   </div>
                   <span>₹{totalPrice.toFixed(2)}</span>
@@ -576,7 +576,7 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
             ) : (
               <button
                 disabled
-                className="w-full bg-[#1b1b1d] text-[#e5e1e4]/50 font-bold py-3 px-4 rounded-xl text-xs cursor-not-allowed text-center border border-white/10"
+                className="w-full bg-[#F5F1E8] text-[#141414]/50 font-bold py-3 px-4 rounded-xl text-xs cursor-not-allowed text-center border border-black/10"
               >
                 Currently Unavailable in Kitchen
               </button>
@@ -586,9 +586,9 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
             <button
               type="button"
               onClick={() => onAskAi(dish)}
-              className="w-full bg-[#1b1b1d] hover:bg-[#201f21] text-[#e5e1e4] font-semibold py-2.5 px-4 rounded-xl border border-white/10 hover:border-[#ff5722]/50 flex items-center justify-center space-x-1.5 text-xs transition-all shadow-xs cursor-pointer"
+              className="w-full bg-[#F5F1E8] hover:bg-[#F5F1E8] text-[#141414] font-semibold py-2.5 px-4 rounded-xl border border-black/10 hover:border-[#F4511E]/50 flex items-center justify-center space-x-1.5 text-xs transition-all shadow-xs cursor-pointer"
             >
-              <Sparkles className="w-3.5 h-3.5 text-[#ffb955]" />
+              <Sparkles className="w-3.5 h-3.5 text-[#2D4A3E]" />
               <span>{t.aiSommelier || 'Ask AI Sommelier'}</span>
             </button>
 
@@ -596,9 +596,9 @@ export const DishDetailModal: React.FC<DishDetailModalProps> = ({
             <button
               type="button"
               onClick={triggerSmoothClose}
-              className="w-full bg-white/5 hover:bg-white/10 text-[#e5e1e4] hover:text-[#ffb955] font-semibold py-2.5 px-4 rounded-xl border border-white/10 flex items-center justify-center gap-2 text-xs transition-all cursor-pointer active:scale-98"
+              className="w-full bg-black/[0.03] hover:bg-black/[0.06] text-[#141414] hover:text-[#2D4A3E] font-semibold py-2.5 px-4 rounded-xl border border-black/10 flex items-center justify-center gap-2 text-xs transition-all cursor-pointer active:scale-98"
             >
-              <ArrowLeft className="w-3.5 h-3.5 text-[#ffb955]" />
+              <ArrowLeft className="w-3.5 h-3.5 text-[#2D4A3E]" />
               <span>Back to Menu</span>
             </button>
           </div>

@@ -253,23 +253,23 @@ export const PitchDeckPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#131315] text-[#e5e1e4] flex flex-col font-sans selection:bg-[#ff5722] selection:text-white antialiased">
+    <div className="min-h-screen bg-[#FFFFFF] text-[#FFFFFF] flex flex-col font-sans selection:bg-[#F4511E] selection:text-white antialiased">
       {/* ══════════════════════════════════════════════════════════════════ */}
       {/* 1. TOP STICKY EXECUTIVE NAVIGATION BAR                            */}
       {/* ══════════════════════════════════════════════════════════════════ */}
-      <header className="sticky top-0 z-50 bg-[#161517]/95 backdrop-blur-md border-b border-white/10 px-4 sm:px-6 py-3">
+      <header className="sticky top-0 z-50 bg-[#F5F1E8]/95 backdrop-blur-md border-b border-black/10 px-4 sm:px-6 py-3">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           {/* Brand Logo */}
           <div className="flex items-center space-x-3">
             <Link to="/" className="flex items-center space-x-2 group">
-              <span className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center font-black text-slate-950 shadow-md text-base">
+              <span className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#F4511E] to-[#F4511E] flex items-center justify-center font-black text-[#FFFFFF] shadow-md text-base">
                 M
               </span>
               <div className="flex flex-col">
-                <span className="text-xl font-black tracking-tight text-white group-hover:text-amber-400 transition-colors">
+                <span className="text-xl font-black tracking-tight text-[#141414] group-hover:text-[#2D4A3E] transition-colors">
                   MENU<span className="text-amber-500">Z</span>
                 </span>
-                <span className="text-[10px] uppercase tracking-widest text-amber-400 font-bold -mt-1 hidden sm:block">
+                <span className="text-[10px] uppercase tracking-widest text-[#2D4A3E] font-bold -mt-1 hidden sm:block">
                   Executive Pitch Deck
                 </span>
               </div>
@@ -277,10 +277,10 @@ export const PitchDeckPage: React.FC = () => {
           </div>
 
           {/* Presentation Master Deck Badge */}
-          <div className="hidden sm:flex items-center gap-2 bg-slate-900 border border-slate-700/80 px-3.5 py-1.5 rounded-xl">
+          <div className="hidden sm:flex items-center gap-2 bg-[#F5F1E8] border border-[#E3E0DA]/80 px-3.5 py-1.5 rounded-xl">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-xs font-bold text-slate-300">Executive Master Presentation</span>
-            <span className="text-[10px] text-amber-400 font-mono font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+            <span className="text-xs font-bold text-[#4A4A4A]">Executive Master Presentation</span>
+            <span className="text-[10px] text-[#2D4A3E] font-mono font-bold bg-[#F4511E]/10 px-2 py-0.5 rounded border border-[#F4511E]/20">
               19 Slides
             </span>
           </div>
@@ -289,16 +289,16 @@ export const PitchDeckPage: React.FC = () => {
           <div className="flex items-center space-x-2">
             <Link
               to="/manage"
-              className="px-3.5 py-1.5 bg-amber-500/10 hover:bg-amber-500/25 text-amber-300 font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 border border-amber-500/40 shadow-sm"
+              className="px-3.5 py-1.5 bg-[#F4511E]/10 hover:bg-[#F4511E]/25 text-[#2D4A3E] font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 border border-[#F4511E]/40 shadow-sm"
               title="Open Restaurant Partner Hub"
             >
-              <Building2 className="w-3.5 h-3.5 text-amber-400" />
+              <Building2 className="w-3.5 h-3.5 text-[#2D4A3E]" />
               <span>Partner Hub</span>
             </Link>
             <a
               href="./menuz_executive_pitch_deck.pptx"
               download="Menuz_Executive_Pitch_Deck.pptx"
-              className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 shadow-sm"
+              className="px-3.5 py-1.5 bg-[#F4511E] hover:bg-[#F4511E] text-[#FFFFFF] font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 shadow-sm"
               title="Download 16:9 Widescreen PowerPoint Presentation (PPTX)"
             >
               <Download className="w-3.5 h-3.5" />
@@ -310,7 +310,7 @@ export const PitchDeckPage: React.FC = () => {
               download="Menuz_Executive_Pitch_Deck.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 border border-amber-500/30"
+              className="px-3.5 py-1.5 bg-[#EFE9DD] hover:bg-[#E8DCC8] text-[#2D4A3E] font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 border border-[#F4511E]/30"
               title="Download High-Resolution PDF"
             >
               <FileText className="w-3.5 h-3.5" />
@@ -318,7 +318,7 @@ export const PitchDeckPage: React.FC = () => {
             </a>
             <Link
               to={`/r/${restaurant.slug}/menu?t=table-token-01-saffron`}
-              className="px-3.5 py-1.5 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 hidden sm:flex"
+              className="px-3.5 py-1.5 bg-cyan-500/20 hover:bg-cyan-500/30 text-[#1F5F8B] border border-cyan-500/40 font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 hidden sm:flex"
             >
               <Smartphone className="w-3.5 h-3.5" />
               <span>Live Diner Menu</span>
@@ -332,12 +332,12 @@ export const PitchDeckPage: React.FC = () => {
       {/* ══════════════════════════════════════════════════════════════════ */}
       <main className="flex-1 flex flex-col p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
         {/* Slide Navigation Top Bar */}
-        <div className="flex items-center justify-between mb-4 bg-slate-900/80 border border-slate-800 p-3 rounded-2xl backdrop-blur-md">
+        <div className="flex items-center justify-between mb-4 bg-[#F5F1E8]/80 border border-[#E3E0DA] p-3 rounded-2xl backdrop-blur-md">
           <div className="flex items-center gap-3">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-cyan-400 bg-cyan-950/60 border border-cyan-500/30 px-3 py-1 rounded-full">
+            <span className="text-xs font-extrabold uppercase tracking-wider text-[#2D4A3E] bg-cyan-950/60 border border-cyan-500/30 px-3 py-1 rounded-full">
               Slide {currentSlide + 1} of {SLIDES_DATA.length} • {SLIDES_DATA[currentSlide]?.tag || ''}
             </span>
-            <h2 className="text-base sm:text-lg font-bold text-white hidden md:block">
+            <h2 className="text-base sm:text-lg font-bold text-[#141414] hidden md:block">
               {SLIDES_DATA[currentSlide]?.short || ''}
             </h2>
           </div>
@@ -347,19 +347,19 @@ export const PitchDeckPage: React.FC = () => {
               type="button"
               onClick={() => setCurrentSlide((prev) => Math.max(0, prev - 1))}
               disabled={currentSlide === 0}
-              className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold transition-all disabled:opacity-30 disabled:pointer-events-none flex items-center gap-1 cursor-pointer"
+              className="px-3 py-1.5 bg-[#EFE9DD] hover:bg-[#E8DCC8] text-[#141414] rounded-lg text-xs font-bold transition-all disabled:opacity-30 disabled:pointer-events-none flex items-center gap-1 cursor-pointer"
             >
               <ChevronLeft className="w-4 h-4" />
               <span>Prev</span>
             </button>
-            <span className="text-xs font-bold text-slate-400 px-2 font-mono">
+            <span className="text-xs font-bold text-[#6E6E6E] px-2 font-mono">
               {currentSlide + 1} / {SLIDES_DATA.length}
             </span>
             <button
               type="button"
               onClick={() => setCurrentSlide((prev) => Math.min(SLIDES_DATA.length - 1, prev + 1))}
               disabled={currentSlide === SLIDES_DATA.length - 1}
-              className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-xs font-bold transition-all disabled:opacity-30 disabled:pointer-events-none flex items-center gap-1 shadow-sm cursor-pointer"
+              className="px-3.5 py-1.5 bg-[#F4511E] hover:bg-[#F4511E] text-[#FFFFFF] rounded-lg text-xs font-bold transition-all disabled:opacity-30 disabled:pointer-events-none flex items-center gap-1 shadow-sm cursor-pointer"
             >
               <span>Next</span>
               <ChevronRight className="w-4 h-4" />
@@ -370,48 +370,48 @@ export const PitchDeckPage: React.FC = () => {
           {/* ════════════════════════════════════════════════════════════════ */}
           {/* SLIDE CANVAS (16:9 WIDESCREEN HIGH-CONTRAST HTML COMPONENT)      */}
           {/* ════════════════════════════════════════════════════════════════ */}
-          <div className="relative w-full bg-[#0E1524] border-2 border-slate-700/80 rounded-3xl p-6 sm:p-10 lg:p-12 shadow-2xl overflow-hidden flex flex-col justify-between min-h-[640px]">
+          <div className="relative w-full bg-[#FFFFFF] border-2 border-[#E3E0DA]/80 rounded-3xl p-6 sm:p-10 lg:p-12 shadow-2xl overflow-hidden flex flex-col justify-between min-h-[640px]">
             {/* Background Ambient Glows */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-0 right-0 w-96 h-96 bg-[#F4511E]/10 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
             {/* SLIDE 1: COVER & MISSION */}
             {currentSlide === 0 && (
               <div className="space-y-8 my-auto relative z-10">
                 <div className="flex items-center gap-3">
-                  <div className="w-3 h-10 bg-amber-500 rounded-full" />
-                  <span className="text-amber-400 font-extrabold uppercase tracking-widest text-sm">
+                  <div className="w-3 h-10 bg-[#F4511E] rounded-full" />
+                  <span className="text-[#2D4A3E] font-extrabold uppercase tracking-widest text-sm">
                     Executive Master Pitch Deck
                   </span>
                 </div>
 
                 <div className="space-y-3">
-                  <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight">
+                  <h1 className="text-4xl sm:text-6xl font-black text-[#141414] tracking-tight leading-tight">
                     MENUZ
                   </h1>
-                  <p className="text-xl sm:text-2xl font-bold text-amber-400">
+                  <p className="text-xl sm:text-2xl font-bold text-[#2D4A3E]">
                     The Autonomous Dining & Reputation Operating System
                   </p>
-                  <p className="text-base sm:text-lg text-slate-300 max-w-3xl leading-relaxed">
+                  <p className="text-base sm:text-lg text-[#4A4A4A] max-w-3xl leading-relaxed">
                     Zero-CapEx Table QR Ordering, Real-Time Multiplayer Cart, Decoupled 3-Channel Reputation Engine, and Hardware-Free Kitchen Automation.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
-                  <div className="bg-[#131C2E] border border-amber-500/30 p-5 rounded-2xl">
-                    <div className="text-amber-400 font-black text-2xl mb-1">0% CapEx</div>
-                    <div className="text-sm font-bold text-white">Zero Hardware Investment</div>
-                    <div className="text-xs text-slate-400 mt-1">Works on existing thermal printers & smartphones</div>
+                  <div className="bg-[#F5F1E8] border border-[#F4511E]/30 p-5 rounded-2xl">
+                    <div className="text-[#2D4A3E] font-black text-2xl mb-1">0% CapEx</div>
+                    <div className="text-sm font-bold text-[#141414]">Zero Hardware Investment</div>
+                    <div className="text-xs text-[#6E6E6E] mt-1">Works on existing thermal printers & smartphones</div>
                   </div>
-                  <div className="bg-[#131C2E] border border-cyan-500/30 p-5 rounded-2xl">
-                    <div className="text-cyan-400 font-black text-2xl mb-1">+₹3.8L / Mo</div>
-                    <div className="text-sm font-bold text-white">Verified Net Margin Boost</div>
-                    <div className="text-xs text-slate-400 mt-1">Via upsells, faster table turns & direct orders</div>
+                  <div className="bg-[#F5F1E8] border border-cyan-500/30 p-5 rounded-2xl">
+                    <div className="text-[#2D4A3E] font-black text-2xl mb-1">+₹3.8L / Mo</div>
+                    <div className="text-sm font-bold text-[#141414]">Verified Net Margin Boost</div>
+                    <div className="text-xs text-[#6E6E6E] mt-1">Via upsells, faster table turns & direct orders</div>
                   </div>
-                  <div className="bg-[#131C2E] border border-emerald-500/30 p-5 rounded-2xl">
-                    <div className="text-emerald-400 font-black text-2xl mb-1">100% Floor Shield</div>
-                    <div className="text-sm font-bold text-white">Zero Negative Public Leak</div>
-                    <div className="text-xs text-slate-400 mt-1">15-Minute private manager grievance recovery</div>
+                  <div className="bg-[#F5F1E8] border border-emerald-500/30 p-5 rounded-2xl">
+                    <div className="text-[#2F7A4F] font-black text-2xl mb-1">100% Floor Shield</div>
+                    <div className="text-sm font-bold text-[#141414]">Zero Negative Public Leak</div>
+                    <div className="text-xs text-[#6E6E6E] mt-1">15-Minute private manager grievance recovery</div>
                   </div>
                 </div>
               </div>
@@ -420,44 +420,44 @@ export const PitchDeckPage: React.FC = () => {
             {/* SLIDE 2: THE MULTI-CRORE DINING CRISIS */}
             {currentSlide === 1 && (
               <div className="space-y-6 my-auto relative z-10">
-                <div className="flex items-center gap-2 text-red-400 text-xs font-bold uppercase tracking-wider bg-red-500/10 border border-red-500/30 px-3 py-1 rounded-full w-fit">
+                <div className="flex items-center gap-2 text-[#C23A1C] text-xs font-bold uppercase tracking-wider bg-red-500/10 border border-red-500/30 px-3 py-1 rounded-full w-fit">
                   <AlertTriangle className="w-4 h-4" />
                   <span>Market Reality & Revenue Leakage</span>
                 </div>
-                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                <h2 className="text-3xl sm:text-5xl font-black text-[#141414] tracking-tight">
                   The ₹4,20,000 Monthly Revenue Drain
                 </h2>
-                <p className="text-base sm:text-lg text-slate-300 max-w-3xl">
+                <p className="text-base sm:text-lg text-[#4A4A4A] max-w-3xl">
                   Modern restaurants face 3 severe systemic fractures that destroy margins and public reputation.
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
-                  <div className="bg-[#131C2E] border border-red-500/30 p-6 rounded-2xl space-y-3">
-                    <div className="w-10 h-10 rounded-xl bg-red-500/20 text-red-400 font-black flex items-center justify-center text-lg">
+                  <div className="bg-[#F5F1E8] border border-red-500/30 p-6 rounded-2xl space-y-3">
+                    <div className="w-10 h-10 rounded-xl bg-red-500/20 text-[#C23A1C] font-black flex items-center justify-center text-lg">
                       95%
                     </div>
-                    <h3 className="text-lg font-bold text-white">The Silent Guest Exodus</h3>
-                    <p className="text-sm text-slate-300 leading-relaxed">
+                    <h3 className="text-lg font-bold text-[#141414]">The Silent Guest Exodus</h3>
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed">
                       95% of satisfied guests pay their bill and leave silently without writing a Google review or recommending to others.
                     </p>
                   </div>
 
-                  <div className="bg-[#131C2E] border border-amber-500/30 p-6 rounded-2xl space-y-3">
-                    <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 font-black flex items-center justify-center text-lg">
+                  <div className="bg-[#F5F1E8] border border-[#F4511E]/30 p-6 rounded-2xl space-y-3">
+                    <div className="w-10 h-10 rounded-xl bg-[#F4511E]/20 text-[#2D4A3E] font-black flex items-center justify-center text-lg">
                       1★
                     </div>
-                    <h3 className="text-lg font-bold text-white">Permanent 1-Star Damage</h3>
-                    <p className="text-sm text-slate-300 leading-relaxed">
+                    <h3 className="text-lg font-bold text-[#141414]">Permanent 1-Star Damage</h3>
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed">
                       A single minor table delay or cold soup gets vented on Google Maps permanently, costing an estimated 30+ future walk-ins.
                     </p>
                   </div>
 
-                  <div className="bg-[#131C2E] border border-purple-500/30 p-6 rounded-2xl space-y-3">
-                    <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 font-black flex items-center justify-center text-lg">
+                  <div className="bg-[#F5F1E8] border border-[#F4511E]/30 p-6 rounded-2xl space-y-3">
+                    <div className="w-10 h-10 rounded-xl bg-[#F4511E]/20 text-[#2D4A3E] font-black flex items-center justify-center text-lg">
                       30%
                     </div>
-                    <h3 className="text-lg font-bold text-white">Aggregator Commission Trap</h3>
-                    <p className="text-sm text-slate-300 leading-relaxed">
+                    <h3 className="text-lg font-bold text-[#141414]">Aggregator Commission Trap</h3>
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed">
                       Restaurants bleed 22% to 30% commissions to Zomato & Swiggy because they lack direct customer acquisition at the table.
                     </p>
                   </div>
@@ -468,62 +468,62 @@ export const PitchDeckPage: React.FC = () => {
             {/* SLIDE 3: THE 3 REPUTATION CHANNELS DECOUPLED */}
             {currentSlide === 2 && (
               <div className="space-y-6 my-auto relative z-10">
-                <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full w-fit">
+                <div className="flex items-center gap-2 text-[#2D4A3E] text-xs font-bold uppercase tracking-wider bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full w-fit">
                   <ShieldCheck className="w-4 h-4" />
                   <span>Strategic Decoupling</span>
                 </div>
-                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                <h2 className="text-3xl sm:text-5xl font-black text-[#141414] tracking-tight">
                   Public Reviews vs. Social Sharing vs. Floor Shield
                 </h2>
-                <p className="text-base sm:text-lg text-slate-300 max-w-3xl">
+                <p className="text-base sm:text-lg text-[#4A4A4A] max-w-3xl">
                   They are completely different channels with distinct objectives, algorithms, and conversion mechanics.
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
-                  <div className="bg-[#131C2E] border-2 border-amber-500/50 p-6 rounded-2xl space-y-4">
+                  <div className="bg-[#F5F1E8] border-2 border-[#F4511E]/50 p-6 rounded-2xl space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold uppercase px-2.5 py-1 rounded bg-amber-500/20 text-amber-300">
+                      <span className="text-xs font-bold uppercase px-2.5 py-1 rounded bg-[#F4511E]/20 text-[#2D4A3E]">
                         Channel 1
                       </span>
-                      <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
+                      <Star className="w-5 h-5 text-[#2D4A3E] fill-[#2D4A3E]" />
                     </div>
-                    <h3 className="text-xl font-black text-white">Google Maps SEO</h3>
-                    <p className="text-sm text-slate-300">
+                    <h3 className="text-xl font-black text-[#141414]">Google Maps SEO</h3>
+                    <p className="text-sm text-[#4A4A4A]">
                       <strong>Goal:</strong> Boost local search ranking when users search "best dining near me". Permanent public 5-star validation.
                     </p>
-                    <div className="text-xs text-amber-400 font-semibold bg-amber-950/40 p-2.5 rounded-lg border border-amber-500/20">
+                    <div className="text-xs text-[#2D4A3E] font-semibold bg-[#F4511E]/40 p-2.5 rounded-lg border border-[#F4511E]/20">
                       Action: AI Keyword Review Builder
                     </div>
                   </div>
 
-                  <div className="bg-[#131C2E] border-2 border-rose-500/50 p-6 rounded-2xl space-y-4">
+                  <div className="bg-[#F5F1E8] border-2 border-rose-500/50 p-6 rounded-2xl space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold uppercase px-2.5 py-1 rounded bg-rose-500/20 text-rose-300">
+                      <span className="text-xs font-bold uppercase px-2.5 py-1 rounded bg-rose-500/20 text-[#C23A1C]">
                         Channel 2
                       </span>
-                      <Share2 className="w-5 h-5 text-rose-400" />
+                      <Share2 className="w-5 h-5 text-[#C23A1C]" />
                     </div>
-                    <h3 className="text-xl font-black text-white">Social Word-of-Mouth</h3>
-                    <p className="text-sm text-slate-300">
+                    <h3 className="text-xl font-black text-[#141414]">Social Word-of-Mouth</h3>
+                    <p className="text-sm text-[#4A4A4A]">
                       <strong>Goal:</strong> Peer recommendations & social proof. Diners share food cards directly with friends, creating viral footfall.
                     </p>
-                    <div className="text-xs text-rose-400 font-semibold bg-rose-950/40 p-2.5 rounded-lg border border-rose-500/20">
+                    <div className="text-xs text-[#C23A1C] font-semibold bg-rose-950/40 p-2.5 rounded-lg border border-rose-500/20">
                       Action: 1-Click Aesthetic Food Presentation Card
                     </div>
                   </div>
 
-                  <div className="bg-[#131C2E] border-2 border-cyan-500/50 p-6 rounded-2xl space-y-4">
+                  <div className="bg-[#F5F1E8] border-2 border-cyan-500/50 p-6 rounded-2xl space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold uppercase px-2.5 py-1 rounded bg-cyan-500/20 text-cyan-300">
+                      <span className="text-xs font-bold uppercase px-2.5 py-1 rounded bg-cyan-500/20 text-[#1F5F8B]">
                         Channel 3
                       </span>
-                      <Shield className="w-5 h-5 text-cyan-400" />
+                      <Shield className="w-5 h-5 text-[#2D4A3E]" />
                     </div>
-                    <h3 className="text-xl font-black text-white">Private Floor Shield</h3>
-                    <p className="text-sm text-slate-300">
+                    <h3 className="text-xl font-black text-[#141414]">Private Floor Shield</h3>
+                    <p className="text-sm text-[#4A4A4A]">
                       <strong>Goal:</strong> Intercept grievances instantly (1-3 stars) while the diner is still seated. 100% confidential.
                     </p>
-                    <div className="text-xs text-cyan-400 font-semibold bg-cyan-950/40 p-2.5 rounded-lg border border-cyan-500/20">
+                    <div className="text-xs text-[#2D4A3E] font-semibold bg-cyan-950/40 p-2.5 rounded-lg border border-cyan-500/20">
                       Action: 15-Min Manager Alert & Recovery
                     </div>
                   </div>
@@ -534,43 +534,43 @@ export const PitchDeckPage: React.FC = () => {
             {/* SLIDE 4: CHANNEL 1 DEEP DIVE — GOOGLE MAPS SEO ENGINE */}
             {currentSlide === 3 && (
               <div className="space-y-6 my-auto relative z-10">
-                <div className="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-full w-fit">
-                  <Star className="w-4 h-4 fill-amber-400" />
+                <div className="flex items-center gap-2 text-[#2D4A3E] text-xs font-bold uppercase tracking-wider bg-[#F4511E]/10 border border-[#F4511E]/30 px-3 py-1 rounded-full w-fit">
+                  <Star className="w-4 h-4 fill-[#2D4A3E]" />
                   <span>Channel 1 Breakdown</span>
                 </div>
-                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                <h2 className="text-3xl sm:text-5xl font-black text-[#141414] tracking-tight">
                   Google Maps SEO Review Generator
                 </h2>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-2">
                   <div className="lg:col-span-6 space-y-4">
-                    <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
+                    <p className="text-base sm:text-lg text-[#4A4A4A] leading-relaxed">
                       Instead of a blank, intimidating review box, Menuz provides 1-tap positive keyword tags (e.g. <em>#AuthenticDumBiryani, #SuperbAmbiance, #FastService</em>) that construct high-converting Google reviews with rich SEO weight.
                     </p>
-                    <ul className="space-y-2.5 text-sm text-slate-300">
+                    <ul className="space-y-2.5 text-sm text-[#4A4A4A]">
                       <li className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-[#2F7A4F] shrink-0" />
                         <span>Pre-injects target food keywords into Google's search index</span>
                       </li>
                       <li className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-[#2F7A4F] shrink-0" />
                         <span>Multi-language auto-generation in English, Hindi, and Marathi</span>
                       </li>
                       <li className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-[#2F7A4F] shrink-0" />
                         <span>1-Click direct redirect to restaurant's verified Google Maps Place ID</span>
                       </li>
                     </ul>
                   </div>
 
-                  <div className="lg:col-span-6 bg-[#131C2E] border border-amber-500/40 p-6 rounded-2xl shadow-xl space-y-4">
-                    <div className="text-xs font-bold text-amber-400 uppercase">Live Review Builder Preview</div>
+                  <div className="lg:col-span-6 bg-[#F5F1E8] border border-[#F4511E]/40 p-6 rounded-2xl shadow-xl space-y-4">
+                    <div className="text-xs font-bold text-[#2D4A3E] uppercase">Live Review Builder Preview</div>
                     <div className="flex gap-1">
                       {[1, 2, 3, 4, 5].map((s) => (
-                        <Star key={s} className="w-6 h-6 text-amber-400 fill-amber-400" />
+                        <Star key={s} className="w-6 h-6 text-[#2D4A3E] fill-[#2D4A3E]" />
                       ))}
                     </div>
-                    <div className="p-4 bg-slate-900/90 rounded-xl border border-slate-700 text-sm text-slate-200">
+                    <div className="p-4 bg-[#F5F1E8]/90 rounded-xl border border-[#E3E0DA] text-sm text-[#F0F0F0]">
                       "{generatedReviewText}"
                     </div>
                     <button
@@ -579,7 +579,7 @@ export const PitchDeckPage: React.FC = () => {
                         setCopiedReview(true);
                         setTimeout(() => setCopiedReview(false), 2000);
                       }}
-                      className="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold rounded-xl text-sm transition-all hover:brightness-110 flex items-center justify-center gap-2 shadow-md"
+                      className="w-full py-3 bg-gradient-to-r from-[#F4511E] to-[#F4511E] text-[#FFFFFF] font-bold rounded-xl text-sm transition-all hover:brightness-110 flex items-center justify-center gap-2 shadow-md"
                     >
                       {copiedReview ? <Check className="w-4 h-4" /> : <Star className="w-4 h-4 fill-slate-950" />}
                       <span>{copiedReview ? 'Copied & Ready to Post!' : '1-Click Copy & Open Google Maps'}</span>
@@ -592,34 +592,34 @@ export const PitchDeckPage: React.FC = () => {
             {/* SLIDE 5: CHANNEL 2 DEEP DIVE — SOCIAL SHARING VIRALITY */}
             {currentSlide === 4 && (
               <div className="space-y-6 my-auto relative z-10">
-                <div className="flex items-center gap-2 text-rose-400 text-xs font-bold uppercase tracking-wider bg-rose-500/10 border border-rose-500/30 px-3 py-1 rounded-full w-fit">
+                <div className="flex items-center gap-2 text-[#C23A1C] text-xs font-bold uppercase tracking-wider bg-rose-500/10 border border-rose-500/30 px-3 py-1 rounded-full w-fit">
                   <Share2 className="w-4 h-4" />
                   <span>Channel 2 Breakdown</span>
                 </div>
-                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                <h2 className="text-3xl sm:text-5xl font-black text-[#141414] tracking-tight">
                   Word-of-Mouth Social Sharing Engine
                 </h2>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-2">
                   <div className="lg:col-span-6 space-y-4">
-                    <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
+                    <p className="text-base sm:text-lg text-[#4A4A4A] leading-relaxed">
                       Turn every table into a viral advocate. Guests easily share high-resolution food presentation cards, chef recommendations, and direct table booking links with friends and family.
                     </p>
                     <div className="grid grid-cols-2 gap-3 pt-2">
-                      <div className="bg-[#131C2E] p-4 rounded-xl border border-slate-700">
-                        <div className="text-rose-400 font-bold text-xl">450+ Reach</div>
-                        <div className="text-xs text-slate-300 mt-1">Average reach per diner table recommendation</div>
+                      <div className="bg-[#F5F1E8] p-4 rounded-xl border border-[#E3E0DA]">
+                        <div className="text-[#C23A1C] font-bold text-xl">450+ Reach</div>
+                        <div className="text-xs text-[#4A4A4A] mt-1">Average reach per diner table recommendation</div>
                       </div>
-                      <div className="bg-[#131C2E] p-4 rounded-xl border border-slate-700">
-                        <div className="text-amber-400 font-bold text-xl">Zero Cost</div>
-                        <div className="text-xs text-slate-300 mt-1">Authentic organic peer-to-peer growth</div>
+                      <div className="bg-[#F5F1E8] p-4 rounded-xl border border-[#E3E0DA]">
+                        <div className="text-[#2D4A3E] font-bold text-xl">Zero Cost</div>
+                        <div className="text-xs text-[#4A4A4A] mt-1">Authentic organic peer-to-peer growth</div>
                       </div>
                     </div>
                   </div>
 
                   <div className="lg:col-span-6 flex justify-center">
-                    <div className="w-72 bg-gradient-to-br from-purple-900/80 to-rose-950/80 border-2 border-rose-500/50 rounded-3xl p-5 shadow-2xl space-y-4">
-                      <div className="flex items-center justify-between text-xs text-rose-300 font-bold">
+                    <div className="w-72 bg-gradient-to-br from-[#2D4A3E]/80 to-rose-950/80 border-2 border-rose-500/50 rounded-3xl p-5 shadow-2xl space-y-4">
+                      <div className="flex items-center justify-between text-xs text-[#C23A1C] font-bold">
                         <span>📸 CULINARY CARD</span>
                         <span>Saffron House</span>
                       </div>
@@ -630,12 +630,12 @@ export const PitchDeckPage: React.FC = () => {
                           className="w-full h-full object-cover"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-3">
-                          <span className="text-xs font-bold text-amber-300">
+                          <span className="text-xs font-bold text-[#2D4A3E]">
                             {DEMO_STORIES[selectedStoryDish].tag}
                           </span>
                         </div>
                       </div>
-                      <p className="text-xs text-slate-200 italic">
+                      <p className="text-xs text-[#3A3A3A] italic">
                         {DEMO_STORIES[selectedStoryDish].quote}
                       </p>
                       <button
@@ -658,47 +658,47 @@ export const PitchDeckPage: React.FC = () => {
             {/* SLIDE 6: CHANNEL 3 DEEP DIVE — PRIVATE FLOOR SHIELD */}
             {currentSlide === 5 && (
               <div className="space-y-6 my-auto relative z-10">
-                <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full w-fit">
+                <div className="flex items-center gap-2 text-[#2D4A3E] text-xs font-bold uppercase tracking-wider bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full w-fit">
                   <ShieldCheck className="w-4 h-4" />
                   <span>Channel 3 Breakdown</span>
                 </div>
-                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                <h2 className="text-3xl sm:text-5xl font-black text-[#141414] tracking-tight">
                   Private Floor Shield & 15-Minute Recovery
                 </h2>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-2">
                   <div className="lg:col-span-6 space-y-4">
-                    <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
+                    <p className="text-base sm:text-lg text-[#4A4A4A] leading-relaxed">
                       When a guest selects 1, 2, or 3 stars, they are NEVER sent to Google Maps. Instead, their grievance routes instantly to the Floor Manager's WhatsApp & Admin Dashboard with an active 15-minute countdown clock.
                     </p>
-                    <div className="space-y-2 text-sm text-slate-300">
-                      <div className="flex items-center gap-2 text-emerald-400 font-semibold">
+                    <div className="space-y-2 text-sm text-[#4A4A4A]">
+                      <div className="flex items-center gap-2 text-[#2F7A4F] font-semibold">
                         <CheckCircle2 className="w-4 h-4" />
                         <span>Manager visits table with a complimentary dessert / apology</span>
                       </div>
-                      <div className="flex items-center gap-2 text-emerald-400 font-semibold">
+                      <div className="flex items-center gap-2 text-[#2F7A4F] font-semibold">
                         <CheckCircle2 className="w-4 h-4" />
                         <span>Guest issue resolved on-premise BEFORE they walk out the door</span>
                       </div>
-                      <div className="flex items-center gap-2 text-emerald-400 font-semibold">
+                      <div className="flex items-center gap-2 text-[#2F7A4F] font-semibold">
                         <CheckCircle2 className="w-4 h-4" />
                         <span>Zero permanent 1-star reviews posted to public search engines</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="lg:col-span-6 bg-[#131C2E] border-2 border-red-500/50 p-6 rounded-2xl shadow-xl space-y-4">
+                  <div className="lg:col-span-6 bg-[#F5F1E8] border-2 border-red-500/50 p-6 rounded-2xl shadow-xl space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold bg-red-500/20 text-red-400 px-3 py-1 rounded-full flex items-center gap-1.5">
+                      <span className="text-xs font-bold bg-red-500/20 text-[#C23A1C] px-3 py-1 rounded-full flex items-center gap-1.5">
                         <Bell className="w-3.5 h-3.5 animate-pulse" />
                         <span>URGENT TABLE ALERT</span>
                       </span>
-                      <span className="font-mono text-xs text-amber-400 font-bold bg-slate-900 px-2 py-1 rounded">
+                      <span className="font-mono text-xs text-[#2D4A3E] font-bold bg-[#F5F1E8] px-2 py-1 rounded">
                         ⏱️ {formatTimer(voucherSeconds)} REMAINING
                       </span>
                     </div>
 
-                    <div className="bg-slate-900/90 p-4 rounded-xl border border-red-500/30 text-sm text-slate-200">
+                    <div className="bg-[#F5F1E8]/90 p-4 rounded-xl border border-red-500/30 text-sm text-[#F0F0F0]">
                       <strong>Table 4 (4 Guests):</strong> "Soup was served lukewarm and we waited 20 minutes for drinks."
                     </div>
 
@@ -709,18 +709,18 @@ export const PitchDeckPage: React.FC = () => {
                         placeholder="Manager PIN (1234)"
                         value={enteredPin}
                         onChange={(e) => setEnteredPin(e.target.value)}
-                        className="bg-slate-900 border border-slate-700 px-3 py-2 rounded-xl text-sm text-white w-40 focus:outline-none focus:border-amber-500"
+                        className="bg-[#F5F1E8] border border-[#E3E0DA] px-3 py-2 rounded-xl text-sm text-white w-40 focus:outline-none focus:border-[#F4511E]"
                       />
                       <button
                         type="button"
                         onClick={handleVerifyPin}
-                        className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl transition-all"
+                        className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-[#FFFFFF] font-bold text-xs rounded-xl transition-all"
                       >
                         Resolve & Close
                       </button>
                     </div>
                     {pinVerified && (
-                      <div className="text-xs font-bold text-emerald-400">
+                      <div className="text-xs font-bold text-[#2F7A4F]">
                         ✅ Table grievance resolved on-floor! Guest satisfied.
                       </div>
                     )}
@@ -732,30 +732,30 @@ export const PitchDeckPage: React.FC = () => {
             {/* SLIDE 7: HARDWARE-FREE SMART KOT ENGINE */}
             {currentSlide === 6 && (
               <div className="space-y-6 my-auto relative z-10">
-                <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full w-fit">
+                <div className="flex items-center gap-2 text-[#2F7A4F] text-xs font-bold uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full w-fit">
                   <Printer className="w-4 h-4" />
                   <span>Kitchen Automation</span>
                 </div>
-                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                <h2 className="text-3xl sm:text-5xl font-black text-[#141414] tracking-tight">
                   Zero-CapEx Universal Kitchen KOT Bridge
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
-                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
-                    <div className="text-amber-400 font-bold text-lg">1. WhatsApp Kitchen Bot</div>
-                    <p className="text-sm text-slate-300">
+                  <div className="bg-[#F5F1E8] border border-[#E3E0DA] p-6 rounded-2xl space-y-3">
+                    <div className="text-[#2D4A3E] font-bold text-lg">1. WhatsApp Kitchen Bot</div>
+                    <p className="text-sm text-[#4A4A4A]">
                       Orders route straight to a kitchen tablet or chef smartphone via WhatsApp with instant loud chime alert.
                     </p>
                   </div>
-                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
-                    <div className="text-cyan-400 font-bold text-lg">2. Direct ESC/POS Print</div>
-                    <p className="text-sm text-slate-300">
+                  <div className="bg-[#F5F1E8] border border-[#E3E0DA] p-6 rounded-2xl space-y-3">
+                    <div className="text-[#2D4A3E] font-bold text-lg">2. Direct ESC/POS Print</div>
+                    <p className="text-sm text-[#4A4A4A]">
                       Prints instantly to standard 80mm/58mm thermal printers over LAN, USB, or Bluetooth without driver installs.
                     </p>
                   </div>
-                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
-                    <div className="text-emerald-400 font-bold text-lg">3. Universal POS Bridge</div>
-                    <p className="text-sm text-slate-300">
+                  <div className="bg-[#F5F1E8] border border-[#E3E0DA] p-6 rounded-2xl space-y-3">
+                    <div className="text-[#2F7A4F] font-bold text-lg">3. Universal POS Bridge</div>
+                    <p className="text-sm text-[#4A4A4A]">
                       Seamless Webhook & API integration with Petpooja, RoyalPOS, Recaho, and RanceLab.
                     </p>
                   </div>
@@ -766,40 +766,40 @@ export const PitchDeckPage: React.FC = () => {
             {/* SLIDE 8: REAL-TIME COLLABORATIVE TABLE SYNC */}
             {currentSlide === 7 && (
               <div className="space-y-6 my-auto relative z-10">
-                <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full w-fit">
+                <div className="flex items-center gap-2 text-[#2D4A3E] text-xs font-bold uppercase tracking-wider bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full w-fit">
                   <Users className="w-4 h-4" />
                   <span>Multiplayer Table Sync</span>
                 </div>
-                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                <h2 className="text-3xl sm:text-5xl font-black text-[#141414] tracking-tight">
                   Real-Time Joint Table Ordering
                 </h2>
-                <p className="text-base sm:text-lg text-slate-300 max-w-3xl">
+                <p className="text-base sm:text-lg text-[#4A4A4A] max-w-3xl">
                   Multiple guests seated at the same table can scan their QR codes and add dishes into a unified shared cart simultaneously over WebSockets.
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
+                  <div className="bg-[#F5F1E8] border border-[#E3E0DA] p-6 rounded-2xl space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-white">Guest 1 (Host Device)</span>
-                      <span className="text-xs bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded">Cart Host</span>
+                      <span className="font-bold text-[#141414]">Guest 1 (Host Device)</span>
+                      <span className="text-xs bg-[#F4511E]/20 text-[#2D4A3E] px-2.5 py-1 rounded">Cart Host</span>
                     </div>
-                    <div className="p-3 bg-slate-900 rounded-xl text-sm text-slate-300">
+                    <div className="p-3 bg-[#F5F1E8] rounded-xl text-sm text-[#4A4A4A]">
                       🥘 1x Awadhi Murgh Dum Biryani (₹480)
                     </div>
-                    <div className="text-xs text-emerald-400 font-bold">
+                    <div className="text-xs text-[#2F7A4F] font-bold">
                       ✓ Synchronized across all 4 guest screens in &lt;50ms
                     </div>
                   </div>
 
-                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
+                  <div className="bg-[#F5F1E8] border border-[#E3E0DA] p-6 rounded-2xl space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-white">Guest 2 (Companion Device)</span>
-                      <span className="text-xs bg-cyan-500/20 text-cyan-300 px-2.5 py-1 rounded">Participant</span>
+                      <span className="font-bold text-[#141414]">Guest 2 (Companion Device)</span>
+                      <span className="text-xs bg-cyan-500/20 text-[#1F5F8B] px-2.5 py-1 rounded">Participant</span>
                     </div>
-                    <div className="p-3 bg-slate-900 rounded-xl text-sm text-slate-300">
+                    <div className="p-3 bg-[#F5F1E8] rounded-xl text-sm text-[#4A4A4A]">
                       🍹 2x Royal Saffron Cooler (₹560)
                     </div>
-                    <div className="text-xs text-emerald-400 font-bold">
+                    <div className="text-xs text-[#2F7A4F] font-bold">
                       ✓ Instant table cart update with host checkout control
                     </div>
                   </div>
@@ -810,11 +810,11 @@ export const PitchDeckPage: React.FC = () => {
             {/* SLIDE 9: MULTI-LANGUAGE AI STORYTELLING */}
             {currentSlide === 8 && (
               <div className="space-y-6 my-auto relative z-10">
-                <div className="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-full w-fit">
+                <div className="flex items-center gap-2 text-[#2D4A3E] text-xs font-bold uppercase tracking-wider bg-[#F4511E]/10 border border-[#F4511E]/30 px-3 py-1 rounded-full w-fit">
                   <Globe className="w-4 h-4" />
                   <span>Multilingual AI Menu</span>
                 </div>
-                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                <h2 className="text-3xl sm:text-5xl font-black text-[#141414] tracking-tight">
                   Instant English, Hindi & Marathi AI Menu
                 </h2>
 
@@ -826,8 +826,8 @@ export const PitchDeckPage: React.FC = () => {
                       onClick={() => setDemoLang(l)}
                       className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${
                         demoLang === l
-                          ? 'bg-amber-500 text-slate-950 shadow-md'
-                          : 'bg-slate-800 text-slate-300 hover:text-white'
+                          ? 'bg-[#F4511E] text-[#FFFFFF] shadow-md'
+                          : 'bg-[#EFE9DD] text-[#4A4A4A] hover:text-[#141414]'
                       }`}
                     >
                       {l === 'en' ? '🇬🇧 English' : l === 'hi' ? '🇮🇳 हिन्दी (Hindi)' : '🇮🇳 मराठी (Marathi)'}
@@ -835,15 +835,15 @@ export const PitchDeckPage: React.FC = () => {
                   ))}
                 </div>
 
-                <div className="bg-[#131C2E] border border-amber-500/30 p-6 rounded-2xl max-w-2xl space-y-3">
+                <div className="bg-[#F5F1E8] border border-[#F4511E]/30 p-6 rounded-2xl max-w-2xl space-y-3">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-2xl font-black text-white">{DEMO_DISH_DATA[demoLang].title}</h3>
-                    <span className="text-xl font-bold text-amber-400">{DEMO_DISH_DATA[demoLang].price}</span>
+                    <h3 className="text-2xl font-black text-[#141414]">{DEMO_DISH_DATA[demoLang].title}</h3>
+                    <span className="text-xl font-bold text-[#2D4A3E]">{DEMO_DISH_DATA[demoLang].price}</span>
                   </div>
-                  <p className="text-base text-slate-300 leading-relaxed">
+                  <p className="text-base text-[#4A4A4A] leading-relaxed">
                     {DEMO_DISH_DATA[demoLang].desc}
                   </p>
-                  <button className="px-5 py-2.5 bg-amber-500 text-slate-950 font-bold rounded-xl text-sm">
+                  <button className="px-5 py-2.5 bg-[#F4511E] text-[#FFFFFF] font-bold rounded-xl text-sm">
                     {DEMO_DISH_DATA[demoLang].addBtn}
                   </button>
                 </div>
@@ -853,41 +853,41 @@ export const PitchDeckPage: React.FC = () => {
             {/* SLIDE 10: ZERO-APP FRICTION PROTOCOL */}
             {currentSlide === 9 && (
               <div className="space-y-6 my-auto relative z-10">
-                <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full w-fit">
+                <div className="flex items-center gap-2 text-[#2D4A3E] text-xs font-bold uppercase tracking-wider bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full w-fit">
                   <Smartphone className="w-4 h-4" />
                   <span>Frictionless Protocol</span>
                 </div>
-                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                <h2 className="text-3xl sm:text-5xl font-black text-[#141414] tracking-tight">
                   Zero App Download. Zero Login Barrier.
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
-                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
-                    <div className="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 font-bold flex items-center justify-center">
+                  <div className="bg-[#F5F1E8] border border-[#E3E0DA] p-6 rounded-2xl space-y-3">
+                    <div className="w-10 h-10 rounded-xl bg-cyan-500/20 text-[#2D4A3E] font-bold flex items-center justify-center">
                       ⚡
                     </div>
-                    <h3 className="text-lg font-bold text-white">&lt; 1 Second Load Time</h3>
-                    <p className="text-sm text-slate-300">
+                    <h3 className="text-lg font-bold text-[#141414]">&lt; 1 Second Load Time</h3>
+                    <p className="text-sm text-[#4A4A4A]">
                       Ultra-optimized Vite & Tailwind progressive web app loads instantly on 3G, 4G, 5G, and venue Wi-Fi.
                     </p>
                   </div>
 
-                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
-                    <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center">
+                  <div className="bg-[#F5F1E8] border border-[#E3E0DA] p-6 rounded-2xl space-y-3">
+                    <div className="w-10 h-10 rounded-xl bg-[#F4511E]/20 text-[#2D4A3E] font-bold flex items-center justify-center">
                       🚫
                     </div>
-                    <h3 className="text-lg font-bold text-white">No App Store Install</h3>
-                    <p className="text-sm text-slate-300">
+                    <h3 className="text-lg font-bold text-[#141414]">No App Store Install</h3>
+                    <p className="text-sm text-[#4A4A4A]">
                       Dinners do not want to download 50MB apps for a 45-minute meal. Instant browser access via standard iOS & Android camera.
                     </p>
                   </div>
 
-                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center">
+                  <div className="bg-[#F5F1E8] border border-[#E3E0DA] p-6 rounded-2xl space-y-3">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-[#2F7A4F] font-bold flex items-center justify-center">
                       🔒
                     </div>
-                    <h3 className="text-lg font-bold text-white">Secure Encrypted Token</h3>
-                    <p className="text-sm text-slate-300">
+                    <h3 className="text-lg font-bold text-[#141414]">Secure Encrypted Token</h3>
+                    <p className="text-sm text-[#4A4A4A]">
                       Each table QR has an embedded cryptographic token preventing remote unauthorized order spam.
                     </p>
                   </div>
@@ -898,27 +898,27 @@ export const PitchDeckPage: React.FC = () => {
             {/* SLIDE 11: ENTERPRISE MULTI-OUTLET ARCHITECTURE */}
             {currentSlide === 10 && (
               <div className="space-y-6 my-auto relative z-10">
-                <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full w-fit">
+                <div className="flex items-center gap-2 text-[#2F7A4F] text-xs font-bold uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full w-fit">
                   <Building2 className="w-4 h-4" />
                   <span>Enterprise Cloud</span>
                 </div>
-                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                <h2 className="text-3xl sm:text-5xl font-black text-[#141414] tracking-tight">
                   Multi-Outlet Centralized Cloud Control
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-4">
-                    <h3 className="text-xl font-bold text-white">Headquarters HQ Master Dashboard</h3>
-                    <ul className="space-y-2 text-sm text-slate-300">
+                  <div className="bg-[#F5F1E8] border border-[#E3E0DA] p-6 rounded-2xl space-y-4">
+                    <h3 className="text-xl font-bold text-[#141414]">Headquarters HQ Master Dashboard</h3>
+                    <ul className="space-y-2 text-sm text-[#4A4A4A]">
                       <li className="flex items-center gap-2">✓ 1-Click global menu item updates across all 15 branches</li>
                       <li className="flex items-center gap-2">✓ Centralized revenue analytics, table turnaround & staff metrics</li>
                       <li className="flex items-center gap-2">✓ Aggregated Google 5-Star reputation tracker</li>
                     </ul>
                   </div>
 
-                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-4">
-                    <h3 className="text-xl font-bold text-white">Local Branch Autonomy</h3>
-                    <ul className="space-y-2 text-sm text-slate-300">
+                  <div className="bg-[#F5F1E8] border border-[#E3E0DA] p-6 rounded-2xl space-y-4">
+                    <h3 className="text-xl font-bold text-[#141414]">Local Branch Autonomy</h3>
+                    <ul className="space-y-2 text-sm text-[#4A4A4A]">
                       <li className="flex items-center gap-2">✓ Floor manager live view & table grievance alert channel</li>
                       <li className="flex items-center gap-2">✓ Real-time item stockout toggle (Out of Stock in 1 tap)</li>
                       <li className="flex items-center gap-2">✓ Branch-specific kitchen thermal printer routing</li>
@@ -931,11 +931,11 @@ export const PitchDeckPage: React.FC = () => {
             {/* SLIDE 12: BOARDROOM PITCH: 15 RESTAURANT FORMATS (100% APPROVAL) */}
             {currentSlide === 11 && (
               <div className="space-y-6 my-auto relative z-10">
-                <div className="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-full w-fit">
+                <div className="flex items-center gap-2 text-[#2D4A3E] text-xs font-bold uppercase tracking-wider bg-[#F4511E]/10 border border-[#F4511E]/30 px-3 py-1 rounded-full w-fit">
                   <Award className="w-4 h-4" />
                   <span>Boardroom Validation</span>
                 </div>
-                <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+                <h2 className="text-3xl sm:text-4xl font-black text-[#141414] tracking-tight">
                   15 Diverse Restaurant Formats Analyzed (100% Boardroom Approval)
                 </h2>
 
@@ -957,10 +957,10 @@ export const PitchDeckPage: React.FC = () => {
                     { name: '14. Asian Noodle Bar', metric: 'Interactive Spice Level Customization' },
                     { name: '15. Hotel Diner', metric: 'Room Charge & Table Token Verification' }
                   ].map((r, i) => (
-                    <div key={i} className="bg-[#131C2E] border border-slate-700/80 p-3.5 rounded-xl space-y-1">
-                      <div className="text-xs font-black text-amber-400">{r.name}</div>
-                      <div className="text-[11px] text-slate-300">{r.metric}</div>
-                      <div className="text-[10px] font-bold text-emerald-400">✓ Approved</div>
+                    <div key={i} className="bg-[#F5F1E8] border border-[#E3E0DA]/80 p-3.5 rounded-xl space-y-1">
+                      <div className="text-xs font-black text-[#2D4A3E]">{r.name}</div>
+                      <div className="text-[11px] text-[#4A4A4A]">{r.metric}</div>
+                      <div className="text-[10px] font-bold text-[#2F7A4F]">✓ Approved</div>
                     </div>
                   ))}
                 </div>
@@ -970,34 +970,34 @@ export const PitchDeckPage: React.FC = () => {
             {/* SLIDE 13: UNIT ECONOMICS & ROI MODEL */}
             {currentSlide === 12 && (
               <div className="space-y-6 my-auto relative z-10">
-                <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full w-fit">
+                <div className="flex items-center gap-2 text-[#2F7A4F] text-xs font-bold uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full w-fit">
                   <TrendingUp className="w-4 h-4" />
                   <span>Financial Validation</span>
                 </div>
-                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                <h2 className="text-3xl sm:text-5xl font-black text-[#141414] tracking-tight">
                   +₹3,84,000 Net Monthly Profit Impact
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-2">
-                  <div className="bg-[#131C2E] border border-amber-500/30 p-5 rounded-2xl">
-                    <div className="text-2xl font-black text-amber-400">+₹1,44,000</div>
-                    <div className="text-sm font-bold text-white mt-1">AI Upsell & Pairings</div>
-                    <div className="text-xs text-slate-400 mt-1">18% increase in beverage & dessert attachment</div>
+                  <div className="bg-[#F5F1E8] border border-[#F4511E]/30 p-5 rounded-2xl">
+                    <div className="text-2xl font-black text-[#2D4A3E]">+₹1,44,000</div>
+                    <div className="text-sm font-bold text-[#141414] mt-1">AI Upsell & Pairings</div>
+                    <div className="text-xs text-[#6E6E6E] mt-1">18% increase in beverage & dessert attachment</div>
                   </div>
-                  <div className="bg-[#131C2E] border border-cyan-500/30 p-5 rounded-2xl">
-                    <div className="text-2xl font-black text-cyan-400">+₹1,20,000</div>
-                    <div className="text-sm font-bold text-white mt-1">Faster Table Turns</div>
-                    <div className="text-xs text-slate-400 mt-1">12 minutes saved per table during peak rush</div>
+                  <div className="bg-[#F5F1E8] border border-cyan-500/30 p-5 rounded-2xl">
+                    <div className="text-2xl font-black text-[#2D4A3E]">+₹1,20,000</div>
+                    <div className="text-sm font-bold text-[#141414] mt-1">Faster Table Turns</div>
+                    <div className="text-xs text-[#6E6E6E] mt-1">12 minutes saved per table during peak rush</div>
                   </div>
-                  <div className="bg-[#131C2E] border border-purple-500/30 p-5 rounded-2xl">
-                    <div className="text-2xl font-black text-purple-400">+₹85,000</div>
-                    <div className="text-sm font-bold text-white mt-1">Commission Savings</div>
-                    <div className="text-xs text-slate-400 mt-1">Direct diner repeat orders vs aggregator fees</div>
+                  <div className="bg-[#F5F1E8] border border-[#F4511E]/30 p-5 rounded-2xl">
+                    <div className="text-2xl font-black text-[#2D4A3E]">+₹85,000</div>
+                    <div className="text-sm font-bold text-[#141414] mt-1">Commission Savings</div>
+                    <div className="text-xs text-[#6E6E6E] mt-1">Direct diner repeat orders vs aggregator fees</div>
                   </div>
-                  <div className="bg-[#131C2E] border border-emerald-500/30 p-5 rounded-2xl">
-                    <div className="text-2xl font-black text-emerald-400">+₹35,000</div>
-                    <div className="text-sm font-bold text-white mt-1">Staff Efficiency</div>
-                    <div className="text-xs text-slate-400 mt-1">Waiters focus on hospitality rather than order taking</div>
+                  <div className="bg-[#F5F1E8] border border-emerald-500/30 p-5 rounded-2xl">
+                    <div className="text-2xl font-black text-[#2F7A4F]">+₹35,000</div>
+                    <div className="text-sm font-bold text-[#141414] mt-1">Staff Efficiency</div>
+                    <div className="text-xs text-[#6E6E6E] mt-1">Waiters focus on hospitality rather than order taking</div>
                   </div>
                 </div>
               </div>
@@ -1006,33 +1006,33 @@ export const PitchDeckPage: React.FC = () => {
             {/* SLIDE 14: 30-MINUTE DEPLOYMENT ROADMAP */}
             {currentSlide === 13 && (
               <div className="space-y-6 my-auto relative z-10">
-                <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full w-fit">
+                <div className="flex items-center gap-2 text-[#2D4A3E] text-xs font-bold uppercase tracking-wider bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full w-fit">
                   <Zap className="w-4 h-4" />
                   <span>Rapid Rollout</span>
                 </div>
-                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                <h2 className="text-3xl sm:text-5xl font-black text-[#141414] tracking-tight">
                   Zero Downtime 30-Minute Deployment
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
-                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
-                    <div className="text-amber-400 font-black text-3xl">01</div>
-                    <h3 className="text-lg font-bold text-white">Menu Ingestion (10 Mins)</h3>
-                    <p className="text-sm text-slate-300">
+                  <div className="bg-[#F5F1E8] border border-[#E3E0DA] p-6 rounded-2xl space-y-3">
+                    <div className="text-[#2D4A3E] font-black text-3xl">01</div>
+                    <h3 className="text-lg font-bold text-[#141414]">Menu Ingestion (10 Mins)</h3>
+                    <p className="text-sm text-[#4A4A4A]">
                       Upload physical menu PDF/photo. AI auto-extracts categories, prices, diet tags, and creates English/Hindi/Marathi translations.
                     </p>
                   </div>
-                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
-                    <div className="text-cyan-400 font-black text-3xl">02</div>
-                    <h3 className="text-lg font-bold text-white">QR Table Generation (10 Mins)</h3>
-                    <p className="text-sm text-slate-300">
+                  <div className="bg-[#F5F1E8] border border-[#E3E0DA] p-6 rounded-2xl space-y-3">
+                    <div className="text-[#2D4A3E] font-black text-3xl">02</div>
+                    <h3 className="text-lg font-bold text-[#141414]">QR Table Generation (10 Mins)</h3>
+                    <p className="text-sm text-[#4A4A4A]">
                       Download pre-designed, branded printable acrylic table standees with dynamic cryptographic table tokens.
                     </p>
                   </div>
-                  <div className="bg-[#131C2E] border border-slate-700 p-6 rounded-2xl space-y-3">
-                    <div className="text-emerald-400 font-black text-3xl">03</div>
-                    <h3 className="text-lg font-bold text-white">Staff Go-Live (10 Mins)</h3>
-                    <p className="text-sm text-slate-300">
+                  <div className="bg-[#F5F1E8] border border-[#E3E0DA] p-6 rounded-2xl space-y-3">
+                    <div className="text-[#2F7A4F] font-black text-3xl">03</div>
+                    <h3 className="text-lg font-bold text-[#141414]">Staff Go-Live (10 Mins)</h3>
+                    <p className="text-sm text-[#4A4A4A]">
                       Connect existing thermal printer or WhatsApp bot. 10-minute floor staff orientation and full service go-live.
                     </p>
                   </div>
@@ -1043,48 +1043,48 @@ export const PitchDeckPage: React.FC = () => {
             {/* SLIDE 15: COMPETITIVE HEGEMONY MATRIX */}
             {currentSlide === 14 && (
               <div className="space-y-6 my-auto relative z-10">
-                <div className="flex items-center gap-2 text-purple-400 text-xs font-bold uppercase tracking-wider bg-purple-500/10 border border-purple-500/30 px-3 py-1 rounded-full w-fit">
+                <div className="flex items-center gap-2 text-[#2D4A3E] text-xs font-bold uppercase tracking-wider bg-[#F4511E]/10 border border-[#F4511E]/30 px-3 py-1 rounded-full w-fit">
                   <Award className="w-4 h-4" />
                   <span>Market Comparison</span>
                 </div>
-                <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+                <h2 className="text-3xl sm:text-4xl font-black text-[#141414] tracking-tight">
                   Competitive Hegemony Matrix
                 </h2>
 
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse text-sm">
                     <thead>
-                      <tr className="border-b border-slate-700 text-slate-400 text-xs uppercase">
+                      <tr className="border-b border-[#E3E0DA] text-[#6E6E6E] text-xs uppercase">
                         <th className="py-3 px-4">Feature & Capability</th>
-                        <th className="py-3 px-4 text-amber-400 font-bold bg-amber-500/10 rounded-t-xl">MENUZ</th>
+                        <th className="py-3 px-4 text-[#2D4A3E] font-bold bg-[#F4511E]/10 rounded-t-xl">MENUZ</th>
                         <th className="py-3 px-4">Legacy POS (Petpooja/POSist)</th>
                         <th className="py-3 px-4">Food Aggregators</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-800 text-slate-300">
+                    <tbody className="divide-y divide-[#E3E0DA] text-[#4A4A4A]">
                       <tr>
-                        <td className="py-3 px-4 font-semibold text-white">Hardware Requirements</td>
-                        <td className="py-3 px-4 font-bold text-emerald-400 bg-amber-500/5">Zero CapEx (Existing Phone/Printer)</td>
-                        <td className="py-3 px-4 text-slate-400">High (Proprietary terminals/touchpads)</td>
-                        <td className="py-3 px-4 text-slate-400">Merchant tablets</td>
+                        <td className="py-3 px-4 font-semibold text-[#141414]">Hardware Requirements</td>
+                        <td className="py-3 px-4 font-bold text-[#2F7A4F] bg-[#F4511E]/5">Zero CapEx (Existing Phone/Printer)</td>
+                        <td className="py-3 px-4 text-[#6E6E6E]">High (Proprietary terminals/touchpads)</td>
+                        <td className="py-3 px-4 text-[#6E6E6E]">Merchant tablets</td>
                       </tr>
                       <tr>
-                        <td className="py-3 px-4 font-semibold text-white">Reputation Interception Shield</td>
-                        <td className="py-3 px-4 font-bold text-emerald-400 bg-amber-500/5">15-Min Private Manager Escalation</td>
-                        <td className="py-3 px-4 text-red-400">None</td>
-                        <td className="py-3 px-4 text-red-400">Public ratings destroy rank</td>
+                        <td className="py-3 px-4 font-semibold text-[#141414]">Reputation Interception Shield</td>
+                        <td className="py-3 px-4 font-bold text-[#2F7A4F] bg-[#F4511E]/5">15-Min Private Manager Escalation</td>
+                        <td className="py-3 px-4 text-[#C23A1C]">None</td>
+                        <td className="py-3 px-4 text-[#C23A1C]">Public ratings destroy rank</td>
                       </tr>
                       <tr>
-                        <td className="py-3 px-4 font-semibold text-white">Commission on In-Venue Dining</td>
-                        <td className="py-3 px-4 font-bold text-emerald-400 bg-amber-500/5">0% Commission</td>
-                        <td className="py-3 px-4 text-slate-400">0% (Flat SaaS)</td>
-                        <td className="py-3 px-4 text-red-400">22% - 30% per order</td>
+                        <td className="py-3 px-4 font-semibold text-[#141414]">Commission on In-Venue Dining</td>
+                        <td className="py-3 px-4 font-bold text-[#2F7A4F] bg-[#F4511E]/5">0% Commission</td>
+                        <td className="py-3 px-4 text-[#6E6E6E]">0% (Flat SaaS)</td>
+                        <td className="py-3 px-4 text-[#C23A1C]">22% - 30% per order</td>
                       </tr>
                       <tr>
-                        <td className="py-3 px-4 font-semibold text-white">Multiplayer Table Sync</td>
-                        <td className="py-3 px-4 font-bold text-emerald-400 bg-amber-500/5">Real-Time WebSockets</td>
-                        <td className="py-3 px-4 text-slate-400">Single device only</td>
-                        <td className="py-3 px-4 text-slate-400">Single diner only</td>
+                        <td className="py-3 px-4 font-semibold text-[#141414]">Multiplayer Table Sync</td>
+                        <td className="py-3 px-4 font-bold text-[#2F7A4F] bg-[#F4511E]/5">Real-Time WebSockets</td>
+                        <td className="py-3 px-4 text-[#6E6E6E]">Single device only</td>
+                        <td className="py-3 px-4 text-[#6E6E6E]">Single diner only</td>
                       </tr>
                     </tbody>
                   </table>
@@ -1095,58 +1095,58 @@ export const PitchDeckPage: React.FC = () => {
             {/* SLIDE 16: GAMIFIED CUSTOMER RETENTION ENGINE (OWNER SOVEREIGN CONTROL) */}
             {currentSlide === 15 && (
               <div className="space-y-6 my-auto relative z-10">
-                <div className="flex items-center gap-2 text-rose-400 text-xs font-bold uppercase tracking-wider bg-rose-500/10 border border-rose-500/30 px-3 py-1 rounded-full w-fit">
+                <div className="flex items-center gap-2 text-[#C23A1C] text-xs font-bold uppercase tracking-wider bg-rose-500/10 border border-rose-500/30 px-3 py-1 rounded-full w-fit">
                   <Sparkles className="w-4 h-4" />
                   <span>Owner-Controlled Incentive Engine</span>
                 </div>
-                <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-                  Gamified Retention: <span className="text-amber-400">Zero Forced Discounting</span>
+                <h2 className="text-3xl sm:text-5xl font-black text-[#141414] tracking-tight">
+                  Gamified Retention: <span className="text-[#2D4A3E]">Zero Forced Discounting</span>
                 </h2>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-2">
                   <div className="lg:col-span-6 space-y-4">
-                    <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
+                    <p className="text-base sm:text-lg text-[#4A4A4A] leading-relaxed">
                       Unlike aggregators (Zomato/Swiggy) that mandate 20%–40% discounts, <strong>Menuz gives the restaurant owner 100% sovereign control</strong> over loyalty incentives.
                     </p>
 
                     <div className="space-y-3">
-                      <div className="bg-[#131C2E] p-4 rounded-xl border border-emerald-500/40 space-y-1">
-                        <div className="text-emerald-400 font-bold text-sm flex items-center gap-2">
+                      <div className="bg-[#F5F1E8] p-4 rounded-xl border border-emerald-500/40 space-y-1">
+                        <div className="text-[#2F7A4F] font-bold text-sm flex items-center gap-2">
                           <ShieldCheck className="w-4 h-4" />
                           <span>100% Food-Only Perks (Default — Zero Margin Loss)</span>
                         </div>
-                        <p className="text-xs text-slate-300">
+                        <p className="text-xs text-[#4A4A4A]">
                           Reward guests with chef desserts (e.g. Saffron Shahi Tukda), artisan mocktails, or VIP table passes without slashing bill prices.
                         </p>
                       </div>
 
-                      <div className="bg-[#131C2E] p-4 rounded-xl border border-purple-500/40 space-y-1">
-                        <div className="text-purple-400 font-bold text-sm flex items-center gap-2">
+                      <div className="bg-[#F5F1E8] p-4 rounded-xl border border-[#F4511E]/40 space-y-1">
+                        <div className="text-[#2D4A3E] font-bold text-sm flex items-center gap-2">
                           <Sliders className="w-4 h-4" />
                           <span>Optional Owner-Defined Discount % (You Decide)</span>
                         </div>
-                        <p className="text-xs text-slate-300">
+                        <p className="text-xs text-[#4A4A4A]">
                           If an owner chooses to run an off-peak promo, they can toggle discounts ON and set the exact percentage (e.g. 5%, 10%, 15%, 20%).
                         </p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="lg:col-span-6 bg-[#131C2E] border-2 border-amber-500/40 p-6 rounded-2xl text-center space-y-4 shadow-xl">
+                  <div className="lg:col-span-6 bg-[#F5F1E8] border-2 border-[#F4511E]/40 p-6 rounded-2xl text-center space-y-4 shadow-xl">
                     {/* Interactive Owner Control Bar on Slide */}
-                    <div className="bg-slate-900/90 border border-slate-700/80 p-3 rounded-xl text-left space-y-2.5">
+                    <div className="bg-[#F5F1E8]/90 border border-[#E3E0DA]/80 p-3 rounded-xl text-left space-y-2.5">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">
+                        <span className="text-xs font-bold text-[#2D4A3E] uppercase tracking-wider">
                           ⚙️ Owner Control Simulator
                         </span>
-                        <div className="flex items-center gap-1.5 bg-slate-800 px-2 py-0.5 rounded-lg border border-slate-700">
-                          <span className="text-[11px] text-slate-300 font-bold">Discounts:</span>
+                        <div className="flex items-center gap-1.5 bg-[#EFE9DD] px-2 py-0.5 rounded-lg border border-[#E3E0DA]">
+                          <span className="text-[11px] text-[#4A4A4A] font-bold">Discounts:</span>
                           <button
                             type="button"
                             onClick={() => setOwnerAllowsDiscount(!ownerAllowsDiscount)}
                             className={`text-[10px] font-black px-2 py-0.5 rounded transition-all ${
                               ownerAllowsDiscount
-                                ? 'bg-purple-600 text-white'
+                                ? 'bg-[#F4511E] text-white'
                                 : 'bg-emerald-600 text-white'
                             }`}
                           >
@@ -1156,10 +1156,10 @@ export const PitchDeckPage: React.FC = () => {
                       </div>
 
                       {ownerAllowsDiscount ? (
-                        <div className="space-y-1 pt-1 border-t border-slate-800">
-                          <div className="flex justify-between text-xs text-slate-300">
+                        <div className="space-y-1 pt-1 border-t border-[#E3E0DA]">
+                          <div className="flex justify-between text-xs text-[#4A4A4A]">
                             <span>Owner Custom Discount:</span>
-                            <span className="font-bold text-purple-400">{ownerDiscountPct}% OFF</span>
+                            <span className="font-bold text-[#2D4A3E]">{ownerDiscountPct}% OFF</span>
                           </div>
                           <input
                             type="range"
@@ -1172,18 +1172,18 @@ export const PitchDeckPage: React.FC = () => {
                           />
                         </div>
                       ) : (
-                        <div className="text-[11px] text-emerald-400 font-medium pt-1 border-t border-slate-800">
+                        <div className="text-[11px] text-[#2F7A4F] font-medium pt-1 border-t border-[#E3E0DA]">
                           ✓ Margin Protection Active: Prizes are 100% Culinary Treats &amp; VIP Perks
                         </div>
                       )}
                     </div>
 
-                    <div className="w-36 h-36 mx-auto rounded-full border-4 border-amber-500 bg-gradient-to-tr from-amber-600 via-rose-600 to-purple-600 flex items-center justify-center text-slate-950 font-black text-base shadow-xl">
+                    <div className="w-36 h-36 mx-auto rounded-full border-4 border-[#F4511E] bg-gradient-to-tr from-[#F4511E] via-rose-600 to-[#F4511E] flex items-center justify-center text-[#FFFFFF] font-black text-base shadow-xl">
                       🎯 SPIN
                     </div>
 
                     {wonPrize && (
-                      <div className="p-3 bg-slate-900 rounded-xl border border-amber-500/30 text-amber-300 font-bold text-xs sm:text-sm">
+                      <div className="p-3 bg-[#F5F1E8] rounded-xl border border-[#F4511E]/30 text-[#2D4A3E] font-bold text-xs sm:text-sm">
                         🎉 Won: {wonPrize}
                       </div>
                     )}
@@ -1192,7 +1192,7 @@ export const PitchDeckPage: React.FC = () => {
                       type="button"
                       onClick={handleSpinWheel}
                       disabled={isSpinning}
-                      className="px-6 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-xs sm:text-sm transition-all shadow-md"
+                      className="px-6 py-2.5 bg-[#F4511E] hover:bg-[#F4511E] text-[#FFFFFF] font-bold rounded-xl text-xs sm:text-sm transition-all shadow-md"
                     >
                       {isSpinning ? 'Spinning...' : 'Test Spin (Simulate Diner)'}
                     </button>
@@ -1204,90 +1204,90 @@ export const PitchDeckPage: React.FC = () => {
             {/* SLIDE 17: TRANSPARENT SUBSCRIPTION & PRICING */}
             {currentSlide === 16 && (
               <div className="space-y-6 my-auto relative z-10 max-w-4xl mx-auto w-full">
-                <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full w-fit">
+                <div className="flex items-center gap-2 text-[#2D4A3E] text-xs font-bold uppercase tracking-wider bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full w-fit">
                   <DollarSign className="w-4 h-4" />
                   <span>Commercial Model</span>
                 </div>
                 <div className="space-y-1 text-left">
-                  <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                  <h2 className="text-3xl sm:text-5xl font-black text-[#141414] tracking-tight">
                     Flat Monthly Subscription. Zero Commissions.
                   </h2>
-                  <p className="text-sm text-slate-300">
+                  <p className="text-sm text-[#4A4A4A]">
                     Keep 100% of your dining revenue. No hidden per-order fees, no commissions, and zero mandatory hardware lock-in.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                  <div className="bg-[#131C2E] border border-slate-700/80 p-7 rounded-3xl space-y-4 text-left shadow-xl hover:border-slate-600 transition-all flex flex-col justify-between">
+                  <div className="bg-[#F5F1E8] border border-[#E3E0DA]/80 p-7 rounded-3xl space-y-4 text-left shadow-xl hover:border-[#E3E0DA] transition-all flex flex-col justify-between">
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-cyan-400 uppercase tracking-wider bg-cyan-500/10 px-2.5 py-0.5 rounded-full border border-cyan-500/20">
+                        <span className="text-xs font-bold text-[#2D4A3E] uppercase tracking-wider bg-cyan-500/10 px-2.5 py-0.5 rounded-full border border-cyan-500/20">
                           Single Outlet
                         </span>
-                        <span className="text-xs text-slate-400 font-mono">Stand-alone Venue</span>
+                        <span className="text-xs text-[#6E6E6E] font-mono">Stand-alone Venue</span>
                       </div>
-                      <div className="text-4xl font-black text-white">
-                        ₹5,000 <span className="text-sm text-slate-400 font-normal">/ month</span>
+                      <div className="text-4xl font-black text-[#141414]">
+                        ₹5,000 <span className="text-sm text-[#6E6E6E] font-normal">/ month</span>
                       </div>
-                      <p className="text-xs text-slate-300 leading-relaxed">
+                      <p className="text-xs text-[#4A4A4A] leading-relaxed">
                         Complete digital ordering, single-station KOT, and reputation machine for independent restaurants, cafes, and bistros.
                       </p>
-                      <ul className="space-y-2 text-xs text-slate-300 pt-2 border-t border-slate-800">
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400 shrink-0" /> <span>1 Dedicated Outlet (Up to 25 QR Tables • Digital PDF Stickers)</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400 shrink-0" /> <span>Fast Mobile Table Ordering (Zero diner app download)</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400 shrink-0" /> <span>Single-Station Thermal ESC/POS KOT &amp; WhatsApp Alerts</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400 shrink-0" /> <span>Standard 1-Way Cloud Order Push to POS (Petpooja / RoyalPOS)</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400 shrink-0" /> <span>Single-Venue Chef AI Studio (Spice &amp; allergen calibration)</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400 shrink-0" /> <span>1-Click Google Maps Review Builder &amp; Floor Grievance Shield</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400 shrink-0" /> <span>Standalone Spin Wheel (100% Owner-controlled next-visit perks)</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400 shrink-0" /> <span>Standard Support (9 AM – 9 PM WhatsApp &amp; Email)</span></li>
+                      <ul className="space-y-2 text-xs text-[#4A4A4A] pt-2 border-t border-[#E3E0DA]">
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#2D4A3E] shrink-0" /> <span>1 Dedicated Outlet (Up to 25 QR Tables • Digital PDF Stickers)</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#2D4A3E] shrink-0" /> <span>Fast Mobile Table Ordering (Zero diner app download)</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#2D4A3E] shrink-0" /> <span>Single-Station Thermal ESC/POS KOT &amp; WhatsApp Alerts</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#2D4A3E] shrink-0" /> <span>Standard 1-Way Cloud Order Push to POS (Petpooja / RoyalPOS)</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#2D4A3E] shrink-0" /> <span>Single-Venue Chef AI Studio (Spice &amp; allergen calibration)</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#2D4A3E] shrink-0" /> <span>1-Click Google Maps Review Builder &amp; Floor Grievance Shield</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#2D4A3E] shrink-0" /> <span>Standalone Spin Wheel (100% Owner-controlled next-visit perks)</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#2D4A3E] shrink-0" /> <span>Standard Support (9 AM – 9 PM WhatsApp &amp; Email)</span></li>
                       </ul>
                     </div>
                     <div className="pt-2">
-                      <div className="text-[11px] text-cyan-300 bg-cyan-950/40 p-2.5 rounded-xl border border-cyan-500/30 text-center font-medium">
+                      <div className="text-[11px] text-[#1F5F8B] bg-cyan-950/40 p-2.5 rounded-xl border border-cyan-500/30 text-center font-medium">
                         Ideal for high-turnover single-location restaurants &amp; cafes
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-[#131C2E] border-2 border-amber-500/90 p-7 rounded-3xl space-y-4 text-left shadow-2xl relative flex flex-col justify-between">
-                    <span className="absolute -top-3 right-6 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 text-[10px] font-extrabold uppercase px-3 py-1 rounded-full shadow-md">
+                  <div className="bg-[#F5F1E8] border-2 border-[#F4511E]/90 p-7 rounded-3xl space-y-4 text-left shadow-2xl relative flex flex-col justify-between">
+                    <span className="absolute -top-3 right-6 bg-gradient-to-r from-[#F4511E] to-[#F4511E] text-[#FFFFFF] text-[10px] font-extrabold uppercase px-3 py-1 rounded-full shadow-md">
                       Enterprise &amp; Multi-Chain
                     </span>
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-amber-400 uppercase tracking-wider bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/30">
+                        <span className="text-xs font-bold text-[#2D4A3E] uppercase tracking-wider bg-[#F4511E]/10 px-2.5 py-0.5 rounded-full border border-[#F4511E]/30">
                           Multi-Outlet Enterprise
                         </span>
-                        <span className="text-xs text-amber-300 font-mono">Centralized HQ</span>
+                        <span className="text-xs text-[#2D4A3E] font-mono">Centralized HQ</span>
                       </div>
-                      <div className="text-4xl font-black text-white">
-                        ₹10,000 <span className="text-sm text-slate-400 font-normal">/ month</span>
+                      <div className="text-4xl font-black text-[#141414]">
+                        ₹10,000 <span className="text-sm text-[#6E6E6E] font-normal">/ month</span>
                       </div>
-                      <p className="text-xs text-slate-300 leading-relaxed">
+                      <p className="text-xs text-[#4A4A4A] leading-relaxed">
                         Full multi-branch oversight with centralized master control, cross-outlet menu pushes, and 2-way POS REST integration.
                       </p>
-                      <ul className="space-y-2 text-xs text-slate-300 pt-2 border-t border-slate-800">
-                        <li className="flex items-center gap-2 font-semibold text-white"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>Unlimited Outlets &amp; Tables + Custom Shipped QR Hardware Kit</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>Real-Time Multiplayer Table Sync + Floor Captain Terminal Bridging</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>Multi-Kitchen Smart Routing (Auto-splits Bar, Tandoor, Curry &amp; Pantry)</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>Full 2-Way REST API Bridge (Live 86 item sync, bill settlements, table status)</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>Multi-Chef AI Studio with City-Level Overrides &amp; Franchise Tone</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>100% White-Label on Your Domain (`order.brand.com` • Zero Menuz Badge)</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>Cross-Outlet Benchmarks &amp; Heatmaps (Comparative sales &amp; turn speed)</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>Granular Multi-Role RBAC (HQ Director, Regional GM, Chef, Waiter)</span></li>
-                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 shrink-0" /> <span>VIP 24/7 Priority Emergency SLA (Dedicated Director • &lt;15 min response)</span></li>
+                      <ul className="space-y-2 text-xs text-[#4A4A4A] pt-2 border-t border-[#E3E0DA]">
+                        <li className="flex items-center gap-2 font-semibold text-[#141414]"><Check className="w-4 h-4 text-[#2D4A3E] shrink-0" /> <span>Unlimited Outlets &amp; Tables + Custom Shipped QR Hardware Kit</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#2D4A3E] shrink-0" /> <span>Real-Time Multiplayer Table Sync + Floor Captain Terminal Bridging</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#2D4A3E] shrink-0" /> <span>Multi-Kitchen Smart Routing (Auto-splits Bar, Tandoor, Curry &amp; Pantry)</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#2D4A3E] shrink-0" /> <span>Full 2-Way REST API Bridge (Live 86 item sync, bill settlements, table status)</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#2D4A3E] shrink-0" /> <span>Multi-Chef AI Studio with City-Level Overrides &amp; Franchise Tone</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#2D4A3E] shrink-0" /> <span>100% White-Label on Your Domain (`order.brand.com` • Zero Menuz Badge)</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#2D4A3E] shrink-0" /> <span>Cross-Outlet Benchmarks &amp; Heatmaps (Comparative sales &amp; turn speed)</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#2D4A3E] shrink-0" /> <span>Granular Multi-Role RBAC (HQ Director, Regional GM, Chef, Waiter)</span></li>
+                        <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#2D4A3E] shrink-0" /> <span>VIP 24/7 Priority Emergency SLA (Dedicated Director • &lt;15 min response)</span></li>
                       </ul>
                     </div>
                     <div className="pt-2">
-                      <div className="text-[11px] text-amber-300 bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/30 text-center font-bold">
+                      <div className="text-[11px] text-[#2D4A3E] bg-[#F4511E]/10 p-2.5 rounded-xl border border-[#F4511E]/30 text-center font-bold">
                         Built for multi-location brands, franchises &amp; hotel groups
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="text-center text-xs text-slate-400 pt-1 font-mono">
+                <div className="text-center text-xs text-[#6E6E6E] pt-1 font-mono">
                   * Custom multi-year enterprise contracts and high-volume billing available on request.
                 </div>
               </div>
@@ -1297,177 +1297,177 @@ export const PitchDeckPage: React.FC = () => {
             {currentSlide === 17 && (
               <div className="space-y-4 my-auto relative z-10 w-full max-w-5xl mx-auto">
                 <div className="flex items-center justify-between flex-wrap gap-2">
-                  <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full">
+                  <div className="flex items-center gap-2 text-[#2D4A3E] text-xs font-bold uppercase tracking-wider bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full">
                     <Layers className="w-4 h-4" />
                     <span>In-Depth Plan Comparison Matrix</span>
                   </div>
-                  <span className="text-xs text-slate-400 font-mono">
+                  <span className="text-xs text-[#6E6E6E] font-mono">
                     Zero Setup Fees • Month-to-Month • Cancel Anytime
                   </span>
                 </div>
 
                 <div className="text-left space-y-1">
-                  <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+                  <h2 className="text-2xl sm:text-4xl font-black text-[#141414] tracking-tight">
                     What Exactly You Get in Each Plan
                   </h2>
-                  <p className="text-xs sm:text-sm text-slate-300">
+                  <p className="text-xs sm:text-sm text-[#4A4A4A]">
                     Transparent side-by-side feature matrix. Choose single-venue growth or multi-chain network governance.
                   </p>
                 </div>
 
-                <div className="bg-[#101726] border border-slate-700/80 rounded-2xl overflow-hidden shadow-2xl">
+                <div className="bg-[#FFFFFF] border border-[#E3E0DA]/80 rounded-2xl overflow-hidden shadow-2xl">
                   <div className="overflow-x-auto max-h-[50vh] scrollbar-thin">
                     <table className="w-full text-left border-collapse text-xs">
                       <thead className="sticky top-0 z-20">
-                        <tr className="bg-slate-900 border-b border-slate-700 text-white shadow-sm">
-                          <th className="py-3 px-4 font-bold text-slate-300 w-2/5">Capability &amp; Modules</th>
-                          <th className="py-3 px-4 font-black text-cyan-300 w-[30%] bg-cyan-950/40 border-l border-slate-700">
+                        <tr className="bg-[#F5F1E8] border-b border-[#E3E0DA] text-white shadow-sm">
+                          <th className="py-3 px-4 font-bold text-[#4A4A4A] w-2/5">Capability &amp; Modules</th>
+                          <th className="py-3 px-4 font-black text-[#1F5F8B] w-[30%] bg-cyan-950/40 border-l border-[#E3E0DA]">
                             Single Outlet
-                            <div className="text-[11px] font-normal text-slate-400">₹5,000 / month</div>
+                            <div className="text-[11px] font-normal text-[#6E6E6E]">₹5,000 / month</div>
                           </th>
-                          <th className="py-3 px-4 font-black text-amber-400 w-[30%] bg-amber-950/40 border-l border-slate-700">
+                          <th className="py-3 px-4 font-black text-[#2D4A3E] w-[30%] bg-[#F4511E]/40 border-l border-[#E3E0DA]">
                             Multi-Outlet Enterprise
-                            <div className="text-[11px] font-normal text-amber-300/80">₹10,000 / month</div>
+                            <div className="text-[11px] font-normal text-[#2D4A3E]/80">₹10,000 / month</div>
                           </th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-800 text-slate-200">
+                      <tbody className="divide-y divide-[#E3E0DA] text-[#3A3A3A]">
                         {/* Row 1 */}
-                        <tr className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-2.5 px-4 font-medium text-white">
+                        <tr className="hover:bg-[#EFE9DD]/40 transition-colors">
+                          <td className="py-2.5 px-4 font-medium text-[#141414]">
                             <div>Outlet Scale &amp; Hardware Kit</div>
-                            <span className="text-[10px] text-slate-400">Supported locations &amp; table QR materials</span>
+                            <span className="text-[10px] text-[#6E6E6E]">Supported locations &amp; table QR materials</span>
                           </td>
-                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-slate-800 font-semibold text-cyan-200">
+                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-[#E3E0DA] font-semibold text-[#1F5F8B]">
                             1 Venue (Up to 25 Tables • Digital PDF Stickers)
                           </td>
-                          <td className="py-2.5 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
+                          <td className="py-2.5 px-4 bg-[#F4511E]/10 border-l border-[#E3E0DA] font-bold text-[#2D4A3E]">
                             Unlimited Venues &amp; Tables + Custom Shipped Acrylic &amp; Metal QR Hardware Kit
                           </td>
                         </tr>
 
                         {/* Row 2 */}
-                        <tr className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-2.5 px-4 font-medium text-white">
+                        <tr className="hover:bg-[#EFE9DD]/40 transition-colors">
+                          <td className="py-2.5 px-4 font-medium text-[#141414]">
                             <div>Interactive Dining &amp; Floor Sync</div>
-                            <span className="text-[10px] text-slate-400">Guest table ordering &amp; device synchronization</span>
+                            <span className="text-[10px] text-[#6E6E6E]">Guest table ordering &amp; device synchronization</span>
                           </td>
-                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-slate-800 text-cyan-300 font-medium">
+                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-[#E3E0DA] text-[#1F5F8B] font-medium">
                             Standard Mobile Table Ordering (Zero Diner App Download)
                           </td>
-                          <td className="py-2.5 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
+                          <td className="py-2.5 px-4 bg-[#F4511E]/10 border-l border-[#E3E0DA] font-bold text-[#2D4A3E]">
                             Real-Time Multiplayer Table Cart Sync + Waiter &amp; Captain Terminal Bridging
                           </td>
                         </tr>
 
                         {/* Row 3 */}
-                        <tr className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-2.5 px-4 font-medium text-white">
+                        <tr className="hover:bg-[#EFE9DD]/40 transition-colors">
+                          <td className="py-2.5 px-4 font-medium text-[#141414]">
                             <div>Chef AI Studio &amp; Customization</div>
-                            <span className="text-[10px] text-slate-400">Multilingual translation &amp; recipe adaptations</span>
+                            <span className="text-[10px] text-[#6E6E6E]">Multilingual translation &amp; recipe adaptations</span>
                           </td>
-                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-slate-800 text-slate-300">
+                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-[#E3E0DA] text-[#4A4A4A]">
                             Single Venue Profile (Head Chef Spice &amp; Allergen Guard)
                           </td>
-                          <td className="py-2.5 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
+                          <td className="py-2.5 px-4 bg-[#F4511E]/10 border-l border-[#E3E0DA] font-bold text-[#2D4A3E]">
                             Multi-Branch AI Studio with City Overrides, Regional Price Tiers &amp; Franchise Voice
                           </td>
                         </tr>
 
                         {/* Row 4 */}
-                        <tr className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-2.5 px-4 font-medium text-white">
+                        <tr className="hover:bg-[#EFE9DD]/40 transition-colors">
+                          <td className="py-2.5 px-4 font-medium text-[#141414]">
                             <div>Kitchen KOT &amp; Order Routing</div>
-                            <span className="text-[10px] text-slate-400">Thermal ticket dispatching &amp; printer architecture</span>
+                            <span className="text-[10px] text-[#6E6E6E]">Thermal ticket dispatching &amp; printer architecture</span>
                           </td>
-                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-slate-800 text-slate-300">
+                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-[#E3E0DA] text-[#4A4A4A]">
                             Single-Station KOT (1 ESC/POS Thermal Printer or WhatsApp Alerts)
                           </td>
-                          <td className="py-2.5 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
+                          <td className="py-2.5 px-4 bg-[#F4511E]/10 border-l border-[#E3E0DA] font-bold text-[#2D4A3E]">
                             Multi-Kitchen Smart Routing (Auto-splits items to Bar, Tandoor, Curry &amp; Pantry KDS)
                           </td>
                         </tr>
 
                         {/* Row 5 */}
-                        <tr className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-2.5 px-4 font-medium text-white">
+                        <tr className="hover:bg-[#EFE9DD]/40 transition-colors">
+                          <td className="py-2.5 px-4 font-medium text-[#141414]">
                             <div>POS Integration Architecture</div>
-                            <span className="text-[10px] text-slate-400">Petpooja, RoyalPOS, Recaho, RanceLab, POSist</span>
+                            <span className="text-[10px] text-[#6E6E6E]">Petpooja, RoyalPOS, Recaho, RanceLab, POSist</span>
                           </td>
-                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-slate-800 text-slate-300">
+                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-[#E3E0DA] text-[#4A4A4A]">
                             Standard 1-Way Cloud Order Relay (Pushes placed orders to POS)
                           </td>
-                          <td className="py-2.5 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
+                          <td className="py-2.5 px-4 bg-[#F4511E]/10 border-l border-[#E3E0DA] font-bold text-[#2D4A3E]">
                             Full 2-Way Live REST API Bridge (Real-time 86'd stockout sync, bill settlement &amp; inventory)
                           </td>
                         </tr>
 
                         {/* Row 6 */}
-                        <tr className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-2.5 px-4 font-medium text-white">
+                        <tr className="hover:bg-[#EFE9DD]/40 transition-colors">
+                          <td className="py-2.5 px-4 font-medium text-[#141414]">
                             <div>Google Maps SEO &amp; Reputation Engine</div>
-                            <span className="text-[10px] text-slate-400">Review generation &amp; floor resolution shield</span>
+                            <span className="text-[10px] text-[#6E6E6E]">Review generation &amp; floor resolution shield</span>
                           </td>
-                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-slate-800 text-slate-300">
+                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-[#E3E0DA] text-[#4A4A4A]">
                             Single-Branch 1-Click Review Assist + Floor Grievance Private Form
                           </td>
-                          <td className="py-2.5 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
+                          <td className="py-2.5 px-4 bg-[#F4511E]/10 border-l border-[#E3E0DA] font-bold text-[#2D4A3E]">
                             Multi-Branch Local SEO Command Center (Cross-location Google profile sync &amp; benchmarks)
                           </td>
                         </tr>
 
                         {/* Row 7 */}
-                        <tr className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-2.5 px-4 font-medium text-white">
+                        <tr className="hover:bg-[#EFE9DD]/40 transition-colors">
+                          <td className="py-2.5 px-4 font-medium text-[#141414]">
                             <div>Gamified Loyalty &amp; Retention Engine</div>
-                            <span className="text-[10px] text-slate-400">Lucky wheel, repeat guest incentives &amp; visit triggers</span>
+                            <span className="text-[10px] text-[#6E6E6E]">Lucky wheel, repeat guest incentives &amp; visit triggers</span>
                           </td>
-                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-slate-800 text-slate-300">
+                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-[#E3E0DA] text-[#4A4A4A]">
                             Standard Venue Spin Wheel (Owner-configured next-visit perks)
                           </td>
-                          <td className="py-2.5 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
+                          <td className="py-2.5 px-4 bg-[#F4511E]/10 border-l border-[#E3E0DA] font-bold text-[#2D4A3E]">
                             Cross-Outlet Loyalty Pass &amp; Branch Dynamic Reward Engine (Geo-targeted retention campaigns)
                           </td>
                         </tr>
 
                         {/* Row 8 */}
-                        <tr className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-2.5 px-4 font-medium text-white">
+                        <tr className="hover:bg-[#EFE9DD]/40 transition-colors">
+                          <td className="py-2.5 px-4 font-medium text-[#141414]">
                             <div>Brand Identity &amp; Custom Domain</div>
-                            <span className="text-[10px] text-slate-400">Custom URLs, domain CNAME &amp; white-labeling</span>
+                            <span className="text-[10px] text-[#6E6E6E]">Custom URLs, domain CNAME &amp; white-labeling</span>
                           </td>
-                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-slate-800 text-slate-400 font-mono text-[11px]">
+                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-[#E3E0DA] text-[#6E6E6E] font-mono text-[11px]">
                             Hosted Branded Menu (`menuz.in/r/your-slug` with custom logo &amp; theme)
                           </td>
-                          <td className="py-2.5 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
+                          <td className="py-2.5 px-4 bg-[#F4511E]/10 border-l border-[#E3E0DA] font-bold text-[#2D4A3E]">
                             100% White-Label on Your Domain (`order.yourbrand.com` • Zero Menuz Badge • Custom SSL)
                           </td>
                         </tr>
 
                         {/* Row 9 */}
-                        <tr className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-2.5 px-4 font-medium text-white">
+                        <tr className="hover:bg-[#EFE9DD]/40 transition-colors">
+                          <td className="py-2.5 px-4 font-medium text-[#141414]">
                             <div>Team Governance &amp; Multi-Role RBAC</div>
-                            <span className="text-[10px] text-slate-400">Access controls, regional oversight &amp; staff permissions</span>
+                            <span className="text-[10px] text-[#6E6E6E]">Access controls, regional oversight &amp; staff permissions</span>
                           </td>
-                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-slate-800 text-slate-400">
+                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-[#E3E0DA] text-[#6E6E6E]">
                             Single Owner / Floor Manager Access
                           </td>
-                          <td className="py-2.5 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
+                          <td className="py-2.5 px-4 bg-[#F4511E]/10 border-l border-[#E3E0DA] font-bold text-[#2D4A3E]">
                             Granular Multi-Role Governance (HQ Director, Regional GM, Outlet Manager, Chef, Waiter)
                           </td>
                         </tr>
 
                         {/* Row 10 */}
-                        <tr className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-2.5 px-4 font-medium text-white">
+                        <tr className="hover:bg-[#EFE9DD]/40 transition-colors">
+                          <td className="py-2.5 px-4 font-medium text-[#141414]">
                             <div>Support SLA &amp; Dedicated Operations</div>
-                            <span className="text-[10px] text-slate-400">Account executive, response guarantee &amp; rush support</span>
+                            <span className="text-[10px] text-[#6E6E6E]">Account executive, response guarantee &amp; rush support</span>
                           </td>
-                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-slate-800 text-slate-300">
+                          <td className="py-2.5 px-4 bg-cyan-950/10 border-l border-[#E3E0DA] text-[#4A4A4A]">
                             Standard Business Hours Support (9 AM – 9 PM WhatsApp &amp; Email, &lt;4h SLA)
                           </td>
-                          <td className="py-2.5 px-4 bg-amber-950/10 border-l border-slate-800 font-bold text-amber-300">
+                          <td className="py-2.5 px-4 bg-[#F4511E]/10 border-l border-[#E3E0DA] font-bold text-[#2D4A3E]">
                             VIP 24/7 Priority Emergency SLA (Dedicated Director • Weekend Rush War-Room • &lt;15 min SLA)
                           </td>
                         </tr>
@@ -1481,23 +1481,23 @@ export const PitchDeckPage: React.FC = () => {
             {/* SLIDE 19: EXECUTIVE ONBOARDING & INSTANT TRIAL */}
             {currentSlide === 18 && (
               <div className="space-y-8 my-auto relative z-10 text-center max-w-3xl mx-auto">
-                <div className="inline-flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-full">
+                <div className="inline-flex items-center gap-2 text-[#2D4A3E] text-xs font-bold uppercase tracking-wider bg-[#F4511E]/10 border border-[#F4511E]/30 px-3 py-1 rounded-full">
                   <Sparkles className="w-4 h-4" />
                   <span>Ready to Transform Your Dining Floor?</span>
                 </div>
 
-                <h2 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight">
-                  Launch Menuz In <span className="text-amber-400">30 Minutes</span>
+                <h2 className="text-4xl sm:text-6xl font-black text-[#141414] tracking-tight leading-tight">
+                  Launch Menuz In <span className="text-[#2D4A3E]">30 Minutes</span>
                 </h2>
 
-                <p className="text-base sm:text-xl text-slate-300 leading-relaxed">
+                <p className="text-base sm:text-xl text-[#4A4A4A] leading-relaxed">
                   Join the next generation of profitable, reputation-shielded restaurants. Zero hardware purchase required.
                 </p>
 
                 <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
                   <Link
                     to={`/r/${restaurant.slug}/menu?t=table-token-01-saffron`}
-                    className="px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-base rounded-2xl transition-all shadow-xl hover:scale-105 flex items-center gap-2"
+                    className="px-8 py-4 bg-gradient-to-r from-[#F4511E] to-[#F4511E] hover:from-[#F4511E] hover:to-[#F4511E] text-[#FFFFFF] font-black text-base rounded-2xl transition-all shadow-xl hover:scale-105 flex items-center gap-2"
                   >
                     <Smartphone className="w-5 h-5" />
                     <span>Experience Live Table Menu</span>
@@ -1505,9 +1505,9 @@ export const PitchDeckPage: React.FC = () => {
 
                   <Link
                     to="/manage"
-                    className="px-8 py-4 bg-[#131C2E] hover:bg-slate-800 text-white font-bold text-base rounded-2xl transition-all border border-slate-700 flex items-center gap-2"
+                    className="px-8 py-4 bg-[#F5F1E8] hover:bg-[#EFE9DD] text-[#141414] font-bold text-base rounded-2xl transition-all border border-[#E3E0DA] flex items-center gap-2"
                   >
-                    <Building2 className="w-5 h-5 text-amber-400" />
+                    <Building2 className="w-5 h-5 text-[#2D4A3E]" />
                     <span>Open Floor Manager Dashboard</span>
                   </Link>
                 </div>
@@ -1515,14 +1515,14 @@ export const PitchDeckPage: React.FC = () => {
             )}
 
             {/* Bottom Footer Controls inside Slide Canvas */}
-            <div className="flex items-center justify-between pt-6 border-t border-slate-800/80 text-xs text-slate-400 mt-6">
+            <div className="flex items-center justify-between pt-6 border-t border-[#E3E0DA]/80 text-xs text-[#6E6E6E] mt-6">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-400" />
                 <span>Menuz Autonomous OS</span>
               </div>
               <div className="flex items-center gap-4">
                 <span>Use <strong>←</strong> / <strong>→</strong> or <strong>Space</strong> to navigate</span>
-                <span className="font-mono text-amber-400 font-bold">Slide {currentSlide + 1} / {SLIDES_DATA.length}</span>
+                <span className="font-mono text-[#2D4A3E] font-bold">Slide {currentSlide + 1} / {SLIDES_DATA.length}</span>
               </div>
             </div>
           </div>
@@ -1536,11 +1536,11 @@ export const PitchDeckPage: React.FC = () => {
                 onClick={() => setCurrentSlide(idx)}
                 className={`relative shrink-0 px-3.5 py-2.5 rounded-xl border text-left transition-all cursor-pointer ${
                   currentSlide === idx
-                    ? 'bg-amber-500/20 border-amber-500 text-white shadow-md shadow-amber-500/10'
-                    : 'bg-slate-900/80 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                    ? 'bg-[#F4511E]/20 border-[#F4511E] text-[#141414] shadow-md shadow-amber-500/10'
+                    : 'bg-[#F5F1E8]/80 border-[#E3E0DA] text-[#C8C8C8] hover:text-[#F0F0F0] hover:bg-[#EFE9DD]'
                 }`}
               >
-                <div className="text-[10px] font-bold text-amber-400">SLIDE {s.num}</div>
+                <div className="text-[10px] font-bold text-[#2D4A3E]">SLIDE {s.num}</div>
                 <div className="text-xs font-semibold whitespace-nowrap">{s.short}</div>
               </button>
             ))}
@@ -1550,7 +1550,7 @@ export const PitchDeckPage: React.FC = () => {
       {/* KOT Setup Wizard Modal */}
       {isWizardOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-3xl border border-slate-700 p-6">
+          <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-[#F5F1E8] rounded-3xl border border-[#E3E0DA] p-6">
             <SelfServeKotSetupWizard 
               restaurant={restaurant} 
               onComplete={() => setIsWizardOpen(false)} 

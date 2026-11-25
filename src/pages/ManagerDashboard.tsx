@@ -305,7 +305,7 @@ export const ManagerDashboard: React.FC = () => {
       icon: '🪑',
       title: 'Floor Plan & Seating Layout Chart',
       badge: `${activeTablesList.length} Tables`,
-      badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+      badgeColor: 'bg-emerald-500/15 text-[#2F7A4F] border-emerald-500/30',
       action: () => setIsFloorModalOpen(true)
     },
     {
@@ -313,7 +313,7 @@ export const ManagerDashboard: React.FC = () => {
       icon: '📸',
       title: 'Restaurant Menu & Photo Studio',
       badge: `${activeMenuItemsList.length} Items`,
-      badgeColor: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+      badgeColor: 'bg-[#F4511E]/15 text-[#2D4A3E] border-[#F4511E]/30',
       action: () => setIsMenuPhotosModalOpen(true)
     },
     {
@@ -321,7 +321,7 @@ export const ManagerDashboard: React.FC = () => {
       icon: '🧑‍🍳',
       title: "Chef & Founder's Story Studio",
       badge: 'Tasting & Heritage',
-      badgeColor: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+      badgeColor: 'bg-[#F4511E]/15 text-[#2D4A3E] border-[#F4511E]/30',
       action: () => navigate('/ai-studio')
     },
     {
@@ -329,7 +329,7 @@ export const ManagerDashboard: React.FC = () => {
       icon: '⭐',
       title: 'Google Reviews & Reputation Shield',
       badge: '4.9★ Shield',
-      badgeColor: 'bg-yellow-500/15 text-yellow-300 border-yellow-500/30',
+      badgeColor: 'bg-[#F4511E]/15 text-[#2D4A3E] border-[#F4511E]/30',
       action: () => setIsReviewsModalOpen(true)
     },
     {
@@ -337,7 +337,7 @@ export const ManagerDashboard: React.FC = () => {
       icon: '⚡',
       title: 'Smart Growth Engine & Upsell Pairings',
       badge: isPairingsActive ? 'Pairings Active' : 'Configure',
-      badgeColor: 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30',
+      badgeColor: 'bg-[#F4511E]/15 text-[#2D4A3E] border-[#F4511E]/30',
       action: () => setIsSmartHubModalOpen(true)
     },
     {
@@ -345,7 +345,7 @@ export const ManagerDashboard: React.FC = () => {
       icon: '🖨️',
       title: 'POS & Thermal Hardware Bridge',
       badge: (restaurant.pos_provider || 'Petpooja').toUpperCase(),
-      badgeColor: 'bg-blue-500/15 text-blue-300 border-blue-500/30',
+      badgeColor: 'bg-blue-500/15 text-[#1F5F8B] border-blue-500/30',
       action: () => setIsPosModalOpen(true)
     },
     {
@@ -353,7 +353,7 @@ export const ManagerDashboard: React.FC = () => {
       icon: '⚙️',
       title: 'Venue Settings & Handover Hub',
       badge: 'Launch Kit',
-      badgeColor: 'bg-slate-700/60 text-slate-300 border-slate-600/40',
+      badgeColor: 'bg-[#E8DCC8]/60 text-[#4A4A4A] border-[#E3E0DA]/40',
       action: () => setIsSettingsModalOpen(true)
     }
   ];
@@ -374,9 +374,9 @@ export const ManagerDashboard: React.FC = () => {
   }, [restaurants]);
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#131315] text-[#e5e1e4] p-3 sm:p-5 md:p-6 max-w-4xl mx-auto space-y-4 pb-20">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#FFFFFF] text-[#141414] p-3 sm:p-5 md:p-6 max-w-4xl mx-auto space-y-4 pb-20">
       {/* ── Compact Navigation Top Bar ────────────────────────────── */}
-      <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-white/[0.08]">
+      <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-black/[0.08]">
         <div className="flex items-center space-x-2">
           {(IS_HQ_SITE || location.search.includes('from=hq') || (typeof window !== 'undefined' && sessionStorage.getItem('menuz_from_hq') === 'true')) && (
             <button
@@ -389,10 +389,10 @@ export const ManagerDashboard: React.FC = () => {
                   window.location.href = getHqSiteUrl('');
                 }
               }}
-              className="inline-flex items-center space-x-1.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 border border-indigo-400/50 px-3 py-1.5 rounded-xl shadow-md transition-all cursor-pointer"
+              className="inline-flex items-center space-x-1.5 text-xs font-bold text-white bg-[#F4511E] hover:bg-[#F4511E] border border-[#F4511E]/50 px-3 py-1.5 rounded-xl shadow-md transition-all cursor-pointer"
               title="Return to Master Platform Command Center"
             >
-              <ArrowLeft className="w-3.5 h-3.5 text-indigo-200" />
+              <ArrowLeft className="w-3.5 h-3.5 text-[#2D4A3E]" />
               <span>Return to HQ</span>
             </button>
           )}
@@ -400,15 +400,15 @@ export const ManagerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsOutletSwitchModalOpen(true)}
-            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-slate-300 hover:text-white transition-colors bg-white/[0.06] hover:bg-white/[0.12] px-2.5 py-1.5 rounded-xl border border-white/[0.1] shadow-sm cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold text-[#4A4A4A] hover:text-[#141414] transition-colors bg-black/[0.04] hover:bg-black/[0.04] px-2.5 py-1.5 rounded-xl border border-black/[0.1] shadow-sm cursor-pointer"
             title="Switch or view all your partner restaurant outlets"
           >
-            <Building2 className="w-3.5 h-3.5 text-amber-400" />
+            <Building2 className="w-3.5 h-3.5 text-[#2D4A3E]" />
             <span>Switch Outlet</span>
-            <ChevronRight className="w-3 h-3 text-slate-400" />
+            <ChevronRight className="w-3 h-3 text-[#6E6E6E]" />
           </button>
 
-          <div className="inline-flex items-center space-x-1.5 text-xs font-bold text-emerald-300 bg-emerald-500/10 px-3 py-1.5 rounded-xl border border-emerald-500/20 shadow-sm">
+          <div className="inline-flex items-center space-x-1.5 text-xs font-bold text-[#2F7A4F] bg-emerald-500/10 px-3 py-1.5 rounded-xl border border-emerald-500/20 shadow-sm">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span>Food Operations Hub</span>
           </div>
@@ -418,25 +418,25 @@ export const ManagerDashboard: React.FC = () => {
           <button
             type="button"
             onClick={handleForceRefresh}
-            className="p-1.5 bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg border border-white/[0.08] transition-colors cursor-pointer"
+            className="p-1.5 bg-[#EFE9DD]/80 hover:bg-[#E8DCC8] text-[#4A4A4A] hover:text-[#141414] rounded-lg border border-black/[0.08] transition-colors cursor-pointer"
             title="Force refresh"
           >
-            <RefreshCw className="w-3.5 h-3.5 text-amber-400" />
+            <RefreshCw className="w-3.5 h-3.5 text-[#2D4A3E]" />
           </button>
 
           {/* Tenant-Isolated Venue Badge (No switching) */}
-          <div className="flex items-center space-x-1.5 bg-[#0D1322] border border-white/[0.08] rounded-xl px-2.5 py-1.5 shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-amber-400" />
-            <span className="text-xs font-bold text-white max-w-[150px] sm:max-w-[200px] truncate">
+          <div className="flex items-center space-x-1.5 bg-[#F5F1E8] border border-black/[0.08] rounded-xl px-2.5 py-1.5 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-[#F4511E]" />
+            <span className="text-xs font-bold text-[#141414] max-w-[150px] sm:max-w-[200px] truncate">
               {restaurant.name}
             </span>
           </div>
 
           <Link
             to="/kitchen"
-            className="inline-flex items-center space-x-1 text-xs font-semibold text-slate-200 hover:text-white transition-colors bg-[#090D16]/[0.04] hover:bg-white/[0.08] px-2.5 py-1.5 rounded-xl border border-white/[0.08] shadow-sm"
+            className="inline-flex items-center space-x-1 text-xs font-semibold text-[#3A3A3A] hover:text-[#141414] transition-colors bg-[#FFFFFF]/[0.04] hover:bg-black/[0.04] px-2.5 py-1.5 rounded-xl border border-black/[0.08] shadow-sm"
           >
-            <ChefHat className="w-3.5 h-3.5 text-amber-400" />
+            <ChefHat className="w-3.5 h-3.5 text-[#2D4A3E]" />
             <span className="hidden sm:inline">Kitchen</span>
           </Link>
         </div>
@@ -444,12 +444,12 @@ export const ManagerDashboard: React.FC = () => {
 
       {/* USB Print Banner */}
       {usbPrintStatus && (
-        <div className="bg-blue-950/40 border border-blue-500/40 text-blue-200 p-2.5 rounded-xl text-xs font-bold flex items-center justify-between shadow-sm animate-in fade-in">
+        <div className="bg-blue-950/40 border border-blue-500/40 text-[#1F5F8B] p-2.5 rounded-xl text-xs font-bold flex items-center justify-between shadow-sm animate-in fade-in">
           <div className="flex items-center gap-2">
-            <Printer className="w-3.5 h-3.5 text-blue-400" />
+            <Printer className="w-3.5 h-3.5 text-[#2F6FA3]" />
             <span>{usbPrintStatus}</span>
           </div>
-          <button onClick={() => setUsbPrintStatus(null)} className="text-blue-400 hover:text-blue-200 cursor-pointer">
+          <button onClick={() => setUsbPrintStatus(null)} className="text-[#2F6FA3] hover:text-[#1F5F8B] cursor-pointer">
             <X className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -458,19 +458,19 @@ export const ManagerDashboard: React.FC = () => {
       {/* ── Compact Venue Header & Quick Diner Link ───────────────── */}
       <header className="flex items-center justify-between gap-3 pt-1">
         <div>
-          <span className="text-[10px] text-amber-400 font-mono uppercase font-bold tracking-wider">
+          <span className="text-[10px] text-[#2D4A3E] font-mono uppercase font-bold tracking-wider">
             {restaurant.cuisine} • {restaurant.location || 'Pune'}
           </span>
-          <h1 className="font-serif text-xl sm:text-2xl font-bold text-white leading-tight">
+          <h1 className="font-serif text-xl sm:text-2xl font-bold text-[#141414] leading-tight">
             {restaurant.name}
           </h1>
         </div>
 
         <Link
           to={`/r/${restaurant.slug}/menu?t=${activeTablesList[0]?.public_token || 'table-token-01-saffron'}`}
-          className="flex items-center space-x-1.5 text-xs text-slate-950 bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 px-3 py-1.5 rounded-xl shadow font-bold transition-all flex-shrink-0"
+          className="flex items-center space-x-1.5 text-xs text-[#FFFFFF] bg-gradient-to-r from-[#F4511E] to-[#F4511E] hover:brightness-110 active:scale-95 px-3 py-1.5 rounded-xl shadow font-bold transition-all flex-shrink-0"
         >
-          <UtensilsCrossed className="w-3.5 h-3.5 text-slate-950" />
+          <UtensilsCrossed className="w-3.5 h-3.5 text-[#141414]" />
           <span>Launch Menu ({activeTablesList[0]?.label || 'Table 1'})</span>
           <ExternalLink className="w-3 h-3 ml-0.5" />
         </Link>
@@ -482,13 +482,13 @@ export const ManagerDashboard: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping" />
-              <h3 className="font-serif font-bold text-xs text-rose-200">
+              <h3 className="font-serif font-bold text-xs text-[#C23A1C]">
                 🚨 Urgent Guest Assistance Required ({unreadServiceAlerts.length} Table{unreadServiceAlerts.length > 1 ? 's' : ''})
               </h3>
             </div>
             <button
               onClick={() => markNotificationRead(unreadServiceAlerts[0].id)}
-              className="text-[10px] font-bold text-rose-300 underline cursor-pointer"
+              className="text-[10px] font-bold text-[#C23A1C] underline cursor-pointer"
             >
               Acknowledge
             </button>
@@ -498,33 +498,33 @@ export const ManagerDashboard: React.FC = () => {
 
       {/* ── Compact Key Stats Strip (Single Row) ─────────────────── */}
       <div className="grid grid-cols-3 gap-2">
-        <div className="bg-[#0D1322] px-3 py-2 rounded-xl border border-white/[0.08] flex items-center space-x-2.5">
-          <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 flex-shrink-0">
+        <div className="bg-[#F5F1E8] px-3 py-2 rounded-xl border border-black/[0.08] flex items-center space-x-2.5">
+          <div className="w-7 h-7 rounded-lg bg-[#F4511E]/10 border border-[#F4511E]/20 flex items-center justify-center text-[#2D4A3E] flex-shrink-0">
             <DollarSign className="w-3.5 h-3.5" />
           </div>
           <div className="truncate">
-            <span className="text-[9px] text-slate-400 font-medium block">Revenue</span>
-            <span className="font-serif text-sm font-bold text-white truncate block">₹{totalVolume.toFixed(0)}</span>
+            <span className="text-[9px] text-[#6E6E6E] font-medium block">Revenue</span>
+            <span className="font-serif text-sm font-bold text-[#141414] truncate block">₹{totalVolume.toFixed(0)}</span>
           </div>
         </div>
 
-        <div className="bg-[#0D1322] px-3 py-2 rounded-xl border border-white/[0.08] flex items-center space-x-2.5">
-          <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 flex-shrink-0">
+        <div className="bg-[#F5F1E8] px-3 py-2 rounded-xl border border-black/[0.08] flex items-center space-x-2.5">
+          <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-[#2D4A3E] flex-shrink-0">
             <ShoppingBag className="w-3.5 h-3.5" />
           </div>
           <div className="truncate">
-            <span className="text-[9px] text-slate-400 font-medium block">Orders</span>
-            <span className="font-serif text-sm font-bold text-white truncate block">{totalOrdersCount} tickets</span>
+            <span className="text-[9px] text-[#6E6E6E] font-medium block">Orders</span>
+            <span className="font-serif text-sm font-bold text-[#141414] truncate block">{totalOrdersCount} tickets</span>
           </div>
         </div>
 
-        <div className="bg-[#0D1322] px-3 py-2 rounded-xl border border-white/[0.08] flex items-center space-x-2.5">
-          <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 flex-shrink-0">
+        <div className="bg-[#F5F1E8] px-3 py-2 rounded-xl border border-black/[0.08] flex items-center space-x-2.5">
+          <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-[#2F7A4F] flex-shrink-0">
             <CheckCircle2 className="w-3.5 h-3.5" />
           </div>
           <div className="truncate">
-            <span className="text-[9px] text-slate-400 font-medium block">Floor</span>
-            <span className="font-serif text-sm font-bold text-white truncate block">{activeTablesList.length} tables</span>
+            <span className="text-[9px] text-[#6E6E6E] font-medium block">Floor</span>
+            <span className="font-serif text-sm font-bold text-[#141414] truncate block">{activeTablesList.length} tables</span>
           </div>
         </div>
       </div>
@@ -537,15 +537,15 @@ export const ManagerDashboard: React.FC = () => {
           <div
             key={item.id}
             onClick={item.action}
-            className="w-full bg-[#0D1322] hover:bg-[#121A2E] border border-white/[0.08] hover:border-amber-500/40 rounded-2xl p-3 sm:p-3.5 flex items-center justify-between gap-3 shadow-md transition-all cursor-pointer group active:scale-[0.99]"
+            className="w-full bg-[#F5F1E8] hover:bg-[#F5F1E8] border border-black/[0.08] hover:border-[#F4511E]/40 rounded-2xl p-3 sm:p-3.5 flex items-center justify-between gap-3 shadow-md transition-all cursor-pointer group active:scale-[0.99]"
           >
             {/* Left: Number + Icon + Title */}
             <div className="flex items-center space-x-3 min-w-0">
-              <div className="w-8 h-8 rounded-xl bg-white/[0.04] group-hover:bg-amber-500/15 border border-white/[0.08] group-hover:border-amber-500/30 flex items-center justify-center text-base flex-shrink-0 transition-colors">
+              <div className="w-8 h-8 rounded-xl bg-black/[0.04] group-hover:bg-[#F4511E]/15 border border-black/[0.08] group-hover:border-[#F4511E]/30 flex items-center justify-center text-base flex-shrink-0 transition-colors">
                 <span>{item.icon}</span>
               </div>
               <div className="min-w-0">
-                <h3 className="font-serif font-bold text-xs sm:text-sm text-white group-hover:text-amber-300 transition-colors truncate">
+                <h3 className="font-serif font-bold text-xs sm:text-sm text-[#141414] group-hover:text-[#2D4A3E] transition-colors truncate">
                   {idx + 1}. {item.title}
                 </h3>
               </div>
@@ -556,7 +556,7 @@ export const ManagerDashboard: React.FC = () => {
               <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${item.badgeColor}`}>
                 {item.badge}
               </span>
-              <div className="w-6 h-6 rounded-lg bg-white/[0.03] group-hover:bg-amber-500/20 flex items-center justify-center text-slate-400 group-hover:text-amber-300 transition-colors">
+              <div className="w-6 h-6 rounded-lg bg-black/[0.04] group-hover:bg-[#F4511E]/20 flex items-center justify-center text-[#6E6E6E] group-hover:text-[#2D4A3E] transition-colors">
                 <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
               </div>
             </div>
@@ -574,14 +574,14 @@ export const ManagerDashboard: React.FC = () => {
         <div
           className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl overflow-y-auto pt-[max(env(safe-area-inset-top,20px),24px)] pb-12 px-3 sm:px-6 flex justify-center items-start overscroll-contain"
         >
-          <div className="bg-[#0D1322] rounded-3xl max-w-5xl w-full shadow-2xl p-4 sm:p-7 relative space-y-4 sm:space-y-5 border border-white/[0.12] text-white my-2 sm:my-6">
+          <div className="bg-[#F5F1E8] rounded-3xl max-w-5xl w-full shadow-2xl p-4 sm:p-7 relative space-y-4 sm:space-y-5 border border-black/[0.12] text-[#141414] my-2 sm:my-6">
             {/* Clean, Non-Colliding Top Header */}
-            <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-white/[0.08] gap-2">
+            <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-black/[0.08] gap-2">
               <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
                 <button
                   type="button"
                   onClick={() => setIsFloorModalOpen(false)}
-                  className="inline-flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-slate-200 hover:text-white font-bold text-xs border border-white/[0.1] transition-all cursor-pointer flex-shrink-0"
+                  className="inline-flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-black/[0.04] hover:bg-black/[0.04] text-[#3A3A3A] hover:text-[#141414] font-bold text-xs border border-black/[0.1] transition-all cursor-pointer flex-shrink-0"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
                   <span>Back</span>
@@ -589,11 +589,11 @@ export const ManagerDashboard: React.FC = () => {
                 <div className="min-w-0">
                   <div className="flex items-center space-x-1.5">
                     <span className="text-lg sm:text-2xl">🪑</span>
-                    <h3 className="font-serif font-bold text-base sm:text-xl text-white truncate">
+                    <h3 className="font-serif font-bold text-base sm:text-xl text-[#141414] truncate">
                       Floor &amp; Live Tables Operations
                     </h3>
                   </div>
-                  <p className="text-[10px] sm:text-xs text-slate-400 truncate hidden xs:block sm:block">
+                  <p className="text-[10px] sm:text-xs text-[#6E6E6E] truncate hidden xs:block sm:block">
                     Manage seating layout, add custom tables, launch diner menus &amp; POS sync
                   </p>
                 </div>
@@ -602,7 +602,7 @@ export const ManagerDashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsFloorModalOpen(false)}
-                className="p-1.5 sm:p-2 rounded-full bg-white/[0.06] hover:bg-white/[0.15] text-slate-300 hover:text-white transition-colors cursor-pointer flex-shrink-0"
+                className="p-1.5 sm:p-2 rounded-full bg-black/[0.04] hover:bg-black/[0.04] text-[#4A4A4A] hover:text-[#141414] transition-colors cursor-pointer flex-shrink-0"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -611,14 +611,14 @@ export const ManagerDashboard: React.FC = () => {
             {/* Action Bar / View Switcher */}
             <div className="flex flex-wrap items-center justify-between gap-2.5 pt-0.5">
               {/* View Switcher: Table Grid vs POS Revenue Breakdown */}
-              <div className="p-0.5 rounded-xl bg-slate-900 border border-white/[0.1] flex items-center">
+              <div className="p-0.5 rounded-xl bg-[#F5F1E8] border border-black/[0.1] flex items-center">
                 <button
                   type="button"
                   onClick={() => setFloorViewTab('grid')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
                     floorViewTab === 'grid'
-                      ? 'bg-amber-500 text-slate-950 shadow-sm'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-[#F4511E] text-[#FFFFFF] shadow-sm'
+                      : 'text-[#6E6E6E] hover:text-[#141414]'
                   }`}
                 >
                   <LayoutGrid className="w-3.5 h-3.5" />
@@ -629,8 +629,8 @@ export const ManagerDashboard: React.FC = () => {
                   onClick={() => setFloorViewTab('revenue')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
                     floorViewTab === 'revenue'
-                      ? 'bg-amber-500 text-slate-950 shadow-sm'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-[#F4511E] text-[#FFFFFF] shadow-sm'
+                      : 'text-[#6E6E6E] hover:text-[#141414]'
                   }`}
                 >
                   <TrendingUp className="w-3.5 h-3.5" />
@@ -642,7 +642,7 @@ export const ManagerDashboard: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleOpenAddTable}
-                  className="px-3 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:brightness-110 text-slate-950 text-xs font-bold rounded-xl shadow-sm cursor-pointer flex items-center space-x-1"
+                  className="px-3 py-1.5 bg-gradient-to-r from-[#F4511E] to-[#F4511E] hover:brightness-110 text-[#FFFFFF] text-xs font-bold rounded-xl shadow-sm cursor-pointer flex items-center space-x-1"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Add Table</span>
@@ -651,7 +651,7 @@ export const ManagerDashboard: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsTableModalOpen(true)}
-                  className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl border border-white/[0.08] cursor-pointer"
+                  className="px-3 py-1.5 bg-[#EFE9DD] hover:bg-[#E8DCC8] text-[#3A3A3A] text-xs font-bold rounded-xl border border-black/[0.08] cursor-pointer"
                 >
                   Batch Setup
                 </button>
@@ -667,26 +667,26 @@ export const ManagerDashboard: React.FC = () => {
                   const hasOpenOrders = tableOrders.length > 0;
 
                   return (
-                    <div key={table.id} className="bg-slate-900/90 rounded-2xl p-4 border border-white/[0.08] hover:border-amber-500/30 transition-all space-y-3 flex flex-col justify-between">
+                    <div key={table.id} className="bg-[#F5F1E8]/90 rounded-2xl p-4 border border-black/[0.08] hover:border-[#F4511E]/30 transition-all space-y-3 flex flex-col justify-between">
                       <div className="flex items-start justify-between">
                         <div>
-                          <h4 className="font-bold text-white text-base">{table.label}</h4>
-                          <span className="text-[10px] text-slate-400 font-mono block">Token: {table.public_token}</span>
-                          <span className="text-[10px] text-slate-400 block pt-0.5">
-                            {table.section || 'Indoor Main'} • <strong className="text-slate-200">{table.capacity || 4} Seats</strong>
+                          <h4 className="font-bold text-[#141414] text-base">{table.label}</h4>
+                          <span className="text-[10px] text-[#6E6E6E] font-mono block">Token: {table.public_token}</span>
+                          <span className="text-[10px] text-[#6E6E6E] block pt-0.5">
+                            {table.section || 'Indoor Main'} • <strong className="text-[#3A3A3A]">{table.capacity || 4} Seats</strong>
                           </span>
                         </div>
                         <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold font-mono ${
-                          hasOpenOrders ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'bg-emerald-500/15 text-emerald-300'
+                          hasOpenOrders ? 'bg-[#F4511E]/20 text-[#2D4A3E] border border-[#F4511E]/40' : 'bg-emerald-500/15 text-[#2F7A4F]'
                         }`}>
                           {hasOpenOrders ? `₹${tableTotal} Open` : '🟢 Ready'}
                         </span>
                       </div>
 
-                      <div className="flex items-center gap-2 pt-2 border-t border-white/[0.06]">
+                      <div className="flex items-center gap-2 pt-2 border-t border-black/[0.06]">
                         <Link
                           to={`/r/${restaurant.slug}/menu?t=${table.public_token}`}
-                          className="flex-1 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:brightness-110 text-white font-bold text-xs rounded-xl text-center flex items-center justify-center space-x-1 shadow-sm"
+                          className="flex-1 py-2 bg-gradient-to-r from-[#F4511E] to-[#F4511E] hover:brightness-110 text-white font-bold text-xs rounded-xl text-center flex items-center justify-center space-x-1 shadow-sm"
                         >
                           <UtensilsCrossed className="w-3.5 h-3.5" />
                           <span>Launch Menu</span>
@@ -695,7 +695,7 @@ export const ManagerDashboard: React.FC = () => {
                         <button
                           type="button"
                           onClick={handleTestUsbPrint}
-                          className="p-2 bg-slate-800 hover:bg-slate-700 text-amber-400 rounded-xl border border-white/[0.08] cursor-pointer"
+                          className="p-2 bg-[#EFE9DD] hover:bg-[#E8DCC8] text-[#2D4A3E] rounded-xl border border-black/[0.08] cursor-pointer"
                           title="Print KOT"
                         >
                           <Printer className="w-4 h-4" />
@@ -708,7 +708,7 @@ export const ManagerDashboard: React.FC = () => {
                               deleteTable(table.id);
                             }
                           }}
-                          className="p-2 bg-slate-800 hover:bg-rose-900/60 text-slate-400 hover:text-rose-300 rounded-xl border border-white/[0.08] transition-colors cursor-pointer"
+                          className="p-2 bg-[#EFE9DD] hover:bg-rose-900/60 text-[#6E6E6E] hover:text-[#C23A1C] rounded-xl border border-black/[0.08] transition-colors cursor-pointer"
                           title="Delete Table"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -722,7 +722,7 @@ export const ManagerDashboard: React.FC = () => {
                 {!isAddingCustomTable ? (
                   <div
                     onClick={handleOpenAddTable}
-                    className="bg-slate-900/40 hover:bg-slate-900/80 rounded-2xl p-6 border-2 border-dashed border-white/[0.15] hover:border-amber-400/50 transition-all flex flex-col items-center justify-center space-y-2 cursor-pointer text-slate-400 hover:text-amber-300 min-h-[140px]"
+                    className="bg-[#F5F1E8]/40 hover:bg-[#F5F1E8]/80 rounded-2xl p-6 border-2 border-dashed border-black/[0.15] hover:border-[#F4511E]/50 transition-all flex flex-col items-center justify-center space-y-2 cursor-pointer text-[#C8C8C8] hover:text-[#FFD08A] min-h-[140px]"
                   >
                     <Plus className="w-6 h-6" />
                     <span className="text-xs font-bold font-mono">+ Add Custom Table</span>
@@ -730,52 +730,52 @@ export const ManagerDashboard: React.FC = () => {
                 ) : (
                   <div
                     ref={addTableFormRef}
-                    className="bg-slate-900 rounded-2xl p-4 sm:p-5 border-2 border-amber-500/50 space-y-3 shadow-xl sm:col-span-2 md:col-span-3 animate-in fade-in slide-in-from-bottom-2"
+                    className="bg-[#F5F1E8] rounded-2xl p-4 sm:p-5 border-2 border-[#F4511E]/50 space-y-3 shadow-xl sm:col-span-2 md:col-span-3 animate-in fade-in slide-in-from-bottom-2"
                   >
-                    <div className="flex items-center justify-between border-b border-white/[0.08] pb-2">
-                      <h4 className="font-bold text-xs text-amber-300 uppercase font-mono tracking-wider flex items-center space-x-1.5">
-                        <Plus className="w-3.5 h-3.5 text-amber-400" />
+                    <div className="flex items-center justify-between border-b border-black/[0.08] pb-2">
+                      <h4 className="font-bold text-xs text-[#2D4A3E] uppercase font-mono tracking-wider flex items-center space-x-1.5">
+                        <Plus className="w-3.5 h-3.5 text-[#2D4A3E]" />
                         <span>Add New Custom Dining Table</span>
                       </h4>
                       <button
                         type="button"
                         onClick={() => setIsAddingCustomTable(false)}
-                        className="text-slate-400 hover:text-white text-xs px-2 py-1 rounded bg-white/[0.05] hover:bg-white/[0.1] cursor-pointer"
+                        className="text-[#6E6E6E] hover:text-[#141414] text-xs px-2 py-1 rounded bg-black/[0.04] hover:bg-black/[0.04] cursor-pointer"
                       >
                         Cancel
                       </button>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       <div>
-                        <label className="text-[10px] text-slate-400 font-mono block mb-1">Table Label / Name</label>
+                        <label className="text-[10px] text-[#6E6E6E] font-mono block mb-1">Table Label / Name</label>
                         <input
                           ref={addTableInputRef}
                           type="text"
                           placeholder={`Table ${activeTablesList.length + 1}`}
                           value={newTableLabel}
                           onChange={(e) => setNewTableLabel(e.target.value)}
-                          className="w-full px-3 py-2 bg-slate-950 border border-white/[0.15] rounded-xl text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+                          className="w-full px-3 py-2 bg-[#FFFFFF] border border-black/[0.15] rounded-xl text-xs text-white placeholder:text-[#7A7A7A] focus:outline-none focus:border-[#F4511E]"
                         />
                       </div>
                       <div>
-                        <label className="text-[10px] text-slate-400 font-mono block mb-1">Seating Capacity (Guests)</label>
+                        <label className="text-[10px] text-[#6E6E6E] font-mono block mb-1">Seating Capacity (Guests)</label>
                         <input
                           type="number"
                           min={1}
                           max={24}
                           value={newTableCapacity}
                           onChange={(e) => setNewTableCapacity(Number(e.target.value) || 4)}
-                          className="w-full px-3 py-2 bg-slate-950 border border-white/[0.15] rounded-xl text-xs text-white font-mono focus:outline-none focus:border-amber-400"
+                          className="w-full px-3 py-2 bg-[#FFFFFF] border border-black/[0.15] rounded-xl text-xs text-white font-mono focus:outline-none focus:border-[#F4511E]"
                         />
                       </div>
                       <div>
-                        <label className="text-[10px] text-slate-400 font-mono block mb-1">Dining Section / Zone</label>
+                        <label className="text-[10px] text-[#6E6E6E] font-mono block mb-1">Dining Section / Zone</label>
                         <input
                           type="text"
                           placeholder="e.g. Indoor Main, Patio, VIP"
                           value={newTableSection}
                           onChange={(e) => setNewTableSection(e.target.value)}
-                          className="w-full px-3 py-2 bg-slate-950 border border-white/[0.15] rounded-xl text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+                          className="w-full px-3 py-2 bg-[#FFFFFF] border border-black/[0.15] rounded-xl text-xs text-white placeholder:text-[#7A7A7A] focus:outline-none focus:border-[#F4511E]"
                         />
                       </div>
                     </div>
@@ -783,14 +783,14 @@ export const ManagerDashboard: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setIsAddingCustomTable(false)}
-                        className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl cursor-pointer"
+                        className="px-3 py-2 bg-[#EFE9DD] hover:bg-[#E8DCC8] text-[#4A4A4A] text-xs font-bold rounded-xl cursor-pointer"
                       >
                         Cancel
                       </button>
                       <button
                         type="button"
                         onClick={handleCreateCustomTable}
-                        className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:brightness-110 text-slate-950 font-bold text-xs rounded-xl shadow-md cursor-pointer"
+                        className="px-4 py-2 bg-gradient-to-r from-[#F4511E] to-[#F4511E] hover:brightness-110 text-[#FFFFFF] font-bold text-xs rounded-xl shadow-md cursor-pointer"
                       >
                         Save &amp; Add to Floor
                       </button>
@@ -804,26 +804,26 @@ export const ManagerDashboard: React.FC = () => {
             {floorViewTab === 'revenue' && (
               <div className="space-y-4">
                 {/* POS Summary Strip */}
-                <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900 via-[#0A101D] to-slate-900 border border-white/[0.1] grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  <div className="p-3 bg-white/[0.02] rounded-xl border border-white/[0.06]">
-                    <span className="text-[10px] uppercase font-mono text-slate-400 block font-bold">Total Floor Volume</span>
-                    <span className="text-lg font-extrabold text-amber-400 font-mono">₹{totalVolume.toLocaleString()}</span>
+                <div className="p-4 rounded-2xl bg-gradient-to-r from-[#F5F1E8] via-[#FFFFFF] to-[#F5F1E8] border border-black/[0.1] grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div className="p-3 bg-black/[0.04] rounded-xl border border-black/[0.06]">
+                    <span className="text-[10px] uppercase font-mono text-[#6E6E6E] block font-bold">Total Floor Volume</span>
+                    <span className="text-lg font-extrabold text-[#2D4A3E] font-mono">₹{totalVolume.toLocaleString()}</span>
                   </div>
-                  <div className="p-3 bg-white/[0.02] rounded-xl border border-white/[0.06]">
-                    <span className="text-[10px] uppercase font-mono text-slate-400 block font-bold">POS Orders</span>
-                    <span className="text-lg font-extrabold text-white font-mono">{totalOrdersCount} Total</span>
+                  <div className="p-3 bg-black/[0.04] rounded-xl border border-black/[0.06]">
+                    <span className="text-[10px] uppercase font-mono text-[#6E6E6E] block font-bold">POS Orders</span>
+                    <span className="text-lg font-extrabold text-[#141414] font-mono">{totalOrdersCount} Total</span>
                   </div>
-                  <div className="p-3 bg-white/[0.02] rounded-xl border border-white/[0.06]">
-                    <span className="text-[10px] uppercase font-mono text-slate-400 block font-bold">Tables Active</span>
-                    <span className="text-lg font-extrabold text-emerald-400 font-mono">
+                  <div className="p-3 bg-black/[0.04] rounded-xl border border-black/[0.06]">
+                    <span className="text-[10px] uppercase font-mono text-[#6E6E6E] block font-bold">Tables Active</span>
+                    <span className="text-lg font-extrabold text-[#2F7A4F] font-mono">
                       {activeTablesList.filter((t) => activeOrdersList.some((o) => o.table_id === t.id)).length} / {activeTablesList.length}
                     </span>
                   </div>
-                  <div className="p-3 bg-white/[0.02] rounded-xl border border-white/[0.06]">
-                    <span className="text-[10px] uppercase font-mono text-slate-400 block font-bold">POS Provider Sync</span>
+                  <div className="p-3 bg-black/[0.04] rounded-xl border border-black/[0.06]">
+                    <span className="text-[10px] uppercase font-mono text-[#6E6E6E] block font-bold">POS Provider Sync</span>
                     <div className="flex items-center space-x-1.5 mt-0.5">
                       <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                      <span className="text-xs font-bold text-slate-200 uppercase font-mono">
+                      <span className="text-xs font-bold text-[#3A3A3A] uppercase font-mono">
                         {restaurant.pos_provider || 'Petpooja'}
                       </span>
                     </div>
@@ -848,36 +848,36 @@ export const ManagerDashboard: React.FC = () => {
                       return (
                         <div
                           key={table.id}
-                          className="bg-slate-900/90 rounded-2xl p-4 border border-white/[0.08] flex flex-col md:flex-row md:items-center justify-between gap-4"
+                          className="bg-[#F5F1E8]/90 rounded-2xl p-4 border border-black/[0.08] flex flex-col md:flex-row md:items-center justify-between gap-4"
                         >
                           {/* Table details */}
                           <div className="space-y-1 min-w-[200px]">
                             <div className="flex items-center space-x-2">
-                              <h4 className="font-bold text-white text-base">{table.label}</h4>
+                              <h4 className="font-bold text-[#141414] text-base">{table.label}</h4>
                               <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold font-mono uppercase ${
                                 hasOpenOrders
-                                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                                  : 'bg-slate-800 text-slate-400'
+                                  ? 'bg-[#F4511E]/20 text-[#2D4A3E] border border-[#F4511E]/40'
+                                  : 'bg-[#EFE9DD] text-[#6E6E6E]'
                               }`}>
                                 {hasOpenOrders ? `${tableOrders.length} Order(s)` : 'Vacant'}
                               </span>
                             </div>
-                            <div className="text-[11px] text-slate-400 flex items-center space-x-2">
+                            <div className="text-[11px] text-[#6E6E6E] flex items-center space-x-2">
                               <span>{table.section || 'Indoor Main'}</span>
                               <span>•</span>
-                              <span className="font-mono text-slate-500">Token: {table.public_token}</span>
+                              <span className="font-mono text-[#7A7A7A]">Token: {table.public_token}</span>
                             </div>
                           </div>
 
                           {/* Orders Summary / Items preview */}
-                          <div className="flex-1 min-w-0 bg-black/30 rounded-xl p-2.5 border border-white/[0.04]">
+                          <div className="flex-1 min-w-0 bg-black/30 rounded-xl p-2.5 border border-black/[0.04]">
                             {hasOpenOrders ? (
                               <div className="space-y-1.5">
                                 <div className="flex items-center justify-between text-[11px]">
-                                  <span className="text-slate-400 font-medium">
+                                  <span className="text-[#6E6E6E] font-medium">
                                     {totalItemsCount} dish items dispatched via POS
                                   </span>
-                                  <span className="text-emerald-400 font-bold font-mono text-xs">
+                                  <span className="text-[#2F7A4F] font-bold font-mono text-xs">
                                     ✓ POS Synced
                                   </span>
                                 </div>
@@ -885,35 +885,35 @@ export const ManagerDashboard: React.FC = () => {
                                   {tableOrders.flatMap((o) => o.items || []).slice(0, 4).map((it, iIdx) => (
                                     <span
                                       key={iIdx}
-                                      className="px-2 py-0.5 bg-white/[0.06] rounded-md text-[10px] text-slate-300 font-medium"
+                                      className="px-2 py-0.5 bg-black/[0.04] rounded-md text-[10px] text-[#4A4A4A] font-medium"
                                     >
                                       {it.quantity}x {it.item_name_snapshot}
                                     </span>
                                   ))}
                                   {tableOrders.flatMap((o) => o.items || []).length > 4 && (
-                                    <span className="px-2 py-0.5 bg-white/[0.06] rounded-md text-[10px] text-amber-400 font-bold">
+                                    <span className="px-2 py-0.5 bg-black/[0.04] rounded-md text-[10px] text-[#2D4A3E] font-bold">
                                       +{tableOrders.flatMap((o) => o.items || []).length - 4} more
                                     </span>
                                   )}
                                 </div>
                               </div>
                             ) : (
-                              <span className="text-[11px] text-slate-500 italic">No live orders. Table is open for guests.</span>
+                              <span className="text-[11px] text-[#7A7A7A] italic">No live orders. Table is open for guests.</span>
                             )}
                           </div>
 
                           {/* Revenue amount & actions */}
                           <div className="flex items-center justify-between md:justify-end gap-3 flex-shrink-0">
                             <div className="text-right">
-                              <span className="text-[10px] text-slate-400 uppercase font-mono block">Table Volume</span>
-                              <span className="text-base font-bold text-amber-400 font-mono">
+                              <span className="text-[10px] text-[#6E6E6E] uppercase font-mono block">Table Volume</span>
+                              <span className="text-base font-bold text-[#2D4A3E] font-mono">
                                 ₹{tableTotal.toLocaleString()}
                               </span>
                             </div>
                             <div className="flex items-center gap-1.5">
                               <Link
                                 to={`/r/${restaurant.slug}/menu?t=${table.public_token}`}
-                                className="px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-xs rounded-xl text-center flex items-center space-x-1"
+                                className="px-3 py-2 bg-gradient-to-r from-[#F4511E] to-[#F4511E] text-white font-bold text-xs rounded-xl text-center flex items-center space-x-1"
                               >
                                 <UtensilsCrossed className="w-3.5 h-3.5" />
                                 <span>Menu</span>
@@ -921,7 +921,7 @@ export const ManagerDashboard: React.FC = () => {
                               <button
                                 type="button"
                                 onClick={handleTestUsbPrint}
-                                className="p-2 bg-slate-800 hover:bg-slate-700 text-amber-400 rounded-xl border border-white/[0.08] cursor-pointer"
+                                className="p-2 bg-[#EFE9DD] hover:bg-[#E8DCC8] text-[#2D4A3E] rounded-xl border border-black/[0.08] cursor-pointer"
                                 title="Print KOT"
                               >
                                 <Printer className="w-4 h-4" />
@@ -945,13 +945,13 @@ export const ManagerDashboard: React.FC = () => {
         <div
           className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl overflow-y-auto pt-[max(env(safe-area-inset-top,20px),24px)] pb-12 px-3 sm:px-6 flex justify-center items-start overscroll-contain"
         >
-          <div className="bg-[#0D1322] rounded-3xl max-w-5xl w-full shadow-2xl p-4 sm:p-7 relative space-y-4 sm:space-y-5 border border-white/[0.12] text-white my-2 sm:my-6">
-            <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-white/[0.08] gap-2">
+          <div className="bg-[#F5F1E8] rounded-3xl max-w-5xl w-full shadow-2xl p-4 sm:p-7 relative space-y-4 sm:space-y-5 border border-black/[0.12] text-[#141414] my-2 sm:my-6">
+            <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-black/[0.08] gap-2">
               <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
                 <button
                   type="button"
                   onClick={() => setIsMenuPhotosModalOpen(false)}
-                  className="inline-flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-slate-200 hover:text-white font-bold text-xs border border-white/[0.1] transition-all cursor-pointer flex-shrink-0"
+                  className="inline-flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-black/[0.04] hover:bg-black/[0.04] text-[#3A3A3A] hover:text-[#141414] font-bold text-xs border border-black/[0.1] transition-all cursor-pointer flex-shrink-0"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
                   <span>Back</span>
@@ -959,11 +959,11 @@ export const ManagerDashboard: React.FC = () => {
                 <div className="min-w-0">
                   <div className="flex items-center space-x-1.5">
                     <span className="text-lg sm:text-2xl">📸</span>
-                    <h3 className="font-serif font-bold text-base sm:text-xl text-white truncate">
+                    <h3 className="font-serif font-bold text-base sm:text-xl text-[#141414] truncate">
                       Menu &amp; Photo Studio
                     </h3>
                   </div>
-                  <p className="text-[10px] sm:text-xs text-slate-400 truncate hidden xs:block sm:block">
+                  <p className="text-[10px] sm:text-xs text-[#6E6E6E] truncate hidden xs:block sm:block">
                     Inline dish editor, multi-photo gallery &amp; ambiance images
                   </p>
                 </div>
@@ -973,16 +973,16 @@ export const ManagerDashboard: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsRestaurantPhotoModalOpen(true)}
-                  className="px-2.5 sm:px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl border border-white/[0.08] flex items-center space-x-1 cursor-pointer"
+                  className="px-2.5 sm:px-3 py-1.5 bg-[#EFE9DD] hover:bg-[#E8DCC8] text-[#3A3A3A] text-xs font-bold rounded-xl border border-black/[0.08] flex items-center space-x-1 cursor-pointer"
                 >
-                  <Building2 className="w-3.5 h-3.5 text-amber-400" />
+                  <Building2 className="w-3.5 h-3.5 text-[#2D4A3E]" />
                   <span className="hidden xs:inline sm:inline">Ambiance Photos</span>
                   <span className="xs:hidden sm:hidden">Ambiance</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsMenuPhotosModalOpen(false)}
-                  className="p-1.5 sm:p-2 rounded-full bg-white/[0.06] hover:bg-white/[0.15] text-slate-300 hover:text-white transition-colors cursor-pointer"
+                  className="p-1.5 sm:p-2 rounded-full bg-black/[0.04] hover:bg-black/[0.04] text-[#4A4A4A] hover:text-[#141414] transition-colors cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -991,13 +991,13 @@ export const ManagerDashboard: React.FC = () => {
 
             {/* Search Input - Cleanly styled for visible typing */}
             <div className="relative w-full sm:w-80">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <Search className="w-4 h-4 text-[#6E6E6E] absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={photoStudioSearch}
                 onChange={(e) => setPhotoStudioSearch(e.target.value)}
                 placeholder="Search dishes to edit name, price, or photos..."
-                className="w-full pl-9 pr-3 py-2 bg-slate-900 border border-white/[0.15] rounded-xl text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-500/60"
+                className="w-full pl-9 pr-3 py-2 bg-[#F5F1E8] border border-black/[0.15] rounded-xl text-xs text-white placeholder:text-[#7A7A7A] focus:outline-none focus:border-[#F4511E]/60"
               />
             </div>
 
@@ -1023,7 +1023,7 @@ export const ManagerDashboard: React.FC = () => {
                   }
 
                   return (
-                    <div key={dish.id} className="bg-slate-900/90 rounded-2xl border border-white/[0.08] overflow-hidden flex flex-col justify-between group relative">
+                    <div key={dish.id} className="bg-[#F5F1E8]/90 rounded-2xl border border-black/[0.08] overflow-hidden flex flex-col justify-between group relative">
                       {/* Photo preview */}
                       <div className="relative aspect-[4/3] overflow-hidden bg-black/40">
                         <img
@@ -1032,14 +1032,14 @@ export const ManagerDashboard: React.FC = () => {
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                         <div className="absolute top-2 right-2">
-                          <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-black/80 text-amber-300 backdrop-blur-sm border border-amber-500/30">
+                          <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-black/80 text-[#FFD08A] backdrop-blur-sm border border-[#F4511E]/30">
                             {dishPhotos.length} Photos
                           </span>
                         </div>
                         {dishSaveSuccessId === dish.id && (
                           <div className="absolute inset-0 bg-emerald-950/80 backdrop-blur-xs flex items-center justify-center text-center p-2">
-                            <span className="text-xs font-bold text-emerald-300 flex items-center space-x-1">
-                              <Check className="w-4 h-4 text-emerald-400" />
+                            <span className="text-xs font-bold text-[#2F7A4F] flex items-center space-x-1">
+                              <Check className="w-4 h-4 text-[#2F7A4F]" />
                               <span>Live Menu Updated</span>
                             </span>
                           </div>
@@ -1049,39 +1049,39 @@ export const ManagerDashboard: React.FC = () => {
                       {/* Card Content: Inline Form or View */}
                       <div className="p-3 space-y-2 flex-1 flex flex-col justify-between">
                         {isEditingThisDish ? (
-                          <div className="space-y-2 bg-slate-950/80 p-2.5 rounded-xl border border-amber-500/40">
+                          <div className="space-y-2 bg-[#FFFFFF]/80 p-2.5 rounded-xl border border-[#F4511E]/40">
                             <div>
-                              <label className="text-[10px] text-amber-300 font-bold uppercase font-mono block">Dish Name</label>
+                              <label className="text-[10px] text-[#2D4A3E] font-bold uppercase font-mono block">Dish Name</label>
                               <input
                                 type="text"
                                 value={editDishDraft.name}
                                 onChange={(e) => setEditDishDraft({ ...editDishDraft, name: e.target.value })}
-                                className="w-full px-2 py-1 bg-slate-900 border border-white/[0.15] rounded-lg text-xs text-white font-bold focus:outline-none focus:border-amber-400"
+                                className="w-full px-2 py-1 bg-[#F5F1E8] border border-black/[0.15] rounded-lg text-xs text-white font-bold focus:outline-none focus:border-[#F4511E]"
                                 placeholder="Dish name"
                               />
                             </div>
 
                             <div>
-                              <label className="text-[10px] text-amber-300 font-bold uppercase font-mono block">Price (₹)</label>
-                              <div className="flex items-center bg-slate-900 border border-white/[0.15] rounded-lg px-2 py-1">
-                                <span className="text-xs text-slate-400 mr-1 font-mono">₹</span>
+                              <label className="text-[10px] text-[#2D4A3E] font-bold uppercase font-mono block">Price (₹)</label>
+                              <div className="flex items-center bg-[#F5F1E8] border border-black/[0.15] rounded-lg px-2 py-1">
+                                <span className="text-xs text-[#6E6E6E] mr-1 font-mono">₹</span>
                                 <input
                                   type="number"
                                   value={editDishDraft.price}
                                   onChange={(e) => setEditDishDraft({ ...editDishDraft, price: e.target.value })}
-                                  className="w-full bg-transparent text-xs text-white font-bold font-mono focus:outline-none"
+                                  className="w-full bg-transparent text-xs text-[#141414] font-bold font-mono focus:outline-none"
                                   placeholder="Price"
                                 />
                               </div>
                             </div>
 
                             <div>
-                              <label className="text-[10px] text-amber-300 font-bold uppercase font-mono block">Description</label>
+                              <label className="text-[10px] text-[#2D4A3E] font-bold uppercase font-mono block">Description</label>
                               <textarea
                                 rows={2}
                                 value={editDishDraft.short_description}
                                 onChange={(e) => setEditDishDraft({ ...editDishDraft, short_description: e.target.value })}
-                                className="w-full px-2 py-1 bg-slate-900 border border-white/[0.15] rounded-lg text-[11px] text-white focus:outline-none focus:border-amber-400 resize-none"
+                                className="w-full px-2 py-1 bg-[#F5F1E8] border border-black/[0.15] rounded-lg text-[11px] text-white focus:outline-none focus:border-[#F4511E] resize-none"
                                 placeholder="Short description..."
                               />
                             </div>
@@ -1100,7 +1100,7 @@ export const ManagerDashboard: React.FC = () => {
                                   setTimeout(() => setDishSaveSuccessId(null), 2500);
                                   setEditingDishId(null);
                                 }}
-                                className="flex-1 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-xs rounded-lg flex items-center justify-center space-x-1 cursor-pointer"
+                                className="flex-1 py-1.5 bg-gradient-to-r from-[#F4511E] to-[#F4511E] text-white font-bold text-xs rounded-lg flex items-center justify-center space-x-1 cursor-pointer"
                               >
                                 <Check className="w-3.5 h-3.5" />
                                 <span>Save</span>
@@ -1108,7 +1108,7 @@ export const ManagerDashboard: React.FC = () => {
                               <button
                                 type="button"
                                 onClick={() => setEditingDishId(null)}
-                                className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-lg cursor-pointer"
+                                className="px-2.5 py-1.5 bg-[#EFE9DD] hover:bg-[#E8DCC8] text-[#4A4A4A] text-xs font-semibold rounded-lg cursor-pointer"
                               >
                                 Cancel
                               </button>
@@ -1118,11 +1118,11 @@ export const ManagerDashboard: React.FC = () => {
                           <div className="space-y-2">
                             <div>
                               <div className="flex items-start justify-between gap-1">
-                                <h4 className="font-bold text-xs text-white line-clamp-1">{dish.name}</h4>
-                                <span className="text-xs font-bold text-amber-400 font-mono flex-shrink-0">₹{dish.price}</span>
+                                <h4 className="font-bold text-xs text-[#141414] line-clamp-1">{dish.name}</h4>
+                                <span className="text-xs font-bold text-[#2D4A3E] font-mono flex-shrink-0">₹{dish.price}</span>
                               </div>
                               {dish.short_description && (
-                                <p className="text-[10px] text-slate-400 line-clamp-2 mt-0.5 leading-tight">
+                                <p className="text-[10px] text-[#6E6E6E] line-clamp-2 mt-0.5 leading-tight">
                                   {dish.short_description}
                                 </p>
                               )}
@@ -1139,16 +1139,16 @@ export const ManagerDashboard: React.FC = () => {
                                     short_description: dish.short_description || ''
                                   });
                                 }}
-                                className="w-full py-1.5 bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-xs rounded-xl border border-white/[0.08] flex items-center justify-center space-x-1.5 cursor-pointer transition-colors"
+                                className="w-full py-1.5 bg-[#EFE9DD] hover:bg-[#E8DCC8] text-[#2D4A3E] font-bold text-xs rounded-xl border border-black/[0.08] flex items-center justify-center space-x-1.5 cursor-pointer transition-colors"
                               >
-                                <Edit3 className="w-3.5 h-3.5 text-amber-400" />
+                                <Edit3 className="w-3.5 h-3.5 text-[#2D4A3E]" />
                                 <span>Edit Name, Price &amp; Desc</span>
                               </button>
 
                               <button
                                 type="button"
                                 onClick={() => setPhotoStudioDish(dish)}
-                                className="w-full py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-xs rounded-xl shadow flex items-center justify-center space-x-1.5 cursor-pointer"
+                                className="w-full py-1.5 bg-gradient-to-r from-[#F4511E] to-[#F4511E] text-white font-bold text-xs rounded-xl shadow flex items-center justify-center space-x-1.5 cursor-pointer"
                               >
                                 <Upload className="w-3.5 h-3.5" />
                                 <span>Upload &amp; Manage Photos</span>
@@ -1159,8 +1159,8 @@ export const ManagerDashboard: React.FC = () => {
                                 onClick={() => toggleItemAvailability(dish.id)}
                                 className={`w-full py-1 rounded-lg text-[10px] font-semibold border transition-all cursor-pointer ${
                                   dish.is_available !== false
-                                    ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'
-                                    : 'bg-rose-500/10 text-rose-300 border-rose-500/30'
+                                    ? 'bg-emerald-500/10 text-[#2F7A4F] border-emerald-500/30'
+                                    : 'bg-rose-500/10 text-[#C23A1C] border-rose-500/30'
                                 }`}
                               >
                                 {dish.is_available !== false ? '● In Stock' : '○ Sold Out'}
@@ -1193,13 +1193,13 @@ export const ManagerDashboard: React.FC = () => {
         <div
           className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl overflow-y-auto pt-[max(env(safe-area-inset-top,20px),24px)] pb-12 px-3 sm:px-6 flex justify-center items-start overscroll-contain"
         >
-          <div className="bg-[#0D1322] rounded-3xl max-w-4xl w-full shadow-2xl p-4 sm:p-7 relative space-y-4 sm:space-y-5 border border-white/[0.12] text-white my-2 sm:my-6">
-            <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-white/[0.08] gap-2">
+          <div className="bg-[#F5F1E8] rounded-3xl max-w-4xl w-full shadow-2xl p-4 sm:p-7 relative space-y-4 sm:space-y-5 border border-black/[0.12] text-[#141414] my-2 sm:my-6">
+            <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-black/[0.08] gap-2">
               <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
                 <button
                   type="button"
                   onClick={() => setIsSmartHubModalOpen(false)}
-                  className="inline-flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-slate-200 hover:text-white font-bold text-xs border border-white/[0.1] transition-all cursor-pointer flex-shrink-0"
+                  className="inline-flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-black/[0.04] hover:bg-black/[0.04] text-[#3A3A3A] hover:text-[#141414] font-bold text-xs border border-black/[0.1] transition-all cursor-pointer flex-shrink-0"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
                   <span>Back</span>
@@ -1207,11 +1207,11 @@ export const ManagerDashboard: React.FC = () => {
                 <div className="min-w-0">
                   <div className="flex items-center space-x-1.5">
                     <span className="text-lg sm:text-2xl">⚡</span>
-                    <h3 className="font-serif font-bold text-base sm:text-xl text-white truncate">
+                    <h3 className="font-serif font-bold text-base sm:text-xl text-[#141414] truncate">
                       Smart Growth Engine
                     </h3>
                   </div>
-                  <p className="text-[10px] sm:text-xs text-slate-400 truncate hidden xs:block sm:block">
+                  <p className="text-[10px] sm:text-xs text-[#6E6E6E] truncate hidden xs:block sm:block">
                     AI chef pairings, happy hour schedules &amp; food reward incentives
                   </p>
                 </div>
@@ -1219,7 +1219,7 @@ export const ManagerDashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsSmartHubModalOpen(false)}
-                className="p-1.5 sm:p-2 rounded-full bg-white/[0.06] hover:bg-white/[0.15] text-slate-300 hover:text-white transition-colors cursor-pointer flex-shrink-0"
+                className="p-1.5 sm:p-2 rounded-full bg-black/[0.04] hover:bg-black/[0.04] text-[#4A4A4A] hover:text-[#141414] transition-colors cursor-pointer flex-shrink-0"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1227,71 +1227,71 @@ export const ManagerDashboard: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Smart Pairings */}
-              <div className="bg-slate-900/90 p-4 rounded-2xl border border-white/[0.08] space-y-3">
+              <div className="bg-[#F5F1E8]/90 p-4 rounded-2xl border border-black/[0.08] space-y-3">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-bold text-sm text-white flex items-center space-x-1.5">
-                    <Sparkles className="w-4 h-4 text-emerald-400" />
+                  <h4 className="font-bold text-sm text-[#141414] flex items-center space-x-1.5">
+                    <Sparkles className="w-4 h-4 text-[#2F7A4F]" />
                     <span>AI Chef's Cart Pairings</span>
                   </h4>
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                    isPairingsActive ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-800 text-slate-400'
+                    isPairingsActive ? 'bg-emerald-500/20 text-[#2F7A4F]' : 'bg-[#EFE9DD] text-[#6E6E6E]'
                   }`}>
                     {isPairingsActive ? 'Active in Cart' : 'Disabled'}
                   </span>
                 </div>
-                <p className="text-xs text-slate-300">
-                  Header: <strong className="text-emerald-300">{pairingsBadgeText}</strong>. Automatically suggests matching drinks &amp; desserts.
+                <p className="text-xs text-[#4A4A4A]">
+                  Header: <strong className="text-[#2F7A4F]">{pairingsBadgeText}</strong>. Automatically suggests matching drinks &amp; desserts.
                 </p>
                 <button
                   type="button"
                   onClick={() => setSmartSettingsTab('pairings')}
-                  className="w-full py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-xs rounded-xl cursor-pointer"
+                  className="w-full py-2 bg-gradient-to-r from-[#F4511E] to-[#F4511E] text-white font-bold text-xs rounded-xl cursor-pointer"
                 >
                   Configure Pairings
                 </button>
               </div>
 
               {/* Happy Hour */}
-              <div className="bg-slate-900/90 p-4 rounded-2xl border border-white/[0.08] space-y-3">
+              <div className="bg-[#F5F1E8]/90 p-4 rounded-2xl border border-black/[0.08] space-y-3">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-bold text-sm text-white flex items-center space-x-1.5">
-                    <Zap className="w-4 h-4 text-amber-400" />
+                  <h4 className="font-bold text-sm text-[#141414] flex items-center space-x-1.5">
+                    <Zap className="w-4 h-4 text-[#2D4A3E]" />
                     <span>Happy Hour &amp; Surge</span>
                   </h4>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-300">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#F4511E]/20 text-[#F4511E]">
                     {restaurant.happy_hour_config?.enabled ? `${restaurant.happy_hour_config.discount_percent}% Off` : 'Configured'}
                   </span>
                 </div>
-                <p className="text-xs text-slate-300">
+                <p className="text-xs text-[#4A4A4A]">
                   Off-peak discounts ({restaurant.happy_hour_config?.start_time || '16:00'} - {restaurant.happy_hour_config?.end_time || '19:30'}) and optional surge markup.
                 </p>
                 <button
                   type="button"
                   onClick={() => setSmartSettingsTab('happy_hour')}
-                  className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl border border-white/[0.08] cursor-pointer"
+                  className="w-full py-2 bg-[#EFE9DD] hover:bg-[#E8DCC8] text-[#141414] font-bold text-xs rounded-xl border border-black/[0.08] cursor-pointer"
                 >
                   Edit Schedule
                 </button>
               </div>
 
               {/* Rewards */}
-              <div className="bg-slate-900/90 p-4 rounded-2xl border border-white/[0.08] space-y-3 sm:col-span-2">
+              <div className="bg-[#F5F1E8]/90 p-4 rounded-2xl border border-black/[0.08] space-y-3 sm:col-span-2">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-bold text-sm text-white flex items-center space-x-1.5">
-                    <Gift className="w-4 h-4 text-purple-400" />
+                  <h4 className="font-bold text-sm text-[#141414] flex items-center space-x-1.5">
+                    <Gift className="w-4 h-4 text-[#2D4A3E]" />
                     <span>Spin Wheel &amp; Dining Food Rewards</span>
                   </h4>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#F4511E]/20 text-[#2D4A3E]">
                     High Margin Food Items
                   </span>
                 </div>
-                <p className="text-xs text-slate-300">
+                <p className="text-xs text-[#4A4A4A]">
                   Rewarding diners with artisan mocktails and chef desserts preserves 90%+ margins while driving 5-star Google review completions.
                 </p>
                 <button
                   type="button"
                   onClick={() => setSmartSettingsTab('rewards')}
-                  className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl border border-white/[0.08] cursor-pointer"
+                  className="w-full py-2 bg-[#EFE9DD] hover:bg-[#E8DCC8] text-[#141414] font-bold text-xs rounded-xl border border-black/[0.08] cursor-pointer"
                 >
                   Edit Rewards Policy
                 </button>
@@ -1308,13 +1308,13 @@ export const ManagerDashboard: React.FC = () => {
         <div
           className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl overflow-y-auto pt-[max(env(safe-area-inset-top,20px),24px)] pb-12 px-3 sm:px-6 flex justify-center items-start overscroll-contain"
         >
-          <div className="bg-[#0D1322] rounded-3xl max-w-4xl w-full shadow-2xl p-4 sm:p-7 relative space-y-4 sm:space-y-5 border border-white/[0.12] text-white my-2 sm:my-6">
-            <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-white/[0.08] gap-2">
+          <div className="bg-[#F5F1E8] rounded-3xl max-w-4xl w-full shadow-2xl p-4 sm:p-7 relative space-y-4 sm:space-y-5 border border-black/[0.12] text-[#141414] my-2 sm:my-6">
+            <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-black/[0.08] gap-2">
               <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
                 <button
                   type="button"
                   onClick={() => setIsPosModalOpen(false)}
-                  className="inline-flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-slate-200 hover:text-white font-bold text-xs border border-white/[0.1] transition-all cursor-pointer flex-shrink-0"
+                  className="inline-flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-black/[0.04] hover:bg-black/[0.04] text-[#3A3A3A] hover:text-[#141414] font-bold text-xs border border-black/[0.1] transition-all cursor-pointer flex-shrink-0"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
                   <span>Back</span>
@@ -1322,27 +1322,27 @@ export const ManagerDashboard: React.FC = () => {
                 <div className="min-w-0">
                   <div className="flex items-center space-x-1.5">
                     <span className="text-lg sm:text-2xl">🖨️</span>
-                    <h3 className="font-serif font-bold text-base sm:text-xl text-white truncate">
+                    <h3 className="font-serif font-bold text-base sm:text-xl text-[#141414] truncate">
                       Kitchen &amp; POS Sync
                     </h3>
                   </div>
-                  <p className="text-[10px] sm:text-xs text-slate-400 truncate hidden xs:block sm:block">
+                  <p className="text-[10px] sm:text-xs text-[#6E6E6E] truncate hidden xs:block sm:block">
                     Switch POS adapters, configure credentials &amp; USB KOT printer
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setIsPosModalOpen(false)}
-                className="p-1.5 sm:p-2 rounded-full bg-white/[0.06] hover:bg-white/[0.15] text-slate-300 hover:text-white transition-colors cursor-pointer flex-shrink-0"
+                className="p-1.5 sm:p-2 rounded-full bg-black/[0.04] hover:bg-black/[0.04] text-[#4A4A4A] hover:text-[#141414] transition-colors cursor-pointer flex-shrink-0"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div>
-              <span className="text-[10px] uppercase font-mono font-bold tracking-widest text-amber-400">Kitchen &amp; Billing Sync</span>
-              <h3 className="text-lg sm:text-xl font-bold font-serif text-white mt-0.5">Select POS System Adapter</h3>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <span className="text-[10px] uppercase font-mono font-bold tracking-widest text-[#2D4A3E]">Kitchen &amp; Billing Sync</span>
+              <h3 className="text-lg sm:text-xl font-bold font-serif text-[#141414] mt-0.5">Select POS System Adapter</h3>
+              <p className="text-xs text-[#6E6E6E] mt-0.5">
                 Switch adapters, configure connection credentials, and simulate live KOT dispatch.
               </p>
 
@@ -1362,15 +1362,15 @@ export const ManagerDashboard: React.FC = () => {
                     }}
                     className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
                       selectedPosTab === prov.id
-                        ? 'bg-amber-500/15 border-amber-500/40 ring-1 ring-amber-400/40 text-amber-300'
-                        : 'bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.06] text-slate-300'
+                        ? 'bg-[#F4511E]/15 border-[#F4511E]/40 ring-1 ring-[#F4511E]/40 text-[#2D4A3E]'
+                        : 'bg-black/[0.04] border-black/[0.08] hover:bg-black/[0.04] text-[#4A4A4A]'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-0.5">
-                      <span className="text-xs font-bold text-white">{prov.name}</span>
-                      <span className="text-[8px] uppercase px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 font-bold font-mono">{prov.tag}</span>
+                      <span className="text-xs font-bold text-[#141414]">{prov.name}</span>
+                      <span className="text-[8px] uppercase px-1 py-0.2 rounded bg-[#F4511E]/20 text-[#2D4A3E] font-bold font-mono">{prov.tag}</span>
                     </div>
-                    <p className="text-[10px] text-slate-400 truncate">{prov.desc}</p>
+                    <p className="text-[10px] text-[#6E6E6E] truncate">{prov.desc}</p>
                   </button>
                 ))}
               </div>
@@ -1414,13 +1414,13 @@ export const ManagerDashboard: React.FC = () => {
         <div
           className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl overflow-y-auto pt-[max(env(safe-area-inset-top,20px),24px)] pb-12 px-3 sm:px-6 flex justify-center items-start overscroll-contain"
         >
-          <div className="bg-[#0D1322] rounded-3xl max-w-3xl w-full shadow-2xl p-4 sm:p-7 relative space-y-4 sm:space-y-5 border border-white/[0.12] text-white my-2 sm:my-6">
-            <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-white/[0.08] gap-2">
+          <div className="bg-[#F5F1E8] rounded-3xl max-w-3xl w-full shadow-2xl p-4 sm:p-7 relative space-y-4 sm:space-y-5 border border-black/[0.12] text-[#141414] my-2 sm:my-6">
+            <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-black/[0.08] gap-2">
               <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
                 <button
                   type="button"
                   onClick={() => setIsSettingsModalOpen(false)}
-                  className="inline-flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-slate-200 hover:text-white font-bold text-xs border border-white/[0.1] transition-all cursor-pointer flex-shrink-0"
+                  className="inline-flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-black/[0.04] hover:bg-black/[0.04] text-[#3A3A3A] hover:text-[#141414] font-bold text-xs border border-black/[0.1] transition-all cursor-pointer flex-shrink-0"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
                   <span>Back</span>
@@ -1428,11 +1428,11 @@ export const ManagerDashboard: React.FC = () => {
                 <div className="min-w-0">
                   <div className="flex items-center space-x-1.5">
                     <span className="text-lg sm:text-2xl">⚙️</span>
-                    <h3 className="font-serif font-bold text-base sm:text-xl text-white truncate">
+                    <h3 className="font-serif font-bold text-base sm:text-xl text-[#141414] truncate">
                       Venue Settings
                     </h3>
                   </div>
-                  <p className="text-[10px] sm:text-xs text-slate-400 truncate hidden xs:block sm:block">
+                  <p className="text-[10px] sm:text-xs text-[#6E6E6E] truncate hidden xs:block sm:block">
                     Launch kit, table layout &amp; venue offboarding
                   </p>
                 </div>
@@ -1440,7 +1440,7 @@ export const ManagerDashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsSettingsModalOpen(false)}
-                className="p-1.5 sm:p-2 rounded-full bg-white/[0.06] hover:bg-white/[0.15] text-slate-300 hover:text-white transition-colors cursor-pointer flex-shrink-0"
+                className="p-1.5 sm:p-2 rounded-full bg-black/[0.04] hover:bg-black/[0.04] text-[#4A4A4A] hover:text-[#141414] transition-colors cursor-pointer flex-shrink-0"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1450,42 +1450,42 @@ export const ManagerDashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsLaunchKitOpen(true)}
-                className="p-4 rounded-2xl bg-slate-900 border border-white/[0.08] hover:border-amber-500/40 text-left transition-all space-y-2 cursor-pointer"
+                className="p-4 rounded-2xl bg-[#F5F1E8] border border-black/[0.08] hover:border-[#F4511E]/40 text-left transition-all space-y-2 cursor-pointer"
               >
-                <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+                <div className="w-10 h-10 rounded-xl bg-[#F4511E]/10 border border-[#F4511E]/20 flex items-center justify-center text-[#2D4A3E]">
                   <Share2 className="w-5 h-5" />
                 </div>
-                <h4 className="font-bold text-sm text-white">📲 Guest Links &amp; Handover</h4>
-                <p className="text-[11px] text-slate-400">WhatsApp handover &amp; direct diner URLs.</p>
+                <h4 className="font-bold text-sm text-[#141414]">📲 Guest Links &amp; Handover</h4>
+                <p className="text-[11px] text-[#6E6E6E]">WhatsApp handover &amp; direct diner URLs.</p>
               </button>
 
               <button
                 type="button"
                 onClick={() => setIsTableModalOpen(true)}
-                className="p-4 rounded-2xl bg-slate-900 border border-white/[0.08] hover:border-emerald-500/40 text-left transition-all space-y-2 cursor-pointer"
+                className="p-4 rounded-2xl bg-[#F5F1E8] border border-black/[0.08] hover:border-emerald-500/40 text-left transition-all space-y-2 cursor-pointer"
               >
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-[#2F7A4F]">
                   <Layers className="w-5 h-5" />
                 </div>
-                <h4 className="font-bold text-sm text-white">🪑 Floor Plan &amp; Tables</h4>
-                <p className="text-[11px] text-slate-400">Edit table names, capacities &amp; tokens.</p>
+                <h4 className="font-bold text-sm text-[#141414]">🪑 Floor Plan &amp; Tables</h4>
+                <p className="text-[11px] text-[#6E6E6E]">Edit table names, capacities &amp; tokens.</p>
               </button>
             </div>
 
-            <div className="pt-4 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-3">
+            <div className="pt-4 border-t border-black/[0.08] flex flex-wrap items-center justify-between gap-3">
               <button
                 type="button"
                 onClick={resetToDefaults}
-                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl text-xs font-bold transition-colors cursor-pointer flex items-center space-x-1.5 border border-white/[0.08]"
+                className="px-4 py-2 bg-[#EFE9DD] hover:bg-[#E8DCC8] text-[#4A4A4A] hover:text-[#141414] rounded-xl text-xs font-bold transition-colors cursor-pointer flex items-center space-x-1.5 border border-black/[0.08]"
               >
-                <RefreshCw className="w-3.5 h-3.5 text-slate-400" />
+                <RefreshCw className="w-3.5 h-3.5 text-[#6E6E6E]" />
                 <span>Reset Venue to Factory Defaults</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setIsOffboardModalOpen(true)}
-                className="px-4 py-2 bg-rose-500/10 hover:bg-rose-600 text-rose-400 hover:text-white border border-rose-500/20 hover:border-rose-600 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5"
+                className="px-4 py-2 bg-rose-500/10 hover:bg-rose-600 text-[#C23A1C] hover:text-white border border-rose-500/20 hover:border-rose-600 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5"
               >
                 <span>Offboard {restaurant.name}</span>
               </button>
@@ -1497,15 +1497,15 @@ export const ManagerDashboard: React.FC = () => {
       {/* ── Sub-Modals ────────────────────────────────────────────── */}
       {isOffboardModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-[#0D1322] rounded-3xl max-w-md w-full p-6 shadow-2xl border border-white/[0.1] text-center space-y-4">
-            <div className="w-14 h-14 mx-auto rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
+          <div className="bg-[#F5F1E8] rounded-3xl max-w-md w-full p-6 shadow-2xl border border-black/[0.1] text-center space-y-4">
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-[#C23A1C]">
               <Building2 className="w-7 h-7" />
             </div>
             <div>
-              <h3 className="font-serif text-xl font-bold text-white">
+              <h3 className="font-serif text-xl font-bold text-[#141414]">
                 Offboard {restaurant.name}?
               </h3>
-              <p className="text-xs text-slate-300 mt-2 leading-relaxed">
+              <p className="text-xs text-[#4A4A4A] mt-2 leading-relaxed">
                 This will offboard <strong>{restaurant.name}</strong> from your active operational venues hub.
               </p>
             </div>
@@ -1513,7 +1513,7 @@ export const ManagerDashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsOffboardModalOpen(false)}
-                className="px-4 py-2.5 rounded-xl border border-white/[0.08] text-slate-300 hover:bg-white/[0.06] text-xs font-semibold transition-colors cursor-pointer"
+                className="px-4 py-2.5 rounded-xl border border-black/[0.08] text-[#4A4A4A] hover:bg-black/[0.04] text-xs font-semibold transition-colors cursor-pointer"
               >
                 Cancel
               </button>
@@ -1603,19 +1603,19 @@ export const ManagerDashboard: React.FC = () => {
       {/* Partner Outlet Switcher Modal */}
       {isOutletSwitchModalOpen && (
         <div className="fixed inset-0 z-[9999] bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-150">
-          <div className="bg-[#0D1424] border border-white/[0.12] rounded-3xl max-w-xl w-full p-5 sm:p-6 text-white space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+          <div className="bg-[#FFFFFF] border border-black/[0.12] rounded-3xl max-w-xl w-full p-5 sm:p-6 text-[#141414] space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between pb-3 border-b border-black/[0.08]">
               <div className="flex items-center space-x-2.5">
-                <Building2 className="w-5 h-5 text-amber-400" />
+                <Building2 className="w-5 h-5 text-[#2D4A3E]" />
                 <div>
-                  <h3 className="font-serif font-bold text-lg text-white">Your Partner Outlets</h3>
-                  <p className="text-xs text-slate-400">Select an outlet to switch active floor operations</p>
+                  <h3 className="font-serif font-bold text-lg text-[#141414]">Your Partner Outlets</h3>
+                  <p className="text-xs text-[#6E6E6E]">Select an outlet to switch active floor operations</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setIsOutletSwitchModalOpen(false)}
-                className="p-1.5 rounded-full text-slate-400 hover:text-white hover:bg-white/[0.08] cursor-pointer"
+                className="p-1.5 rounded-full text-[#6E6E6E] hover:text-[#141414] hover:bg-black/[0.04] cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1636,12 +1636,12 @@ export const ManagerDashboard: React.FC = () => {
                     }}
                     className={`w-full p-3.5 rounded-2xl border text-left transition-all flex items-center justify-between group cursor-pointer ${
                       isCurrent
-                        ? 'bg-amber-500/15 border-amber-500/50 shadow-md'
-                        : 'bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.08] hover:border-white/[0.2]'
+                        ? 'bg-[#F4511E]/15 border-[#F4511E]/50 shadow-md'
+                        : 'bg-black/[0.04] border-black/[0.08] hover:bg-black/[0.04] hover:border-black/[0.2]'
                     }`}
                   >
                     <div className="flex items-center space-x-3 min-w-0">
-                      <div className="w-10 h-10 rounded-xl overflow-hidden bg-slate-800 flex-shrink-0">
+                      <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#EFE9DD] flex-shrink-0">
                         <img
                           src={r.logo_url || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200'}
                           alt={r.name}
@@ -1650,35 +1650,35 @@ export const ManagerDashboard: React.FC = () => {
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center space-x-2">
-                          <h4 className="font-bold text-sm text-white group-hover:text-amber-300 transition-colors truncate">
+                          <h4 className="font-bold text-sm text-[#141414] group-hover:text-[#2D4A3E] transition-colors truncate">
                             {r.name}
                           </h4>
                           {isCurrent && (
-                            <span className="text-[10px] bg-amber-500 text-slate-950 font-bold px-1.5 py-0.2 rounded-full">
+                            <span className="text-[10px] bg-[#F4511E] text-[#FFFFFF] font-bold px-1.5 py-0.2 rounded-full">
                               Active
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-slate-400 truncate">{r.cuisine} • {r.location || 'Pune'}</p>
+                        <p className="text-xs text-[#6E6E6E] truncate">{r.cuisine} • {r.location || 'Pune'}</p>
                       </div>
                     </div>
 
                     <div className="flex items-center space-x-2 flex-shrink-0">
-                      <span className="text-[11px] text-slate-400 font-mono">
+                      <span className="text-[11px] text-[#6E6E6E] font-mono">
                         {rTables.length} tables
                       </span>
-                      <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all" />
+                      <ChevronRight className="w-4 h-4 text-[#7A7A7A] group-hover:text-[#2D4A3E] group-hover:translate-x-0.5 transition-all" />
                     </div>
                   </button>
                 );
               })}
             </div>
 
-            <div className="pt-2 border-t border-white/[0.08] flex items-center justify-between">
+            <div className="pt-2 border-t border-black/[0.08] flex items-center justify-between">
               <Link
                 to="/ai-studio"
                 onClick={() => setIsOutletSwitchModalOpen(false)}
-                className="text-xs text-emerald-400 hover:text-emerald-300 font-bold flex items-center space-x-1"
+                className="text-xs text-[#2F7A4F] hover:text-[#2F7A4F] font-bold flex items-center space-x-1"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Onboard New Restaurant Outlet</span>
@@ -1687,7 +1687,7 @@ export const ManagerDashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsOutletSwitchModalOpen(false)}
-                className="px-4 py-2 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-xs font-semibold text-slate-300 hover:text-white transition-colors cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-black/[0.04] hover:bg-black/[0.04] text-xs font-semibold text-[#4A4A4A] hover:text-[#141414] transition-colors cursor-pointer"
               >
                 Close
               </button>

@@ -373,7 +373,7 @@ interface BillConsequence {
 const BILL_CONSEQUENCES_BY_DIFFICULTY: Record<ArcadeDifficulty, BillConsequence[]> = {
   // 🟢 EASY (Kids & Family Mode - Fun Table Dares)
   easy: [
-    { text: '🦁 Must roar like a lion for 5 full seconds!', color: '#F59E0B', icon: '🦁', tag: 'Silly Roar' },
+    { text: '🦁 Must roar like a lion for 5 full seconds!', color: '#2D4A3E', icon: '🦁', tag: 'Silly Roar' },
     { text: '🎤 Must sing the chorus of a cartoon or Disney song!', color: '#3B82F6', icon: '🎤', tag: 'Star Performer' },
     { text: '🤸 Must do 5 silly jumping jacks beside the table!', color: '#10B981', icon: '🤸', tag: 'Table Fitness' },
     { text: '💖 Must give everyone at the table a sweet compliment!', color: '#EC4899', icon: '💖', tag: 'Kind Heart' },
@@ -386,15 +386,15 @@ const BILL_CONSEQUENCES_BY_DIFFICULTY: Record<ArcadeDifficulty, BillConsequence[
     { text: '📸 Must snap and post the official table group selfie!', color: '#8B5CF6', icon: '📸', tag: 'Official Photographer' },
     { text: '🥤 Treats the table to the next round of soft drinks or mocktails!', color: '#3B82F6', icon: '🥤', tag: 'Beverage Sponsor' },
     { text: '🕺 Must do a 10-second funny table dance in their seat!', color: '#EC4899', icon: '🕺', tag: 'Groove Master' },
-    { text: '🗣️ Must speak in a fancy accent until the food arrives!', color: '#F59E0B', icon: '🗣️', tag: 'Voice Actor' },
-    { text: '🍟 Must share half of their fries or appetizer with the table!', color: '#EF4444', icon: '🍟', tag: 'Generous Friend' },
+    { text: '🗣️ Must speak in a fancy accent until the food arrives!', color: '#2D4A3E', icon: '🗣️', tag: 'Voice Actor' },
+    { text: '🍟 Must share half of their fries or appetizer with the table!', color: '#F4511E', icon: '🍟', tag: 'Generous Friend' },
     { text: '🛡️ 100% Free Pass (Immune from all table forfeits today)!', color: '#10B981', icon: '🛡️', tag: 'Immunity Shield' },
   ],
 
   // 🔴 HARD (Adults - Real Dining Bill & Bar Stakes)
   hard: [
-    { text: '💳 Pays the ENTIRE dining bill for the table!', color: '#EF4444', icon: '💳', tag: 'Hero of the Table' },
-    { text: '🍰 Sponsors all desserts and post-dinner coffees!', color: '#F59E0B', icon: '🍰', tag: 'Sweet Tooth Sponsor' },
+    { text: '💳 Pays the ENTIRE dining bill for the table!', color: '#F4511E', icon: '💳', tag: 'Hero of the Table' },
+    { text: '🍰 Sponsors all desserts and post-dinner coffees!', color: '#2D4A3E', icon: '🍰', tag: 'Sweet Tooth Sponsor' },
     { text: '🍺 Covers the craft beers, wine, and bar beverage tab!', color: '#3B82F6', icon: '🍺', tag: 'Bar Host' },
     { text: '💵 Covers the 20% server gratuity & table service charge!', color: '#10B981', icon: '💵', tag: 'Tipping Champion' },
     { text: '🍽️ Must host/treat everyone to next weekend’s dinner outing!', color: '#8B5CF6', icon: '🍽️', tag: 'Future Host' },
@@ -768,29 +768,29 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-      <div className="w-full max-w-4xl max-h-[94vh] bg-[#161517] border border-white/10 rounded-3xl shadow-2xl flex flex-col overflow-hidden text-[#e5e1e4]">
+      <div className="w-full max-w-4xl max-h-[94vh] bg-[#F5F1E8] border border-black/10 rounded-3xl shadow-2xl flex flex-col overflow-hidden text-[#141414]">
         
         {/* Header Bar */}
-        <div className="px-4 sm:px-6 py-3.5 bg-[#131315] border-b border-white/10 flex items-center justify-between">
+        <div className="px-4 sm:px-6 py-3.5 bg-[#FFFFFF] border-b border-black/10 flex items-center justify-between">
           <div className="flex items-center space-x-2.5">
-            <div className="w-9 h-9 rounded-xl bg-[#ff5722] flex items-center justify-center text-white font-black shadow-xs">
-              <Gamepad2 className="w-5 h-5 text-white" />
+            <div className="w-9 h-9 rounded-xl bg-[#F4511E] flex items-center justify-center text-white font-black shadow-xs">
+              <Gamepad2 className="w-5 h-5 text-[#141414]" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <h3 className="font-serif font-black text-base sm:text-lg text-[#924E00]">Table Arcade</h3>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#F9A620]/15 text-[#924E00] border border-[#F9A620]/30">
+                <h3 className="font-serif font-black text-base sm:text-lg text-[#2D4A3E]">Table Arcade</h3>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#F4511E]/15 text-[#2D4A3E] border border-[#F4511E]/30">
                   {tableLabel}
                 </span>
               </div>
-              <p className="text-[11px] text-[#924E00]/70">Play while waiting for your order • {restaurantName}</p>
+              <p className="text-[11px] text-[#2D4A3E]/70">Play while waiting for your order • {restaurantName}</p>
             </div>
           </div>
 
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-xl bg-[#924E00]/5 hover:bg-[#924E00]/10 text-[#924E00]/60 hover:text-[#924E00] transition-all cursor-pointer"
+            className="p-2 rounded-xl bg-[#2D4A3E]/5 hover:bg-[#2D4A3E]/10 text-[#2D4A3E]/60 hover:text-[#2D4A3E] transition-all cursor-pointer"
             title="Close Games"
           >
             <X className="w-5 h-5" />
@@ -800,15 +800,15 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
         {/* ═══════════════════════════════════════════════════════════ */}
         {/* UNIVERSAL DIFFICULTY SELECTOR                             */}
         {/* ═══════════════════════════════════════════════════════════ */}
-        <div className="px-4 sm:px-6 py-2.5 bg-[#FFF2D6] border-b border-[#924E00]/10 flex items-center justify-center">
-          <div className="flex items-center space-x-1.5 bg-white/80 p-1 rounded-xl border border-[#924E00]/15">
+        <div className="px-4 sm:px-6 py-2.5 bg-[#FFF2D6] border-b border-[#2D4A3E]/10 flex items-center justify-center">
+          <div className="flex items-center space-x-1.5 bg-black/[0.48] p-1 rounded-xl border border-[#2D4A3E]/15">
             <button
               type="button"
               onClick={() => setDifficulty('easy')}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 difficulty === 'easy'
                   ? 'bg-emerald-600 text-white font-black shadow-xs'
-                  : 'text-[#924E00]/70 hover:text-[#924E00] hover:bg-white'
+                  : 'text-[#2D4A3E]/70 hover:text-[#2D4A3E] hover:bg-white'
               }`}
             >
               Easy
@@ -819,8 +819,8 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
               onClick={() => setDifficulty('medium')}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 difficulty === 'medium'
-                  ? 'bg-[#F9A620] text-white font-black shadow-xs'
-                  : 'text-[#924E00]/70 hover:text-[#924E00] hover:bg-white'
+                  ? 'bg-[#F4511E] text-white font-black shadow-xs'
+                  : 'text-[#2D4A3E]/70 hover:text-[#2D4A3E] hover:bg-white'
               }`}
             >
               Medium
@@ -832,7 +832,7 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 difficulty === 'hard'
                   ? 'bg-rose-600 text-white font-black shadow-xs'
-                  : 'text-[#924E00]/70 hover:text-[#924E00] hover:bg-white'
+                  : 'text-[#2D4A3E]/70 hover:text-[#2D4A3E] hover:bg-white'
               }`}
             >
               Hard
@@ -841,14 +841,14 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
         </div>
 
         {/* Tab Navigation */}
-        <div className="px-3 sm:px-6 py-2 bg-[#18171a] border-b border-white/10 flex items-center space-x-1 sm:space-x-2 overflow-x-auto scrollbar-none">
+        <div className="px-3 sm:px-6 py-2 bg-[#F5F1E8] border-b border-black/10 flex items-center space-x-1 sm:space-x-2 overflow-x-auto scrollbar-none">
           <button
             type="button"
             onClick={() => setActiveTab('solitaire')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 cursor-pointer ${
               activeTab === 'solitaire'
-                ? 'bg-[#F9A620] text-white shadow-xs font-black'
-                : 'text-[#924E00]/70 hover:text-[#924E00] hover:bg-white'
+                ? 'bg-[#F4511E] text-white shadow-xs font-black'
+                : 'text-[#2D4A3E]/70 hover:text-[#2D4A3E] hover:bg-white'
             }`}
           >
             <span>♠️</span>
@@ -860,8 +860,8 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
             onClick={() => setActiveTab('crossword')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 cursor-pointer ${
               activeTab === 'crossword'
-                ? 'bg-[#F9A620] text-white shadow-xs font-black'
-                : 'text-[#924E00]/70 hover:text-[#924E00] hover:bg-white'
+                ? 'bg-[#F4511E] text-white shadow-xs font-black'
+                : 'text-[#2D4A3E]/70 hover:text-[#2D4A3E] hover:bg-white'
             }`}
           >
             <span>✍️</span>
@@ -873,8 +873,8 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
             onClick={() => setActiveTab('trivia')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 cursor-pointer ${
               activeTab === 'trivia'
-                ? 'bg-[#F9A620] text-white shadow-xs font-black'
-                : 'text-[#924E00]/70 hover:text-[#924E00] hover:bg-white'
+                ? 'bg-[#F4511E] text-white shadow-xs font-black'
+                : 'text-[#2D4A3E]/70 hover:text-[#2D4A3E] hover:bg-white'
             }`}
           >
             <Users className="w-3.5 h-3.5" />
@@ -886,8 +886,8 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
             onClick={() => setActiveTab('billRoulette')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 cursor-pointer ${
               activeTab === 'billRoulette'
-                ? 'bg-[#F9A620] text-white shadow-xs font-black'
-                : 'text-[#924E00]/70 hover:text-[#924E00] hover:bg-white'
+                ? 'bg-[#F4511E] text-white shadow-xs font-black'
+                : 'text-[#2D4A3E]/70 hover:text-[#2D4A3E] hover:bg-white'
             }`}
           >
             <Dices className="w-3.5 h-3.5" />
@@ -904,26 +904,26 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
           {activeTab === 'solitaire' && (
             <div className="space-y-4">
               {/* Solitaire Control Bar */}
-              <div className="flex flex-wrap items-center justify-between gap-2 p-3 bg-slate-900/80 rounded-2xl border border-white/[0.06]">
+              <div className="flex flex-wrap items-center justify-between gap-2 p-3 bg-[#F5F1E8]/80 rounded-2xl border border-black/[0.06]">
                 <div className="flex items-center space-x-4 text-xs font-mono">
                   <div className="flex items-center space-x-1.5">
-                    <Clock className="w-3.5 h-3.5 text-amber-400" />
+                    <Clock className="w-3.5 h-3.5 text-[#2D4A3E]" />
                     <span>{Math.floor(solitaireTimer / 60)}:{String(solitaireTimer % 60).padStart(2, '0')}</span>
                   </div>
-                  <div>Moves: <span className="text-white font-bold">{solitaire.moves}</span></div>
-                  <div>Score: <span className="text-amber-400 font-bold">{solitaire.score}</span></div>
-                  <div className="hidden sm:inline text-slate-400">
-                    Mode: <span className="text-emerald-300 font-bold">{difficulty === 'easy' ? 'Draw 1' : 'Draw 3'}</span>
-                    {difficulty === 'hard' && <span className="text-rose-400 ml-1">({3 - solitaireDeckPasses} passes left)</span>}
+                  <div>Moves: <span className="text-[#141414] font-bold">{solitaire.moves}</span></div>
+                  <div>Score: <span className="text-[#2D4A3E] font-bold">{solitaire.score}</span></div>
+                  <div className="hidden sm:inline text-[#6E6E6E]">
+                    Mode: <span className="text-[#2F7A4F] font-bold">{difficulty === 'easy' ? 'Draw 1' : 'Draw 3'}</span>
+                    {difficulty === 'hard' && <span className="text-[#C23A1C] ml-1">({3 - solitaireDeckPasses} passes left)</span>}
                   </div>
                 </div>
 
                 <button
                   type="button"
                   onClick={resetSolitaireGame}
-                  className="px-3 py-1.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/[0.1] text-xs font-bold text-slate-200 hover:text-white flex items-center space-x-1.5 transition-all cursor-pointer"
+                  className="px-3 py-1.5 rounded-xl bg-black/[0.04] hover:bg-black/[0.04] border border-black/[0.1] text-xs font-bold text-[#3A3A3A] hover:text-[#141414] flex items-center space-x-1.5 transition-all cursor-pointer"
                 >
-                  <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
+                  <RotateCcw className="w-3.5 h-3.5 text-[#2D4A3E]" />
                   <span>New Deal</span>
                 </button>
               </div>
@@ -935,18 +935,18 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                   onClick={handleStockClick}
                   className={`aspect-[2/3] rounded-xl border-2 flex items-center justify-center cursor-pointer transition-transform active:scale-95 select-none ${
                     solitaire.stock.length > 0
-                      ? 'bg-gradient-to-br from-indigo-900 to-slate-950 border-indigo-500 shadow-md'
-                      : 'bg-black/30 border-dashed border-slate-700 hover:border-slate-500'
+                      ? 'bg-gradient-to-br from-[#2D4A3E] to-[#FFFFFF] border-[#F4511E] shadow-md'
+                      : 'bg-black/30 border-dashed border-[#E3E0DA] hover:border-slate-500'
                   }`}
                   title="Click to deal cards"
                 >
                   {solitaire.stock.length > 0 ? (
                     <div className="text-center">
-                      <span className="text-xs sm:text-sm font-bold text-indigo-300">🂠</span>
-                      <span className="text-[10px] block text-indigo-300 font-mono">{solitaire.stock.length}</span>
+                      <span className="text-xs sm:text-sm font-bold text-[#2D4A3E]">🂠</span>
+                      <span className="text-[10px] block text-[#2D4A3E] font-mono">{solitaire.stock.length}</span>
                     </div>
                   ) : (
-                    <RotateCcw className="w-4 h-4 text-slate-500" />
+                    <RotateCcw className="w-4 h-4 text-[#7A7A7A]" />
                   )}
                 </div>
 
@@ -955,13 +955,13 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                   onClick={() => handleCardTap('waste')}
                   className={`aspect-[2/3] rounded-xl border flex items-center justify-center transition-all select-none ${
                     solitaire.waste.length > 0
-                      ? 'bg-white text-slate-950 border-slate-300 shadow-md cursor-pointer hover:ring-2 hover:ring-amber-400'
-                      : 'bg-black/20 border-dashed border-slate-800'
+                      ? 'bg-white text-[#141414] border-slate-300 shadow-md cursor-pointer hover:ring-2 hover:ring-[#F4511E]'
+                      : 'bg-black/20 border-dashed border-[#E3E0DA]'
                   }`}
                 >
                   {solitaire.waste.length > 0 && (
                     <div className="text-center">
-                      <div className={`text-xs sm:text-base font-black ${solitaire.waste[solitaire.waste.length - 1].color === 'red' ? 'text-rose-600' : 'text-slate-950'}`}>
+                      <div className={`text-xs sm:text-base font-black ${solitaire.waste[solitaire.waste.length - 1].color === 'red' ? 'text-rose-600' : 'text-[#141414]'}`}>
                         {getRankLabel(solitaire.waste[solitaire.waste.length - 1].rank)}
                       </div>
                       <div className="text-xs sm:text-sm">{solitaire.waste[solitaire.waste.length - 1].suit}</div>
@@ -982,13 +982,13 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                       key={`foundation-${fIdx}`}
                       className={`aspect-[2/3] rounded-xl border flex items-center justify-center select-none ${
                         top
-                          ? 'bg-white text-slate-950 border-slate-300 shadow-md'
-                          : 'bg-black/30 border-dashed border-slate-700'
+                          ? 'bg-white text-[#141414] border-slate-300 shadow-md'
+                          : 'bg-black/30 border-dashed border-[#E3E0DA]'
                       }`}
                     >
                       {top ? (
                         <div className="text-center">
-                          <div className={`text-xs sm:text-base font-black ${top.color === 'red' ? 'text-rose-600' : 'text-slate-950'}`}>
+                          <div className={`text-xs sm:text-base font-black ${top.color === 'red' ? 'text-rose-600' : 'text-[#141414]'}`}>
                             {getRankLabel(top.rank)}
                           </div>
                           <div className="text-xs sm:text-sm">{top.suit}</div>
@@ -1006,7 +1006,7 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                 {solitaire.tableau.map((col, colIdx) => (
                   <div key={`col-${colIdx}`} className="relative min-h-[180px] flex flex-col items-center">
                     {col.length === 0 ? (
-                      <div className="w-full aspect-[2/3] rounded-xl border border-dashed border-slate-800 bg-black/20" />
+                      <div className="w-full aspect-[2/3] rounded-xl border border-dashed border-[#E3E0DA] bg-black/20" />
                     ) : (
                       col.map((card, cardIdx) => {
                         const isTop = cardIdx === col.length - 1;
@@ -1017,13 +1017,13 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                             style={{ marginTop: cardIdx === 0 ? 0 : -28 }}
                             className={`w-full aspect-[2/3] rounded-xl border transition-all select-none ${
                               card.faceUp
-                                ? 'bg-white text-slate-950 border-slate-300 shadow-sm cursor-pointer hover:ring-2 hover:ring-amber-400'
-                                : 'bg-gradient-to-br from-indigo-900 to-slate-950 border-indigo-700/60'
+                                ? 'bg-white text-[#141414] border-slate-300 shadow-sm cursor-pointer hover:ring-2 hover:ring-[#F4511E]'
+                                : 'bg-gradient-to-br from-[#2D4A3E] to-[#FFFFFF] border-[#F4511E]/60'
                             }`}
                           >
                             {card.faceUp ? (
                               <div className="p-1">
-                                <div className={`text-[10px] sm:text-xs font-black leading-none ${card.color === 'red' ? 'text-rose-600' : 'text-slate-950'}`}>
+                                <div className={`text-[10px] sm:text-xs font-black leading-none ${card.color === 'red' ? 'text-rose-600' : 'text-[#141414]'}`}>
                                   {getRankLabel(card.rank)} {card.suit}
                                 </div>
                               </div>
@@ -1039,10 +1039,10 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
               </div>
 
               {solitaire.won && (
-                <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-500/20 to-amber-500/20 border border-emerald-500 text-center space-y-2 animate-bounce">
-                  <Trophy className="w-10 h-10 text-amber-400 mx-auto" />
-                  <h4 className="text-lg font-black text-white">SOLITAIRE VICTORY!</h4>
-                  <p className="text-xs text-slate-200">You cleared the table in {solitaire.moves} moves!</p>
+                <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-500/20 to-[#F4511E]/20 border border-emerald-500 text-center space-y-2 animate-bounce">
+                  <Trophy className="w-10 h-10 text-[#2D4A3E] mx-auto" />
+                  <h4 className="text-lg font-black text-[#141414]">SOLITAIRE VICTORY!</h4>
+                  <p className="text-xs text-[#3A3A3A]">You cleared the table in {solitaire.moves} moves!</p>
                 </div>
               )}
             </div>
@@ -1054,24 +1054,24 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
           {activeTab === 'crossword' && (
             <div className="space-y-4">
               {/* Puzzle Header & Controls */}
-              <div className="flex flex-wrap items-center justify-between gap-2 p-3 bg-slate-900/80 rounded-2xl border border-white/[0.06]">
+              <div className="flex flex-wrap items-center justify-between gap-2 p-3 bg-[#F5F1E8]/80 rounded-2xl border border-black/[0.06]">
                 <div>
                   <div className="flex items-center space-x-2">
-                    <h4 className="font-bold text-sm text-white">{curPuzzle.title}</h4>
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                    <h4 className="font-bold text-sm text-[#141414]">{curPuzzle.title}</h4>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#F4511E]/20 text-[#2D4A3E] border border-[#F4511E]/40">
                       {curPuzzle.ageLabel}
                     </span>
                   </div>
-                  <p className="text-[11px] text-slate-400 mt-0.5">{curPuzzle.theme}</p>
+                  <p className="text-[11px] text-[#6E6E6E] mt-0.5">{curPuzzle.theme}</p>
                 </div>
 
                 <div className="flex items-center space-x-2">
                   <button
                     type="button"
                     onClick={handleHintWord}
-                    className="px-2.5 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-bold transition-all flex items-center space-x-1 cursor-pointer"
+                    className="px-2.5 py-1.5 rounded-lg bg-[#F4511E]/15 hover:bg-[#F4511E]/25 border border-[#F4511E]/30 text-[#2D4A3E] text-xs font-bold transition-all flex items-center space-x-1 cursor-pointer"
                   >
-                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                    <Sparkles className="w-3.5 h-3.5 text-[#2D4A3E]" />
                     <span>Reveal Word</span>
                   </button>
                   <button
@@ -1080,7 +1080,7 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                       setGridAnswers(Array(curPuzzle.size).fill(null).map(() => Array(curPuzzle.size).fill('')));
                       setCrosswordSuccess(false);
                     }}
-                    className="p-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-slate-400 hover:text-white transition-all cursor-pointer"
+                    className="p-1.5 rounded-lg bg-black/[0.04] hover:bg-black/[0.04] text-[#6E6E6E] hover:text-[#141414] transition-all cursor-pointer"
                     title="Clear Grid"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
@@ -1089,16 +1089,16 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
               </div>
 
               {/* Active Clue Banner */}
-              <div className="p-3 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/30 rounded-2xl flex items-center justify-between gap-3">
+              <div className="p-3 bg-gradient-to-r from-[#F4511E]/10 via-[#F4511E]/5 to-transparent border border-[#F4511E]/30 rounded-2xl flex items-center justify-between gap-3">
                 <div className="flex items-center space-x-2.5 min-w-0">
-                  <span className="px-2 py-0.5 rounded-md font-mono font-black text-xs bg-amber-500 text-slate-950 uppercase shrink-0">
+                  <span className="px-2 py-0.5 rounded-md font-mono font-black text-xs bg-[#F4511E] text-[#FFFFFF] uppercase shrink-0">
                     {selectedDirection} {activeClue ? activeClue.num : 1}
                   </span>
-                  <p className="text-xs font-medium text-white truncate">
+                  <p className="text-xs font-medium text-[#141414] truncate">
                     {activeClue ? activeClue.clue : 'Select any square to reveal the clue'}
                   </p>
                 </div>
-                <span className="text-[11px] font-mono text-slate-400 shrink-0">
+                <span className="text-[11px] font-mono text-[#6E6E6E] shrink-0">
                   ({activeClue?.answer.length || 0} letters)
                 </span>
               </div>
@@ -1106,7 +1106,7 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
               {/* Crossword Grid + Clues Side by Side */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Dynamic Sized Grid */}
-                <div className="bg-[#0B1120] p-3 sm:p-4 rounded-2xl border border-white/[0.08] flex items-center justify-center">
+                <div className="bg-[#FFFFFF] p-3 sm:p-4 rounded-2xl border border-black/[0.08] flex items-center justify-center">
                   <div
                     style={{ gridTemplateColumns: `repeat(${curPuzzle.size}, minmax(0, 1fr))` }}
                     className="grid gap-1 w-full max-w-[320px]"
@@ -1125,14 +1125,14 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                             onClick={() => handleCellClick(r, c)}
                             className={`aspect-square rounded-lg relative flex items-center justify-center font-bold text-sm sm:text-base select-none transition-all ${
                               !isPlayable
-                                ? 'bg-[#060912] border border-white/[0.02]'
+                                ? 'bg-[#FFFFFF] border border-black/[0.02]'
                                 : isSelected
-                                ? 'bg-amber-500 text-slate-950 ring-2 ring-amber-300 font-black cursor-pointer shadow-lg scale-105 z-10'
-                                : 'bg-[#131B2E] border border-white/[0.12] text-white hover:border-amber-400 cursor-pointer'
+                                ? 'bg-[#F4511E] text-[#FFFFFF] ring-2 ring-[#F4511E] font-black cursor-pointer shadow-lg scale-105 z-10'
+                                : 'bg-[#F5F1E8] border border-black/[0.12] text-[#141414] hover:border-[#F4511E] cursor-pointer'
                             }`}
                           >
                             {startClue && (
-                              <span className={`absolute top-0.5 left-1 text-[8px] font-mono font-bold leading-none ${isSelected ? 'text-slate-950' : 'text-amber-400'}`}>
+                              <span className={`absolute top-0.5 left-1 text-[8px] font-mono font-bold leading-none ${isSelected ? 'text-[#141414]' : 'text-[#2D4A3E]'}`}>
                                 {startClue.num}
                               </span>
                             )}
@@ -1145,9 +1145,9 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                 </div>
 
                 {/* Clues List */}
-                <div className="bg-[#0B1120] p-4 rounded-2xl border border-white/[0.08] space-y-4 max-h-[340px] overflow-y-auto">
+                <div className="bg-[#FFFFFF] p-4 rounded-2xl border border-black/[0.08] space-y-4 max-h-[340px] overflow-y-auto">
                   <div>
-                    <h5 className="text-[10px] font-black uppercase tracking-wider text-amber-400 border-b border-white/[0.06] pb-1 mb-2 font-mono">
+                    <h5 className="text-[10px] font-black uppercase tracking-wider text-[#2D4A3E] border-b border-black/[0.06] pb-1 mb-2 font-mono">
                       Across Clues
                     </h5>
                     <div className="space-y-1.5">
@@ -1160,20 +1160,20 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                           }}
                           className={`p-1.5 rounded-lg text-xs transition-colors cursor-pointer ${
                             activeClue?.num === clue.num && activeClue?.dir === 'across'
-                              ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30'
-                              : 'text-slate-300 hover:text-white hover:bg-white/[0.03]'
+                              ? 'bg-[#F4511E]/20 text-[#2D4A3E] font-bold border border-[#F4511E]/30'
+                              : 'text-[#4A4A4A] hover:text-[#141414] hover:bg-black/[0.04]'
                           }`}
                         >
-                          <span className="font-bold text-amber-400 mr-1.5">{clue.num}.</span>
+                          <span className="font-bold text-[#2D4A3E] mr-1.5">{clue.num}.</span>
                           <span>{clue.clue}</span>
-                          <span className="text-[10px] text-slate-500 font-mono ml-1">({clue.answer.length})</span>
+                          <span className="text-[10px] text-[#7A7A7A] font-mono ml-1">({clue.answer.length})</span>
                         </div>
                       ))}
                     </div>
                   </div>
 
                   <div>
-                    <h5 className="text-[10px] font-black uppercase tracking-wider text-amber-400 border-b border-white/[0.06] pb-1 mb-2 font-mono">
+                    <h5 className="text-[10px] font-black uppercase tracking-wider text-[#2D4A3E] border-b border-black/[0.06] pb-1 mb-2 font-mono">
                       Down Clues
                     </h5>
                     <div className="space-y-1.5">
@@ -1186,13 +1186,13 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                           }}
                           className={`p-1.5 rounded-lg text-xs transition-colors cursor-pointer ${
                             activeClue?.num === clue.num && activeClue?.dir === 'down'
-                              ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30'
-                              : 'text-slate-300 hover:text-white hover:bg-white/[0.03]'
+                              ? 'bg-[#F4511E]/20 text-[#2D4A3E] font-bold border border-[#F4511E]/30'
+                              : 'text-[#4A4A4A] hover:text-[#141414] hover:bg-black/[0.04]'
                           }`}
                         >
-                          <span className="font-bold text-amber-400 mr-1.5">{clue.num}.</span>
+                          <span className="font-bold text-[#2D4A3E] mr-1.5">{clue.num}.</span>
                           <span>{clue.clue}</span>
-                          <span className="text-[10px] text-slate-500 font-mono ml-1">({clue.answer.length})</span>
+                          <span className="text-[10px] text-[#7A7A7A] font-mono ml-1">({clue.answer.length})</span>
                         </div>
                       ))}
                     </div>
@@ -1201,14 +1201,14 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
               </div>
 
               {/* Virtual Touch Keyboard for Mobile Diners */}
-              <div className="p-2.5 bg-[#0B1120] rounded-2xl border border-white/[0.08] space-y-1.5">
+              <div className="p-2.5 bg-[#FFFFFF] rounded-2xl border border-black/[0.08] space-y-1.5">
                 {['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'].map((row, rIdx) => (
                   <div key={row} className="flex justify-center space-x-1">
                     {rIdx === 2 && (
                       <button
                         type="button"
                         onClick={handleBackspace}
-                        className="px-2.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-lg transition-colors cursor-pointer"
+                        className="px-2.5 py-2 bg-[#EFE9DD] hover:bg-[#E8DCC8] text-[#3A3A3A] text-xs font-bold rounded-lg transition-colors cursor-pointer"
                       >
                         ⌫
                       </button>
@@ -1218,7 +1218,7 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                         key={char}
                         type="button"
                         onClick={() => handleKeyInput(char)}
-                        className="w-7 sm:w-8 h-8 sm:h-9 bg-slate-800 hover:bg-amber-500 hover:text-slate-950 active:scale-95 text-white font-bold text-xs sm:text-sm rounded-lg transition-all shadow-sm cursor-pointer"
+                        className="w-7 sm:w-8 h-8 sm:h-9 bg-[#EFE9DD] hover:bg-[#F4511E] hover:text-[#FFFFFF] active:scale-95 text-white font-bold text-xs sm:text-sm rounded-lg transition-all shadow-sm cursor-pointer"
                       >
                         {char}
                       </button>
@@ -1227,7 +1227,7 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                       <button
                         type="button"
                         onClick={() => setSelectedDirection((d) => (d === 'across' ? 'down' : 'across'))}
-                        className="px-2 py-2 bg-slate-800 hover:bg-slate-700 text-amber-400 text-[10px] font-bold rounded-lg transition-colors cursor-pointer"
+                        className="px-2 py-2 bg-[#EFE9DD] hover:bg-[#E8DCC8] text-[#2D4A3E] text-[10px] font-bold rounded-lg transition-colors cursor-pointer"
                       >
                         DIR
                       </button>
@@ -1238,9 +1238,9 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
 
               {crosswordSuccess && (
                 <div className="p-4 rounded-2xl bg-emerald-500/20 border border-emerald-500 text-center space-y-2 animate-bounce">
-                  <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
-                  <h4 className="text-base font-black text-emerald-300">CROSSWORD PUZZLE COMPLETE!</h4>
-                  <p className="text-xs text-slate-200">You solved the {curPuzzle.ageLabel} puzzle for {tableLabel}!</p>
+                  <CheckCircle2 className="w-10 h-10 text-[#2F7A4F] mx-auto" />
+                  <h4 className="text-base font-black text-[#2F7A4F]">CROSSWORD PUZZLE COMPLETE!</h4>
+                  <p className="text-xs text-[#3A3A3A]">You solved the {curPuzzle.ageLabel} puzzle for {tableLabel}!</p>
                 </div>
               )}
             </div>
@@ -1258,15 +1258,15 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                     key={name}
                     className={`p-3 rounded-2xl border text-center transition-all ${
                       activePlayerTurn === pIdx
-                        ? 'bg-amber-500/20 border-amber-500 text-white shadow-lg ring-1 ring-amber-400'
-                        : 'bg-slate-900/60 border-white/[0.06] text-slate-300'
+                        ? 'bg-[#F4511E]/20 border-[#F4511E] text-[#141414] shadow-lg ring-1 ring-[#F4511E]'
+                        : 'bg-[#F5F1E8]/60 border-black/[0.06] text-[#444444]'
                     }`}
                   >
-                    <span className="text-[10px] font-bold uppercase tracking-wider block text-slate-400">
+                    <span className="text-[10px] font-bold uppercase tracking-wider block text-[#6E6E6E]">
                       {activePlayerTurn === pIdx ? '👉 Current Turn' : `Seat ${pIdx + 1}`}
                     </span>
-                    <span className="text-xs font-bold text-white truncate block">{name}</span>
-                    <span className="text-base font-black text-amber-400 font-mono mt-0.5 block">
+                    <span className="text-xs font-bold text-[#141414] truncate block">{name}</span>
+                    <span className="text-base font-black text-[#2D4A3E] font-mono mt-0.5 block">
                       {playerScores[pIdx] || 0} pts
                     </span>
                   </div>
@@ -1274,20 +1274,20 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
               </div>
 
               {/* Question Card */}
-              <div className="p-6 bg-[#0E1527] border border-white/[0.1] rounded-3xl shadow-xl space-y-5">
+              <div className="p-6 bg-[#FFFFFF] border border-black/[0.1] rounded-3xl shadow-xl space-y-5">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/20">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#2D4A3E] bg-[#F4511E]/10 px-2.5 py-1 rounded-full border border-[#F4511E]/20">
                     Round {curTriviaIdx + 1} of {activeTriviaList.length} • {difficulty.toUpperCase()}
                   </span>
                   {triviaStreak > 1 && (
-                    <span className="text-xs font-bold text-emerald-400 flex items-center space-x-1 animate-pulse">
-                      <Zap className="w-3.5 h-3.5 text-emerald-400" />
+                    <span className="text-xs font-bold text-[#2F7A4F] flex items-center space-x-1 animate-pulse">
+                      <Zap className="w-3.5 h-3.5 text-[#2F7A4F]" />
                       <span>{triviaStreak}x Streak (+{triviaStreak * 2} bonus)</span>
                     </span>
                   )}
                 </div>
 
-                <h3 className="font-serif font-black text-base sm:text-xl text-white leading-snug">
+                <h3 className="font-serif font-black text-base sm:text-xl text-[#141414] leading-snug">
                   {curQ.question}
                 </h3>
 
@@ -1298,14 +1298,14 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                     const isCorrect = optIdx === curQ.correct;
                     const showFeedback = triviaAnswered;
 
-                    let btnStyle = 'bg-white/[0.04] border-white/[0.1] hover:bg-white/[0.08] hover:border-amber-400 text-white';
+                    let btnStyle = 'bg-black/[0.04] border-black/[0.1] hover:bg-black/[0.04] hover:border-[#F4511E] text-[#141414]';
                     if (showFeedback) {
                       if (isCorrect) {
-                        btnStyle = 'bg-emerald-500/20 border-emerald-500 text-emerald-300 font-bold';
+                        btnStyle = 'bg-emerald-500/20 border-emerald-500 text-[#2F7A4F] font-bold';
                       } else if (isSelected) {
-                        btnStyle = 'bg-rose-500/20 border-rose-500 text-rose-300';
+                        btnStyle = 'bg-rose-500/20 border-rose-500 text-[#C23A1C]';
                       } else {
-                        btnStyle = 'bg-white/[0.02] border-white/[0.04] opacity-50';
+                        btnStyle = 'bg-black/[0.04] border-black/[0.04] opacity-50';
                       }
                     }
 
@@ -1317,7 +1317,7 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                         disabled={triviaAnswered}
                         className={`p-3.5 rounded-2xl border text-left text-xs sm:text-sm font-medium transition-all flex items-center space-x-3 cursor-pointer ${btnStyle}`}
                       >
-                        <span className="w-6 h-6 rounded-lg bg-black/40 border border-white/10 flex items-center justify-center font-mono text-xs font-bold text-slate-300">
+                        <span className="w-6 h-6 rounded-lg bg-black/40 border border-black/10 flex items-center justify-center font-mono text-xs font-bold text-[#444444]">
                           {String.fromCharCode(65 + optIdx)}
                         </span>
                         <span className="flex-1">{opt}</span>
@@ -1328,17 +1328,17 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
 
                 {/* Did You Know / Fact Popup */}
                 {triviaAnswered && (
-                  <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl space-y-2 animate-in fade-in duration-200">
-                    <div className="flex items-center space-x-2 text-amber-400 text-xs font-bold">
+                  <div className="p-4 bg-[#F4511E]/10 border border-[#F4511E]/30 rounded-2xl space-y-2 animate-in fade-in duration-200">
+                    <div className="flex items-center space-x-2 text-[#2D4A3E] text-xs font-bold">
                       <Sparkles className="w-4 h-4" />
                       <span>{selectedOption === curQ.correct ? 'Spot On! High Five!' : 'Good Try! Here is the Fun Fact:'}</span>
                     </div>
-                    <p className="text-xs text-slate-300 leading-relaxed font-sans">{curQ.fact}</p>
+                    <p className="text-xs text-[#4A4A4A] leading-relaxed font-sans">{curQ.fact}</p>
                     <div className="pt-2 flex justify-end">
                       <button
                         type="button"
                         onClick={handleNextTriviaQuestion}
-                        className="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-400 hover:brightness-110 active:scale-95 text-slate-950 font-bold text-xs rounded-xl shadow-md cursor-pointer transition-all"
+                        className="px-4 py-2 bg-gradient-to-r from-[#F4511E] to-[#F4511E] hover:brightness-110 active:scale-95 text-[#FFFFFF] font-bold text-xs rounded-xl shadow-md cursor-pointer transition-all"
                       >
                         Next Player Turn →
                       </button>
@@ -1355,11 +1355,11 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
           {activeTab === 'billRoulette' && (
             <div className="space-y-5">
               <div className="text-center space-y-1">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#2D4A3E] bg-[#F4511E]/10 px-3 py-1 rounded-full border border-[#F4511E]/20">
                   {tableLabel} • {difficulty.toUpperCase()} MODE
                 </span>
-                <h4 className="font-serif font-black text-xl text-white">Who Pays The Bill?</h4>
-                <p className="text-xs text-slate-400">
+                <h4 className="font-serif font-black text-xl text-[#141414]">Who Pays The Bill?</h4>
+                <p className="text-xs text-[#6E6E6E]">
                   {difficulty === 'easy' && 'Fun dares & sweet treat rewards for kids and junior diners!'}
                   {difficulty === 'medium' && 'Social fun dares & friendly mocktail/snack treats for teens!'}
                   {difficulty === 'hard' && 'High stakes! Spin to see who settles the real dining check or bar tab!'}
@@ -1367,9 +1367,9 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
               </div>
 
               {/* Guest Manager */}
-              <div className="p-4 bg-slate-900/80 rounded-2xl border border-white/[0.08] space-y-3">
+              <div className="p-4 bg-[#F5F1E8]/80 rounded-2xl border border-black/[0.08] space-y-3">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-slate-300">Diners at {tableLabel} ({rouletteGuests.length}/8)</span>
+                  <span className="font-bold text-[#4A4A4A]">Diners at {tableLabel} ({rouletteGuests.length}/8)</span>
                 </div>
 
                 {/* Tags */}
@@ -1377,14 +1377,14 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                   {rouletteGuests.map((guest, idx) => (
                     <span
                       key={`${guest}-${idx}`}
-                      className="px-3 py-1.5 rounded-xl bg-slate-800 border border-white/[0.08] text-xs font-bold text-white flex items-center space-x-1.5"
+                      className="px-3 py-1.5 rounded-xl bg-[#EFE9DD] border border-black/[0.08] text-xs font-bold text-[#141414] flex items-center space-x-1.5"
                     >
                       <span>{guest}</span>
                       {rouletteGuests.length > 2 && (
                         <button
                           type="button"
                           onClick={() => removeGuest(idx)}
-                          className="hover:text-rose-400 ml-1 cursor-pointer"
+                          className="hover:text-[#C23A1C] ml-1 cursor-pointer"
                         >
                           <X className="w-3 h-3" />
                         </button>
@@ -1402,12 +1402,12 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                       onChange={(e) => setNewGuestInput(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && addGuest()}
                       placeholder="Add another friend (e.g. Rahul)"
-                      className="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                      className="flex-1 bg-[#FFFFFF] border border-[#E3E0DA] rounded-xl px-3 py-2 text-xs text-white placeholder-[#7A7A7A] focus:outline-none focus:border-[#F4511E]"
                     />
                     <button
                       type="button"
                       onClick={addGuest}
-                      className="px-3 py-2 bg-white/[0.08] hover:bg-white/[0.15] text-white font-bold text-xs rounded-xl flex items-center space-x-1 transition-all cursor-pointer"
+                      className="px-3 py-2 bg-black/[0.04] hover:bg-black/[0.04] text-[#141414] font-bold text-xs rounded-xl flex items-center space-x-1 transition-all cursor-pointer"
                     >
                       <Plus className="w-3.5 h-3.5" />
                       <span>Add</span>
@@ -1426,7 +1426,7 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                       transform: `rotate(${wheelRotation}deg)`,
                       transition: isSpinning ? 'transform 3.8s cubic-bezier(0.15, 0.9, 0.2, 1)' : 'none',
                     }}
-                    className="w-full h-full rounded-full border-4 border-amber-400/80 shadow-2xl relative overflow-hidden bg-gradient-to-tr from-indigo-950 via-slate-900 to-indigo-900"
+                    className="w-full h-full rounded-full border-4 border-[#F4511E]/80 shadow-2xl relative overflow-hidden bg-gradient-to-tr from-[#2D4A3E] via-[#F5F1E8] to-[#2D4A3E]"
                   >
                     {rouletteGuests.map((guest, idx) => {
                       const angle = (360 / rouletteGuests.length) * idx;
@@ -1439,7 +1439,7 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                           }}
                           className="absolute top-0 left-1/2 -ml-8 w-16 h-1/2 flex flex-col items-center justify-start pt-3"
                         >
-                          <span className="text-[10px] font-black text-white uppercase font-mono tracking-wider drop-shadow-md truncate max-w-[55px]">
+                          <span className="text-[10px] font-black text-[#141414] uppercase font-mono tracking-wider drop-shadow-md truncate max-w-[55px]">
                             {guest}
                           </span>
                         </div>
@@ -1451,7 +1451,7 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                     type="button"
                     onClick={spinTheWheel}
                     disabled={isSpinning || rouletteGuests.length < 2}
-                    className="absolute z-10 w-20 h-20 rounded-full bg-gradient-to-tr from-amber-500 to-amber-400 text-slate-950 font-black text-xs uppercase shadow-2xl hover:scale-105 active:scale-95 transition-all flex flex-col items-center justify-center border-4 border-slate-950 cursor-pointer disabled:opacity-50"
+                    className="absolute z-10 w-20 h-20 rounded-full bg-gradient-to-tr from-[#F4511E] to-[#F4511E] text-[#FFFFFF] font-black text-xs uppercase shadow-2xl hover:scale-105 active:scale-95 transition-all flex flex-col items-center justify-center border-4 border-[#E3E0DA] cursor-pointer disabled:opacity-50"
                   >
                     <Dices className="w-5 h-5 mb-0.5" />
                     <span>{isSpinning ? 'Spinning' : 'SPIN'}</span>
@@ -1460,15 +1460,15 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
 
                 {/* Result Card */}
                 {rouletteWinner && (
-                  <div className="w-full max-w-md p-5 rounded-3xl bg-gradient-to-r from-purple-950/80 via-slate-900 to-indigo-950/80 border-2 border-amber-400/80 text-center space-y-2 shadow-2xl animate-in fade-in duration-300">
+                  <div className="w-full max-w-md p-5 rounded-3xl bg-gradient-to-r from-[#2D4A3E]/80 via-[#F5F1E8] to-[#2D4A3E]/80 border-2 border-[#F4511E]/80 text-center space-y-2 shadow-2xl animate-in fade-in duration-300">
                     <span className="text-3xl block">{rouletteWinner.consequence.icon}</span>
-                    <h3 className="font-serif font-black text-xl text-amber-300">
+                    <h3 className="font-serif font-black text-xl text-[#2D4A3E]">
                       DESTINY CHOOSES: {rouletteWinner.guest.toUpperCase()}!
                     </h3>
-                    <p className="text-sm font-bold text-white">
+                    <p className="text-sm font-bold text-[#141414]">
                       {rouletteWinner.consequence.text}
                     </p>
-                    <span className="inline-block px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-white/10 text-slate-300 border border-white/20">
+                    <span className="inline-block px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-black/[0.06] text-[#4A4A4A] border border-black/20">
                       {rouletteWinner.consequence.tag}
                     </span>
                   </div>
@@ -1477,14 +1477,14 @@ export const TableArcadeModal: React.FC<TableArcadeModalProps> = ({
                 {/* History */}
                 {spinHistory.length > 0 && (
                   <div className="w-full max-w-md space-y-1.5 pt-2">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono block">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#6E6E6E] font-mono block">
                       Previous Spins at This Table:
                     </span>
                     {spinHistory.map((h, idx) => (
-                      <div key={idx} className="p-2 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs flex items-center justify-between">
-                        <span className="font-bold text-white">{h.guest}</span>
-                        <span className="text-slate-400 truncate max-w-[200px]">{h.consequence}</span>
-                        <span className="text-[10px] text-slate-500 font-mono">{h.time}</span>
+                      <div key={idx} className="p-2 rounded-xl bg-black/[0.04] border border-black/[0.06] text-xs flex items-center justify-between">
+                        <span className="font-bold text-[#141414]">{h.guest}</span>
+                        <span className="text-[#6E6E6E] truncate max-w-[200px]">{h.consequence}</span>
+                        <span className="text-[10px] text-[#7A7A7A] font-mono">{h.time}</span>
                       </div>
                     ))}
                   </div>

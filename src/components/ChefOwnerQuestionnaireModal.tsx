@@ -55,13 +55,13 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
 
   return (
     <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl overflow-y-auto pt-[max(env(safe-area-inset-top,20px),24px)] pb-12 px-3 sm:px-6 flex justify-center items-start overscroll-contain">
-      <div className="bg-[#0D1322] rounded-3xl max-w-4xl w-full flex flex-col shadow-2xl border border-white/[0.08] overflow-hidden my-2 sm:my-6">
+      <div className="bg-[#F5F1E8] rounded-3xl max-w-4xl w-full flex flex-col shadow-2xl border border-black/[0.08] overflow-hidden my-2 sm:my-6">
         
         {/* Modal Header */}
-        <div className="bg-gradient-to-r from-amber-700 via-orange-600 to-amber-800 text-white p-6 relative">
+        <div className="bg-gradient-to-r from-[#F4511E] via-[#F4511E] to-[#F4511E] text-white p-6 relative">
           <button
             onClick={onClose}
-            className="absolute top-5 right-5 p-2 rounded-full bg-[#090D16]/10 hover:bg-white/20 text-white transition-colors"
+            className="absolute top-5 right-5 p-2 rounded-full bg-[#FFFFFF]/10 hover:bg-black/[0.12] text-[#141414] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -70,7 +70,7 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-black/20 hover:bg-black/40 text-white font-bold text-xs border border-white/20 transition-all cursor-pointer mr-1"
+              className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-black/20 hover:bg-black/40 text-white font-bold text-xs border border-black/20 transition-all cursor-pointer mr-1"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back</span>
@@ -78,12 +78,12 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
             <span className="bg-white text-orange-700 text-xs font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
               AI Persona Studio
             </span>
-            <span className="bg-orange-900/40 text-orange-100 text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1.5">
+            <span className="bg-[#F4511E]/40 text-orange-100 text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5" /> 100% Chef & Owner Trained
             </span>
           </div>
 
-          <h2 className="text-2xl font-serif font-bold text-white">
+          <h2 className="text-2xl font-serif font-bold text-[#141414]">
             {restaurant.name} · Chef & Owner Knowledge Onboarding
           </h2>
           <p className="text-xs text-orange-100 max-w-2xl mt-1 leading-relaxed">
@@ -91,11 +91,11 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
           </p>
 
           {/* Section Navigation Tabs */}
-          <div className="flex flex-wrap gap-2 mt-5 border-t border-white/20 pt-4">
+          <div className="flex flex-wrap gap-2 mt-5 border-t border-black/20 pt-4">
             <button
               onClick={() => setActiveSection('chef')}
               className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
-                activeSection === 'chef' ? 'bg-white text-orange-900 shadow-sm' : 'text-white/80 hover:bg-white/10'
+                activeSection === 'chef' ? 'bg-white text-orange-900 shadow-sm' : 'text-[#141414]/80 hover:bg-black/[0.06]'
               }`}
             >
               <ChefHat className="w-4 h-4" /> 1. Head Chef Philosophy
@@ -103,7 +103,7 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
             <button
               onClick={() => setActiveSection('owner')}
               className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
-                activeSection === 'owner' ? 'bg-white text-orange-900 shadow-sm' : 'text-white/80 hover:bg-white/10'
+                activeSection === 'owner' ? 'bg-white text-orange-900 shadow-sm' : 'text-[#141414]/80 hover:bg-black/[0.06]'
               }`}
             >
               <Heart className="w-4 h-4" /> 2. Owner Lore & Tone
@@ -111,7 +111,7 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
             <button
               onClick={() => setActiveSection('dishes')}
               className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
-                activeSection === 'dishes' ? 'bg-white text-orange-900 shadow-sm' : 'text-white/80 hover:bg-white/10'
+                activeSection === 'dishes' ? 'bg-white text-orange-900 shadow-sm' : 'text-[#141414]/80 hover:bg-black/[0.06]'
               }`}
             >
               <BookOpen className="w-4 h-4" /> 3. Secrets & Pairings
@@ -119,7 +119,7 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
             <button
               onClick={() => setActiveSection('print')}
               className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
-                activeSection === 'print' ? 'bg-white text-orange-900 shadow-sm' : 'text-white/80 hover:bg-white/10'
+                activeSection === 'print' ? 'bg-white text-orange-900 shadow-sm' : 'text-[#141414]/80 hover:bg-black/[0.06]'
               }`}
             >
               <Printer className="w-4 h-4" /> 4. Print Blank Form
@@ -133,7 +133,7 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
           {/* SECTION 1: CHEF PHILOSOPHY */}
           {activeSection === 'chef' && (
             <div className="space-y-4">
-              <div className="bg-amber-50/70 border border-amber-200 rounded-2xl p-4 flex items-start gap-3">
+              <div className="bg-amber-50/70 border border-[#F4511E] rounded-2xl p-4 flex items-start gap-3">
                 <ChefHat className="w-5 h-5 text-amber-700 mt-0.5 shrink-0" />
                 <div>
                   <h4 className="text-sm font-bold text-amber-950">Executive Chef Credentials & Kitchen Philosophy</h4>
@@ -145,56 +145,56 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-white mb-1">Head Chef Full Name</label>
+                  <label className="block text-xs font-bold text-[#141414] mb-1">Head Chef Full Name</label>
                   <input
                     type="text"
                     value={formData.chef_name}
                     onChange={(e) => setFormData({ ...formData, chef_name: e.target.value })}
-                    className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl p-3 text-xs text-white focus:ring-2 focus:ring-orange-500"
+                    className="w-full bg-[#FFFFFF]/[0.03] border border-black/[0.08] rounded-xl p-3 text-xs text-[#141414] focus:ring-2 focus:ring-[#F4511E]"
                     placeholder="e.g. Chef Sanjay Rawat"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-white mb-1">Official Culinary Title</label>
+                  <label className="block text-xs font-bold text-[#141414] mb-1">Official Culinary Title</label>
                   <input
                     type="text"
                     value={formData.chef_title}
                     onChange={(e) => setFormData({ ...formData, chef_title: e.target.value })}
-                    className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl p-3 text-xs text-white focus:ring-2 focus:ring-orange-500"
+                    className="w-full bg-[#FFFFFF]/[0.03] border border-black/[0.08] rounded-xl p-3 text-xs text-[#141414] focus:ring-2 focus:ring-[#F4511E]"
                     placeholder="e.g. Executive Head Chef & Master of Dum Pukht"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-white mb-1">Chef Bio & Heritage Background</label>
+                <label className="block text-xs font-bold text-[#141414] mb-1">Chef Bio & Heritage Background</label>
                 <textarea
                   rows={2}
                   value={formData.chef_bio}
                   onChange={(e) => setFormData({ ...formData, chef_bio: e.target.value })}
-                  className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl p-3 text-xs text-white focus:ring-2 focus:ring-orange-500"
+                  className="w-full bg-[#FFFFFF]/[0.03] border border-black/[0.08] rounded-xl p-3 text-xs text-[#141414] focus:ring-2 focus:ring-[#F4511E]"
                   placeholder="Where did the chef train? What cooking traditions do they master?"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-white mb-1">Core Kitchen Philosophy & Ingredient Standards</label>
+                <label className="block text-xs font-bold text-[#141414] mb-1">Core Kitchen Philosophy & Ingredient Standards</label>
                 <textarea
                   rows={2}
                   value={formData.chef_philosophy}
                   onChange={(e) => setFormData({ ...formData, chef_philosophy: e.target.value })}
-                  className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl p-3 text-xs text-white focus:ring-2 focus:ring-orange-500"
+                  className="w-full bg-[#FFFFFF]/[0.03] border border-black/[0.08] rounded-xl p-3 text-xs text-[#141414] focus:ring-2 focus:ring-[#F4511E]"
                   placeholder="e.g. We use hand-pounded spices, cold-pressed mustard oil, and 24-hour slow braising."
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-white mb-1">Spice Scale Calibration (1 to 5)</label>
+                <label className="block text-xs font-bold text-[#141414] mb-1">Spice Scale Calibration (1 to 5)</label>
                 <input
                   type="text"
                   value={formData.spice_guidance}
                   onChange={(e) => setFormData({ ...formData, spice_guidance: e.target.value })}
-                  className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl p-3 text-xs text-white focus:ring-2 focus:ring-orange-500"
+                  className="w-full bg-[#FFFFFF]/[0.03] border border-black/[0.08] rounded-xl p-3 text-xs text-[#141414] focus:ring-2 focus:ring-[#F4511E]"
                   placeholder="e.g. 1 = Mild aromatic, 3 = Traditional Indian, 5 = Fiery Guntur chili heat"
                 />
               </div>
@@ -204,7 +204,7 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
           {/* SECTION 2: OWNER LORE & HOSPITALITY */}
           {activeSection === 'owner' && (
             <div className="space-y-4">
-              <div className="bg-orange-50/70 border border-orange-200 rounded-2xl p-4 flex items-start gap-3">
+              <div className="bg-orange-50/70 border border-[#F4511E] rounded-2xl p-4 flex items-start gap-3">
                 <Heart className="w-5 h-5 text-orange-700 mt-0.5 shrink-0" />
                 <div>
                   <h4 className="text-sm font-bold text-orange-950">Owner Hospitality & Brand Voice</h4>
@@ -216,21 +216,21 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-white mb-1">Founder / Owner Name(s)</label>
+                  <label className="block text-xs font-bold text-[#141414] mb-1">Founder / Owner Name(s)</label>
                   <input
                     type="text"
                     value={formData.owner_name}
                     onChange={(e) => setFormData({ ...formData, owner_name: e.target.value })}
-                    className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl p-3 text-xs text-white focus:ring-2 focus:ring-orange-500"
+                    className="w-full bg-[#FFFFFF]/[0.03] border border-black/[0.08] rounded-xl p-3 text-xs text-[#141414] focus:ring-2 focus:ring-[#F4511E]"
                     placeholder="e.g. Vikramaditya Singhania"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-white mb-1">AI Greeting & Voice Style</label>
+                  <label className="block text-xs font-bold text-[#141414] mb-1">AI Greeting & Voice Style</label>
                   <select
                     value={formData.greeting_tone}
                     onChange={(e: any) => setFormData({ ...formData, greeting_tone: e.target.value })}
-                    className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl p-3 text-xs text-white focus:ring-2 focus:ring-orange-500"
+                    className="w-full bg-[#FFFFFF]/[0.03] border border-black/[0.08] rounded-xl p-3 text-xs text-[#141414] focus:ring-2 focus:ring-[#F4511E]"
                   >
                     <option value="warm_traditional">Warm Traditional ('Atithi Devo Bhava')</option>
                     <option value="bistro_cozy">Cozy European Trattoria / Bistro</option>
@@ -241,23 +241,23 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-white mb-1">Owner Welcome Message & Guest Promise</label>
+                <label className="block text-xs font-bold text-[#141414] mb-1">Owner Welcome Message & Guest Promise</label>
                 <textarea
                   rows={3}
                   value={formData.owner_hospitality_note}
                   onChange={(e) => setFormData({ ...formData, owner_hospitality_note: e.target.value })}
-                  className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl p-3 text-xs text-white focus:ring-2 focus:ring-orange-500"
+                  className="w-full bg-[#FFFFFF]/[0.03] border border-black/[0.08] rounded-xl p-3 text-xs text-[#141414] focus:ring-2 focus:ring-[#F4511E]"
                   placeholder="What is the story behind opening this restaurant? How should diners feel?"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-white mb-1">Dietary Safety & Kitchen Rules</label>
+                <label className="block text-xs font-bold text-[#141414] mb-1">Dietary Safety & Kitchen Rules</label>
                 <textarea
                   rows={2}
                   value={formData.dietary_rules}
                   onChange={(e) => setFormData({ ...formData, dietary_rules: e.target.value })}
-                  className="w-full bg-[#090D16]/[0.03] border border-white/[0.08] rounded-xl p-3 text-xs text-white focus:ring-2 focus:ring-orange-500"
+                  className="w-full bg-[#FFFFFF]/[0.03] border border-black/[0.08] rounded-xl p-3 text-xs text-[#141414] focus:ring-2 focus:ring-[#F4511E]"
                   placeholder="e.g. 100% separate fryers for vegetarian, gluten-free prep protocol, nut allergy warnings."
                 />
               </div>
@@ -279,11 +279,11 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
 
               {/* Secret Stories */}
               <div className="space-y-3">
-                <h5 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                <h5 className="text-xs font-bold text-[#141414] uppercase tracking-wider flex items-center gap-1.5">
                   <BookOpen className="w-4 h-4 text-orange-600" /> Signature Dish Backstories (Trained in AI)
                 </h5>
                 {formData.secret_stories.map((s, idx) => (
-                  <div key={idx} className="bg-white/[0.03] border border-white/[0.08] p-3.5 rounded-2xl space-y-2">
+                  <div key={idx} className="bg-black/[0.04] border border-black/[0.08] p-3.5 rounded-2xl space-y-2">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                       <input
                         type="text"
@@ -293,7 +293,7 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
                           updated[idx].dish_name = e.target.value;
                           setFormData({ ...formData, secret_stories: updated });
                         }}
-                        className="bg-white border border-white/[0.08] rounded-xl p-2 text-xs font-bold text-white"
+                        className="bg-white border border-black/[0.08] rounded-xl p-2 text-xs font-bold text-[#141414]"
                         placeholder="Dish Name"
                       />
                       <input
@@ -304,7 +304,7 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
                           updated[idx].story = e.target.value;
                           setFormData({ ...formData, secret_stories: updated });
                         }}
-                        className="sm:col-span-2 bg-[#090D16] border border-white/[0.08] rounded-xl p-2 text-xs text-white"
+                        className="sm:col-span-2 bg-[#FFFFFF] border border-black/[0.08] rounded-xl p-2 text-xs text-[#141414]"
                         placeholder="Secret backstory, heirloom recipe origin, or cooking method..."
                       />
                     </div>
@@ -313,12 +313,12 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
               </div>
 
               {/* Pairings */}
-              <div className="space-y-3 pt-2 border-t border-white/[0.08]">
-                <h5 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+              <div className="space-y-3 pt-2 border-t border-black/[0.08]">
+                <h5 className="text-xs font-bold text-[#141414] uppercase tracking-wider flex items-center gap-1.5">
                   <GlassWater className="w-4 h-4 text-blue-600" /> Chef & Owner Signature Drink Pairings
                 </h5>
                 {formData.signature_pairings.map((p, idx) => (
-                  <div key={idx} className="bg-white/[0.03] border border-white/[0.08] p-3.5 rounded-2xl space-y-2">
+                  <div key={idx} className="bg-black/[0.04] border border-black/[0.08] p-3.5 rounded-2xl space-y-2">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                       <input
                         type="text"
@@ -328,7 +328,7 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
                           updated[idx].dish_name = e.target.value;
                           setFormData({ ...formData, signature_pairings: updated });
                         }}
-                        className="bg-white border border-white/[0.08] rounded-xl p-2 text-xs font-bold text-white"
+                        className="bg-white border border-black/[0.08] rounded-xl p-2 text-xs font-bold text-[#141414]"
                         placeholder="Dish Name"
                       />
                       <input
@@ -339,7 +339,7 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
                           updated[idx].pairing_drink = e.target.value;
                           setFormData({ ...formData, signature_pairings: updated });
                         }}
-                        className="bg-white border border-white/[0.08] rounded-xl p-2 text-xs text-white font-semibold"
+                        className="bg-white border border-black/[0.08] rounded-xl p-2 text-xs text-[#141414] font-semibold"
                         placeholder="Recommended Beverage / Wine"
                       />
                       <input
@@ -350,7 +350,7 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
                           updated[idx].why = e.target.value;
                           setFormData({ ...formData, signature_pairings: updated });
                         }}
-                        className="bg-white border border-white/[0.08] rounded-xl p-2 text-xs text-white"
+                        className="bg-white border border-black/[0.08] rounded-xl p-2 text-xs text-[#141414]"
                         placeholder="Why they pair perfectly..."
                       />
                     </div>
@@ -379,37 +379,37 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
               </div>
 
               {/* Printable Paper Preview */}
-              <div className="border-2 border-dashed border-white/[0.08] rounded-2xl p-6 bg-[#090D16]/[0.03]/50 space-y-4 text-white">
-                <div className="text-center pb-4 border-b border-white/[0.08]">
+              <div className="border-2 border-dashed border-black/[0.08] rounded-2xl p-6 bg-[#FFFFFF]/[0.03]/50 space-y-4 text-[#141414]">
+                <div className="text-center pb-4 border-b border-black/[0.08]">
                   <span className="text-[10px] uppercase font-bold tracking-widest text-orange-700">MENUZ RESTAURANT AI SYSTEM</span>
                   <h3 className="font-serif text-xl font-bold">{restaurant.name} · Chef & Owner Intake Form</h3>
-                  <p className="text-xs text-slate-400">Please fill out these 6 questions to train your dining concierge.</p>
+                  <p className="text-xs text-[#6E6E6E]">Please fill out these 6 questions to train your dining concierge.</p>
                 </div>
 
                 <div className="space-y-3 text-xs">
-                  <div className="p-3 bg-[#0D1322] rounded-xl border border-white/[0.08]">
+                  <div className="p-3 bg-[#F5F1E8] rounded-xl border border-black/[0.08]">
                     <p className="font-bold">1. Head Chef Name & Bio:</p>
-                    <p className="text-slate-400 italic mt-1">{formData.chef_name} ({formData.chef_title}) — {formData.chef_bio}</p>
+                    <p className="text-[#6E6E6E] italic mt-1">{formData.chef_name} ({formData.chef_title}) — {formData.chef_bio}</p>
                   </div>
-                  <div className="p-3 bg-[#0D1322] rounded-xl border border-white/[0.08]">
+                  <div className="p-3 bg-[#F5F1E8] rounded-xl border border-black/[0.08]">
                     <p className="font-bold">2. Culinary Philosophy & Signature Techniques:</p>
-                    <p className="text-slate-400 italic mt-1">{formData.chef_philosophy}</p>
+                    <p className="text-[#6E6E6E] italic mt-1">{formData.chef_philosophy}</p>
                   </div>
-                  <div className="p-3 bg-[#0D1322] rounded-xl border border-white/[0.08]">
+                  <div className="p-3 bg-[#F5F1E8] rounded-xl border border-black/[0.08]">
                     <p className="font-bold">3. Owner's Welcome Message to Diners:</p>
-                    <p className="text-slate-400 italic mt-1">{formData.owner_hospitality_note}</p>
+                    <p className="text-[#6E6E6E] italic mt-1">{formData.owner_hospitality_note}</p>
                   </div>
-                  <div className="p-3 bg-[#0D1322] rounded-xl border border-white/[0.08]">
+                  <div className="p-3 bg-[#F5F1E8] rounded-xl border border-black/[0.08]">
                     <p className="font-bold">4. Top 3 Dish Secrets & Stories:</p>
-                    <ul className="list-disc list-inside text-slate-400 italic mt-1 space-y-1">
+                    <ul className="list-disc list-inside text-[#6E6E6E] italic mt-1 space-y-1">
                       {formData.secret_stories.map((s, i) => (
                         <li key={i}><strong>{s.dish_name}:</strong> {s.story}</li>
                       ))}
                     </ul>
                   </div>
-                  <div className="p-3 bg-[#0D1322] rounded-xl border border-white/[0.08]">
+                  <div className="p-3 bg-[#F5F1E8] rounded-xl border border-black/[0.08]">
                     <p className="font-bold">5. Signature Beverage Pairings:</p>
-                    <ul className="list-disc list-inside text-slate-400 italic mt-1 space-y-1">
+                    <ul className="list-disc list-inside text-[#6E6E6E] italic mt-1 space-y-1">
                       {formData.signature_pairings.map((p, i) => (
                         <li key={i}><strong>{p.dish_name}</strong> + <strong>{p.pairing_drink}</strong>: {p.why}</li>
                       ))}
@@ -423,7 +423,7 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
         </div>
 
         {/* Modal Footer */}
-        <div className="p-5 bg-[#090D16]/[0.03] border-t border-white/[0.08] flex items-center justify-between">
+        <div className="p-5 bg-[#FFFFFF]/[0.03] border-t border-black/[0.08] flex items-center justify-between">
           <div className="flex items-center gap-2">
             {savedSuccess && (
               <span className="text-xs text-emerald-700 font-bold bg-emerald-100 px-3 py-1.5 rounded-lg flex items-center gap-1.5">
@@ -434,13 +434,13 @@ export const ChefOwnerQuestionnaireModal: React.FC<ChefOwnerQuestionnaireModalPr
           <div className="flex items-center gap-2.5">
             <button
               onClick={onClose}
-              className="px-4 py-2.5 bg-[#090D16] hover:bg-white/[0.04] text-slate-400 border border-white/[0.08] rounded-xl text-xs font-bold transition-all"
+              className="px-4 py-2.5 bg-[#FFFFFF] hover:bg-black/[0.04] text-[#6E6E6E] border border-black/[0.08] rounded-xl text-xs font-bold transition-all"
             >
               Cancel
             </button>
             <button
               onClick={handleSave}
-              className="px-5 py-2.5 bg-orange-600 hover:bg-orange-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md hover:shadow-lg transition-all"
+              className="px-5 py-2.5 bg-[#F4511E] hover:bg-[#F4511E] text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md hover:shadow-lg transition-all"
             >
               <Save className="w-4 h-4" /> Save & Train AI Persona
             </button>

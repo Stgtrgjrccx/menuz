@@ -73,12 +73,12 @@ export const SEED_RESTAURANT: Restaurant = {
       spin_wheel: {
         enabled: true,
         slices: [
-          { id: 'sw-1', label: '15% Off Bill', reward: '15% Off Food & Beverages', emoji: '🎉', color: '#F59E0B', textColor: '#000', probabilityWeight: 25 },
+          { id: 'sw-1', label: '15% Off Bill', reward: '15% Off Food & Beverages', emoji: '🎉', color: '#2D4A3E', textColor: '#000', probabilityWeight: 25 },
           { id: 'sw-2', label: 'Free Dessert', reward: 'Complimentary Chef Saffron Kulfi', emoji: '🍨', color: '#EC4899', textColor: '#fff', probabilityWeight: 25 },
           { id: 'sw-3', label: '10% Off Bill', reward: '10% Instant Bill Discount', emoji: '✨', color: '#10B981', textColor: '#fff', probabilityWeight: 25 },
           { id: 'sw-4', label: 'Free Beverage', reward: 'Complimentary Craft Beverage', emoji: '🥤', color: '#3B82F6', textColor: '#fff', probabilityWeight: 15 },
           { id: 'sw-5', label: '₹100 Off', reward: 'Flat ₹100 Off on Bill', emoji: '💰', color: '#8B5CF6', textColor: '#fff', probabilityWeight: 8 },
-          { id: 'sw-6', label: 'Chef Starter', reward: 'Complimentary Tandoori Appetizer', emoji: '👑', color: '#EF4444', textColor: '#fff', probabilityWeight: 2 }
+          { id: 'sw-6', label: 'Chef Starter', reward: 'Complimentary Tandoori Appetizer', emoji: '👑', color: '#F4511E', textColor: '#fff', probabilityWeight: 2 }
         ]
       },
       scratch_card: {
@@ -170,11 +170,11 @@ export const SEED_CASA_BELLA: Restaurant = {
         enabled: true,
         slices: [
           { id: 'cb-1', label: 'Free Tiramisu', reward: 'Complimentary Venetian Tiramisu', emoji: '🍰', color: '#0D9488', textColor: '#fff', probabilityWeight: 30 },
-          { id: 'cb-2', label: '15% Off Bill', reward: '15% Off Artisanal Pasta & Pizza', emoji: '🍕', color: '#F59E0B', textColor: '#000', probabilityWeight: 25 },
+          { id: 'cb-2', label: '15% Off Bill', reward: '15% Off Artisanal Pasta & Pizza', emoji: '🍕', color: '#2D4A3E', textColor: '#000', probabilityWeight: 25 },
           { id: 'cb-3', label: 'Free Mocktail', reward: 'Complimentary Italian Soda / Mocktail', emoji: '🍹', color: '#3B82F6', textColor: '#fff', probabilityWeight: 20 },
           { id: 'cb-4', label: '10% Off Bill', reward: '10% Instant Bill Discount', emoji: '✨', color: '#10B981', textColor: '#fff', probabilityWeight: 15 },
           { id: 'cb-5', label: '₹150 Credit', reward: 'Flat ₹150 Bill Credit', emoji: '💶', color: '#8B5CF6', textColor: '#fff', probabilityWeight: 8 },
-          { id: 'cb-6', label: 'Chef Bruschetta', reward: 'Complimentary Truffle Bruschetta', emoji: '🥖', color: '#EF4444', textColor: '#fff', probabilityWeight: 2 }
+          { id: 'cb-6', label: 'Chef Bruschetta', reward: 'Complimentary Truffle Bruschetta', emoji: '🥖', color: '#F4511E', textColor: '#fff', probabilityWeight: 2 }
         ]
       },
       scratch_card: {

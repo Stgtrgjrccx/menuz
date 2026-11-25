@@ -106,7 +106,7 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      className={`relative w-full ${aspectRatioClass} rounded-xl sm:rounded-2xl overflow-hidden bg-[#18171a] border border-white/10 group-hover:border-[#ffb955]/60 transition-all duration-300 shadow-xl group-hover:shadow-[0_16px_36px_-6px_rgba(255,185,85,0.3)] select-none cursor-pointer`}
+      className={`relative w-full ${aspectRatioClass} rounded-xl sm:rounded-2xl overflow-hidden bg-[#F5F1E8] border border-black/10 group-hover:border-[#F4511E]/60 transition-all duration-300 shadow-xl group-hover:shadow-[0_16px_36px_-6px_rgba(255,185,85,0.3)] select-none cursor-pointer`}
     >
       {/* Active Photo */}
       <img
@@ -122,7 +122,7 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
 
       {/* Top Left Veg / Non-Veg Indicator & Badges */}
       <div className="absolute top-2 left-2 sm:top-3 sm:left-3 flex items-center gap-1 sm:gap-1.5 z-20 pointer-events-none">
-        <div className="w-4 h-4 sm:w-5 sm:h-5 rounded bg-black/70 backdrop-blur-md p-0.5 border border-white/15 flex items-center justify-center shadow">
+        <div className="w-4 h-4 sm:w-5 sm:h-5 rounded bg-black/70 backdrop-blur-md p-0.5 border border-black/15 flex items-center justify-center shadow">
           <div
             className={`w-2.5 h-2.5 sm:w-3 sm:h-3 border ${
               isVeg ? 'border-emerald-500' : 'border-red-500'
@@ -132,17 +132,17 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
           </div>
         </div>
         {dish.is_signature && (
-          <span className="px-1.5 py-0.5 rounded bg-black/75 backdrop-blur-md text-[8px] sm:text-[9px] font-mono text-[#ffb955] font-bold border border-[#ffb955]/30 shadow">
+          <span className="px-1.5 py-0.5 rounded bg-black/75 backdrop-blur-md text-[8px] sm:text-[9px] font-mono text-[#FFC46B] font-bold border border-[#F4511E]/30 shadow">
             ★ SIGNATURE
           </span>
         )}
         {dish.is_bestseller && !dish.is_signature && (
-          <span className="px-1.5 py-0.5 rounded bg-black/75 backdrop-blur-md text-[8px] sm:text-[9px] font-mono text-[#ffb955] font-bold border border-white/15 shadow">
+          <span className="px-1.5 py-0.5 rounded bg-black/75 backdrop-blur-md text-[8px] sm:text-[9px] font-mono text-[#FFC46B] font-bold border border-white/20 shadow">
             Chef's Pick
           </span>
         )}
         {dish.is_chef_recommended && !dish.is_signature && !dish.is_bestseller && (
-          <span className="px-1.5 py-0.5 rounded bg-black/75 backdrop-blur-md text-[8px] sm:text-[9px] font-mono text-[#e5e1e4] font-medium border border-white/15 shadow">
+          <span className="px-1.5 py-0.5 rounded bg-black/75 backdrop-blur-md text-[8px] sm:text-[9px] font-mono text-[#e5e1e4] font-medium border border-white/20 shadow">
             Special
           </span>
         )}
@@ -159,8 +159,8 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
             e.stopPropagation();
             onToggleFavorite(dish.id, e as any);
           }}
-          className={`absolute top-2 right-2 sm:top-3 sm:right-3 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-black/70 backdrop-blur-md border border-white/10 flex items-center justify-center transition-colors cursor-pointer z-20 ${
-            isFav ? 'text-red-500' : 'text-white/70 hover:text-red-400'
+          className={`absolute top-2 right-2 sm:top-3 sm:right-3 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-black/55 backdrop-blur-md border border-white/20 flex items-center justify-center transition-colors cursor-pointer z-20 ${
+            isFav ? 'text-red-500' : 'text-white/80 hover:text-[#FF8A65]'
           }`}
         >
           <span
@@ -180,7 +180,7 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
             onClick={handlePrev}
             onTouchStart={(e) => e.stopPropagation()}
             aria-label="Previous photo"
-            className="absolute left-1.5 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-black/60 hover:bg-black/85 text-white/80 hover:text-white backdrop-blur-md border border-white/15 hidden md:group-hover:flex items-center justify-center transition-opacity cursor-pointer z-20 shadow-md"
+            className="absolute left-1.5 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-black/60 hover:bg-black/85 text-[#FFFFFF]/80 hover:text-white backdrop-blur-md border border-black/15 hidden md:group-hover:flex items-center justify-center transition-opacity cursor-pointer z-20 shadow-md"
           >
             <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
@@ -189,7 +189,7 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
             onClick={handleNext}
             onTouchStart={(e) => e.stopPropagation()}
             aria-label="Next photo"
-            className="absolute right-1.5 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-black/60 hover:bg-black/85 text-white/80 hover:text-white backdrop-blur-md border border-white/15 hidden md:group-hover:flex items-center justify-center transition-opacity cursor-pointer z-20 shadow-md"
+            className="absolute right-1.5 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-black/60 hover:bg-black/85 text-[#FFFFFF]/80 hover:text-white backdrop-blur-md border border-black/15 hidden md:group-hover:flex items-center justify-center transition-opacity cursor-pointer z-20 shadow-md"
           >
             <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
@@ -199,7 +199,7 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
       {/* ── PAGINATION DOTS TOGGLE (EXACTLY AS IN THE VIDEO AT BOTTOM RIGHT) ── */}
       {photos.length > 1 && (
         <div
-          className="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-2.5 flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/15 z-20 shadow-md"
+          className="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-2.5 flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full bg-black/60 backdrop-blur-md border border-black/15 z-20 shadow-md"
           onClick={(e) => {
             e.stopPropagation();
             setActiveIdx((prev) => (prev + 1) % photos.length);
@@ -227,7 +227,7 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
               className={`transition-all duration-200 cursor-pointer ${
                 activeIdx === dotIdx
                   ? 'w-2 sm:w-2.5 h-1 sm:h-1.5 rounded-full bg-white shadow-xs'
-                  : 'w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full bg-white/40 hover:bg-white/70'
+                  : 'w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full bg-black/[0.24] hover:bg-black/[0.42]'
               }`}
               aria-label={`Photo ${dotIdx + 1} of ${photos.length}`}
             />
@@ -237,7 +237,7 @@ export const DishCardImageGallery: React.FC<DishCardImageGalleryProps> = ({
 
       {/* Cart Quantity Indicator if already in table tray (placed bottom left so it does not collide with toggle) */}
       {cartQuantity > 0 && (
-        <div className="absolute bottom-2 left-2 sm:bottom-2.5 sm:left-2.5 px-2 py-0.5 rounded-full bg-[#ffb955] text-black font-mono font-bold text-[10px] sm:text-xs shadow-lg flex items-center gap-1 z-20">
+        <div className="absolute bottom-2 left-2 sm:bottom-2.5 sm:left-2.5 px-2 py-0.5 rounded-full bg-[#F4511E] text-black font-mono font-bold text-[10px] sm:text-xs shadow-lg flex items-center gap-1 z-20">
           <ShoppingBag className="w-3 h-3" />
           <span>{cartQuantity} in tray</span>
         </div>

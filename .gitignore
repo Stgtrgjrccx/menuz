@@ -31,3 +31,4 @@ sync_state.json
 .venv
 .vercel
 chrome/
+dist-combined/

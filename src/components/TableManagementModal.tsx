@@ -181,13 +181,13 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl overflow-y-auto pt-[max(env(safe-area-inset-top,20px),24px)] pb-12 px-3 sm:px-5 flex justify-center items-start overscroll-contain">
-      <div className="bg-[#0D1322] border border-white/[0.08] rounded-3xl max-w-3xl w-full overflow-hidden flex flex-col my-2 sm:my-6 shadow-2xl">
+      <div className="bg-[#F5F1E8] border border-black/[0.08] rounded-3xl max-w-3xl w-full overflow-hidden flex flex-col my-2 sm:my-6 shadow-2xl">
         
         {/* Modal Header */}
-        <div className="bg-gradient-to-r from-[#090D16] via-[#0D1322] to-[#090D16] p-5 text-white border-b border-white/[0.08] relative">
+        <div className="bg-gradient-to-r from-[#FFFFFF] via-[#F5F1E8] to-[#FFFFFF] p-5 text-[#141414] border-b border-black/[0.08] relative">
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-xl bg-[#090D16]/[0.06] hover:bg-white/[0.1] text-slate-400 hover:text-white transition-colors"
+            className="absolute top-4 right-4 p-2 rounded-xl bg-[#FFFFFF]/[0.06] hover:bg-black/[0.04] text-[#6E6E6E] hover:text-[#141414] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -196,32 +196,32 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-slate-200 hover:text-white font-bold text-xs border border-white/[0.1] transition-all cursor-pointer mr-1"
+              className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-black/[0.04] hover:bg-black/[0.04] text-[#3A3A3A] hover:text-[#141414] font-bold text-xs border border-black/[0.1] transition-all cursor-pointer mr-1"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back</span>
             </button>
-            <div className="w-11 h-11 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 font-serif font-bold text-xl shadow-inner flex items-center justify-center">
+            <div className="w-11 h-11 rounded-2xl bg-[#F4511E]/10 border border-[#F4511E]/20 text-[#2D4A3E] font-serif font-bold text-xl shadow-inner flex items-center justify-center">
               🪑
             </div>
             <div>
-              <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20">
+              <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-[#F4511E]/10 text-[#2D4A3E] border border-[#F4511E]/20">
                 Floor Plan & Profile Studio
               </span>
-              <h2 className="font-serif text-xl sm:text-2xl font-bold text-white mt-1">
+              <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#141414] mt-1">
                 {restaurant.name}
               </h2>
             </div>
           </div>
 
           {/* Sub Navigation */}
-          <div className="flex space-x-2 mt-4 pt-2 border-t border-white/[0.08] text-xs font-bold overflow-x-auto">
+          <div className="flex space-x-2 mt-4 pt-2 border-t border-black/[0.08] text-xs font-bold overflow-x-auto">
             <button
               onClick={() => setActiveTab('tables')}
               className={`px-3.5 py-1.5 rounded-xl transition-all flex items-center space-x-1.5 whitespace-nowrap ${
                 activeTab === 'tables'
-                  ? 'bg-amber-500 text-slate-950 shadow-sm'
-                  : 'text-slate-400 hover:text-white hover:bg-white/[0.08]'
+                  ? 'bg-[#F4511E] text-[#FFFFFF] shadow-sm'
+                  : 'text-[#6E6E6E] hover:text-[#141414] hover:bg-black/[0.04]'
               }`}
             >
               <Layers className="w-3.5 h-3.5" />
@@ -231,8 +231,8 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
               onClick={() => setActiveTab('batch_add')}
               className={`px-3.5 py-1.5 rounded-xl transition-all flex items-center space-x-1.5 whitespace-nowrap ${
                 activeTab === 'batch_add'
-                  ? 'bg-amber-500 text-slate-950 shadow-sm'
-                  : 'text-slate-400 hover:text-white hover:bg-white/[0.08]'
+                  ? 'bg-[#F4511E] text-[#FFFFFF] shadow-sm'
+                  : 'text-[#6E6E6E] hover:text-[#141414] hover:bg-black/[0.04]'
               }`}
             >
               <Plus className="w-3.5 h-3.5" />
@@ -242,8 +242,8 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
               onClick={() => setActiveTab('edit_restaurant')}
               className={`px-3.5 py-1.5 rounded-xl transition-all flex items-center space-x-1.5 whitespace-nowrap ${
                 activeTab === 'edit_restaurant'
-                  ? 'bg-amber-500 text-slate-950 shadow-sm'
-                  : 'text-slate-400 hover:text-white hover:bg-white/[0.08]'
+                  ? 'bg-[#F4511E] text-[#FFFFFF] shadow-sm'
+                  : 'text-[#6E6E6E] hover:text-[#141414] hover:bg-black/[0.04]'
               }`}
             >
               <Edit2 className="w-3.5 h-3.5" />
@@ -253,15 +253,15 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
         </div>
 
         {/* Modal Body */}
-        <div className="p-5 overflow-y-auto space-y-4 text-white text-xs flex-1">
+        <div className="p-5 overflow-y-auto space-y-4 text-[#141414] text-xs flex-1">
           
           {/* TAB 1: ALL TABLES & QR CODES */}
           {activeTab === 'tables' && (
             <div className="space-y-4">
               
               {/* Add Single Table Bar */}
-              <form onSubmit={handleAddSingleTable} className="bg-white/[0.03] p-3.5 rounded-2xl border border-white/[0.08] space-y-3">
-                <span className="font-bold text-white text-xs block">Add New Dining Table</span>
+              <form onSubmit={handleAddSingleTable} className="bg-black/[0.04] p-3.5 rounded-2xl border border-black/[0.08] space-y-3">
+                <span className="font-bold text-[#141414] text-xs block">Add New Dining Table</span>
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-2.5">
                   <input
                     type="text"
@@ -269,12 +269,12 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
                     value={newLabel}
                     onChange={(e) => setNewLabel(e.target.value)}
                     placeholder="Table Label (e.g. Table 5, VIP 2)"
-                    className="bg-[#0D1322] border border-white/[0.08] rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    className="bg-[#F5F1E8] border border-black/[0.08] rounded-xl px-3 py-2 text-[#141414] text-xs focus:outline-none focus:border-[#F4511E]"
                   />
                   <select
                     value={newSection}
                     onChange={(e) => setNewSection(e.target.value)}
-                    className="bg-[#0D1322] border border-white/[0.08] rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    className="bg-[#F5F1E8] border border-black/[0.08] rounded-xl px-3 py-2 text-[#141414] text-xs focus:outline-none focus:border-[#F4511E]"
                   >
                     <option value="Indoor Main">Indoor Main</option>
                     <option value="Outdoor Patio">Outdoor Patio</option>
@@ -285,7 +285,7 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
                   <select
                     value={newCapacity}
                     onChange={(e) => setNewCapacity(Number(e.target.value))}
-                    className="bg-[#0D1322] border border-white/[0.08] rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    className="bg-[#F5F1E8] border border-black/[0.08] rounded-xl px-3 py-2 text-[#141414] text-xs focus:outline-none focus:border-[#F4511E]"
                   >
                     <option value={2}>2 Seats (Couple)</option>
                     <option value={4}>4 Seats (Standard)</option>
@@ -295,7 +295,7 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
                   </select>
                   <button
                     type="submit"
-                    className="bg-amber-500 hover:brightness-110 text-slate-950 font-bold py-2 px-3 rounded-xl flex items-center justify-center space-x-1.5 transition-colors shadow-sm"
+                    className="bg-[#F4511E] hover:brightness-110 text-[#FFFFFF] font-bold py-2 px-3 rounded-xl flex items-center justify-center space-x-1.5 transition-colors shadow-sm"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     <span>Add Table</span>
@@ -306,11 +306,11 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
               {/* Section Filter */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <span className="text-slate-500 font-bold text-[11px]">Section:</span>
+                  <span className="text-[#7A7A7A] font-bold text-[11px]">Section:</span>
                   <select
                     value={sectionFilter}
                     onChange={(e) => setSectionFilter(e.target.value)}
-                    className="bg-[#0D1322] border border-white/[0.08] rounded-xl px-2.5 py-1 text-white text-xs focus:outline-none"
+                    className="bg-[#F5F1E8] border border-black/[0.08] rounded-xl px-2.5 py-1 text-[#141414] text-xs focus:outline-none"
                   >
                     <option value="all">All Sections ({currentTables.length})</option>
                     {sections.map((sec) => (
@@ -320,9 +320,9 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
                 </div>
                 <button
                   onClick={() => window.print()}
-                  className="px-3 py-1 bg-[#090D16]/[0.06] hover:bg-white/[0.1] text-slate-400 hover:text-white rounded-xl font-bold flex items-center space-x-1 border border-white/[0.08] transition-colors"
+                  className="px-3 py-1 bg-[#FFFFFF]/[0.06] hover:bg-black/[0.04] text-[#6E6E6E] hover:text-[#141414] rounded-xl font-bold flex items-center space-x-1 border border-black/[0.08] transition-colors"
                 >
-                  <Printer className="w-3.5 h-3.5 text-amber-400" />
+                  <Printer className="w-3.5 h-3.5 text-[#2D4A3E]" />
                   <span>Print All Table QRs</span>
                 </button>
               </div>
@@ -335,20 +335,20 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
 
                   if (isEditing) {
                     return (
-                      <div key={t.id} className="p-3 bg-[#0D1322] border-2 border-amber-500 rounded-2xl space-y-2">
-                        <span className="font-bold text-amber-400 text-xs">Edit {t.label}</span>
+                      <div key={t.id} className="p-3 bg-[#F5F1E8] border-2 border-[#F4511E] rounded-2xl space-y-2">
+                        <span className="font-bold text-[#2D4A3E] text-xs">Edit {t.label}</span>
                         <input
                           type="text"
                           value={editLabel}
                           onChange={(e) => setEditLabel(e.target.value)}
-                          className="w-full bg-[#0D1322] border border-white/[0.08] rounded-xl px-2.5 py-1.5 text-white text-xs"
+                          className="w-full bg-[#F5F1E8] border border-black/[0.08] rounded-xl px-2.5 py-1.5 text-[#141414] text-xs"
                           placeholder="Table Label"
                         />
                         <div className="grid grid-cols-2 gap-1.5">
                           <select
                             value={editSection}
                             onChange={(e) => setEditSection(e.target.value)}
-                            className="bg-[#0D1322] border border-white/[0.08] rounded-xl px-2 py-1 text-white text-xs"
+                            className="bg-[#F5F1E8] border border-black/[0.08] rounded-xl px-2 py-1 text-[#141414] text-xs"
                           >
                             <option value="Indoor Main">Indoor Main</option>
                             <option value="Outdoor Patio">Outdoor Patio</option>
@@ -359,7 +359,7 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
                           <select
                             value={editStatus}
                             onChange={(e) => setEditStatus(e.target.value as any)}
-                            className="bg-[#0D1322] border border-white/[0.08] rounded-xl px-2 py-1 text-white text-xs"
+                            className="bg-[#F5F1E8] border border-black/[0.08] rounded-xl px-2 py-1 text-[#141414] text-xs"
                           >
                             <option value="vacant">Vacant</option>
                             <option value="occupied">Occupied</option>
@@ -370,14 +370,14 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
                         <div className="flex space-x-1.5 pt-1">
                           <button
                             onClick={() => handleSaveEdit(t.id)}
-                            className="flex-1 py-1.5 bg-amber-500 hover:brightness-110 rounded-xl text-slate-950 font-bold text-[11px] flex items-center justify-center space-x-1"
+                            className="flex-1 py-1.5 bg-[#F4511E] hover:brightness-110 rounded-xl text-[#FFFFFF] font-bold text-[11px] flex items-center justify-center space-x-1"
                           >
                             <Check className="w-3.5 h-3.5" />
                             <span>Save</span>
                           </button>
                           <button
                             onClick={() => setEditingTableId(null)}
-                            className="px-2.5 py-1.5 bg-[#090D16]/[0.06] hover:bg-white/[0.1] rounded-xl text-slate-400 text-[11px]"
+                            className="px-2.5 py-1.5 bg-[#FFFFFF]/[0.06] hover:bg-black/[0.04] rounded-xl text-[#6E6E6E] text-[11px]"
                           >
                             Cancel
                           </button>
@@ -389,58 +389,58 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
                   return (
                     <div
                       key={t.id}
-                      className="p-3 bg-[#090D16]/[0.03] border border-white/[0.08] rounded-2xl hover:border-white/[0.16] transition-all flex flex-col justify-between space-y-2.5"
+                      className="p-3 bg-[#FFFFFF]/[0.03] border border-black/[0.08] rounded-2xl hover:border-black/[0.16] transition-all flex flex-col justify-between space-y-2.5"
                     >
                       <div className="flex items-start justify-between">
                         <div>
-                          <h4 className="font-bold text-white text-sm">{t.label}</h4>
-                          <span className="text-[10px] text-amber-300 font-medium block">
+                          <h4 className="font-bold text-[#141414] text-sm">{t.label}</h4>
+                          <span className="text-[10px] text-[#2D4A3E] font-medium block">
                             {t.section || 'Indoor Main'} • {t.capacity || 4} Seats
                           </span>
                         </div>
                         <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold border uppercase tracking-wider ${
                           t.status === 'occupied'
-                            ? 'bg-red-500/20 text-red-300 border-red-500/30'
+                            ? 'bg-red-500/20 text-[#C23A1C] border-red-500/30'
                             : t.status === 'reserved'
-                            ? 'bg-amber-500/20 text-amber-300 border-amber-500/30'
-                            : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+                            ? 'bg-[#F4511E]/20 text-[#2D4A3E] border-[#F4511E]/30'
+                            : 'bg-emerald-500/20 text-[#2F7A4F] border-emerald-500/30'
                         }`}>
                           {t.status || 'vacant'}
                         </span>
                       </div>
 
-                      <div className="p-2 bg-[#090D16] rounded-xl border border-white/[0.08] flex items-center justify-between text-[10px] font-mono text-slate-400 truncate">
+                      <div className="p-2 bg-[#FFFFFF] rounded-xl border border-black/[0.08] flex items-center justify-between text-[10px] font-mono text-[#6E6E6E] truncate">
                         <span className="truncate mr-1">Token: {t.public_token.slice(0, 14)}...</span>
                         <button
                           onClick={() => copyUrl(tableDinerUrl, t.id)}
-                          className="text-amber-400 hover:text-amber-300 flex items-center space-x-0.5 flex-shrink-0"
+                          className="text-[#2D4A3E] hover:text-[#2D4A3E] flex items-center space-x-0.5 flex-shrink-0"
                           title="Copy Table QR Diner URL"
                         >
-                          {copiedToken === t.id ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                          {copiedToken === t.id ? <Check className="w-3 h-3 text-[#2F7A4F]" /> : <Copy className="w-3 h-3" />}
                           <span>{copiedToken === t.id ? 'Copied' : 'Copy'}</span>
                         </button>
                       </div>
 
-                      <div className="flex items-center space-x-1.5 pt-1 border-t border-white/[0.08]/60">
+                      <div className="flex items-center space-x-1.5 pt-1 border-t border-black/[0.08]/60">
                         <a
                           href={tableDinerUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="flex-1 py-1 bg-[#090D16] hover:bg-[#090D16] text-white rounded-lg text-center font-bold text-[10px] border border-white/[0.08] flex items-center justify-center space-x-1"
+                          className="flex-1 py-1 bg-[#FFFFFF] hover:bg-[#FFFFFF] text-[#141414] rounded-lg text-center font-bold text-[10px] border border-black/[0.08] flex items-center justify-center space-x-1"
                         >
-                          <ExternalLink className="w-3 h-3 text-amber-400" />
+                          <ExternalLink className="w-3 h-3 text-[#2D4A3E]" />
                           <span>Test Menu</span>
                         </a>
                         <button
                           onClick={() => handleStartEdit(t)}
-                          className="p-1 bg-[#090D16]/[0.06] hover:bg-white/[0.1] rounded-lg text-slate-400 hover:text-white"
+                          className="p-1 bg-[#FFFFFF]/[0.06] hover:bg-black/[0.04] rounded-lg text-[#6E6E6E] hover:text-[#141414]"
                           title="Edit Table Info"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => deleteTable(t.id)}
-                          className="p-1 bg-[#090D16]/[0.06] hover:bg-red-500/20 rounded-lg text-slate-400 hover:text-red-400"
+                          className="p-1 bg-[#FFFFFF]/[0.06] hover:bg-red-500/20 rounded-lg text-[#6E6E6E] hover:text-[#C23A1C]"
                           title="Delete Table"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -455,46 +455,46 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
 
           {/* TAB 2: BATCH GENERATE TABLES */}
           {activeTab === 'batch_add' && (
-            <form onSubmit={handleBatchGenerate} className="bg-white/[0.03] p-5 rounded-2xl border border-white/[0.08] space-y-4 max-w-xl mx-auto">
-              <div className="flex items-center space-x-2 pb-2 border-b border-white/[0.08]">
-                <Layers className="w-4 h-4 text-amber-400" />
-                <h4 className="font-bold text-white text-sm">Batch Floor Plan Generator</h4>
+            <form onSubmit={handleBatchGenerate} className="bg-black/[0.04] p-5 rounded-2xl border border-black/[0.08] space-y-4 max-w-xl mx-auto">
+              <div className="flex items-center space-x-2 pb-2 border-b border-black/[0.08]">
+                <Layers className="w-4 h-4 text-[#2D4A3E]" />
+                <h4 className="font-bold text-[#141414] text-sm">Batch Floor Plan Generator</h4>
               </div>
-              <p className="text-slate-400 text-xs">
+              <p className="text-[#6E6E6E] text-xs">
                 Quickly create multiple tables for a dining room, rooftop, or banquet hall with auto-generated encrypted tokens.
               </p>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-white block mb-1">Number of Tables</label>
+                  <label className="font-bold text-[#141414] block mb-1">Number of Tables</label>
                   <input
                     type="number"
                     min={1}
                     max={50}
                     value={batchCount}
                     onChange={(e) => setBatchCount(Number(e.target.value))}
-                    className="w-full bg-[#0D1322] border border-white/[0.08] rounded-xl px-3 py-2 text-white text-xs"
+                    className="w-full bg-[#F5F1E8] border border-black/[0.08] rounded-xl px-3 py-2 text-[#141414] text-xs"
                   />
                 </div>
                 <div>
-                  <label className="font-bold text-white block mb-1">Starting Table Number</label>
+                  <label className="font-bold text-[#141414] block mb-1">Starting Table Number</label>
                   <input
                     type="number"
                     min={1}
                     value={batchStartNum}
                     onChange={(e) => setBatchStartNum(Number(e.target.value))}
-                    className="w-full bg-[#0D1322] border border-white/[0.08] rounded-xl px-3 py-2 text-white text-xs"
+                    className="w-full bg-[#F5F1E8] border border-black/[0.08] rounded-xl px-3 py-2 text-[#141414] text-xs"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-white block mb-1">Dining Section</label>
+                  <label className="font-bold text-[#141414] block mb-1">Dining Section</label>
                   <select
                     value={batchSection}
                     onChange={(e) => setBatchSection(e.target.value)}
-                    className="w-full bg-[#0D1322] border border-white/[0.08] rounded-xl px-3 py-2 text-white text-xs"
+                    className="w-full bg-[#F5F1E8] border border-black/[0.08] rounded-xl px-3 py-2 text-[#141414] text-xs"
                   >
                     <option value="Indoor Main">Indoor Main</option>
                     <option value="Outdoor Patio">Outdoor Patio</option>
@@ -504,11 +504,11 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
                   </select>
                 </div>
                 <div>
-                  <label className="font-bold text-white block mb-1">Seats per Table</label>
+                  <label className="font-bold text-[#141414] block mb-1">Seats per Table</label>
                   <select
                     value={batchCapacity}
                     onChange={(e) => setBatchCapacity(Number(e.target.value))}
-                    className="w-full bg-[#0D1322] border border-white/[0.08] rounded-xl px-3 py-2 text-white text-xs"
+                    className="w-full bg-[#F5F1E8] border border-black/[0.08] rounded-xl px-3 py-2 text-[#141414] text-xs"
                   >
                     <option value={2}>2 Seats (Couple)</option>
                     <option value={4}>4 Seats (Standard)</option>
@@ -521,11 +521,11 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-2.5 bg-amber-500 hover:brightness-110 text-slate-950 font-bold rounded-xl text-xs flex items-center justify-center space-x-2 transition-all shadow-md mt-2"
+                className="w-full py-2.5 bg-[#F4511E] hover:brightness-110 text-[#FFFFFF] font-bold rounded-xl text-xs flex items-center justify-center space-x-2 transition-all shadow-md mt-2"
               >
                 {batchSuccess ? (
                   <span className="flex items-center space-x-1">
-                    <CheckCircle2 className="w-4 h-4 text-white" />
+                    <CheckCircle2 className="w-4 h-4 text-[#141414]" />
                     <span>{batchCount} Tables Generated!</span>
                   </span>
                 ) : (
@@ -537,14 +537,14 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
 
           {/* TAB 3: EDIT RESTAURANT PROFILE */}
           {activeTab === 'edit_restaurant' && (
-            <form onSubmit={handleSaveRestaurantProfile} className="bg-white/[0.03] p-5 rounded-2xl border border-white/[0.08] space-y-4">
-              <div className="flex items-center justify-between pb-2 border-b border-white/[0.08]">
+            <form onSubmit={handleSaveRestaurantProfile} className="bg-black/[0.04] p-5 rounded-2xl border border-black/[0.08] space-y-4">
+              <div className="flex items-center justify-between pb-2 border-b border-black/[0.08]">
                 <div className="flex items-center space-x-2">
-                  <Building2 className="w-4 h-4 text-amber-400" />
-                  <h4 className="font-bold text-white text-sm">Update Restaurant Information</h4>
+                  <Building2 className="w-4 h-4 text-[#2D4A3E]" />
+                  <h4 className="font-bold text-[#141414] text-sm">Update Restaurant Information</h4>
                 </div>
                 {restSaveSuccess && (
-                  <span className="text-[11px] text-emerald-400 font-bold flex items-center space-x-1">
+                  <span className="text-[11px] text-[#2F7A4F] font-bold flex items-center space-x-1">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     <span>Profile Saved!</span>
                   </span>
@@ -553,76 +553,76 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-white block mb-1">Restaurant Name</label>
+                  <label className="font-bold text-[#141414] block mb-1">Restaurant Name</label>
                   <input
                     type="text"
                     required
                     value={restName}
                     onChange={(e) => setRestName(e.target.value)}
-                    className="w-full bg-[#0D1322] border border-white/[0.08] rounded-xl px-3 py-2 text-white text-xs"
+                    className="w-full bg-[#F5F1E8] border border-black/[0.08] rounded-xl px-3 py-2 text-[#141414] text-xs"
                   />
                 </div>
                 <div>
-                  <label className="font-bold text-white block mb-1">Cuisine / Category</label>
+                  <label className="font-bold text-[#141414] block mb-1">Cuisine / Category</label>
                   <input
                     type="text"
                     required
                     value={restCuisine}
                     onChange={(e) => setRestCuisine(e.target.value)}
-                    className="w-full bg-[#0D1322] border border-white/[0.08] rounded-xl px-3 py-2 text-white text-xs"
+                    className="w-full bg-[#F5F1E8] border border-black/[0.08] rounded-xl px-3 py-2 text-[#141414] text-xs"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-white block mb-1">Location & City</label>
+                  <label className="font-bold text-[#141414] block mb-1">Location & City</label>
                   <input
                     type="text"
                     value={restLocation}
                     onChange={(e) => setRestLocation(e.target.value)}
-                    className="w-full bg-[#0D1322] border border-white/[0.08] rounded-xl px-3 py-2 text-white text-xs"
+                    className="w-full bg-[#F5F1E8] border border-black/[0.08] rounded-xl px-3 py-2 text-[#141414] text-xs"
                   />
                 </div>
                 <div>
-                  <label className="font-bold text-white block mb-1">Owner / GM Name</label>
+                  <label className="font-bold text-[#141414] block mb-1">Owner / GM Name</label>
                   <input
                     type="text"
                     value={restOwner}
                     onChange={(e) => setRestOwner(e.target.value)}
-                    className="w-full bg-[#0D1322] border border-white/[0.08] rounded-xl px-3 py-2 text-white text-xs"
+                    className="w-full bg-[#F5F1E8] border border-black/[0.08] rounded-xl px-3 py-2 text-[#141414] text-xs"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-white block mb-1">Contact Email</label>
+                  <label className="font-bold text-[#141414] block mb-1">Contact Email</label>
                   <input
                     type="email"
                     value={restEmail}
                     onChange={(e) => setRestEmail(e.target.value)}
-                    className="w-full bg-[#0D1322] border border-white/[0.08] rounded-xl px-3 py-2 text-white text-xs"
+                    className="w-full bg-[#F5F1E8] border border-black/[0.08] rounded-xl px-3 py-2 text-[#141414] text-xs"
                   />
                 </div>
                 <div>
-                  <label className="font-bold text-white block mb-1">Contact Phone</label>
+                  <label className="font-bold text-[#141414] block mb-1">Contact Phone</label>
                   <input
                     type="tel"
                     value={restPhone}
                     onChange={(e) => setRestPhone(e.target.value)}
-                    className="w-full bg-[#0D1322] border border-white/[0.08] rounded-xl px-3 py-2 text-white text-xs"
+                    className="w-full bg-[#F5F1E8] border border-black/[0.08] rounded-xl px-3 py-2 text-[#141414] text-xs"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="font-bold text-white block mb-1">POS System</label>
+                  <label className="font-bold text-[#141414] block mb-1">POS System</label>
                   <select
                     value={restPos}
                     onChange={(e) => setRestPos(e.target.value as any)}
-                    className="w-full bg-[#0D1322] border border-white/[0.08] rounded-xl px-3 py-2 text-white text-xs"
+                    className="w-full bg-[#F5F1E8] border border-black/[0.08] rounded-xl px-3 py-2 text-[#141414] text-xs"
                   >
                     {MODERN_POS_PROVIDERS.map((p) => (
                       <option key={p.id} value={p.id}>{p.name}</option>
@@ -630,22 +630,22 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
                   </select>
                 </div>
                 <div>
-                  <label className="font-bold text-white block mb-1">GST Tax Rate (%)</label>
+                  <label className="font-bold text-[#141414] block mb-1">GST Tax Rate (%)</label>
                   <input
                     type="number"
                     value={restTaxRate}
                     onChange={(e) => setRestTaxRate(Number(e.target.value))}
-                    className="w-full bg-[#0D1322] border border-white/[0.08] rounded-xl px-3 py-2 text-white text-xs"
+                    className="w-full bg-[#F5F1E8] border border-black/[0.08] rounded-xl px-3 py-2 text-[#141414] text-xs"
                   />
                 </div>
                 <div>
-                  <label className="font-bold text-white block mb-1">Brand Accent Color</label>
+                  <label className="font-bold text-[#141414] block mb-1">Brand Accent Color</label>
                   <div className="flex items-center space-x-2">
                     <input
                       type="color"
                       value={restColor}
                       onChange={(e) => setRestColor(e.target.value)}
-                      className="w-8 h-8 rounded-lg border border-white/[0.08] cursor-pointer bg-[#090D16]"
+                      className="w-8 h-8 rounded-lg border border-black/[0.08] cursor-pointer bg-[#FFFFFF]"
                     />
                     <span className="font-mono text-xs">{restColor}</span>
                   </div>
@@ -653,20 +653,20 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
               </div>
 
               <div>
-                <label className="font-bold text-white block mb-1">Google Place Review URL</label>
+                <label className="font-bold text-[#141414] block mb-1">Google Place Review URL</label>
                 <input
                   type="text"
                   value={restGoogleUrl}
                   onChange={(e) => setRestGoogleUrl(e.target.value)}
                   placeholder="https://search.google.com/local/writereview?placeid=..."
-                  className="w-full bg-[#0D1322] border border-white/[0.08] rounded-xl px-3 py-2 text-white text-xs"
+                  className="w-full bg-[#F5F1E8] border border-black/[0.08] rounded-xl px-3 py-2 text-[#141414] text-xs"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={isSavingRest}
-                className="w-full py-2.5 bg-amber-500 hover:brightness-110 text-slate-950 font-bold rounded-xl text-xs flex items-center justify-center space-x-2 transition-all shadow-md mt-2"
+                className="w-full py-2.5 bg-[#F4511E] hover:brightness-110 text-[#FFFFFF] font-bold rounded-xl text-xs flex items-center justify-center space-x-2 transition-all shadow-md mt-2"
               >
                 <Save className="w-4 h-4" />
                 <span>{isSavingRest ? 'Saving Updates...' : 'Save Restaurant Profile Updates'}</span>
@@ -677,13 +677,13 @@ export const TableManagementModal: React.FC<TableManagementModalProps> = ({
         </div>
 
         {/* Modal Footer */}
-        <div className="p-4 bg-[#090D16] border-t border-white/[0.08] flex items-center justify-between text-xs">
-          <span className="text-slate-500">
-            Total active tables: <strong className="text-white">{currentTables.length}</strong>
+        <div className="p-4 bg-[#FFFFFF] border-t border-black/[0.08] flex items-center justify-between text-xs">
+          <span className="text-[#7A7A7A]">
+            Total active tables: <strong className="text-[#141414]">{currentTables.length}</strong>
           </span>
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-xl bg-[#090D16]/[0.06] hover:bg-white/[0.1] text-white font-bold transition-colors"
+            className="px-4 py-2 rounded-xl bg-[#FFFFFF]/[0.06] hover:bg-black/[0.04] text-[#141414] font-bold transition-colors"
           >
             Close
           </button>

@@ -320,13 +320,13 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#090D16] text-slate-100 p-3 sm:p-5 md:p-6 max-w-5xl mx-auto space-y-5 pb-20">
+    <div className="min-h-screen bg-[#FFFFFF] text-[#141414] p-3 sm:p-5 md:p-6 max-w-5xl mx-auto space-y-5 pb-20">
       {/* ── Top Header Navigation Bar ────────────────────────────── */}
-      <div className="flex items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
+      <div className="flex items-center justify-between gap-3 pb-3 border-b border-black/[0.08]">
         <div className="flex items-center space-x-2">
           <Link
             to={`/manage/${restaurant.slug}`}
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-slate-300 hover:text-white bg-white/[0.06] hover:bg-white/[0.12] px-3 py-1.5 rounded-xl border border-white/[0.1] transition-all cursor-pointer"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-[#4A4A4A] hover:text-[#141414] bg-black/[0.04] hover:bg-black/[0.04] px-3 py-1.5 rounded-xl border border-black/[0.1] transition-all cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Dashboard</span>
@@ -334,15 +334,15 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
         </div>
 
         {/* Venue Selector */}
-        <div className="flex items-center space-x-2 bg-slate-900 px-3 py-1.5 rounded-xl border border-white/[0.1]">
-          <span className="text-xs text-slate-400 font-medium">Venue:</span>
+        <div className="flex items-center space-x-2 bg-[#F5F1E8] px-3 py-1.5 rounded-xl border border-black/[0.1]">
+          <span className="text-xs text-[#6E6E6E] font-medium">Venue:</span>
           <select
             value={restaurant.id}
             onChange={(e) => setCurrentRestaurant(e.target.value)}
-            className="bg-transparent text-xs font-bold text-amber-300 focus:outline-none cursor-pointer"
+            className="bg-transparent text-xs font-bold text-[#2D4A3E] focus:outline-none cursor-pointer"
           >
             {activeWorkingRestaurants.map((r) => (
-              <option key={r.id} value={r.id} className="bg-[#090D16] text-white">
+              <option key={r.id} value={r.id} className="bg-[#FFFFFF] text-[#141414]">
                 {r.name}
               </option>
             ))}
@@ -351,16 +351,16 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
       </div>
 
       {/* ── Page Header / Title & Actions ────────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/60 p-4 sm:p-5 rounded-2xl border border-white/[0.08]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#F5F1E8]/60 p-4 sm:p-5 rounded-2xl border border-black/[0.08]">
         <div>
-          <h1 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-            <ChefHat className="w-5 h-5 text-amber-400" />
+          <h1 className="text-base sm:text-lg font-bold text-[#141414] flex items-center gap-2">
+            <ChefHat className="w-5 h-5 text-[#2D4A3E]" />
             <span>Chef &amp; Owner Culinary Studio</span>
-            <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
+            <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-[#F4511E]/15 text-[#2D4A3E] border border-[#F4511E]/30">
               {activeMenuItemsList.length} Dishes
             </span>
           </h1>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-[#6E6E6E] mt-0.5">
             Configure dish preparation secrets, drink pairings, Veg / Non-Veg classifications &amp; spice levels.
           </p>
         </div>
@@ -368,7 +368,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
         <button
           type="button"
           onClick={() => setIsAddDishModalOpen(true)}
-          className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:brightness-110 text-slate-950 font-bold text-xs rounded-xl shadow-md cursor-pointer flex items-center space-x-1.5 self-start sm:self-auto"
+          className="px-4 py-2 bg-gradient-to-r from-[#F4511E] to-[#F4511E] hover:brightness-110 text-[#FFFFFF] font-bold text-xs rounded-xl shadow-md cursor-pointer flex items-center space-x-1.5 self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
           <span>Add New Dish</span>
@@ -376,15 +376,15 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
       </div>
 
       {/* ── Clean Filter & Search Bar ────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900 p-3 rounded-2xl border border-white/[0.08]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#F5F1E8] p-3 rounded-2xl border border-black/[0.08]">
         <div className="flex flex-wrap items-center gap-1.5">
           <button
             type="button"
             onClick={() => setDishFilterType('all')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               dishFilterType === 'all'
-                ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.08] hover:text-white'
+                ? 'bg-[#F4511E] text-[#FFFFFF] font-black shadow-sm'
+                : 'bg-black/[0.04] text-[#6E6E6E] hover:bg-black/[0.04] hover:text-[#141414]'
             }`}
           >
             All ({activeMenuItemsList.length})
@@ -396,8 +396,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
             onClick={() => setDishFilterType('veg')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1 cursor-pointer ${
               dishFilterType === 'veg'
-                ? 'bg-emerald-500 text-slate-950 font-black shadow-sm'
-                : 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/25'
+                ? 'bg-emerald-500 text-[#FFFFFF] font-black shadow-sm'
+                : 'bg-emerald-500/15 text-[#2F7A4F] border border-emerald-500/30 hover:bg-emerald-500/25'
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-emerald-400" />
@@ -411,7 +411,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1 cursor-pointer ${
               dishFilterType === 'non_veg'
                 ? 'bg-rose-600 text-white font-black shadow-sm'
-                : 'bg-rose-500/15 text-rose-300 border border-rose-500/30 hover:bg-rose-500/25'
+                : 'bg-rose-500/15 text-[#C23A1C] border border-rose-500/30 hover:bg-rose-500/25'
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-rose-400" />
@@ -423,8 +423,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
             onClick={() => setDishFilterType('chef_fav')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1 cursor-pointer ${
               dishFilterType === 'chef_fav'
-                ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                : 'bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25'
+                ? 'bg-[#F4511E] text-[#FFFFFF] font-black shadow-sm'
+                : 'bg-[#F4511E]/15 text-[#2D4A3E] border border-[#F4511E]/30 hover:bg-[#F4511E]/25'
             }`}
           >
             <Star className="w-3.5 h-3.5 fill-current" />
@@ -436,8 +436,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
             onClick={() => setDishFilterType('specials')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1 cursor-pointer ${
               dishFilterType === 'specials'
-                ? 'bg-orange-500 text-slate-950 font-black shadow-sm'
-                : 'bg-orange-500/15 text-orange-300 border border-orange-500/30 hover:bg-orange-500/25'
+                ? 'bg-[#F4511E] text-[#FFFFFF] font-black shadow-sm'
+                : 'bg-[#F4511E]/15 text-[#F4511E] border border-[#F4511E]/30 hover:bg-[#F4511E]/25'
             }`}
           >
             <Flame className="w-3.5 h-3.5" />
@@ -449,8 +449,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
             onClick={() => setDishFilterType('bestsellers')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1 cursor-pointer ${
               dishFilterType === 'bestsellers'
-                ? 'bg-purple-600 text-white font-black shadow-sm'
-                : 'bg-purple-500/15 text-purple-300 border border-purple-500/30 hover:bg-purple-500/25'
+                ? 'bg-[#F4511E] text-white font-black shadow-sm'
+                : 'bg-[#F4511E]/15 text-[#2D4A3E] border border-[#F4511E]/30 hover:bg-[#F4511E]/25'
             }`}
           >
             <Award className="w-3.5 h-3.5" />
@@ -463,7 +463,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
           <select
             value={selectedCatId}
             onChange={(e) => setSelectedCatId(e.target.value)}
-            className="bg-slate-950 text-xs font-bold text-slate-300 border border-white/[0.12] rounded-xl px-2.5 py-1.5 focus:outline-none cursor-pointer"
+            className="bg-[#FFFFFF] text-xs font-bold text-[#4A4A4A] border border-black/[0.12] rounded-xl px-2.5 py-1.5 focus:outline-none cursor-pointer"
           >
             <option value="all">All Categories ({activeCategoriesList.length})</option>
             {activeCategoriesList.map((c) => (
@@ -480,13 +480,13 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
               placeholder="Search dish, spice, lore..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full text-xs bg-slate-950 border border-white/[0.12] rounded-xl pl-2.5 pr-7 py-1.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+              className="w-full text-xs bg-[#FFFFFF] border border-black/[0.12] rounded-xl pl-2.5 pr-7 py-1.5 text-white placeholder:text-[#7A7A7A] focus:outline-none focus:border-[#F4511E]"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute right-2 top-2 text-slate-400 hover:text-white text-xs cursor-pointer"
+                className="absolute right-2 top-2 text-[#6E6E6E] hover:text-[#141414] text-xs cursor-pointer"
               >
                 ✕
               </button>
@@ -498,10 +498,10 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
       {/* ── Detailed Dish Forms List (Table Card Pattern) ─────────── */}
       <div className="space-y-4">
         {filteredDishes.length === 0 ? (
-          <div className="bg-slate-900/60 rounded-2xl p-8 text-center border border-white/[0.08] text-slate-400 space-y-2">
+          <div className="bg-[#F5F1E8]/60 rounded-2xl p-8 text-center border border-black/[0.08] text-[#C8C8C8] space-y-2">
             <UtensilsCrossed className="w-8 h-8 text-slate-600 mx-auto" />
-            <p className="text-sm font-semibold text-slate-300">No dishes match your filter</p>
-            <p className="text-xs text-slate-500">Try changing your search query or category filter above.</p>
+            <p className="text-sm font-semibold text-[#4A4A4A]">No dishes match your filter</p>
+            <p className="text-xs text-[#7A7A7A]">Try changing your search query or category filter above.</p>
           </div>
         ) : (
           filteredDishes.map((dish) => {
@@ -512,7 +512,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
             return (
               <div
                 key={dish.id}
-                className="bg-slate-900/90 rounded-2xl p-4 sm:p-5 border border-white/[0.08] hover:border-amber-500/30 transition-all space-y-4 shadow-lg"
+                className="bg-[#F5F1E8]/90 rounded-2xl p-4 sm:p-5 border border-black/[0.08] hover:border-[#F4511E]/30 transition-all space-y-4 shadow-lg"
               >
                 {/* ── Row 1: Dish Identity & Actions ────────────────── */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -520,7 +520,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                     <img
                       src={dish.image_url}
                       alt={dish.name}
-                      className="w-14 h-14 rounded-2xl object-cover border border-white/[0.1] shadow-sm flex-shrink-0"
+                      className="w-14 h-14 rounded-2xl object-cover border border-black/[0.1] shadow-sm flex-shrink-0"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src =
                           'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80';
@@ -541,7 +541,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                             className={`w-2.5 h-2.5 rounded-full ${isVeg ? 'bg-emerald-500' : 'bg-rose-500'}`}
                           />
                         </button>
-                        <h3 className="font-bold text-white text-base">{dish.name}</h3>
+                        <h3 className="font-bold text-[#141414] text-base">{dish.name}</h3>
 
                         {/* Explicit Veg / Non-Veg Toggle Button */}
                         <button
@@ -549,8 +549,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                           onClick={() => handleToggleDishVeg(dish)}
                           className={`text-[11px] font-bold px-2 py-0.5 rounded-lg border transition-all cursor-pointer flex items-center space-x-1 ${
                             isVeg
-                              ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40 hover:bg-emerald-500/25'
-                              : 'bg-rose-500/15 text-rose-300 border-rose-500/40 hover:bg-rose-500/25'
+                              ? 'bg-emerald-500/15 text-[#2F7A4F] border-emerald-500/40 hover:bg-emerald-500/25'
+                              : 'bg-rose-500/15 text-[#C23A1C] border-rose-500/40 hover:bg-rose-500/25'
                           }`}
                           title="Click to switch Veg / Non-Veg status"
                         >
@@ -558,8 +558,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                           <span>{isVeg ? 'Veg' : 'Non-Veg'}</span>
                         </button>
                       </div>
-                      <span className="text-xs text-slate-400 font-mono block pt-0.5">
-                        {category?.name || 'General'} • <strong className="text-amber-300">₹{dish.price}</strong>
+                      <span className="text-xs text-[#6E6E6E] font-mono block pt-0.5">
+                        {category?.name || 'General'} • <strong className="text-[#2D4A3E]">₹{dish.price}</strong>
                       </span>
                     </div>
                   </div>
@@ -573,8 +573,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                       }
                       className={`px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center space-x-1 ${
                         dish.is_chef_recommended
-                          ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-sm'
-                          : 'bg-slate-950 text-slate-400 border-white/[0.08] hover:text-amber-300'
+                          ? 'bg-[#F4511E] text-[#FFFFFF] border-[#F4511E] shadow-sm'
+                          : 'bg-[#FFFFFF] text-[#6E6E6E] border-black/[0.08] hover:text-[#2D4A3E]'
                       }`}
                     >
                       <Star className={`w-3 h-3 ${dish.is_chef_recommended ? 'fill-slate-950' : ''}`} />
@@ -586,8 +586,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                       onClick={() => updateMenuItem(dish.id, { is_signature: !dish.is_signature })}
                       className={`px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center space-x-1 ${
                         dish.is_signature
-                          ? 'bg-orange-500 text-slate-950 border-orange-400 shadow-sm'
-                          : 'bg-slate-950 text-slate-400 border-white/[0.08] hover:text-orange-300'
+                          ? 'bg-[#F4511E] text-[#FFFFFF] border-[#F4511E] shadow-sm'
+                          : 'bg-[#FFFFFF] text-[#6E6E6E] border-black/[0.08] hover:text-[#F4511E]'
                       }`}
                     >
                       <Flame className="w-3 h-3" />
@@ -599,8 +599,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                       onClick={() => updateMenuItem(dish.id, { is_bestseller: !dish.is_bestseller })}
                       className={`px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center space-x-1 ${
                         dish.is_bestseller
-                          ? 'bg-purple-600 text-white border-purple-500 shadow-sm'
-                          : 'bg-slate-950 text-slate-400 border-white/[0.08] hover:text-purple-300'
+                          ? 'bg-[#F4511E] text-white border-[#F4511E] shadow-sm'
+                          : 'bg-[#FFFFFF] text-[#6E6E6E] border-black/[0.08] hover:text-[#2D4A3E]'
                       }`}
                     >
                       <Award className="w-3 h-3" />
@@ -613,7 +613,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                         if (e.target.value) handleApplyPresetTemplate(dish, e.target.value);
                       }}
                       defaultValue=""
-                      className="text-xs font-bold bg-slate-950 border border-white/[0.12] rounded-xl px-2 py-1.5 text-amber-300 focus:outline-none cursor-pointer"
+                      className="text-xs font-bold bg-[#FFFFFF] border border-black/[0.12] rounded-xl px-2 py-1.5 text-[#2D4A3E] focus:outline-none cursor-pointer"
                     >
                       <option value="" disabled>✦ Apply Culinary Style...</option>
                       <option value="royal_awadhi">👑 Royal Awadhi 18h Slow Dum</option>
@@ -625,10 +625,10 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleAutoSuggestSecret(dish)}
-                      className="px-3 py-1.5 bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 rounded-xl text-xs font-bold transition-all flex items-center space-x-1 cursor-pointer"
+                      className="px-3 py-1.5 bg-[#F4511E]/15 hover:bg-[#F4511E]/25 text-[#2D4A3E] border border-[#F4511E]/30 rounded-xl text-xs font-bold transition-all flex items-center space-x-1 cursor-pointer"
                       title="Auto-craft authentic culinary secrets and pairing notes"
                     >
-                      <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                      <Sparkles className="w-3.5 h-3.5 text-[#2D4A3E]" />
                       <span>Auto-Craft</span>
                     </button>
 
@@ -638,11 +638,11 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                       className={`px-2.5 py-1.5 rounded-xl border transition-all text-xs font-bold flex items-center space-x-1 cursor-pointer ${
                         isRecording
                           ? 'bg-rose-600 text-white animate-pulse border-rose-700'
-                          : 'bg-slate-950 text-slate-300 hover:text-white border-white/[0.08]'
+                          : 'bg-[#FFFFFF] text-[#4A4A4A] hover:text-white border-black/[0.08]'
                       }`}
                       title="Record Chef's spoken recipe notes"
                     >
-                      {isRecording ? <MicOff className="w-3.5 h-3.5" /> : <Mic className="w-3.5 h-3.5 text-amber-400" />}
+                      {isRecording ? <MicOff className="w-3.5 h-3.5" /> : <Mic className="w-3.5 h-3.5 text-[#2D4A3E]" />}
                       <span className="hidden sm:inline">{isRecording ? 'Listening...' : 'Voice'}</span>
                     </button>
 
@@ -653,7 +653,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                           deleteMenuItem(dish.id);
                         }
                       }}
-                      className="p-2 bg-slate-950 hover:bg-rose-900/60 text-slate-400 hover:text-rose-300 rounded-xl border border-white/[0.08] transition-colors cursor-pointer"
+                      className="p-2 bg-[#FFFFFF] hover:bg-rose-900/60 text-[#6E6E6E] hover:text-[#C23A1C] rounded-xl border border-black/[0.08] transition-colors cursor-pointer"
                       title="Delete Dish"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -662,29 +662,29 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                 </div>
 
                 {/* ── Row 2: Detailed Preparation & Lore Fields ──────── */}
-                <div className="space-y-3 pt-2 border-t border-white/[0.06]">
+                <div className="space-y-3 pt-2 border-t border-black/[0.06]">
                   {/* Field 1: Secret Cooking Technique & Spices */}
                   <div>
-                    <label className="text-[11px] font-bold text-slate-300 flex items-center justify-between mb-1">
+                    <label className="text-[11px] font-bold text-[#4A4A4A] flex items-center justify-between mb-1">
                       <span className="flex items-center gap-1.5">
-                        <ChefHat className="w-3.5 h-3.5 text-amber-400" />
+                        <ChefHat className="w-3.5 h-3.5 text-[#2D4A3E]" />
                         Secret Cooking Technique &amp; Heirloom Spices
                       </span>
-                      <span className="text-[10px] text-slate-500 font-mono">Shared with dining guests</span>
+                      <span className="text-[10px] text-[#7A7A7A] font-mono">Shared with dining guests</span>
                     </label>
                     <textarea
                       rows={2}
                       value={dish.chef_notes || ''}
                       onChange={(e) => updateMenuItem(dish.id, { chef_notes: e.target.value })}
                       placeholder="e.g. 18-hour charcoal simmer with hand-pounded mace, stone flower, and pure white makkhan..."
-                      className="w-full text-xs bg-slate-950 border border-white/[0.12] rounded-xl p-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400 transition-all leading-relaxed"
+                      className="w-full text-xs bg-[#FFFFFF] border border-black/[0.12] rounded-xl p-2.5 text-white placeholder:text-[#7A7A7A] focus:outline-none focus:border-[#F4511E] transition-all leading-relaxed"
                     />
                   </div>
 
                   {/* Field 2 & 3: Generational Origin Story & Founder's Table Pitch */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="text-[11px] font-bold text-slate-300 flex items-center gap-1.5 mb-1">
+                      <label className="text-[11px] font-bold text-[#4A4A4A] flex items-center gap-1.5 mb-1">
                         <BookOpen className="w-3.5 h-3.5 text-amber-500" />
                         Generational Origin Story / Heritage Lore
                       </label>
@@ -693,13 +693,13 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                         value={dish.chef_story || ''}
                         onChange={(e) => updateMenuItem(dish.id, { chef_story: e.target.value })}
                         placeholder="e.g. 80-year-old family recipe from Amritsar"
-                        className="w-full text-xs bg-slate-950 border border-white/[0.12] rounded-xl px-3 py-2 text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+                        className="w-full text-xs bg-[#FFFFFF] border border-black/[0.12] rounded-xl px-3 py-2 text-white placeholder:text-[#7A7A7A] focus:outline-none focus:border-[#F4511E]"
                       />
                     </div>
 
                     <div>
-                      <label className="text-[11px] font-bold text-slate-300 flex items-center gap-1.5 mb-1">
-                        <Heart className="w-3.5 h-3.5 text-rose-400" />
+                      <label className="text-[11px] font-bold text-[#4A4A4A] flex items-center gap-1.5 mb-1">
+                        <Heart className="w-3.5 h-3.5 text-[#C23A1C]" />
                         Founder's Table Recommendation
                       </label>
                       <input
@@ -707,7 +707,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                         value={dish.owner_pitch || ''}
                         onChange={(e) => updateMenuItem(dish.id, { owner_pitch: e.target.value })}
                         placeholder="e.g. Our most beloved comfort dish — light on the stomach"
-                        className="w-full text-xs bg-slate-950 border border-white/[0.12] rounded-xl px-3 py-2 text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+                        className="w-full text-xs bg-[#FFFFFF] border border-black/[0.12] rounded-xl px-3 py-2 text-white placeholder:text-[#7A7A7A] focus:outline-none focus:border-[#F4511E]"
                       />
                     </div>
                   </div>
@@ -715,8 +715,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                   {/* Field 4 & 5: Sommelier Drink Pairing & Serving Temperature */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="text-[11px] font-bold text-slate-300 flex items-center gap-1.5 mb-1">
-                        <GlassWater className="w-3.5 h-3.5 text-cyan-400" />
+                      <label className="text-[11px] font-bold text-[#4A4A4A] flex items-center gap-1.5 mb-1">
+                        <GlassWater className="w-3.5 h-3.5 text-[#2D4A3E]" />
                         Recommended Beverage Pairing &amp; Reason
                       </label>
                       <input
@@ -724,13 +724,13 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                         value={dish.pairing_drink_name || ''}
                         onChange={(e) => updateMenuItem(dish.id, { pairing_drink_name: e.target.value })}
                         placeholder="e.g. Saffron Mint Chaas (balances rich butter)"
-                        className="w-full text-xs bg-slate-950 border border-white/[0.12] rounded-xl px-3 py-2 text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-400"
+                        className="w-full text-xs bg-[#FFFFFF] border border-black/[0.12] rounded-xl px-3 py-2 text-white placeholder:text-[#7A7A7A] focus:outline-none focus:border-cyan-400"
                       />
                     </div>
 
                     <div>
-                      <label className="text-[11px] font-bold text-slate-300 flex items-center gap-1.5 mb-1">
-                        <Utensils className="w-3.5 h-3.5 text-slate-400" />
+                      <label className="text-[11px] font-bold text-[#4A4A4A] flex items-center gap-1.5 mb-1">
+                        <Utensils className="w-3.5 h-3.5 text-[#6E6E6E]" />
                         Serving Temperature &amp; Style
                       </label>
                       <input
@@ -738,16 +738,16 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                         value={dish.temperature_style || ''}
                         onChange={(e) => updateMenuItem(dish.id, { temperature_style: e.target.value })}
                         placeholder="e.g. Sizzling hot in pre-heated cast iron skillet"
-                        className="w-full text-xs bg-slate-950 border border-white/[0.12] rounded-xl px-3 py-2 text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+                        className="w-full text-xs bg-[#FFFFFF] border border-black/[0.12] rounded-xl px-3 py-2 text-white placeholder:text-[#7A7A7A] focus:outline-none focus:border-[#F4511E]"
                       />
                     </div>
                   </div>
                 </div>
 
                 {/* ── Row 3: Spice Level Pill Bar & Dietary Tags ─────── */}
-                <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-white/[0.06]">
+                <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-black/[0.06]">
                   <div className="flex items-center space-x-2">
-                    <span className="text-[11px] font-bold text-slate-400 font-mono">Spice Heat:</span>
+                    <span className="text-[11px] font-bold text-[#6E6E6E] font-mono">Spice Heat:</span>
                     <div className="flex items-center space-x-1">
                       {[0, 1, 2, 3, 4, 5].map((lvl) => (
                         <button
@@ -757,14 +757,14 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                           className={`w-6 h-6 rounded-lg text-[10px] font-bold flex items-center justify-center transition-all cursor-pointer ${
                             dish.spice_level === lvl
                               ? 'bg-rose-600 text-white shadow-sm scale-105'
-                              : 'bg-slate-950 text-slate-400 hover:bg-slate-800'
+                              : 'bg-[#FFFFFF] text-[#6E6E6E] hover:bg-[#EFE9DD]'
                           }`}
                         >
                           {lvl}
                         </button>
                       ))}
                     </div>
-                    <span className="text-[10px] text-slate-400 font-mono pl-1">
+                    <span className="text-[10px] text-[#6E6E6E] font-mono pl-1">
                       {dish.spice_level === 0
                         ? 'Mild'
                         : dish.spice_level <= 2
@@ -783,8 +783,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                       onClick={() => handleToggleDishVeg(dish)}
                       className={`text-[10px] font-mono px-2 py-0.5 rounded-lg border transition-all cursor-pointer font-bold ${
                         isVeg
-                          ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50'
-                          : 'bg-rose-500/20 text-rose-300 border-rose-500/50'
+                          ? 'bg-emerald-500/20 text-[#2F7A4F] border-emerald-500/50'
+                          : 'bg-rose-500/20 text-[#C23A1C] border-rose-500/50'
                       }`}
                     >
                       {isVeg ? '🟢 Vegetarian' : '🔴 Non-Vegetarian'}
@@ -804,8 +804,8 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                           }}
                           className={`text-[10px] font-mono px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${
                             hasFlag
-                              ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40 font-bold'
-                              : 'bg-slate-950 text-slate-500 border-white/[0.06] hover:text-slate-300'
+                              ? 'bg-emerald-500/15 text-[#2F7A4F] border-emerald-500/40 font-bold'
+                              : 'bg-[#FFFFFF] text-[#7A7A7A] border-black/[0.06] hover:text-[#4A4A4A]'
                           }`}
                         >
                           {flag}
@@ -823,16 +823,16 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
       {/* ── Modal: Add New Dish ─────────────────────────────────────── */}
       {isAddDishModalOpen && (
         <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl flex items-center justify-center p-4">
-          <div className="bg-[#0D1322] rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-white/[0.12] space-y-4">
-            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Plus className="w-4 h-4 text-amber-400" />
+          <div className="bg-[#F5F1E8] rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-black/[0.12] space-y-4">
+            <div className="flex items-center justify-between border-b border-black/[0.08] pb-3">
+              <h3 className="text-sm font-bold text-[#141414] flex items-center gap-2">
+                <Plus className="w-4 h-4 text-[#2D4A3E]" />
                 <span>Add New Catalog Dish to {restaurant.name}</span>
               </h3>
               <button
                 type="button"
                 onClick={() => setIsAddDishModalOpen(false)}
-                className="text-slate-400 hover:text-white cursor-pointer"
+                className="text-[#6E6E6E] hover:text-[#141414] cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -840,28 +840,28 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
 
             <form onSubmit={handleCreateNewDish} className="space-y-3.5">
               <div>
-                <label className="text-xs font-bold text-slate-300 block mb-1">Dish Name *</label>
+                <label className="text-xs font-bold text-[#4A4A4A] block mb-1">Dish Name *</label>
                 <input
                   type="text"
                   required
                   value={newDishName}
                   onChange={(e) => setNewDishName(e.target.value)}
                   placeholder="e.g. Murg Dum Handi Biryani"
-                  className="w-full text-xs bg-slate-950 border border-white/[0.12] rounded-xl px-3 py-2 text-white font-bold focus:outline-none focus:border-amber-400"
+                  className="w-full text-xs bg-[#FFFFFF] border border-black/[0.12] rounded-xl px-3 py-2 text-white font-bold focus:outline-none focus:border-[#F4511E]"
                 />
               </div>
 
               {/* Veg / Non-Veg Selector in Add Modal */}
               <div>
-                <label className="text-xs font-bold text-slate-300 block mb-1">Dietary Classification *</label>
+                <label className="text-xs font-bold text-[#4A4A4A] block mb-1">Dietary Classification *</label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
                     onClick={() => setNewDishIsVeg(true)}
                     className={`py-2 rounded-xl text-xs font-bold border transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
                       newDishIsVeg
-                        ? 'bg-emerald-500 text-slate-950 border-emerald-400 font-black shadow-sm'
-                        : 'bg-slate-950 text-slate-400 border-white/[0.08] hover:text-emerald-300'
+                        ? 'bg-emerald-500 text-[#FFFFFF] border-emerald-400 font-black shadow-sm'
+                        : 'bg-[#FFFFFF] text-[#6E6E6E] border-black/[0.08] hover:text-[#2F7A4F]'
                     }`}
                   >
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
@@ -873,7 +873,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                     className={`py-2 rounded-xl text-xs font-bold border transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
                       !newDishIsVeg
                         ? 'bg-rose-600 text-white border-rose-500 font-black shadow-sm'
-                        : 'bg-slate-950 text-slate-400 border-white/[0.08] hover:text-rose-300'
+                        : 'bg-[#FFFFFF] text-[#6E6E6E] border-black/[0.08] hover:text-[#C23A1C]'
                     }`}
                   >
                     <span className="w-2.5 h-2.5 rounded-full bg-rose-400" />
@@ -884,11 +884,11 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-bold text-slate-300 block mb-1">Category</label>
+                  <label className="text-xs font-bold text-[#4A4A4A] block mb-1">Category</label>
                   <select
                     value={newDishCategory}
                     onChange={(e) => setNewDishCategory(e.target.value)}
-                    className="w-full text-xs bg-slate-950 border border-white/[0.12] rounded-xl px-2.5 py-2 font-bold text-white focus:outline-none cursor-pointer"
+                    className="w-full text-xs bg-[#FFFFFF] border border-black/[0.12] rounded-xl px-2.5 py-2 font-bold text-white focus:outline-none cursor-pointer"
                   >
                     {activeCategoriesList.map((c) => (
                       <option key={c.id} value={c.id}>
@@ -899,23 +899,23 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300 block mb-1">Price (₹)</label>
+                  <label className="text-xs font-bold text-[#4A4A4A] block mb-1">Price (₹)</label>
                   <input
                     type="number"
                     value={newDishPrice}
                     onChange={(e) => setNewDishPrice(e.target.value)}
-                    className="w-full text-xs bg-slate-950 border border-white/[0.12] rounded-xl px-3 py-2 font-mono font-bold text-amber-300 focus:outline-none"
+                    className="w-full text-xs bg-[#FFFFFF] border border-black/[0.12] rounded-xl px-3 py-2 font-mono font-bold text-[#2D4A3E] focus:outline-none"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-bold text-slate-300 block mb-1">Type</label>
+                  <label className="text-xs font-bold text-[#4A4A4A] block mb-1">Type</label>
                   <select
                     value={newDishType}
                     onChange={(e) => setNewDishType(e.target.value as any)}
-                    className="w-full text-xs bg-slate-950 border border-white/[0.12] rounded-xl px-2.5 py-2 text-white cursor-pointer"
+                    className="w-full text-xs bg-[#FFFFFF] border border-black/[0.12] rounded-xl px-2.5 py-2 text-white cursor-pointer"
                   >
                     <option value="food">Food Dish</option>
                     <option value="drink">Beverage / Drink</option>
@@ -923,23 +923,23 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300 block mb-1">Spice Level (0-5)</label>
+                  <label className="text-xs font-bold text-[#4A4A4A] block mb-1">Spice Level (0-5)</label>
                   <input
                     type="number"
                     min="0"
                     max="5"
                     value={newDishSpice}
                     onChange={(e) => setNewDishSpice(parseInt(e.target.value) || 0)}
-                    className="w-full text-xs bg-slate-950 border border-white/[0.12] rounded-xl px-3 py-2 font-mono text-white"
+                    className="w-full text-xs bg-[#FFFFFF] border border-black/[0.12] rounded-xl px-3 py-2 font-mono text-white"
                   />
                 </div>
               </div>
 
               {/* Special Badges */}
-              <div className="bg-slate-950 p-3 rounded-2xl border border-white/[0.08] space-y-2">
-                <span className="text-[11px] font-bold text-slate-400 block">Highlight Status:</span>
+              <div className="bg-[#FFFFFF] p-3 rounded-2xl border border-black/[0.08] space-y-2">
+                <span className="text-[11px] font-bold text-[#6E6E6E] block">Highlight Status:</span>
                 <div className="flex items-center space-x-4">
-                  <label className="flex items-center space-x-1.5 text-xs font-bold text-slate-200 cursor-pointer">
+                  <label className="flex items-center space-x-1.5 text-xs font-bold text-[#3A3A3A] cursor-pointer">
                     <input
                       type="checkbox"
                       checked={newDishIsChefFav}
@@ -949,7 +949,7 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                     <span>🌟 Chef's Pick</span>
                   </label>
 
-                  <label className="flex items-center space-x-1.5 text-xs font-bold text-slate-200 cursor-pointer">
+                  <label className="flex items-center space-x-1.5 text-xs font-bold text-[#3A3A3A] cursor-pointer">
                     <input
                       type="checkbox"
                       checked={newDishIsSpecial}
@@ -961,17 +961,17 @@ export const AiBotOnboardingStudioPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex justify-end space-x-2 pt-2 border-t border-white/[0.08]">
+              <div className="flex justify-end space-x-2 pt-2 border-t border-black/[0.08]">
                 <button
                   type="button"
                   onClick={() => setIsAddDishModalOpen(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white cursor-pointer"
+                  className="px-4 py-2 rounded-xl text-xs font-bold text-[#6E6E6E] hover:text-[#141414] cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-sm cursor-pointer"
+                  className="px-5 py-2 rounded-xl text-xs font-bold bg-[#F4511E] hover:bg-[#F4511E] text-[#FFFFFF] shadow-sm cursor-pointer"
                 >
                   Add to Catalog
                 </button>

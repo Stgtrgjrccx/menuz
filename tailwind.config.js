@@ -9,19 +9,19 @@ export default {
     extend: {
       colors: {
         stitch: {
-          bg: '#131315',
-          surface: '#131315',
-          'surface-low': '#1b1b1d',
-          'surface-container': '#201f21',
-          'surface-high': '#2a2a2c',
-          'surface-highest': '#353437',
-          primary: '#ff5722',
-          'primary-dim': '#ffb5a0',
-          secondary: '#ffb955',
-          tertiary: '#88d982',
-          'on-surface': '#e5e1e4',
-          'on-surface-variant': '#e4beb4',
-          outline: '#ab8980',
+          bg: '#FFFFFF',
+          surface: '#FFFFFF',
+          'surface-low': '#F5F1E8',
+          'surface-container': '#F5F1E8',
+          'surface-high': '#EFE9DD',
+          'surface-highest': '#E8DCC8',
+          primary: '#F4511E',
+          'primary-dim': '#F4511E',
+          secondary: '#2D4A3E',
+          tertiary: '#2F7A4F',
+          'on-surface': '#141414',
+          'on-surface-variant': '#4A4A4A',
+          outline: '#6E6E6E',
         },
         saffron: {
           50: '#FFF7ED',
@@ -63,7 +63,7 @@ export default {
       },
       fontFamily: {
         serif: ['"Playfair Display"', 'Georgia', 'serif'],
-        sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+        sans: ['Rubik', '"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
       },
       boxShadow: {
         'subtle': '0 2px 10px rgba(28, 25, 23, 0.05)',

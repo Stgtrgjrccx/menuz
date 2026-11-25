@@ -163,13 +163,13 @@ export const ImageLightboxModal: React.FC<ImageLightboxModalProps> = ({
               <span className={`w-2 h-2 rounded-full ${isVeg ? 'bg-emerald-500' : 'bg-red-500'}`} />
             </span>
             <div className="min-w-0">
-              <h2 className="font-serif font-bold text-sm sm:text-base text-white truncate drop-shadow">
+              <h2 className="font-serif font-bold text-sm sm:text-base text-[#141414] truncate drop-shadow">
                 {dish.name}
               </h2>
-              <div className="flex items-center space-x-2 text-[11px] text-amber-300 font-semibold">
+              <div className="flex items-center space-x-2 text-[11px] text-[#2D4A3E] font-semibold">
                 <span>₹{dish.price.toFixed(2)}</span>
                 {allImages.length > 1 && (
-                  <span className="text-slate-400 font-normal">
+                  <span className="text-[#6E6E6E] font-normal">
                     • Photo {currentIndex + 1} of {allImages.length}
                   </span>
                 )}
@@ -184,7 +184,7 @@ export const ImageLightboxModal: React.FC<ImageLightboxModalProps> = ({
               type="button"
               onClick={handleZoomOut}
               disabled={zoomScale <= 1}
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white disabled:opacity-30 disabled:hover:bg-white/10 transition-colors cursor-pointer"
+              className="p-2 rounded-full bg-black/[0.06] hover:bg-black/[0.12] text-[#3A3A3A] hover:text-[#141414] disabled:opacity-30 disabled:hover:bg-black/[0.06] transition-colors cursor-pointer"
               title="Zoom out (-)"
             >
               <ZoomOut className="w-4 h-4" />
@@ -194,7 +194,7 @@ export const ImageLightboxModal: React.FC<ImageLightboxModalProps> = ({
             <button
               type="button"
               onClick={handleResetZoom}
-              className="px-2 py-1 rounded-full bg-white/10 hover:bg-white/20 text-[11px] font-mono font-bold text-amber-300 border border-white/10 transition-colors cursor-pointer"
+              className="px-2 py-1 rounded-full bg-black/[0.06] hover:bg-black/[0.12] text-[11px] font-mono font-bold text-[#2D4A3E] border border-black/10 transition-colors cursor-pointer"
               title="Reset Zoom"
             >
               {Math.round(zoomScale * 100)}%
@@ -205,7 +205,7 @@ export const ImageLightboxModal: React.FC<ImageLightboxModalProps> = ({
               type="button"
               onClick={handleZoomIn}
               disabled={zoomScale >= 3}
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white disabled:opacity-30 disabled:hover:bg-white/10 transition-colors cursor-pointer"
+              className="p-2 rounded-full bg-black/[0.06] hover:bg-black/[0.12] text-[#3A3A3A] hover:text-[#141414] disabled:opacity-30 disabled:hover:bg-black/[0.06] transition-colors cursor-pointer"
               title="Zoom in (+)"
             >
               <ZoomIn className="w-4 h-4" />
@@ -215,7 +215,7 @@ export const ImageLightboxModal: React.FC<ImageLightboxModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-full bg-white/15 hover:bg-red-500/80 text-white transition-colors cursor-pointer ml-1"
+              className="p-2 rounded-full bg-black/[0.09] hover:bg-red-500/80 text-[#141414] transition-colors cursor-pointer ml-1"
               title="Close (Esc)"
             >
               <X className="w-5 h-5" />
@@ -241,7 +241,7 @@ export const ImageLightboxModal: React.FC<ImageLightboxModalProps> = ({
                 e.stopPropagation();
                 handlePrev();
               }}
-              className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-30 p-2.5 sm:p-3 rounded-full bg-black/60 hover:bg-black/90 text-white border border-white/20 shadow-2xl active:scale-95 transition-all cursor-pointer backdrop-blur-md"
+              className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-30 p-2.5 sm:p-3 rounded-full bg-black/60 hover:bg-black/90 text-white border border-black/20 shadow-2xl active:scale-95 transition-all cursor-pointer backdrop-blur-md"
               title="Previous photo"
             >
               <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -264,18 +264,18 @@ export const ImageLightboxModal: React.FC<ImageLightboxModalProps> = ({
             <img
               src={currentImage.src}
               alt={currentImage.alt || dish.name}
-              className="max-h-[68vh] sm:max-h-[72vh] w-auto max-w-full object-contain rounded-2xl shadow-2xl border border-white/10 select-none pointer-events-auto"
+              className="max-h-[68vh] sm:max-h-[72vh] w-auto max-w-full object-contain rounded-2xl shadow-2xl border border-black/10 select-none pointer-events-auto"
               draggable={false}
             />
 
             {/* Label overlay on bottom right of the image */}
             {currentImage.label && (
               <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-                <span className="px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md text-white text-[11px] font-semibold border border-white/20 shadow-md">
+                <span className="px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md text-white text-[11px] font-semibold border border-black/20 shadow-md">
                   {currentImage.label}
                 </span>
                 {currentImage.code && (
-                  <span className="px-2 py-0.5 rounded-full bg-amber-400 text-slate-950 font-mono text-[10px] font-bold shadow-md">
+                  <span className="px-2 py-0.5 rounded-full bg-[#F4511E] text-[#FFFFFF] font-mono text-[10px] font-bold shadow-md">
                     {currentImage.code}
                   </span>
                 )}
@@ -291,7 +291,7 @@ export const ImageLightboxModal: React.FC<ImageLightboxModalProps> = ({
                 e.stopPropagation();
                 handleNext();
               }}
-              className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-30 p-2.5 sm:p-3 rounded-full bg-black/60 hover:bg-black/90 text-white border border-white/20 shadow-2xl active:scale-95 transition-all cursor-pointer backdrop-blur-md"
+              className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-30 p-2.5 sm:p-3 rounded-full bg-black/60 hover:bg-black/90 text-white border border-black/20 shadow-2xl active:scale-95 transition-all cursor-pointer backdrop-blur-md"
               title="Next photo"
             >
               <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -317,12 +317,12 @@ export const ImageLightboxModal: React.FC<ImageLightboxModalProps> = ({
                   }}
                   className={`relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden border-2 flex-shrink-0 transition-all cursor-pointer ${
                     currentIndex === idx
-                      ? 'border-amber-400 ring-2 ring-amber-400/40 scale-105 opacity-100'
-                      : 'border-white/20 opacity-60 hover:opacity-100'
+                      ? 'border-[#F4511E] ring-2 ring-[#F4511E]/40 scale-105 opacity-100'
+                      : 'border-black/20 opacity-60 hover:opacity-100'
                   }`}
                 >
                   <img src={img.src} alt={img.alt || `Thumb ${idx + 1}`} className="w-full h-full object-cover" />
-                  <span className="absolute bottom-0 inset-x-0 bg-black/70 text-[8px] text-center text-amber-200 font-mono py-0.2">
+                  <span className="absolute bottom-0 inset-x-0 bg-black/70 text-[8px] text-center text-[#2D4A3E] font-mono py-0.2">
                     #{idx + 1}
                   </span>
                 </button>
@@ -333,11 +333,11 @@ export const ImageLightboxModal: React.FC<ImageLightboxModalProps> = ({
           {/* Description & Add to Order Bar */}
           <div className="max-w-2xl mx-auto flex items-center justify-between gap-3 pt-1">
             <div className="min-w-0 flex-1">
-              <p className="text-xs text-slate-300 line-clamp-1">
+              <p className="text-xs text-[#4A4A4A] line-clamp-1">
                 {dish.short_description || dish.full_description || 'Master Chef Signature Dish'}
               </p>
               {dish.chef_notes && (
-                <p className="text-[10px] text-amber-300/90 truncate mt-0.5">
+                <p className="text-[10px] text-[#2D4A3E]/90 truncate mt-0.5">
                   ✨ <strong>Chef's Note:</strong> {dish.chef_notes}
                 </p>
               )}
@@ -347,13 +347,13 @@ export const ImageLightboxModal: React.FC<ImageLightboxModalProps> = ({
               <button
                 type="button"
                 onClick={handleQuickAdd}
-                className="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:brightness-110 active:scale-95 text-slate-950 text-xs font-bold rounded-xl shadow-xl flex items-center space-x-1.5 flex-shrink-0 cursor-pointer"
+                className="px-4 py-2 bg-gradient-to-r from-[#F4511E] to-[#F4511E] hover:brightness-110 active:scale-95 text-[#FFFFFF] text-xs font-bold rounded-xl shadow-xl flex items-center space-x-1.5 flex-shrink-0 cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add • ₹{dish.price.toFixed(2)}</span>
               </button>
             ) : (
-              <span className="px-3 py-1.5 bg-red-600/80 text-white text-[11px] font-bold rounded-xl">
+              <span className="px-3 py-1.5 bg-red-600/80 text-[#141414] text-[11px] font-bold rounded-xl">
                 Sold Out
               </span>
             )}
