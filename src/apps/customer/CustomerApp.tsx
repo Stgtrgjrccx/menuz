@@ -35,6 +35,13 @@ const CustomerRouteSEOManager: React.FC = () => {
   return null;
 };
 
+/** The home screen has its own header, so the global navbar is hidden there. */
+const ShellNavbar: React.FC = () => {
+  const { pathname } = useLocation();
+  if (pathname === '/' || pathname === '/customer') return null;
+  return <CustomerNavbar />;
+};
+
 export const CustomerApp: React.FC = () => {
   useEffect(() => {
     cloudSyncManager.init();
@@ -44,7 +51,7 @@ export const CustomerApp: React.FC = () => {
     <HashRouter>
       <CustomerRouteSEOManager />
       <div className="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col bg-[#131315] text-[#e5e1e4] font-sans antialiased selection:bg-[#ff5722]/30 selection:text-white">
-        <CustomerNavbar />
+        <ShellNavbar />
         <div className="flex-1">
           <ErrorBoundary>
             <Routes>
