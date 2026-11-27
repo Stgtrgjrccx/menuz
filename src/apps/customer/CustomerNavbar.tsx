@@ -1,3 +1,4 @@
+import { Logo } from '../../components/Logo';
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
@@ -51,12 +52,7 @@ export const CustomerNavbar: React.FC = () => {
             className="flex items-center space-x-2.5 group focus:outline-none"
             aria-label="Menuz Home"
           >
-            <div className="w-8 h-8 rounded-full bg-[#F4511E] flex items-center justify-center text-white shadow-md shadow-[#F4511E]/20">
-              <span className="font-serif font-bold text-sm tracking-tight">M</span>
-            </div>
-            <span className="font-serif font-black tracking-tight text-[#141414] text-xl sm:text-2xl">
-              menuz
-            </span>
+            <Logo variant="wordmark" tone="green" height={26} />
           </Link>
 
           {/* Desktop Navigation */}

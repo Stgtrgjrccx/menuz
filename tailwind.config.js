@@ -62,7 +62,8 @@ export default {
         }
       },
       fontFamily: {
-        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+        serif: ['Anton', 'Impact', 'sans-serif'],
+        mono: ['Rubik', 'system-ui', 'sans-serif'],
         sans: ['Rubik', '"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
       },
       boxShadow: {

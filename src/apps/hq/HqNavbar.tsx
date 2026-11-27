@@ -1,3 +1,4 @@
+import { Logo } from '../../components/Logo';
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
@@ -85,17 +86,14 @@ export const HqNavbar: React.FC = () => {
             className="flex items-center space-x-2.5 group focus:outline-none"
             title={IS_OWNER_SITE ? "Menuz Restaurant Operations Hub" : "Menuz Master Admin HQ"}
           >
-            <div className="w-8 h-8 rounded-full bg-[#F4511E] flex items-center justify-center text-white shadow-md shadow-[#F4511E]/20">
-              <span className="font-serif font-bold text-sm tracking-tight">M</span>
-            </div>
             <div>
-              <div className="flex items-center space-x-1.5">
-                <span className="font-serif font-black tracking-tight text-[#141414] text-lg">menuz</span>
-                <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-[#F4511E]/15 text-[#2D4A3E] border border-[#F4511E]/30">
+              <div className="flex items-center space-x-2">
+                <Logo variant="wordmark" tone="green" height={24} />
+                <span className="hidden lg:inline-block whitespace-nowrap text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-[#F4511E]/15 text-[#2D4A3E] border border-[#F4511E]/30">
                   {IS_OWNER_SITE ? 'RESTAURANT' : 'HQ'}
                 </span>
               </div>
-              <p className="text-[10px] text-[#6E6E6E] font-medium hidden sm:block">
+              <p className="text-[10px] text-[#6E6E6E] font-medium hidden lg:block">
                 {IS_OWNER_SITE
                   ? 'Food Operations Hub & Seating Management'
                   : 'Master Platform Governance & Partner Network'}
@@ -154,7 +152,7 @@ export const HqNavbar: React.FC = () => {
             title="Open Live Table QR Menu"
           >
             <UtensilsCrossed className="w-3 h-3 text-black" />
-            <span>Table Menu</span>
+            <span className="whitespace-nowrap">Table Menu</span>
           </Link>
 
           {/* Kitchen Display Link */}
@@ -170,11 +168,11 @@ export const HqNavbar: React.FC = () => {
           {/* Link to Customer Site (Visible on both phone and laptop) */}
           <a
             href={getCustomerSiteUrl('')}
-            className="inline-flex items-center space-x-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#F4511E]/15 border border-[#F4511E]/30 text-[#F4511E] hover:bg-[#F4511E]/25 text-[11px] sm:text-xs font-semibold transition-all shadow-xs cursor-pointer"
+            className="inline-flex items-center space-x-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#F4511E]/15 border border-[#F4511E]/30 text-[#C23A1C] hover:bg-[#F4511E]/25 text-[11px] sm:text-xs font-semibold transition-all shadow-xs cursor-pointer"
             title="Open Customer Discovery Portal"
           >
             <span>Customer</span>
-            <ExternalLink className="w-3 h-3 text-[#F4511E]" />
+            <ExternalLink className="w-3 h-3 text-[#C23A1C]" />
           </a>
 
           {/* Notifications Bell */}
