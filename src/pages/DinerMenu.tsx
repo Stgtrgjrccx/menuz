@@ -1,3 +1,4 @@
+import { Logo } from '../components/Logo';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import {
@@ -619,9 +620,7 @@ export const DinerMenu: React.FC = () => {
   if (slugNotFound) {
     return (
       <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#FFFFFF] text-[#141414] font-sans px-6 text-center">
-        <div className="w-14 h-14 rounded-2xl bg-[#F4511E]/15 border border-[#F4511E]/30 flex items-center justify-center mb-5">
-          <span className="font-serif font-black text-2xl text-[#F4511E]">M</span>
-        </div>
+        <div className="mb-5"><Logo variant="tagline" tone="green" height={64} /></div>
         <h1 className="font-serif text-2xl font-bold mb-2">Menu not found</h1>
         <p className="text-sm text-[#6E6E6E] max-w-xs mb-6">
           We couldn&apos;t find a restaurant for this code. The QR may be out of date —

@@ -1,3 +1,4 @@
+import { Logo } from '../components/Logo';
 import React, { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown, Heart, List as ListIcon, Map as MapIcon, QrCode, Sparkles, Star, Tag, User } from 'lucide-react';
@@ -171,16 +172,14 @@ export const CustomerHomePage: React.FC = () => {
         <div
           role="status"
           aria-label="Loading Menuz"
-          className="absolute inset-0 z-[70] flex flex-col items-center justify-center bg-white"
-          style={{ opacity: mapReady ? 0 : 1, transition: 'opacity 400ms ease', pointerEvents: mapReady ? 'none' : 'auto' }}
+          className="absolute inset-0 z-[70] flex flex-col items-center justify-center"
+          style={{ background: C.green, opacity: mapReady ? 0 : 1, transition: 'opacity 400ms ease', pointerEvents: mapReady ? 'none' : 'auto' }}
         >
-          <p style={{ fontFamily: "'Anton', Impact, sans-serif", fontSize: 44, letterSpacing: 1, color: C.ink }}>
-            MEN<span style={{ color: C.orange }}>UZ</span>
-          </p>
-          <div className="mt-4 h-[3px] w-28 rounded overflow-hidden" style={{ background: '#EFEBE3' }}>
+          <Logo variant="tagline" tone="cream" height={96} />
+          <div className="mt-8 h-[3px] w-28 rounded overflow-hidden" style={{ background: 'rgba(242,230,202,0.25)' }}>
             <div className="h-full rounded animate-pulse" style={{ width: '60%', background: C.orange }} />
           </div>
-          <p className="mt-3 text-[12px]" style={{ color: C.grey }}>Finding restaurants near you…</p>
+          <p className="mt-3 text-[12px]" style={{ color: 'rgba(242,230,202,0.8)' }}>Finding restaurants near you…</p>
         </div>
       )}
       {/* Header */}

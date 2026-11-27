@@ -1,3 +1,4 @@
+import { Logo } from './Logo';
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
@@ -150,15 +151,10 @@ export const Navbar: React.FC = () => {
           {/* Left: Brand + Clean Venue Switcher */}
           <div className="flex items-center space-x-3 sm:space-x-4">
             <Link to="/" className="flex items-center space-x-2.5 group">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#F4511E] to-[#F4511E] flex items-center justify-center font-black text-[#FFFFFF] text-base shadow-sm group-hover:scale-105 transition-transform">
-                M
-              </div>
               <div className="flex flex-col">
-                <div className="flex items-center space-x-1.5">
-                  <span className="font-serif font-black text-lg tracking-tight text-[#141414] group-hover:text-[#2D4A3E] transition-colors">
-                    menuz
-                  </span>
-                  <span className="text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#F4511E]/10 text-[#2D4A3E] border border-[#F4511E]/20 font-bold">
+                <div className="flex items-center space-x-2">
+                  <Logo variant="wordmark" tone="green" height={24} />
+                  <span className="hidden lg:inline-block whitespace-nowrap text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#F4511E]/10 text-[#2D4A3E] border border-[#F4511E]/20 font-bold">
                     {IS_OWNER_SITE ? 'RESTAURANT' : 'CUSTOMER'}
                   </span>
                 </div>

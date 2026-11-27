@@ -1,3 +1,4 @@
+import { Logo } from '../components/Logo';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useRestaurantStore, isDishNameAsRestaurant, WhatsAppCampaign } from '../store/restaurantStore';
 import { Restaurant, PosSyncEvent, isWorkingWithMenuz, PetpoojaConfig, RoyalPosConfig, RecahoConfig, RancelabConfig, MODERN_POS_PROVIDERS } from '../types';
@@ -556,8 +557,8 @@ export const MasterAdminDashboard: React.FC = () => {
     return (
       <div className="min-h-[85vh] flex items-center justify-center px-4 py-12 bg-[#FFFFFF] text-[#141414]">
         <div className="max-w-md w-full bg-[#F5F1E8] border border-black/10 p-8 rounded-3xl shadow-2xl space-y-6 text-center text-[#141414]">
-          <div className="w-16 h-16 mx-auto rounded-2xl bg-[#F4511E]/15 border border-[#F4511E]/30 flex items-center justify-center text-[#2D4A3E]">
-            <Lock className="w-8 h-8 text-[#2D4A3E]" />
+          <div className="mx-auto flex justify-center">
+            <Logo variant="tagline" tone="green" height={72} />
           </div>
           <div className="space-y-2">
             <span className="text-[11px] font-mono font-bold text-[#2D4A3E] uppercase tracking-widest bg-[#F4511E]/15 px-3 py-1 rounded-full border border-[#F4511E]/30">
@@ -642,16 +643,11 @@ export const MasterAdminDashboard: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
           {/* Left: Enterprise Brand Identity */}
           <div className="flex items-center space-x-3 sm:space-x-4">
-            <Link to="/hq" className="flex items-center space-x-2.5 group">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#F4511E] via-[#F4511E] to-[#F4511E] flex items-center justify-center font-black text-[#FFFFFF] text-base shadow-lg shadow-[#F4511E]/25 group-hover:scale-105 transition-transform">
-                <ShieldCheck className="w-5 h-5 text-[#141414] stroke-[2.5]" />
-              </div>
+            <Link to="/hq" className="hidden md:flex items-center space-x-2.5 group">
+              <Logo variant="mark" tone="green" height={34} />
               <div className="flex flex-col">
                 <div className="flex items-center space-x-1.5">
-                  <span className="font-serif font-black text-lg tracking-tight text-[#141414] group-hover:text-[#2D4A3E] transition-colors">
-                    menuz
-                  </span>
-                  <span className="text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 rounded bg-[#F4511E]/20 text-[#2D4A3E] border border-[#F4511E]/30 font-extrabold shadow-inner">
+                  <span className="text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 rounded bg-[#F4511E]/20 text-[#2D4A3E] border border-[#F4511E]/30 font-extrabold shadow-inner whitespace-nowrap">
                     ENTERPRISE HQ
                   </span>
                 </div>
